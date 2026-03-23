@@ -1,14 +1,8 @@
 "use client"
 
-import { Button, Space } from "@arco-design/web-react"
+import { Button, Space, Link } from "@arco-design/web-react"
 import { IconArrowRight, IconPlayArrowFill } from "@arco-design/web-react/icon"
 
-const stats = [
-  { value: "10,000+", label: "企业客户" },
-  { value: "99.9%", label: "服务可用性" },
-  { value: "300%", label: "效率提升" },
-  { value: "50+", label: "AI模型" },
-]
 
 export function Hero() {
   return (
@@ -56,14 +50,17 @@ export function Hero() {
 
         {/* CTA Buttons */}
         <Space size="large" className="mb-16">
-          <Button
-            type="primary"
-            size="large"
-            className="!bg-accent !text-accent-foreground hover:!bg-accent/90 !h-12 !px-8 !text-base !rounded-lg"
-          >
-            开始免费试用
-            <IconArrowRight className="ml-2" />
-          </Button>
+          <Link href="/products">
+            <Button
+              type="primary"
+              size="large"
+              className="!bg-accent !text-accent-foreground hover:!bg-accent/90 !h-12 !px-8 !text-base !rounded-lg"
+            >
+              免费试用
+              <IconArrowRight className="ml-2" />
+            </Button>
+          </Link>
+
           <Button
             type="secondary"
             size="large"
@@ -73,21 +70,7 @@ export function Hero() {
             观看演示
           </Button>
         </Space>
-
-        {/* Stats */}
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-6 md:gap-8 max-w-4xl mx-auto">
-          {stats.map((stat, index) => (
-            <div
-              key={index}
-              className="p-6 rounded-2xl bg-card/50 backdrop-blur-sm border border-border/50 hover:border-accent/30 transition-colors"
-            >
-              <div className="text-3xl sm:text-4xl font-bold text-accent mb-2">
-                {stat.value}
-              </div>
-              <div className="text-sm text-muted-foreground">{stat.label}</div>
-            </div>
-          ))}
-        </div>
+        
       </div>
 
       {/* Scroll Indicator */}
@@ -97,6 +80,7 @@ export function Hero() {
           <div className="w-1.5 h-3 bg-accent rounded-full animate-bounce" />
         </div>
       </div>
+
     </section>
   )
 }

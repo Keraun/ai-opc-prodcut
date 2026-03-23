@@ -2,7 +2,7 @@
 
 import { useState } from "react"
 import { Button, Tabs, Tag, Card, Input } from "@arco-design/web-react"
-import { IconArrowLeft, IconSearch, IconShoppingCart, IconEye } from "@arco-design/web-react/icon"
+import { IconArrowLeft, IconSearch, IconAt, IconEye } from "@arco-design/web-react/icon"
 import Image from "next/image"
 import Link from "next/link"
 
@@ -232,7 +232,7 @@ function ProductCard({ product }: { product: Product }) {
       <div className="flex gap-2">
         <Button
           type="primary"
-          icon={<IconShoppingCart />}
+          icon={<IconAt />}
           className="flex-1 !bg-accent !text-accent-foreground hover:!bg-accent/90"
         >
           {product.price === 0 ? "立即获取" : "立即购买"}

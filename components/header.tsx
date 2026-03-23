@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react"
 import { Button, Drawer, Dropdown, Menu } from "@arco-design/web-react"
-import { IconMenu, IconDown, IconUser } from "@arco-design/web-react/icon"
+import { IconMenu, IconUser } from "@arco-design/web-react/icon"
 import Link from "next/link"
 
 const navItems = [
@@ -22,11 +22,11 @@ export function Header() {
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 50)
     }
-    
+
     const handleResize = () => {
       setIsMobile(window.innerWidth < 768)
     }
-    
+
     handleResize()
     window.addEventListener("scroll", handleScroll)
     window.addEventListener("resize", handleResize)
@@ -48,11 +48,11 @@ export function Header() {
     <Menu className="!bg-card !border-border min-w-[160px]">
       {navItems.map((item) => (
         <Menu.Item
-          key={item.href}
-          onClick={() => scrollToSection(item.href)}
-          className="!text-foreground hover:!bg-secondary"
-        >
-          {item.label}
+          key={item?.href}
+          onClick={() => scrollToSection(item?.href)}
+          className="!text-foreground hover:!bg-secondary cursor-pointer"
+        >{item?.label}
+
         </Menu.Item>
       ))}
       <Menu.Divider className="!bg-border" />
@@ -67,11 +67,10 @@ export function Header() {
 
   return (
     <header
-      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-        isScrolled
-          ? "bg-background/80 backdrop-blur-xl border-b border-border"
-          : "bg-transparent"
-      }`}
+      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${isScrolled
+        ? "bg-background/80 backdrop-blur-xl border-b border-border"
+        : "bg-transparent"
+        }`}
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16 md:h-20">
@@ -89,7 +88,8 @@ export function Header() {
               <button
                 key={item.href}
                 onClick={() => scrollToSection(item.href)}
-                className="text-muted-foreground hover:text-foreground transition-colors text-sm font-medium"
+                className="text-muted-foreground hover:text-foreground transition-colors text-sm font-medium cursor-pointer"
+                style={{ color: "#333" }}
               >
                 {item.label}
               </button>
@@ -110,7 +110,7 @@ export function Header() {
                 type="primary"
                 className="!bg-accent !text-accent-foreground hover:!bg-accent/90 !px-5 !h-9 !rounded-full"
               >
-                开始免费试用
+                免费试用
               </Button>
             </Link>
           </div>
@@ -178,7 +178,7 @@ export function Header() {
             </Button>
             <Link href="/products" onClick={() => setDrawerVisible(false)}>
               <Button type="primary" long className="!bg-accent !text-accent-foreground">
-                开始免费试用
+                免费试用
               </Button>
             </Link>
           </div>
