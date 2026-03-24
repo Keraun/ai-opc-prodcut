@@ -6,7 +6,7 @@ import { IconMenu, IconPhone } from "@arco-design/web-react/icon"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
 import { Logo } from "@/components/common/logo"
-import { siteConfig, navigationConfig } from "@/config/site"
+import { siteConfig, navigationConfig } from "@/config/client"
 
 const navItems = navigationConfig.main
 

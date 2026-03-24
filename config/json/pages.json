@@ -1,0 +1,246 @@
+{
+  "hero": {
+    "badge": "专注AI一人公司服务",
+    "title": {
+      "main": "让AI成为你的",
+      "sub": "超级员工"
+    },
+    "subtitle": "为个人创业者提供AI工具、课程和工作流，助力一人公司实现10倍效率提升",
+    "buttons": {
+      "primary": {
+        "text": "开始探索",
+        "href": "/products"
+      },
+      "secondary": {
+        "text": "了解更多",
+        "href": "/about"
+      }
+    }
+  },
+  "about": {
+    "title": {
+      "main": "关于",
+      "highlight": "创客AI"
+    },
+    "description": [
+      "创客AI专注于为个人创业者提供AI赋能服务",
+      "我们深知一人公司的挑战与机遇，致力于通过AI工具、课程和工作流，帮助创业者提升效率、降低成本、实现增长"
+    ],
+    "mission": {
+      "title": "使命",
+      "description": "让每一个创业者都能用上AI，实现业务自动化增长"
+    },
+    "vision": {
+      "title": "愿景",
+      "description": "成为最受信赖的AI一人公司服务平台"
+    },
+    "values": {
+      "title": "价值观",
+      "description": "客户第一、持续创新、简单可信赖"
+    },
+    "stats": [
+      { "value": "1000+", "label": "AI工具" },
+      { "value": "10万+", "label": "服务用户" },
+      { "value": "99%", "label": "满意度" }
+    ]
+  },
+  "homeProducts": [
+    {
+      "id": "workflow",
+      "name": "AI 工作流",
+      "description": "自动化内容创作、客服、数据分析等业务流程",
+      "icon": "IconThunderbolt",
+      "tag": "热门",
+      "tagColor": "blue",
+      "features": ["自动化流程", "降低成本", "提升效率"],
+      "link": "/products#workflows"
+    },
+    {
+      "id": "tools",
+      "name": "AI 工具站",
+      "description": "精选 1000+ AI 工具，持续更新",
+      "icon": "IconApps",
+      "tag": "免费",
+      "tagColor": "green",
+      "features": ["1000+ 工具", "每周更新", "智能分类"],
+      "link": "/products#tools"
+    },
+    {
+      "id": "courses",
+      "name": "AI GEO 课程",
+      "description": "从入门到精通的 AI 学习路径",
+      "icon": "IconBook",
+      "tag": "新课",
+      "tagColor": "orange",
+      "features": ["零基础入门", "实战案例", "社群答疑"],
+      "link": "/products#courses"
+    },
+    {
+      "id": "services",
+      "name": "AI 咨询服务",
+      "description": "一对一 AI 应用咨询与定制开发",
+      "icon": "IconCustomerService",
+      "tag": "定制",
+      "tagColor": "purple",
+      "features": ["专家咨询", "定制方案", "技术支持"],
+      "link": "/products#services"
+    }
+  ],
+  "homeServices": [
+    {
+      "title": "AI 工具站",
+      "description": "精选优质 AI 工具集合，涵盖写作、设计、营销等多个领域",
+      "highlights": ["1000+ 精选工具", "每周更新", "智能分类", "免费使用"]
+    },
+    {
+      "title": "AI GEO 课程",
+      "description": "系统化 AI 学习课程，从零基础到实战应用",
+      "highlights": ["零基础入门", "实战案例", "社群答疑", "终身学习"]
+    },
+    {
+      "title": "AI 工作流",
+      "description": "定制化 AI 工作流解决方案，提升业务效率",
+      "highlights": ["自动化流程", "降低成本", "提升效率", "持续优化"]
+    },
+    {
+      "title": "AI 咨询服务",
+      "description": "一对一 AI 应用咨询，助力企业 AI 转型",
+      "highlights": ["专家咨询", "定制方案", "技术支持", "效果保障"]
+    }
+  ],
+  "products": {
+    "categories": [
+      { "key": "all", "title": "全部产品" },
+      { "key": "tools", "title": "AI 工具" },
+      { "key": "courses", "title": "AI 课程" },
+      { "key": "services", "title": "AI 服务" }
+    ],
+    "items": [
+      {
+        "id": "workflow-1",
+        "title": "自动化内容创作工作流",
+        "description": "从选题到发布的全流程自动化，一键生成文章、配图、社交媒体内容。",
+        "price": 299,
+        "originalPrice": 499,
+        "image": "/images/products/workflow-ai.jpg",
+        "tags": ["企业版", "热销"],
+        "category": "tools"
+      },
+      {
+        "id": "workflow-2",
+        "title": "智能客服工作流模板",
+        "description": "多渠道客服自动化解决方案，支持微信、网站、APP 等平台接入。",
+        "price": 599,
+        "image": "/images/products/workflow-ai.jpg",
+        "tags": ["企业版"],
+        "category": "tools"
+      },
+      {
+        "id": "workflow-3",
+        "title": "数据分析自动化流程",
+        "description": "自动收集、清洗、分析数据并生成可视化报告，支持定时任务。",
+        "price": 399,
+        "originalPrice": 699,
+        "image": "/images/products/workflow-ai.jpg",
+        "tags": ["新品"],
+        "category": "tools"
+      },
+      {
+        "id": "nav-1",
+        "title": "AI 工具导航 Pro",
+        "description": "精选 1000+ AI 工具网站，按类别智能分类，每周更新最新工具推荐。",
+        "price": 0,
+        "image": "/images/products/ai-nav.jpg",
+        "tags": ["免费", "持续更新"],
+        "category": "navigation"
+      },
+      {
+        "id": "nav-2",
+        "title": "AI 资源聚合平台",
+        "description": "整合全网 AI 学习资源、开源项目、论文解读，一站式获取前沿资讯。",
+        "price": 49,
+        "image": "/images/products/ai-nav.jpg",
+        "tags": ["会员专属"],
+        "category": "navigation"
+      },
+      {
+        "id": "course-1",
+        "title": "AI 零基础入门实战课",
+        "description": "从零开始学习 AI 应用，包含 ChatGPT、Midjourney、Stable Diffusion 等主流工具使用。",
+        "price": 199,
+        "originalPrice": 399,
+        "image": "/images/products/ai-course.jpg",
+        "tags": ["新手推荐", "视频课程"],
+        "category": "courses"
+      },
+      {
+        "id": "course-2",
+        "title": "AI 绘画进阶大师课",
+        "description": "深入学习 AI 绘画技巧，掌握 LoRA 训练、ControlNet 高级用法，创作商业级作品。",
+        "price": 499,
+        "image": "/images/products/ai-course.jpg",
+        "tags": ["进阶课程"],
+        "category": "courses"
+      },
+      {
+        "id": "course-3",
+        "title": "企业 AI 转型实战指南",
+        "description": "面向企业管理者的 AI 战略课程，包含落地案例分析和实施路径规划。",
+        "price": 999,
+        "image": "/images/products/ai-course.jpg",
+        "tags": ["企业培训", "直播答疑"],
+        "category": "courses"
+      },
+      {
+        "id": "service-1",
+        "title": "AI 应用定制开发",
+        "description": "根据您的业务需求，定制开发专属 AI 应用，包括聊天机器人、智能助手等。",
+        "price": 9999,
+        "image": "/images/products/ai-service.jpg",
+        "tags": ["1对1服务", "企业定制"],
+        "category": "services"
+      },
+      {
+        "id": "service-2",
+        "title": "AI 技术咨询服务",
+        "description": "资深 AI 专家一对一咨询，帮助您规划 AI 战略，解决技术难题。",
+        "price": 1999,
+        "image": "/images/products/ai-service.jpg",
+        "tags": ["专家咨询"],
+        "category": "services"
+      },
+      {
+        "id": "service-3",
+        "title": "AI 模型微调服务",
+        "description": "基于您的数据和场景，对大模型进行微调优化，提升特定任务的表现。",
+        "price": 4999,
+        "image": "/images/products/ai-service.jpg",
+        "tags": ["技术服务"],
+        "category": "services"
+      }
+    ]
+  },
+  "pages": {
+    "about": {
+      "title": "关于我们",
+      "description": "了解创客AI的使命和愿景",
+      "contentType": "markdown",
+      "showTOC": true,
+      "content": "# 关于创客AI\n\n## 我们的使命\n\n创客AI专注于为个人创业者提供AI赋能服务。我们深知一人公司的挑战与机遇，致力于通过AI工具、课程和工作流，帮助创业者提升效率、降低成本、实现增长。\n\n## 我们的愿景\n\n成为最受信赖的AI一人公司服务平台，助力10万+创业者实现梦想。\n\n## 我们的服务\n\n- **AI工具站**：精选优质AI工具集合\n- **AI GEO课程**：系统化AI学习课程\n- **AI工作流**：定制化AI工作流解决方案\n- **AI咨询服务**：一对一AI应用咨询\n\n## 联系我们\n\n- 邮箱：wuly93@163.com\n- 微信：makerai_official\n- 地址：浙江省杭州市西湖区三墩镇西园八路3号浙大森林"
+    },
+    "terms": {
+      "title": "服务条款",
+      "description": "创客AI服务条款",
+      "contentType": "html",
+      "showTOC": false,
+      "content": "<h1>服务条款</h1><h2>1. 服务说明</h2><p>创客AI为个人创业者提供AI赋能服务，包括但不限于AI工具推荐、课程培训、工作流定制等服务。</p><h2>2. 用户责任</h2><p>用户应遵守相关法律法规，不得利用本平台从事违法违规活动。</p><h2>3. 知识产权</h2><p>本平台的所有内容（包括但不限于文字、图片、音频、视频等）的知识产权归创客AI所有。</p><h2>4. 免责声明</h2><p>本平台提供的服务仅供参考，用户应根据自身情况谨慎决策。</p>"
+    },
+    "privacy": {
+      "title": "隐私政策",
+      "description": "创客AI隐私政策",
+      "contentType": "markdown",
+      "showTOC": true,
+      "content": "# 隐私政策\n\n## 信息收集\n\n我们收集以下信息：\n- 联系方式（姓名、电话、邮箱、微信）\n- 使用记录\n- 设备信息\n\n## 信息使用\n\n我们使用收集的信息用于：\n- 提供服务\n- 改进用户体验\n- 发送通知\n\n## 信息保护\n\n我们采取以下措施保护您的信息：\n- 数据加密\n- 访问控制\n- 安全审计\n\n## Cookie使用\n\n我们使用Cookie来：\n- 记住您的偏好\n- 分析网站流量\n- 改善用户体验\n\n## 联系我们\n\n如有任何隐私相关问题，请联系：\n- 邮箱：wuly93@163.com"
+    }
+  }
+}

@@ -8,7 +8,7 @@ import {
   IconCustomerService,
   IconArrowRight,
 } from "@arco-design/web-react/icon"
-import { productsConfig } from "@/config/site"
+import { productsConfig } from "@/config/client"
 
 const iconMap: Record<string, any> = {
   IconApps,

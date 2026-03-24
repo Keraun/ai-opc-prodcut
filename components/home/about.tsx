@@ -1,7 +1,7 @@
 "use client"
 
 import { IconStar, IconCompass, IconHeart, IconThunderbolt, IconUser, IconCheckCircle } from "@arco-design/web-react/icon"
-import { aboutConfig } from "@/config/site"
+import { aboutConfig } from "@/config/client"
 
 const values = [
   {

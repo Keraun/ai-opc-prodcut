@@ -2,7 +2,7 @@
 
 import { IconLocation, IconPhone, IconEmail } from "@arco-design/web-react/icon"
 import { Logo } from "@/components/common/logo"
-import { siteConfig, footerConfig } from "@/config/site"
+import { siteConfig, footerConfig } from "@/config/client"
 
 const contactInfo = [
   {

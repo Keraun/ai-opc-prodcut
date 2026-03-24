@@ -7,7 +7,7 @@ import Image from "next/image"
 import Link from "next/link"
 import { Header } from "@/components/common/header"
 import { Footer } from "@/components/common/footer"
-import { products, productCategories, Product } from "@/config/site"
+import { products, productCategories, Product } from "@/config/client"
 
 function ProductCard({ product }: { product: Product }) {
   const [visible, setVisible] = useState(false)

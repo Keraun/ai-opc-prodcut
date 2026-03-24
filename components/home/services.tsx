@@ -7,7 +7,7 @@ import {
   IconBook,
   IconCustomerService,
 } from "@arco-design/web-react/icon"
-import { servicesConfig } from "@/config/site"
+import { servicesConfig } from "@/config/client"
 
 const iconMap: Record<string, any> = {
   IconBulb,

@@ -1,0 +1,22 @@
+{
+  "name": "创客AI",
+  "description": "专注AI一人公司服务",
+  "url": "https://makerai.com",
+  "ogImage": "/og-image.png",
+  "links": {
+    "email": "wuly93@163.com",
+    "wechat": "makerai_official",
+    "github": "https://github.com/makerai",
+    "twitter": "https://twitter.com/makerai"
+  },
+  "creator": {
+    "name": "创客AI",
+    "url": "https://makerai.com"
+  },
+  "contact": {
+    "address": "浙江省杭州市西湖区三墩镇西园八路3号浙大森林",
+    "phone": "400-888-8888",
+    "email": "wuly93@163.com"
+  },
+  "icp": "浙ICP备XXXXXXXX号"
+}
