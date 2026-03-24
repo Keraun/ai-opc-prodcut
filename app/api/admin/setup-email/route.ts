@@ -14,53 +14,40 @@ function generateSuperAdminToken(): string {
 
 export async function POST(request: NextRequest) {
   try {
+    const cookieStore = await cookies()
+    const userCookie = cookieStore.get('adminUser')
+    
+    if (!userCookie) {
+      return NextResponse.json({
+        success: false,
+        message: "未授权"
+      }, { status: 401 })
+    }
+
+    const userData = JSON.parse(userCookie.value)
     const body = await request.json()
-    const { username, password } = body
+    const { email } = body
+
+    if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+      return NextResponse.json({
+        success: false,
+        message: "请输入有效的邮箱地址"
+      }, { status: 400 })
+    }
 
     const accountConfigPath = path.join(process.cwd(), "config/json/account.json")
     const accountConfig = JSON.parse(fs.readFileSync(accountConfigPath, "utf-8"))
 
-    const adminIndex = accountConfig.admins?.findIndex((admin: any) => admin.username === username)
+    const adminIndex = accountConfig.admins?.findIndex((admin: any) => admin.username === userData.username)
 
     if (adminIndex === -1 || adminIndex === undefined) {
       return NextResponse.json({
         success: false,
-        message: "用户名或密码错误"
-      }, { status: 401 })
+        message: "用户不存在"
+      }, { status: 404 })
     }
 
-    const admin = accountConfig.admins[adminIndex]
-
-    if (admin.password !== password) {
-      return NextResponse.json({
-        success: false,
-        message: "用户名或密码错误"
-      }, { status: 401 })
-    }
-
-    const requireEmailSetup = !admin.email
-
-    if (requireEmailSetup) {
-      const cookieStore = await cookies()
-      const userData = {
-        username: admin.username,
-        remark: admin.remark,
-        mustChangePassword: admin.mustChangePassword
-      }
-      
-      cookieStore.set('adminUser', JSON.stringify(userData), {
-        httpOnly: true,
-        secure: process.env.NODE_ENV === 'production',
-        sameSite: 'lax',
-        maxAge: 60 * 60 * 24 * 7
-      })
-
-      return NextResponse.json({
-        success: true,
-        requireEmailSetup: true,
-        user: userData
-      })
-    }
+    accountConfig.admins[adminIndex].email = email
 
     const currentIP = request.headers.get('x-forwarded-for') || 
                       request.headers.get('x-real-ip') || 
@@ -76,6 +63,7 @@ export async function POST(request: NextRequest) {
       second: '2-digit'
     })
 
+    const admin = accountConfig.admins[adminIndex]
     const lastLoginTime = admin.currentLoginTime || admin.lastLoginTime || ''
     const lastLoginIP = admin.currentLoginIP || admin.lastLoginIP || ''
 
@@ -111,8 +99,7 @@ export async function POST(request: NextRequest) {
     
     fs.writeFileSync(loginLogsPath, JSON.stringify(loginLogs, null, 2))
 
-    const cookieStore = await cookies()
-    const userData = {
+    const updatedUserData = {
       username: admin.username,
       remark: admin.remark,
       mustChangePassword: admin.mustChangePassword,
@@ -121,7 +108,7 @@ export async function POST(request: NextRequest) {
       currentLoginIP: currentIP
     }
     
-    cookieStore.set('adminUser', JSON.stringify(userData), {
+    cookieStore.set('adminUser', JSON.stringify(updatedUserData), {
       httpOnly: true,
       secure: process.env.NODE_ENV === 'production',
       sameSite: 'lax',
@@ -130,15 +117,13 @@ export async function POST(request: NextRequest) {
 
     return NextResponse.json({
       success: true,
-      mustChangePassword: admin.mustChangePassword,
-      user: userData,
       showSuperAdminToken,
       superAdminToken: showSuperAdminToken ? superAdminToken : undefined
     })
   } catch (error) {
     return NextResponse.json({
       success: false,
-      message: "登录失败"
+      message: "邮箱设置失败"
     }, { status: 500 })
   }
 }
