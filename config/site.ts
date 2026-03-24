@@ -356,6 +356,7 @@ export const navigationConfig = {
   main: [
     { label: "首页", href: "/" },
     { label: "产品", href: "/products" },
+    { label: "关于我们", href: "/about" },
   ],
   
   // 首页侧边导航配置
@@ -366,4 +367,112 @@ export const navigationConfig = {
     { label: "关于我们", href: "about" },
     { label: "联系我们", href: "contact" },
   ],
+}
+
+/**
+ * 通用页面配置
+ * 用于动态路由页面，支持markdown和html内容渲染
+ */
+export const pagesConfig: Record<string, {
+  // 页面标题
+  title: string
+  // 页面描述
+  description?: string
+  // 内容类型：markdown 或 html
+  contentType: 'markdown' | 'html'
+  // 页面内容
+  content: string
+}> = {
+  // 示例：关于我们页面
+  about: {
+    title: '关于我们',
+    description: '了解创客AI的使命和愿景',
+    contentType: 'markdown',
+    content: `
+# 关于创客AI
+
+## 我们的使命
+
+创客AI专注于为个人创业者提供AI赋能服务。我们深知一人公司的挑战与机遇，致力于通过AI工具、课程和工作流，帮助创业者提升效率、降低成本、实现增长。
+
+## 我们的愿景
+
+成为最受信赖的AI一人公司服务平台，助力10万+创业者实现梦想。
+
+## 我们的服务
+
+- **AI工具站**：精选优质AI工具集合
+- **AI GEO课程**：系统化AI学习课程
+- **AI工作流**：定制化AI工作流解决方案
+- **AI咨询服务**：一对一AI应用咨询
+
+## 联系我们
+
+- 邮箱：wuly93@163.com
+- 微信：makerai_official
+- 地址：浙江省杭州市西湖区三墩镇西园八路3号浙大森林
+    `.trim(),
+  },
+  
+  // 示例：服务条款页面
+  terms: {
+    title: '服务条款',
+    description: '创客AI服务条款',
+    contentType: 'html',
+    content: `
+<h1>服务条款</h1>
+<h2>1. 服务说明</h2>
+<p>创客AI为个人创业者提供AI赋能服务，包括但不限于AI工具推荐、课程培训、工作流定制等服务。</p>
+<h2>2. 用户责任</h2>
+<p>用户应遵守相关法律法规，不得利用本平台从事违法违规活动。</p>
+<h2>3. 知识产权</h2>
+<p>本平台的所有内容（包括但不限于文字、图片、音频、视频等）的知识产权归创客AI所有。</p>
+<h2>4. 免责声明</h2>
+<p>本平台提供的服务仅供参考，用户应根据自身情况谨慎决策。</p>
+    `.trim(),
+  },
+  
+  // 示例：隐私政策页面
+  privacy: {
+    title: '隐私政策',
+    description: '创客AI隐私政策',
+    contentType: 'markdown',
+    content: `
+# 隐私政策
+
+## 信息收集
+
+我们收集以下信息：
+- 联系方式（姓名、电话、邮箱、微信）
+- 使用记录
+- 设备信息
+
+## 信息使用
+
+我们使用收集的信息用于：
+- 提供服务
+- 改进用户体验
+- 发送通知
+
+## 信息保护
+
+我们采取以下措施保护您的信息：
+- 数据加密
+- 访问控制
+- 安全审计
+
+## Cookie使用
+
+我们使用Cookie来：
+- 记住您的偏好
+- 分析网站流量
+- 改善用户体验
+
+## 联系我们
+
+如有任何隐私相关问题，请联系：
+- 邮箱：wuly93@163.com
+- 微信：makerai_official
+    `.trim(),
+  },
 }
