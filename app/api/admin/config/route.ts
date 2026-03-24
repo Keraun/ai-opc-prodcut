@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server"
 import fs from "fs"
 import path from "path"
+import { createVersion } from "@/lib/version-manager"
 
 export async function GET() {
   try {
@@ -51,6 +52,17 @@ export async function POST(request: NextRequest) {
     } else {
       configPath = path.join(process.cwd(), `config/json/${type}.json`)
     }
+    
+    let existingData: any = {}
+    try {
+      if (fs.existsSync(configPath)) {
+        existingData = JSON.parse(fs.readFileSync(configPath, "utf-8"))
+      }
+    } catch (error) {
+      console.error("Failed to read existing config:", error)
+    }
+    
+    createVersion(type, existingData)
     
     fs.writeFileSync(configPath, JSON.stringify(data, null, 2))
 

@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react"
 import { useRouter } from "next/navigation"
 import { Button, Card, Tabs, Message, Modal, Input, Alert, Dropdown } from "@arco-design/web-react"
-import { IconSave, IconExport, IconEdit, IconLock, IconCheck, IconInfoCircle, IconEye, IconCustomerService, IconQuestionCircle } from "@arco-design/web-react/icon"
+import { IconSave, IconExport, IconEdit, IconLock, IconCheck, IconInfoCircle, IconEye, IconCustomerService, IconQuestionCircle, IconHistory, IconUndo } from "@arco-design/web-react/icon"
 
 const TabPane = Tabs.TabPane
 
@@ -42,6 +42,10 @@ export default function AdminDashboardPage() {
   const [changePasswordLoading, setChangePasswordLoading] = useState(false)
   const [currentUser, setCurrentUser] = useState<any>(null)
   const [loginLogs, setLoginLogs] = useState<any[]>([])
+  const [viewingPreviousVersion, setViewingPreviousVersion] = useState<string | null>(null)
+  const [previousVersionData, setPreviousVersionData] = useState<any>(null)
+  const [previousVersionInfo, setPreviousVersionInfo] = useState<any>(null)
+  const [restoringVersion, setRestoringVersion] = useState(false)
 
   useEffect(() => {
     fetchConfigs()
@@ -223,6 +227,57 @@ export default function AdminDashboardPage() {
     }
   }
 
+  const handleViewPreviousVersion = async (configType: string) => {
+    try {
+      const response = await fetch(`/api/admin/config/version?type=${configType}&action=previous`)
+      const data = await response.json()
+
+      if (response.ok && data.success) {
+        setPreviousVersionData(data.data)
+        setPreviousVersionInfo(data.version)
+        setViewingPreviousVersion(configType)
+      } else {
+        Message.info("当前配置项还没有历史版本记录，保存配置后将创建第一个版本。")
+      }
+    } catch (error) {
+      Message.error("获取上一版本失败")
+    }
+  }
+
+  const handleRestoreVersion = async (configType: string) => {
+    Modal.confirm({
+      title: "确认还原",
+      content: "确定要还原到上一版本吗？当前配置将被覆盖。",
+      onOk: async () => {
+        setRestoringVersion(true)
+        try {
+          const response = await fetch("/api/admin/config/restore", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              type: configType
+            }),
+          })
+
+          const data = await response.json()
+
+          if (response.ok && data.success) {
+            Message.success("版本还原成功")
+            await fetchConfigs()
+          } else {
+            Message.error(data.message || "版本还原失败")
+          }
+        } catch (error) {
+          Message.error("版本还原失败")
+        } finally {
+          setRestoringVersion(false)
+        }
+      }
+    })
+  }
+
   const handleChangePassword = async () => {
     if (!oldPassword || !newPassword || !confirmPassword) {
       Message.error("请填写所有字段")
@@ -359,6 +414,13 @@ export default function AdminDashboardPage() {
               <div className="flex items-center justify-between">
                 <span className="text-lg font-semibold">{title}</span>
                 <div className="flex gap-2">
+                  <Button
+                    size="small"
+                    icon={<IconHistory />}
+                    onClick={() => handleViewPreviousVersion(configType)}
+                  >
+                    上一版本
+                  </Button>
                   <Button
                     size="small"
                     icon={<IconEye />}
@@ -825,6 +887,76 @@ export default function AdminDashboardPage() {
           
           <pre className="bg-gray-50 p-4 rounded-lg overflow-auto text-sm font-mono whitespace-pre-wrap break-words" style={{ maxHeight: '60vh' }}>
             {viewValue}
+          </pre>
+        </div>
+      </Modal>
+
+      <Modal
+        title={
+          <div className="flex items-center gap-2">
+            <IconHistory className="text-blue-600" />
+            <span>查看上一版本配置</span>
+          </div>
+        }
+        visible={!!viewingPreviousVersion}
+        onCancel={() => {
+          setViewingPreviousVersion(null)
+          setPreviousVersionData(null)
+          setPreviousVersionInfo(null)
+        }}
+        footer={
+          <div className="flex justify-end gap-2">
+            <Button onClick={() => {
+              setViewingPreviousVersion(null)
+              setPreviousVersionData(null)
+              setPreviousVersionInfo(null)
+            }}>
+              关闭
+            </Button>
+            <Button
+              type="primary"
+              icon={<IconUndo />}
+              loading={restoringVersion}
+              onClick={() => {
+                if (viewingPreviousVersion) {
+                  handleRestoreVersion(viewingPreviousVersion)
+                  setViewingPreviousVersion(null)
+                  setPreviousVersionData(null)
+                  setPreviousVersionInfo(null)
+                }
+              }}
+            >
+              还原到此版本
+            </Button>
+          </div>
+        }
+        style={{ width: '90vw', maxWidth: 1000 }}
+      >
+        <div className="mb-4">
+          {previousVersionInfo && (
+            <Alert
+              type="info"
+              content={`版本时间：${new Date(previousVersionInfo.createdAt).toLocaleString('zh-CN')}`}
+              className="mb-4"
+            />
+          )}
+          <div className="flex items-center justify-between mb-2">
+            <p className="text-sm text-gray-500">
+              上一版本配置内容
+            </p>
+            <Button
+              size="small"
+              onClick={() => {
+                navigator.clipboard.writeText(JSON.stringify(previousVersionData, null, 2))
+                Message.success("已复制到剪贴板")
+              }}
+            >
+              复制
+            </Button>
+          </div>
+          
+          <pre className="bg-gray-50 p-4 rounded-lg overflow-auto text-sm font-mono whitespace-pre-wrap break-words" style={{ maxHeight: '60vh' }}>
+            {JSON.stringify(previousVersionData, null, 2)}
           </pre>
         </div>
       </Modal>
