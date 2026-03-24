@@ -2,11 +2,9 @@
 
 import { useState, useEffect } from "react"
 import { useRouter } from "next/navigation"
-import { Button, Card, Tabs, Message, Modal, Input, Alert, Dropdown } from "@arco-design/web-react"
-import { IconSave, IconExport, IconEdit, IconLock, IconCheck, IconInfoCircle, IconEye, IconCustomerService, IconQuestionCircle, IconHistory, IconUndo } from "@arco-design/web-react/icon"
+import { Button, Card, Message, Modal, Input, Alert, Dropdown } from "@arco-design/web-react"
+import { IconSave, IconExport, IconEdit, IconLock, IconCheck, IconInfoCircle, IconEye, IconCustomerService, IconQuestionCircle, IconHistory, IconUndo, IconHome, IconSettings, IconUser, IconNav, IconFile, IconStorage, IconCode, IconTrophy, IconClockCircle } from "@arco-design/web-react/icon"
 import { compareJSON, getLineClass, hasChanges } from "@/lib/json-compare"
-
-const TabPane = Tabs.TabPane
 
 const JSONViewerWithLineNumbers = ({ 
   content, 
@@ -150,6 +148,8 @@ export default function AdminDashboardPage() {
   const [showDiff, setShowDiff] = useState(false)
   const [showEditDiff, setShowEditDiff] = useState(false)
   const [versionInfos, setVersionInfos] = useState<Record<string, any>>({})
+  const [activeMenu, setActiveMenu] = useState('accountInfo')
+  const [sidebarCollapsed, setSidebarCollapsed] = useState(false)
 
   const fetchVersionInfos = async () => {
     const configTypes = ['homePage', 'aboutPage', 'contactPage', 'otherPages', 'newsCategory']
@@ -749,208 +749,378 @@ export default function AdminDashboardPage() {
         </div>
       </div>
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <Tabs defaultActiveTab="site" type="card">
-          <TabPane key="accountInfo" title="账号信息">
-            <Card>
-              {currentUser && (
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                  <div className="bg-gradient-to-br from-blue-50 to-blue-100 rounded-xl p-6 border border-blue-200">
-                    <div className="flex items-center gap-3 mb-4">
-                      <div className="w-12 h-12 rounded-full bg-gradient-to-br from-blue-500 to-blue-600 flex items-center justify-center">
-                        <svg className="w-6 h-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
-                        </svg>
-                      </div>
-                      <div>
-                        <p className="text-sm text-gray-600">当前账号</p>
-                        <p className="text-lg font-bold text-gray-900">{currentUser.username}</p>
-                      </div>
-                    </div>
-                    <div className="text-sm text-gray-600">
-                      当前登录的管理员账号
-                    </div>
-                  </div>
+      <div className="flex" style={{ height: 'calc(100vh - 64px)' }}>
+        <div className={`${sidebarCollapsed ? 'w-16' : 'w-64'} bg-white border-r border-gray-200 transition-all duration-300 flex-shrink-0`}>
+          <div className="h-full overflow-y-auto">
+            <div className="p-4">
+              <Button
+                type="text"
+                long
+                onClick={() => setSidebarCollapsed(!sidebarCollapsed)}
+                className="mb-4"
+              >
+                {sidebarCollapsed ? '展开' : '收起'}
+              </Button>
+              
+              <nav className="space-y-1">
+                <button
+                  onClick={() => setActiveMenu('accountInfo')}
+                  className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-left transition-all ${
+                    activeMenu === 'accountInfo' 
+                      ? 'bg-blue-50 text-blue-700 font-medium' 
+                      : 'text-gray-700 hover:bg-gray-50'
+                  }`}
+                >
+                  <IconUser className="text-lg flex-shrink-0" />
+                  {!sidebarCollapsed && <span className="text-sm">账号信息</span>}
+                </button>
 
-                  <div className="bg-gradient-to-br from-green-50 to-green-100 rounded-xl p-6 border border-green-200">
-                    <div className="flex items-center gap-3 mb-4">
-                      <div className="w-12 h-12 rounded-full bg-gradient-to-br from-green-500 to-green-600 flex items-center justify-center">
-                        <svg className="w-6 h-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-                        </svg>
-                      </div>
-                      <div>
-                        <p className="text-sm text-gray-600">上次登录</p>
-                        <p className="text-lg font-bold text-gray-900">
-                          {currentUser.lastLoginTime || '首次登录'}
-                        </p>
-                      </div>
+                <div className="pt-4 pb-2">
+                  {!sidebarCollapsed && (
+                    <div className="px-3 text-xs font-semibold text-gray-400 uppercase tracking-wider">
+                      配置管理
                     </div>
-                    <div className="text-sm text-gray-600">
-                      上次成功登录的时间
-                    </div>
-                  </div>
-
-                  <div className="bg-gradient-to-br from-purple-50 to-purple-100 rounded-xl p-6 border border-purple-200">
-                    <div className="flex items-center gap-3 mb-4">
-                      <div className="w-12 h-12 rounded-full bg-gradient-to-br from-purple-500 to-purple-600 flex items-center justify-center">
-                        <svg className="w-6 h-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9" />
-                        </svg>
-                      </div>
-                      <div>
-                        <p className="text-sm text-gray-600">当前IP</p>
-                        <p className="text-lg font-bold text-gray-900 font-mono">
-                          {currentUser.currentLoginIP || '未知'}
-                        </p>
-                      </div>
-                    </div>
-                    <div className="text-sm text-gray-600">
-                      当前登录的IP地址
-                    </div>
-                  </div>
+                  )}
                 </div>
-              )}
-            </Card>
-          </TabPane>
-          <TabPane key="site" title="站点配置">
-            {renderConfigCard(
+
+                <button
+                  onClick={() => setActiveMenu('site')}
+                  className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-left transition-all ${
+                    activeMenu === 'site' 
+                      ? 'bg-blue-50 text-blue-700 font-medium' 
+                      : 'text-gray-700 hover:bg-gray-50'
+                  }`}
+                >
+                  <IconHome className="text-lg flex-shrink-0" />
+                  {!sidebarCollapsed && <span className="text-sm">站点配置</span>}
+                </button>
+
+                <button
+                  onClick={() => setActiveMenu('common')}
+                  className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-left transition-all ${
+                    activeMenu === 'common' 
+                      ? 'bg-blue-50 text-blue-700 font-medium' 
+                      : 'text-gray-700 hover:bg-gray-50'
+                  }`}
+                >
+                  <IconStorage className="text-lg flex-shrink-0" />
+                  {!sidebarCollapsed && <span className="text-sm">站点版本配置</span>}
+                </button>
+
+                <button
+                  onClick={() => setActiveMenu('account')}
+                  className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-left transition-all ${
+                    activeMenu === 'account' 
+                      ? 'bg-blue-50 text-blue-700 font-medium' 
+                      : 'text-gray-700 hover:bg-gray-50'
+                  }`}
+                >
+                  <IconUser className="text-lg flex-shrink-0" />
+                  {!sidebarCollapsed && <span className="text-sm">账号配置</span>}
+                </button>
+
+                <button
+                  onClick={() => setActiveMenu('navigation')}
+                  className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-left transition-all ${
+                    activeMenu === 'navigation' 
+                      ? 'bg-blue-50 text-blue-700 font-medium' 
+                      : 'text-gray-700 hover:bg-gray-50'
+                  }`}
+                >
+                  <IconNav className="text-lg flex-shrink-0" />
+                  {!sidebarCollapsed && <span className="text-sm">导航栏配置</span>}
+                </button>
+
+                <button
+                  onClick={() => setActiveMenu('footer')}
+                  className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-left transition-all ${
+                    activeMenu === 'footer' 
+                      ? 'bg-blue-50 text-blue-700 font-medium' 
+                      : 'text-gray-700 hover:bg-gray-50'
+                  }`}
+                >
+                  <IconFile className="text-lg flex-shrink-0" />
+                  {!sidebarCollapsed && <span className="text-sm">站点Footer配置</span>}
+                </button>
+
+                <button
+                  onClick={() => setActiveMenu('home')}
+                  className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-left transition-all ${
+                    activeMenu === 'home' 
+                      ? 'bg-blue-50 text-blue-700 font-medium' 
+                      : 'text-gray-700 hover:bg-gray-50'
+                  }`}
+                >
+                  <IconHome className="text-lg flex-shrink-0" />
+                  {!sidebarCollapsed && <span className="text-sm">首页内容配置</span>}
+                </button>
+
+                <button
+                  onClick={() => setActiveMenu('products')}
+                  className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-left transition-all ${
+                    activeMenu === 'products' 
+                      ? 'bg-blue-50 text-blue-700 font-medium' 
+                      : 'text-gray-700 hover:bg-gray-50'
+                  }`}
+                >
+                  <IconTrophy className="text-lg flex-shrink-0" />
+                  {!sidebarCollapsed && <span className="text-sm">产品页面配置</span>}
+                </button>
+
+                <button
+                  onClick={() => setActiveMenu('seo')}
+                  className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-left transition-all ${
+                    activeMenu === 'seo' 
+                      ? 'bg-blue-50 text-blue-700 font-medium' 
+                      : 'text-gray-700 hover:bg-gray-50'
+                  }`}
+                >
+                  <IconCode className="text-lg flex-shrink-0" />
+                  {!sidebarCollapsed && <span className="text-sm">SEO配置</span>}
+                </button>
+
+                <button
+                  onClick={() => setActiveMenu('custom')}
+                  className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-left transition-all ${
+                    activeMenu === 'custom' 
+                      ? 'bg-blue-50 text-blue-700 font-medium' 
+                      : 'text-gray-700 hover:bg-gray-50'
+                  }`}
+                >
+                  <IconSettings className="text-lg flex-shrink-0" />
+                  {!sidebarCollapsed && <span className="text-sm">站点个性化配置</span>}
+                </button>
+
+                <button
+                  onClick={() => setActiveMenu('otherPages')}
+                  className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-left transition-all ${
+                    activeMenu === 'otherPages' 
+                      ? 'bg-blue-50 text-blue-700 font-medium' 
+                      : 'text-gray-700 hover:bg-gray-50'
+                  }`}
+                >
+                  <IconFile className="text-lg flex-shrink-0" />
+                  {!sidebarCollapsed && <span className="text-sm">自定义页面配置</span>}
+                </button>
+
+                <div className="pt-4 pb-2">
+                  {!sidebarCollapsed && (
+                    <div className="px-3 text-xs font-semibold text-gray-400 uppercase tracking-wider">
+                      系统管理
+                    </div>
+                  )}
+                </div>
+
+                <button
+                  onClick={() => setActiveMenu('operationLogs')}
+                  className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-left transition-all ${
+                    activeMenu === 'operationLogs' 
+                      ? 'bg-blue-50 text-blue-700 font-medium' 
+                      : 'text-gray-700 hover:bg-gray-50'
+                  }`}
+                >
+                  <IconClockCircle className="text-lg flex-shrink-0" />
+                  {!sidebarCollapsed && <span className="text-sm">操作记录</span>}
+                </button>
+              </nav>
+            </div>
+          </div>
+        </div>
+
+        <div className="flex-1 overflow-auto bg-gray-50">
+          <div className="p-8">
+            {activeMenu === 'accountInfo' && (
+              <Card>
+                {currentUser && (
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <div className="bg-gradient-to-br from-blue-50 to-blue-100 rounded-xl p-6 border border-blue-200">
+                      <div className="flex items-center gap-3 mb-4">
+                        <div className="w-12 h-12 rounded-full bg-gradient-to-br from-blue-500 to-blue-600 flex items-center justify-center">
+                          <svg className="w-6 h-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                          </svg>
+                        </div>
+                        <div>
+                          <p className="text-sm text-gray-600">当前账号</p>
+                          <p className="text-lg font-bold text-gray-900">{currentUser.username}</p>
+                        </div>
+                      </div>
+                      <div className="text-sm text-gray-600">
+                        当前登录的管理员账号
+                      </div>
+                    </div>
+
+                    <div className="bg-gradient-to-br from-green-50 to-green-100 rounded-xl p-6 border border-green-200">
+                      <div className="flex items-center gap-3 mb-4">
+                        <div className="w-12 h-12 rounded-full bg-gradient-to-br from-green-500 to-green-600 flex items-center justify-center">
+                          <svg className="w-6 h-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                          </svg>
+                        </div>
+                        <div>
+                          <p className="text-sm text-gray-600">上次登录</p>
+                          <p className="text-lg font-bold text-gray-900">
+                            {currentUser.lastLoginTime || '首次登录'}
+                          </p>
+                        </div>
+                      </div>
+                      <div className="text-sm text-gray-600">
+                        上次成功登录的时间
+                      </div>
+                    </div>
+
+                    <div className="bg-gradient-to-br from-purple-50 to-purple-100 rounded-xl p-6 border border-purple-200">
+                      <div className="flex items-center gap-3 mb-4">
+                        <div className="w-12 h-12 rounded-full bg-gradient-to-br from-purple-500 to-purple-600 flex items-center justify-center">
+                          <svg className="w-6 h-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9" />
+                          </svg>
+                        </div>
+                        <div>
+                          <p className="text-sm text-gray-600">当前IP</p>
+                          <p className="text-lg font-bold text-gray-900 font-mono">
+                            {currentUser.currentLoginIP || '未知'}
+                          </p>
+                        </div>
+                      </div>
+                      <div className="text-sm text-gray-600">
+                        当前登录的IP地址
+                      </div>
+                    </div>
+                  </div>
+                )}
+              </Card>
+            )}
+
+            {activeMenu === 'site' && renderConfigCard(
               "站点配置",
               "site",
               "包含网站名称、描述、联系方式等基础信息"
             )}
-          </TabPane>
-          <TabPane key="common" title="站点版本配置">
-            {renderConfigCard(
+
+            {activeMenu === 'common' && renderConfigCard(
               "站点版本配置",
               "common",
               "包含版本号、最后更新时间等通用配置"
             )}
-          </TabPane>
-          <TabPane key="account" title="账号配置">
-            {renderConfigCard(
+
+            {activeMenu === 'account' && renderConfigCard(
               "账号配置",
               "account",
               "包含管理员账号、普通用户账号等账号配置"
             )}
-          </TabPane>
-          <TabPane key="navigation" title="导航栏配置">
-            {renderConfigCard(
+
+            {activeMenu === 'navigation' && renderConfigCard(
               "导航栏配置",
               "navigation",
               "包含主导航、侧边栏导航等导航配置"
             )}
-          </TabPane>
-          <TabPane key="footer" title="站点Footer配置">
-            {renderConfigCard(
+
+            {activeMenu === 'footer' && renderConfigCard(
               "站点Footer配置",
               "footer",
               "包含页脚描述、社交链接、公司信息等页脚配置"
             )}
-          </TabPane>
-          <TabPane key="home" title="首页内容配置">
-            {renderConfigCard(
+
+            {activeMenu === 'home' && renderConfigCard(
               "首页内容配置",
               "home",
               "包含Hero区域、关于我们、首页产品展示、首页服务展示等首页内容配置"
             )}
-          </TabPane>
-          <TabPane key="products" title="产品页面配置">
-            {renderConfigCard(
+
+            {activeMenu === 'products' && renderConfigCard(
               "产品页面配置",
               "products",
               "包含产品分类、产品列表等产品页面配置"
             )}
-          </TabPane>
-          <TabPane key="seo" title="SEO配置">
-            {renderConfigCard(
+
+            {activeMenu === 'seo' && renderConfigCard(
               "SEO配置",
               "seo",
               "包含全局SEO、产品页面SEO等搜索引擎优化配置"
             )}
-          </TabPane>
-          <TabPane key="custom" title="站点个性化配置">
-            {renderConfigCard(
+
+            {activeMenu === 'custom' && renderConfigCard(
               "站点个性化配置",
               "custom",
               "包含主题、功能开关等个性化配置"
             )}
-          </TabPane>
-          <TabPane key="otherPages" title="自定义页面配置">
-            {renderConfigCard(
+
+            {activeMenu === 'otherPages' && renderConfigCard(
               "自定义页面配置",
               "otherPages",
               "包含关于我们、服务条款、隐私政策等其他页面配置"
             )}
-          </TabPane>
-          <TabPane key="operationLogs" title="操作记录">
-            <Card title="操作记录">
-              {operationLogs.length === 0 ? (
-                <div className="text-center py-12">
-                  <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-gray-100 mb-4">
-                    <svg className="w-8 h-8 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
-                    </svg>
+
+            {activeMenu === 'operationLogs' && (
+              <Card title="操作记录">
+                {operationLogs.length === 0 ? (
+                  <div className="text-center py-12">
+                    <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-gray-100 mb-4">
+                      <svg className="w-8 h-8 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
+                      </svg>
+                    </div>
+                    <p className="text-gray-500 text-sm">暂无操作记录</p>
                   </div>
-                  <p className="text-gray-500 text-sm">暂无操作记录</p>
-                </div>
-              ) : (
-                <div className="overflow-x-auto rounded-lg border border-gray-200">
-                  <table className="w-full text-sm">
-                    <thead>
-                      <tr className="bg-gradient-to-r from-gray-50 to-gray-100 border-b border-gray-200">
-                        <th className="text-left py-4 px-5 font-semibold text-gray-700">用户名</th>
-                        <th className="text-left py-4 px-5 font-semibold text-gray-700">操作类型</th>
-                        <th className="text-left py-4 px-5 font-semibold text-gray-700">描述</th>
-                        <th className="text-left py-4 px-5 font-semibold text-gray-700">IP地址</th>
-                        <th className="text-left py-4 px-5 font-semibold text-gray-700">时间</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {operationLogs.map((log, index) => (
-                        <tr key={log.id} className={`border-b border-gray-100 hover:bg-blue-50 transition-colors ${index % 2 === 0 ? 'bg-white' : 'bg-gray-50/50'}`}>
-                          <td className="py-4 px-5">
-                            <div className="flex items-center gap-2">
-                              <div className="w-8 h-8 rounded-full bg-gradient-to-br from-blue-500 to-purple-500 flex items-center justify-center text-white text-xs font-semibold">
-                                {log.username.charAt(0).toUpperCase()}
-                              </div>
-                              <span className="text-gray-900 font-medium">{log.username}</span>
-                            </div>
-                          </td>
-                          <td className="py-4 px-5">
-                            <span className={`inline-flex items-center px-3 py-1.5 text-xs font-medium rounded-full ${
-                              log.type === 'login' ? 'bg-blue-100 text-blue-700 border border-blue-200' :
-                              log.type === 'update_config' ? 'bg-green-100 text-green-700 border border-green-200' :
-                              log.type === 'change_password' ? 'bg-purple-100 text-purple-700 border border-purple-200' :
-                              'bg-gray-100 text-gray-700 border border-gray-200'
-                            }`}>
-                              {log.type === 'login' ? '🔐 登录' :
-                               log.type === 'update_config' ? '⚙️ 更新配置' :
-                               log.type === 'change_password' ? '🔑 修改密码' :
-                               log.type}
-                            </span>
-                          </td>
-                          <td className="py-4 px-5 text-gray-700">{log.description}</td>
-                          <td className="py-4 px-5">
-                            <span className="inline-flex items-center gap-1 text-gray-600 font-mono text-xs bg-gray-100 px-2 py-1 rounded">
-                              <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9" />
-                              </svg>
-                              {log.ip}
-                            </span>
-                          </td>
-                          <td className="py-4 px-5">
-                            <span className="text-gray-600 text-xs">{log.timestamp}</span>
-                          </td>
+                ) : (
+                  <div className="overflow-x-auto rounded-lg border border-gray-200">
+                    <table className="w-full text-sm">
+                      <thead>
+                        <tr className="bg-gradient-to-r from-gray-50 to-gray-100 border-b border-gray-200">
+                          <th className="text-left py-4 px-5 font-semibold text-gray-700">用户名</th>
+                          <th className="text-left py-4 px-5 font-semibold text-gray-700">操作类型</th>
+                          <th className="text-left py-4 px-5 font-semibold text-gray-700">描述</th>
+                          <th className="text-left py-4 px-5 font-semibold text-gray-700">IP地址</th>
+                          <th className="text-left py-4 px-5 font-semibold text-gray-700">时间</th>
                         </tr>
-                      ))}
-                    </tbody>
-                  </table>
-                </div>
-              )}
-            </Card>
-          </TabPane>
-        </Tabs>
+                      </thead>
+                      <tbody>
+                        {operationLogs.map((log, index) => (
+                          <tr key={log.id} className={`border-b border-gray-100 hover:bg-blue-50 transition-colors ${index % 2 === 0 ? 'bg-white' : 'bg-gray-50/50'}`}>
+                            <td className="py-4 px-5">
+                              <div className="flex items-center gap-2">
+                                <div className="w-8 h-8 rounded-full bg-gradient-to-br from-blue-500 to-purple-500 flex items-center justify-center text-white text-xs font-semibold">
+                                  {log.username.charAt(0).toUpperCase()}
+                                </div>
+                                <span className="text-gray-900 font-medium">{log.username}</span>
+                              </div>
+                            </td>
+                            <td className="py-4 px-5">
+                              <span className={`inline-flex items-center px-3 py-1.5 text-xs font-medium rounded-full ${
+                                log.type === 'login' ? 'bg-blue-100 text-blue-700 border border-blue-200' :
+                                log.type === 'update_config' ? 'bg-green-100 text-green-700 border border-green-200' :
+                                log.type === 'change_password' ? 'bg-purple-100 text-purple-700 border border-purple-200' :
+                                'bg-gray-100 text-gray-700 border border-gray-200'
+                              }`}>
+                                {log.type === 'login' ? '🔐 登录' :
+                                 log.type === 'update_config' ? '⚙️ 更新配置' :
+                                 log.type === 'change_password' ? '🔑 修改密码' :
+                                 log.type}
+                              </span>
+                            </td>
+                            <td className="py-4 px-5 text-gray-700">{log.description}</td>
+                            <td className="py-4 px-5">
+                              <span className="inline-flex items-center gap-1 text-gray-600 font-mono text-xs bg-gray-100 px-2 py-1 rounded">
+                                <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9" />
+                                </svg>
+                                {log.ip}
+                              </span>
+                            </td>
+                            <td className="py-4 px-5">
+                              <span className="text-gray-600 text-xs">{log.timestamp}</span>
+                            </td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+                )}
+              </Card>
+            )}
+          </div>
+        </div>
       </div>
 
       <Modal
