@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react"
 import { Button, Drawer, Dropdown, Menu } from "@arco-design/web-react"
-import { IconMenu, IconPhone } from "@arco-design/web-react/icon"
+import { IconMenu, IconPhone, IconSettings } from "@arco-design/web-react/icon"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
 import { Logo } from "@/components/common/logo"
@@ -89,6 +89,15 @@ export function Header() {
             )}
           {/* Desktop CTA */}
           <div className="hidden md:flex items-center gap-3 w-[200px] justify-end">
+            <Link href="/admin">
+              <Button
+                type="text"
+                className="!text-gray-700 hover:!text-cyan-500 !px-3 !h-10 !rounded-full transition-all duration-300"
+                icon={<IconSettings />}
+              >
+                管理后台
+              </Button>
+            </Link>
             <Dropdown
               droplist={
                 <div className="p-4">

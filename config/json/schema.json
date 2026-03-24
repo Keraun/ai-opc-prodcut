@@ -1,0 +1,205 @@
+{
+  "site": {
+    "name": {
+      "description": "网站名称，显示在Header、Footer等位置",
+      "type": "string",
+      "required": true
+    },
+    "description": {
+      "description": "网站描述，用于SEO和网站介绍",
+      "type": "string",
+      "required": true
+    },
+    "url": {
+      "description": "网站URL，用于生成绝对路径链接",
+      "type": "string",
+      "required": true
+    },
+    "ogImage": {
+      "description": "Open Graph图片路径，用于社交分享",
+      "type": "string",
+      "required": false
+    },
+    "links": {
+      "description": "社交媒体链接",
+      "type": "object",
+      "required": false,
+      "fields": {
+        "email": "联系邮箱",
+        "wechat": "微信公众号",
+        "github": "GitHub地址",
+        "twitter": "Twitter地址"
+      }
+    },
+    "creator": {
+      "description": "创建者信息",
+      "type": "object",
+      "required": false,
+      "fields": {
+        "name": "创建者名称",
+        "url": "创建者网站"
+      }
+    },
+    "contact": {
+      "description": "联系方式",
+      "type": "object",
+      "required": false,
+      "fields": {
+        "address": "公司地址",
+        "phone": "联系电话",
+        "email": "联系邮箱"
+      }
+    },
+    "icp": {
+      "description": "ICP备案号",
+      "type": "string",
+      "required": false
+    }
+  },
+  "common": {
+    "productsSeo": {
+      "description": "产品页面SEO配置",
+      "type": "object",
+      "required": false,
+      "fields": {
+        "title": "页面标题",
+        "description": "页面描述",
+        "keywords": "关键词数组"
+      }
+    },
+    "seo": {
+      "description": "全局SEO配置",
+      "type": "object",
+      "required": true,
+      "fields": {
+        "keywords": "关键词数组",
+        "openGraph": "Open Graph配置",
+        "twitter": "Twitter Card配置",
+        "robots": "搜索引擎爬虫配置"
+      }
+    },
+    "navigation": {
+      "description": "导航配置",
+      "type": "object",
+      "required": true,
+      "fields": {
+        "main": "主导航菜单",
+        "sidebar": "侧边栏导航"
+      }
+    },
+    "footer": {
+      "description": "页脚配置",
+      "type": "object",
+      "required": true,
+      "fields": {
+        "description": "页脚描述",
+        "social": "社交链接配置",
+        "company": "公司信息配置"
+      }
+    }
+  },
+  "pages": {
+    "hero": {
+      "description": "首页Hero区域配置",
+      "type": "object",
+      "required": false,
+      "fields": {
+        "badge": "徽章文字",
+        "title": "标题（main: 主标题, sub: 副标题）",
+        "subtitle": "副标题描述",
+        "buttons": "按钮配置（primary: 主按钮, secondary: 次按钮）"
+      }
+    },
+    "about": {
+      "description": "关于我们区域配置",
+      "type": "object",
+      "required": false,
+      "fields": {
+        "title": "标题配置",
+        "description": "描述数组",
+        "mission": "使命",
+        "vision": "愿景",
+        "values": "价值观",
+        "stats": "统计数据"
+      }
+    },
+    "homeProducts": {
+      "description": "首页产品展示配置",
+      "type": "array",
+      "required": false,
+      "fields": {
+        "id": "产品ID",
+        "name": "产品名称",
+        "description": "产品描述",
+        "icon": "图标名称",
+        "tag": "标签文字",
+        "tagColor": "标签颜色",
+        "features": "特性列表",
+        "link": "跳转链接"
+      }
+    },
+    "homeServices": {
+      "description": "首页服务展示配置",
+      "type": "array",
+      "required": false,
+      "fields": {
+        "title": "服务标题",
+        "description": "服务描述",
+        "highlights": "亮点列表"
+      }
+    },
+    "products": {
+      "description": "产品页面配置",
+      "type": "object",
+      "required": false,
+      "fields": {
+        "categories": "产品分类",
+        "items": "产品列表"
+      }
+    },
+    "pages": {
+      "description": "通用页面配置",
+      "type": "object",
+      "required": false,
+      "fields": {
+        "title": "页面标题",
+        "description": "页面描述",
+        "contentType": "内容类型（markdown或html）",
+        "content": "页面内容",
+        "showTOC": "是否显示目录"
+      }
+    }
+  },
+  "custom": {
+    "admin": {
+      "description": "管理员账号配置",
+      "type": "object",
+      "required": true,
+      "fields": {
+        "username": "管理员用户名",
+        "password": "管理员密码",
+        "mustChangePassword": "是否必须修改密码"
+      }
+    },
+    "theme": {
+      "description": "主题配置",
+      "type": "object",
+      "required": false,
+      "fields": {
+        "primaryColor": "主色调",
+        "secondaryColor": "辅助色",
+        "mode": "主题模式（light或dark）"
+      }
+    },
+    "features": {
+      "description": "功能开关配置",
+      "type": "object",
+      "required": false,
+      "fields": {
+        "enableTOC": "是否启用目录功能",
+        "enableReadingProgress": "是否启用阅读进度条",
+        "enableSearch": "是否启用搜索功能"
+      }
+    }
+  }
+}
