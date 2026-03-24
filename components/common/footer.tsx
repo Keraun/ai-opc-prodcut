@@ -1,6 +1,6 @@
 "use client"
 
-import { IconLocation, IconPhone, IconEmail } from "@arco-design/web-react/icon"
+import { IconLocation, IconPhone, IconEmail, IconSettings } from "@arco-design/web-react/icon"
 import { Logo } from "@/components/common/logo"
 import { siteConfig, footerConfig } from "@/config/client"
 
@@ -97,8 +97,9 @@ export function Footer() {
               href="/admin" 
               target="_blank" 
               rel="noopener noreferrer"
-              className="text-sm text-gray-500 hover:text-blue-600 transition-colors"
+              className="text-sm text-gray-500 hover:text-blue-600 transition-colors flex items-center gap-1"
             >
+              <IconSettings className="text-sm" />
               管理后台
             </a>
           </div>

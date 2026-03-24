@@ -53,6 +53,22 @@ export async function POST(request: NextRequest) {
 
     fs.writeFileSync(accountConfigPath, JSON.stringify(accountConfig, null, 2))
 
+    const loginLogsPath = path.join(process.cwd(), "config/json/login-logs.json")
+    const loginLogs = JSON.parse(fs.readFileSync(loginLogsPath, "utf-8"))
+    
+    loginLogs.logs.unshift({
+      username: admin.username,
+      loginTime: currentTime,
+      loginIP: currentIP,
+      id: Date.now()
+    })
+    
+    if (loginLogs.logs.length > 100) {
+      loginLogs.logs = loginLogs.logs.slice(0, 100)
+    }
+    
+    fs.writeFileSync(loginLogsPath, JSON.stringify(loginLogs, null, 2))
+
     const cookieStore = await cookies()
     const userData = {
       username: admin.username,

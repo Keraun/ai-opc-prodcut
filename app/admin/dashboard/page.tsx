@@ -19,7 +19,8 @@ export default function AdminDashboardPage() {
     products: {},
     otherPages: {},
     custom: {},
-    account: {}
+    account: {},
+    loginLogs: {}
   })
   const [loading, setLoading] = useState(false)
   const [editingConfig, setEditingConfig] = useState<string | null>(null)
@@ -40,10 +41,12 @@ export default function AdminDashboardPage() {
   const [confirmPassword, setConfirmPassword] = useState("")
   const [changePasswordLoading, setChangePasswordLoading] = useState(false)
   const [currentUser, setCurrentUser] = useState<any>(null)
+  const [loginLogs, setLoginLogs] = useState<any[]>([])
 
   useEffect(() => {
     fetchConfigs()
     fetchSchema()
+    fetchLoginLogs()
     checkAuth()
   }, [])
 
@@ -150,6 +153,18 @@ export default function AdminDashboardPage() {
       }
     } catch (error) {
       console.error("获取配置说明失败", error)
+    }
+  }
+
+  const fetchLoginLogs = async () => {
+    try {
+      const response = await fetch("/api/admin/login-logs")
+      if (response.ok) {
+        const data = await response.json()
+        setLoginLogs(data.logs || [])
+      }
+    } catch (error) {
+      console.error("获取登录记录失败", error)
     }
   }
 
@@ -581,6 +596,36 @@ export default function AdminDashboardPage() {
               "otherPages",
               "包含关于我们、服务条款、隐私政策等其他页面配置"
             )}
+          </TabPane>
+          <TabPane key="loginLogs" title="登录记录">
+            <Card title="登录记录">
+              {loginLogs.length === 0 ? (
+                <div className="text-center py-8 text-gray-500">
+                  暂无登录记录
+                </div>
+              ) : (
+                <div className="overflow-x-auto">
+                  <table className="w-full text-sm">
+                    <thead>
+                      <tr className="border-b border-gray-200">
+                        <th className="text-left py-3 px-4 font-semibold text-gray-700">用户名</th>
+                        <th className="text-left py-3 px-4 font-semibold text-gray-700">登录时间</th>
+                        <th className="text-left py-3 px-4 font-semibold text-gray-700">登录IP</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {loginLogs.map((log) => (
+                        <tr key={log.id} className="border-b border-gray-100 hover:bg-gray-50">
+                          <td className="py-3 px-4 text-gray-900">{log.username}</td>
+                          <td className="py-3 px-4 text-gray-700">{log.loginTime}</td>
+                          <td className="py-3 px-4 text-gray-700">{log.loginIP}</td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              )}
+            </Card>
           </TabPane>
         </Tabs>
       </div>

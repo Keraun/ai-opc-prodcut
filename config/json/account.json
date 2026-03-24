@@ -5,10 +5,19 @@
       "password": "admin@qwer",
       "remark": "默认管理员账号",
       "mustChangePassword": false,
-      "lastLoginTime": "2026/03/25 05:10:30",
+      "lastLoginTime": "2026/03/25 05:11:55",
       "lastLoginIP": "::1",
       "currentLoginIP": "::1",
-      "currentLoginTime": "2026/03/25 05:11:55"
+      "currentLoginTime": "2026/03/25 05:18:51"
+    },
+    {
+      "username": "admin2",
+      "password": "admin@1234",
+      "remark": "默认管理员账号2",
+      "lastLoginTime": "",
+      "lastLoginIP": "",
+      "currentLoginIP": "::1",
+      "currentLoginTime": "2026/03/25 05:20:33"
     }
   ]
 }

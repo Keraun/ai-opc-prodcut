@@ -228,5 +228,18 @@
         "currentLoginTime": "当前登录时间"
       }
     }
+  },
+  "login-logs": {
+    "logs": {
+      "description": "登录记录数组",
+      "type": "array",
+      "required": true,
+      "fields": {
+        "username": "用户名",
+        "loginTime": "登录时间",
+        "loginIP": "登录IP",
+        "id": "记录ID"
+      }
+    }
   }
 }
