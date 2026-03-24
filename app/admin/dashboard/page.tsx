@@ -2,8 +2,9 @@
 
 import { useState, useEffect } from "react"
 import { useRouter } from "next/navigation"
-import { Button, Card, Message, Modal, Input, Alert, Dropdown } from "@arco-design/web-react"
+import { Button, Card, Modal, Input, Alert, Dropdown } from "@arco-design/web-react"
 import { IconSave, IconExport, IconEdit, IconLock, IconCheck, IconInfoCircle, IconEye, IconCustomerService, IconQuestionCircle, IconHistory, IconUndo, IconHome, IconSettings, IconUser, IconNav, IconFile, IconStorage, IconCode, IconTrophy, IconClockCircle } from "@arco-design/web-react/icon"
+import { toast, Toaster } from "sonner"
 import { compareJSON, getLineClass, hasChanges } from "@/lib/json-compare"
 
 const JSONViewerWithLineNumbers = ({ 
@@ -309,10 +310,10 @@ export default function AdminDashboardPage() {
         setConfigs(data)
         setOriginalConfigs(JSON.parse(JSON.stringify(data)))
       } else {
-        Message.error("获取配置失败")
+        toast.error("获取配置失败")
       }
     } catch (error) {
-      Message.error("获取配置失败")
+      toast.error("获取配置失败")
     }
   }
 
@@ -336,7 +337,7 @@ export default function AdminDashboardPage() {
       })
 
       if (response.ok) {
-        Message.success("配置提交成功")
+        toast.success("配置提交成功")
         setOriginalConfigs(prev => ({
           ...prev,
           [configType]: JSON.parse(JSON.stringify(configs[configType as keyof typeof configs]))
@@ -344,10 +345,10 @@ export default function AdminDashboardPage() {
         fetchVersionInfos()
         fetchOperationLogs()
       } else {
-        Message.error("配置提交失败")
+        toast.error("配置提交失败")
       }
     } catch (error) {
-      Message.error("配置提交失败")
+      toast.error("配置提交失败")
     } finally {
       setLoading(false)
     }
@@ -360,11 +361,11 @@ export default function AdminDashboardPage() {
       })
 
       if (response.ok) {
-        Message.success("退出成功")
+        toast.success("退出成功")
         router.push("/admin")
       }
     } catch (error) {
-      Message.error("退出失败")
+      toast.error("退出失败")
     }
   }
 
@@ -378,10 +379,10 @@ export default function AdminDashboardPage() {
         setPreviousVersionInfo(data.version)
         setViewingPreviousVersion(configType)
       } else {
-        Message.info("当前配置项还没有历史版本记录，提交配置后将创建第一个版本。")
+        toast.info("当前配置项还没有历史版本记录，提交配置后将创建第一个版本。")
       }
     } catch (error) {
-      Message.error("获取上一版本失败")
+      toast.error("获取上一版本失败")
     }
   }
 
@@ -405,14 +406,14 @@ export default function AdminDashboardPage() {
           const data = await response.json()
 
           if (response.ok && data.success) {
-            Message.success("版本还原成功")
+            toast.success("版本还原成功")
             await fetchConfigs()
             fetchVersionInfos()
           } else {
-            Message.error(data.message || "版本还原失败")
+            toast.error(data.message || "版本还原失败")
           }
         } catch (error) {
-          Message.error("版本还原失败")
+          toast.error("版本还原失败")
         } finally {
           setRestoringVersion(false)
         }
@@ -422,23 +423,23 @@ export default function AdminDashboardPage() {
 
   const handleChangePassword = async () => {
     if (!oldPassword || !newPassword || !confirmPassword) {
-      Message.error("请填写所有字段")
+      toast.error("请填写所有字段")
       return
     }
 
     if (newPassword !== confirmPassword) {
-      Message.error("两次输入的新密码不一致")
+      toast.error("两次输入的新密码不一致")
       return
     }
 
     if (newPassword.length < 8) {
-      Message.error("新密码长度至少为8位")
+      toast.error("新密码长度至少为8位")
       return
     }
 
     const currentUserStr = sessionStorage.getItem('currentUser')
     if (!currentUserStr) {
-      Message.error("未找到用户信息，请重新登录")
+      toast.error("未找到用户信息，请重新登录")
       router.push("/admin")
       return
     }
@@ -463,7 +464,7 @@ export default function AdminDashboardPage() {
       const data = await response.json()
 
       if (response.ok) {
-        Message.success("密码修改成功")
+        toast.success("密码修改成功")
         setShowChangePassword(false)
         setMustChangePassword(false)
         setOldPassword("")
@@ -476,10 +477,10 @@ export default function AdminDashboardPage() {
         }
         fetchOperationLogs()
       } else {
-        Message.error(data.message || "密码修改失败")
+        toast.error(data.message || "密码修改失败")
       }
     } catch (error) {
-      Message.error("密码修改失败，请重试")
+      toast.error("密码修改失败，请重试")
     } finally {
       setChangePasswordLoading(false)
     }
@@ -513,11 +514,11 @@ export default function AdminDashboardPage() {
       const formatted = JSON.stringify(parsed, null, 2)
       setEditValue(formatted)
       setJsonError("")
-      Message.success("格式化成功")
+      toast.success("格式化成功")
     } catch (error: any) {
       const errorMessage = error.message || "JSON格式错误"
       setJsonError(errorMessage)
-      Message.error("JSON格式错误，无法格式化")
+      toast.error("JSON格式错误，无法格式化")
     }
   }
 
@@ -528,7 +529,7 @@ export default function AdminDashboardPage() {
 
   const handleSaveEdit = () => {
     if (!validateJson(editValue)) {
-      Message.error("JSON格式错误，请修正后再提交")
+      toast.error("JSON格式错误，请修正后再提交")
       return
     }
     
@@ -540,9 +541,9 @@ export default function AdminDashboardPage() {
       }))
       setEditingConfig(null)
       setJsonError("")
-      Message.success("配置已更新，请点击提交按钮确认更改")
+      toast.success("配置已更新，请点击提交按钮确认更改")
     } catch (error) {
-      Message.error("JSON格式错误")
+      toast.error("JSON格式错误")
     }
   }
 
@@ -551,7 +552,7 @@ export default function AdminDashboardPage() {
     const versionInfo = versionInfos[configType]
     
     return (
-      <div id="config-container" className="flex gap-0 mb-4 relative" style={{ minHeight: '500px' }}>
+      <div id="config-container" className="flex gap-0 mb-4 relative" style={{ height: 'calc(100vh - 64px - 64px)' }}>
         <div style={{ width: `${leftWidth}%` }} className="flex-shrink-0">
           <Card
             title={
@@ -660,7 +661,10 @@ export default function AdminDashboardPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <>
+      <Toaster position="top-center" richColors />
+      
+      <div className="min-h-screen bg-gray-50">
       {mustChangePassword && (
         <div className="bg-red-50 border-b-2 border-red-400">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
@@ -690,11 +694,23 @@ export default function AdminDashboardPage() {
           </div>
         </div>
       )}
-      <div className="bg-white border-b border-gray-200">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="bg-white border-b border-gray-200 shadow-sm">
+        <div className="px-6">
           <div className="flex items-center justify-between h-16">
-            <h1 className="text-xl font-bold text-gray-900">配置管理后台</h1>
-            <div className="flex items-center gap-4">
+            <div className="flex items-center gap-3">
+              <div className="w-9 h-9 rounded-lg bg-gradient-to-br from-blue-500 to-blue-600 flex items-center justify-center shadow-sm">
+                <svg className="w-5 h-5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                </svg>
+              </div>
+              <div className="flex items-center gap-2">
+                <h1 className="text-sm font-bold text-gray-900">配置管理后台</h1>
+                <span className="text-xs text-gray-400">|</span>
+                <p className="text-xs text-gray-500">创客AI</p>
+              </div>
+            </div>
+            <div className="flex items-center gap-3">
               <Dropdown
                 droplist={
                   <div className="p-4 bg-white rounded-lg shadow-lg">
@@ -713,7 +729,7 @@ export default function AdminDashboardPage() {
               >
                 <Button
                   type="text"
-                  className="!text-gray-700 hover:!text-blue-600"
+                  className="!text-gray-700 hover:!text-blue-600 hover:!bg-blue-50"
                   icon={<IconCustomerService />}
                 >
                   联系客服
@@ -721,24 +737,27 @@ export default function AdminDashboardPage() {
               </Dropdown>
               <Button
                 type="text"
-                className="!text-gray-700 hover:!text-blue-600"
+                className="!text-gray-700 hover:!text-blue-600 hover:!bg-blue-50"
                 icon={<IconQuestionCircle />}
                 onClick={() => window.open('https://help.makerai.com', '_blank')}
               >
                 帮助文档
               </Button>
               <Button
+                className="!bg-blue-500 !text-white hover:!bg-blue-600 !border-blue-500"
                 onClick={() => window.open('/', '_blank')}
               >
                 打开官网
               </Button>
               <Button
+                className="!bg-gray-100 !text-gray-700 hover:!bg-gray-200 !border-gray-200"
                 icon={<IconLock />}
                 onClick={() => setShowChangePassword(true)}
               >
                 修改密码
               </Button>
               <Button
+                className="!bg-red-50 !text-red-600 hover:!bg-red-100 !border-red-200"
                 icon={<IconExport />}
                 onClick={handleLogout}
               >
@@ -750,18 +769,9 @@ export default function AdminDashboardPage() {
       </div>
 
       <div className="flex" style={{ height: 'calc(100vh - 64px)' }}>
-        <div className={`${sidebarCollapsed ? 'w-16' : 'w-64'} bg-white border-r border-gray-200 transition-all duration-300 flex-shrink-0`}>
+        <div className={`${sidebarCollapsed ? 'w-16' : 'w-64'} bg-white border-r border-gray-200 transition-all duration-300 flex-shrink-0 relative`}>
           <div className="h-full overflow-y-auto">
             <div className="p-4">
-              <Button
-                type="text"
-                long
-                onClick={() => setSidebarCollapsed(!sidebarCollapsed)}
-                className="mb-4"
-              >
-                {sidebarCollapsed ? '展开' : '收起'}
-              </Button>
-              
               <nav className="space-y-1">
                 <button
                   onClick={() => setActiveMenu('accountInfo')}
@@ -925,10 +935,24 @@ export default function AdminDashboardPage() {
               </nav>
             </div>
           </div>
+          
+          <button
+            onClick={() => setSidebarCollapsed(!sidebarCollapsed)}
+            className="absolute top-1/2 -right-4 w-8 h-16 bg-white border border-gray-200 rounded-r-lg flex items-center justify-center hover:bg-gray-50 transition-colors shadow-md z-10"
+          >
+            <svg 
+              className={`w-4 h-4 text-gray-600 transition-transform duration-300 ${sidebarCollapsed ? 'rotate-180' : ''}`} 
+              fill="none" 
+              viewBox="0 0 24 24" 
+              stroke="currentColor"
+            >
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+            </svg>
+          </button>
         </div>
 
-        <div className="flex-1 overflow-auto bg-gray-50">
-          <div className="p-8">
+        <div className="flex-1 overflow-auto bg-gray-50 h-full">
+          <div className="p-8 h-full">
             {activeMenu === 'accountInfo' && (
               <Card>
                 {currentUser && (
@@ -1067,18 +1091,18 @@ export default function AdminDashboardPage() {
                   <div className="overflow-x-auto rounded-lg border border-gray-200">
                     <table className="w-full text-sm">
                       <thead>
-                        <tr className="bg-gradient-to-r from-gray-50 to-gray-100 border-b border-gray-200">
-                          <th className="text-left py-4 px-5 font-semibold text-gray-700">用户名</th>
-                          <th className="text-left py-4 px-5 font-semibold text-gray-700">操作类型</th>
-                          <th className="text-left py-4 px-5 font-semibold text-gray-700">描述</th>
-                          <th className="text-left py-4 px-5 font-semibold text-gray-700">IP地址</th>
-                          <th className="text-left py-4 px-5 font-semibold text-gray-700">时间</th>
+                        <tr className="bg-gradient-to-r from-gray-50 to-gray-100 border-b-2 border-gray-300">
+                          <th className="text-center py-5 px-8 font-bold text-gray-800 text-base min-w-[120px]">用户名</th>
+                          <th className="text-center py-5 px-8 font-bold text-gray-800 text-base min-w-[140px]">操作类型</th>
+                          <th className="text-center py-5 px-8 font-bold text-gray-800 text-base min-w-[200px]">描述</th>
+                          <th className="text-center py-5 px-8 font-bold text-gray-800 text-base min-w-[150px]">IP地址</th>
+                          <th className="text-center py-5 px-8 font-bold text-gray-800 text-base min-w-[180px]">时间</th>
                         </tr>
                       </thead>
                       <tbody>
                         {operationLogs.map((log, index) => (
                           <tr key={log.id} className={`border-b border-gray-100 hover:bg-blue-50 transition-colors ${index % 2 === 0 ? 'bg-white' : 'bg-gray-50/50'}`}>
-                            <td className="py-4 px-5">
+                            <td className="py-5 px-8">
                               <div className="flex items-center gap-2">
                                 <div className="w-8 h-8 rounded-full bg-gradient-to-br from-blue-500 to-purple-500 flex items-center justify-center text-white text-xs font-semibold">
                                   {log.username.charAt(0).toUpperCase()}
@@ -1086,7 +1110,7 @@ export default function AdminDashboardPage() {
                                 <span className="text-gray-900 font-medium">{log.username}</span>
                               </div>
                             </td>
-                            <td className="py-4 px-5">
+                            <td className="py-5 px-8">
                               <span className={`inline-flex items-center px-3 py-1.5 text-xs font-medium rounded-full ${
                                 log.type === 'login' ? 'bg-blue-100 text-blue-700 border border-blue-200' :
                                 log.type === 'update_config' ? 'bg-green-100 text-green-700 border border-green-200' :
@@ -1099,8 +1123,8 @@ export default function AdminDashboardPage() {
                                  log.type}
                               </span>
                             </td>
-                            <td className="py-4 px-5 text-gray-700">{log.description}</td>
-                            <td className="py-4 px-5">
+                            <td className="py-5 px-8 text-gray-700">{log.description}</td>
+                            <td className="py-5 px-8">
                               <span className="inline-flex items-center gap-1 text-gray-600 font-mono text-xs bg-gray-100 px-2 py-1 rounded">
                                 <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9" />
@@ -1108,7 +1132,7 @@ export default function AdminDashboardPage() {
                                 {log.ip}
                               </span>
                             </td>
-                            <td className="py-4 px-5">
+                            <td className="py-5 px-8">
                               <span className="text-gray-600 text-xs">{log.timestamp}</span>
                             </td>
                           </tr>
@@ -1157,7 +1181,7 @@ export default function AdminDashboardPage() {
                       if (editingConfig) {
                         setEditValue(JSON.stringify(configs[editingConfig as keyof typeof configs], null, 2))
                         setJsonError("")
-                        Message.success("已恢复到编辑前的配置")
+                        toast.success("已恢复到编辑前的配置")
                       }
                     }}
                   >
@@ -1325,7 +1349,7 @@ export default function AdminDashboardPage() {
               size="small"
               onClick={() => {
                 navigator.clipboard.writeText(viewValue)
-                Message.success("已复制到剪贴板")
+                toast.success("已复制到剪贴板")
               }}
             >
               复制
@@ -1414,7 +1438,7 @@ export default function AdminDashboardPage() {
                 size="small"
                 onClick={() => {
                   navigator.clipboard.writeText(JSON.stringify(previousVersionData, null, 2))
-                  Message.success("已复制到剪贴板")
+                  toast.success("已复制到剪贴板")
                 }}
               >
                 复制
@@ -1488,5 +1512,6 @@ export default function AdminDashboardPage() {
         </div>
       </Modal>
     </div>
+    </>
   )
 }
