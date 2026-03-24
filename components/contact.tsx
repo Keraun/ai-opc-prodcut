@@ -1,18 +1,17 @@
 "use client"
 
 import { useState } from "react"
-import { Card, Form, Input, Select, Button, Message } from "@arco-design/web-react"
+import { Card, Form, Input, Button, Message, Radio } from "@arco-design/web-react"
 import { IconSend } from "@arco-design/web-react/icon"
 
 const FormItem = Form.Item
 const TextArea = Input.TextArea
+const RadioGroup = Radio.Group
 
-const businessTypes = [
-  { label: "产品咨询", value: "product" },
-  { label: "技术支持", value: "support" },
-  { label: "商务合作", value: "business" },
-  { label: "加入我们", value: "career" },
-  { label: "其他", value: "other" },
+const contactPreferences = [
+  { label: "电话", value: "phone" },
+  { label: "微信", value: "wechat" },
+  { label: "邮箱", value: "email" },
 ]
 
 export function Contact() {
@@ -28,7 +27,7 @@ export function Contact() {
   }
 
   return (
-    <section id="contact" className="relative py-24 md:py-32 bg-gradient-to-b from-gray-50/50 to-white">
+    <section id="contact" className="relative py-16 md:py-24 bg-gradient-to-b from-gray-50/50 to-white">
       {/* Background Pattern */}
       <div className="absolute inset-0 bg-[linear-gradient(rgba(59,130,246,0.02)_1px,transparent_1px),linear-gradient(90deg,rgba(59,130,246,0.02)_1px,transparent_1px)] bg-[size:60px_60px]" />
       
@@ -36,39 +35,39 @@ export function Contact() {
       <div className="absolute top-20 left-10 w-72 h-72 bg-blue-100/50 rounded-full blur-3xl" />
       <div className="absolute bottom-20 right-10 w-96 h-96 bg-purple-100/50 rounded-full blur-3xl" />
 
-      <div className="relative z-10 max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="relative z-10 max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Section Header */}
-        <div className="text-center mb-16">
+        <div className="text-center mb-12">
           <span className="inline-block px-4 py-1.5 rounded-full bg-blue-50 text-blue-600 text-sm font-medium mb-4 border border-blue-100">
             联系我们
           </span>
-          <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-gray-900 mb-4 text-balance">
+          <h2 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-3">
             准备好开启AI之旅了吗？
           </h2>
-          <p className="text-lg text-gray-500 max-w-2xl mx-auto leading-relaxed">
-            无论您有任何问题或合作意向，我们的团队随时为您服务
+          <p className="text-base text-gray-500 max-w-xl mx-auto">
+            留下您的联系方式，我们会尽快与您取得联系
           </p>
         </div>
 
         {/* Contact Form */}
-        <Card className="!bg-white !border-gray-100 hover:!border-gray-200 hover:!shadow-xl transition-all duration-300">
-          <div className="p-6 md:p-8">
-            <h3 className="text-2xl font-bold text-gray-900 mb-6">发送留言</h3>
+        <Card className="!bg-white !border-gray-100 hover:!shadow-lg transition-all duration-300">
+          <div className="p-5 md:p-6">
             <Form
               form={form}
               layout="vertical"
               onSubmit={handleSubmit}
-              className="[&_.arco-form-label-item]:!text-gray-600 [&_.arco-form-label-item>label]:!text-gray-600 [&_.arco-form-label-item>label]:!font-medium"
+              initialValues={{ preference: "phone" }}
+              className="[&_.arco-form-label-item]:!text-gray-600 [&_.arco-form-label-item>label]:!text-gray-600 [&_.arco-form-label-item>label]:!font-medium [&_.arco-form-label-item>label]:!text-sm"
             >
-              <div className="grid sm:grid-cols-2 gap-5">
+              <div className="grid sm:grid-cols-2 gap-4">
                 <FormItem
                   label="您的姓名"
                   field="name"
                   rules={[{ required: true, message: "请输入姓名" }]}
                 >
                   <Input
-                    placeholder="请输入您的姓名"
-                    className="!bg-gray-50 !border-gray-200 !text-gray-900 placeholder:!text-gray-400 hover:!border-blue-300 focus:!border-blue-500 transition-colors !rounded-xl"
+                    placeholder="请输入姓名"
+                    className="!bg-gray-50 !border-gray-200 !text-gray-900 placeholder:!text-gray-400 hover:!border-blue-300 focus:!border-blue-500 transition-colors !rounded-lg !h-10"
                   />
                 </FormItem>
                 <FormItem
@@ -77,13 +76,22 @@ export function Contact() {
                   rules={[{ required: true, message: "请输入联系电话" }]}
                 >
                   <Input
-                    placeholder="请输入您的电话"
-                    className="!bg-gray-50 !border-gray-200 !text-gray-900 placeholder:!text-gray-400 hover:!border-blue-300 focus:!border-blue-500 transition-colors !rounded-xl"
+                    placeholder="请输入电话"
+                    className="!bg-gray-50 !border-gray-200 !text-gray-900 placeholder:!text-gray-400 hover:!border-blue-300 focus:!border-blue-500 transition-colors !rounded-lg !h-10"
                   />
                 </FormItem>
               </div>
 
-              <div className="grid sm:grid-cols-2 gap-5">
+              <div className="grid sm:grid-cols-2 gap-4">
+                <FormItem
+                  label="微信号"
+                  field="wechat"
+                >
+                  <Input
+                    placeholder="请输入微信号（选填）"
+                    className="!bg-gray-50 !border-gray-200 !text-gray-900 placeholder:!text-gray-400 hover:!border-blue-300 focus:!border-blue-500 transition-colors !rounded-lg !h-10"
+                  />
+                </FormItem>
                 <FormItem
                   label="电子邮箱"
                   field="email"
@@ -92,30 +100,23 @@ export function Contact() {
                   ]}
                 >
                   <Input
-                    placeholder="请输入您的邮箱（选填）"
-                    className="!bg-gray-50 !border-gray-200 !text-gray-900 placeholder:!text-gray-400 hover:!border-blue-300 focus:!border-blue-500 transition-colors !rounded-xl"
-                  />
-                </FormItem>
-                <FormItem
-                  label="咨询类型"
-                  field="type"
-                >
-                  <Select
-                    placeholder="请选择咨询类型（选填）"
-                    options={businessTypes}
-                    className="[&_.arco-select-view]:!bg-gray-50 [&_.arco-select-view]:!border-gray-200 [&_.arco-select-view]:hover:!border-blue-300 [&_.arco-select-view]:focus:!border-blue-500 !rounded-xl [&_.arco-select-view]:!h-10"
+                    placeholder="请输入邮箱（选填）"
+                    className="!bg-gray-50 !border-gray-200 !text-gray-900 placeholder:!text-gray-400 hover:!border-blue-300 focus:!border-blue-500 transition-colors !rounded-lg !h-10"
                   />
                 </FormItem>
               </div>
 
               <FormItem
-                label="公司名称"
-                field="company"
+                label="偏好联系方式"
+                field="preference"
               >
-                <Input
-                  placeholder="请输入您的公司名称（选填）"
-                  className="!bg-gray-50 !border-gray-200 !text-gray-900 placeholder:!text-gray-400 hover:!border-blue-300 focus:!border-blue-500 transition-colors !rounded-xl"
-                />
+                <RadioGroup>
+                  {contactPreferences.map((item) => (
+                    <Radio key={item.value} value={item.value}>
+                      {item.label}
+                    </Radio>
+                  ))}
+                </RadioGroup>
               </FormItem>
 
               <FormItem
@@ -124,19 +125,19 @@ export function Contact() {
                 rules={[{ required: true, message: "请输入留言内容" }]}
               >
                 <TextArea
-                  placeholder="请详细描述您的需求或问题..."
-                  autoSize={{ minRows: 4, maxRows: 6 }}
-                  className="!bg-gray-50 !border-gray-200 !text-gray-900 placeholder:!text-gray-400 hover:!border-blue-300 focus:!border-blue-500 transition-colors !rounded-xl"
+                  placeholder="请描述您的需求或问题..."
+                  autoSize={{ minRows: 3, maxRows: 5 }}
+                  className="!bg-gray-50 !border-gray-200 !text-gray-900 placeholder:!text-gray-400 hover:!border-blue-300 focus:!border-blue-500 transition-colors !rounded-lg"
                 />
               </FormItem>
 
-              <FormItem>
+              <FormItem className="mb-0">
                 <Button
                   type="primary"
                   htmlType="submit"
                   long
                   loading={loading}
-                  className="!bg-gradient-to-r !from-blue-600 !to-blue-700 !text-white hover:!from-blue-700 hover:!to-blue-800 !h-12 !text-base !rounded-xl shadow-lg shadow-blue-600/25 hover:shadow-xl hover:shadow-blue-600/30 transition-all duration-300 hover:-translate-y-0.5"
+                  className="!bg-gradient-to-r !from-blue-600 !to-blue-700 !text-white hover:!from-blue-700 hover:!to-blue-800 !h-11 !text-base !rounded-lg shadow-lg shadow-blue-600/25 hover:shadow-xl hover:shadow-blue-600/30 transition-all duration-300"
                 >
                   <IconSend className="mr-2" />
                   提交留言
