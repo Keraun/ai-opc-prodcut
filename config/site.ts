@@ -374,20 +374,18 @@ export const navigationConfig = {
  * 用于动态路由页面，支持markdown和html内容渲染
  */
 export const pagesConfig: Record<string, {
-  // 页面标题
   title: string
-  // 页面描述
   description?: string
-  // 内容类型：markdown 或 html
   contentType: 'markdown' | 'html'
-  // 页面内容
   content: string
+  showTOC?: boolean
 }> = {
   // 示例：关于我们页面
   about: {
     title: '关于我们',
     description: '了解创客AI的使命和愿景',
     contentType: 'markdown',
+    showTOC: true,
     content: `
 # 关于创客AI
 
@@ -419,6 +417,7 @@ export const pagesConfig: Record<string, {
     title: '服务条款',
     description: '创客AI服务条款',
     contentType: 'html',
+    showTOC: false,
     content: `
 <h1>服务条款</h1>
 <h2>1. 服务说明</h2>
@@ -437,6 +436,7 @@ export const pagesConfig: Record<string, {
     title: '隐私政策',
     description: '创客AI隐私政策',
     contentType: 'markdown',
+    showTOC: true,
     content: `
 # 隐私政策
 
