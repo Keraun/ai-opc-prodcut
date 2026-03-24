@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server"
-import { getVersionHistory, getPreviousVersion, getVersionData } from "@/lib/version-manager"
+import { getVersionHistory, getPreviousVersion, getVersionData, getLatestVersion } from "@/lib/version-manager"
 
 export async function GET(request: NextRequest) {
   try {
@@ -12,6 +12,16 @@ export async function GET(request: NextRequest) {
         success: false,
         message: "缺少配置类型参数"
       }, { status: 400 })
+    }
+
+    if (action === "latest") {
+      const { info, data } = getLatestVersion(configType)
+      
+      return NextResponse.json({
+        success: true,
+        version: info,
+        data: data
+      })
     }
 
     if (action === "previous") {

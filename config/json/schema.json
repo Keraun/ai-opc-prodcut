@@ -231,7 +231,7 @@
   },
   "login-logs": {
     "logs": {
-      "description": "登录记录数组",
+      "description": "登入记录数组",
       "type": "array",
       "required": true,
       "fields": {

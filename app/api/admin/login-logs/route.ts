@@ -11,7 +11,7 @@ export async function GET() {
   } catch (error) {
     return NextResponse.json({
       success: false,
-      message: "获取登录记录失败"
+      message: "获取登入记录失败"
     }, { status: 500 })
   }
 }

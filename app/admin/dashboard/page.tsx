@@ -4,12 +4,112 @@ import { useState, useEffect } from "react"
 import { useRouter } from "next/navigation"
 import { Button, Card, Tabs, Message, Modal, Input, Alert, Dropdown } from "@arco-design/web-react"
 import { IconSave, IconExport, IconEdit, IconLock, IconCheck, IconInfoCircle, IconEye, IconCustomerService, IconQuestionCircle, IconHistory, IconUndo } from "@arco-design/web-react/icon"
+import { compareJSON, getLineClass, hasChanges } from "@/lib/json-compare"
 
 const TabPane = Tabs.TabPane
+
+const JSONViewerWithLineNumbers = ({ 
+  content, 
+  diffLines = null,
+  maxHeight = '60vh' 
+}: { 
+  content: string
+  diffLines?: any[] | null
+  maxHeight?: string 
+}) => {
+  const lines = content.split('\n')
+  
+  return (
+    <div className="bg-gray-50 rounded-lg overflow-auto font-mono text-sm" style={{ maxHeight }}>
+      {lines.map((line, index) => {
+        const lineNumber = index + 1
+        const diffLine = diffLines?.find(d => d.lineNumber === lineNumber)
+        const lineClass = diffLine ? getLineClass(diffLine.type) : ''
+        
+        return (
+          <div key={index} className={`flex ${lineClass}`}>
+            <div className="flex-shrink-0 w-12 px-2 py-0.5 text-right text-gray-400 select-none border-r border-gray-200 bg-gray-100">
+              {lineNumber}
+            </div>
+            <div className="flex-1 px-4 py-0.5 whitespace-pre-wrap break-words">
+              {line || ' '}
+            </div>
+          </div>
+        )
+      })}
+    </div>
+  )
+}
+
+const JSONDiffViewer = ({ 
+  oldContent, 
+  newContent,
+  oldTitle = '旧版本',
+  newTitle = '新版本',
+  maxHeight = '60vh'
+}: { 
+  oldContent: string
+  newContent: string
+  oldTitle?: string
+  newTitle?: string
+  maxHeight?: string
+}) => {
+  const oldObj = JSON.parse(oldContent)
+  const newObj = JSON.parse(newContent)
+  const { oldLines, newLines } = compareJSON(oldObj, newObj)
+  
+  return (
+    <div className="grid grid-cols-2 gap-4">
+      <div>
+        <div className="mb-2 font-semibold text-gray-700">{oldTitle}</div>
+        <div className="bg-gray-50 rounded-lg overflow-auto font-mono text-sm" style={{ maxHeight }}>
+          {oldLines.map((line, index) => (
+            <div key={index} className={`flex ${getLineClass(line.type)}`}>
+              <div className="flex-shrink-0 w-12 px-2 py-0.5 text-right text-gray-400 select-none border-r border-gray-200 bg-gray-100">
+                {line.lineNumber}
+              </div>
+              <div className="flex-1 px-4 py-0.5 whitespace-pre-wrap break-words">
+                {line.content || ' '}
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+      <div>
+        <div className="mb-2 font-semibold text-gray-700">{newTitle}</div>
+        <div className="bg-gray-50 rounded-lg overflow-auto font-mono text-sm" style={{ maxHeight }}>
+          {newLines.map((line, index) => (
+            <div key={index} className={`flex ${getLineClass(line.type)}`}>
+              <div className="flex-shrink-0 w-12 px-2 py-0.5 text-right text-gray-400 select-none border-r border-gray-200 bg-gray-100">
+                {line.lineNumber}
+              </div>
+              <div className="flex-1 px-4 py-0.5 whitespace-pre-wrap break-words">
+                {line.content || ' '}
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  )
+}
 
 export default function AdminDashboardPage() {
   const router = useRouter()
   const [configs, setConfigs] = useState({
+    site: {},
+    common: {},
+    seo: {},
+    navigation: {},
+    footer: {},
+    home: {},
+    products: {},
+    otherPages: {},
+    custom: {},
+    account: {},
+    loginLogs: {}
+  })
+  const [originalConfigs, setOriginalConfigs] = useState({
     site: {},
     common: {},
     seo: {},
@@ -46,6 +146,28 @@ export default function AdminDashboardPage() {
   const [previousVersionData, setPreviousVersionData] = useState<any>(null)
   const [previousVersionInfo, setPreviousVersionInfo] = useState<any>(null)
   const [restoringVersion, setRestoringVersion] = useState(false)
+  const [showDiff, setShowDiff] = useState(false)
+  const [showEditDiff, setShowEditDiff] = useState(false)
+  const [versionInfos, setVersionInfos] = useState<Record<string, any>>({})
+
+  const fetchVersionInfos = async () => {
+    const configTypes = ['homePage', 'aboutPage', 'contactPage', 'otherPages', 'newsCategory']
+    const infos: Record<string, any> = {}
+    
+    for (const type of configTypes) {
+      try {
+        const response = await fetch(`/api/admin/config/version?type=${type}&action=latest`)
+        const data = await response.json()
+        if (data.success) {
+          infos[type] = data.version
+        }
+      } catch (error) {
+        console.error(`获取${type}版本信息失败:`, error)
+      }
+    }
+    
+    setVersionInfos(infos)
+  }
 
   useEffect(() => {
     fetchConfigs()
@@ -53,6 +175,12 @@ export default function AdminDashboardPage() {
     fetchLoginLogs()
     checkAuth()
   }, [])
+
+  useEffect(() => {
+    if (Object.keys(configs).length > 0) {
+      fetchVersionInfos()
+    }
+  }, [configs])
 
   const checkAuth = async () => {
     try {
@@ -168,7 +296,7 @@ export default function AdminDashboardPage() {
         setLoginLogs(data.logs || [])
       }
     } catch (error) {
-      console.error("获取登录记录失败", error)
+      console.error("获取登入记录失败", error)
     }
   }
 
@@ -178,12 +306,18 @@ export default function AdminDashboardPage() {
       if (response.ok) {
         const data = await response.json()
         setConfigs(data)
+        setOriginalConfigs(JSON.parse(JSON.stringify(data)))
       } else {
         Message.error("获取配置失败")
       }
     } catch (error) {
       Message.error("获取配置失败")
     }
+  }
+
+  const hasConfigChanges = (configType: string) => {
+    return JSON.stringify(configs[configType as keyof typeof configs]) !== 
+           JSON.stringify(originalConfigs[configType as keyof typeof originalConfigs])
   }
 
   const handleSave = async (configType: string) => {
@@ -201,12 +335,17 @@ export default function AdminDashboardPage() {
       })
 
       if (response.ok) {
-        Message.success("配置保存成功")
+        Message.success("配置提交成功")
+        setOriginalConfigs(prev => ({
+          ...prev,
+          [configType]: JSON.parse(JSON.stringify(configs[configType as keyof typeof configs]))
+        }))
+        fetchVersionInfos()
       } else {
-        Message.error("配置保存失败")
+        Message.error("配置提交失败")
       }
     } catch (error) {
-      Message.error("配置保存失败")
+      Message.error("配置提交失败")
     } finally {
       setLoading(false)
     }
@@ -237,7 +376,7 @@ export default function AdminDashboardPage() {
         setPreviousVersionInfo(data.version)
         setViewingPreviousVersion(configType)
       } else {
-        Message.info("当前配置项还没有历史版本记录，保存配置后将创建第一个版本。")
+        Message.info("当前配置项还没有历史版本记录，提交配置后将创建第一个版本。")
       }
     } catch (error) {
       Message.error("获取上一版本失败")
@@ -266,6 +405,7 @@ export default function AdminDashboardPage() {
           if (response.ok && data.success) {
             Message.success("版本还原成功")
             await fetchConfigs()
+            fetchVersionInfos()
           } else {
             Message.error(data.message || "版本还原失败")
           }
@@ -385,7 +525,7 @@ export default function AdminDashboardPage() {
 
   const handleSaveEdit = () => {
     if (!validateJson(editValue)) {
-      Message.error("JSON格式错误，请修正后再保存")
+      Message.error("JSON格式错误，请修正后再提交")
       return
     }
     
@@ -397,7 +537,7 @@ export default function AdminDashboardPage() {
       }))
       setEditingConfig(null)
       setJsonError("")
-      Message.success("配置已更新，请点击保存按钮保存到文件")
+      Message.success("配置已更新，请点击提交按钮确认更改")
     } catch (error) {
       Message.error("JSON格式错误")
     }
@@ -405,6 +545,7 @@ export default function AdminDashboardPage() {
 
   const renderConfigCard = (title: string, configType: string, description: string) => {
     const schemaData = schema[configType]
+    const versionInfo = versionInfos[configType]
     
     return (
       <div id="config-container" className="flex gap-0 mb-4 relative" style={{ minHeight: '500px' }}>
@@ -420,6 +561,14 @@ export default function AdminDashboardPage() {
                     onClick={() => handleViewPreviousVersion(configType)}
                   >
                     上一版本
+                  </Button>
+                  <Button
+                    size="small"
+                    icon={<IconUndo />}
+                    onClick={() => handleRestoreVersion(configType)}
+                    disabled={!versionInfo}
+                  >
+                    还原上一版本
                   </Button>
                   <Button
                     size="small"
@@ -441,8 +590,9 @@ export default function AdminDashboardPage() {
                     icon={<IconSave />}
                     loading={loading}
                     onClick={() => handleSave(configType)}
+                    disabled={!hasConfigChanges(configType)}
                   >
-                    保存
+                    提交
                   </Button>
                 </div>
               </div>
@@ -450,6 +600,11 @@ export default function AdminDashboardPage() {
           >
             <div className="mb-4">
               <p className="text-sm text-gray-500">{description}</p>
+              {versionInfo && (
+                <p className="text-xs text-gray-400 mt-1">
+                  最后更新时间：{new Date(versionInfo.createdAt).toLocaleString('zh-CN')}
+                </p>
+              )}
             </div>
             <pre className="bg-gray-50 p-4 rounded-lg overflow-auto max-h-96 text-sm">
               {JSON.stringify(configs[configType as keyof typeof configs], null, 2)}
@@ -691,11 +846,11 @@ export default function AdminDashboardPage() {
               "包含关于我们、服务条款、隐私政策等其他页面配置"
             )}
           </TabPane>
-          <TabPane key="loginLogs" title="登录记录">
-            <Card title="登录记录">
+          <TabPane key="loginLogs" title="登入记录">
+            <Card title="登入记录">
               {loginLogs.length === 0 ? (
                 <div className="text-center py-8 text-gray-500">
-                  暂无登录记录
+                  暂无登入记录
                 </div>
               ) : (
                 <div className="overflow-x-auto">
@@ -730,17 +885,41 @@ export default function AdminDashboardPage() {
         onCancel={() => {
           setEditingConfig(null)
           setJsonError("")
+          setShowEditDiff(false)
         }}
         onOk={handleSaveEdit}
+        okText="确认修改"
         style={{ width: '90vw', maxWidth: 1200 }}
       >
         <div id="edit-config-container" className="flex gap-0 relative" style={{ maxHeight: '65vh' }}>
           <div style={{ width: `${editLeftWidth}%` }} className="flex-shrink-0 overflow-auto">
             <div className="mb-4">
               <div className="flex items-center justify-between mb-2">
-                <p className="text-sm text-gray-500">
-                  请直接编辑JSON配置内容
-                </p>
+                <div className="flex items-center gap-2">
+                  <p className="text-sm text-gray-500">
+                    请直接编辑JSON配置内容
+                  </p>
+                  <Button
+                    size="small"
+                    type={showEditDiff ? "primary" : "secondary"}
+                    onClick={() => setShowEditDiff(!showEditDiff)}
+                  >
+                    {showEditDiff ? "隐藏对比" : "对比原版本"}
+                  </Button>
+                  <Button
+                    size="small"
+                    icon={<IconUndo />}
+                    onClick={() => {
+                      if (editingConfig) {
+                        setEditValue(JSON.stringify(configs[editingConfig as keyof typeof configs], null, 2))
+                        setJsonError("")
+                        Message.success("已恢复到编辑前的配置")
+                      }
+                    }}
+                  >
+                    恢复原配置
+                  </Button>
+                </div>
                 <Button
                   size="small"
                   icon={<IconCheck />}
@@ -760,13 +939,23 @@ export default function AdminDashboardPage() {
                 />
               )}
               
-              <Input.TextArea
-                value={editValue}
-                onChange={handleEditValueChange}
-                rows={textareaRows}
-                className="font-mono"
-                status={jsonError ? "error" : undefined}
-              />
+              {showEditDiff && editingConfig ? (
+                <JSONDiffViewer
+                  oldContent={JSON.stringify(configs[editingConfig as keyof typeof configs], null, 2)}
+                  newContent={editValue}
+                  oldTitle="原版本"
+                  newTitle="编辑后"
+                  maxHeight="50vh"
+                />
+              ) : (
+                <Input.TextArea
+                  value={editValue}
+                  onChange={handleEditValueChange}
+                  rows={textareaRows}
+                  className="font-mono"
+                  status={jsonError ? "error" : undefined}
+                />
+              )}
               
               <div className="flex items-center justify-center gap-4 mt-3 pt-3 border-t border-gray-100">
                 <span className="text-xs text-gray-500">输入框高度：</span>
@@ -885,9 +1074,10 @@ export default function AdminDashboardPage() {
             </Button>
           </div>
           
-          <pre className="bg-gray-50 p-4 rounded-lg overflow-auto text-sm font-mono whitespace-pre-wrap break-words" style={{ maxHeight: '60vh' }}>
-            {viewValue}
-          </pre>
+          <JSONViewerWithLineNumbers
+            content={viewValue}
+            maxHeight="60vh"
+          />
         </div>
       </Modal>
 
@@ -903,6 +1093,7 @@ export default function AdminDashboardPage() {
           setViewingPreviousVersion(null)
           setPreviousVersionData(null)
           setPreviousVersionInfo(null)
+          setShowDiff(false)
         }}
         footer={
           <div className="flex justify-end gap-2">
@@ -910,6 +1101,7 @@ export default function AdminDashboardPage() {
               setViewingPreviousVersion(null)
               setPreviousVersionData(null)
               setPreviousVersionInfo(null)
+              setShowDiff(false)
             }}>
               关闭
             </Button>
@@ -923,6 +1115,7 @@ export default function AdminDashboardPage() {
                   setViewingPreviousVersion(null)
                   setPreviousVersionData(null)
                   setPreviousVersionInfo(null)
+                  setShowDiff(false)
                 }
               }}
             >
@@ -930,7 +1123,7 @@ export default function AdminDashboardPage() {
             </Button>
           </div>
         }
-        style={{ width: '90vw', maxWidth: 1000 }}
+        style={{ width: '90vw', maxWidth: 1200 }}
       >
         <div className="mb-4">
           {previousVersionInfo && (
@@ -940,24 +1133,51 @@ export default function AdminDashboardPage() {
               className="mb-4"
             />
           )}
+          
           <div className="flex items-center justify-between mb-2">
-            <p className="text-sm text-gray-500">
-              上一版本配置内容
-            </p>
-            <Button
-              size="small"
-              onClick={() => {
-                navigator.clipboard.writeText(JSON.stringify(previousVersionData, null, 2))
-                Message.success("已复制到剪贴板")
-              }}
-            >
-              复制
-            </Button>
+            <div className="flex items-center gap-2">
+              <Button
+                type={showDiff ? "secondary" : "primary"}
+                size="small"
+                onClick={() => setShowDiff(false)}
+              >
+                查看版本
+              </Button>
+              <Button
+                type={showDiff ? "primary" : "secondary"}
+                size="small"
+                onClick={() => setShowDiff(true)}
+              >
+                对比当前版本
+              </Button>
+            </div>
+            {!showDiff && (
+              <Button
+                size="small"
+                onClick={() => {
+                  navigator.clipboard.writeText(JSON.stringify(previousVersionData, null, 2))
+                  Message.success("已复制到剪贴板")
+                }}
+              >
+                复制
+              </Button>
+            )}
           </div>
           
-          <pre className="bg-gray-50 p-4 rounded-lg overflow-auto text-sm font-mono whitespace-pre-wrap break-words" style={{ maxHeight: '60vh' }}>
-            {JSON.stringify(previousVersionData, null, 2)}
-          </pre>
+          {showDiff && viewingPreviousVersion ? (
+            <JSONDiffViewer
+              oldContent={JSON.stringify(previousVersionData, null, 2)}
+              newContent={JSON.stringify(configs[viewingPreviousVersion as keyof typeof configs], null, 2)}
+              oldTitle="上一版本"
+              newTitle="当前版本"
+              maxHeight="60vh"
+            />
+          ) : (
+            <JSONViewerWithLineNumbers
+              content={JSON.stringify(previousVersionData, null, 2)}
+              maxHeight="60vh"
+            />
+          )}
         </div>
       </Modal>
 
