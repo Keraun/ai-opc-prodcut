@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server"
 import fs from "fs"
 import path from "path"
+import { sendEmail, generateVerificationCodeEmail } from "@/lib/email"
 
 function generateVerificationCode(): string {
   return Math.random().toString().slice(2, 8)
@@ -59,12 +60,25 @@ export async function POST(request: NextRequest) {
     verificationCodes[email] = { code, expiresAt }
     saveVerificationCodes(verificationCodes)
 
-    console.log(`[Email Verification Code] Email: ${email}, Code: ${code}`)
+    const emailHtml = generateVerificationCodeEmail(code)
+    const emailSent = await sendEmail({
+      to: email,
+      subject: "【创客AI】密码重置验证码",
+      html: emailHtml
+    })
+
+    if (!emailSent) {
+      console.log(`[Email Verification Code - Fallback] Email: ${email}, Code: ${code}`)
+      return NextResponse.json({
+        success: true,
+        message: "验证码已生成，但邮件发送失败。请联系管理员或查看服务器日志获取验证码。",
+        _debug_code: process.env.NODE_ENV === 'development' ? code : undefined
+      })
+    }
 
     return NextResponse.json({
       success: true,
-      message: "验证码已发送到您的邮箱",
-      _debug_code: code
+      message: "验证码已发送到您的邮箱，请注意查收"
     })
   } catch (error) {
     console.error("Send reset code error:", error)

@@ -3,7 +3,7 @@
   "admins": [
     {
       "username": "admin",
-      "password": "admin@12345",
+      "password": "qwer12345",
       "remark": "默认管理员账号",
       "mustChangePassword": false,
       "lastLoginTime": "2026/03/25 05:57:19",
@@ -13,13 +13,14 @@
     },
     {
       "username": "admin2",
-      "password": "admin@1234",
+      "password": "qwer1234",
       "remark": "默认管理员账号2",
-      "lastLoginTime": "2026/03/25 05:20:33",
+      "lastLoginTime": "2026/03/25 06:17:27",
       "lastLoginIP": "::1",
       "currentLoginIP": "::1",
-      "currentLoginTime": "2026/03/25 06:17:27",
-      "email": "wuly93@163.com"
+      "currentLoginTime": "2026/03/25 06:36:38",
+      "email": "wuly93@163.com",
+      "mustChangePassword": false
     }
   ]
 }

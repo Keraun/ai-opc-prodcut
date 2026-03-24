@@ -128,10 +128,16 @@ export async function POST(request: NextRequest) {
 
     fs.writeFileSync(accountConfigPath, JSON.stringify(accountConfig, null, 2))
 
-    return NextResponse.json({
+    const response: any = {
       success: true,
       message: "密码修改成功"
-    })
+    }
+
+    if (method === "email") {
+      response.username = accountConfig.admins[adminIndex].username
+    }
+
+    return NextResponse.json(response)
   } catch (error) {
     console.error("Reset password error:", error)
     return NextResponse.json({

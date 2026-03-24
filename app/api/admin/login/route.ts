@@ -25,7 +25,7 @@ export async function POST(request: NextRequest) {
     if (adminIndex === -1 || adminIndex === undefined) {
       return NextResponse.json({
         success: false,
-        message: "用户名或密码错误"
+        message: "用户名不存在"
       }, { status: 401 })
     }
 
@@ -34,7 +34,7 @@ export async function POST(request: NextRequest) {
     if (admin.password !== password) {
       return NextResponse.json({
         success: false,
-        message: "用户名或密码错误"
+        message: "密码错误"
       }, { status: 401 })
     }
 
