@@ -221,7 +221,11 @@
         "username": "用户名",
         "password": "密码",
         "remark": "备注信息",
-        "mustChangePassword": "首次登录后是否提示修改密码"
+        "mustChangePassword": "首次登录后是否提示修改密码",
+        "lastLoginTime": "上次登录时间",
+        "lastLoginIP": "上次登录IP",
+        "currentLoginIP": "当前登录IP",
+        "currentLoginTime": "当前登录时间"
       }
     }
   }

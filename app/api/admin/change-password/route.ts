@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server"
 import fs from "fs"
 import path from "path"
+import { cookies } from "next/headers"
 
 export async function POST(request: NextRequest) {
   try {
@@ -31,9 +32,28 @@ export async function POST(request: NextRequest) {
 
     fs.writeFileSync(accountConfigPath, JSON.stringify(accountConfig, null, 2))
 
+    const cookieStore = await cookies()
+    const admin = accountConfig.admins[adminIndex]
+    const userData = {
+      username: admin.username,
+      remark: admin.remark,
+      mustChangePassword: false,
+      lastLoginTime: admin.lastLoginTime,
+      lastLoginIP: admin.lastLoginIP,
+      currentLoginIP: admin.currentLoginIP
+    }
+    
+    cookieStore.set('adminUser', JSON.stringify(userData), {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: 'lax',
+      maxAge: 60 * 60 * 24 * 7
+    })
+
     return NextResponse.json({
       success: true,
-      message: "密码修改成功"
+      message: "密码修改成功",
+      user: userData
     })
   } catch (error) {
     return NextResponse.json({

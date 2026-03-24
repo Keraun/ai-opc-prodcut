@@ -88,11 +88,19 @@ export function Footer() {
         <div className="pt-8 border-t border-gray-200">
           <div className="flex flex-col md:flex-row justify-between items-center gap-4">
             <p className="text-sm text-gray-500">
-            &copy; {currentYear} {siteConfig.name}. All rights reserved.
-          </p>
+              &copy; {currentYear} {siteConfig.name}. All rights reserved.
+            </p>
             <p className="text-sm text-gray-500">
               {siteConfig.icp}
             </p>
+            <a 
+              href="/admin" 
+              target="_blank" 
+              rel="noopener noreferrer"
+              className="text-sm text-gray-500 hover:text-blue-600 transition-colors"
+            >
+              管理后台
+            </a>
           </div>
         </div>
       </div>

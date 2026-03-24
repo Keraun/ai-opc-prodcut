@@ -39,19 +39,34 @@ export default function AdminDashboardPage() {
   const [newPassword, setNewPassword] = useState("")
   const [confirmPassword, setConfirmPassword] = useState("")
   const [changePasswordLoading, setChangePasswordLoading] = useState(false)
+  const [currentUser, setCurrentUser] = useState<any>(null)
 
   useEffect(() => {
     fetchConfigs()
     fetchSchema()
-    
-    const currentUserStr = sessionStorage.getItem('currentUser')
-    if (currentUserStr) {
-      const currentUser = JSON.parse(currentUserStr)
-      if (currentUser.mustChangePassword) {
+    checkAuth()
+  }, [])
+
+  const checkAuth = async () => {
+    try {
+      const response = await fetch("/api/admin/auth")
+      const data = await response.json()
+      
+      if (!data.authenticated) {
+        router.push("/admin")
+        return
+      }
+      
+      setCurrentUser(data.user)
+      sessionStorage.setItem('currentUser', JSON.stringify(data.user))
+      
+      if (data.user.mustChangePassword) {
         setMustChangePassword(true)
       }
+    } catch (error) {
+      router.push("/admin")
     }
-  }, [])
+  }
 
   useEffect(() => {
     const handleMouseMove = (e: MouseEvent) => {
@@ -243,11 +258,10 @@ export default function AdminDashboardPage() {
         setNewPassword("")
         setConfirmPassword("")
         
-        const updatedUser = {
-          ...currentUser,
-          mustChangePassword: false
+        if (data.user) {
+          setCurrentUser(data.user)
+          sessionStorage.setItem('currentUser', JSON.stringify(data.user))
         }
-        sessionStorage.setItem('currentUser', JSON.stringify(updatedUser))
       } else {
         Message.error(data.message || "密码修改失败")
       }
@@ -453,7 +467,32 @@ export default function AdminDashboardPage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-16">
             <h1 className="text-xl font-bold text-gray-900">配置管理后台</h1>
-            <div className="flex gap-2">
+            <div className="flex items-center gap-4">
+              {currentUser && (
+                <div className="text-sm text-gray-600">
+                  <span className="font-medium">当前账号：</span>
+                  <span className="text-gray-900">{currentUser.username}</span>
+                  {currentUser.lastLoginTime && (
+                    <>
+                      <span className="mx-2">|</span>
+                      <span className="font-medium">上次登录：</span>
+                      <span>{currentUser.lastLoginTime}</span>
+                    </>
+                  )}
+                  {currentUser.currentLoginIP && (
+                    <>
+                      <span className="mx-2">|</span>
+                      <span className="font-medium">当前IP：</span>
+                      <span>{currentUser.currentLoginIP}</span>
+                    </>
+                  )}
+                </div>
+              )}
+              <Button
+                onClick={() => window.open('/', '_blank')}
+              >
+                打开官网
+              </Button>
               <Button
                 icon={<IconLock />}
                 onClick={() => setShowChangePassword(true)}

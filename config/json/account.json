@@ -2,9 +2,13 @@
   "admins": [
     {
       "username": "admin",
-      "password": "admin@1234",
+      "password": "admin@qwer",
       "remark": "默认管理员账号",
-      "mustChangePassword": false
+      "mustChangePassword": false,
+      "lastLoginTime": "2026/03/25 05:10:30",
+      "lastLoginIP": "::1",
+      "currentLoginIP": "::1",
+      "currentLoginTime": "2026/03/25 05:11:55"
     }
   ]
 }

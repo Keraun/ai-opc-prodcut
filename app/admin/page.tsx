@@ -95,10 +95,8 @@ export default function AdminLoginPage() {
               登录
             </Button>
           </div>
-
           <div className="mt-6 text-center text-sm text-gray-500">
-            <p>默认账号：admin</p>
-            <p>默认密码：admin@1234</p>
+            <p className="text-red-500">管理员首次进入需修改密码!</p>
           </div>
         </div>
       </div>
