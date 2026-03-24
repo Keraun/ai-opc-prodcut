@@ -56,11 +56,11 @@ export function Header() {
         </Menu.Item>
       ))}
       <Menu.Divider className="!bg-border" />
-      <Menu.Item key="login" className="!text-foreground hover:!bg-secondary">
+      {/* <Menu.Item key="login" className="!text-foreground hover:!bg-secondary">
         登录
-      </Menu.Item>
+      </Menu.Item> */}
       <Menu.Item key="trial" className="!text-accent hover:!bg-secondary">
-        免费试用
+       开始使用
       </Menu.Item>
     </Menu>
   )
@@ -98,19 +98,19 @@ export function Header() {
 
           {/* Desktop CTA */}
           <div className="hidden md:flex items-center gap-3">
-            <Button
+            {/* <Button
               type="text"
               icon={<IconUser />}
               className="!text-muted-foreground hover:!text-foreground !px-4 !h-9"
             >
               登录
-            </Button>
+            </Button> */}
             <Link href="/products">
               <Button
                 type="primary"
                 className="!bg-accent !text-accent-foreground hover:!bg-accent/90 !px-5 !h-9 !rounded-full"
               >
-                免费试用
+               开始使用
               </Button>
             </Link>
           </div>
@@ -173,12 +173,12 @@ export function Header() {
             </button>
           ))}
           <div className="flex flex-col gap-3 mt-6 pt-6 border-t border-border">
-            <Button type="secondary" long icon={<IconUser />} className="!bg-transparent !border-border !text-foreground">
+            {/* <Button type="secondary" long icon={<IconUser />} className="!bg-transparent !border-border !text-foreground">
               登录
-            </Button>
+            </Button> */}
             <Link href="/products" onClick={() => setDrawerVisible(false)}>
               <Button type="primary" long className="!bg-accent !text-accent-foreground">
-                免费试用
+               开始使用
               </Button>
             </Link>
           </div>

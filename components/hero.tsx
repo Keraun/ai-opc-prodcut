@@ -56,7 +56,7 @@ export function Hero() {
               size="large"
               className="!bg-accent !text-accent-foreground hover:!bg-accent/90 !h-12 !px-8 !text-base !rounded-lg"
             >
-              免费试用
+             开始使用
               <IconArrowRight className="ml-2" />
             </Button>
           </Link>
