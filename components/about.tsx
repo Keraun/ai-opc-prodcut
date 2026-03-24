@@ -98,7 +98,7 @@ export function About() {
                   hoverable
                 >
                   <div className="flex gap-4 p-5">
-                    <div className="shrink-0 w-14 h-14 rounded-2xl bg-gradient-to-br from-blue-500 to-blue-600 flex items-center justify-center shadow-lg shadow-blue-500/25 group-hover:scale-110 transition-transform duration-300">
+                    <div className={`shrink-0 w-14 h-14 rounded-2xl bg-gradient-to-br ${colors.bg} flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform duration-300`} style={{ boxShadow: `0 10px 15px -3px ${colors.bg.replace('bg-', 'rgba(').replace('500', '0.2')})` }}>
                       <Icon className="text-2xl text-white" />
                     </div>
                     <div className="flex-1">

@@ -98,7 +98,7 @@ export function Contact() {
                   hoverable
                 >
                   <div className="flex gap-4 p-5">
-                    <div className="shrink-0 w-14 h-14 rounded-2xl bg-gradient-to-br from-blue-500 to-blue-600 flex items-center justify-center shadow-lg shadow-blue-500/25 group-hover:scale-110 transition-transform duration-300">
+                    <div className={`shrink-0 w-14 h-14 rounded-2xl bg-gradient-to-br ${colors.bg} flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform duration-300`} style={{ boxShadow: `0 10px 15px -3px ${colors.bg.replace('bg-', 'rgba(').replace('500', '0.2')})` }}>
                       <Icon className="text-2xl text-white" />
                     </div>
                     <div>
@@ -115,15 +115,27 @@ export function Contact() {
             <Card className="!bg-white !border-gray-100 hover:!border-gray-200 hover:!shadow-lg transition-all duration-300">
               <div className="p-5">
                 <p className="text-sm text-gray-500 mb-4">关注我们获取最新动态</p>
-                <div className="flex justify-center gap-3">
-                  {["微信", "微博", "LinkedIn"].map((platform) => (
-                    <div
-                      key={platform}
-                      className="w-12 h-12 rounded-xl bg-gray-50 flex items-center justify-center text-sm text-gray-500 hover:bg-blue-50 hover:text-blue-600 hover:scale-110 transition-all duration-300 cursor-pointer"
-                    >
-                      {platform[0]}
+                <div className="flex justify-center gap-6">
+                  <div className="text-center">
+                    <div className="w-28 h-28 bg-gradient-to-br from-gray-50 to-gray-100 rounded-xl flex items-center justify-center border-2 border-gray-200 mb-2">
+                      <div className="text-center">
+                        <div className="w-20 h-20 bg-white rounded-lg flex items-center justify-center">
+                          <span className="text-xs text-gray-400">微信二维码</span>
+                        </div>
+                      </div>
                     </div>
-                  ))}
+                    <p className="text-xs text-gray-500">扫码关注</p>
+                  </div>
+                  <div className="text-center">
+                    <div className="w-28 h-28 bg-gradient-to-br from-gray-50 to-gray-100 rounded-xl flex items-center justify-center border-2 border-gray-200 mb-2">
+                      <div className="text-center">
+                        <div className="w-20 h-20 bg-white rounded-lg flex items-center justify-center">
+                          <span className="text-xs text-gray-400">公众号二维码</span>
+                        </div>
+                      </div>
+                    </div>
+                    <p className="text-xs text-gray-500">扫码关注</p>
+                  </div>
                 </div>
               </div>
             </Card>
