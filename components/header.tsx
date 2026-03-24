@@ -5,6 +5,7 @@ import { Button, Drawer, Dropdown, Menu } from "@arco-design/web-react"
 import { IconMenu, IconPhone } from "@arco-design/web-react/icon"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
+import { Logo } from "@/components/logo"
 
 const navItems = [
   { label: "首页", href: "/" },
@@ -67,11 +68,9 @@ export function Header() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center h-16 md:h-20">
           {/* Logo */}
-          <div className="flex items-center gap-2 w-[200px]">
-            <div className="w-9 h-9 md:w-10 md:h-10 rounded-xl bg-gradient-to-br from-blue-500 to-blue-600 flex items-center justify-center shadow-lg shadow-blue-500/25">
-              <span className="text-white font-bold text-lg md:text-xl">N</span>
-            </div>
-            <span className="text-lg md:text-xl font-bold text-gray-900">NexusAI</span>
+          <div className="flex items-center gap-2.5 w-[200px]">
+            <Logo className="w-9 h-9 md:w-10 md:h-10 flex-shrink-0" />
+            <span className="text-lg md:text-xl font-bold text-gray-900 leading-none">创客AI</span>
           </div>
             {/* Desktop Navigation */}
             <nav className="hidden md:flex items-center justify-center gap-8 flex-1">
@@ -82,7 +81,7 @@ export function Header() {
                   className="text-gray-600 hover:text-gray-900 transition-colors text-sm font-medium cursor-pointer relative group"
                 >
                   {item.label}
-                  <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-blue-500 group-hover:w-full transition-all duration-300" />
+                  <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-cyan-500 group-hover:w-full transition-all duration-300" />
                 </button>
               ))}
             </nav>
@@ -106,7 +105,7 @@ export function Header() {
             >
               <Button
                 type="text"
-                className="!text-gray-700 hover:!text-blue-600 !px-4 !h-10 !rounded-full transition-all duration-300"
+                className="!text-gray-700 hover:!text-cyan-500 !px-4 !h-10 !rounded-full transition-all duration-300"
               >
                 <IconPhone className="mr-1.5" />
                 联系我们
@@ -115,7 +114,7 @@ export function Header() {
             <Link href="/products">
               <Button
                 type="primary"
-                className="!bg-blue-600 !text-white hover:!bg-blue-700 !px-6 !h-10 !rounded-full shadow-lg shadow-blue-600/25 hover:shadow-xl hover:shadow-blue-600/30 transition-all duration-300"
+                className="!bg-blue-800 !text-white hover:!bg-blue-900 !px-6 !h-10 !rounded-full shadow-lg shadow-blue-800/25 hover:shadow-xl hover:shadow-blue-800/30 transition-all duration-300"
               >
                 开始使用
               </Button>
@@ -175,7 +174,7 @@ export function Header() {
               <Button
                 type="primary"
                 long
-                className="!bg-gradient-to-r !from-blue-600 !to-blue-700 !text-white hover:!from-blue-700 hover:!to-blue-800 !h-12 !rounded-xl shadow-lg shadow-blue-600/25 hover:shadow-xl hover:shadow-blue-600/30 transition-all duration-300 !font-semibold !text-base"
+                className="!bg-blue-800 !text-white hover:!bg-blue-900 !h-12 !rounded-xl shadow-lg shadow-blue-800/25 hover:shadow-xl hover:shadow-blue-800/30 transition-all duration-300 !font-semibold !text-base"
               >
                 立即开始使用
               </Button>

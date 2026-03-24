@@ -1,12 +1,13 @@
 "use client"
 
 import { IconLocation, IconPhone, IconEmail } from "@arco-design/web-react/icon"
+import { Logo } from "@/components/logo"
 
 const contactInfo = [
   {
     icon: IconLocation,
     title: "公司地址",
-    content: "北京市海淀区中关村科技园区 NexusAI大厦 18层",
+    content: "北京市海淀区中关村科技园区 创客AI工作室",
   },
   {
     icon: IconPhone,
@@ -16,7 +17,7 @@ const contactInfo = [
   {
     icon: IconEmail,
     title: "电子邮箱",
-    content: "contact@nexusai.com",
+    content: "contact@makerai.com",
   },
 ]
 
@@ -30,14 +31,12 @@ export function Footer() {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-8">
           {/* Company Info */}
           <div>
-            <div className="flex items-center gap-2 mb-4">
-              <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-blue-500 to-blue-600 flex items-center justify-center shadow-lg shadow-blue-500/25">
-                <span className="text-white font-bold text-xl">N</span>
-              </div>
-              <span className="text-xl font-bold text-gray-900">NexusAI</span>
+            <div className="flex items-center gap-2.5 mb-4">
+              <Logo className="w-10 h-10 flex-shrink-0" />
+              <span className="text-xl font-bold text-gray-900 leading-none">创客AI</span>
             </div>
             <p className="text-sm text-gray-600 leading-relaxed">
-              让AI技术普惠每一家企业，助力数字化转型升级。
+              专注AI一人公司服务，助力个人创业者实现AI赋能。
             </p>
           </div>
 
@@ -88,8 +87,8 @@ export function Footer() {
         <div className="pt-8 border-t border-gray-200">
           <div className="flex flex-col md:flex-row justify-between items-center gap-4">
             <p className="text-sm text-gray-500">
-              &copy; {currentYear} NexusAI. All rights reserved.
-            </p>
+            &copy; {currentYear} 创客AI. All rights reserved.
+          </p>
             <p className="text-sm text-gray-500">
               京ICP备XXXXXXXX号-1
             </p>

@@ -2,49 +2,39 @@
 
 import { Card, Tag, Button } from "@arco-design/web-react"
 import {
-  IconRobot,
-  IconMessage,
-  IconEye,
-  IconCode,
+  IconApps,
+  IconBook,
+  IconThunderbolt,
   IconArrowRight,
 } from "@arco-design/web-react/icon"
 
 const products = [
   {
-    icon: IconRobot,
-    name: "NexusGPT",
-    tag: "旗舰产品",
-    tagColor: "arcoblue",
-    description: "企业级大语言模型，支持私有化部署，为您的业务提供定制化AI能力。具备强大的理解、推理和生成能力。",
-    features: ["私有化部署", "定制训练", "多语言支持", "API接口"],
-    gradient: "from-blue-500 to-cyan-500",
+    icon: IconApps,
+    name: "AI工具站",
+    tag: "核心产品",
+    tagColor: "orange",
+    description: "精选优质AI工具集合，涵盖写作、设计、编程、营销等多个领域，助力个人创业者快速上手AI工具。",
+    features: ["工具精选", "分类清晰", "持续更新", "免费使用"],
+    gradient: "blue-800",
   },
   {
-    icon: IconMessage,
-    name: "NexusChat",
+    icon: IconBook,
+    name: "AI GEO课程",
     tag: "热门",
     tagColor: "red",
-    description: "智能客服对话系统，7x24小时自动响应，显著降低人工成本，提升客户满意度。",
-    features: ["多渠道接入", "意图识别", "知识库管理", "人机协作"],
-    gradient: "from-red-500 to-pink-500",
+    description: "系统化AI学习课程，从入门到精通，帮助创业者掌握AI技能，提升工作效率和竞争力。",
+    features: ["系统课程", "实战案例", "社群答疑", "终身学习"],
+    gradient: "cyan-600",
   },
   {
-    icon: IconEye,
-    name: "NexusVision",
-    tag: "新品",
-    tagColor: "green",
-    description: "计算机视觉AI平台，支持图像识别、目标检测、OCR文字识别等多种视觉AI能力。",
-    features: ["图像分类", "目标检测", "人脸识别", "OCR识别"],
-    gradient: "from-green-500 to-emerald-500",
-  },
-  {
-    icon: IconCode,
-    name: "NexusCode",
-    tag: "开发者",
-    tagColor: "purple",
-    description: "AI编程助手，智能代码补全、代码审查、Bug检测，让开发效率提升数倍。",
-    features: ["代码补全", "代码审查", "Bug检测", "文档生成"],
-    gradient: "from-purple-500 to-violet-500",
+    icon: IconThunderbolt,
+    name: "AI工作流",
+    tag: "定制服务",
+    tagColor: "blue",
+    description: "定制化AI工作流解决方案，自动化处理重复性工作，让一人公司也能高效运转。",
+    features: ["流程定制", "自动化执行", "效率提升", "降低成本"],
+    gradient: "from-blue-800 to-blue-600",
   },
 ]
 
@@ -54,25 +44,25 @@ export function Products() {
       {/* Background Elements */}
       <div className="absolute inset-0 overflow-hidden">
         <div className="absolute top-0 left-1/4 w-96 h-96 bg-blue-50 rounded-full blur-3xl" />
-        <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-purple-50 rounded-full blur-3xl" />
+        <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-cyan-50 rounded-full blur-3xl" />
       </div>
 
       <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Section Header */}
         <div className="text-center mb-16">
-          <span className="inline-block px-4 py-1.5 rounded-full bg-blue-50 text-blue-600 text-sm font-medium mb-4 border border-blue-100">
-            产品矩阵
+          <span className="inline-block px-4 py-1.5 rounded-full bg-cyan-50 text-cyan-600 text-sm font-medium mb-4 border border-cyan-100">
+            产品服务
           </span>
           <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-gray-900 mb-4 text-balance">
-            全方位AI产品解决方案
+            AI一人公司解决方案
           </h2>
           <p className="text-lg text-gray-500 max-w-2xl mx-auto leading-relaxed">
-            从对话AI到视觉AI，从智能编程到企业大模型，满足您的一切AI需求
+            从工具到课程，从学习到实践，全方位助力个人创业者实现AI赋能
           </p>
         </div>
 
         {/* Products Grid */}
-        <div className="grid md:grid-cols-2 gap-6 lg:gap-8">
+        <div className="grid md:grid-cols-3 gap-6 lg:gap-8">
           {products.map((product, index) => {
             const Icon = product.icon
             return (
@@ -111,7 +101,7 @@ export function Products() {
                   {/* CTA */}
                   <Button
                     type="text"
-                    className="!text-blue-600 !p-0 hover:!text-blue-700 font-medium"
+                    className="!text-cyan-500 !p-0 hover:!text-cyan-600 font-medium"
                   >
                     了解更多
                     <IconArrowRight className="ml-1 group-hover:translate-x-1 transition-transform" />

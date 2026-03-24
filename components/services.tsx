@@ -12,61 +12,61 @@ const services = [
   {
     icon: IconBulb,
     number: "01",
-    title: "AI战略咨询",
-    description: "资深AI专家团队为您量身定制数字化转型方案，从需求分析到落地实施，全程专业指导。",
-    highlights: ["行业洞察", "方案设计", "ROI分析"],
+    title: "AI工具推荐",
+    description: "精选优质AI工具，涵盖写作、设计、编程、营销等领域，帮助创业者快速找到合适的工具。",
+    highlights: ["工具精选", "分类清晰", "免费使用"],
+    color: "orange",
+  },
+  {
+    icon: IconBook,
+    number: "02",
+    title: "GEO课程培训",
+    description: "系统化AI学习课程，从入门到精通，帮助创业者掌握AI技能，提升工作效率。",
+    highlights: ["系统课程", "实战案例", "社群答疑"],
     color: "blue",
   },
   {
     icon: IconSettings,
-    number: "02",
-    title: "定制化开发",
-    description: "根据企业特定需求，提供AI模型定制训练、系统集成开发等一站式技术服务。",
-    highlights: ["模型定制", "系统集成", "二次开发"],
-    color: "purple",
-  },
-  {
-    icon: IconBook,
     number: "03",
-    title: "技术培训",
-    description: "面向企业技术团队，提供AI技术培训课程，助力团队快速掌握前沿AI技能。",
-    highlights: ["实战课程", "认证体系", "持续学习"],
+    title: "工作流定制",
+    description: "根据业务需求定制AI工作流，自动化处理重复性工作，让一人公司高效运转。",
+    highlights: ["流程定制", "自动化执行", "效率提升"],
     color: "green",
   },
   {
     icon: IconCustomerService,
     number: "04",
-    title: "运维支持",
-    description: "7x24小时技术支持，确保AI系统稳定运行。提供性能优化、安全加固等增值服务。",
-    highlights: ["全天候响应", "性能优化", "安全保障"],
-    color: "orange",
+    title: "咨询服务",
+    description: "一对一AI应用咨询，帮助创业者制定AI赋能策略，解决实际业务问题。",
+    highlights: ["专业咨询", "方案定制", "持续支持"],
+    color: "purple",
   },
 ]
 
 const colorMap: Record<string, { bg: string; text: string; light: string }> = {
-  blue: { bg: "bg-blue-500", text: "text-blue-600", light: "bg-blue-50" },
-  purple: { bg: "bg-purple-500", text: "text-purple-600", light: "bg-purple-50" },
+  orange: { bg: "bg-cyan-500", text: "text-cyan-600", light: "bg-cyan-50" },
+  blue: { bg: "bg-blue-800", text: "text-blue-600", light: "bg-blue-50" },
   green: { bg: "bg-green-500", text: "text-green-600", light: "bg-green-50" },
-  orange: { bg: "bg-orange-500", text: "text-orange-600", light: "bg-orange-50" },
+  purple: { bg: "bg-purple-500", text: "text-purple-600", light: "bg-purple-50" },
 }
 
 export function Services() {
   return (
     <section id="services" className="relative py-24 md:py-32 bg-gray-50/50">
       {/* Background Pattern */}
-      <div className="absolute inset-0 bg-[linear-gradient(rgba(59,130,246,0.02)_1px,transparent_1px),linear-gradient(90deg,rgba(59,130,246,0.02)_1px,transparent_1px)] bg-[size:60px_60px]" />
+      <div className="absolute inset-0 bg-[linear-gradient(rgba(30,64,175,0.02)_1px,transparent_1px),linear-gradient(90deg,rgba(30,64,175,0.02)_1px,transparent_1px)] bg-[size:60px_60px]" />
 
       <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Section Header */}
         <div className="text-center mb-16">
-          <span className="inline-block px-4 py-1.5 rounded-full bg-blue-50 text-blue-600 text-sm font-medium mb-4 border border-blue-100">
-            专业服务
+          <span className="inline-block px-4 py-1.5 rounded-full bg-cyan-50 text-cyan-600 text-sm font-medium mb-4 border border-cyan-100">
+            服务内容
           </span>
           <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-gray-900 mb-4 text-balance">
-            端到端的AI服务体系
+            全方位AI赋能服务
           </h2>
           <p className="text-lg text-gray-500 max-w-2xl mx-auto leading-relaxed">
-            从咨询到实施，从培训到运维，为您提供全生命周期的AI服务支持
+            从工具到课程，从定制到咨询，为个人创业者提供一站式AI服务支持
           </p>
         </div>
 
@@ -78,43 +78,33 @@ export function Services() {
             return (
               <Card
                 key={index}
-                className="group !bg-white !border-gray-100 hover:!border-gray-200 hover:!shadow-xl transition-all duration-300 hover:-translate-y-2 relative overflow-hidden"
+                className="group !bg-white !border-gray-100 hover:!border-gray-200 hover:!shadow-xl transition-all duration-300 hover:-translate-y-1"
                 hoverable
               >
-                {/* Number Watermark */}
-                <span className="absolute -top-2 -right-2 text-7xl font-bold text-gray-100 select-none group-hover:text-gray-200 transition-colors">
-                  {service.number}
-                </span>
-
-                <div className="relative p-4">
-                  {/* Icon */}
-                  <div className={`w-12 h-12 rounded-xl ${colors.light} flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-300`}>
-                    <Icon className={`text-xl ${colors.text}`} />
+                <div className="p-6">
+                  {/* Number Badge */}
+                  <div className="flex items-center justify-between mb-6">
+                    <div className={`w-12 h-12 rounded-xl ${colors.light} flex items-center justify-center`}>
+                      <Icon className={`text-2xl ${colors.text}`} />
+                    </div>
+                    <span className="text-3xl font-bold text-gray-100 group-hover:text-gray-200 transition-colors">
+                      {service.number}
+                    </span>
                   </div>
 
                   {/* Content */}
-                  <h3 className="text-lg font-bold text-gray-900 mb-2">{service.title}</h3>
-                  <p className="text-sm text-gray-500 mb-4 leading-relaxed">
-                    {service.description}
-                  </p>
+                  <h3 className="text-lg font-bold text-gray-900 mb-3">{service.title}</h3>
+                  <p className="text-gray-500 text-sm leading-relaxed mb-4">{service.description}</p>
 
                   {/* Highlights */}
-                  <div className="flex flex-wrap gap-2">
+                  <div className="space-y-2">
                     {service.highlights.map((highlight, i) => (
-                      <span
-                        key={i}
-                        className={`text-xs ${colors.text} font-medium`}
-                      >
+                      <div key={i} className="flex items-center gap-2 text-xs text-gray-600">
+                        <div className={`w-1.5 h-1.5 rounded-full ${colors.bg}`} />
                         {highlight}
-                        {i < service.highlights.length - 1 && (
-                          <span className="ml-2 text-gray-300">|</span>
-                        )}
-                      </span>
+                      </div>
                     ))}
                   </div>
-
-                  {/* Bottom Accent Line */}
-                  <div className={`absolute bottom-0 left-0 w-0 h-1 ${colors.bg} group-hover:w-full transition-all duration-500`} />
                 </div>
               </Card>
             )

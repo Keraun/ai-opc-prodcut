@@ -38,7 +38,7 @@ export function Contact() {
       <div className="relative z-10 max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Section Header */}
         <div className="text-center mb-12">
-          <span className="inline-block px-4 py-1.5 rounded-full bg-blue-50 text-blue-600 text-sm font-medium mb-4 border border-blue-100">
+          <span className="inline-block px-4 py-1.5 rounded-full bg-cyan-50 text-cyan-600 text-sm font-medium mb-4 border border-cyan-100">
             联系我们
           </span>
           <h2 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-3">
@@ -137,7 +137,7 @@ export function Contact() {
                   htmlType="submit"
                   long
                   loading={loading}
-                  className="!bg-gradient-to-r !from-blue-600 !to-blue-700 !text-white hover:!from-blue-700 hover:!to-blue-800 !h-11 !text-base !rounded-lg shadow-lg shadow-blue-600/25 hover:shadow-xl hover:shadow-blue-600/30 transition-all duration-300"
+                  className="!bg-blue-800 !text-white hover:!bg-blue-900 !h-11 !text-base !rounded-lg shadow-lg shadow-blue-800/25 hover:shadow-xl hover:shadow-blue-800/30 transition-all duration-300"
                 >
                   <IconSend className="mr-2" />
                   提交留言
