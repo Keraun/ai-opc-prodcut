@@ -176,7 +176,7 @@ export function generateVerificationCodeEmail(code: string): string {
           </div>
         </div>
         <div class="footer">
-          <p>© 2024 创客AI · 配置管理系统</p>
+          <p>© 创客AI · 配置管理系统</p>
           <p>此邮件由系统自动发送，请勿直接回复</p>
         </div>
       </div>
