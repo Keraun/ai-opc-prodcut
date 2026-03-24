@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react"
 import { Button, Drawer, Dropdown, Menu } from "@arco-design/web-react"
-import { IconMenu } from "@arco-design/web-react/icon"
+import { IconMenu, IconPhone } from "@arco-design/web-react/icon"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
 
@@ -54,7 +54,7 @@ export function Header() {
         </Menu.Item>
       ))}
       <Menu.Item key="trial" className="!text-blue-600 hover:!bg-blue-50 cursor-pointer rounded-lg mx-1">
-       开始使用
+        开始使用
       </Menu.Item>
     </Menu>
   )
@@ -69,41 +69,63 @@ export function Header() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center h-16 md:h-20">
           {/* Logo */}
-          <div className="flex items-center gap-2 flex-shrink-0">
+          <div className="flex items-center gap-2 w-[200px]">
             <div className="w-9 h-9 md:w-10 md:h-10 rounded-xl bg-gradient-to-br from-blue-500 to-blue-600 flex items-center justify-center shadow-lg shadow-blue-500/25">
               <span className="text-white font-bold text-lg md:text-xl">N</span>
             </div>
             <span className="text-lg md:text-xl font-bold text-gray-900">NexusAI</span>
           </div>
-
-          {/* Desktop Navigation */}
-          <nav className="hidden md:flex items-center gap-8 flex-1 justify-center">
-            {navItems.map((item) => (
-              <button
-                key={item.href}
-                onClick={() => handleNavClick(item.href)}
-                className="text-gray-600 hover:text-gray-900 transition-colors text-sm font-medium cursor-pointer relative group"
-              >
-                {item.label}
-                <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-blue-500 group-hover:w-full transition-all duration-300" />
-              </button>
-            ))}
-          </nav>
-
+            {/* Desktop Navigation */}
+            <nav className="hidden md:flex items-center justify-center gap-8 flex-1">
+              {navItems.map((item) => (
+                <button
+                  key={item.href}
+                  onClick={() => handleNavClick(item.href)}
+                  className="text-gray-600 hover:text-gray-900 transition-colors text-sm font-medium cursor-pointer relative group"
+                >
+                  {item.label}
+                  <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-blue-500 group-hover:w-full transition-all duration-300" />
+                </button>
+              ))}
+            </nav>
           {/* Desktop CTA */}
-          <div className="hidden md:flex items-center gap-3 flex-shrink-0">
+          <div className="hidden md:flex items-center gap-3 w-[200px] justify-end">
+            <Dropdown
+              droplist={
+                <div className="p-4">
+                  <div className="w-32 h-32 bg-gradient-to-br from-gray-50 to-gray-100 rounded-xl flex items-center justify-center border-2 border-gray-200">
+                    <div className="text-center">
+                      <div className="w-24 h-24 bg-white rounded-lg flex items-center justify-center">
+                        <span className="text-xs text-gray-400">客服二维码</span>
+                      </div>
+                    </div>
+                  </div>
+                  <p className="text-center text-xs text-gray-500 mt-2">扫码联系客服</p>
+                </div>
+              }
+              trigger="hover"
+              position="br"
+            >
+              <Button
+                type="outline"
+                className="!border-gray-300 !text-gray-700 hover:!border-blue-500 hover:!text-blue-600 !px-4 !h-10 !rounded-full transition-all duration-300"
+              >
+                <IconPhone className="mr-1.5" />
+                联系我们
+              </Button>
+            </Dropdown>
             <Link href="/products">
               <Button
                 type="primary"
                 className="!bg-blue-600 !text-white hover:!bg-blue-700 !px-6 !h-10 !rounded-full shadow-lg shadow-blue-600/25 hover:shadow-xl hover:shadow-blue-600/30 transition-all duration-300"
               >
-               开始使用
+                开始使用
               </Button>
             </Link>
           </div>
 
           {/* Mobile Menu Button */}
-          <div className="md:hidden flex-shrink-0 ml-auto">
+          <div className="md:hidden ml-auto">
             <Button
               type="text"
               className="!text-gray-700"
@@ -149,12 +171,12 @@ export function Header() {
               </span>
             </button>
           ))}
-          
+
           <div className="mt-8 pt-8 border-t border-gray-200">
             <Link href="/products" onClick={() => setDrawerVisible(false)}>
-              <Button 
-                type="primary" 
-                long 
+              <Button
+                type="primary"
+                long
                 className="!bg-gradient-to-r !from-blue-600 !to-blue-700 !text-white hover:!from-blue-700 hover:!to-blue-800 !h-12 !rounded-xl shadow-lg shadow-blue-600/25 hover:shadow-xl hover:shadow-blue-600/30 transition-all duration-300 !font-semibold !text-base"
               >
                 立即开始使用
