@@ -1,4 +1,5 @@
 import { Header } from "@/components/header"
+import { SidebarNav } from "@/components/sidebar-nav"
 import { Hero } from "@/components/hero"
 import { Partner } from "@/components/partner"
 import { Products } from "@/components/products"
@@ -11,9 +12,10 @@ export default function Home() {
   return (
     <div className="min-h-screen bg-background">
       <Header />
+      <SidebarNav />
       <main>
         <Hero />
-        <Partner/>
+        <Partner />
         <Products />
         <Services />
         <About />
