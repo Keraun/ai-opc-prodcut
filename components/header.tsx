@@ -9,8 +9,6 @@ import { useRouter } from "next/navigation"
 const navItems = [
   { label: "首页", href: "/" },
   { label: "产品", href: "/products" },
-  { label: "工具", href: "/tools" },
-  { label: "AI导航", href: "/ai-nav" },
 ]
 
 export function Header() {
@@ -107,8 +105,8 @@ export function Header() {
               position="br"
             >
               <Button
-                type="outline"
-                className="!border-gray-300 !text-gray-700 hover:!border-blue-500 hover:!text-blue-600 !px-4 !h-10 !rounded-full transition-all duration-300"
+                type="text"
+                className="!text-gray-700 hover:!text-blue-600 !px-4 !h-10 !rounded-full transition-all duration-300"
               >
                 <IconPhone className="mr-1.5" />
                 联系我们
