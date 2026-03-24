@@ -5,7 +5,7 @@ import { Button, Drawer, Dropdown, Menu } from "@arco-design/web-react"
 import { IconMenu, IconPhone } from "@arco-design/web-react/icon"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
-import { Logo } from "@/components/logo"
+import { Logo } from "@/components/common/logo"
 import { siteConfig, navigationConfig } from "@/config/site"
 
 const navItems = navigationConfig.main

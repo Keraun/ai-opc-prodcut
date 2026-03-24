@@ -3,7 +3,7 @@
 import { Button, Space } from "@arco-design/web-react"
 import { IconArrowRight, IconCommand } from "@arco-design/web-react/icon"
 import Link from "next/link"
-import { Logo } from "@/components/logo"
+import { Logo } from "@/components/common/logo"
 import { heroConfig } from "@/config/site"
 
 export function Hero() {

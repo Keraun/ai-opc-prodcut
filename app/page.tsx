@@ -1,12 +1,12 @@
-import { Header } from "@/components/header"
-import { SidebarNav } from "@/components/sidebar-nav"
-import { Hero } from "@/components/hero"
-import { Partner } from "@/components/partner"
-import { Products } from "@/components/products"
-import { Services } from "@/components/services"
-import { About } from "@/components/about"
-import { Contact } from "@/components/contact"
-import { Footer } from "@/components/footer"
+import { Header } from "@/components/common/header"
+import { SidebarNav } from "@/components/home/sidebar-nav"
+import { Hero } from "@/components/home/hero"
+import { Partner } from "@/components/home/partner"
+import { Products } from "@/components/home/products"
+import { Services } from "@/components/home/services"
+import { About } from "@/components/home/about"
+import { Contact } from "@/components/home/contact"
+import { Footer } from "@/components/common/footer"
 
 export default function Home() {
   return (

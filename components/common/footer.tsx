@@ -1,7 +1,7 @@
 "use client"
 
 import { IconLocation, IconPhone, IconEmail } from "@arco-design/web-react/icon"
-import { Logo } from "@/components/logo"
+import { Logo } from "@/components/common/logo"
 import { siteConfig, footerConfig } from "@/config/site"
 
 const contactInfo = [

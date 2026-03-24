@@ -5,8 +5,8 @@ import { Button, Tag, Card, Input } from "@arco-design/web-react"
 import { IconSearch, IconAt, IconEye } from "@arco-design/web-react/icon"
 import Image from "next/image"
 import Link from "next/link"
-import { Header } from "@/components/header"
-import { Footer } from "@/components/footer"
+import { Header } from "@/components/common/header"
+import { Footer } from "@/components/common/footer"
 
 interface Product {
   id: string
