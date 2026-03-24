@@ -132,8 +132,9 @@ export default function AdminDashboardPage() {
   const [textareaRows, setTextareaRows] = useState(20)
   const [viewingConfig, setViewingConfig] = useState<string | null>(null)
   const [viewValue, setViewValue] = useState("")
-  const [editLeftWidth, setEditLeftWidth] = useState(60)
+  const [editLeftWidth, setEditLeftWidth] = useState(70)
   const [isEditDragging, setIsEditDragging] = useState(false)
+  const [showFieldDescription, setShowFieldDescription] = useState(true)
   const [showChangePassword, setShowChangePassword] = useState(false)
   const [mustChangePassword, setMustChangePassword] = useState(false)
   const [oldPassword, setOldPassword] = useState("")
@@ -561,7 +562,6 @@ export default function AdminDashboardPage() {
                     size="small"
                     icon={<IconHistory />}
                     onClick={() => handleViewPreviousVersion(configType)}
-                    disabled={!versionInfo}
                   >
                     上一版本
                   </Button>
@@ -695,26 +695,6 @@ export default function AdminDashboardPage() {
           <div className="flex items-center justify-between h-16">
             <h1 className="text-xl font-bold text-gray-900">配置管理后台</h1>
             <div className="flex items-center gap-4">
-              {currentUser && (
-                <div className="text-sm text-gray-600">
-                  <span className="font-medium">当前账号：</span>
-                  <span className="text-gray-900">{currentUser.username}</span>
-                  {currentUser.lastLoginTime && (
-                    <>
-                      <span className="mx-2">|</span>
-                      <span className="font-medium">上次登录：</span>
-                      <span>{currentUser.lastLoginTime}</span>
-                    </>
-                  )}
-                  {currentUser.currentLoginIP && (
-                    <>
-                      <span className="mx-2">|</span>
-                      <span className="font-medium">当前IP：</span>
-                      <span>{currentUser.currentLoginIP}</span>
-                    </>
-                  )}
-                </div>
-              )}
               <Dropdown
                 droplist={
                   <div className="p-4 bg-white rounded-lg shadow-lg">
@@ -771,6 +751,68 @@ export default function AdminDashboardPage() {
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <Tabs defaultActiveTab="site" type="card">
+          <TabPane key="accountInfo" title="账号信息">
+            <Card>
+              {currentUser && (
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                  <div className="bg-gradient-to-br from-blue-50 to-blue-100 rounded-xl p-6 border border-blue-200">
+                    <div className="flex items-center gap-3 mb-4">
+                      <div className="w-12 h-12 rounded-full bg-gradient-to-br from-blue-500 to-blue-600 flex items-center justify-center">
+                        <svg className="w-6 h-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                        </svg>
+                      </div>
+                      <div>
+                        <p className="text-sm text-gray-600">当前账号</p>
+                        <p className="text-lg font-bold text-gray-900">{currentUser.username}</p>
+                      </div>
+                    </div>
+                    <div className="text-sm text-gray-600">
+                      当前登录的管理员账号
+                    </div>
+                  </div>
+
+                  <div className="bg-gradient-to-br from-green-50 to-green-100 rounded-xl p-6 border border-green-200">
+                    <div className="flex items-center gap-3 mb-4">
+                      <div className="w-12 h-12 rounded-full bg-gradient-to-br from-green-500 to-green-600 flex items-center justify-center">
+                        <svg className="w-6 h-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        </svg>
+                      </div>
+                      <div>
+                        <p className="text-sm text-gray-600">上次登录</p>
+                        <p className="text-lg font-bold text-gray-900">
+                          {currentUser.lastLoginTime || '首次登录'}
+                        </p>
+                      </div>
+                    </div>
+                    <div className="text-sm text-gray-600">
+                      上次成功登录的时间
+                    </div>
+                  </div>
+
+                  <div className="bg-gradient-to-br from-purple-50 to-purple-100 rounded-xl p-6 border border-purple-200">
+                    <div className="flex items-center gap-3 mb-4">
+                      <div className="w-12 h-12 rounded-full bg-gradient-to-br from-purple-500 to-purple-600 flex items-center justify-center">
+                        <svg className="w-6 h-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9" />
+                        </svg>
+                      </div>
+                      <div>
+                        <p className="text-sm text-gray-600">当前IP</p>
+                        <p className="text-lg font-bold text-gray-900 font-mono">
+                          {currentUser.currentLoginIP || '未知'}
+                        </p>
+                      </div>
+                    </div>
+                    <div className="text-sm text-gray-600">
+                      当前登录的IP地址
+                    </div>
+                  </div>
+                </div>
+              )}
+            </Card>
+          </TabPane>
           <TabPane key="site" title="站点配置">
             {renderConfigCard(
               "站点配置",
@@ -844,41 +886,62 @@ export default function AdminDashboardPage() {
           <TabPane key="operationLogs" title="操作记录">
             <Card title="操作记录">
               {operationLogs.length === 0 ? (
-                <div className="text-center py-8 text-gray-500">
-                  暂无操作记录
+                <div className="text-center py-12">
+                  <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-gray-100 mb-4">
+                    <svg className="w-8 h-8 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
+                    </svg>
+                  </div>
+                  <p className="text-gray-500 text-sm">暂无操作记录</p>
                 </div>
               ) : (
-                <div className="overflow-x-auto">
+                <div className="overflow-x-auto rounded-lg border border-gray-200">
                   <table className="w-full text-sm">
                     <thead>
-                      <tr className="border-b border-gray-200">
-                        <th className="text-left py-3 px-4 font-semibold text-gray-700">用户名</th>
-                        <th className="text-left py-3 px-4 font-semibold text-gray-700">操作类型</th>
-                        <th className="text-left py-3 px-4 font-semibold text-gray-700">描述</th>
-                        <th className="text-left py-3 px-4 font-semibold text-gray-700">IP地址</th>
-                        <th className="text-left py-3 px-4 font-semibold text-gray-700">时间</th>
+                      <tr className="bg-gradient-to-r from-gray-50 to-gray-100 border-b border-gray-200">
+                        <th className="text-left py-4 px-5 font-semibold text-gray-700">用户名</th>
+                        <th className="text-left py-4 px-5 font-semibold text-gray-700">操作类型</th>
+                        <th className="text-left py-4 px-5 font-semibold text-gray-700">描述</th>
+                        <th className="text-left py-4 px-5 font-semibold text-gray-700">IP地址</th>
+                        <th className="text-left py-4 px-5 font-semibold text-gray-700">时间</th>
                       </tr>
                     </thead>
                     <tbody>
-                      {operationLogs.map((log) => (
-                        <tr key={log.id} className="border-b border-gray-100 hover:bg-gray-50">
-                          <td className="py-3 px-4 text-gray-900">{log.username}</td>
-                          <td className="py-3 px-4">
-                            <span className={`px-2 py-1 text-xs rounded ${
-                              log.type === 'login' ? 'bg-blue-100 text-blue-700' :
-                              log.type === 'update_config' ? 'bg-green-100 text-green-700' :
-                              log.type === 'change_password' ? 'bg-purple-100 text-purple-700' :
-                              'bg-gray-100 text-gray-700'
+                      {operationLogs.map((log, index) => (
+                        <tr key={log.id} className={`border-b border-gray-100 hover:bg-blue-50 transition-colors ${index % 2 === 0 ? 'bg-white' : 'bg-gray-50/50'}`}>
+                          <td className="py-4 px-5">
+                            <div className="flex items-center gap-2">
+                              <div className="w-8 h-8 rounded-full bg-gradient-to-br from-blue-500 to-purple-500 flex items-center justify-center text-white text-xs font-semibold">
+                                {log.username.charAt(0).toUpperCase()}
+                              </div>
+                              <span className="text-gray-900 font-medium">{log.username}</span>
+                            </div>
+                          </td>
+                          <td className="py-4 px-5">
+                            <span className={`inline-flex items-center px-3 py-1.5 text-xs font-medium rounded-full ${
+                              log.type === 'login' ? 'bg-blue-100 text-blue-700 border border-blue-200' :
+                              log.type === 'update_config' ? 'bg-green-100 text-green-700 border border-green-200' :
+                              log.type === 'change_password' ? 'bg-purple-100 text-purple-700 border border-purple-200' :
+                              'bg-gray-100 text-gray-700 border border-gray-200'
                             }`}>
-                              {log.type === 'login' ? '登录' :
-                               log.type === 'update_config' ? '更新配置' :
-                               log.type === 'change_password' ? '修改密码' :
+                              {log.type === 'login' ? '🔐 登录' :
+                               log.type === 'update_config' ? '⚙️ 更新配置' :
+                               log.type === 'change_password' ? '🔑 修改密码' :
                                log.type}
                             </span>
                           </td>
-                          <td className="py-3 px-4 text-gray-700">{log.description}</td>
-                          <td className="py-3 px-4 text-gray-700">{log.ip}</td>
-                          <td className="py-3 px-4 text-gray-700">{log.timestamp}</td>
+                          <td className="py-4 px-5 text-gray-700">{log.description}</td>
+                          <td className="py-4 px-5">
+                            <span className="inline-flex items-center gap-1 text-gray-600 font-mono text-xs bg-gray-100 px-2 py-1 rounded">
+                              <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9" />
+                              </svg>
+                              {log.ip}
+                            </span>
+                          </td>
+                          <td className="py-4 px-5">
+                            <span className="text-gray-600 text-xs">{log.timestamp}</span>
+                          </td>
                         </tr>
                       ))}
                     </tbody>
@@ -903,7 +966,7 @@ export default function AdminDashboardPage() {
         style={{ width: '90vw', maxWidth: 1200 }}
       >
         <div id="edit-config-container" className="flex gap-0 relative" style={{ maxHeight: '65vh' }}>
-          <div style={{ width: `${editLeftWidth}%` }} className="flex-shrink-0 overflow-auto">
+          <div style={{ width: showFieldDescription ? `${editLeftWidth}%` : '100%' }} className="flex-shrink-0 overflow-auto">
             <div className="mb-4">
               <div className="flex items-center justify-between mb-2">
                 <div className="flex items-center gap-2">
@@ -931,13 +994,23 @@ export default function AdminDashboardPage() {
                     恢复原配置
                   </Button>
                 </div>
-                <Button
-                  size="small"
-                  icon={<IconCheck />}
-                  onClick={handleFormatJson}
-                >
-                  格式化
-                </Button>
+                <div className="flex items-center gap-2">
+                  <Button
+                    size="small"
+                    icon={<IconInfoCircle />}
+                    type={showFieldDescription ? "primary" : "secondary"}
+                    onClick={() => setShowFieldDescription(!showFieldDescription)}
+                  >
+                    {showFieldDescription ? "隐藏字段说明" : "显示字段说明"}
+                  </Button>
+                  <Button
+                    size="small"
+                    icon={<IconCheck />}
+                    onClick={handleFormatJson}
+                  >
+                    格式化
+                  </Button>
+                </div>
               </div>
               
               {jsonError && (
@@ -1011,54 +1084,58 @@ export default function AdminDashboardPage() {
             </div>
           </div>
           
-          <div
-            className={`flex-shrink-0 w-1 bg-gray-200 hover:bg-blue-400 cursor-col-resize transition-colors relative group ${isEditDragging ? 'bg-blue-500' : ''}`}
-            onMouseDown={handleEditMouseDown}
-            style={{ margin: '0 8px' }}
-          >
-            <div className="absolute inset-y-0 -left-1 -right-1" />
-            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-1 h-12 bg-gray-300 rounded group-hover:bg-blue-500 transition-colors" />
-          </div>
-          
-          <div style={{ width: `${100 - editLeftWidth}%` }} className="flex-shrink-0 overflow-auto">
-            {editingConfig && schema[editingConfig] && (
-              <Card 
-                title={
-                  <div className="flex items-center gap-2">
-                    <IconInfoCircle className="text-blue-600" />
-                    <span className="text-base font-semibold">字段说明</span>
-                  </div>
-                }
+          {showFieldDescription && (
+            <>
+              <div
+                className={`flex-shrink-0 w-1 bg-gray-200 hover:bg-blue-400 cursor-col-resize transition-colors relative group ${isEditDragging ? 'bg-blue-500' : ''}`}
+                onMouseDown={handleEditMouseDown}
+                style={{ margin: '0 8px' }}
               >
-                <div className="space-y-3" style={{ maxHeight: '60vh', overflow: 'auto' }}>
-                  {Object.entries(schema[editingConfig]).map(([key, value]: [string, any]) => (
-                    <div key={key} className="border-b border-gray-100 pb-2 last:border-b-0 last:pb-0">
-                      <div className="flex items-center gap-2 mb-1">
-                        <h4 className="text-sm font-semibold text-gray-900">{key}</h4>
-                        {value.required && (
-                          <span className="px-1.5 py-0.5 text-xs bg-red-50 text-red-600 rounded">必填</span>
-                        )}
-                        {value.type && (
-                          <span className="px-1.5 py-0.5 text-xs bg-blue-50 text-blue-600 rounded">{value.type}</span>
-                        )}
+                <div className="absolute inset-y-0 -left-1 -right-1" />
+                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-1 h-12 bg-gray-300 rounded group-hover:bg-blue-500 transition-colors" />
+              </div>
+              
+              <div style={{ width: `${100 - editLeftWidth}%` }} className="flex-shrink-0 overflow-auto">
+                {editingConfig && schema[editingConfig] && (
+                  <Card 
+                    title={
+                      <div className="flex items-center gap-2">
+                        <IconInfoCircle className="text-blue-600" />
+                        <span className="text-base font-semibold">字段说明</span>
                       </div>
-                      <p className="text-xs text-gray-600 mb-1">{value.description}</p>
-                      {value.fields && (
-                        <div className="ml-2 mt-1 space-y-0.5">
-                          {Object.entries(value.fields).map(([fieldKey, fieldDesc]: [string, any]) => (
-                            <div key={fieldKey} className="flex items-start gap-1 text-xs">
-                              <span className="font-medium text-gray-700 min-w-[80px]">{fieldKey}:</span>
-                              <span className="text-gray-600">{fieldDesc}</span>
+                    }
+                  >
+                    <div className="space-y-3" style={{ maxHeight: '60vh', overflow: 'auto' }}>
+                      {Object.entries(schema[editingConfig]).map(([key, value]: [string, any]) => (
+                        <div key={key} className="border-b border-gray-100 pb-2 last:border-b-0 last:pb-0">
+                          <div className="flex items-center gap-2 mb-1">
+                            <h4 className="text-sm font-semibold text-gray-900">{key}</h4>
+                            {value.required && (
+                              <span className="px-1.5 py-0.5 text-xs bg-red-50 text-red-600 rounded">必填</span>
+                            )}
+                            {value.type && (
+                              <span className="px-1.5 py-0.5 text-xs bg-blue-50 text-blue-600 rounded">{value.type}</span>
+                            )}
+                          </div>
+                          <p className="text-xs text-gray-600 mb-1">{value.description}</p>
+                          {value.fields && (
+                            <div className="ml-2 mt-1 space-y-0.5">
+                              {Object.entries(value.fields).map(([fieldKey, fieldDesc]: [string, any]) => (
+                                <div key={fieldKey} className="flex items-start gap-1 text-xs">
+                                  <span className="font-medium text-gray-700 min-w-[80px]">{fieldKey}:</span>
+                                  <span className="text-gray-600">{fieldDesc}</span>
+                                </div>
+                              ))}
                             </div>
-                          ))}
+                          )}
                         </div>
-                      )}
+                      ))}
                     </div>
-                  ))}
-                </div>
-              </Card>
-            )}
-          </div>
+                  </Card>
+                )}
+              </div>
+            </>
+          )}
         </div>
       </Modal>
 
