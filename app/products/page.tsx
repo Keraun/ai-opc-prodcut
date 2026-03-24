@@ -2,9 +2,11 @@
 
 import { useState } from "react"
 import { Button, Tabs, Tag, Card, Input } from "@arco-design/web-react"
-import { IconArrowLeft, IconSearch, IconAt, IconEye } from "@arco-design/web-react/icon"
+import { IconSearch, IconAt, IconEye } from "@arco-design/web-react/icon"
 import Image from "next/image"
 import Link from "next/link"
+import { Header } from "@/components/header"
+import { Footer } from "@/components/footer"
 
 const TabPane = Tabs.TabPane
 
@@ -20,7 +22,6 @@ interface Product {
 }
 
 const products: Product[] = [
-  // AI 提示词
   {
     id: "prompt-1",
     title: "ChatGPT 高级提示词库",
@@ -50,7 +51,6 @@ const products: Product[] = [
     tags: ["程序员必备"],
     category: "prompts"
   },
-  // AI 工作流
   {
     id: "workflow-1",
     title: "自动化内容创作工作流",
@@ -80,7 +80,6 @@ const products: Product[] = [
     tags: ["新品"],
     category: "workflows"
   },
-  // AI 网站导航
   {
     id: "nav-1",
     title: "AI 工具导航 Pro",
@@ -99,7 +98,6 @@ const products: Product[] = [
     tags: ["会员专属"],
     category: "navigation"
   },
-  // AI 课程
   {
     id: "course-1",
     title: "AI 零基础入门实战课",
@@ -128,7 +126,6 @@ const products: Product[] = [
     tags: ["企业培训", "直播答疑"],
     category: "courses"
   },
-  // AI 服务
   {
     id: "service-1",
     title: "AI 应用定制开发",
@@ -171,16 +168,13 @@ function ProductCard({ product }: { product: Product }) {
   return (
     <Card
       hoverable
-      className="!bg-card !border-border overflow-hidden group"
+      className="!bg-white !border-gray-100 overflow-hidden group hover:!border-gray-200 hover:!shadow-xl transition-all duration-300"
       cover={
-        <div className="relative h-48 overflow-hidden">
-          <Image
-            src={product.image}
-            alt={product.title}
-            fill
-            className="object-cover transition-transform duration-500 group-hover:scale-110"
-          />
-          <div className="absolute inset-0 bg-gradient-to-t from-background/80 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
+        <div className="relative h-48 overflow-hidden bg-gradient-to-br from-gray-50 to-gray-100">
+          <div className="absolute inset-0 flex items-center justify-center">
+            <span className="text-gray-300 text-sm">产品图片</span>
+          </div>
+          <div className="absolute inset-0 bg-gradient-to-t from-white/80 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
         </div>
       }
     >
@@ -191,12 +185,12 @@ function ProductCard({ product }: { product: Product }) {
             size="small"
             className={`!border-0 ${
               tag === "热销" || tag === "限时特惠"
-                ? "!bg-red-500/20 !text-red-400"
+                ? "!bg-red-500/20 !text-red-600"
                 : tag === "新品"
-                ? "!bg-accent/20 !text-accent"
+                ? "!bg-blue-500/20 !text-blue-600"
                 : tag === "免费"
-                ? "!bg-green-500/20 !text-green-400"
-                : "!bg-secondary !text-muted-foreground"
+                ? "!bg-green-500/20 !text-green-600"
+                : "!bg-gray-100 !text-gray-600"
             }`}
           >
             {tag}
@@ -204,23 +198,23 @@ function ProductCard({ product }: { product: Product }) {
         ))}
       </div>
       
-      <h3 className="text-lg font-semibold text-foreground mb-2 line-clamp-1">
+      <h3 className="text-lg font-semibold text-gray-900 mb-2 line-clamp-1">
         {product.title}
       </h3>
       
-      <p className="text-sm text-muted-foreground mb-4 line-clamp-2">
+      <p className="text-sm text-gray-500 mb-4 line-clamp-2">
         {product.description}
       </p>
       
       <div className="flex items-center justify-between mb-4">
         <div className="flex items-baseline gap-2">
           {product.price === 0 ? (
-            <span className="text-2xl font-bold text-green-400">免费</span>
+            <span className="text-2xl font-bold text-green-600">免费</span>
           ) : (
             <>
-              <span className="text-2xl font-bold text-accent">¥{product.price}</span>
+              <span className="text-2xl font-bold text-blue-600">¥{product.price}</span>
               {product.originalPrice && (
-                <span className="text-sm text-muted-foreground line-through">
+                <span className="text-sm text-gray-400 line-through">
                   ¥{product.originalPrice}
                 </span>
               )}
@@ -233,14 +227,14 @@ function ProductCard({ product }: { product: Product }) {
         <Button
           type="primary"
           icon={<IconAt />}
-          className="flex-1 !bg-accent !text-accent-foreground hover:!bg-accent/90"
+          className="flex-1 !bg-blue-600 !text-white hover:!bg-blue-700"
         >
           {product.price === 0 ? "立即获取" : "立即购买"}
         </Button>
         <Button
-          type="secondary"
+          type="outline"
           icon={<IconEye />}
-          className="!bg-secondary !border-border !text-foreground hover:!bg-secondary/80"
+          className="!border-gray-200 !text-gray-600 hover:!border-blue-500 hover:!text-blue-600"
         >
           详情
         </Button>
@@ -261,85 +255,67 @@ export default function ProductsPage() {
   })
 
   return (
-    <div className="min-h-screen bg-background">
-      {/* Header */}
-      <header className="sticky top-0 z-50 bg-background/80 backdrop-blur-xl border-b border-border">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center justify-between h-16">
-            <Link href="/" className="flex items-center gap-3 text-muted-foreground hover:text-foreground transition-colors">
-              <IconArrowLeft className="text-xl" />
-              <div className="flex items-center gap-2">
-                <div className="w-8 h-8 rounded-lg bg-accent flex items-center justify-center">
-                  <span className="text-accent-foreground font-bold">N</span>
-                </div>
-                <span className="font-bold text-foreground">NexusAI</span>
-              </div>
-            </Link>
+    <div className="min-h-screen bg-gray-50">
+      <Header />
+      
+      <main className="pt-20">
+        {/* Hero Section */}
+        <section className="relative py-16 md:py-24 overflow-hidden bg-gradient-to-br from-slate-50 via-white to-blue-50">
+          <div className="absolute inset-0 overflow-hidden">
+            <div className="absolute top-20 left-10 w-72 h-72 bg-blue-400/20 rounded-full blur-3xl animate-pulse" />
+            <div className="absolute bottom-20 right-10 w-96 h-96 bg-purple-400/20 rounded-full blur-3xl animate-pulse" style={{ animationDelay: "1s" }} />
+          </div>
+          
+          <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-gray-900 mb-6">
+              探索 <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-cyan-500">AI 产品</span>
+            </h1>
+            <p className="text-lg md:text-xl text-gray-600 max-w-2xl mx-auto mb-8">
+              精选优质 AI 工具、课程和服务，助力您的 AI 学习和业务增长
+            </p>
             
-            <div className="w-72">
+            <div className="max-w-md mx-auto">
               <Input
                 prefix={<IconSearch />}
                 placeholder="搜索产品..."
                 value={searchText}
                 onChange={setSearchText}
-                className="!bg-secondary !border-border [&_input]:!text-foreground [&_input]:placeholder:!text-muted-foreground [&_.arco-input-prefix]:!text-muted-foreground"
+                className="!bg-white !border-gray-200 !h-12 !rounded-xl shadow-lg [&_input]:!text-gray-900 [&_input]:placeholder:!text-gray-400 [&_.arco-input-prefix]:!text-gray-400"
               />
             </div>
           </div>
-        </div>
-      </header>
+        </section>
 
-      {/* Hero Section */}
-      <section className="relative py-16 md:py-24 overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-b from-accent/5 to-transparent" />
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-accent/10 rounded-full blur-3xl" />
-        
-        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-foreground mb-6">
-            探索 <span className="text-transparent bg-clip-text bg-gradient-to-r from-accent to-cyan-400">AI 产品</span>
-          </h1>
-          <p className="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto">
-            精选优质 AI 工具、课程和服务，助力您的 AI 学习和业务增长
-          </p>
-        </div>
-      </section>
-
-      {/* Products Section */}
-      <section className="pb-24">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <Tabs
-            activeTab={activeTab}
-            onChange={setActiveTab}
-            type="capsule"
-            className="mb-8 [&_.arco-tabs-header]:!border-0 [&_.arco-tabs-header-nav-capsule]:!bg-secondary [&_.arco-tabs-header-nav-capsule_.arco-tabs-header-title]:!text-muted-foreground [&_.arco-tabs-header-nav-capsule_.arco-tabs-header-title-active]:!text-foreground [&_.arco-tabs-header-nav-capsule_.arco-tabs-header-title-active]:!bg-accent [&_.arco-tabs-header-nav-capsule_.arco-tabs-header-ink]:!bg-transparent"
-          >
-            {categories.map((cat) => (
-              <TabPane key={cat.key} title={cat.title} />
-            ))}
-          </Tabs>
-
-          {filteredProducts.length > 0 ? (
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-              {filteredProducts.map((product) => (
-                <ProductCard key={product.id} product={product} />
+        {/* Products Section */}
+        <section className="py-16 md:py-24">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <Tabs
+              activeTab={activeTab}
+              onChange={setActiveTab}
+              type="capsule"
+              className="mb-8 [&_.arco-tabs-header]:!border-0 [&_.arco-tabs-header-nav-capsule]:!bg-gray-100 [&_.arco-tabs-header-nav-capsule_.arco-tabs-header-title]:!text-gray-600 [&_.arco-tabs-header-nav-capsule_.arco-tabs-header-title-active]:!text-white [&_.arco-tabs-header-nav-capsule_.arco-tabs-header-title-active]:!bg-blue-600 [&_.arco-tabs-header-nav-capsule_.arco-tabs-header-ink]:!bg-transparent"
+            >
+              {categories.map((cat) => (
+                <TabPane key={cat.key} title={cat.title} />
               ))}
-            </div>
-          ) : (
-            <div className="text-center py-20">
-              <p className="text-muted-foreground text-lg">暂无相关产品</p>
-            </div>
-          )}
-        </div>
-      </section>
+            </Tabs>
 
-      {/* Footer */}
-      <footer className="border-t border-border py-8">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <p className="text-muted-foreground text-sm">
-            © 2026 NexusAI. All rights reserved.
-          </p>
-        </div>
-      </footer>
+            {filteredProducts.length > 0 ? (
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+                {filteredProducts.map((product) => (
+                  <ProductCard key={product.id} product={product} />
+                ))}
+              </div>
+            ) : (
+              <div className="text-center py-20">
+                <p className="text-gray-500 text-lg">暂无相关产品</p>
+              </div>
+            )}
+          </div>
+        </section>
+      </main>
+      
+      <Footer />
     </div>
   )
 }
