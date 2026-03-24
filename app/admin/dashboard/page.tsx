@@ -15,7 +15,9 @@ export default function AdminDashboardPage() {
     seo: {},
     navigation: {},
     footer: {},
-    pages: {},
+    home: {},
+    products: {},
+    otherPages: {},
     custom: {},
     account: {}
   })
@@ -478,18 +480,18 @@ export default function AdminDashboardPage() {
               "包含网站名称、描述、联系方式等基础信息"
             )}
           </TabPane>
-          <TabPane key="common" title="通用配置">
+          <TabPane key="common" title="站点版本配置">
             {renderConfigCard(
-              "通用配置",
+              "站点版本配置",
               "common",
               "包含版本号、最后更新时间等通用配置"
             )}
           </TabPane>
-          <TabPane key="seo" title="SEO配置">
+          <TabPane key="account" title="账号配置">
             {renderConfigCard(
-              "SEO配置",
-              "seo",
-              "包含全局SEO、产品页面SEO等搜索引擎优化配置"
+              "账号配置",
+              "account",
+              "包含管理员账号、普通用户账号等账号配置"
             )}
           </TabPane>
           <TabPane key="navigation" title="导航栏配置">
@@ -499,32 +501,46 @@ export default function AdminDashboardPage() {
               "包含主导航、侧边栏导航等导航配置"
             )}
           </TabPane>
-          <TabPane key="footer" title="页面Footer配置">
+          <TabPane key="footer" title="站点Footer配置">
             {renderConfigCard(
-              "页面Footer配置",
+              "站点Footer配置",
               "footer",
               "包含页脚描述、社交链接、公司信息等页脚配置"
             )}
           </TabPane>
-          <TabPane key="pages" title="页面配置">
+          <TabPane key="home" title="首页内容配置">
             {renderConfigCard(
-              "页面配置",
-              "pages",
-              "包含产品页面、通用页面等页面配置"
+              "首页内容配置",
+              "home",
+              "包含Hero区域、关于我们、首页产品展示、首页服务展示等首页内容配置"
             )}
           </TabPane>
-          <TabPane key="custom" title="个性化配置">
+          <TabPane key="products" title="产品页面配置">
             {renderConfigCard(
-              "个性化配置",
+              "产品页面配置",
+              "products",
+              "包含产品分类、产品列表等产品页面配置"
+            )}
+          </TabPane>
+          <TabPane key="seo" title="SEO配置">
+            {renderConfigCard(
+              "SEO配置",
+              "seo",
+              "包含全局SEO、产品页面SEO等搜索引擎优化配置"
+            )}
+          </TabPane>
+          <TabPane key="custom" title="站点个性化配置">
+            {renderConfigCard(
+              "站点个性化配置",
               "custom",
               "包含主题、功能开关等个性化配置"
             )}
           </TabPane>
-          <TabPane key="account" title="账号配置">
+          <TabPane key="otherPages" title="自定义页面配置">
             {renderConfigCard(
-              "账号配置",
-              "account",
-              "包含管理员账号、普通用户账号等账号配置"
+              "自定义页面配置",
+              "otherPages",
+              "包含关于我们、服务条款、隐私政策等其他页面配置"
             )}
           </TabPane>
         </Tabs>

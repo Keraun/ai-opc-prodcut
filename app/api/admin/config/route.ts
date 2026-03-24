@@ -11,7 +11,9 @@ export async function GET() {
     const seoConfig = JSON.parse(fs.readFileSync(path.join(configDir, "seo.json"), "utf-8"))
     const navigationConfig = JSON.parse(fs.readFileSync(path.join(configDir, "navigation.json"), "utf-8"))
     const footerConfig = JSON.parse(fs.readFileSync(path.join(configDir, "footer.json"), "utf-8"))
-    const pagesConfig = JSON.parse(fs.readFileSync(path.join(configDir, "pages.json"), "utf-8"))
+    const homeConfig = JSON.parse(fs.readFileSync(path.join(configDir, "home.json"), "utf-8"))
+    const productsConfig = JSON.parse(fs.readFileSync(path.join(configDir, "products.json"), "utf-8"))
+    const otherPagesConfig = JSON.parse(fs.readFileSync(path.join(configDir, "other-pages.json"), "utf-8"))
     const customConfig = JSON.parse(fs.readFileSync(path.join(configDir, "custom.json"), "utf-8"))
     const accountConfig = JSON.parse(fs.readFileSync(path.join(configDir, "account.json"), "utf-8"))
 
@@ -21,7 +23,9 @@ export async function GET() {
       seo: seoConfig,
       navigation: navigationConfig,
       footer: footerConfig,
-      pages: pagesConfig,
+      home: homeConfig,
+      products: productsConfig,
+      otherPages: otherPagesConfig,
       custom: customConfig,
       account: accountConfig
     })
@@ -38,7 +42,14 @@ export async function POST(request: NextRequest) {
     const body = await request.json()
     const { type, data } = body
 
-    const configPath = path.join(process.cwd(), `config/json/${type}.json`)
+    let configPath: string
+    
+    if (type === 'otherPages') {
+      configPath = path.join(process.cwd(), "config/json/other-pages.json")
+    } else {
+      configPath = path.join(process.cwd(), `config/json/${type}.json`)
+    }
+    
     fs.writeFileSync(configPath, JSON.stringify(data, null, 2))
 
     return NextResponse.json({

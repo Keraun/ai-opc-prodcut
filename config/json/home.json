@@ -1,0 +1,111 @@
+{
+  "hero": {
+    "badge": "专注AI一人公司服务",
+    "title": {
+      "main": "让AI成为你的",
+      "sub": "超级员工"
+    },
+    "subtitle": "为个人创业者提供AI工具、课程和工作流，助力一人公司实现10倍效率提升",
+    "buttons": {
+      "primary": {
+        "text": "开始探索",
+        "href": "/products"
+      },
+      "secondary": {
+        "text": "了解更多",
+        "href": "/about"
+      }
+    }
+  },
+  "about": {
+    "title": {
+      "main": "关于",
+      "highlight": "创客AI"
+    },
+    "description": [
+      "创客AI专注于为个人创业者提供AI赋能服务",
+      "我们深知一人公司的挑战与机遇，致力于通过AI工具、课程和工作流，帮助创业者提升效率、降低成本、实现增长"
+    ],
+    "mission": {
+      "title": "使命",
+      "description": "让每一个创业者都能用上AI，实现业务自动化增长"
+    },
+    "vision": {
+      "title": "愿景",
+      "description": "成为最受信赖的AI一人公司服务平台"
+    },
+    "values": {
+      "title": "价值观",
+      "description": "客户第一、持续创新、简单可信赖"
+    },
+    "stats": [
+      { "value": "1000+", "label": "AI工具" },
+      { "value": "10万+", "label": "服务用户" },
+      { "value": "99%", "label": "满意度" }
+    ]
+  },
+  "homeProducts": [
+    {
+      "id": "workflow",
+      "name": "AI 工作流",
+      "description": "自动化内容创作、客服、数据分析等业务流程",
+      "icon": "IconThunderbolt",
+      "tag": "热门",
+      "tagColor": "blue",
+      "features": ["自动化流程", "降低成本", "提升效率"],
+      "link": "/products#workflows"
+    },
+    {
+      "id": "tools",
+      "name": "AI 工具站",
+      "description": "精选 1000+ AI 工具，持续更新",
+      "icon": "IconApps",
+      "tag": "免费",
+      "tagColor": "green",
+      "features": ["1000+ 工具", "每周更新", "智能分类"],
+      "link": "/products#tools"
+    },
+    {
+      "id": "courses",
+      "name": "AI GEO 课程",
+      "description": "从入门到精通的 AI 学习路径",
+      "icon": "IconBook",
+      "tag": "新课",
+      "tagColor": "orange",
+      "features": ["零基础入门", "实战案例", "社群答疑"],
+      "link": "/products#courses"
+    },
+    {
+      "id": "services",
+      "name": "AI 咨询服务",
+      "description": "一对一 AI 应用咨询与定制开发",
+      "icon": "IconCustomerService",
+      "tag": "定制",
+      "tagColor": "purple",
+      "features": ["专家咨询", "定制方案", "技术支持"],
+      "link": "/products#services"
+    }
+  ],
+  "homeServices": [
+    {
+      "title": "AI 工具站",
+      "description": "精选优质 AI 工具集合，涵盖写作、设计、营销等多个领域",
+      "highlights": ["1000+ 精选工具", "每周更新", "智能分类", "免费使用"]
+    },
+    {
+      "title": "AI GEO 课程",
+      "description": "系统化 AI 学习课程，从零基础到实战应用",
+      "highlights": ["零基础入门", "实战案例", "社群答疑", "终身学习"]
+    },
+    {
+      "title": "AI 工作流",
+      "description": "定制化 AI 工作流解决方案，提升业务效率",
+      "highlights": ["自动化流程", "降低成本", "提升效率", "持续优化"]
+    },
+    {
+      "title": "AI 咨询服务",
+      "description": "一对一 AI 应用咨询，助力企业 AI 转型",
+      "highlights": ["专家咨询", "定制方案", "技术支持", "效果保障"]
+    }
+  ]
+}

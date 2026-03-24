@@ -3,7 +3,9 @@ import commonConfig from "./json/common.json"
 import seoConfigData from "./json/seo.json"
 import navigationConfigData from "./json/navigation.json"
 import footerConfigData from "./json/footer.json"
-import pagesConfig from "./json/pages.json"
+import homeConfig from "./json/home.json"
+import productsConfigData from "./json/products.json"
+import otherPagesConfig from "./json/other-pages.json"
 import customConfig from "./json/custom.json"
 import accountConfig from "./json/account.json"
 
@@ -13,7 +15,7 @@ export const siteConfig = {
   icp: siteConfigData.icp || ""
 }
 
-export { commonConfig, pagesConfig, customConfig, accountConfig }
+export { commonConfig, customConfig, accountConfig }
 
 export const seoConfig = seoConfigData.seo || {}
 
@@ -39,17 +41,17 @@ export interface ProductCategory {
   title: string
 }
 
-export const productCategories: ProductCategory[] = pagesConfig.products?.categories || []
+export const productCategories: ProductCategory[] = productsConfigData.products?.categories || []
 
-export const products: Product[] = pagesConfig.products?.items || []
+export const products: Product[] = productsConfigData.products?.items || []
 
-export const productsConfig = pagesConfig.homeProducts || []
+export const productsConfig = homeConfig.homeProducts || []
 
-export const servicesConfig = pagesConfig.homeServices || []
+export const servicesConfig = homeConfig.homeServices || []
 
-export const heroConfig = pagesConfig.hero || {}
+export const heroConfig = homeConfig.hero || {}
 
-export const aboutConfig = pagesConfig.about || {}
+export const aboutConfig = homeConfig.about || {}
 
 export const pagesConfigExport: Record<string, {
   title: string
@@ -57,7 +59,7 @@ export const pagesConfigExport: Record<string, {
   contentType: 'markdown' | 'html'
   content: string
   showTOC?: boolean
-}> = (pagesConfig.pages || {}) as Record<string, {
+}> = (otherPagesConfig.pages || {}) as Record<string, {
   title: string
   description?: string
   contentType: 'markdown' | 'html'

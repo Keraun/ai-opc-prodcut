@@ -20,7 +20,9 @@ const commonConfigData = loadConfig("common.json")
 const seoConfigData = loadConfig("seo.json")
 const navigationConfigData = loadConfig("navigation.json")
 const footerConfigData = loadConfig("footer.json")
-const pagesConfigData = loadConfig("pages.json")
+const homeConfigData = loadConfig("home.json")
+const productsConfigData = loadConfig("products.json")
+const otherPagesConfigData = loadConfig("other-pages.json")
 const customConfigData = loadConfig("custom.json")
 const accountConfigData = loadConfig("account.json")
 
@@ -57,17 +59,17 @@ export interface ProductCategory {
   title: string
 }
 
-export const productCategories: ProductCategory[] = pagesConfigData.products?.categories || []
+export const productCategories: ProductCategory[] = productsConfigData.products?.categories || []
 
-export const products: Product[] = pagesConfigData.products?.items || []
+export const products: Product[] = productsConfigData.products?.items || []
 
-export const productsConfig = pagesConfigData.homeProducts || []
+export const productsConfig = homeConfigData.homeProducts || []
 
-export const servicesConfig = pagesConfigData.homeServices || []
+export const servicesConfig = homeConfigData.homeServices || []
 
-export const heroConfig = pagesConfigData.hero || {}
+export const heroConfig = homeConfigData.hero || {}
 
-export const aboutConfig = pagesConfigData.about || {}
+export const aboutConfig = homeConfigData.about || {}
 
 export const pagesConfig: Record<string, {
   title: string
@@ -75,7 +77,7 @@ export const pagesConfig: Record<string, {
   contentType: 'markdown' | 'html'
   content: string
   showTOC?: boolean
-}> = pagesConfigData.pages || {}
+}> = otherPagesConfigData.pages || {}
 
 export const customConfigExport = customConfigData || {}
 

@@ -114,7 +114,7 @@
       }
     }
   },
-  "pages": {
+  "home": {
     "hero": {
       "description": "首页Hero区域配置",
       "type": "object",
@@ -163,20 +163,24 @@
         "description": "服务描述",
         "highlights": "亮点列表"
       }
-    },
+    }
+  },
+  "products": {
     "products": {
       "description": "产品页面配置",
       "type": "object",
-      "required": false,
+      "required": true,
       "fields": {
         "categories": "产品分类",
         "items": "产品列表"
       }
-    },
+    }
+  },
+  "otherPages": {
     "pages": {
-      "description": "通用页面配置",
+      "description": "其他页面配置",
       "type": "object",
-      "required": false,
+      "required": true,
       "fields": {
         "title": "页面标题",
         "description": "页面描述",
