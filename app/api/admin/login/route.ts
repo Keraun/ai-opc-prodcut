@@ -3,6 +3,15 @@ import fs from "fs"
 import path from "path"
 import { cookies } from "next/headers"
 
+function generateSuperAdminToken(): string {
+  const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789'
+  let result = ''
+  for (let i = 0; i < 12; i++) {
+    result += chars.charAt(Math.floor(Math.random() * chars.length))
+  }
+  return Buffer.from(result).toString('base64')
+}
+
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json()
@@ -51,6 +60,15 @@ export async function POST(request: NextRequest) {
     accountConfig.admins[adminIndex].currentLoginIP = currentIP
     accountConfig.admins[adminIndex].currentLoginTime = currentTime
 
+    let showSuperAdminToken = false
+    let superAdminToken = ''
+
+    if (!accountConfig.superAdminToken) {
+      superAdminToken = generateSuperAdminToken()
+      accountConfig.superAdminToken = superAdminToken
+      showSuperAdminToken = true
+    }
+
     fs.writeFileSync(accountConfigPath, JSON.stringify(accountConfig, null, 2))
 
     const loginLogsPath = path.join(process.cwd(), "config/json/login-logs.json")
@@ -89,7 +107,9 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({
       success: true,
       mustChangePassword: admin.mustChangePassword,
-      user: userData
+      user: userData,
+      showSuperAdminToken,
+      superAdminToken: showSuperAdminToken ? superAdminToken : undefined
     })
   } catch (error) {
     return NextResponse.json({

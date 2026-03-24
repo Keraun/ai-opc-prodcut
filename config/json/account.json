@@ -1,14 +1,15 @@
 {
+  "superAdminToken": "ald0NFRXZU5NS2dw",
   "admins": [
     {
       "username": "admin",
-      "password": "admin@qwer",
+      "password": "admin@12345",
       "remark": "默认管理员账号",
       "mustChangePassword": false,
-      "lastLoginTime": "2026/03/25 05:11:55",
+      "lastLoginTime": "2026/03/25 05:57:19",
       "lastLoginIP": "::1",
       "currentLoginIP": "::1",
-      "currentLoginTime": "2026/03/25 05:18:51"
+      "currentLoginTime": "2026/03/25 05:58:34"
     },
     {
       "username": "admin2",
