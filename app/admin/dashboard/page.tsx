@@ -2,8 +2,8 @@
 
 import { useState, useEffect } from "react"
 import { useRouter } from "next/navigation"
-import { Button, Card, Tabs, Message, Modal, Input, Alert } from "@arco-design/web-react"
-import { IconSave, IconExport, IconEdit, IconLock, IconCheck, IconInfoCircle, IconEye } from "@arco-design/web-react/icon"
+import { Button, Card, Tabs, Message, Modal, Input, Alert, Dropdown } from "@arco-design/web-react"
+import { IconSave, IconExport, IconEdit, IconLock, IconCheck, IconInfoCircle, IconEye, IconCustomerService, IconQuestionCircle } from "@arco-design/web-react/icon"
 
 const TabPane = Tabs.TabPane
 
@@ -503,6 +503,38 @@ export default function AdminDashboardPage() {
                   )}
                 </div>
               )}
+              <Dropdown
+                droplist={
+                  <div className="p-4 bg-white rounded-lg shadow-lg">
+                    <div className="w-40 h-40 bg-gradient-to-br from-gray-50 to-gray-100 rounded-xl flex items-center justify-center border-2 border-gray-200">
+                      <div className="text-center">
+                        <div className="w-32 h-32 bg-white rounded-lg flex items-center justify-center">
+                          <span className="text-xs text-gray-400">客服二维码</span>
+                        </div>
+                      </div>
+                    </div>
+                    <p className="text-center text-xs text-gray-500 mt-2">技术问题可扫码联系客服</p>
+                  </div>
+                }
+                trigger="hover"
+                position="br"
+              >
+                <Button
+                  type="text"
+                  className="!text-gray-700 hover:!text-blue-600"
+                  icon={<IconCustomerService />}
+                >
+                  联系客服
+                </Button>
+              </Dropdown>
+              <Button
+                type="text"
+                className="!text-gray-700 hover:!text-blue-600"
+                icon={<IconQuestionCircle />}
+                onClick={() => window.open('https://help.makerai.com', '_blank')}
+              >
+                帮助文档
+              </Button>
               <Button
                 onClick={() => window.open('/', '_blank')}
               >

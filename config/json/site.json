@@ -18,5 +18,9 @@
     "phone": "400-888-8888",
     "email": "wuly93@163.com"
   },
+  "support": {
+    "customerServiceQRCode": "/images/customer-service-qr.png",
+    "helpDocUrl": "https://help.makerai.com"
+  },
   "icp": "浙ICP备XXXXXXXX号"
 }
