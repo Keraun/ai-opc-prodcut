@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server"
 import fs from "fs"
 import path from "path"
 import { cookies } from "next/headers"
+import { logOperation } from "@/lib/operation-logger"
 
 function generateSuperAdminToken(): string {
   const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789'
@@ -95,21 +96,7 @@ export async function POST(request: NextRequest) {
 
     fs.writeFileSync(accountConfigPath, JSON.stringify(accountConfig, null, 2))
 
-    const loginLogsPath = path.join(process.cwd(), "config/json/login-logs.json")
-    const loginLogs = JSON.parse(fs.readFileSync(loginLogsPath, "utf-8"))
-    
-    loginLogs.logs.unshift({
-      username: admin.username,
-      loginTime: currentTime,
-      loginIP: currentIP,
-      id: Date.now()
-    })
-    
-    if (loginLogs.logs.length > 100) {
-      loginLogs.logs = loginLogs.logs.slice(0, 100)
-    }
-    
-    fs.writeFileSync(loginLogsPath, JSON.stringify(loginLogs, null, 2))
+    logOperation(admin.username, 'login', '管理员登录', currentIP)
 
     const cookieStore = await cookies()
     const userData = {

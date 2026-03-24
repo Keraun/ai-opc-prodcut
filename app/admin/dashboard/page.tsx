@@ -141,7 +141,7 @@ export default function AdminDashboardPage() {
   const [confirmPassword, setConfirmPassword] = useState("")
   const [changePasswordLoading, setChangePasswordLoading] = useState(false)
   const [currentUser, setCurrentUser] = useState<any>(null)
-  const [loginLogs, setLoginLogs] = useState<any[]>([])
+  const [operationLogs, setOperationLogs] = useState<any[]>([])
   const [viewingPreviousVersion, setViewingPreviousVersion] = useState<string | null>(null)
   const [previousVersionData, setPreviousVersionData] = useState<any>(null)
   const [previousVersionInfo, setPreviousVersionInfo] = useState<any>(null)
@@ -172,7 +172,7 @@ export default function AdminDashboardPage() {
   useEffect(() => {
     fetchConfigs()
     fetchSchema()
-    fetchLoginLogs()
+    fetchOperationLogs()
     checkAuth()
   }, [])
 
@@ -288,15 +288,15 @@ export default function AdminDashboardPage() {
     }
   }
 
-  const fetchLoginLogs = async () => {
+  const fetchOperationLogs = async () => {
     try {
-      const response = await fetch("/api/admin/login-logs")
+      const response = await fetch("/api/admin/operation-logs")
       if (response.ok) {
         const data = await response.json()
-        setLoginLogs(data.logs || [])
+        setOperationLogs(data.logs || [])
       }
     } catch (error) {
-      console.error("获取登入记录失败", error)
+      console.error("获取操作记录失败", error)
     }
   }
 
@@ -341,6 +341,7 @@ export default function AdminDashboardPage() {
           [configType]: JSON.parse(JSON.stringify(configs[configType as keyof typeof configs]))
         }))
         fetchVersionInfos()
+        fetchOperationLogs()
       } else {
         Message.error("配置提交失败")
       }
@@ -472,6 +473,7 @@ export default function AdminDashboardPage() {
           setCurrentUser(data.user)
           sessionStorage.setItem('currentUser', JSON.stringify(data.user))
         }
+        fetchOperationLogs()
       } else {
         Message.error(data.message || "密码修改失败")
       }
@@ -559,16 +561,9 @@ export default function AdminDashboardPage() {
                     size="small"
                     icon={<IconHistory />}
                     onClick={() => handleViewPreviousVersion(configType)}
-                  >
-                    上一版本
-                  </Button>
-                  <Button
-                    size="small"
-                    icon={<IconUndo />}
-                    onClick={() => handleRestoreVersion(configType)}
                     disabled={!versionInfo}
                   >
-                    还原上一版本
+                    上一版本
                   </Button>
                   <Button
                     size="small"
@@ -846,11 +841,11 @@ export default function AdminDashboardPage() {
               "包含关于我们、服务条款、隐私政策等其他页面配置"
             )}
           </TabPane>
-          <TabPane key="loginLogs" title="登入记录">
-            <Card title="登入记录">
-              {loginLogs.length === 0 ? (
+          <TabPane key="operationLogs" title="操作记录">
+            <Card title="操作记录">
+              {operationLogs.length === 0 ? (
                 <div className="text-center py-8 text-gray-500">
-                  暂无登入记录
+                  暂无操作记录
                 </div>
               ) : (
                 <div className="overflow-x-auto">
@@ -858,16 +853,32 @@ export default function AdminDashboardPage() {
                     <thead>
                       <tr className="border-b border-gray-200">
                         <th className="text-left py-3 px-4 font-semibold text-gray-700">用户名</th>
-                        <th className="text-left py-3 px-4 font-semibold text-gray-700">登录时间</th>
-                        <th className="text-left py-3 px-4 font-semibold text-gray-700">登录IP</th>
+                        <th className="text-left py-3 px-4 font-semibold text-gray-700">操作类型</th>
+                        <th className="text-left py-3 px-4 font-semibold text-gray-700">描述</th>
+                        <th className="text-left py-3 px-4 font-semibold text-gray-700">IP地址</th>
+                        <th className="text-left py-3 px-4 font-semibold text-gray-700">时间</th>
                       </tr>
                     </thead>
                     <tbody>
-                      {loginLogs.map((log) => (
+                      {operationLogs.map((log) => (
                         <tr key={log.id} className="border-b border-gray-100 hover:bg-gray-50">
                           <td className="py-3 px-4 text-gray-900">{log.username}</td>
-                          <td className="py-3 px-4 text-gray-700">{log.loginTime}</td>
-                          <td className="py-3 px-4 text-gray-700">{log.loginIP}</td>
+                          <td className="py-3 px-4">
+                            <span className={`px-2 py-1 text-xs rounded ${
+                              log.type === 'login' ? 'bg-blue-100 text-blue-700' :
+                              log.type === 'update_config' ? 'bg-green-100 text-green-700' :
+                              log.type === 'change_password' ? 'bg-purple-100 text-purple-700' :
+                              'bg-gray-100 text-gray-700'
+                            }`}>
+                              {log.type === 'login' ? '登录' :
+                               log.type === 'update_config' ? '更新配置' :
+                               log.type === 'change_password' ? '修改密码' :
+                               log.type}
+                            </span>
+                          </td>
+                          <td className="py-3 px-4 text-gray-700">{log.description}</td>
+                          <td className="py-3 px-4 text-gray-700">{log.ip}</td>
+                          <td className="py-3 px-4 text-gray-700">{log.timestamp}</td>
                         </tr>
                       ))}
                     </tbody>

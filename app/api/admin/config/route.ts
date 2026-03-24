@@ -2,6 +2,8 @@ import { NextRequest, NextResponse } from "next/server"
 import fs from "fs"
 import path from "path"
 import { createVersion } from "@/lib/version-manager"
+import { logOperation } from "@/lib/operation-logger"
+import { cookies } from "next/headers"
 
 export async function GET() {
   try {
@@ -65,6 +67,32 @@ export async function POST(request: NextRequest) {
     createVersion(type, existingData)
     
     fs.writeFileSync(configPath, JSON.stringify(data, null, 2))
+
+    const cookieStore = await cookies()
+    const userCookie = cookieStore.get('adminUser')?.value
+    let username = 'unknown'
+    if (userCookie) {
+      try {
+        const userData = JSON.parse(userCookie)
+        username = userData.username
+      } catch (e) {
+        console.error('Failed to parse user cookie:', e)
+      }
+    }
+    
+    const configNames: Record<string, string> = {
+      site: '站点配置',
+      common: '通用配置',
+      seo: 'SEO配置',
+      navigation: '导航配置',
+      footer: '底部配置',
+      home: '首页配置',
+      products: '产品配置',
+      otherPages: '其他页面配置',
+      custom: '自定义配置'
+    }
+    const configName = configNames[type] || type
+    logOperation(username, 'update_config', `更新${configName}`, 'unknown', { configType: type })
 
     return NextResponse.json({
       success: true,

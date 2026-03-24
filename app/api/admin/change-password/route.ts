@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server"
 import fs from "fs"
 import path from "path"
 import { cookies } from "next/headers"
+import { logOperation } from "@/lib/operation-logger"
 
 export async function POST(request: NextRequest) {
   try {
@@ -31,6 +32,11 @@ export async function POST(request: NextRequest) {
     accountConfig.admins[adminIndex].mustChangePassword = false
 
     fs.writeFileSync(accountConfigPath, JSON.stringify(accountConfig, null, 2))
+
+    const currentIP = request.headers.get('x-forwarded-for') || 
+                      request.headers.get('x-real-ip') || 
+                      'unknown'
+    logOperation(username, 'change_password', '修改登录密码', currentIP)
 
     const cookieStore = await cookies()
     const admin = accountConfig.admins[adminIndex]
