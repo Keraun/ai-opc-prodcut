@@ -2,22 +2,23 @@
 
 import { IconLocation, IconPhone, IconEmail } from "@arco-design/web-react/icon"
 import { Logo } from "@/components/logo"
+import { siteConfig, footerConfig } from "@/config/site"
 
 const contactInfo = [
   {
     icon: IconLocation,
     title: "公司地址",
-    content: "北京市海淀区中关村科技园区 创客AI工作室",
+    content: siteConfig.contact.address,
   },
   {
     icon: IconPhone,
     title: "联系电话",
-    content: "400-888-9999",
+    content: siteConfig.contact.phone,
   },
   {
     icon: IconEmail,
     title: "电子邮箱",
-    content: "contact@makerai.com",
+    content: siteConfig.contact.email,
   },
 ]
 
@@ -33,10 +34,10 @@ export function Footer() {
           <div>
             <div className="flex items-center gap-2.5 mb-4">
               <Logo className="w-10 h-10 flex-shrink-0" />
-              <span className="text-xl font-bold text-gray-900 leading-none">创客AI</span>
+              <span className="text-xl font-bold text-gray-900 leading-none">{siteConfig.name}</span>
             </div>
             <p className="text-sm text-gray-600 leading-relaxed">
-              专注AI一人公司服务，助力个人创业者实现AI赋能。
+              {footerConfig.description}
             </p>
           </div>
 
@@ -87,10 +88,10 @@ export function Footer() {
         <div className="pt-8 border-t border-gray-200">
           <div className="flex flex-col md:flex-row justify-between items-center gap-4">
             <p className="text-sm text-gray-500">
-            &copy; {currentYear} 创客AI. All rights reserved.
+            &copy; {currentYear} {siteConfig.name}. All rights reserved.
           </p>
             <p className="text-sm text-gray-500">
-              京ICP备XXXXXXXX号-1
+              {siteConfig.icp}
             </p>
           </div>
         </div>

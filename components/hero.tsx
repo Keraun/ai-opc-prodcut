@@ -4,6 +4,7 @@ import { Button, Space } from "@arco-design/web-react"
 import { IconArrowRight, IconCommand } from "@arco-design/web-react/icon"
 import Link from "next/link"
 import { Logo } from "@/components/logo"
+import { heroConfig } from "@/config/site"
 
 export function Hero() {
   return (
@@ -24,48 +25,60 @@ export function Hero() {
 
       <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
         {/* Badge */}
-        <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/80 backdrop-blur-sm border border-cyan-100 shadow-sm mb-8">
-          <span className="w-2 h-2 rounded-full bg-cyan-500 animate-pulse" />
-          <span className="text-sm text-gray-600 font-medium">AI一人公司服务专家</span>
-        </div>
+        {heroConfig?.badge && (
+          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/80 backdrop-blur-sm border border-cyan-100 shadow-sm mb-8">
+            <span className="w-2 h-2 rounded-full bg-cyan-500 animate-pulse" />
+            <span className="text-sm text-gray-600 font-medium">{heroConfig.badge}</span>
+          </div>
+        )}
 
         {/* Main Heading */}
         <h1 className="text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-bold mb-6 leading-[1.1] tracking-tight">
-          <span className="text-blue-800 block mb-2">
-            AI赋能
-          </span>
-          <span className="text-gray-900 block">
-            一人公司
-          </span>
+          {heroConfig?.title?.main && (
+            <span className="text-blue-800 block mb-2">
+              {heroConfig.title.main}
+            </span>
+          )}
+          {heroConfig?.title?.sub && (
+            <span className="text-gray-900 block">
+              {heroConfig.title.sub}
+            </span>
+          )}
         </h1>
 
         {/* Subtitle */}
-        <p className="text-lg text-gray-500 mb-12 inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-white/60 backdrop-blur-sm border border-gray-100 shadow-sm">
-          <Logo className="w-6 h-6" />
-          <span>专注AI工具、课程、工作流服务</span>
-        </p>
+        {heroConfig?.subtitle && (
+          <p className="text-lg text-gray-500 mb-12 inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-white/60 backdrop-blur-sm border border-gray-100 shadow-sm">
+            <Logo className="w-6 h-6" />
+            <span>{heroConfig.subtitle}</span>
+          </p>
+        )}
 
         {/* CTA Buttons */}
         <div className="flex flex-wrap justify-center gap-4 mb-16">
-          <Link href="/products">
-            <Button
-              type="primary"
-              size="large"
-              className="!bg-blue-800 !text-white hover:!bg-blue-900 !h-14 !px-10 !text-base !rounded-xl shadow-lg shadow-blue-800/25 hover:shadow-xl hover:shadow-blue-800/30 transition-all duration-300 hover:-translate-y-0.5"
-            >
-              <IconCommand className="mr-2 text-lg" />
-              立即体验
-            </Button>
-          </Link>
+          {heroConfig?.buttons?.primary?.href && heroConfig?.buttons?.primary?.text && (
+            <Link href={heroConfig.buttons.primary.href}>
+              <Button
+                type="primary"
+                size="large"
+                className="!bg-blue-800 !text-white hover:!bg-blue-900 !h-14 !px-10 !text-base !rounded-xl shadow-lg shadow-blue-800/25 hover:shadow-xl hover:shadow-blue-800/30 transition-all duration-300 hover:-translate-y-0.5"
+              >
+                <IconCommand className="mr-2 text-lg" />
+                {heroConfig.buttons.primary.text}
+              </Button>
+            </Link>
+          )}
 
-          <Button
-            type="secondary"
-            size="large"
-            className="!bg-white !border-gray-200 !text-gray-700 hover:!bg-gray-50 hover:!border-gray-300 !h-14 !px-10 !text-base !rounded-xl shadow-sm hover:shadow-md transition-all duration-300 hover:-translate-y-0.5"
-          >
-            了解更多
-            <IconArrowRight className="ml-2" />
-          </Button>
+          {heroConfig?.buttons?.secondary?.text && (
+            <Button
+              type="secondary"
+              size="large"
+              className="!bg-white !border-gray-200 !text-gray-700 hover:!bg-gray-50 hover:!border-gray-300 !h-14 !px-10 !text-base !rounded-xl shadow-sm hover:shadow-md transition-all duration-300 hover:-translate-y-0.5"
+            >
+              {heroConfig.buttons.secondary.text}
+              <IconArrowRight className="ml-2" />
+            </Button>
+          )}
         </div>
 
         {/* Feature Pills */}

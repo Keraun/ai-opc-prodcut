@@ -6,11 +6,9 @@ import { IconMenu, IconPhone } from "@arco-design/web-react/icon"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
 import { Logo } from "@/components/logo"
+import { siteConfig, navigationConfig } from "@/config/site"
 
-const navItems = [
-  { label: "首页", href: "/" },
-  { label: "产品", href: "/products" },
-]
+const navItems = navigationConfig.main
 
 export function Header() {
   const router = useRouter()
@@ -68,23 +66,27 @@ export function Header() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center h-16 md:h-20">
           {/* Logo */}
-          <div className="flex items-center gap-2.5 w-[200px]">
-            <Logo className="w-9 h-9 md:w-10 md:h-10 flex-shrink-0" />
-            <span className="text-lg md:text-xl font-bold text-gray-900 leading-none">创客AI</span>
-          </div>
+          {siteConfig?.name && (
+            <div className="flex items-center gap-2.5 w-[200px]">
+              <Logo className="w-9 h-9 md:w-10 md:h-10 flex-shrink-0" />
+              <span className="text-lg md:text-xl font-bold text-gray-900 leading-none">{siteConfig.name}</span>
+            </div>
+          )}
             {/* Desktop Navigation */}
-            <nav className="hidden md:flex items-center justify-center gap-8 flex-1">
-              {navItems.map((item) => (
-                <button
-                  key={item.href}
-                  onClick={() => handleNavClick(item.href)}
-                  className="text-gray-600 hover:text-gray-900 transition-colors text-sm font-medium cursor-pointer relative group"
-                >
-                  {item.label}
-                  <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-cyan-500 group-hover:w-full transition-all duration-300" />
-                </button>
-              ))}
-            </nav>
+            {navItems && navItems.length > 0 && (
+              <nav className="hidden md:flex items-center justify-center gap-8 flex-1">
+                {navItems.map((item) => (
+                  <button
+                    key={item?.href}
+                    onClick={() => handleNavClick(item?.href)}
+                    className="text-gray-600 hover:text-gray-900 transition-colors text-sm font-medium cursor-pointer relative group"
+                  >
+                    {item?.label}
+                    <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-cyan-500 group-hover:w-full transition-all duration-300" />
+                  </button>
+                ))}
+              </nav>
+            )}
           {/* Desktop CTA */}
           <div className="hidden md:flex items-center gap-3 w-[200px] justify-end">
             <Dropdown

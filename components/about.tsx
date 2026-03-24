@@ -2,33 +2,35 @@
 
 import { Card } from "@arco-design/web-react"
 import { IconStar, IconCompass, IconHeart, IconThunderbolt, IconUser, IconCheckCircle } from "@arco-design/web-react/icon"
+import { aboutConfig } from "@/config/site"
 
 const values = [
   {
     icon: IconStar,
-    title: "使命",
-    description: "让AI技术赋能每一个创业者，降低AI应用门槛，实现一人公司的无限可能。",
+    title: aboutConfig.mission.title,
+    description: aboutConfig.mission.description,
     color: "orange",
   },
   {
     icon: IconCompass,
-    title: "愿景",
-    description: "成为最受信赖的AI一人公司服务平台，引领个人创业者的AI时代。",
+    title: aboutConfig.vision.title,
+    description: aboutConfig.vision.description,
     color: "blue",
   },
   {
     icon: IconHeart,
-    title: "价值观",
-    description: "专注、实用、高效、共赢，与创业者一起成长，创造价值。",
+    title: aboutConfig.values.title,
+    description: aboutConfig.values.description,
     color: "green",
   },
 ]
 
-const stats = [
-  { icon: IconThunderbolt, value: "100+", label: "AI工具", color: "text-cyan-500" },
-  { icon: IconUser, value: "1000+", label: "学员用户", color: "text-blue-800" },
-  { icon: IconCheckCircle, value: "50+", label: "工作流案例", color: "text-green-600" },
-]
+const stats = aboutConfig.stats.map((stat, index) => ({
+  icon: index === 0 ? IconThunderbolt : index === 1 ? IconUser : IconCheckCircle,
+  value: stat.value,
+  label: stat.label,
+  color: index === 0 ? "text-cyan-500" : index === 1 ? "text-blue-800" : "text-green-600",
+}))
 
 const colorMap: Record<string, { bg: string; text: string; light: string }> = {
   orange: { bg: "bg-cyan-500", text: "text-cyan-600", light: "bg-cyan-50" },
@@ -54,19 +56,16 @@ export function About() {
               关于我们
             </span>
             <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-gray-900 mb-6 leading-tight">
-              专注AI
+              {aboutConfig.title.main}
               <br />
               <span className="text-blue-800">
-                一人公司服务
+                {aboutConfig.title.highlight}
               </span>
             </h2>
             <div className="space-y-4 text-gray-600 leading-relaxed">
-              <p>
-                创客AI专注于为个人创业者提供AI赋能服务。我们深知一人公司的挑战与机遇，致力于通过AI工具、课程和工作流，帮助创业者提升效率、降低成本、实现增长。
-              </p>
-              <p>
-                从AI工具站到GEO课程，从工作流定制到咨询服务，我们为1000+个人创业者提供了实用的AI解决方案，帮助他们实现一人公司的无限可能。
-              </p>
+              {aboutConfig.description.map((desc, index) => (
+                <p key={index}>{desc}</p>
+              ))}
             </div>
 
             {/* Stats */}
