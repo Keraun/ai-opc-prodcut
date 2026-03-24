@@ -1,7 +1,7 @@
 "use client"
 
 import { useState, useEffect, useRef } from "react"
-import { Button, Tag, Card, Input } from "@arco-design/web-react"
+import { Button, Tag, Card, Input, Tooltip, Modal } from "@arco-design/web-react"
 import { IconSearch, IconAt, IconEye } from "@arco-design/web-react/icon"
 import Image from "next/image"
 import Link from "next/link"
@@ -132,85 +132,118 @@ const categories = [
 ]
 
 function ProductCard({ product }: { product: Product }) {
+  const [visible, setVisible] = useState(false)
+  
   return (
-    <Card
-      hoverable
-      className="!bg-white !border-gray-100 overflow-hidden group hover:!border-gray-200 hover:!shadow-lg transition-all duration-300"
-      cover={
-        <div className="relative h-32 overflow-hidden bg-gradient-to-br from-gray-50 to-gray-100">
-          <div className="absolute inset-0 flex items-center justify-center">
-            <span className="text-gray-300 text-xs">产品图片</span>
+    <>
+      <Card
+        hoverable
+        className="!bg-white !border-gray-100 overflow-hidden group hover:!border-gray-200 hover:!shadow-lg transition-all duration-300"
+        cover={
+          <div className="relative h-32 overflow-hidden bg-gradient-to-br from-gray-50 to-gray-100">
+            <div className="absolute inset-0 flex items-center justify-center">
+              <span className="text-gray-300 text-xs">产品图片</span>
+            </div>
+            <div className="absolute inset-0 bg-gradient-to-t from-white/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
           </div>
-          <div className="absolute inset-0 bg-gradient-to-t from-white/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
-        </div>
-      }
-    >
-      <div className="p-4">
-        <div className="flex flex-wrap gap-1.5 mb-2">
-          {product.tags.map((tag) => (
-            <Tag
-              key={tag}
+        }
+      >
+        <div className="p-4">
+          <div className="flex flex-wrap gap-1.5 mb-2">
+            {product.tags.map((tag) => (
+              <Tag
+                key={tag}
+                size="small"
+                className={`!border-0 !text-xs ${
+                  tag === "热销" || tag === "限时特惠"
+                    ? "!bg-red-500/20 !text-red-600"
+                    : tag === "新品"
+                    ? "!bg-blue-500/20 !text-blue-600"
+                    : tag === "免费"
+                    ? "!bg-green-500/20 !text-green-600"
+                    : "!bg-gray-100 !text-gray-600"
+                }`}
+              >
+                {tag}
+              </Tag>
+            ))}
+          </div>
+          
+          <Tooltip content={product.title} position="top">
+            <h3 className="text-base font-semibold text-gray-900 mb-1.5 line-clamp-1 cursor-pointer">
+              {product.title}
+            </h3>
+          </Tooltip>
+          
+          <Tooltip content={product.description} position="top">
+            <p className="text-xs text-gray-500 mb-3 line-clamp-3 leading-relaxed cursor-pointer">
+              {product.description}
+            </p>
+          </Tooltip>
+          
+          <div className="flex items-center justify-between mb-3">
+            <div className="flex items-baseline gap-1.5">
+              {product.price === 0 ? (
+                <span className="text-lg font-bold text-green-600">免费</span>
+              ) : (
+                <>
+                  <span className="text-lg font-bold text-blue-600">¥{product.price}</span>
+                  {product.originalPrice && (
+                    <span className="text-xs text-gray-400 line-through">
+                      ¥{product.originalPrice}
+                    </span>
+                  )}
+                </>
+              )}
+            </div>
+          </div>
+          
+          <div className="flex gap-2">
+            <Button
+              type="primary"
               size="small"
-              className={`!border-0 !text-xs ${
-                tag === "热销" || tag === "限时特惠"
-                  ? "!bg-red-500/20 !text-red-600"
-                  : tag === "新品"
-                  ? "!bg-blue-500/20 !text-blue-600"
-                  : tag === "免费"
-                  ? "!bg-green-500/20 !text-green-600"
-                  : "!bg-gray-100 !text-gray-600"
-              }`}
+              icon={<IconAt />}
+              className="flex-1 !bg-blue-600 !text-white hover:!bg-blue-700 !h-8"
+              onClick={() => setVisible(true)}
             >
-              {tag}
-            </Tag>
-          ))}
-        </div>
-        
-        <h3 className="text-base font-semibold text-gray-900 mb-1.5 line-clamp-1">
-          {product.title}
-        </h3>
-        
-        <p className="text-xs text-gray-500 mb-3 line-clamp-2 leading-relaxed">
-          {product.description}
-        </p>
-        
-        <div className="flex items-center justify-between mb-3">
-          <div className="flex items-baseline gap-1.5">
-            {product.price === 0 ? (
-              <span className="text-lg font-bold text-green-600">免费</span>
-            ) : (
-              <>
-                <span className="text-lg font-bold text-blue-600">¥{product.price}</span>
-                {product.originalPrice && (
-                  <span className="text-xs text-gray-400 line-through">
-                    ¥{product.originalPrice}
-                  </span>
-                )}
-              </>
-            )}
+              {product.price === 0 ? "获取" : "购买"}
+            </Button>
+            <Button
+              type="outline"
+              size="small"
+              icon={<IconEye />}
+              className="!border-gray-200 !text-gray-600 hover:!border-blue-500 hover:!text-blue-600 !h-8"
+            >
+              详情
+            </Button>
           </div>
         </div>
-        
-        <div className="flex gap-2">
-          <Button
-            type="primary"
-            size="small"
-            icon={<IconAt />}
-            className="flex-1 !bg-blue-600 !text-white hover:!bg-blue-700 !h-8"
-          >
-            {product.price === 0 ? "获取" : "购买"}
-          </Button>
-          <Button
-            type="outline"
-            size="small"
-            icon={<IconEye />}
-            className="!border-gray-200 !text-gray-600 hover:!border-blue-500 hover:!text-blue-600 !h-8"
-          >
-            详情
-          </Button>
+      </Card>
+      
+      <Modal
+        title={product.price === 0 ? "获取方式" : "购买方式"}
+        visible={visible}
+        onCancel={() => setVisible(false)}
+        footer={null}
+        className="!max-w-md"
+      >
+        <div className="text-center py-6">
+          <div className="w-64 h-64 mx-auto mb-4 bg-gradient-to-br from-gray-50 to-gray-100 rounded-xl flex items-center justify-center border-2 border-gray-200">
+            <div className="text-center">
+              <div className="w-48 h-48 bg-white rounded-lg flex items-center justify-center mb-2">
+                <span className="text-sm text-gray-400">扫码咨询</span>
+              </div>
+            </div>
+          </div>
+          <p className="text-sm text-gray-600 mb-2">
+            {product.price === 0 ? "扫描二维码免费获取" : "扫描二维码咨询购买"}
+          </p>
+          <p className="text-xs text-gray-400">
+            工作时间：9:00-18:00
+          </p>
         </div>
-      </div>
-    </Card>
+      </Modal>
+    </>
   )
 }
 
@@ -340,7 +373,7 @@ export default function ProductsPage() {
                       </h2>
                       
                       {categoryProducts.length > 0 ? (
-                        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+                        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
                           {categoryProducts.map((product) => (
                             <ProductCard key={product.id} product={product} />
                           ))}

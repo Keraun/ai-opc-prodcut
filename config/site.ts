@@ -26,11 +26,11 @@ export const siteConfig = {
   // 联系方式配置
   contact: {
     // 联系电话
-    phone: "400-888-9999",
+    phone: "***-***-****",
     // 联系邮箱
-    email: "contact@makerai.com",
+    email: "wuly93@163.com",
     // 公司地址
-    address: "北京市海淀区中关村科技园区 创客AI工作室",
+    address: "浙江省杭州市西湖区三墩镇西园八路3号浙大森林",
     // 微信号
     wechat: "makerai_official",
   },
@@ -47,6 +47,79 @@ export const siteConfig = {
   
   // ICP备案号，显示在Footer底部
   icp: "京ICP备XXXXXXXX号-1",
+}
+
+/**
+ * SEO配置
+ * 搜索引擎优化相关配置
+ */
+export const seoConfig = {
+  // 网站关键词，用于SEO优化
+  keywords: [
+    'AI一人公司',
+    'AI工具',
+    'AI课程',
+    'AI工作流',
+    'AI赋能',
+    '个人创业',
+    '一人公司',
+    'AI GEO课程',
+    'AI解决方案',
+    '创业者服务',
+  ],
+  
+  // OpenGraph配置（社交媒体分享）
+  openGraph: {
+    // 网站类型
+    type: 'website',
+    // 语言
+    locale: 'zh_CN',
+    // 网站名称
+    siteName: '创客AI',
+    // 分享图片配置
+    images: [
+      {
+        url: '/og-image.png',
+        width: 1200,
+        height: 630,
+        alt: '创客AI - 专注AI一人公司服务',
+      },
+    ],
+  },
+  
+  // Twitter卡片配置
+  twitter: {
+    // 卡片类型
+    card: 'summary_large_image',
+    // Twitter账号
+    creator: '@makerai',
+  },
+  
+  // 主题颜色
+  themeColor: '#1e40af',
+  
+  // Robots配置（搜索引擎爬虫规则）
+  robots: {
+    // 是否允许索引
+    index: true,
+    // 是否允许跟踪链接
+    follow: true,
+    // 禁止访问的路径
+    disallow: ['/api/', '/_next/', '/static/'],
+  },
+}
+
+/**
+ * 产品页面SEO配置
+ * 产品页面的SEO相关信息
+ */
+export const productsSeoConfig = {
+  // 页面标题
+  title: '产品服务',
+  // 页面描述
+  description: '探索创客AI的产品服务，包括AI工具站、AI GEO课程、AI工作流定制、AI咨询服务等，助力个人创业者实现AI赋能。',
+  // 页面关键词
+  keywords: ['AI产品', 'AI工具站', 'AI课程', 'AI工作流', 'AI咨询', '一人公司服务'],
 }
 
 /**
