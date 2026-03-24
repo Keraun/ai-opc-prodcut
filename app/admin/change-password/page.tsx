@@ -28,6 +28,15 @@ export default function ChangePasswordPage() {
       return
     }
 
+    const currentUserStr = sessionStorage.getItem('currentUser')
+    if (!currentUserStr) {
+      Message.error("未找到用户信息，请重新登录")
+      router.push("/admin")
+      return
+    }
+
+    const currentUser = JSON.parse(currentUserStr)
+
     setLoading(true)
 
     try {
@@ -36,7 +45,11 @@ export default function ChangePasswordPage() {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ oldPassword, newPassword }),
+        body: JSON.stringify({ 
+          username: currentUser.username,
+          oldPassword, 
+          newPassword 
+        }),
       })
 
       const data = await response.json()

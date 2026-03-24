@@ -5,22 +5,31 @@ import path from "path"
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json()
-    const { oldPassword, newPassword } = body
+    const { username, oldPassword, newPassword } = body
 
-    const customConfigPath = path.join(process.cwd(), "config/json/custom.json")
-    const customConfig = JSON.parse(fs.readFileSync(customConfigPath, "utf-8"))
+    const accountConfigPath = path.join(process.cwd(), "config/json/account.json")
+    const accountConfig = JSON.parse(fs.readFileSync(accountConfigPath, "utf-8"))
 
-    if (oldPassword !== customConfig.admin.password) {
+    const adminIndex = accountConfig.admins?.findIndex((admin: any) => admin.username === username)
+
+    if (adminIndex === -1 || adminIndex === undefined) {
+      return NextResponse.json({
+        success: false,
+        message: "用户不存在"
+      }, { status: 400 })
+    }
+
+    if (oldPassword !== accountConfig.admins[adminIndex].password) {
       return NextResponse.json({
         success: false,
         message: "原密码错误"
       }, { status: 400 })
     }
 
-    customConfig.admin.password = newPassword
-    customConfig.admin.mustChangePassword = false
+    accountConfig.admins[adminIndex].password = newPassword
+    accountConfig.admins[adminIndex].mustChangePassword = false
 
-    fs.writeFileSync(customConfigPath, JSON.stringify(customConfig, null, 2))
+    fs.writeFileSync(accountConfigPath, JSON.stringify(accountConfig, null, 2))
 
     return NextResponse.json({
       success: true,

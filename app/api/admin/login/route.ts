@@ -7,13 +7,20 @@ export async function POST(request: NextRequest) {
     const body = await request.json()
     const { username, password } = body
 
-    const customConfigPath = path.join(process.cwd(), "config/json/custom.json")
-    const customConfig = JSON.parse(fs.readFileSync(customConfigPath, "utf-8"))
+    const accountConfigPath = path.join(process.cwd(), "config/json/account.json")
+    const accountConfig = JSON.parse(fs.readFileSync(accountConfigPath, "utf-8"))
 
-    if (username === customConfig.admin.username && password === customConfig.admin.password) {
+    const admin = accountConfig.admins?.find((admin: any) => admin.username === username)
+
+    if (admin && admin.password === password) {
       return NextResponse.json({
         success: true,
-        mustChangePassword: customConfig.admin.mustChangePassword
+        mustChangePassword: admin.mustChangePassword,
+        user: {
+          username: admin.username,
+          remark: admin.remark,
+          mustChangePassword: admin.mustChangePassword
+        }
       })
     } else {
       return NextResponse.json({

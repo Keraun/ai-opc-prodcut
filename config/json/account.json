@@ -1,0 +1,10 @@
+{
+  "admins": [
+    {
+      "username": "admin",
+      "password": "admin@1234",
+      "remark": "默认管理员账号",
+      "mustChangePassword": false
+    }
+  ]
+}

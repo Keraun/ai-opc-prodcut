@@ -1,7 +1,11 @@
 import siteConfigData from "./json/site.json"
 import commonConfig from "./json/common.json"
+import seoConfigData from "./json/seo.json"
+import navigationConfigData from "./json/navigation.json"
+import footerConfigData from "./json/footer.json"
 import pagesConfig from "./json/pages.json"
 import customConfig from "./json/custom.json"
+import accountConfig from "./json/account.json"
 
 export const siteConfig = {
   ...siteConfigData,
@@ -9,15 +13,15 @@ export const siteConfig = {
   icp: siteConfigData.icp || ""
 }
 
-export { commonConfig, pagesConfig, customConfig }
+export { commonConfig, pagesConfig, customConfig, accountConfig }
 
-export const seoConfig = commonConfig.seo || {}
+export const seoConfig = seoConfigData.seo || {}
 
-export const productsSeoConfig = commonConfig.productsSeo || {}
+export const productsSeoConfig = seoConfigData.productsSeo || {}
 
-export const navigationConfig = commonConfig.navigation || {}
+export const navigationConfig = navigationConfigData.navigation || {}
 
-export const footerConfig = commonConfig.footer || {}
+export const footerConfig = footerConfigData.footer || {}
 
 export interface Product {
   id: string

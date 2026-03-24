@@ -8,14 +8,22 @@ export async function GET() {
     
     const siteConfig = JSON.parse(fs.readFileSync(path.join(configDir, "site.json"), "utf-8"))
     const commonConfig = JSON.parse(fs.readFileSync(path.join(configDir, "common.json"), "utf-8"))
+    const seoConfig = JSON.parse(fs.readFileSync(path.join(configDir, "seo.json"), "utf-8"))
+    const navigationConfig = JSON.parse(fs.readFileSync(path.join(configDir, "navigation.json"), "utf-8"))
+    const footerConfig = JSON.parse(fs.readFileSync(path.join(configDir, "footer.json"), "utf-8"))
     const pagesConfig = JSON.parse(fs.readFileSync(path.join(configDir, "pages.json"), "utf-8"))
     const customConfig = JSON.parse(fs.readFileSync(path.join(configDir, "custom.json"), "utf-8"))
+    const accountConfig = JSON.parse(fs.readFileSync(path.join(configDir, "account.json"), "utf-8"))
 
     return NextResponse.json({
       site: siteConfig,
       common: commonConfig,
+      seo: seoConfig,
+      navigation: navigationConfig,
+      footer: footerConfig,
       pages: pagesConfig,
-      custom: customConfig
+      custom: customConfig,
+      account: accountConfig
     })
   } catch (error) {
     return NextResponse.json({

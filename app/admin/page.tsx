@@ -31,6 +31,9 @@ export default function AdminLoginPage() {
       const data = await response.json()
 
       if (response.ok) {
+        if (data.user) {
+          sessionStorage.setItem('currentUser', JSON.stringify(data.user))
+        }
         Message.success("登录成功")
         router.push("/admin/dashboard")
       } else {

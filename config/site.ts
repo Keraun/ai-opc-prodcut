@@ -17,8 +17,12 @@ const loadConfig = (filename: string) => {
 
 const siteConfigData = loadConfig("site.json")
 const commonConfigData = loadConfig("common.json")
+const seoConfigData = loadConfig("seo.json")
+const navigationConfigData = loadConfig("navigation.json")
+const footerConfigData = loadConfig("footer.json")
 const pagesConfigData = loadConfig("pages.json")
 const customConfigData = loadConfig("custom.json")
+const accountConfigData = loadConfig("account.json")
 
 export const siteConfig = {
   name: siteConfigData.name || "创客AI",
@@ -29,13 +33,13 @@ export const siteConfig = {
   creator: siteConfigData.creator || {},
 }
 
-export const seoConfig = commonConfigData.seo || {}
+export const seoConfig = seoConfigData.seo || {}
 
-export const productsSeoConfig = commonConfigData.productsSeo || {}
+export const productsSeoConfig = seoConfigData.productsSeo || {}
 
-export const navigationConfig = commonConfigData.navigation || {}
+export const navigationConfig = navigationConfigData.navigation || {}
 
-export const footerConfig = commonConfigData.footer || {}
+export const footerConfig = footerConfigData.footer || {}
 
 export interface Product {
   id: string
@@ -74,3 +78,5 @@ export const pagesConfig: Record<string, {
 }> = pagesConfigData.pages || {}
 
 export const customConfigExport = customConfigData || {}
+
+export const accountConfigExport = accountConfigData || {}

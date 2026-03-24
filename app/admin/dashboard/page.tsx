@@ -12,8 +12,12 @@ export default function AdminDashboardPage() {
   const [configs, setConfigs] = useState({
     site: {},
     common: {},
+    seo: {},
+    navigation: {},
+    footer: {},
     pages: {},
-    custom: {}
+    custom: {},
+    account: {}
   })
   const [loading, setLoading] = useState(false)
   const [editingConfig, setEditingConfig] = useState<string | null>(null)
@@ -27,10 +31,24 @@ export default function AdminDashboardPage() {
   const [viewValue, setViewValue] = useState("")
   const [editLeftWidth, setEditLeftWidth] = useState(60)
   const [isEditDragging, setIsEditDragging] = useState(false)
+  const [showChangePassword, setShowChangePassword] = useState(false)
+  const [mustChangePassword, setMustChangePassword] = useState(false)
+  const [oldPassword, setOldPassword] = useState("")
+  const [newPassword, setNewPassword] = useState("")
+  const [confirmPassword, setConfirmPassword] = useState("")
+  const [changePasswordLoading, setChangePasswordLoading] = useState(false)
 
   useEffect(() => {
     fetchConfigs()
     fetchSchema()
+    
+    const currentUserStr = sessionStorage.getItem('currentUser')
+    if (currentUserStr) {
+      const currentUser = JSON.parse(currentUserStr)
+      if (currentUser.mustChangePassword) {
+        setMustChangePassword(true)
+      }
+    }
   }, [])
 
   useEffect(() => {
@@ -170,6 +188,71 @@ export default function AdminDashboardPage() {
       }
     } catch (error) {
       Message.error("退出失败")
+    }
+  }
+
+  const handleChangePassword = async () => {
+    if (!oldPassword || !newPassword || !confirmPassword) {
+      Message.error("请填写所有字段")
+      return
+    }
+
+    if (newPassword !== confirmPassword) {
+      Message.error("两次输入的新密码不一致")
+      return
+    }
+
+    if (newPassword.length < 8) {
+      Message.error("新密码长度至少为8位")
+      return
+    }
+
+    const currentUserStr = sessionStorage.getItem('currentUser')
+    if (!currentUserStr) {
+      Message.error("未找到用户信息，请重新登录")
+      router.push("/admin")
+      return
+    }
+
+    const currentUser = JSON.parse(currentUserStr)
+
+    setChangePasswordLoading(true)
+
+    try {
+      const response = await fetch("/api/admin/change-password", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ 
+          username: currentUser.username,
+          oldPassword, 
+          newPassword 
+        }),
+      })
+
+      const data = await response.json()
+
+      if (response.ok) {
+        Message.success("密码修改成功")
+        setShowChangePassword(false)
+        setMustChangePassword(false)
+        setOldPassword("")
+        setNewPassword("")
+        setConfirmPassword("")
+        
+        const updatedUser = {
+          ...currentUser,
+          mustChangePassword: false
+        }
+        sessionStorage.setItem('currentUser', JSON.stringify(updatedUser))
+      } else {
+        Message.error(data.message || "密码修改失败")
+      }
+    } catch (error) {
+      Message.error("密码修改失败，请重试")
+    } finally {
+      setChangePasswordLoading(false)
     }
   }
 
@@ -335,6 +418,35 @@ export default function AdminDashboardPage() {
 
   return (
     <div className="min-h-screen bg-gray-50">
+      {mustChangePassword && (
+        <div className="bg-red-50 border-b-2 border-red-400">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+            <div className="flex items-start gap-3">
+              <div className="flex-shrink-0">
+                <svg className="h-6 w-6 text-red-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                </svg>
+              </div>
+              <div className="flex-1">
+                <h3 className="text-lg font-semibold text-red-800 mb-1">
+                  安全提示
+                </h3>
+                <p className="text-red-700 mb-2">
+                  这是您首次登录，请立即修改密码以确保账户安全。
+                </p>
+              </div>
+              <Button
+                type="primary"
+                status="danger"
+                onClick={() => setShowChangePassword(true)}
+                className="flex-shrink-0"
+              >
+                立即修改密码
+              </Button>
+            </div>
+          </div>
+        </div>
+      )}
       <div className="bg-white border-b border-gray-200">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-16">
@@ -342,7 +454,7 @@ export default function AdminDashboardPage() {
             <div className="flex gap-2">
               <Button
                 icon={<IconLock />}
-                onClick={() => router.push("/admin/change-password")}
+                onClick={() => setShowChangePassword(true)}
               >
                 修改密码
               </Button>
@@ -370,7 +482,28 @@ export default function AdminDashboardPage() {
             {renderConfigCard(
               "通用配置",
               "common",
-              "包含SEO、导航、页脚等通用配置"
+              "包含版本号、最后更新时间等通用配置"
+            )}
+          </TabPane>
+          <TabPane key="seo" title="SEO配置">
+            {renderConfigCard(
+              "SEO配置",
+              "seo",
+              "包含全局SEO、产品页面SEO等搜索引擎优化配置"
+            )}
+          </TabPane>
+          <TabPane key="navigation" title="导航栏配置">
+            {renderConfigCard(
+              "导航栏配置",
+              "navigation",
+              "包含主导航、侧边栏导航等导航配置"
+            )}
+          </TabPane>
+          <TabPane key="footer" title="页面Footer配置">
+            {renderConfigCard(
+              "页面Footer配置",
+              "footer",
+              "包含页脚描述、社交链接、公司信息等页脚配置"
             )}
           </TabPane>
           <TabPane key="pages" title="页面配置">
@@ -384,7 +517,14 @@ export default function AdminDashboardPage() {
             {renderConfigCard(
               "个性化配置",
               "custom",
-              "包含管理员账号、主题、功能开关等个性化配置"
+              "包含主题、功能开关等个性化配置"
+            )}
+          </TabPane>
+          <TabPane key="account" title="账号配置">
+            {renderConfigCard(
+              "账号配置",
+              "account",
+              "包含管理员账号、普通用户账号等账号配置"
             )}
           </TabPane>
         </Tabs>
@@ -554,6 +694,55 @@ export default function AdminDashboardPage() {
           <pre className="bg-gray-50 p-4 rounded-lg overflow-auto text-sm font-mono whitespace-pre-wrap break-words" style={{ maxHeight: '60vh' }}>
             {viewValue}
           </pre>
+        </div>
+      </Modal>
+
+      <Modal
+        title="修改密码"
+        visible={showChangePassword}
+        onCancel={() => {
+          setShowChangePassword(false)
+          setOldPassword("")
+          setNewPassword("")
+          setConfirmPassword("")
+        }}
+        onOk={handleChangePassword}
+        okText="确认修改"
+        cancelText="取消"
+        okButtonProps={{ loading: changePasswordLoading }}
+        style={{ width: 500 }}
+      >
+        <div className="space-y-4">
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-2">
+              原密码
+            </label>
+            <Input.Password
+              placeholder="请输入原密码"
+              value={oldPassword}
+              onChange={setOldPassword}
+            />
+          </div>
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-2">
+              新密码
+            </label>
+            <Input.Password
+              placeholder="请输入新密码（至少8位）"
+              value={newPassword}
+              onChange={setNewPassword}
+            />
+          </div>
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-2">
+              确认新密码
+            </label>
+            <Input.Password
+              placeholder="请再次输入新密码"
+              value={confirmPassword}
+              onChange={setConfirmPassword}
+            />
+          </div>
         </div>
       </Modal>
     </div>
