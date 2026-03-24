@@ -1,14 +1,12 @@
 "use client"
 
-import { useState } from "react"
-import { Button, Tabs, Tag, Card, Input } from "@arco-design/web-react"
+import { useState, useEffect, useRef } from "react"
+import { Button, Tag, Card, Input } from "@arco-design/web-react"
 import { IconSearch, IconAt, IconEye } from "@arco-design/web-react/icon"
 import Image from "next/image"
 import Link from "next/link"
 import { Header } from "@/components/header"
 import { Footer } from "@/components/footer"
-
-const TabPane = Tabs.TabPane
 
 interface Product {
   id: string
@@ -23,35 +21,6 @@ interface Product {
 
 const products: Product[] = [
   {
-    id: "prompt-1",
-    title: "ChatGPT 高级提示词库",
-    description: "包含 500+ 精选提示词模板，覆盖写作、编程、营销、教育等多个领域，让你快速上手 AI 对话。",
-    price: 99,
-    originalPrice: 199,
-    image: "/images/products/prompt-master.jpg",
-    tags: ["热销", "新品"],
-    category: "prompts"
-  },
-  {
-    id: "prompt-2",
-    title: "Midjourney 绘画提示词大全",
-    description: "专为 Midjourney 设计的提示词合集，包含风格、构图、光影等专业参数指南。",
-    price: 79,
-    originalPrice: 149,
-    image: "/images/products/prompt-master.jpg",
-    tags: ["限时特惠"],
-    category: "prompts"
-  },
-  {
-    id: "prompt-3",
-    title: "AI 编程助手提示词包",
-    description: "针对代码生成、调试、重构优化的专业提示词，支持多种编程语言和框架。",
-    price: 129,
-    image: "/images/products/prompt-master.jpg",
-    tags: ["程序员必备"],
-    category: "prompts"
-  },
-  {
     id: "workflow-1",
     title: "自动化内容创作工作流",
     description: "从选题到发布的全流程自动化，一键生成文章、配图、社交媒体内容。",
@@ -59,7 +28,7 @@ const products: Product[] = [
     originalPrice: 499,
     image: "/images/products/workflow-ai.jpg",
     tags: ["企业版", "热销"],
-    category: "workflows"
+    category: "tools"
   },
   {
     id: "workflow-2",
@@ -68,7 +37,7 @@ const products: Product[] = [
     price: 599,
     image: "/images/products/workflow-ai.jpg",
     tags: ["企业版"],
-    category: "workflows"
+    category: "tools"
   },
   {
     id: "workflow-3",
@@ -78,7 +47,7 @@ const products: Product[] = [
     originalPrice: 699,
     image: "/images/products/workflow-ai.jpg",
     tags: ["新品"],
-    category: "workflows"
+    category: "tools"
   },
   {
     id: "nav-1",
@@ -157,9 +126,7 @@ const products: Product[] = [
 
 const categories = [
   { key: "all", title: "全部产品" },
-  { key: "prompts", title: "AI 提示词" },
-  { key: "workflows", title: "AI 工作流" },
-  { key: "navigation", title: "AI 网站导航" },
+  { key: "tools", title: "AI 工具" },
   { key: "courses", title: "AI 课程" },
   { key: "services", title: "AI 服务" },
 ]
@@ -246,13 +213,42 @@ function ProductCard({ product }: { product: Product }) {
 export default function ProductsPage() {
   const [activeTab, setActiveTab] = useState("all")
   const [searchText, setSearchText] = useState("")
+  const sectionRefs = useRef<{ [key: string]: HTMLElement | null }>({})
+
+  useEffect(() => {
+    const handleScroll = () => {
+      const sections = categories.map((cat) => cat.key)
+      const scrollPosition = window.scrollY + 300
+
+      for (let i = sections.length - 1; i >= 0; i--) {
+        const section = sectionRefs.current[sections[i]]
+        if (section) {
+          const sectionTop = section.offsetTop
+          if (scrollPosition >= sectionTop) {
+            setActiveTab(sections[i])
+            break
+          }
+        }
+      }
+    }
+
+    window.addEventListener("scroll", handleScroll)
+    handleScroll()
+    return () => window.removeEventListener("scroll", handleScroll)
+  }, [])
 
   const filteredProducts = products.filter((product) => {
-    const matchesCategory = activeTab === "all" || product.category === activeTab
     const matchesSearch = product.title.toLowerCase().includes(searchText.toLowerCase()) ||
                          product.description.toLowerCase().includes(searchText.toLowerCase())
-    return matchesCategory && matchesSearch
+    return matchesSearch
   })
+
+  const scrollToSection = (key: string) => {
+    const section = sectionRefs.current[key]
+    if (section) {
+      section.scrollIntoView({ behavior: "smooth", block: "start" })
+    }
+  }
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -289,28 +285,68 @@ export default function ProductsPage() {
         {/* Products Section */}
         <section className="py-16 md:py-24">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <Tabs
-              activeTab={activeTab}
-              onChange={setActiveTab}
-              type="capsule"
-              className="mb-8 [&_.arco-tabs-header]:!border-0 [&_.arco-tabs-header-nav-capsule]:!bg-gray-100 [&_.arco-tabs-header-nav-capsule_.arco-tabs-header-title]:!text-gray-600 [&_.arco-tabs-header-nav-capsule_.arco-tabs-header-title-active]:!text-white [&_.arco-tabs-header-nav-capsule_.arco-tabs-header-title-active]:!bg-blue-600 [&_.arco-tabs-header-nav-capsule_.arco-tabs-header-ink]:!bg-transparent"
-            >
-              {categories.map((cat) => (
-                <TabPane key={cat.key} title={cat.title} />
-              ))}
-            </Tabs>
+            <div className="flex flex-col md:flex-row gap-8">
+              {/* Left Sidebar - Tabs */}
+              <div className="md:w-64 flex-shrink-0">
+                <div className="sticky top-24 space-y-1">
+                  {categories.map((cat) => (
+                    <button
+                      key={cat.key}
+                      onClick={() => scrollToSection(cat.key)}
+                      className={`w-full text-left px-5 py-3 rounded-lg transition-all duration-300 relative ${
+                        activeTab === cat.key
+                          ? "bg-blue-600 text-white shadow-md"
+                          : "bg-white text-gray-600 hover:bg-gray-50 hover:text-gray-900"
+                      }`}
+                    >
+                      {activeTab === cat.key && (
+                        <div className="absolute left-0 top-1/2 -translate-y-1/2 w-1 h-6 bg-white rounded-r" />
+                      )}
+                      {cat.title}
+                    </button>
+                  ))}
+                </div>
+              </div>
 
-            {filteredProducts.length > 0 ? (
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-                {filteredProducts.map((product) => (
-                  <ProductCard key={product.id} product={product} />
-                ))}
+              {/* Right Content - Products */}
+              <div className="flex-1">
+                {categories.map((cat) => {
+                  const categoryProducts = products.filter((p) => cat.key === "all" || p.category === cat.key)
+                  if (cat.key === "all") return null
+                  
+                  return (
+                    <div
+                      key={cat.key}
+                      ref={(el) => {
+                        sectionRefs.current[cat.key] = el
+                      }}
+                      id={cat.key}
+                      className="mb-16 scroll-mt-24"
+                    >
+                      <h2 className="text-2xl font-bold text-gray-900 mb-6 flex items-center gap-3">
+                        <div className="w-1 h-8 bg-blue-600 rounded-full" />
+                        {cat.title}
+                        <span className="text-sm font-normal text-gray-500">
+                          ({categoryProducts.length})
+                        </span>
+                      </h2>
+                      
+                      {categoryProducts.length > 0 ? (
+                        <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-6">
+                          {categoryProducts.map((product) => (
+                            <ProductCard key={product.id} product={product} />
+                          ))}
+                        </div>
+                      ) : (
+                        <div className="text-center py-12 bg-white rounded-xl border border-gray-100">
+                          <p className="text-gray-500">暂无{cat.title}</p>
+                        </div>
+                      )}
+                    </div>
+                  )
+                })}
               </div>
-            ) : (
-              <div className="text-center py-20">
-                <p className="text-gray-500 text-lg">暂无相关产品</p>
-              </div>
-            )}
+            </div>
           </div>
         </section>
       </main>
