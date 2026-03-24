@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react"
 import { Button, Drawer, Dropdown, Menu } from "@arco-design/web-react"
-import { IconMenu, IconUser } from "@arco-design/web-react/icon"
+import { IconMenu } from "@arco-design/web-react/icon"
 import Link from "next/link"
 
 const navItems = [
@@ -45,21 +45,18 @@ export function Header() {
   }
 
   const dropdownMenu = (
-    <Menu className="!bg-card !border-border min-w-[160px]">
+    <Menu className="!bg-white !border-gray-100 min-w-[160px] rounded-xl shadow-lg">
       {navItems.map((item) => (
         <Menu.Item
           key={item?.href}
           onClick={() => scrollToSection(item?.href)}
-          className="!text-foreground hover:!bg-secondary cursor-pointer"
+          className="!text-gray-700 hover:!bg-gray-50 cursor-pointer rounded-lg mx-1"
         >{item?.label}
 
         </Menu.Item>
       ))}
-      <Menu.Divider className="!bg-border" />
-      {/* <Menu.Item key="login" className="!text-foreground hover:!bg-secondary">
-        登录
-      </Menu.Item> */}
-      <Menu.Item key="trial" className="!text-accent hover:!bg-secondary">
+      <Menu.Divider className="!bg-gray-100" />
+      <Menu.Item key="trial" className="!text-blue-600 hover:!bg-blue-50 cursor-pointer rounded-lg mx-1">
        开始使用
       </Menu.Item>
     </Menu>
@@ -68,7 +65,7 @@ export function Header() {
   return (
     <header
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${isScrolled
-        ? "bg-background/80 backdrop-blur-xl border-b border-border"
+        ? "bg-white/90 backdrop-blur-xl border-b border-gray-100 shadow-sm"
         : "bg-transparent"
         }`}
     >
@@ -76,10 +73,10 @@ export function Header() {
         <div className="flex items-center justify-between h-16 md:h-20">
           {/* Logo */}
           <div className="flex items-center gap-2">
-            <div className="w-8 h-8 md:w-10 md:h-10 rounded-lg bg-accent flex items-center justify-center">
-              <span className="text-accent-foreground font-bold text-lg md:text-xl">N</span>
+            <div className="w-9 h-9 md:w-10 md:h-10 rounded-xl bg-gradient-to-br from-blue-500 to-blue-600 flex items-center justify-center shadow-lg shadow-blue-500/25">
+              <span className="text-white font-bold text-lg md:text-xl">N</span>
             </div>
-            <span className="text-lg md:text-xl font-bold text-foreground">NexusAI</span>
+            <span className="text-lg md:text-xl font-bold text-gray-900">NexusAI</span>
           </div>
 
           {/* Desktop Navigation */}
@@ -88,27 +85,20 @@ export function Header() {
               <button
                 key={item.href}
                 onClick={() => scrollToSection(item.href)}
-                className="text-muted-foreground hover:text-foreground transition-colors text-sm font-medium cursor-pointer"
-                style={{ color: "#333" }}
+                className="text-gray-600 hover:text-gray-900 transition-colors text-sm font-medium cursor-pointer relative group"
               >
                 {item.label}
+                <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-blue-500 group-hover:w-full transition-all duration-300" />
               </button>
             ))}
           </nav>
 
           {/* Desktop CTA */}
           <div className="hidden md:flex items-center gap-3">
-            {/* <Button
-              type="text"
-              icon={<IconUser />}
-              className="!text-muted-foreground hover:!text-foreground !px-4 !h-9"
-            >
-              登录
-            </Button> */}
             <Link href="/products">
               <Button
                 type="primary"
-                className="!bg-accent !text-accent-foreground hover:!bg-accent/90 !px-5 !h-9 !rounded-full"
+                className="!bg-blue-600 !text-white hover:!bg-blue-700 !px-6 !h-10 !rounded-full shadow-lg shadow-blue-600/25 hover:shadow-xl hover:shadow-blue-600/30 transition-all duration-300"
               >
                开始使用
               </Button>
@@ -119,7 +109,7 @@ export function Header() {
           {isMobile && (
             <Button
               type="text"
-              className="md:hidden !text-foreground"
+              className="md:hidden !text-gray-700"
               icon={<IconMenu className="text-xl" />}
               onClick={() => setDrawerVisible(true)}
             />
@@ -135,7 +125,7 @@ export function Header() {
               >
                 <Button
                   type="text"
-                  className="!text-foreground"
+                  className="!text-gray-700"
                   icon={<IconMenu className="text-xl" />}
                 />
               </Dropdown>
@@ -149,10 +139,10 @@ export function Header() {
         width={280}
         title={
           <div className="flex items-center gap-2">
-            <div className="w-8 h-8 rounded-lg bg-accent flex items-center justify-center">
-              <span className="text-accent-foreground font-bold">N</span>
+            <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-blue-500 to-blue-600 flex items-center justify-center">
+              <span className="text-white font-bold">N</span>
             </div>
-            <span className="font-bold text-foreground">NexusAI</span>
+            <span className="font-bold text-gray-900">NexusAI</span>
           </div>
         }
         visible={drawerVisible}
@@ -160,24 +150,21 @@ export function Header() {
         closable
         onCancel={() => setDrawerVisible(false)}
         footer={null}
-        className="[&_.arco-drawer-content]:!bg-background [&_.arco-drawer-header]:!bg-background [&_.arco-drawer-header]:!border-border"
+        className="[&_.arco-drawer-content]:!bg-white [&_.arco-drawer-header]:!bg-white [&_.arco-drawer-header]:!border-gray-100"
       >
         <div className="flex flex-col gap-4 py-4">
           {navItems.map((item) => (
             <button
               key={item.href}
               onClick={() => scrollToSection(item.href)}
-              className="text-left text-lg text-muted-foreground hover:text-foreground transition-colors py-2"
+              className="text-left text-lg text-gray-600 hover:text-gray-900 transition-colors py-2"
             >
               {item.label}
             </button>
           ))}
-          <div className="flex flex-col gap-3 mt-6 pt-6 border-t border-border">
-            {/* <Button type="secondary" long icon={<IconUser />} className="!bg-transparent !border-border !text-foreground">
-              登录
-            </Button> */}
+          <div className="flex flex-col gap-3 mt-6 pt-6 border-t border-gray-100">
             <Link href="/products" onClick={() => setDrawerVisible(false)}>
-              <Button type="primary" long className="!bg-accent !text-accent-foreground">
+              <Button type="primary" long className="!bg-blue-600 !text-white hover:!bg-blue-700 !rounded-full">
                开始使用
               </Button>
             </Link>
