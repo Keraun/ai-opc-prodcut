@@ -1,0 +1,46 @@
+{
+  "sections": [
+    {
+      "id": "hero",
+      "name": "Hero 区块",
+      "visible": true,
+      "order": 1
+    },
+    {
+      "id": "partner",
+      "name": "合作伙伴区块",
+      "visible": true,
+      "order": 2
+    },
+    {
+      "id": "products",
+      "name": "产品区块",
+      "visible": true,
+      "order": 3
+    },
+    {
+      "id": "services",
+      "name": "服务区块",
+      "visible": true,
+      "order": 4
+    },
+    {
+      "id": "pricing",
+      "name": "价格区块",
+      "visible": true,
+      "order": 5
+    },
+    {
+      "id": "about",
+      "name": "关于我们区块",
+      "visible": true,
+      "order": 6
+    },
+    {
+      "id": "contact",
+      "name": "联系我们区块",
+      "visible": true,
+      "order": 7
+    }
+  ]
+}

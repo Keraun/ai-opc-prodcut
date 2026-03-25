@@ -206,7 +206,7 @@ export function Header() {
               </Button>
             </Link>
             <p className="text-center text-xs text-gray-400 mt-4">
-              免费试用 · 无需信用卡
+              免费试用 · 无需充值
             </p>
           </div>
         </div>

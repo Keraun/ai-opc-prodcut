@@ -15,6 +15,14 @@ export async function GET() {
     const navigationConfig = JSON.parse(fs.readFileSync(path.join(configDir, "navigation.json"), "utf-8"))
     const footerConfig = JSON.parse(fs.readFileSync(path.join(configDir, "footer.json"), "utf-8"))
     const homeConfig = JSON.parse(fs.readFileSync(path.join(configDir, "home.json"), "utf-8"))
+    const homeOrderConfig = JSON.parse(fs.readFileSync(path.join(configDir, "home-order.json"), "utf-8"))
+    const homeBannerConfig = JSON.parse(fs.readFileSync(path.join(configDir, "home-banner.json"), "utf-8"))
+    const homePartnersConfig = JSON.parse(fs.readFileSync(path.join(configDir, "home-partners.json"), "utf-8"))
+    const homeProductsConfig = JSON.parse(fs.readFileSync(path.join(configDir, "home-products.json"), "utf-8"))
+    const homeServicesConfig = JSON.parse(fs.readFileSync(path.join(configDir, "home-services.json"), "utf-8"))
+    const homePricingConfig = JSON.parse(fs.readFileSync(path.join(configDir, "home-pricing.json"), "utf-8"))
+    const homeAboutConfig = JSON.parse(fs.readFileSync(path.join(configDir, "home-about.json"), "utf-8"))
+    const homeContactConfig = JSON.parse(fs.readFileSync(path.join(configDir, "home-contact.json"), "utf-8"))
     const productsConfig = JSON.parse(fs.readFileSync(path.join(configDir, "products.json"), "utf-8"))
     const otherPagesConfig = JSON.parse(fs.readFileSync(path.join(configDir, "other-pages.json"), "utf-8"))
     const customConfig = JSON.parse(fs.readFileSync(path.join(configDir, "custom.json"), "utf-8"))
@@ -29,6 +37,14 @@ export async function GET() {
       navigation: navigationConfig,
       footer: footerConfig,
       home: homeConfig,
+      homeOrder: homeOrderConfig,
+      homeBanner: homeBannerConfig,
+      homePartners: homePartnersConfig,
+      homeProducts: homeProductsConfig,
+      homeServices: homeServicesConfig,
+      homePricing: homePricingConfig,
+      homeAbout: homeAboutConfig,
+      homeContact: homeContactConfig,
       products: productsConfig,
       otherPages: otherPagesConfig,
       custom: customConfig,
@@ -89,6 +105,14 @@ export async function POST(request: NextRequest) {
       navigation: '导航配置',
       footer: '底部配置',
       home: '首页配置',
+      homeOrder: '区块顺序配置',
+      homeBanner: 'Banner信息区块',
+      homePartners: '伙伴信息区块',
+      homeProducts: '产品信息区块',
+      homeServices: '服务信息区块',
+      homePricing: '价格信息区块',
+      homeAbout: '关于我们区块',
+      homeContact: '联系我们区块',
       products: '产品配置',
       otherPages: '其他页面配置',
       custom: '自定义配置'

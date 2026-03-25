@@ -291,7 +291,7 @@ export default function AdminLoginPage() {
               <h1 className="text-5xl font-black text-white mb-4 leading-tight">
                 创客AI
                 <span className="block text-3xl font-bold bg-gradient-to-r from-violet-400 to-blue-400 bg-clip-text text-transparent mt-2">
-                  配置管理后台
+                  管理后台
                 </span>
               </h1>
               <p className="text-xl text-gray-300 leading-relaxed">

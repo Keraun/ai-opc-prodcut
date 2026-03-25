@@ -47,6 +47,14 @@ interface Configs {
   navigation: any
   footer: any
   home: any
+  homeOrder: any
+  homeBanner: any
+  homePartners: any
+  homeProducts: any
+  homeServices: any
+  homePricing: any
+  homeAbout: any
+  homeContact: any
   products: any
   otherPages: any
   custom: any
@@ -151,6 +159,14 @@ export default function AdminDashboardPage() {
     navigation: {},
     footer: {},
     home: {},
+    homeOrder: {},
+    homeBanner: {},
+    homePartners: {},
+    homeProducts: {},
+    homeServices: {},
+    homePricing: {},
+    homeAbout: {},
+    homeContact: {},
     products: {},
     otherPages: {},
     custom: {},
@@ -168,6 +184,14 @@ export default function AdminDashboardPage() {
     navigation: {},
     footer: {},
     home: {},
+    homeOrder: {},
+    homeBanner: {},
+    homePartners: {},
+    homeProducts: {},
+    homeServices: {},
+    homePricing: {},
+    homeAbout: {},
+    homeContact: {},
     products: {},
     otherPages: {},
     custom: {},
@@ -818,7 +842,7 @@ export default function AdminDashboardPage() {
                   </svg>
                 </div>
                 <div className="flex items-center gap-2">
-                  <h1 className="text-sm font-bold text-gray-900">配置管理后台</h1>
+                  <h1 className="text-sm font-bold text-gray-900">管理后台</h1>
                   <span className="text-xs text-gray-400">|</span>
                   <p className="text-xs text-gray-500">创客AI</p>
                 </div>
@@ -957,7 +981,7 @@ export default function AdminDashboardPage() {
                       }`}
                   >
                     <IconFile className="text-lg flex-shrink-0" />
-                    {!sidebarCollapsed && <span className="text-sm">底部页尾配置</span>}
+                    {!sidebarCollapsed && <span className="text-sm">底部页脚配置</span>}
                   </button>
 
                   <button
@@ -979,16 +1003,94 @@ export default function AdminDashboardPage() {
                     )}
                   </div>
 
-                  <button
-                    onClick={() => setActiveMenu('home')}
-                    className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-left transition-all ${activeMenu === 'home'
-                        ? 'bg-blue-50 text-blue-700 font-medium'
-                        : 'text-gray-700 hover:bg-gray-50'
-                      }`}
-                  >
-                    <IconHome className="text-lg flex-shrink-0" />
-                    {!sidebarCollapsed && <span className="text-sm">首页区块配置</span>}
-                  </button>
+                  <div className="space-y-1">
+                    <button
+                      onClick={() => setActiveMenu('home')}
+                      className={`w-full flex items-center justify-between gap-3 px-3 py-2.5 rounded-lg text-left transition-all ${activeMenu === 'home'
+                          ? 'bg-blue-50 text-blue-700 font-medium'
+                          : 'text-gray-700 hover:bg-gray-50'
+                        }`}
+                    >
+                      <div className="flex items-center gap-3">
+                        <IconHome className="text-lg flex-shrink-0" />
+                        {!sidebarCollapsed && <span className="text-sm">首页区块管理</span>}
+                      </div>
+                    </button>
+                    <div className="pl-10 space-y-1">
+                      <button
+                        onClick={() => setActiveMenu('homeOrder')}
+                        className={`w-full flex items-center gap-3 px-3 py-2 rounded-lg text-left transition-all ${activeMenu === 'homeOrder'
+                            ? 'bg-blue-50 text-blue-700 font-medium'
+                            : 'text-gray-600 hover:bg-gray-50'
+                          }`}
+                      >
+                        {!sidebarCollapsed && <span className="text-sm">区块顺序配置</span>}
+                      </button>
+                      <button
+                        onClick={() => setActiveMenu('homeBanner')}
+                        className={`w-full flex items-center gap-3 px-3 py-2 rounded-lg text-left transition-all ${activeMenu === 'homeBanner'
+                            ? 'bg-blue-50 text-blue-700 font-medium'
+                            : 'text-gray-600 hover:bg-gray-50'
+                          }`}
+                      >
+                        {!sidebarCollapsed && <span className="text-sm">Banner信息区块</span>}
+                      </button>
+                      <button
+                        onClick={() => setActiveMenu('homePartners')}
+                        className={`w-full flex items-center gap-3 px-3 py-2 rounded-lg text-left transition-all ${activeMenu === 'homePartners'
+                            ? 'bg-blue-50 text-blue-700 font-medium'
+                            : 'text-gray-600 hover:bg-gray-50'
+                          }`}
+                      >
+                        {!sidebarCollapsed && <span className="text-sm">伙伴信息区块</span>}
+                      </button>
+                      <button
+                        onClick={() => setActiveMenu('homeProducts')}
+                        className={`w-full flex items-center gap-3 px-3 py-2 rounded-lg text-left transition-all ${activeMenu === 'homeProducts'
+                            ? 'bg-blue-50 text-blue-700 font-medium'
+                            : 'text-gray-600 hover:bg-gray-50'
+                          }`}
+                      >
+                        {!sidebarCollapsed && <span className="text-sm">产品信息区块</span>}
+                      </button>
+                      <button
+                        onClick={() => setActiveMenu('homeServices')}
+                        className={`w-full flex items-center gap-3 px-3 py-2 rounded-lg text-left transition-all ${activeMenu === 'homeServices'
+                            ? 'bg-blue-50 text-blue-700 font-medium'
+                            : 'text-gray-600 hover:bg-gray-50'
+                          }`}
+                      >
+                        {!sidebarCollapsed && <span className="text-sm">服务信息区块</span>}
+                      </button>
+                      <button
+                        onClick={() => setActiveMenu('homePricing')}
+                        className={`w-full flex items-center gap-3 px-3 py-2 rounded-lg text-left transition-all ${activeMenu === 'homePricing'
+                            ? 'bg-blue-50 text-blue-700 font-medium'
+                            : 'text-gray-600 hover:bg-gray-50'
+                          }`}
+                      >
+                        {!sidebarCollapsed && <span className="text-sm">价格信息区块</span>}
+                      </button>
+                      <button
+                        onClick={() => setActiveMenu('homeAbout')}
+                        className={`w-full flex items-center gap-3 px-3 py-2 rounded-lg text-left transition-all ${activeMenu === 'homeAbout'
+                            ? 'bg-blue-50 text-blue-700 font-medium'
+                            : 'text-gray-600 hover:bg-gray-50'
+                          }`}
+                      >
+                        {!sidebarCollapsed && <span className="text-sm">关于我们区块</span>}
+                      </button>
+                      <button
+                        onClick={() => setActiveMenu('homeContact')}
+                        className={`w-full flex items-center gap-3 px-3 py-2 rounded-lg text-left transition-all ${activeMenu === 'homeContact'
+                            ? 'bg-blue-50 text-blue-700 font-medium'
+                            : 'text-gray-600 hover:bg-gray-50'
+                          }`}
+                      >
+                        {!sidebarCollapsed && <span className="text-sm">联系我们区块</span>}
+                      </button>
+                    </div>
+                  </div>
 
                   <button
                     onClick={() => setActiveMenu('products')}
@@ -1157,15 +1259,63 @@ export default function AdminDashboardPage() {
               )}
 
               {activeMenu === 'footer' && renderConfigCard(
-                "底部页尾配置",
+                "底部页脚配置",
                 "footer",
                 "包含页脚描述、社交链接、公司信息等页脚配置"
               )}
 
               {activeMenu === 'home' && renderConfigCard(
-                "首页区块配置",
+                "首页区块管理",
                 "home",
-                "包含Hero区域、关于我们、首页产品展示、首页服务展示等首页区块配置"
+                "管理首页各个区块的整体配置"
+              )}
+
+              {activeMenu === 'homeOrder' && renderConfigCard(
+                "区块顺序配置",
+                "homeOrder",
+                "配置首页区块的显示顺序"
+              )}
+
+              {activeMenu === 'homeBanner' && renderConfigCard(
+                "Banner信息区块",
+                "homeBanner",
+                "配置首页Banner区域的内容"
+              )}
+
+              {activeMenu === 'homePartners' && renderConfigCard(
+                "伙伴信息区块",
+                "homePartners",
+                "配置首页伙伴信息区域的内容"
+              )}
+
+              {activeMenu === 'homeProducts' && renderConfigCard(
+                "产品信息区块",
+                "homeProducts",
+                "配置首页产品信息区域的内容"
+              )}
+
+              {activeMenu === 'homeServices' && renderConfigCard(
+                "服务信息区块",
+                "homeServices",
+                "配置首页服务信息区域的内容"
+              )}
+
+              {activeMenu === 'homePricing' && renderConfigCard(
+                "价格信息区块",
+                "homePricing",
+                "配置首页价格信息区域的内容"
+              )}
+
+              {activeMenu === 'homeAbout' && renderConfigCard(
+                "关于我们区块",
+                "homeAbout",
+                "配置首页关于我们区域的内容"
+              )}
+
+              {activeMenu === 'homeContact' && renderConfigCard(
+                "联系我们区块",
+                "homeContact",
+                "配置首页联系我们区域的内容"
               )}
 
               {activeMenu === 'products' && renderConfigCard(
