@@ -1,0 +1,118 @@
+{
+  "title": "价格信息配置",
+  "description": "配置首页价格信息区域的内容",
+  "type": "object",
+  "properties": {
+    "pricing": {
+      "type": "object",
+      "title": "价格配置",
+      "properties": {
+        "title": {
+          "type": "string",
+          "title": "区块标题",
+          "ui": {
+            "widget": "input",
+            "width": "100%"
+          }
+        },
+        "description": {
+          "type": "string",
+          "title": "区块描述",
+          "ui": {
+            "widget": "textarea",
+            "rows": 2,
+            "width": "100%"
+          }
+        },
+        "plans": {
+          "type": "array",
+          "title": "价格方案",
+          "items": {
+            "type": "object",
+            "properties": {
+              "title": {
+                "type": "string",
+                "title": "方案名称",
+                "ui": {
+                  "widget": "input",
+                  "width": "50%"
+                }
+              },
+              "price": {
+                "type": "string",
+                "title": "价格",
+                "ui": {
+                  "widget": "input",
+                  "width": "50%"
+                }
+              },
+              "description": {
+                "type": "string",
+                "title": "方案描述",
+                "ui": {
+                  "widget": "textarea",
+                  "rows": 2,
+                  "width": "100%"
+                }
+              },
+              "features": {
+                "type": "array",
+                "title": "功能列表",
+                "items": {
+                  "type": "string"
+                },
+                "ui": {
+                  "widget": "tags",
+                  "placeholder": "输入功能后按回车添加",
+                  "width": "100%"
+                }
+              },
+              "buttonText": {
+                "type": "string",
+                "title": "按钮文字",
+                "ui": {
+                  "widget": "input",
+                  "width": "50%"
+                }
+              },
+              "buttonLink": {
+                "type": "string",
+                "title": "按钮链接",
+                "ui": {
+                  "widget": "input",
+                  "width": "50%"
+                }
+              },
+              "isPopular": {
+                "type": "boolean",
+                "title": "是否为推荐方案",
+                "default": false,
+                "ui": {
+                  "widget": "switch",
+                  "width": "100%"
+                }
+              }
+            }
+          },
+          "ui": {
+            "widget": "array",
+            "itemTitle": "价格方案",
+            "width": "100%"
+          }
+        }
+      }
+    }
+  },
+  "ui": {
+    "layout": "vertical",
+    "labelAlign": "left",
+    "groups": [
+      {
+        "title": "价格配置",
+        "fields": [
+          "pricing"
+        ]
+      }
+    ]
+  }
+}

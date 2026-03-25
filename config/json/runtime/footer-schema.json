@@ -1,0 +1,124 @@
+{
+  "title": "页脚配置",
+  "description": "配置网站页脚信息",
+  "type": "object",
+  "properties": {
+    "footer": {
+      "type": "object",
+      "title": "页脚配置",
+      "properties": {
+        "description": {
+          "type": "string",
+          "title": "页脚描述",
+          "description": "页脚显示的描述文字",
+          "ui": {
+            "widget": "textarea",
+            "placeholder": "请输入页脚描述",
+            "rows": 2,
+            "width": "100%"
+          }
+        },
+        "social": {
+          "type": "object",
+          "title": "产品服务链接",
+          "properties": {
+            "title": {
+              "type": "string",
+              "title": "标题",
+              "ui": {
+                "widget": "input",
+                "width": "50%"
+              }
+            },
+            "items": {
+              "type": "array",
+              "title": "链接列表",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "label": {
+                    "type": "string",
+                    "title": "链接名称",
+                    "ui": {
+                      "widget": "input",
+                      "width": "50%"
+                    }
+                  },
+                  "href": {
+                    "type": "string",
+                    "title": "链接地址",
+                    "ui": {
+                      "widget": "input",
+                      "width": "50%"
+                    }
+                  }
+                }
+              },
+              "ui": {
+                "widget": "array",
+                "itemTitle": "链接项",
+                "width": "100%"
+              }
+            }
+          }
+        },
+        "company": {
+          "type": "object",
+          "title": "公司信息链接",
+          "properties": {
+            "title": {
+              "type": "string",
+              "title": "标题",
+              "ui": {
+                "widget": "input",
+                "width": "50%"
+              }
+            },
+            "items": {
+              "type": "array",
+              "title": "链接列表",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "label": {
+                    "type": "string",
+                    "title": "链接名称",
+                    "ui": {
+                      "widget": "input",
+                      "width": "50%"
+                    }
+                  },
+                  "href": {
+                    "type": "string",
+                    "title": "链接地址",
+                    "ui": {
+                      "widget": "input",
+                      "width": "50%"
+                    }
+                  }
+                }
+              },
+              "ui": {
+                "widget": "array",
+                "itemTitle": "链接项",
+                "width": "100%"
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "ui": {
+    "layout": "vertical",
+    "labelAlign": "left",
+    "groups": [
+      {
+        "title": "页脚配置",
+        "fields": [
+          "footer"
+        ]
+      }
+    ]
+  }
+}

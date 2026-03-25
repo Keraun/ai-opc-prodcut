@@ -55,8 +55,6 @@ interface ThemeData {
 
 interface Configs {
   site: any
-  common: any
-  seo: any
   navigation: any
   footer: any
   home: any
@@ -81,8 +79,6 @@ export default function AdminDashboardPage() {
   const { setTheme } = useTheme()
   const [configs, setConfigs] = useState<Configs>({
     site: {},
-    common: {},
-    seo: {},
     navigation: {},
     footer: {},
     home: {},
@@ -106,8 +102,6 @@ export default function AdminDashboardPage() {
   })
   const [originalConfigs, setOriginalConfigs] = useState<Configs>({
     site: {},
-    common: {},
-    seo: {},
     navigation: {},
     footer: {},
     home: {},
@@ -900,21 +894,6 @@ export default function AdminDashboardPage() {
               />
             )}
 
-            {activeMenu === 'common' && (
-              <ConfigFormEditor
-                configType="common"
-                title="通用配置"
-                description="包含网站通用配置项"
-                configData={configs.common}
-                onSave={async (data) => {
-                  setConfigs(prev => ({ ...prev, common: data }))
-                  await handleSave('common')
-                }}
-                hasChanges={hasConfigChanges('common')}
-                loading={loading}
-              />
-            )}
-
             {activeMenu === 'navigation' && (
               <ConfigFormEditor
                 configType="navigation"
@@ -1096,21 +1075,6 @@ export default function AdminDashboardPage() {
             )}
 
             {activeMenu === 'articles' && <ArticlesManagement />}
-
-            {activeMenu === 'seo' && (
-              <ConfigFormEditor
-                configType="seo"
-                title="站点SEO配置"
-                description="包含全局SEO、产品页面SEO等搜索引擎优化配置"
-                configData={configs.seo}
-                onSave={async (data) => {
-                  setConfigs(prev => ({ ...prev, seo: data }))
-                  await handleSave('seo')
-                }}
-                hasChanges={hasConfigChanges('seo')}
-                loading={loading}
-              />
-            )}
 
             {activeMenu === 'custom' && (
               <ConfigFormEditor

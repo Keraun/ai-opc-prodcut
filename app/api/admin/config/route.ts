@@ -66,11 +66,9 @@ export async function POST(request: NextRequest) {
     }
     
     const configNames: Record<string, string> = {
-      site: '站点基础配置',
-      common: '通用配置',
-      seo: '站点SEO配置',
+      site: '站点配置',
       navigation: '导航配置',
-      footer: '底部配置',
+      footer: '页脚配置',
       home: '首页配置',
       homeOrder: '区块顺序',
       homeBanner: '[区块]Banner信息',

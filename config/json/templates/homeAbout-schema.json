@@ -1,0 +1,113 @@
+{
+  "title": "关于我们配置",
+  "description": "配置首页关于我们区域的内容",
+  "type": "object",
+  "properties": {
+    "about": {
+      "type": "object",
+      "title": "关于我们配置",
+      "properties": {
+        "title": {
+          "type": "object",
+          "title": "标题配置",
+          "properties": {
+            "main": {
+              "type": "string",
+              "title": "主标题",
+              "ui": {"widget": "input", "width": "50%"}
+            },
+            "highlight": {
+              "type": "string",
+              "title": "高亮文字",
+              "ui": {"widget": "input", "width": "50%"}
+            }
+          }
+        },
+        "description": {
+          "type": "array",
+          "title": "描述段落",
+          "items": {"type": "string"},
+          "ui": {"widget": "tags", "placeholder": "输入段落后按回车添加", "width": "100%"}
+        },
+        "mission": {
+          "type": "object",
+          "title": "使命",
+          "properties": {
+            "title": {
+              "type": "string",
+              "title": "标题",
+              "ui": {"widget": "input", "width": "50%"}
+            },
+            "description": {
+              "type": "string",
+              "title": "描述",
+              "ui": {"widget": "textarea", "rows": 2, "width": "100%"}
+            }
+          }
+        },
+        "vision": {
+          "type": "object",
+          "title": "愿景",
+          "properties": {
+            "title": {
+              "type": "string",
+              "title": "标题",
+              "ui": {"widget": "input", "width": "50%"}
+            },
+            "description": {
+              "type": "string",
+              "title": "描述",
+              "ui": {"widget": "textarea", "rows": 2, "width": "100%"}
+            }
+          }
+        },
+        "values": {
+          "type": "object",
+          "title": "价值观",
+          "properties": {
+            "title": {
+              "type": "string",
+              "title": "标题",
+              "ui": {"widget": "input", "width": "50%"}
+            },
+            "description": {
+              "type": "string",
+              "title": "描述",
+              "ui": {"widget": "input", "width": "100%"}
+            }
+          }
+        },
+        "stats": {
+          "type": "array",
+          "title": "统计数据",
+          "items": {
+            "type": "object",
+            "properties": {
+              "value": {
+                "type": "string",
+                "title": "数值",
+                "ui": {"widget": "input", "width": "50%"}
+              },
+              "label": {
+                "type": "string",
+                "title": "标签",
+                "ui": {"widget": "input", "width": "50%"}
+              }
+            }
+          },
+          "ui": {"widget": "array", "itemTitle": "统计项", "width": "100%"}
+        }
+      }
+    }
+  },
+  "ui": {
+    "layout": "vertical",
+    "labelAlign": "left",
+    "groups": [
+      {
+        "title": "关于我们配置",
+        "fields": ["about"]
+      }
+    ]
+  }
+}

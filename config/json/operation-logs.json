@@ -1,6 +1,28 @@
 {
   "logs": [
     {
+      "id": 1774479758527,
+      "username": "admin",
+      "type": "update_config",
+      "description": "更新主题配置",
+      "ip": "unknown",
+      "timestamp": "2026/03/26 07:02:38",
+      "details": {
+        "configType": "theme"
+      }
+    },
+    {
+      "id": 1774479752087,
+      "username": "admin",
+      "type": "update_config",
+      "description": "更新主题配置",
+      "ip": "unknown",
+      "timestamp": "2026/03/26 07:02:32",
+      "details": {
+        "configType": "theme"
+      }
+    },
+    {
       "id": 1774479399590,
       "username": "admin",
       "type": "login",

@@ -41,14 +41,6 @@ export function Sidebar({
             </button>
 
             <button
-              onClick={() => onMenuClick('common')}
-              className={`${styles.navItem} ${activeMenu === 'common' ? styles.navItemActive : styles.navItemInactive}`}
-            >
-              <span className={styles.navItemIcon}>⚙️</span>
-              {!collapsed && <span className={styles.navItemText}>通用配置</span>}
-            </button>
-
-            <button
               onClick={() => onMenuClick('navigation')}
               className={`${styles.navItem} ${activeMenu === 'navigation' ? styles.navItemActive : styles.navItemInactive}`}
             >
@@ -154,14 +146,6 @@ export function Sidebar({
             >
               <span className={styles.navItemIcon}>🛍️</span>
               {!collapsed && <span className={styles.navItemText}>产品列表</span>}
-            </button>
-
-            <button
-              onClick={() => onMenuClick('seo')}
-              className={`${styles.navItem} ${activeMenu === 'seo' ? styles.navItemActive : styles.navItemInactive}`}
-            >
-              <span className={styles.navItemIcon}>🔍</span>
-              {!collapsed && <span className={styles.navItemText}>SEO配置</span>}
             </button>
 
             <button

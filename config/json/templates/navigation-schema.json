@@ -1,12 +1,11 @@
 {
   "title": "导航配置",
-  "description": "配置网站顶部导航菜单",
+  "description": "配置网站导航菜单",
   "type": "object",
   "properties": {
     "navigation": {
       "type": "object",
       "title": "导航配置",
-      "description": "网站导航菜单配置",
       "properties": {
         "main": {
           "type": "array",
@@ -18,18 +17,45 @@
               "label": {
                 "type": "string",
                 "title": "菜单名称",
-                "description": "显示在导航栏的名称"
+                "description": "显示在导航栏的名称",
+                "ui": {"widget": "input", "width": "50%"}
               },
               "href": {
                 "type": "string",
                 "title": "链接地址",
-                "description": "点击后跳转的URL"
+                "description": "点击后跳转的URL",
+                "ui": {"widget": "input", "width": "50%"}
               }
             }
           },
           "ui": {
             "widget": "array",
             "itemTitle": "菜单项",
+            "width": "100%"
+          }
+        },
+        "sidebar": {
+          "type": "array",
+          "title": "侧边栏导航",
+          "description": "首页侧边栏导航菜单项",
+          "items": {
+            "type": "object",
+            "properties": {
+              "label": {
+                "type": "string",
+                "title": "菜单名称",
+                "ui": {"widget": "input", "width": "50%"}
+              },
+              "href": {
+                "type": "string",
+                "title": "链接地址",
+                "ui": {"widget": "input", "width": "50%"}
+              }
+            }
+          },
+          "ui": {
+            "widget": "array",
+            "itemTitle": "侧边栏菜单项",
             "width": "100%"
           }
         }

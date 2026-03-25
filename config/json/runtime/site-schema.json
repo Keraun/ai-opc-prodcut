@@ -1,0 +1,185 @@
+{
+  "title": "站点配置",
+  "description": "配置网站的基本信息和SEO设置",
+  "type": "object",
+  "properties": {
+    "name": {
+      "type": "string",
+      "title": "网站名称",
+      "description": "显示在Header、Footer等位置",
+      "required": true,
+      "ui": {
+        "widget": "input",
+        "placeholder": "请输入网站名称",
+        "width": "100%"
+      }
+    },
+    "description": {
+      "type": "string",
+      "title": "网站描述",
+      "description": "用于SEO和网站介绍",
+      "required": true,
+      "ui": {
+        "widget": "textarea",
+        "placeholder": "请输入网站描述",
+        "rows": 3,
+        "width": "100%"
+      }
+    },
+    "url": {
+      "type": "string",
+      "title": "网站URL",
+      "description": "用于生成绝对路径链接",
+      "required": true,
+      "ui": {
+        "widget": "input",
+        "placeholder": "https://example.com",
+        "width": "100%"
+      }
+    },
+    "ogImage": {
+      "type": "string",
+      "title": "Open Graph图片",
+      "description": "用于社交分享的图片路径",
+      "ui": {
+        "widget": "input",
+        "placeholder": "/og-image.png",
+        "width": "100%"
+      }
+    },
+    "icp": {
+      "type": "string",
+      "title": "ICP备案号",
+      "description": "网站ICP备案号",
+      "ui": {
+        "widget": "input",
+        "placeholder": "浙ICP备XXXXXXXX号",
+        "width": "100%"
+      }
+    },
+    "links": {
+      "type": "object",
+      "title": "社交链接",
+      "description": "社交媒体链接配置",
+      "properties": {
+        "email": {
+          "type": "string",
+          "title": "联系邮箱",
+          "ui": {
+            "widget": "input",
+            "width": "50%"
+          }
+        },
+        "wechat": {
+          "type": "string",
+          "title": "微信公众号",
+          "ui": {
+            "widget": "input",
+            "width": "50%"
+          }
+        },
+        "github": {
+          "type": "string",
+          "title": "GitHub",
+          "ui": {
+            "widget": "input",
+            "width": "50%"
+          }
+        },
+        "twitter": {
+          "type": "string",
+          "title": "Twitter",
+          "ui": {
+            "widget": "input",
+            "width": "50%"
+          }
+        }
+      }
+    },
+    "contact": {
+      "type": "object",
+      "title": "联系方式",
+      "description": "公司联系方式",
+      "properties": {
+        "address": {
+          "type": "string",
+          "title": "公司地址",
+          "ui": {
+            "widget": "input",
+            "width": "100%"
+          }
+        },
+        "phone": {
+          "type": "string",
+          "title": "联系电话",
+          "ui": {
+            "widget": "input",
+            "width": "50%"
+          }
+        },
+        "email": {
+          "type": "string",
+          "title": "联系邮箱",
+          "ui": {
+            "widget": "input",
+            "width": "50%"
+          }
+        }
+      }
+    },
+    "seo": {
+      "type": "object",
+      "title": "SEO配置",
+      "description": "搜索引擎优化配置",
+      "properties": {
+        "keywords": {
+          "type": "array",
+          "title": "关键词",
+          "description": "网站关键词列表",
+          "items": {
+            "type": "string"
+          },
+          "ui": {
+            "widget": "tags",
+            "placeholder": "输入关键词后按回车添加",
+            "width": "100%"
+          }
+        }
+      }
+    }
+  },
+  "ui": {
+    "layout": "vertical",
+    "labelAlign": "left",
+    "groups": [
+      {
+        "title": "基本信息",
+        "fields": [
+          "name",
+          "description",
+          "url",
+          "ogImage",
+          "icp"
+        ]
+      },
+      {
+        "title": "社交链接",
+        "fields": [
+          "links"
+        ]
+      },
+      {
+        "title": "联系方式",
+        "fields": [
+          "contact"
+        ]
+      },
+      {
+        "title": "SEO设置",
+        "fields": [
+          "seo"
+        ]
+      }
+    ]
+  }
+}
