@@ -25,7 +25,8 @@ export function Pricing() {
         "社区支持",
         "每月100次API调用"
       ],
-      buttonText: "开始免费使用"
+      buttonText: "开始免费使用",
+      link: "/products"
     },
     {
       title: "专业版",
@@ -39,7 +40,8 @@ export function Pricing() {
         "AI GEO课程访问"
       ],
       buttonText: "升级专业版",
-      isPopular: true
+      isPopular: true,
+      link: "/products"
     },
     {
       title: "企业版",
@@ -57,8 +59,12 @@ export function Pricing() {
     }
   ]
 
-  const handleButtonClick = () => {
-    setQrModalVisible(true)
+  const handleButtonClick = (plan: any) => {
+    if (plan.link) {
+      window.location.href = plan.link
+    } else {
+      setQrModalVisible(true)
+    }
   }
 
   return (
@@ -118,7 +124,7 @@ export function Pricing() {
                   <Button
                     type={plan.isPopular ? "primary" : "secondary"}
                     long
-                    onClick={handleButtonClick}
+                    onClick={() => handleButtonClick(plan)}
                     style={{
                       backgroundColor: plan.isPopular ? primaryColor : 'white',
                       color: plan.isPopular ? 'white' : primaryColor,
@@ -137,10 +143,9 @@ export function Pricing() {
 
         <Modal
           title="联系客服"
-          open={qrModalVisible}
+          visible={qrModalVisible}
           onCancel={() => setQrModalVisible(false)}
           footer={null}
-          width={320}
         >
           <div className="text-center py-4">
             <p className="mb-4 text-gray-600">扫码添加客服微信</p>

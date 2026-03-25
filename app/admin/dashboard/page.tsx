@@ -230,14 +230,18 @@ export default function AdminDashboardPage() {
   const [showDiff, setShowDiff] = useState(false)
   const [showEditDiff, setShowEditDiff] = useState(false)
   const [versionInfos, setVersionInfos] = useState<Record<string, any>>({})
-  const [activeMenu, setActiveMenu] = useState(() => {
-    // 从URL查询参数中获取activeMenu，如果没有则使用默认值
+  const [activeMenu, setActiveMenu] = useState('accountInfo')
+
+  // 在客户端使用 useEffect 获取 URL 查询参数
+  useEffect(() => {
     if (typeof window !== 'undefined') {
       const urlParams = new URLSearchParams(window.location.search)
-      return urlParams.get('menu') || 'accountInfo'
+      const menu = urlParams.get('menu') || 'accountInfo'
+      if (menu !== activeMenu) {
+        setActiveMenu(menu)
+      }
     }
-    return 'accountInfo'
-  })
+  }, [])
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false)
   const [showSchema, setShowSchema] = useState(true)
 

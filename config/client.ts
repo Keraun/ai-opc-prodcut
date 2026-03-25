@@ -37,7 +37,7 @@ export interface Product {
   tags: string[]
   category: string
   details?: {
-    type?: 'markdown' | 'html' | 'link'
+    type?: string
     content?: string
     link?: string
   }

@@ -43,7 +43,7 @@ export function SidebarNav() {
         const config = await fetchConfig()
         if (config.homeOrder?.sections) {
           const items = config.homeOrder.sections
-            .filter((section: any) => section.visible !== false)
+            .filter((section: any) => section.visible !== false && section.sidebar !== false)
             .sort((a: any, b: any) => (a.order || 0) - (b.order || 0))
             .map((section: any) => ({
               id: section.id,
