@@ -50,8 +50,8 @@ export function logOperation(
     
     operationLogs.logs.unshift(logEntry)
     
-    if (operationLogs.logs.length > 200) {
-      operationLogs.logs = operationLogs.logs.slice(0, 200)
+    if (operationLogs.logs.length > 50) {
+      operationLogs.logs = operationLogs.logs.slice(0, 50)
     }
     
     fs.writeFileSync(logsPath, JSON.stringify(operationLogs, null, 2))

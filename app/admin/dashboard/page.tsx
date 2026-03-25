@@ -1549,6 +1549,22 @@ export default function AdminDashboardPage() {
 
               {activeMenu === 'operationLogs' && (
                 <Card title="操作记录">
+                  <div className="mb-4">
+                    <div className="bg-blue-50 border-l-4 border-blue-400 p-4 rounded-r">
+                      <div className="flex items-start">
+                        <div className="flex-shrink-0">
+                          <svg className="h-5 w-5 text-blue-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                          </svg>
+                        </div>
+                        <div className="ml-3">
+                          <p className="text-sm text-blue-700">
+                            系统最多保留最近50条操作记录，超出后将自动删除最早的记录。
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
                   {operationLogs.length === 0 ? (
                     <div className="text-center py-12">
                       <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-gray-100 mb-4">
