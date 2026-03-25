@@ -9,7 +9,7 @@ import { Logo } from "@/components/common/logo"
 import { siteConfig, navigationConfig } from "@/config/client"
 import { useTheme } from "@/components/theme-provider"
 
-const navItems = navigationConfig.main
+const navItems = navigationConfig.main || []
 
 export function Header() {
   const router = useRouter()

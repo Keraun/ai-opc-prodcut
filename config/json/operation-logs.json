@@ -1,6 +1,52 @@
 {
   "logs": [
     {
+      "id": 1774436757751,
+      "username": "admin",
+      "type": "update_config",
+      "description": "更新区块顺序",
+      "ip": "unknown",
+      "timestamp": "2026/03/25 19:05:57",
+      "details": {
+        "configType": "homeOrder"
+      }
+    },
+    {
+      "id": 1774436713813,
+      "username": "admin",
+      "type": "login",
+      "description": "管理员登录",
+      "ip": "::1",
+      "timestamp": "2026/03/25 19:05:13"
+    },
+    {
+      "id": 1774436657627,
+      "username": "admin",
+      "type": "reset_website",
+      "description": "一键还原网站配置",
+      "ip": "清空版本历史目录",
+      "timestamp": "2026/03/25 19:04:17"
+    },
+    {
+      "id": 1774436642150,
+      "username": "admin",
+      "type": "update_config",
+      "description": "更新区块顺序",
+      "ip": "unknown",
+      "timestamp": "2026/03/25 19:04:02",
+      "details": {
+        "configType": "homeOrder"
+      }
+    },
+    {
+      "id": 1774436617734,
+      "username": "admin",
+      "type": "reset_website",
+      "description": "一键还原网站配置",
+      "ip": "清空版本历史目录",
+      "timestamp": "2026/03/25 19:03:37"
+    },
+    {
       "id": 1774431576156,
       "username": "admin",
       "type": "update_config",

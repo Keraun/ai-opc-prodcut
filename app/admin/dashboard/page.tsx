@@ -522,38 +522,38 @@ export default function AdminDashboardPage() {
   }
 
   const handleRestoreVersion = async (configType: string) => {
-    Modal.confirm({
-      title: "确认还原",
-      content: "确定要还原到上一版本吗？当前配置将被覆盖。",
-      onOk: async () => {
-        setRestoringVersion(true)
-        try {
-          const response = await fetch("/api/admin/config/restore", {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-              type: configType
-            }),
-          })
+    const confirmed = window.confirm("确定要还原到上一版本吗？当前配置将被覆盖。")
+    
+    if (!confirmed) {
+      return
+    }
 
-          const data = await response.json()
+    setRestoringVersion(true)
+    try {
+      const response = await fetch("/api/admin/config/restore", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          type: configType
+        }),
+      })
 
-          if (response.ok && data.success) {
-            toast.success("版本还原成功")
-            await fetchConfigs()
-            fetchVersionInfos()
-          } else {
-            toast.error(data.message || "版本还原失败")
-          }
-        } catch (error) {
-          toast.error("版本还原失败")
-        } finally {
-          setRestoringVersion(false)
-        }
+      const data = await response.json()
+
+      if (response.ok && data.success) {
+        toast.success("版本还原成功")
+        await fetchConfigs()
+        fetchVersionInfos()
+      } else {
+        toast.error(data.message || "版本还原失败")
       }
-    })
+    } catch (error) {
+      toast.error("版本还原失败")
+    } finally {
+      setRestoringVersion(false)
+    }
   }
 
   // 处理菜单点击事件
@@ -866,11 +866,69 @@ export default function AdminDashboardPage() {
       }
     }
 
-    Modal.confirm({
-      title: '确认导入',
-      content: '确定要导入配置吗？这将覆盖当前的配置版本。',
-      onOk: uploadConfig
-    })
+    const confirmed = window.confirm('确定要导入配置吗？这将覆盖当前的配置版本。')
+    
+    if (confirmed) {
+      uploadConfig()
+    }
+  }
+
+  const handleResetWebsite = async () => {
+    if (!currentUser) {
+      toast.error("未找到用户信息，请重新登录")
+      return
+    }
+
+    const backupConfirmed = window.confirm(
+      "⚠️ 一键还原网站配置\n\n" +
+      "此操作将把所有配置还原到模版文件状态，建议先备份当前配置。\n\n" +
+      "点击'确定'先下载配置备份，点击'取消'放弃操作。"
+    )
+
+    if (!backupConfirmed) {
+      return
+    }
+
+    await handleExportConfig()
+
+    const resetConfirmed = window.confirm(
+      "✅ 配置已备份完成\n\n" +
+      "现在可以安全地执行一键还原操作。\n\n" +
+      "此操作将把所有配置还原到模版文件状态，无法恢复！\n\n" +
+      "点击'确定'继续还原，点击'取消'放弃操作。"
+    )
+
+    if (!resetConfirmed) {
+      return
+    }
+
+    setLoading(true)
+    try {
+      const response = await fetch("/api/admin/reset-website", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          username: currentUser.username
+        }),
+      })
+
+      const data = await response.json()
+
+      if (response.ok && data.success) {
+        toast.success("网站配置已成功还原到初始状态")
+        setTimeout(() => {
+          window.location.reload()
+        }, 1500)
+      } else {
+        toast.error(data.message || "还原失败")
+      }
+    } catch (error) {
+      toast.error("还原失败，请重试")
+    } finally {
+      setLoading(false)
+    }
   }
 
   const renderSystemManagement = () => {
@@ -913,6 +971,28 @@ export default function AdminDashboardPage() {
                       导入配置
                     </label>
                   </div>
+                </div>
+              </div>
+            </div>
+
+            <div className="p-6 bg-red-50 rounded-lg border-2 border-red-200">
+              <h3 className="text-lg font-semibold mb-4 text-red-800">危险区域</h3>
+              <div className="space-y-4">
+                <Alert
+                  type="error"
+                  title="警告"
+                  content="以下操作具有破坏性，请谨慎使用。建议在执行前先导出配置备份。"
+                />
+                <div className="flex gap-4">
+                  <Button
+                    status="danger"
+                    icon={<IconUndo />}
+                    onClick={handleResetWebsite}
+                    loading={loading}
+                    className="!bg-red-500 !text-white hover:!bg-red-600 !border-red-500"
+                  >
+                    一键还原网站
+                  </Button>
                 </div>
               </div>
             </div>

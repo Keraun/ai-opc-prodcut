@@ -1,0 +1,57 @@
+{
+  "productsSeo": {
+    "title": "产品服务",
+    "description": "创客AI提供AI工具站、AI GEO课程、AI工作流、AI咨询服务，助力个人创业者实现AI赋能",
+    "keywords": [
+      "AI工具",
+      "AI课程",
+      "AI工作流",
+      "AI咨询",
+      "AI一人公司",
+      "创业者服务"
+    ]
+  },
+  "seo": {
+    "keywords": [
+      "AI一人公司",
+      "AI工具",
+      "AI课程",
+      "AI工作流",
+      "AI赋能",
+      "个人创业",
+      "一人公司",
+      "AI GEO课程",
+      "AI解决方案",
+      "创业者服务"
+    ],
+    "openGraph": {
+      "type": "website",
+      "locale": "zh_CN",
+      "siteName": "创客AI",
+      "images": [
+        {
+          "url": "/og-image.png",
+          "width": 1200,
+          "height": 630,
+          "alt": "创客AI - 专注AI一人公司服务"
+        }
+      ]
+    },
+    "twitter": {
+      "card": "summary_large_image",
+      "site": "@makerai",
+      "creator": "@makerai"
+    },
+    "robots": {
+      "index": true,
+      "follow": true,
+      "googleBot": {
+        "index": true,
+        "follow": true,
+        "maxVideoPreview": -1,
+        "maxImagePreview": "large",
+        "maxSnippet": -1
+      }
+    }
+  }
+}

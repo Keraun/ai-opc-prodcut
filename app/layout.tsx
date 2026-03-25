@@ -5,16 +5,16 @@ import '@arco-design/web-react/dist/css/arco.css'
 import './globals.css'
 import { siteConfig, seoConfig } from '@/config/site'
 import { ClientLayout } from '@/components/client-layout'
-import { readFileSync } from 'fs'
-import { join } from 'path'
 
 const _geist = Geist({ subsets: ["latin"] });
 const _geistMono = Geist_Mono({ subsets: ["latin"] });
 
 function getThemeConfig() {
   try {
-    const themePath = join(process.cwd(), 'config', 'json', 'theme-config.json')
-    const themeData = readFileSync(themePath, 'utf-8')
+    const themePath = process.cwd() + '/config/json/runtime/theme.json'
+    const fs = require('fs')
+    const path = require('path')
+    const themeData = fs.readFileSync(themePath, 'utf-8')
     const themeConfig = JSON.parse(themeData)
     const currentTheme = themeConfig.themes[themeConfig.currentTheme]
     return currentTheme

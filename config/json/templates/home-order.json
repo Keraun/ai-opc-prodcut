@@ -11,7 +11,7 @@
       "id": "partner",
       "name": "合作伙伴",
       "visible": true,
-      "sidebar": true,
+      "sidebar": false,
       "order": 2
     },
     {

@@ -1,48 +1,30 @@
 import "server-only"
-import fs from "fs"
-import path from "path"
-
-const configDir = path.join(process.cwd(), "config/json")
-
-const loadConfig = (filename: string) => {
-  try {
-    const filePath = path.join(configDir, filename)
-    const content = fs.readFileSync(filePath, "utf-8")
-    return JSON.parse(content)
-  } catch (error) {
-    console.error(`Failed to load config: ${filename}`, error)
-    return {}
-  }
-}
-
-const siteConfigData = loadConfig("site-config.json")
-const commonConfigData = loadConfig("site-common.json")
-const seoConfigData = loadConfig("site-seo.json")
-const navigationConfigData = loadConfig("site-navigation.json")
-const footerConfigData = loadConfig("site-footer.json")
-const homeConfigData = loadConfig("home-config.json")
-const homeOrderConfigData = loadConfig("home-order.json")
-const productsConfigData = loadConfig("page-products.json")
-const otherPagesConfigData = loadConfig("page-other.json")
-const customConfigData = loadConfig("theme-custom.json")
-const accountConfigData = loadConfig("system-account.json")
+import { readConfig } from "@/lib/config-manager"
 
 export const siteConfig = {
-  name: siteConfigData.name || "创客AI",
-  description: siteConfigData.description || "专注AI一人公司服务",
-  url: siteConfigData.url || "https://makerai.com",
-  ogImage: siteConfigData.ogImage || "/og-image.png",
-  links: siteConfigData.links || {},
-  creator: siteConfigData.creator || {},
+  name: "创客AI",
+  description: "专注AI一人公司服务",
+  url: "https://makerai.com",
+  ogImage: "/og-image.png",
+  links: {
+    email: "wuly93@163.com",
+    wechat: "makerai_official",
+    github: "https://github.com/makerai",
+    twitter: "https://twitter.com/makerai"
+  },
+  creator: {
+    name: "创客AI",
+    url: "https://makerai.com"
+  },
 }
 
-export const seoConfig = seoConfigData.seo || {}
+export const seoConfig = {}
 
-export const productsSeoConfig = seoConfigData.productsSeo || {}
+export const productsSeoConfig = {}
 
-export const navigationConfig = navigationConfigData.navigation || {}
+export const navigationConfig = {}
 
-export const footerConfig = footerConfigData.footer || {}
+export const footerConfig = {}
 
 export interface Product {
   id: string
@@ -60,19 +42,19 @@ export interface ProductCategory {
   title: string
 }
 
-export const productCategories: ProductCategory[] = productsConfigData.products?.categories || []
+export const productCategories: ProductCategory[] = []
 
-export const products: Product[] = productsConfigData.products?.items || []
+export const products: Product[] = []
 
-export const productsConfig = homeConfigData.homeProducts || []
+export const productsConfig = []
 
-export const servicesConfig = homeConfigData.homeServices || []
+export const servicesConfig = []
 
-export const heroConfig = homeConfigData.hero || {}
+export const heroConfig = {}
 
-export const aboutConfig = homeConfigData.about || {}
+export const aboutConfig = {}
 
-export const sectionsConfig = homeOrderConfigData.sections || []
+export const sectionsConfig = []
 
 export const pagesConfig: Record<string, {
   title: string
@@ -80,8 +62,8 @@ export const pagesConfig: Record<string, {
   contentType: 'markdown' | 'html'
   content: string
   showTOC?: boolean
-}> = otherPagesConfigData.pages || {}
+}> = {}
 
-export const customConfigExport = customConfigData || {}
+export const customConfigExport = {}
 
-export const accountConfigExport = accountConfigData || {}
+export const accountConfigExport = {}

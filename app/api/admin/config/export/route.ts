@@ -3,27 +3,39 @@ import fs from 'fs/promises'
 import path from 'path'
 import archiver from 'archiver'
 
-const VERSIONS_DIR = path.join(process.cwd(), 'config', 'json', 'versions')
+const CONFIG_DIR = path.join(process.cwd(), 'config', 'json')
+const RUNTIME_DIR = path.join(CONFIG_DIR, 'runtime')
+const VERSIONS_DIR = path.join(CONFIG_DIR, 'versions')
 
 export async function GET(request: NextRequest) {
   try {
-    // 检查 versions 目录是否存在
-    const versionsDirExists = await fs
-      .access(VERSIONS_DIR)
-      .then(() => true)
-      .catch(() => false)
-
-    if (!versionsDirExists) {
-      return NextResponse.json({ error: 'Versions directory not found' }, { status: 404 })
-    }
-
     // 创建临时 zip 文件
     const tempZipPath = path.join(process.cwd(), 'temp-config-export.zip')
     const output = await fs.open(tempZipPath, 'w')
     const archive = archiver('zip', { zlib: { level: 9 } })
 
     archive.pipe(output.createWriteStream())
-    archive.directory(VERSIONS_DIR, 'versions')
+
+    // 导出运行时配置
+    const runtimeDirExists = await fs
+      .access(RUNTIME_DIR)
+      .then(() => true)
+      .catch(() => false)
+
+    if (runtimeDirExists) {
+      archive.directory(RUNTIME_DIR, 'runtime')
+    }
+
+    // 导出版本历史
+    const versionsDirExists = await fs
+      .access(VERSIONS_DIR)
+      .then(() => true)
+      .catch(() => false)
+
+    if (versionsDirExists) {
+      archive.directory(VERSIONS_DIR, 'versions')
+    }
+
     await archive.finalize()
     await output.close()
 

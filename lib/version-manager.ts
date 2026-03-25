@@ -141,12 +141,12 @@ export const restoreVersion = (configType: string, filename: string): boolean =>
     return false
   }
   
-  let configPath: string
-  if (configType === 'otherPages') {
-    configPath = path.join(configDir, "other-pages.json")
-  } else {
-    configPath = path.join(configDir, `${configType}.json`)
+  const runtimeDir = path.join(configDir, "runtime")
+  if (!fs.existsSync(runtimeDir)) {
+    fs.mkdirSync(runtimeDir, { recursive: true })
   }
+  
+  const configPath = path.join(runtimeDir, `${configType}.json`)
   
   try {
     fs.writeFileSync(configPath, JSON.stringify(data, null, 2))

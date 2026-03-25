@@ -1,7 +1,7 @@
 import fs from "fs"
 import path from "path"
 
-type OperationType = 'login' | 'update_config' | 'change_password'
+type OperationType = 'login' | 'update_config' | 'change_password' | 'reset_website'
 
 type OperationLog = {
   id: number

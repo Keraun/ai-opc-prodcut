@@ -1,0 +1,12 @@
+{
+  "theme": {
+    "primaryColor": "#3b82f6",
+    "secondaryColor": "#8b5cf6",
+    "mode": "light"
+  },
+  "features": {
+    "enableTOC": true,
+    "enableReadingProgress": true,
+    "enableSearch": true
+  }
+}
