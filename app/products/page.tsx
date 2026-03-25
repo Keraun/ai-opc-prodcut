@@ -8,9 +8,15 @@ import Link from "next/link"
 import { Header } from "@/components/common/header"
 import { Footer } from "@/components/common/footer"
 import { products, productCategories, Product } from "@/config/client"
+import { useTheme } from "@/components/theme-provider"
 
 function ProductCard({ product }: { product: Product }) {
   const [visible, setVisible] = useState(false)
+  const { themeConfig } = useTheme()
+  
+  const primaryColor = themeConfig?.colors?.primary || "#1e40af"
+  const secondaryColor = themeConfig?.colors?.secondary || "#3b82f6"
+  const accentColor = themeConfig?.colors?.accent || "#06b6d4"
   
   return (
     <>
@@ -81,7 +87,11 @@ function ProductCard({ product }: { product: Product }) {
               type="primary"
               size="small"
               icon={<IconAt />}
-              className="flex-1 !bg-blue-600 !text-white hover:!bg-blue-700 !h-8"
+              style={{ 
+                backgroundColor: primaryColor,
+                color: 'white'
+              }}
+              className="flex-1 !h-8"
               onClick={() => setVisible(true)}
             >
               {product.price === 0 ? "获取" : "购买"}
@@ -90,7 +100,11 @@ function ProductCard({ product }: { product: Product }) {
               type="outline"
               size="small"
               icon={<IconEye />}
-              className="!border-gray-200 !text-gray-600 hover:!border-blue-500 hover:!text-blue-600 !h-8"
+              style={{ 
+                borderColor: primaryColor,
+                color: primaryColor
+              }}
+              className="!h-8"
             >
               详情
             </Button>
@@ -129,6 +143,11 @@ export default function ProductsPage() {
   const [activeTab, setActiveTab] = useState("all")
   const [searchText, setSearchText] = useState("")
   const sectionRefs = useRef<{ [key: string]: HTMLElement | null }>({})
+  const { themeConfig } = useTheme()
+  
+  const primaryColor = themeConfig?.colors?.primary || "#1e40af"
+  const secondaryColor = themeConfig?.colors?.secondary || "#3b82f6"
+  const accentColor = themeConfig?.colors?.accent || "#06b6d4"
 
   useEffect(() => {
     const handleScroll = () => {
@@ -181,7 +200,12 @@ export default function ProductsPage() {
             <div className="flex items-center justify-between gap-8">
               <div>
                 <h1 className="text-3xl md:text-4xl font-bold text-gray-900 mb-2">
-                  探索 <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-cyan-500">AI 产品</span>
+                  探索 <span 
+                    className="text-transparent bg-clip-text"
+                    style={{ backgroundImage: `linear-gradient(to right, ${primaryColor}, ${accentColor})` }}
+                  >
+                    AI 产品
+                  </span>
                 </h1>
                 <p className="text-sm text-gray-600">
                   精选优质 AI 工具、课程和服务
@@ -214,9 +238,10 @@ export default function ProductsPage() {
                       onClick={() => scrollToSection(cat.key)}
                       className={`w-full text-left px-4 py-2.5 rounded-lg transition-all duration-300 relative text-sm ${
                         activeTab === cat.key
-                          ? "bg-blue-600 text-white shadow-md"
+                          ? "text-white shadow-md"
                           : "bg-white text-gray-600 hover:bg-gray-50 hover:text-gray-900"
                       }`}
+                      style={activeTab === cat.key ? { backgroundColor: primaryColor } : undefined}
                     >
                       {activeTab === cat.key && (
                         <div className="absolute left-0 top-1/2 -translate-y-1/2 w-1 h-5 bg-white rounded-r" />
@@ -243,7 +268,10 @@ export default function ProductsPage() {
                       className="mb-12 scroll-mt-24"
                     >
                       <h2 className="text-xl font-bold text-gray-900 mb-4 flex items-center gap-3">
-                        <div className="w-1 h-6 bg-blue-600 rounded-full" />
+                        <div 
+                          className="w-1 h-6 rounded-full"
+                          style={{ backgroundColor: primaryColor }}
+                        />
                         {cat.title}
                         <span className="text-xs font-normal text-gray-500">
                           ({categoryProducts.length})

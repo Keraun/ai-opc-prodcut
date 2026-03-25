@@ -3,6 +3,7 @@
 import { useState } from "react"
 import { Card, Form, Input, Button, Message, Radio } from "@arco-design/web-react"
 import { IconSend } from "@arco-design/web-react/icon"
+import { useTheme } from "@/components/theme-provider"
 
 const FormItem = Form.Item
 const TextArea = Input.TextArea
@@ -17,6 +18,11 @@ const contactPreferences = [
 export function Contact() {
   const [form] = Form.useForm()
   const [loading, setLoading] = useState(false)
+  const { themeConfig } = useTheme()
+  
+  const primaryColor = themeConfig?.colors?.primary || "#1e40af"
+  const secondaryColor = themeConfig?.colors?.secondary || "#3b82f6"
+  const accentColor = themeConfig?.colors?.accent || "#06b6d4"
 
   const handleSubmit = async (values: Record<string, unknown>) => {
     setLoading(true)
@@ -36,9 +42,15 @@ export function Contact() {
       <div className="absolute bottom-20 right-10 w-96 h-96 bg-purple-100/50 rounded-full blur-3xl" />
 
       <div className="relative z-10 max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
-        {/* Section Header */}
         <div className="text-center mb-12">
-          <span className="inline-block px-4 py-1.5 rounded-full bg-cyan-50 text-cyan-600 text-sm font-medium mb-4 border border-cyan-100">
+          <span 
+            className="inline-block px-4 py-1.5 rounded-full text-sm font-medium mb-4 border"
+            style={{ 
+              backgroundColor: `${accentColor}0D`,
+              color: accentColor,
+              borderColor: `${accentColor}33`
+            }}
+          >
             联系我们
           </span>
           <h2 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-3">
@@ -137,7 +149,11 @@ export function Contact() {
                   htmlType="submit"
                   long
                   loading={loading}
-                  className="!bg-blue-800 !text-white hover:!bg-blue-900 !h-11 !text-base !rounded-lg shadow-lg shadow-blue-800/25 hover:shadow-xl hover:shadow-blue-800/30 transition-all duration-300"
+                  style={{ 
+                    backgroundColor: primaryColor,
+                    color: 'white'
+                  }}
+                  className="!h-11 !text-base !rounded-lg shadow-lg hover:shadow-xl transition-all duration-300"
                 >
                   <IconSend className="mr-2" />
                   提交留言

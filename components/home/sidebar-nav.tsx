@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react"
 import { IconHome, IconApps, IconThunderbolt, IconUserGroup, IconPhone } from "@arco-design/web-react/icon"
+import { useTheme } from "@/components/theme-provider"
 
 const sidebarItems = [
   { id: "home", label: "介绍", icon: IconHome, href: "#home" },
@@ -13,6 +14,11 @@ const sidebarItems = [
 
 export function SidebarNav() {
   const [activeSection, setActiveSection] = useState("home")
+  const { themeConfig } = useTheme()
+  
+  const primaryColor = themeConfig?.colors?.primary || "#1e40af"
+  const secondaryColor = themeConfig?.colors?.secondary || "#3b82f6"
+  const accentColor = themeConfig?.colors?.accent || "#06b6d4"
 
   useEffect(() => {
     const handleScroll = () => {
@@ -55,9 +61,10 @@ export function SidebarNav() {
               onClick={() => scrollToSection(item.href)}
               className={`relative w-12 h-12 rounded-xl flex items-center justify-center transition-all duration-300 group ${
                 isActive
-                  ? "bg-blue-600 text-white shadow-lg shadow-blue-600/30"
+                  ? "text-white shadow-lg"
                   : "text-gray-500 hover:text-gray-900 hover:bg-gray-50"
               }`}
+              style={isActive ? { backgroundColor: primaryColor } : undefined}
               title={item.label}
             >
               <Icon className="text-xl" />

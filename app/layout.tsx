@@ -4,6 +4,7 @@ import { Analytics } from '@vercel/analytics/next'
 import '@arco-design/web-react/dist/css/arco.css'
 import './globals.css'
 import { siteConfig, seoConfig } from '@/config/site'
+import { ClientLayout } from '@/components/client-layout'
 
 const _geist = Geist({ subsets: ["latin"] });
 const _geistMono = Geist_Mono({ subsets: ["latin"] });
@@ -37,7 +38,7 @@ export const metadata: Metadata = {
     card: seoConfig?.twitter?.card as 'summary_large_image',
     title: `${siteConfig?.name || '创客AI'} - ${siteConfig?.description || ''}`,
     description: siteConfig?.description,
-    images: seoConfig?.openGraph?.images?.map(img => img.url),
+    images: seoConfig?.openGraph?.images?.map((img: any) => img.url),
     creator: seoConfig?.twitter?.creator,
   },
   robots: {
@@ -86,7 +87,9 @@ export default function RootLayout({
         <link rel="manifest" href="/manifest.json" />
       </head>
       <body className="font-sans antialiased">
-        {children}
+        <ClientLayout>
+          {children}
+        </ClientLayout>
         <Analytics />
       </body>
     </html>

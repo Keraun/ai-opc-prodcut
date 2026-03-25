@@ -7,6 +7,53 @@ import { IconSave, IconExport, IconEdit, IconLock, IconCheck, IconInfoCircle, Ic
 import { toast, Toaster } from "sonner"
 import { compareJSON, getLineClass, hasChanges } from "@/lib/json-compare"
 
+interface ThemeColors {
+  primary: string
+  primaryHover: string
+  secondary: string
+  accent: string
+  background: string
+  backgroundSecondary: string
+  text: string
+  textSecondary: string
+  border: string
+  success: string
+  warning: string
+  error: string
+}
+
+interface ThemeConfig {
+  id: string
+  name: string
+  description: string
+  colors: ThemeColors
+  layout: any
+  effects: any
+  darkMode: {
+    colors: ThemeColors
+  }
+}
+
+interface ThemeData {
+  currentTheme: string
+  themes: Record<string, ThemeConfig>
+}
+
+interface Configs {
+  site: any
+  common: any
+  seo: any
+  navigation: any
+  footer: any
+  home: any
+  products: any
+  otherPages: any
+  custom: any
+  account: any
+  loginLogs: any
+  theme: ThemeData
+}
+
 const JSONViewerWithLineNumbers = ({
   content,
   diffLines = null,
@@ -95,7 +142,7 @@ const JSONDiffViewer = ({
 
 export default function AdminDashboardPage() {
   const router = useRouter()
-  const [configs, setConfigs] = useState({
+  const [configs, setConfigs] = useState<Configs>({
     site: {},
     common: {},
     seo: {},
@@ -106,9 +153,13 @@ export default function AdminDashboardPage() {
     otherPages: {},
     custom: {},
     account: {},
-    loginLogs: {}
+    loginLogs: {},
+    theme: {
+      currentTheme: 'modern',
+      themes: {}
+    }
   })
-  const [originalConfigs, setOriginalConfigs] = useState({
+  const [originalConfigs, setOriginalConfigs] = useState<Configs>({
     site: {},
     common: {},
     seo: {},
@@ -119,7 +170,11 @@ export default function AdminDashboardPage() {
     otherPages: {},
     custom: {},
     account: {},
-    loginLogs: {}
+    loginLogs: {},
+    theme: {
+      currentTheme: 'modern',
+      themes: {}
+    }
   })
   const [loading, setLoading] = useState(false)
   const [editingConfig, setEditingConfig] = useState<string | null>(null)
@@ -321,6 +376,46 @@ export default function AdminDashboardPage() {
   const hasConfigChanges = (configType: string) => {
     return JSON.stringify(configs[configType as keyof typeof configs]) !==
       JSON.stringify(originalConfigs[configType as keyof typeof originalConfigs])
+  }
+
+  const handleThemeChange = async (themeId: string) => {
+    const updatedTheme = {
+      ...configs.theme,
+      currentTheme: themeId
+    }
+    
+    setConfigs(prev => ({
+      ...prev,
+      theme: updatedTheme
+    }))
+    
+    setLoading(true)
+    try {
+      const response = await fetch("/api/admin/config", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          type: "theme",
+          data: updatedTheme
+        }),
+      })
+
+      if (response.ok) {
+        toast.success("主题切换成功")
+        setOriginalConfigs(prev => ({
+          ...prev,
+          theme: updatedTheme
+        }))
+      } else {
+        toast.error("主题切换失败")
+      }
+    } catch (error) {
+      toast.error("主题切换失败")
+    } finally {
+      setLoading(false)
+    }
   }
 
   const handleSave = async (configType: string) => {
@@ -932,6 +1027,17 @@ export default function AdminDashboardPage() {
                     {!sidebarCollapsed && <span className="text-sm">主题个性化配置</span>}
                   </button>
 
+                  <button
+                    onClick={() => setActiveMenu('theme')}
+                    className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-left transition-all ${activeMenu === 'theme'
+                        ? 'bg-blue-50 text-blue-700 font-medium'
+                        : 'text-gray-700 hover:bg-gray-50'
+                      }`}
+                  >
+                    <IconSettings className="text-lg flex-shrink-0" />
+                    {!sidebarCollapsed && <span className="text-sm">主题皮肤选择</span>}
+                  </button>
+
                   <div className="pt-4 pb-2">
                     {!sidebarCollapsed && (
                       <div className="px-3 text-xs font-semibold text-gray-400 uppercase tracking-wider">
@@ -1074,6 +1180,68 @@ export default function AdminDashboardPage() {
                 "主题个性化配置",
                 "custom",
                 "包含主题、功能开关等个性化配置"
+              )}
+
+              {activeMenu === 'theme' && (
+                <Card title="主题皮肤选择">
+                  <div className="mb-6">
+                    <p className="text-sm text-gray-500">选择您喜欢的主题皮肤，不同主题有不同的配色方案和布局风格。</p>
+                  </div>
+                  
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    {configs.theme && configs.theme.themes && Object.entries(configs.theme.themes).map(([key, theme]: [string, any]) => (
+                      <div
+                        key={key}
+                        className={`relative border-2 rounded-xl p-6 cursor-pointer transition-all hover:shadow-lg ${
+                          configs.theme.currentTheme === key
+                            ? 'border-blue-500 bg-blue-50 shadow-md'
+                            : 'border-gray-200 hover:border-blue-300'
+                        }`}
+                        onClick={() => handleThemeChange(key)}
+                      >
+                        {configs.theme.currentTheme === key && (
+                          <div className="absolute top-3 right-3">
+                            <div className="w-6 h-6 rounded-full bg-blue-500 flex items-center justify-center">
+                              <svg className="w-4 h-4 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                              </svg>
+                            </div>
+                          </div>
+                        )}
+                        
+                        <div className="mb-4">
+                          <div 
+                            className="w-full h-24 rounded-lg mb-3"
+                            style={{
+                              background: `linear-gradient(135deg, ${theme.colors.primary} 0%, ${theme.colors.secondary} 100%)`
+                            }}
+                          />
+                        </div>
+                        
+                        <h3 className="text-lg font-bold text-gray-900 mb-2">{theme.name}</h3>
+                        <p className="text-sm text-gray-600 mb-4">{theme.description}</p>
+                        
+                        <div className="flex gap-2 flex-wrap">
+                          <div 
+                            className="w-8 h-8 rounded-full border-2 border-white shadow-md"
+                            style={{ backgroundColor: theme.colors.primary }}
+                            title="主色"
+                          />
+                          <div 
+                            className="w-8 h-8 rounded-full border-2 border-white shadow-md"
+                            style={{ backgroundColor: theme.colors.secondary }}
+                            title="辅助色"
+                          />
+                          <div 
+                            className="w-8 h-8 rounded-full border-2 border-white shadow-md"
+                            style={{ backgroundColor: theme.colors.accent }}
+                            title="强调色"
+                          />
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </Card>
               )}
 
               {activeMenu === 'otherPages' && renderConfigCard(

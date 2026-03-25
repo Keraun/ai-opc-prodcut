@@ -241,5 +241,26 @@
         "id": "记录ID"
       }
     }
+  },
+  "theme": {
+    "currentTheme": {
+      "description": "当前激活的主题ID",
+      "type": "string",
+      "required": true
+    },
+    "themes": {
+      "description": "所有可用主题配置",
+      "type": "object",
+      "required": true,
+      "fields": {
+        "id": "主题唯一标识",
+        "name": "主题名称",
+        "description": "主题描述",
+        "colors": "颜色配置（primary: 主色, secondary: 辅助色, accent: 强调色等）",
+        "layout": "布局配置（headerStyle: 头部样式, footerStyle: 底部样式等）",
+        "effects": "效果配置（shadow: 阴影, borderRadius: 圆角, animation: 动画）",
+        "darkMode": "暗色模式配置"
+      }
+    }
   }
 }

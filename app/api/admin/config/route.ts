@@ -20,6 +20,7 @@ export async function GET() {
     const customConfig = JSON.parse(fs.readFileSync(path.join(configDir, "custom.json"), "utf-8"))
     const accountConfig = JSON.parse(fs.readFileSync(path.join(configDir, "account.json"), "utf-8"))
     const loginLogsConfig = JSON.parse(fs.readFileSync(path.join(configDir, "login-logs.json"), "utf-8"))
+    const themeConfig = JSON.parse(fs.readFileSync(path.join(configDir, "theme.json"), "utf-8"))
 
     return NextResponse.json({
       site: siteConfig,
@@ -32,7 +33,8 @@ export async function GET() {
       otherPages: otherPagesConfig,
       custom: customConfig,
       account: accountConfig,
-      loginLogs: loginLogsConfig
+      loginLogs: loginLogsConfig,
+      theme: themeConfig
     })
   } catch (error) {
     return NextResponse.json({

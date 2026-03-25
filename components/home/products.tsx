@@ -9,6 +9,7 @@ import {
   IconArrowRight,
 } from "@arco-design/web-react/icon"
 import { productsConfig } from "@/config/client"
+import { useTheme } from "@/components/theme-provider"
 
 const iconMap: Record<string, any> = {
   IconApps,
@@ -23,6 +24,12 @@ const products = productsConfig.map((product) => ({
 }))
 
 export function Products() {
+  const { themeConfig } = useTheme()
+  
+  const primaryColor = themeConfig?.colors?.primary || "#1e40af"
+  const secondaryColor = themeConfig?.colors?.secondary || "#3b82f6"
+  const accentColor = themeConfig?.colors?.accent || "#06b6d4"
+
   return (
     <section id="products" className="relative py-24 md:py-32 overflow-hidden bg-white">
       {/* Background Elements */}
@@ -34,7 +41,14 @@ export function Products() {
       <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Section Header */}
         <div className="text-center mb-16">
-          <span className="inline-block px-4 py-1.5 rounded-full bg-cyan-50 text-cyan-600 text-sm font-medium mb-4 border border-cyan-100">
+          <span 
+            className="inline-block px-4 py-1.5 rounded-full text-sm font-medium mb-4 border"
+            style={{ 
+              backgroundColor: `${accentColor}0D`,
+              color: accentColor,
+              borderColor: `${accentColor}33`
+            }}
+          >
             产品服务
           </span>
           <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-gray-900 mb-4 text-balance">
@@ -62,7 +76,10 @@ export function Products() {
                     {/* Header */}
                     <div className="flex items-start justify-between mb-4">
                       <div className="w-12 h-12 rounded-xl flex items-center justify-center">
-                        <Icon className="text-3xl text-blue-800" />
+                        <Icon 
+                          className="text-3xl"
+                          style={{ color: primaryColor }}
+                        />
                       </div>
                       {product?.tag && (
                         <Tag color={product?.tagColor} className="!rounded-full !px-2.5 !py-0.5 !text-xs">
@@ -96,7 +113,8 @@ export function Products() {
                     {/* CTA */}
                     <Button
                       type="text"
-                      className="!text-cyan-600 !p-0 hover:!text-cyan-700 font-medium !text-sm"
+                      className="!p-0 hover:!px-0 font-medium !text-sm"
+                      style={{ color: accentColor }}
                     >
                       了解更多
                       <IconArrowRight className="ml-1 group-hover:translate-x-1 transition-transform !text-sm" />

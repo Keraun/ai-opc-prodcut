@@ -5,8 +5,15 @@ import { IconArrowRight, IconCommand } from "@arco-design/web-react/icon"
 import Link from "next/link"
 import { Logo } from "@/components/common/logo"
 import { heroConfig } from "@/config/client"
+import { useTheme } from "@/components/theme-provider"
 
 export function Hero() {
+  const { themeConfig } = useTheme()
+  
+  const primaryColor = themeConfig?.colors?.primary || "#1e40af"
+  const secondaryColor = themeConfig?.colors?.secondary || "#3b82f6"
+  const accentColor = themeConfig?.colors?.accent || "#06b6d4"
+
   return (
     <section
       id="home"
@@ -14,20 +21,33 @@ export function Hero() {
     >
       {/* Decorative Background Elements */}
       <div className="absolute inset-0 overflow-hidden">
-        {/* Gradient Orbs */}
-        <div className="absolute top-20 left-10 w-72 h-72 bg-blue-600/20 rounded-full blur-3xl animate-pulse" />
-        <div className="absolute bottom-20 right-10 w-96 h-96 bg-cyan-400/20 rounded-full blur-3xl animate-pulse" style={{ animationDelay: "1s" }} />
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-gradient-to-r from-blue-100/40 to-cyan-100/40 rounded-full blur-3xl" />
-        
-        {/* Grid Pattern */}
-        <div className="absolute inset-0 bg-[linear-gradient(rgba(30,64,175,0.03)_1px,transparent_1px),linear-gradient(90deg,rgba(30,64,175,0.03)_1px,transparent_1px)] bg-[size:60px_60px]" />
+        <div 
+          className="absolute top-20 left-10 w-72 h-72 rounded-full blur-3xl animate-pulse"
+          style={{ backgroundColor: `${primaryColor}33` }}
+        />
+        <div 
+          className="absolute bottom-20 right-10 w-96 h-96 rounded-full blur-3xl animate-pulse"
+          style={{ backgroundColor: `${accentColor}33`, animationDelay: "1s" }}
+        />
+        <div 
+          className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] rounded-full blur-3xl"
+          style={{ 
+            background: `linear-gradient(135deg, ${primaryColor}66 0%, ${accentColor}66 100%)`
+          }}
+        />
       </div>
 
       <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
         {/* Badge */}
         {heroConfig?.badge && (
-          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/80 backdrop-blur-sm border border-cyan-100 shadow-sm mb-8">
-            <span className="w-2 h-2 rounded-full bg-cyan-500 animate-pulse" />
+          <div 
+            className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/80 backdrop-blur-sm border shadow-sm mb-8"
+            style={{ borderColor: `${accentColor}33` }}
+          >
+            <span 
+              className="w-2 h-2 rounded-full animate-pulse"
+              style={{ backgroundColor: accentColor }}
+            />
             <span className="text-sm text-gray-600 font-medium">{heroConfig.badge}</span>
           </div>
         )}
@@ -35,7 +55,10 @@ export function Hero() {
         {/* Main Heading */}
         <h1 className="text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-bold mb-6 leading-[1.1] tracking-tight">
           {heroConfig?.title?.main && (
-            <span className="text-blue-800 block mb-2">
+            <span 
+              className="block mb-2"
+              style={{ color: primaryColor }}
+            >
               {heroConfig.title.main}
             </span>
           )}
@@ -61,7 +84,11 @@ export function Hero() {
               <Button
                 type="primary"
                 size="large"
-                className="!bg-blue-800 !text-white hover:!bg-blue-900 !h-14 !px-10 !text-base !rounded-xl shadow-lg shadow-blue-800/25 hover:shadow-xl hover:shadow-blue-800/30 transition-all duration-300 hover:-translate-y-0.5"
+                style={{ 
+                  backgroundColor: primaryColor,
+                  color: 'white'
+                }}
+                className="!h-14 !px-10 !text-base !rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-0.5"
               >
                 <IconCommand className="mr-2 text-lg" />
                 {heroConfig.buttons.primary.text}
@@ -98,7 +125,10 @@ export function Hero() {
       <div className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2">
         <span className="text-xs text-gray-400">向下滚动</span>
         <div className="w-6 h-10 rounded-full border-2 border-gray-300 flex justify-center pt-2">
-          <div className="w-1.5 h-3 bg-cyan-500 rounded-full animate-bounce" />
+          <div 
+            className="w-1.5 h-3 rounded-full animate-bounce"
+            style={{ backgroundColor: accentColor }}
+          />
         </div>
       </div>
     </section>

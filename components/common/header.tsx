@@ -7,14 +7,20 @@ import Link from "next/link"
 import { useRouter } from "next/navigation"
 import { Logo } from "@/components/common/logo"
 import { siteConfig, navigationConfig } from "@/config/client"
+import { useTheme } from "@/components/theme-provider"
 
 const navItems = navigationConfig.main
 
 export function Header() {
   const router = useRouter()
+  const { themeConfig } = useTheme()
   const [isScrolled, setIsScrolled] = useState(false)
   const [drawerVisible, setDrawerVisible] = useState(false)
   const [isMobile, setIsMobile] = useState(false)
+
+  const primaryColor = themeConfig?.colors?.primary || "#1e40af"
+  const secondaryColor = themeConfig?.colors?.secondary || "#3b82f6"
+  const accentColor = themeConfig?.colors?.accent || "#06b6d4"
 
   useEffect(() => {
     const handleScroll = () => {
@@ -82,7 +88,10 @@ export function Header() {
                     className="text-gray-600 hover:text-gray-900 transition-colors text-sm font-medium cursor-pointer relative group"
                   >
                     {item?.label}
-                    <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-cyan-500 group-hover:w-full transition-all duration-300" />
+                    <span 
+                      className="absolute -bottom-1 left-0 w-0 h-0.5 group-hover:w-full transition-all duration-300"
+                      style={{ backgroundColor: accentColor }}
+                    />
                   </button>
                 ))}
               </nav>
@@ -107,7 +116,8 @@ export function Header() {
             >
               <Button
                 type="text"
-                className="!text-gray-700 hover:!text-cyan-500 !px-4 !h-10 !rounded-full transition-all duration-300"
+                className="!text-gray-700 hover:!px-4 !h-10 !rounded-full transition-all duration-300"
+                style={{ color: accentColor }}
               >
                 <IconPhone className="mr-1.5" />
                 联系我们
@@ -116,7 +126,11 @@ export function Header() {
             <Link href="/products">
               <Button
                 type="primary"
-                className="!bg-blue-800 !text-white hover:!bg-blue-900 !px-6 !h-10 !rounded-full shadow-lg shadow-blue-800/25 hover:shadow-xl hover:shadow-blue-800/30 transition-all duration-300"
+                style={{ 
+                  backgroundColor: primaryColor,
+                  color: 'white'
+                }}
+                className="!px-6 !h-10 !rounded-full shadow-lg hover:shadow-xl transition-all duration-300"
               >
                 开始使用
               </Button>
@@ -140,7 +154,13 @@ export function Header() {
         width={320}
         title={
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-blue-500 to-blue-600 flex items-center justify-center shadow-lg shadow-blue-500/25">
+            <div 
+              className="w-10 h-10 rounded-xl flex items-center justify-center shadow-lg"
+              style={{ 
+                background: `linear-gradient(135deg, ${primaryColor} 0%, ${secondaryColor} 100%)`,
+                color: 'white'
+              }}
+            >
               <span className="text-white font-bold text-lg">N</span>
             </div>
             <span className="font-bold text-gray-900 text-lg">NexusAI</span>
