@@ -215,13 +215,9 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
     
     setThemes(themeConfigs)
     
-    const serverTheme = (window as any).__THEME_CONFIG__
-    const themeId = serverTheme?.id || savedTheme || "modern"
+    const themeId = savedTheme || "modern"
     
-    if (serverTheme) {
-      setCurrentTheme(themeId)
-      setThemeConfig(serverTheme)
-    } else if (savedTheme && themeConfigs[savedTheme]) {
+    if (savedTheme && themeConfigs[savedTheme]) {
       setCurrentTheme(savedTheme)
       setThemeConfig(themeConfigs[savedTheme])
     } else {

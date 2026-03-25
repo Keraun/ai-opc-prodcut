@@ -95,6 +95,41 @@ export default function RootLayout({
   children: React.ReactNode
 }>) {
   const themeConfig = getThemeConfig()
+  const colors = themeConfig?.colors || {}
+  const effects = themeConfig?.effects || {}
+  
+  const radiusMap: Record<string, string> = {
+    small: '0.25rem',
+    medium: '0.5rem',
+    large: '1rem'
+  }
+  const shadowMap: Record<string, string> = {
+    small: '0 1px 2px 0 rgba(0, 0, 0, 0.05)',
+    medium: '0 4px 6px -1px rgba(0, 0, 0, 0.1)',
+    large: '0 10px 15px -3px rgba(0, 0, 0, 0.1)',
+    soft: '0 2px 8px 0 rgba(0, 0, 0, 0.08)'
+  }
+  
+  const cssVariables: Record<string, string> = {
+    '--theme-primary': colors.primary || '#1e40af',
+    '--theme-primary-hover': colors.primaryHover || '#1e3a8a',
+    '--theme-secondary': colors.secondary || '#3b82f6',
+    '--theme-accent': colors.accent || '#06b6d4',
+    '--theme-background': colors.background || '#ffffff',
+    '--theme-background-secondary': colors.backgroundSecondary || '#f8fafc',
+    '--theme-text': colors.text || '#1e293b',
+    '--theme-text-secondary': colors.textSecondary || '#64748b',
+    '--theme-border': colors.border || '#e2e8f0',
+    '--theme-success': colors.success || '#10b981',
+    '--theme-warning': colors.warning || '#f59e0b',
+    '--theme-error': colors.error || '#ef4444',
+    '--theme-radius': radiusMap[effects.borderRadius] || '0.5rem',
+    '--theme-shadow': shadowMap[effects.shadow] || '0 4px 6px -1px rgba(0, 0, 0, 0.1)'
+  }
+  
+  const styleString = Object.entries(cssVariables)
+    .map(([key, value]) => `${key}: ${value};`)
+    .join(' ')
   
   return (
     <html lang="zh-CN">
@@ -102,13 +137,7 @@ export default function RootLayout({
         <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
         <meta name="theme-color" content={seoConfig?.themeColor} />
         <link rel="manifest" href="/manifest.json" />
-        <script
-          dangerouslySetInnerHTML={{
-            __html: `
-              window.__THEME_CONFIG__ = ${JSON.stringify(themeConfig || {})};
-            `
-          }}
-        />
+        <style dangerouslySetInnerHTML={{ __html: `:root { ${styleString} }` }} />
       </head>
       <body className="font-sans antialiased">
         <ClientLayout>

@@ -1,6 +1,61 @@
 {
   "logs": [
     {
+      "id": 1774402482491,
+      "username": "admin",
+      "type": "update_config",
+      "description": "更新theme",
+      "ip": "unknown",
+      "timestamp": "2026/03/25 09:34:42",
+      "details": {
+        "configType": "theme"
+      }
+    },
+    {
+      "id": 1774402482332,
+      "username": "admin",
+      "type": "update_config",
+      "description": "更新theme",
+      "ip": "unknown",
+      "timestamp": "2026/03/25 09:34:42",
+      "details": {
+        "configType": "theme"
+      }
+    },
+    {
+      "id": 1774402481438,
+      "username": "admin",
+      "type": "update_config",
+      "description": "更新theme",
+      "ip": "unknown",
+      "timestamp": "2026/03/25 09:34:41",
+      "details": {
+        "configType": "theme"
+      }
+    },
+    {
+      "id": 1774402481288,
+      "username": "admin",
+      "type": "update_config",
+      "description": "更新theme",
+      "ip": "unknown",
+      "timestamp": "2026/03/25 09:34:41",
+      "details": {
+        "configType": "theme"
+      }
+    },
+    {
+      "id": 1774402345256,
+      "username": "admin",
+      "type": "update_config",
+      "description": "更新theme",
+      "ip": "unknown",
+      "timestamp": "2026/03/25 09:32:25",
+      "details": {
+        "configType": "theme"
+      }
+    },
+    {
       "id": 1774400653777,
       "username": "admin",
       "type": "update_config",
