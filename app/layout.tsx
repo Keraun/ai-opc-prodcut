@@ -5,9 +5,24 @@ import '@arco-design/web-react/dist/css/arco.css'
 import './globals.css'
 import { siteConfig, seoConfig } from '@/config/site'
 import { ClientLayout } from '@/components/client-layout'
+import { readFileSync } from 'fs'
+import { join } from 'path'
 
 const _geist = Geist({ subsets: ["latin"] });
 const _geistMono = Geist_Mono({ subsets: ["latin"] });
+
+function getThemeConfig() {
+  try {
+    const themePath = join(process.cwd(), 'config', 'json', 'theme.json')
+    const themeData = readFileSync(themePath, 'utf-8')
+    const themeConfig = JSON.parse(themeData)
+    const currentTheme = themeConfig.themes[themeConfig.currentTheme]
+    return currentTheme
+  } catch (error) {
+    console.error('Failed to read theme config:', error)
+    return null
+  }
+}
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteConfig?.url || 'https://makerai.com'),
@@ -79,12 +94,21 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode
 }>) {
+  const themeConfig = getThemeConfig()
+  
   return (
     <html lang="zh-CN">
       <head>
         <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
         <meta name="theme-color" content={seoConfig?.themeColor} />
         <link rel="manifest" href="/manifest.json" />
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+              window.__THEME_CONFIG__ = ${JSON.stringify(themeConfig || {})};
+            `
+          }}
+        />
       </head>
       <body className="font-sans antialiased">
         <ClientLayout>

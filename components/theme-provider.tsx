@@ -56,52 +56,7 @@ const ThemeContext = createContext<ThemeContextType | undefined>(undefined)
 export function ThemeProvider({ children }: { children: ReactNode }) {
   const [mounted, setMounted] = useState(false)
   const [currentTheme, setCurrentTheme] = useState<string>("modern")
-  const [themeConfig, setThemeConfig] = useState<ThemeConfig | null>({
-    id: "modern",
-    name: "现代简约",
-    description: "简洁大方的设计风格，蓝色系配色，适合企业官网",
-    colors: {
-      primary: "#1e40af",
-      primaryHover: "#1e3a8a",
-      secondary: "#3b82f6",
-      accent: "#06b6d4",
-      background: "#ffffff",
-      backgroundSecondary: "#f8fafc",
-      text: "#1e293b",
-      textSecondary: "#64748b",
-      border: "#e2e8f0",
-      success: "#10b981",
-      warning: "#f59e0b",
-      error: "#ef4444"
-    },
-    layout: {
-      headerStyle: "default",
-      footerStyle: "default",
-      cardStyle: "rounded",
-      buttonStyle: "rounded"
-    },
-    effects: {
-      shadow: "medium",
-      borderRadius: "medium",
-      animation: "smooth"
-    },
-    darkMode: {
-      colors: {
-        primary: "#3b82f6",
-        primaryHover: "#2563eb",
-        secondary: "#60a5fa",
-        accent: "#22d3ee",
-        background: "#0f172a",
-        backgroundSecondary: "#1e293b",
-        text: "#f1f5f9",
-        textSecondary: "#94a3b8",
-        border: "#334155",
-        success: "#34d399",
-        warning: "#fbbf24",
-        error: "#f87171"
-      }
-    }
-  })
+  const [themeConfig, setThemeConfig] = useState<ThemeConfig | null>(null)
   const [themes, setThemes] = useState<Record<string, ThemeConfig>>({})
   const [isDark, setIsDark] = useState(false)
 
@@ -115,10 +70,6 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
       setIsDark(savedDarkMode === "true")
     } else {
       setIsDark(window.matchMedia("(prefers-color-scheme: dark)").matches)
-    }
-    
-    if (savedTheme) {
-      setCurrentTheme(savedTheme)
     }
     
     const themeConfigs: Record<string, ThemeConfig> = {
@@ -262,8 +213,21 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
       }
     }
     
-    const themeId = savedTheme || "modern"
-    setThemeConfig(themeConfigs[themeId])
+    setThemes(themeConfigs)
+    
+    const serverTheme = (window as any).__THEME_CONFIG__
+    const themeId = serverTheme?.id || savedTheme || "modern"
+    
+    if (serverTheme) {
+      setCurrentTheme(themeId)
+      setThemeConfig(serverTheme)
+    } else if (savedTheme && themeConfigs[savedTheme]) {
+      setCurrentTheme(savedTheme)
+      setThemeConfig(themeConfigs[savedTheme])
+    } else {
+      setCurrentTheme("modern")
+      setThemeConfig(themeConfigs["modern"])
+    }
     
     fetchThemeConfig()
   }, [])
@@ -279,6 +243,12 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
     localStorage.setItem("darkMode", String(isDark))
     applyThemeColors()
   }, [isDark, currentTheme, themeConfig, mounted])
+
+  useEffect(() => {
+    if (mounted && themeConfig) {
+      applyThemeColors()
+    }
+  }, [mounted, themeConfig])
 
   const fetchThemeConfig = async () => {
     try {
