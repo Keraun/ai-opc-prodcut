@@ -795,13 +795,13 @@ export default function AdminDashboardPage() {
                       }`}
                   >
                     <IconUser className="text-lg flex-shrink-0" />
-                    {!sidebarCollapsed && <span className="text-sm">账号信息</span>}
+                    {!sidebarCollapsed && <span className="text-sm">控制台</span>}
                   </button>
 
                   <div className="pt-4 pb-2">
                     {!sidebarCollapsed && (
                       <div className="px-3 text-xs font-semibold text-gray-400 uppercase tracking-wider">
-                        配置管理
+                        站点管理
                       </div>
                     )}
                   </div>
@@ -814,7 +814,7 @@ export default function AdminDashboardPage() {
                       }`}
                   >
                     <IconHome className="text-lg flex-shrink-0" />
-                    {!sidebarCollapsed && <span className="text-sm">站点配置</span>}
+                    {!sidebarCollapsed && <span className="text-sm">站点基础配置</span>}
                   </button>
 
                   <button
@@ -836,7 +836,7 @@ export default function AdminDashboardPage() {
                       }`}
                   >
                     <IconUser className="text-lg flex-shrink-0" />
-                    {!sidebarCollapsed && <span className="text-sm">账号配置</span>}
+                    {!sidebarCollapsed && <span className="text-sm">站点账号配置</span>}
                   </button>
 
                   <button
@@ -847,7 +847,7 @@ export default function AdminDashboardPage() {
                       }`}
                   >
                     <IconNav className="text-lg flex-shrink-0" />
-                    {!sidebarCollapsed && <span className="text-sm">导航栏配置</span>}
+                    {!sidebarCollapsed && <span className="text-sm">顶部导航配置</span>}
                   </button>
 
                   <button
@@ -858,29 +858,7 @@ export default function AdminDashboardPage() {
                       }`}
                   >
                     <IconFile className="text-lg flex-shrink-0" />
-                    {!sidebarCollapsed && <span className="text-sm">站点Footer配置</span>}
-                  </button>
-
-                  <button
-                    onClick={() => setActiveMenu('home')}
-                    className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-left transition-all ${activeMenu === 'home'
-                        ? 'bg-blue-50 text-blue-700 font-medium'
-                        : 'text-gray-700 hover:bg-gray-50'
-                      }`}
-                  >
-                    <IconHome className="text-lg flex-shrink-0" />
-                    {!sidebarCollapsed && <span className="text-sm">首页内容配置</span>}
-                  </button>
-
-                  <button
-                    onClick={() => setActiveMenu('products')}
-                    className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-left transition-all ${activeMenu === 'products'
-                        ? 'bg-blue-50 text-blue-700 font-medium'
-                        : 'text-gray-700 hover:bg-gray-50'
-                      }`}
-                  >
-                    <IconTrophy className="text-lg flex-shrink-0" />
-                    {!sidebarCollapsed && <span className="text-sm">产品页面配置</span>}
+                    {!sidebarCollapsed && <span className="text-sm">底部页尾配置</span>}
                   </button>
 
                   <button
@@ -891,18 +869,37 @@ export default function AdminDashboardPage() {
                       }`}
                   >
                     <IconCode className="text-lg flex-shrink-0" />
-                    {!sidebarCollapsed && <span className="text-sm">SEO配置</span>}
+                    {!sidebarCollapsed && <span className="text-sm">站点SEO配置</span>}
                   </button>
 
+                  <div className="pt-4 pb-2">
+                    {!sidebarCollapsed && (
+                      <div className="px-3 text-xs font-semibold text-gray-400 uppercase tracking-wider">
+                        页面管理
+                      </div>
+                    )}
+                  </div>
+
                   <button
-                    onClick={() => setActiveMenu('custom')}
-                    className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-left transition-all ${activeMenu === 'custom'
+                    onClick={() => setActiveMenu('home')}
+                    className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-left transition-all ${activeMenu === 'home'
                         ? 'bg-blue-50 text-blue-700 font-medium'
                         : 'text-gray-700 hover:bg-gray-50'
                       }`}
                   >
-                    <IconSettings className="text-lg flex-shrink-0" />
-                    {!sidebarCollapsed && <span className="text-sm">站点个性化配置</span>}
+                    <IconHome className="text-lg flex-shrink-0" />
+                    {!sidebarCollapsed && <span className="text-sm">首页区块配置</span>}
+                  </button>
+
+                  <button
+                    onClick={() => setActiveMenu('products')}
+                    className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-left transition-all ${activeMenu === 'products'
+                        ? 'bg-blue-50 text-blue-700 font-medium'
+                        : 'text-gray-700 hover:bg-gray-50'
+                      }`}
+                  >
+                    <IconTrophy className="text-lg flex-shrink-0" />
+                    {!sidebarCollapsed && <span className="text-sm">产品列表配置</span>}
                   </button>
 
                   <button
@@ -914,6 +911,25 @@ export default function AdminDashboardPage() {
                   >
                     <IconFile className="text-lg flex-shrink-0" />
                     {!sidebarCollapsed && <span className="text-sm">自定义页面配置</span>}
+                  </button>
+
+                  <div className="pt-4 pb-2">
+                    {!sidebarCollapsed && (
+                      <div className="px-3 text-xs font-semibold text-gray-400 uppercase tracking-wider">
+                        主题管理
+                      </div>
+                    )}
+                  </div>
+
+                  <button
+                    onClick={() => setActiveMenu('custom')}
+                    className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-left transition-all ${activeMenu === 'custom'
+                        ? 'bg-blue-50 text-blue-700 font-medium'
+                        : 'text-gray-700 hover:bg-gray-50'
+                      }`}
+                  >
+                    <IconSettings className="text-lg flex-shrink-0" />
+                    {!sidebarCollapsed && <span className="text-sm">主题个性化配置</span>}
                   </button>
 
                   <div className="pt-4 pb-2">
@@ -1007,7 +1023,7 @@ export default function AdminDashboardPage() {
               )}
 
               {activeMenu === 'site' && renderConfigCard(
-                "站点配置",
+                "站点基础配置",
                 "site",
                 "包含网站名称、描述、联系方式等基础信息"
               )}
@@ -1019,43 +1035,43 @@ export default function AdminDashboardPage() {
               )}
 
               {activeMenu === 'account' && renderConfigCard(
-                "账号配置",
+                "站点账号配置",
                 "account",
-                "包含管理员账号、普通用户账号等账号配置"
+                "包含管理员账号、普通用户账号等站点账号配置"
               )}
 
               {activeMenu === 'navigation' && renderConfigCard(
-                "导航栏配置",
+                "顶部导航配置",
                 "navigation",
                 "包含主导航、侧边栏导航等导航配置"
               )}
 
               {activeMenu === 'footer' && renderConfigCard(
-                "站点Footer配置",
+                "底部页尾配置",
                 "footer",
                 "包含页脚描述、社交链接、公司信息等页脚配置"
               )}
 
               {activeMenu === 'home' && renderConfigCard(
-                "首页内容配置",
+                "首页区块配置",
                 "home",
-                "包含Hero区域、关于我们、首页产品展示、首页服务展示等首页内容配置"
+                "包含Hero区域、关于我们、首页产品展示、首页服务展示等首页区块配置"
               )}
 
               {activeMenu === 'products' && renderConfigCard(
-                "产品页面配置",
+                "产品列表配置",
                 "products",
-                "包含产品分类、产品列表等产品页面配置"
+                "包含产品分类、产品列表等产品列表配置"
               )}
 
               {activeMenu === 'seo' && renderConfigCard(
-                "SEO配置",
+                "站点SEO配置",
                 "seo",
                 "包含全局SEO、产品页面SEO等搜索引擎优化配置"
               )}
 
               {activeMenu === 'custom' && renderConfigCard(
-                "站点个性化配置",
+                "主题个性化配置",
                 "custom",
                 "包含主题、功能开关等个性化配置"
               )}

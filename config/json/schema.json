@@ -70,7 +70,7 @@
   },
   "seo": {
     "productsSeo": {
-      "description": "产品页面SEO配置",
+      "description": "产品页面站点SEO配置",
       "type": "object",
       "required": false,
       "fields": {
@@ -80,7 +80,7 @@
       }
     },
     "seo": {
-      "description": "全局SEO配置",
+      "description": "全局站点SEO配置",
       "type": "object",
       "required": true,
       "fields": {
@@ -167,7 +167,7 @@
   },
   "products": {
     "products": {
-      "description": "产品页面配置",
+      "description": "产品列表配置",
       "type": "object",
       "required": true,
       "fields": {
