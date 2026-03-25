@@ -130,18 +130,6 @@ export function Pricing() {
           ))}
         </div>
 
-        <div className="mt-16 text-center">
-          <p className="text-gray-500 mb-4">需要自定义方案？</p>
-          <Link href="/contact">
-            <Button
-              type="text"
-              className="!text-blue-600 hover:!text-blue-800 hover:!bg-blue-50"
-            >
-              联系我们获取定制方案
-              <IconArrowRight className="ml-2" />
-            </Button>
-          </Link>
-        </div>
       </div>
     </section>
   )

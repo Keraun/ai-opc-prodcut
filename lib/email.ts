@@ -40,12 +40,12 @@ function getEmailConfig(): EmailConfig | null {
 
 function createTransporter(config: EmailConfig) {
   return nodemailer.createTransport({
-    host: config.host,
-    port: config.port,
-    secure: config.secure,
+    host: config?.host,
+    port: config?.port,
+    secure: config?.secure,
     auth: {
-      user: config.auth.user,
-      pass: config.auth.pass
+      user: config?.auth?.user,
+      pass: config?.auth?.pass
     }
   })
 }
@@ -61,7 +61,7 @@ export async function sendEmail({ to, subject, html }: SendEmailOptions): Promis
   try {
     const transporter = createTransporter(config)
     
-    const fromEmail = process.env.SMTP_FROM || config.auth.user
+    const fromEmail = process.env.SMTP_FROM || config?.auth?.user
     
     await transporter.sendMail({
       from: `"创客AI" <${fromEmail}>`,
