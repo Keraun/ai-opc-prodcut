@@ -1,15 +1,14 @@
 {
-  "superAdminToken": "ald0NFRXZU5NS2dw",
   "admins": [
     {
       "username": "admin",
-      "password": "qwer12345",
+      "password": "qwer1234",
       "remark": "默认管理员账号",
       "mustChangePassword": false,
-      "lastLoginTime": "2026/03/25 06:50:16",
+      "lastLoginTime": "2026/03/25 06:59:06",
       "lastLoginIP": "::1",
       "currentLoginIP": "::1",
-      "currentLoginTime": "2026/03/25 06:59:06",
+      "currentLoginTime": "2026/03/25 11:00:37",
       "email": "wuly93@163.com"
     },
     {

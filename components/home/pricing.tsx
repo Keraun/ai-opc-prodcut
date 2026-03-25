@@ -8,7 +8,7 @@ import { pricingConfig } from "@/config/client"
 
 export function Pricing() {
   const { themeConfig } = useTheme()
-  
+
   const primaryColor = themeConfig?.colors?.primary || "#1e40af"
   const secondaryColor = themeConfig?.colors?.secondary || "#3b82f6"
   const accentColor = themeConfig?.colors?.accent || "#06b6d4"
@@ -83,8 +83,11 @@ export function Pricing() {
               }}
             >
               {plan.isPopular && (
-                <div 
+                <div
                   className="bg-gradient-to-r from-blue-600 to-indigo-600 text-white text-center py-2 text-sm font-medium"
+                  style={{
+                    backgroundColor: primaryColor,
+                  }}
                 >
                   最受欢迎
                 </div>
@@ -99,8 +102,8 @@ export function Pricing() {
                 <ul className="space-y-3 mb-8">
                   {plan.features.map((feature, featureIndex) => (
                     <li key={featureIndex} className="flex items-start gap-2">
-                      <IconCheck 
-                        className="text-green-500 mt-0.5 flex-shrink-0" 
+                      <IconCheck
+                        className="text-green-500 mt-0.5 flex-shrink-0"
                         style={{ color: accentColor }}
                       />
                       <span className="text-gray-600">{feature}</span>

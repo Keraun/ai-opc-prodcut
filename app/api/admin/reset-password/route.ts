@@ -43,7 +43,7 @@ export async function POST(request: NextRequest) {
       }, { status: 400 })
     }
 
-    const accountConfigPath = path.join(process.cwd(), "config/json/account.json")
+    const accountConfigPath = path.join(process.cwd(), "config/json/system-account.json")
     const accountConfig = JSON.parse(fs.readFileSync(accountConfigPath, "utf-8"))
 
     let adminIndex = -1
@@ -56,7 +56,10 @@ export async function POST(request: NextRequest) {
         }, { status: 400 })
       }
 
-      if (!accountConfig.superAdminToken || accountConfig.superAdminToken !== superAdminToken) {
+      const tokenConfigPath = path.join(process.cwd(), "config/json/system-token.json")
+      const tokenConfig = JSON.parse(fs.readFileSync(tokenConfigPath, "utf-8"))
+
+      if (!tokenConfig.superAdminToken || tokenConfig.superAdminToken !== superAdminToken) {
         return NextResponse.json({
           success: false,
           message: "超级管理员口令错误"

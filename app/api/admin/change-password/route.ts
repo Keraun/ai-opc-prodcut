@@ -9,7 +9,7 @@ export async function POST(request: NextRequest) {
     const body = await request.json()
     const { username, oldPassword, newPassword } = body
 
-    const accountConfigPath = path.join(process.cwd(), "config/json/account.json")
+    const accountConfigPath = path.join(process.cwd(), "config/json/system-account.json")
     const accountConfig = JSON.parse(fs.readFileSync(accountConfigPath, "utf-8"))
 
     const adminIndex = accountConfig.admins?.findIndex((admin: any) => admin.username === username)

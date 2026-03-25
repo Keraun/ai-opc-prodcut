@@ -35,7 +35,7 @@ export async function POST(request: NextRequest) {
       }, { status: 400 })
     }
 
-    const accountConfigPath = path.join(process.cwd(), "config/json/account.json")
+    const accountConfigPath = path.join(process.cwd(), "config/json/system-account.json")
     const accountConfig = JSON.parse(fs.readFileSync(accountConfigPath, "utf-8"))
 
     const adminIndex = accountConfig.admins?.findIndex((admin: any) => admin.username === userData.username)
@@ -75,10 +75,16 @@ export async function POST(request: NextRequest) {
     let showSuperAdminToken = false
     let superAdminToken = ''
 
-    if (!accountConfig.superAdminToken) {
+    const tokenConfigPath = path.join(process.cwd(), "config/json/system-token.json")
+    const tokenConfig = JSON.parse(fs.readFileSync(tokenConfigPath, "utf-8"))
+
+    if (!tokenConfig.superAdminToken) {
       superAdminToken = generateSuperAdminToken()
-      accountConfig.superAdminToken = superAdminToken
+      tokenConfig.superAdminToken = superAdminToken
       showSuperAdminToken = true
+      fs.writeFileSync(tokenConfigPath, JSON.stringify(tokenConfig, null, 2))
+    } else {
+      superAdminToken = tokenConfig.superAdminToken
     }
 
     fs.writeFileSync(accountConfigPath, JSON.stringify(accountConfig, null, 2))
