@@ -6,6 +6,7 @@ import { Button, Card, Modal, Input, Alert, Dropdown } from "@arco-design/web-re
 import { IconSave, IconExport, IconEdit, IconLock, IconCheck, IconInfoCircle, IconEye, IconCustomerService, IconQuestionCircle, IconHistory, IconUndo, IconHome, IconSettings, IconUser, IconNav, IconFile, IconStorage, IconCode, IconTrophy, IconClockCircle } from "@arco-design/web-react/icon"
 import { toast, Toaster } from "sonner"
 import { compareJSON, getLineClass, hasChanges } from "@/lib/json-compare"
+import { useTheme } from "@/components/theme-provider"
 
 interface ThemeColors {
   primary: string
@@ -142,6 +143,7 @@ const JSONDiffViewer = ({
 
 export default function AdminDashboardPage() {
   const router = useRouter()
+  const { setTheme } = useTheme()
   const [configs, setConfigs] = useState<Configs>({
     site: {},
     common: {},
@@ -388,6 +390,8 @@ export default function AdminDashboardPage() {
       ...prev,
       theme: updatedTheme
     }))
+    
+    setTheme(themeId)
     
     setLoading(true)
     try {

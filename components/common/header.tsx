@@ -125,12 +125,12 @@ export function Header() {
             </Dropdown>
             <Link href="/products">
               <Button
-                type="primary"
                 style={{ 
                   backgroundColor: primaryColor,
-                  color: 'white'
+                  color: 'white',
+                  borderColor: primaryColor
                 }}
-                className="!px-6 !h-10 !rounded-full shadow-lg hover:shadow-xl transition-all duration-300"
+                className="!px-6 !h-10 !rounded-full shadow-lg hover:shadow-xl transition-all duration-300 hover:!opacity-90"
               >
                 开始使用
               </Button>
@@ -194,9 +194,13 @@ export function Header() {
           <div className="mt-8 pt-8 border-t border-gray-200">
             <Link href="/products" onClick={() => setDrawerVisible(false)}>
               <Button
-                type="primary"
                 long
-                className="!bg-blue-800 !text-white hover:!bg-blue-900 !h-12 !rounded-xl shadow-lg shadow-blue-800/25 hover:shadow-xl hover:shadow-blue-800/30 transition-all duration-300 !font-semibold !text-base"
+                style={{ 
+                  backgroundColor: primaryColor,
+                  color: 'white',
+                  borderColor: primaryColor
+                }}
+                className="!h-12 !rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 !font-semibold !text-base hover:!opacity-90"
               >
                 立即开始使用
               </Button>

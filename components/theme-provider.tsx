@@ -473,9 +473,12 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
     }
     
     if (themeConfigs[themeId]) {
+      console.log('Setting theme to:', themeId, 'with primary color:', themeConfigs[themeId].colors.primary)
       setCurrentTheme(themeId)
       setThemeConfig(themeConfigs[themeId])
       localStorage.setItem("theme", themeId)
+    } else {
+      console.error('Theme not found:', themeId)
     }
   }
 
