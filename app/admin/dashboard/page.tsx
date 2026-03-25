@@ -151,6 +151,7 @@ export default function AdminDashboardPage() {
   const [versionInfos, setVersionInfos] = useState<Record<string, any>>({})
   const [activeMenu, setActiveMenu] = useState('accountInfo')
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false)
+  const [showSchema, setShowSchema] = useState(true)
 
   const fetchVersionInfos = async () => {
     const configTypes = ['homePage', 'aboutPage', 'contactPage', 'otherPages', 'newsCategory']
@@ -553,13 +554,21 @@ export default function AdminDashboardPage() {
 
     return (
       <div id="config-container" className="flex gap-0 mb-4 relative" style={{ height: 'calc(100vh - 64px - 64px)' }}>
-        <div style={{ width: `${leftWidth}%` }} className="flex-shrink-0">
+        <div style={{ width: showSchema ? `${leftWidth}%` : '100%' }} className="flex-shrink-0">
           <Card
             style={{ height: 'calc(100vh - 64px - 64px)' }}
             title={
               <div className="flex items-center justify-between">
                 <span className="text-lg font-semibold">{title}</span>
                 <div className="flex gap-2">
+                  <Button
+                    size="small"
+                    type="text"
+                    icon={<IconInfoCircle />}
+                    onClick={() => setShowSchema(!showSchema)}
+                  >
+                    {showSchema ? '隐藏说明' : '显示说明'}
+                  </Button>
                   <Button
                     size="small"
                     icon={<IconHistory />}
@@ -609,54 +618,58 @@ export default function AdminDashboardPage() {
           </Card>
         </div>
 
-        <div
-          className={`flex-shrink-0 w-1 bg-gray-200 hover:bg-blue-400 cursor-col-resize transition-colors relative group ${isDragging ? 'bg-blue-500' : ''}`}
-          onMouseDown={handleMouseDown}
-          style={{ margin: '0 8px' }}
-        >
-          <div className="absolute inset-y-0 -left-1 -right-1" />
-          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-1 h-12 bg-gray-300 rounded group-hover:bg-blue-500 transition-colors" />
-        </div>
-
-        <div style={{ width: `${100 - leftWidth}%` }} className="flex-shrink-0">
-          {schemaData && (
-            <Card
-              title={
-                <div className="flex items-center gap-2">
-                  <IconInfoCircle className="text-blue-600" />
-                  <span className="text-lg font-semibold">字段说明</span>
-                </div>
-              }
+        {showSchema && (
+          <>
+            <div
+              className={`flex-shrink-0 w-1 bg-gray-200 hover:bg-blue-400 cursor-col-resize transition-colors relative group ${isDragging ? 'bg-blue-500' : ''}`}
+              onMouseDown={handleMouseDown}
+              style={{ margin: '0 8px' }}
             >
-              <div className="space-y-4 max-h-[500px] overflow-auto">
-                {Object.entries(schemaData).map(([key, value]: [string, any]) => (
-                  <div key={key} className="border-b border-gray-100 pb-3 last:border-b-0 last:pb-0">
-                    <div className="flex items-center gap-2 mb-1">
-                      <h4 className="text-sm font-semibold text-gray-900">{key}</h4>
-                      {value.required && (
-                        <span className="px-1.5 py-0.5 text-xs bg-red-50 text-red-600 rounded">必填</span>
-                      )}
-                      {value.type && (
-                        <span className="px-1.5 py-0.5 text-xs bg-blue-50 text-blue-600 rounded">{value.type}</span>
-                      )}
+              <div className="absolute inset-y-0 -left-1 -right-1" />
+              <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-1 h-12 bg-gray-300 rounded group-hover:bg-blue-500 transition-colors" />
+            </div>
+
+            <div style={{ width: `${100 - leftWidth}%` }} className="flex-shrink-0">
+              {schemaData && (
+                <Card
+                  title={
+                    <div className="flex items-center gap-2">
+                      <IconInfoCircle className="text-blue-600" />
+                      <span className="text-lg font-semibold">字段说明</span>
                     </div>
-                    <p className="text-xs text-gray-600 mb-1">{value.description}</p>
-                    {value.fields && (
-                      <div className="ml-2 mt-1 space-y-0.5">
-                        {Object.entries(value.fields).map(([fieldKey, fieldDesc]: [string, any]) => (
-                          <div key={fieldKey} className="flex items-start gap-1 text-xs">
-                            <span className="font-medium text-gray-700 min-w-[80px]">{fieldKey}:</span>
-                            <span className="text-gray-600">{fieldDesc}</span>
+                  }
+                >
+                  <div className="space-y-4 max-h-[500px] overflow-auto">
+                    {Object.entries(schemaData).map(([key, value]: [string, any]) => (
+                      <div key={key} className="border-b border-gray-100 pb-3 last:border-b-0 last:pb-0">
+                        <div className="flex items-center gap-2 mb-1">
+                          <h4 className="text-sm font-semibold text-gray-900">{key}</h4>
+                          {value.required && (
+                            <span className="px-1.5 py-0.5 text-xs bg-red-50 text-red-600 rounded">必填</span>
+                          )}
+                          {value.type && (
+                            <span className="px-1.5 py-0.5 text-xs bg-blue-50 text-blue-600 rounded">{value.type}</span>
+                          )}
+                        </div>
+                        <p className="text-xs text-gray-600 mb-1">{value.description}</p>
+                        {value.fields && (
+                          <div className="ml-2 mt-1 space-y-0.5">
+                            {Object.entries(value.fields).map(([fieldKey, fieldDesc]: [string, any]) => (
+                              <div key={fieldKey} className="flex items-start gap-1 text-xs">
+                                <span className="font-medium text-gray-700 min-w-[80px]">{fieldKey}:</span>
+                                <span className="text-gray-600">{fieldDesc}</span>
+                              </div>
+                            ))}
                           </div>
-                        ))}
+                        )}
                       </div>
-                    )}
+                    ))}
                   </div>
-                ))}
-              </div>
-            </Card>
-          )}
-        </div>
+                </Card>
+              )}
+            </div>
+          </>
+        )}
       </div>
     )
   }
