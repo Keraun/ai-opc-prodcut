@@ -817,6 +817,111 @@ export default function AdminDashboardPage() {
     )
   }
 
+  const handleExportConfig = async () => {
+    try {
+      const response = await fetch('/api/admin/config/export')
+      if (response.ok) {
+        const blob = await response.blob()
+        const url = window.URL.createObjectURL(blob)
+        const a = document.createElement('a')
+        a.href = url
+        a.download = `config-export-${new Date().toISOString().split('T')[0]}.zip`
+        document.body.appendChild(a)
+        a.click()
+        document.body.removeChild(a)
+        window.URL.revokeObjectURL(url)
+        toast.success('配置导出成功')
+      } else {
+        toast.error('配置导出失败')
+      }
+    } catch (error) {
+      toast.error('配置导出失败')
+    }
+  }
+
+  const handleImportConfig = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0]
+    if (!file) return
+
+    const formData = new FormData()
+    formData.append('file', file)
+
+    const uploadConfig = async () => {
+      try {
+        const response = await fetch('/api/admin/config/import', {
+          method: 'POST',
+          body: formData
+        })
+
+        if (response.ok) {
+          toast.success('配置导入成功，正在刷新页面...')
+          setTimeout(() => {
+            window.location.reload()
+          }, 1500)
+        } else {
+          toast.error('配置导入失败')
+        }
+      } catch (error) {
+        toast.error('配置导入失败')
+      }
+    }
+
+    Modal.confirm({
+      title: '确认导入',
+      content: '确定要导入配置吗？这将覆盖当前的配置版本。',
+      onOk: uploadConfig
+    })
+  }
+
+  const renderSystemManagement = () => {
+    return (
+      <div className="p-6">
+        <Card
+          title={
+            <div className="flex items-center gap-2">
+              <IconSettings className="text-blue-600" />
+              <span className="text-lg font-semibold">系统管理</span>
+            </div>
+          }
+        >
+          <div className="space-y-6">
+            <div className="p-6 bg-gray-50 rounded-lg">
+              <h3 className="text-lg font-semibold mb-4">配置管理</h3>
+              <div className="space-y-4">
+                <p className="text-gray-600">通过以下功能可以导出或导入配置，用于备份和恢复系统配置。</p>
+                <div className="flex gap-4">
+                  <Button
+                    type="primary"
+                    icon={<IconExport />}
+                    onClick={handleExportConfig}
+                  >
+                    导出配置
+                  </Button>
+                  <div>
+                    <input
+                      type="file"
+                      accept=".zip"
+                      onChange={handleImportConfig}
+                      className="hidden"
+                      id="config-import"
+                    />
+                    <label
+                      htmlFor="config-import"
+                      className="inline-flex items-center justify-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-gray-700 hover:bg-gray-800 transition-colors cursor-pointer"
+                    >
+                      <IconFile className="mr-2" />
+                      导入配置
+                    </label>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </Card>
+      </div>
+    )
+  }
+
   return (
     <>
       <Toaster position="top-center" richColors />
@@ -1111,6 +1216,25 @@ export default function AdminDashboardPage() {
                       </button>
                     </div>
                   </div>
+
+                  <div className="pt-4 pb-2">
+                    {!sidebarCollapsed && (
+                      <div className="px-3 text-xs font-semibold text-gray-400 uppercase tracking-wider">
+                        页面配置
+                      </div>
+                    )}
+                  </div>
+
+                  <button
+                    onClick={() => handleMenuClick('system')}
+                    className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-left transition-all ${activeMenu === 'system'
+                        ? 'bg-blue-50 text-blue-700 font-medium'
+                        : 'text-gray-700 hover:bg-gray-50'
+                      }`}
+                  >
+                    <IconSettings className="text-lg flex-shrink-0" />
+                    {!sidebarCollapsed && <span className="text-sm">页面配置</span>}
+                  </button>
 
                   <button
                     onClick={() => handleMenuClick('products')}
@@ -1423,6 +1547,8 @@ export default function AdminDashboardPage() {
                 "otherPages",
                 "包含关于我们、服务条款、隐私政策等其他页面配置"
               )}
+
+              {activeMenu === 'system' && renderSystemManagement()}
 
               {activeMenu === 'operationLogs' && (
                 <Card title="操作记录">
