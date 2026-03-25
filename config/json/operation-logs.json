@@ -4,7 +4,7 @@
       "id": 1774405303691,
       "username": "admin",
       "type": "update_config",
-      "description": "更新区块顺序配置",
+      "description": "更新区块顺序",
       "ip": "unknown",
       "timestamp": "2026/03/25 10:21:43",
       "details": {
@@ -15,7 +15,7 @@
       "id": 1774405251586,
       "username": "admin",
       "type": "update_config",
-      "description": "更新区块顺序配置",
+      "description": "更新区块顺序",
       "ip": "unknown",
       "timestamp": "2026/03/25 10:20:51",
       "details": {

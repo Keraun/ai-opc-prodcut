@@ -32,13 +32,13 @@
     },
     {
       "id": "about",
-      "name": "关于我们区块",
+      "name": "[区块]关于我们",
       "visible": true,
       "order": 6
     },
     {
       "id": "contact",
-      "name": "联系我们区块",
+      "name": "[区块]联系我们",
       "visible": true,
       "order": 7
     }

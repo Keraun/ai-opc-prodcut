@@ -1037,7 +1037,7 @@ export default function AdminDashboardPage() {
                             : 'text-gray-600 hover:bg-gray-50'
                           }`}
                       >
-                        {!sidebarCollapsed && <span className="text-sm">区块顺序配置</span>}
+                        {!sidebarCollapsed && <span className="text-sm">区块顺序</span>}
                       </button>
                       <button
                         onClick={() => handleMenuClick('homeBanner')}
@@ -1046,7 +1046,7 @@ export default function AdminDashboardPage() {
                             : 'text-gray-600 hover:bg-gray-50'
                           }`}
                       >
-                        {!sidebarCollapsed && <span className="text-sm">Banner信息区块</span>}
+                        {!sidebarCollapsed && <span className="text-sm">[区块]Banner信息</span>}
                       </button>
                       <button
                         onClick={() => handleMenuClick('homePartners')}
@@ -1055,7 +1055,7 @@ export default function AdminDashboardPage() {
                             : 'text-gray-600 hover:bg-gray-50'
                           }`}
                       >
-                        {!sidebarCollapsed && <span className="text-sm">伙伴信息区块</span>}
+                        {!sidebarCollapsed && <span className="text-sm">[区块]伙伴信息</span>}
                       </button>
                       <button
                         onClick={() => handleMenuClick('homeProducts')}
@@ -1064,7 +1064,7 @@ export default function AdminDashboardPage() {
                             : 'text-gray-600 hover:bg-gray-50'
                           }`}
                       >
-                        {!sidebarCollapsed && <span className="text-sm">产品信息区块</span>}
+                        {!sidebarCollapsed && <span className="text-sm">[区块]产品信息</span>}
                       </button>
                       <button
                         onClick={() => handleMenuClick('homeServices')}
@@ -1073,7 +1073,7 @@ export default function AdminDashboardPage() {
                             : 'text-gray-600 hover:bg-gray-50'
                           }`}
                       >
-                        {!sidebarCollapsed && <span className="text-sm">服务信息区块</span>}
+                        {!sidebarCollapsed && <span className="text-sm">[区块]服务信息</span>}
                       </button>
                       <button
                         onClick={() => handleMenuClick('homePricing')}
@@ -1082,7 +1082,7 @@ export default function AdminDashboardPage() {
                             : 'text-gray-600 hover:bg-gray-50'
                           }`}
                       >
-                        {!sidebarCollapsed && <span className="text-sm">价格信息区块</span>}
+                        {!sidebarCollapsed && <span className="text-sm">[区块]价格信息</span>}
                       </button>
                       <button
                         onClick={() => handleMenuClick('homeAbout')}
@@ -1091,7 +1091,7 @@ export default function AdminDashboardPage() {
                             : 'text-gray-600 hover:bg-gray-50'
                           }`}
                       >
-                        {!sidebarCollapsed && <span className="text-sm">关于我们区块</span>}
+                        {!sidebarCollapsed && <span className="text-sm">[区块]关于我们</span>}
                       </button>
                       <button
                         onClick={() => handleMenuClick('homeContact')}
@@ -1100,7 +1100,7 @@ export default function AdminDashboardPage() {
                             : 'text-gray-600 hover:bg-gray-50'
                           }`}
                       >
-                        {!sidebarCollapsed && <span className="text-sm">联系我们区块</span>}
+                        {!sidebarCollapsed && <span className="text-sm">[区块]联系我们</span>}
                       </button>
                     </div>
                   </div>
@@ -1284,49 +1284,49 @@ export default function AdminDashboardPage() {
               )}
 
               {activeMenu === 'homeOrder' && renderConfigCard(
-                "区块顺序配置",
+                "区块顺序",
                 "homeOrder",
                 "配置首页区块的显示顺序"
               )}
 
               {activeMenu === 'homeBanner' && renderConfigCard(
-                "Banner信息区块",
+                "[区块]Banner信息",
                 "homeBanner",
                 "配置首页Banner区域的内容"
               )}
 
               {activeMenu === 'homePartners' && renderConfigCard(
-                "伙伴信息区块",
+                "[区块]伙伴信息",
                 "homePartners",
                 "配置首页伙伴信息区域的内容"
               )}
 
               {activeMenu === 'homeProducts' && renderConfigCard(
-                "产品信息区块",
+                "[区块]产品信息",
                 "homeProducts",
                 "配置首页产品信息区域的内容"
               )}
 
               {activeMenu === 'homeServices' && renderConfigCard(
-                "服务信息区块",
+                "[区块]服务信息",
                 "homeServices",
                 "配置首页服务信息区域的内容"
               )}
 
               {activeMenu === 'homePricing' && renderConfigCard(
-                "价格信息区块",
+                "[区块]价格信息",
                 "homePricing",
                 "配置首页价格信息区域的内容"
               )}
 
               {activeMenu === 'homeAbout' && renderConfigCard(
-                "关于我们区块",
+                "[区块]关于我们",
                 "homeAbout",
                 "配置首页关于我们区域的内容"
               )}
 
               {activeMenu === 'homeContact' && renderConfigCard(
-                "联系我们区块",
+                "[区块]联系我们",
                 "homeContact",
                 "配置首页联系我们区域的内容"
               )}
