@@ -34,6 +34,11 @@ export interface Product {
   image: string
   tags: string[]
   category: string
+  details?: {
+    type?: 'markdown' | 'html' | 'link'
+    content?: string
+    link?: string
+  }
 }
 
 export interface ProductCategory {

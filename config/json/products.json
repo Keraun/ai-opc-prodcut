@@ -15,7 +15,11 @@
         "originalPrice": 499,
         "image": "/images/products/workflow-ai.jpg",
         "tags": ["企业版", "热销"],
-        "category": "tools"
+        "category": "tools",
+        "details": {
+          "type": "markdown",
+          "content": "# 自动化内容创作工作流\n\n## 功能特点\n\n- **智能选题**：基于大数据分析，自动推荐热门话题\n- **一键生成**：支持文章、配图、社交媒体内容同时生成\n- **多平台发布**：一键同步到微信公众号、微博、抖音等平台\n\n## 适用场景\n\n- 内容创作者\n- 新媒体运营\n- 企业营销团队\n\n## 技术支持\n\n提供7x24小时技术支持，确保您的创作流程不间断。"
+        }
       },
       {
         "id": "workflow-2",
@@ -24,7 +28,11 @@
         "price": 599,
         "image": "/images/products/workflow-ai.jpg",
         "tags": ["企业版"],
-        "category": "tools"
+        "category": "tools",
+        "details": {
+          "type": "html",
+          "content": "<h2>智能客服工作流模板</h2><p>多渠道客服自动化解决方案，支持微信、网站、APP 等平台接入。</p><h3>核心功能</h3><ul><li>智能问答：基于大模型的自然语言理解</li><li>多渠道接入：微信、网站、APP 一站式管理</li><li>自动分流：根据问题类型自动转接人工客服</li><li>数据分析：实时监控客服质量和用户满意度</li></ul><h3>适用行业</h3><p>电商、教育、金融、医疗等需要大量客服的行业。</p>"
+        }
       },
       {
         "id": "workflow-3",
@@ -43,7 +51,11 @@
         "price": 0,
         "image": "/images/products/ai-nav.jpg",
         "tags": ["免费", "持续更新"],
-        "category": "navigation"
+        "category": "navigation",
+        "details": {
+          "type": "link",
+          "link": "https://example.com/ai-tools"
+        }
       },
       {
         "id": "nav-2",
