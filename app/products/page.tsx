@@ -9,6 +9,8 @@ import { Header } from "@/components/common/header"
 import { Footer } from "@/components/common/footer"
 import { products, productCategories, Product } from "@/config/client"
 import { useTheme } from "@/components/theme-provider"
+import ReactMarkdown from "react-markdown"
+import remarkGfm from "remark-gfm"
 
 function ProductCard({ product }: { product: Product }) {
   const [visible, setVisible] = useState(false)
@@ -150,10 +152,12 @@ function ProductCard({ product }: { product: Product }) {
           className="!max-w-4xl"
           style={{ width: '80%', maxWidth: '800px' }}
         >
-          <div className="py-4">
+          <div className="py-4 max-h-[80vh] overflow-y-auto">
             {product.details?.type === 'markdown' && (
-              <div className="prose prose-sm max-w-none whitespace-pre-wrap">
-                {product.details.content}
+              <div className="prose prose-sm max-w-none">
+                <ReactMarkdown remarkPlugins={[remarkGfm]}>
+                  {product.details.content}
+                </ReactMarkdown>
               </div>
             )}
             {product.details?.type === 'html' && (
@@ -175,7 +179,7 @@ function ProductCard({ product }: { product: Product }) {
           className="!max-w-lg"
           style={{ width: '60%', maxWidth: '500px' }}
         >
-          <div className="text-center py-8">
+          <div className="text-center py-8 max-h-[80vh] overflow-y-auto">
             <div className="w-80 h-80 mx-auto mb-6 bg-gradient-to-br from-gray-50 to-gray-100 rounded-xl flex items-center justify-center border-2 border-gray-200">
               <div className="text-center">
                 <div className="w-64 h-64 bg-white rounded-lg flex items-center justify-center mb-3">
