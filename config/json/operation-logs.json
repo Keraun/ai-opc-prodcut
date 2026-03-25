@@ -1,6 +1,83 @@
 {
   "logs": [
     {
+      "id": 1774456886398,
+      "username": "admin",
+      "type": "update_config",
+      "description": "更新站点基础配置",
+      "ip": "unknown",
+      "timestamp": "2026/03/26 00:41:26",
+      "details": {
+        "configType": "site"
+      }
+    },
+    {
+      "id": 1774456885930,
+      "username": "admin",
+      "type": "update_config",
+      "description": "更新站点基础配置",
+      "ip": "unknown",
+      "timestamp": "2026/03/26 00:41:25",
+      "details": {
+        "configType": "site"
+      }
+    },
+    {
+      "id": 1774456885073,
+      "username": "admin",
+      "type": "update_config",
+      "description": "更新站点基础配置",
+      "ip": "unknown",
+      "timestamp": "2026/03/26 00:41:25",
+      "details": {
+        "configType": "site"
+      }
+    },
+    {
+      "id": 1774456612933,
+      "username": "admin",
+      "type": "update_config",
+      "description": "更新站点基础配置",
+      "ip": "unknown",
+      "timestamp": "2026/03/26 00:36:52",
+      "details": {
+        "configType": "site"
+      }
+    },
+    {
+      "id": 1774456611749,
+      "username": "admin",
+      "type": "update_config",
+      "description": "更新站点基础配置",
+      "ip": "unknown",
+      "timestamp": "2026/03/26 00:36:51",
+      "details": {
+        "configType": "site"
+      }
+    },
+    {
+      "id": 1774456610655,
+      "username": "admin",
+      "type": "update_config",
+      "description": "更新站点基础配置",
+      "ip": "unknown",
+      "timestamp": "2026/03/26 00:36:50",
+      "details": {
+        "configType": "site"
+      }
+    },
+    {
+      "id": 1774456610069,
+      "username": "admin",
+      "type": "update_config",
+      "description": "更新站点基础配置",
+      "ip": "unknown",
+      "timestamp": "2026/03/26 00:36:50",
+      "details": {
+        "configType": "site"
+      }
+    },
+    {
       "id": 1774448899883,
       "username": "admin",
       "type": "update_config",

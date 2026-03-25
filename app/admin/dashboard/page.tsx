@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react"
 import { useRouter } from "next/navigation"
-import { Button, Card, Modal, Input, Alert, Dropdown } from "@arco-design/web-react"
+import { Button, Card, Modal, Input, Alert, Dropdown, Switch } from "@arco-design/web-react"
 import { IconSave, IconExport, IconEdit, IconLock, IconCheck, IconInfoCircle, IconEye, IconCustomerService, IconQuestionCircle, IconHistory, IconUndo, IconHome, IconSettings, IconUser, IconNav, IconFile, IconStorage, IconCode, IconTrophy, IconClockCircle } from "@arco-design/web-react/icon"
 import { toast, Toaster } from "sonner"
 import { compareJSON, getLineClass, hasChanges } from "@/lib/json-compare"
@@ -943,6 +943,52 @@ export default function AdminDashboardPage() {
           }
         >
           <div className="space-y-6">
+            <div className="p-6 bg-gray-50 rounded-lg">
+              <h3 className="text-lg font-semibold mb-4">性能配置</h3>
+              <div className="space-y-4">
+                <div className="flex items-center justify-between">
+                  <div className="flex-1">
+                    <h4 className="font-medium text-gray-900 mb-1">配置缓存</h4>
+                    <p className="text-sm text-gray-600">启用配置缓存可以提高系统性能，但可能导致配置更新延迟</p>
+                  </div>
+                  <Switch
+                    checked={configs.site?.cache?.enabled ?? true}
+                    onChange={async (checked: boolean) => {
+                      try {
+                        const updatedConfig = {
+                          ...configs.site,
+                          cache: {
+                            ...configs.site?.cache,
+                            enabled: checked
+                          }
+                        }
+                        
+                        const response = await fetch('/api/admin/config', {
+                          method: 'POST',
+                          headers: {
+                            'Content-Type': 'application/json'
+                          },
+                          body: JSON.stringify({
+                            type: 'site',
+                            data: updatedConfig
+                          })
+                        })
+                        
+                        if (response.ok) {
+                          toast.success(checked ? '配置缓存已启用' : '配置缓存已禁用')
+                          await fetchConfigs()
+                        } else {
+                          toast.error('更新配置失败')
+                        }
+                      } catch (error) {
+                        toast.error('更新配置失败')
+                      }
+                    }}
+                  />
+                </div>
+              </div>
+            </div>
+
             <div className="p-6 bg-gray-50 rounded-lg">
               <h3 className="text-lg font-semibold mb-4">配置管理</h3>
               <div className="space-y-4">

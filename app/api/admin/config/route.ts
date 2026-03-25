@@ -3,7 +3,7 @@ import { readConfig, writeConfig, readAllConfigs, readTemplate } from "@/lib/con
 import { createVersion } from "@/lib/version-manager"
 import { logOperation } from "@/lib/operation-logger"
 import { cookies } from "next/headers"
-import { loadAllConfigs } from "@/lib/config-cache"
+import { loadAllConfigs, getCacheEnabled, setCacheEnabled, clearCache } from "@/lib/config-cache"
 
 export async function GET() {
   try {
@@ -33,8 +33,25 @@ export async function POST(request: NextRequest) {
     createVersion(type, existingData)
     writeConfig(type, data)
 
-    // 刷新配置缓存
-    loadAllConfigs()
+    // 如果是站点配置更新，检查缓存开关状态
+    if (type === 'site' && data.cache?.enabled !== undefined) {
+      const previousCacheEnabled = getCacheEnabled()
+      const newCacheEnabled = data.cache.enabled
+      
+      // 如果缓存开关状态发生变化
+      if (previousCacheEnabled !== newCacheEnabled) {
+        setCacheEnabled(newCacheEnabled)
+        console.log(`Cache setting changed from ${previousCacheEnabled} to ${newCacheEnabled}`)
+      }
+    }
+
+    // 刷新配置缓存（如果缓存启用）
+    if (getCacheEnabled()) {
+      console.log(`Config updated, reloading cache...`)
+      loadAllConfigs()
+    } else {
+      console.log(`Config updated, cache disabled, skipping cache reload`)
+    }
 
     const cookieStore = await cookies()
     const userCookie = cookieStore.get('adminUser')?.value

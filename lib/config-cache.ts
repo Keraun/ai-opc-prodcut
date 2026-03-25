@@ -4,6 +4,7 @@ import path from "path"
 // 全局缓存
 let configCache: any = null
 let cacheTimestamp: number = 0
+let cacheEnabled: boolean = true
 
 // 配置文件列表
 const configFiles = [
@@ -52,6 +53,12 @@ export function loadAllConfigs() {
   const runtimeDir = path.join(configDir, "runtime")
 
   const siteConfig = readConfig(configDir, runtimeDir, "site-config.json")
+  
+  // 读取缓存开关配置
+  if (siteConfig?.cache?.enabled !== undefined) {
+    cacheEnabled = siteConfig.cache.enabled
+    console.log(`Cache ${cacheEnabled ? 'enabled' : 'disabled'}`)
+  }
   const commonConfig = readConfig(configDir, runtimeDir, "site-common.json")
   const seoConfig = readConfig(configDir, runtimeDir, "site-seo.json")
   const navigationConfig = readConfig(configDir, runtimeDir, "site-navigation.json")
@@ -111,6 +118,29 @@ export function getCacheTimestamp() {
   return cacheTimestamp
 }
 
+// 获取缓存开关状态
+export function getCacheEnabled() {
+  return cacheEnabled
+}
+
+// 设置缓存开关状态
+export function setCacheEnabled(enabled: boolean) {
+  cacheEnabled = enabled
+  console.log(`Cache ${enabled ? 'enabled' : 'disabled'}`)
+  
+  // 如果禁用缓存，立即清理缓存
+  if (!enabled) {
+    clearCache()
+  }
+}
+
+// 清理缓存
+export function clearCache() {
+  configCache = null
+  cacheTimestamp = 0
+  console.log('Cache cleared')
+}
+
 // 设置文件监听
 export function setupFileWatchers() {
   const configDir = path.join(process.cwd(), "config/json")
@@ -120,8 +150,13 @@ export function setupFileWatchers() {
   if (fs.existsSync(runtimeDir)) {
     fs.watch(runtimeDir, (eventType, filename) => {
       if (filename && configFiles.includes(filename)) {
-        console.log(`Config file changed: ${filename}, reloading cache...`)
-        loadAllConfigs()
+        console.log(`Config file changed: ${filename}`)
+        if (cacheEnabled) {
+          console.log(`Reloading cache...`)
+          loadAllConfigs()
+        } else {
+          console.log(`Cache disabled, skipping cache reload`)
+        }
       }
     })
   }
@@ -129,8 +164,13 @@ export function setupFileWatchers() {
   // 监听根配置目录
   fs.watch(configDir, (eventType, filename) => {
     if (filename && configFiles.includes(filename)) {
-      console.log(`Config file changed: ${filename}, reloading cache...`)
-      loadAllConfigs()
+      console.log(`Config file changed: ${filename}`)
+      if (cacheEnabled) {
+        console.log(`Reloading cache...`)
+        loadAllConfigs()
+      } else {
+        console.log(`Cache disabled, skipping cache reload`)
+      }
     }
   })
 

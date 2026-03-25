@@ -4,7 +4,7 @@
   "url": "https://makerai.com",
   "ogImage": "/og-image.png",
   "cache": {
-    "enabled": false,
+    "enabled": true,
     "description": "配置缓存开关，启用后可提高性能但可能延迟配置更新"
   },
   "links": {
