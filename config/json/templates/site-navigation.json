@@ -6,12 +6,12 @@
         "href": "/"
       },
       {
-        "label": "产品",
+        "label": "产品服务",
         "href": "/products"
       },
       {
-        "label": "关于我们",
-        "href": "/about"
+        "label": "资讯",
+        "href": "/news"
       }
     ],
     "sidebar": [
@@ -26,6 +26,10 @@
       {
         "label": "服务",
         "href": "services"
+      },
+      {
+        "label": "资讯",
+        "href": "/news"
       },
       {
         "label": "关于我们",

@@ -14,7 +14,7 @@ export default function NotFoundPage() {
       <Header />
       
       {/* Main Content */}
-      <div className="flex-1 flex items-center justify-center py-16 px-4 sm:px-6 lg:px-8">
+      <div className="flex-1 flex items-center justify-center pt-32 pb-16 px-4 sm:px-6 lg:px-8">
         <div className="max-w-md w-full text-center">
           {/* 404 Animation */}
           <div className="mb-8">

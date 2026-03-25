@@ -44,10 +44,10 @@
     },
     {
       "id": "contact",
-      "name": "联系我们11",
+      "name": "联系我们",
       "visible": true,
       "sidebar": true,
-      "order": 2
+      "order": 7
     }
   ]
 }
