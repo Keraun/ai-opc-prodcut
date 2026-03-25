@@ -7,6 +7,7 @@ import { IconSave, IconExport, IconEdit, IconLock, IconCheck, IconInfoCircle, Ic
 import { toast, Toaster } from "sonner"
 import { compareJSON, getLineClass, hasChanges } from "@/lib/json-compare"
 import { useTheme } from "@/components/theme-provider"
+import styles from "./dashboard.module.css"
 
 interface ThemeColors {
   primary: string
@@ -75,18 +76,18 @@ const JSONViewerWithLineNumbers = ({
   const lines = content.split('\n')
 
   return (
-    <div className="bg-gray-50 rounded-lg overflow-auto font-mono text-sm" style={{ maxHeight }}>
+    <div className={styles.jsonViewerContainer} style={{ maxHeight }}>
       {lines.map((line, index) => {
         const lineNumber = index + 1
         const diffLine = diffLines?.find(d => d.lineNumber === lineNumber)
         const lineClass = diffLine ? getLineClass(diffLine.type) : ''
 
         return (
-          <div key={index} className={`flex ${lineClass}`}>
-            <div className="flex-shrink-0 w-12 px-2 py-0.5 text-right text-gray-400 select-none border-r border-gray-200 bg-gray-100">
+          <div key={index} className={`${styles.jsonViewerLine} ${lineClass}`}>
+            <div className={styles.jsonViewerLineNumber}>
               {lineNumber}
             </div>
-            <div className="flex-1 px-4 py-0.5 whitespace-pre-wrap break-words">
+            <div className={styles.jsonViewerLineContent}>
               {line || ' '}
             </div>
           </div>
@@ -114,16 +115,16 @@ const JSONDiffViewer = ({
   const { oldLines, newLines } = compareJSON(oldObj, newObj)
 
   return (
-    <div className="grid grid-cols-2 gap-4">
+    <div className={styles.diffGrid}>
       <div>
-        <div className="mb-2 font-semibold text-gray-700">{oldTitle}</div>
-        <div className="bg-gray-50 rounded-lg overflow-auto font-mono text-sm" style={{ maxHeight }}>
+        <div className={styles.diffTitle}>{oldTitle}</div>
+        <div className={styles.jsonViewerContainer} style={{ maxHeight }}>
           {oldLines.map((line, index) => (
-            <div key={index} className={`flex ${getLineClass(line.type)}`}>
-              <div className="flex-shrink-0 w-12 px-2 py-0.5 text-right text-gray-400 select-none border-r border-gray-200 bg-gray-100">
+            <div key={index} className={`${styles.jsonViewerLine} ${getLineClass(line.type)}`}>
+              <div className={styles.jsonViewerLineNumber}>
                 {line.lineNumber}
               </div>
-              <div className="flex-1 px-4 py-0.5 whitespace-pre-wrap break-words">
+              <div className={styles.jsonViewerLineContent}>
                 {line.content || ' '}
               </div>
             </div>
@@ -131,14 +132,14 @@ const JSONDiffViewer = ({
         </div>
       </div>
       <div>
-        <div className="mb-2 font-semibold text-gray-700">{newTitle}</div>
-        <div className="bg-gray-50 rounded-lg overflow-auto font-mono text-sm" style={{ maxHeight }}>
+        <div className={styles.diffTitle}>{newTitle}</div>
+        <div className={styles.jsonViewerContainer} style={{ maxHeight }}>
           {newLines.map((line, index) => (
-            <div key={index} className={`flex ${getLineClass(line.type)}`}>
-              <div className="flex-shrink-0 w-12 px-2 py-0.5 text-right text-gray-400 select-none border-r border-gray-200 bg-gray-100">
+            <div key={index} className={`${styles.jsonViewerLine} ${getLineClass(line.type)}`}>
+              <div className={styles.jsonViewerLineNumber}>
                 {line.lineNumber}
               </div>
-              <div className="flex-1 px-4 py-0.5 whitespace-pre-wrap break-words">
+              <div className={styles.jsonViewerLineContent}>
                 {line.content || ' '}
               </div>
             </div>
@@ -696,14 +697,14 @@ export default function AdminDashboardPage() {
     const versionInfo = versionInfos[configType]
 
     return (
-      <div id="config-container" className="flex gap-0 mb-4 relative" style={{ height: 'calc(100vh - 64px - 64px)' }}>
-        <div style={{ width: showSchema ? `${leftWidth}%` : '100%' }} className="flex-shrink-0">
+      <div id="config-container" className={styles.configContainer}>
+        <div style={{ width: showSchema ? `${leftWidth}%` : '100%' }} className={styles.configLeft}>
           <Card
             style={{ height: 'calc(100vh - 64px - 64px)' }}
             title={
-              <div className="flex items-center justify-between">
-                <span className="text-lg font-semibold">{title}</span>
-                <div className="flex gap-2">
+              <div className={styles.configCardTitle}>
+                <span className={styles.configCardTitleText}>{title}</span>
+                <div className={styles.configCardActions}>
                   <Button
                     size="small"
                     type="text"
@@ -747,15 +748,15 @@ export default function AdminDashboardPage() {
               </div>
             }
           >
-            <div className="mb-4">
-              <p className="text-sm text-gray-500">{description}</p>
+            <div className={styles.configCardBody}>
+              <p className={styles.configCardBodyDescription}>{description}</p>
               {versionInfo && (
-                <p className="text-xs text-gray-400 mt-1">
+                <p className={styles.configCardBodyVersion}>
                   最后更新时间：{new Date(versionInfo.createdAt).toLocaleString('zh-CN')}
                 </p>
               )}
             </div>
-            <pre className="bg-gray-50 p-4 rounded-lg overflow-auto max-h-96 text-sm">
+            <pre className={styles.configCardBodyPreview}>
               {JSON.stringify(configs[configType as keyof typeof configs], null, 2)}
             </pre>
           </Card>
@@ -764,43 +765,42 @@ export default function AdminDashboardPage() {
         {showSchema && (
           <>
             <div
-              className={`flex-shrink-0 w-1 bg-gray-200 hover:bg-blue-400 cursor-col-resize transition-colors relative group ${isDragging ? 'bg-blue-500' : ''}`}
+              className={`${styles.configResizer} ${isDragging ? styles.configResizerDragging : ''}`}
               onMouseDown={handleMouseDown}
-              style={{ margin: '0 8px' }}
             >
-              <div className="absolute inset-y-0 -left-1 -right-1" />
-              <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-1 h-12 bg-gray-300 rounded group-hover:bg-blue-500 transition-colors" />
+              <div className={styles.configResizerHandle} />
+              <div className={styles.configResizerVisual} />
             </div>
 
-            <div style={{ width: `${100 - leftWidth}%` }} className="flex-shrink-0">
+            <div style={{ width: `${100 - leftWidth}%` }} className={styles.configRight}>
               {schemaData && (
                 <Card
                   title={
-                    <div className="flex items-center gap-2">
-                      <IconInfoCircle className="text-blue-600" />
-                      <span className="text-lg font-semibold">字段说明</span>
+                    <div className={styles.schemaCardTitle}>
+                      <IconInfoCircle className={styles.schemaCardTitleIcon} />
+                      <span className={styles.schemaCardTitleText}>字段说明</span>
                     </div>
                   }
                 >
-                  <div className="space-y-4 max-h-[500px] overflow-auto">
+                  <div className={styles.schemaContent}>
                     {Object.entries(schemaData).map(([key, value]: [string, any]) => (
-                      <div key={key} className="border-b border-gray-100 pb-3 last:border-b-0 last:pb-0">
-                        <div className="flex items-center gap-2 mb-1">
-                          <h4 className="text-sm font-semibold text-gray-900">{key}</h4>
+                      <div key={key} className={styles.schemaItem}>
+                        <div className={styles.schemaItemHeader}>
+                          <h4 className={styles.schemaItemName}>{key}</h4>
                           {value.required && (
-                            <span className="px-1.5 py-0.5 text-xs bg-red-50 text-red-600 rounded">必填</span>
+                            <span className={`${styles.schemaItemBadge} ${styles.schemaItemBadgeRequired}`}>必填</span>
                           )}
                           {value.type && (
-                            <span className="px-1.5 py-0.5 text-xs bg-blue-50 text-blue-600 rounded">{value.type}</span>
+                            <span className={`${styles.schemaItemBadge} ${styles.schemaItemBadgeType}`}>{value.type}</span>
                           )}
                         </div>
-                        <p className="text-xs text-gray-600 mb-1">{value.description}</p>
+                        <p className={styles.schemaItemDescription}>{value.description}</p>
                         {value.fields && (
-                          <div className="ml-2 mt-1 space-y-0.5">
+                          <div className={styles.schemaItemFields}>
                             {Object.entries(value.fields).map(([fieldKey, fieldDesc]: [string, any]) => (
-                              <div key={fieldKey} className="flex items-start gap-1 text-xs">
-                                <span className="font-medium text-gray-700 min-w-[80px]">{fieldKey}:</span>
-                                <span className="text-gray-600">{fieldDesc}</span>
+                              <div key={fieldKey} className={styles.schemaField}>
+                                <span className={styles.schemaFieldName}>{fieldKey}:</span>
+                                <span className={styles.schemaFieldDescription}>{fieldDesc}</span>
                               </div>
                             ))}
                           </div>
@@ -933,23 +933,23 @@ export default function AdminDashboardPage() {
 
   const renderSystemManagement = () => {
     return (
-      <div className="p-6">
+      <div className={styles.systemManagement}>
         <Card
           title={
-            <div className="flex items-center gap-2">
-              <IconSettings className="text-blue-600" />
-              <span className="text-lg font-semibold">系统管理</span>
+            <div className={styles.sectionTitleContainer}>
+              <IconSettings className={styles.sectionTitleIcon} />
+              <span className={styles.sectionTitle}>系统管理</span>
             </div>
           }
         >
-          <div className="space-y-6">
-            <div className="p-6 bg-gray-50 rounded-lg">
-              <h3 className="text-lg font-semibold mb-4">性能配置</h3>
-              <div className="space-y-4">
-                <div className="flex items-center justify-between">
-                  <div className="flex-1">
-                    <h4 className="font-medium text-gray-900 mb-1">配置缓存</h4>
-                    <p className="text-sm text-gray-600">启用配置缓存可以提高系统性能，但可能导致配置更新延迟</p>
+          <div className={styles.spaceY6}>
+            <div className={styles.performanceSection}>
+              <h3 className={styles.sectionTitle}>性能配置</h3>
+              <div className={styles.spaceY4}>
+                <div className={styles.performanceItem}>
+                  <div className={styles.performanceItemLeft}>
+                    <h4 className={styles.performanceItemTitle}>配置缓存</h4>
+                    <p className={styles.performanceItemDescription}>启用配置缓存可以提高系统性能，但可能导致配置更新延迟</p>
                   </div>
                   <Switch
                     checked={configs.site?.cache?.enabled ?? true}
@@ -989,11 +989,11 @@ export default function AdminDashboardPage() {
               </div>
             </div>
 
-            <div className="p-6 bg-gray-50 rounded-lg">
-              <h3 className="text-lg font-semibold mb-4">配置管理</h3>
-              <div className="space-y-4">
-                <p className="text-gray-600">通过以下功能可以导出或导入配置，用于备份和恢复系统配置。</p>
-                <div className="flex gap-4">
+            <div className={styles.configSection}>
+              <h3 className={styles.sectionTitle}>配置管理</h3>
+              <div className={styles.spaceY4}>
+                <p className={styles.configSectionDescription}>通过以下功能可以导出或导入配置，用于备份和恢复系统配置。</p>
+                <div className={styles.configSectionActions}>
                   <Button
                     type="primary"
                     icon={<IconExport />}
@@ -1006,14 +1006,14 @@ export default function AdminDashboardPage() {
                       type="file"
                       accept=".zip"
                       onChange={handleImportConfig}
-                      className="hidden"
+                      className={styles.importInput}
                       id="config-import"
                     />
                     <label
                       htmlFor="config-import"
-                      className="inline-flex items-center justify-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-gray-700 hover:bg-gray-800 transition-colors cursor-pointer"
+                      className={styles.importLabel}
                     >
-                      <IconFile className="mr-2" />
+                      <IconFile className={styles.importLabelIcon} />
                       导入配置
                     </label>
                   </div>
@@ -1021,21 +1021,21 @@ export default function AdminDashboardPage() {
               </div>
             </div>
 
-            <div className="p-6 bg-red-50 rounded-lg border-2 border-red-200">
-              <h3 className="text-lg font-semibold mb-4 text-red-800">危险区域</h3>
-              <div className="space-y-4">
+            <div className={styles.dangerSection}>
+              <h3 className={styles.dangerSectionTitle}>危险区域</h3>
+              <div className={styles.spaceY4}>
                 <Alert
                   type="error"
                   title="警告"
                   content="以下操作具有破坏性，请谨慎使用。建议在执行前先导出配置备份。"
+                  className={styles.dangerSectionAlert}
                 />
-                <div className="flex gap-4">
+                <div className={styles.dangerSectionActions}>
                   <Button
                     status="danger"
                     icon={<IconUndo />}
                     onClick={handleResetWebsite}
                     loading={loading}
-                    className="!bg-red-500 !text-white hover:!bg-red-600 !border-red-500"
                   >
                     一键还原网站
                   </Button>
@@ -1052,21 +1052,21 @@ export default function AdminDashboardPage() {
     <>
       <Toaster position="top-center" richColors />
 
-      <div className="min-h-screen bg-gray-50">
+      <div className={styles.mainContainer}>
         {mustChangePassword && (
-          <div className="bg-red-50 border-b-2 border-red-400">
-            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
-              <div className="flex items-start gap-3">
-                <div className="flex-shrink-0">
-                  <svg className="h-6 w-6 text-red-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <div className={styles.passwordBanner}>
+            <div className={styles.passwordBannerInner}>
+              <div className={styles.passwordBannerContent}>
+                <div className={styles.passwordBannerIcon}>
+                  <svg className={styles.passwordBannerIconSvg} fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
                   </svg>
                 </div>
-                <div className="flex-1">
-                  <h3 className="text-lg font-semibold text-red-800 mb-1">
+                <div className={styles.passwordBannerText}>
+                  <h3 className={styles.passwordBannerTitle}>
                     安全提示
                   </h3>
-                  <p className="text-red-700 mb-2">
+                  <p className={styles.passwordBannerMessage}>
                     这是您首次登录，请立即修改密码以确保账户安全。
                   </p>
                 </div>
@@ -1074,7 +1074,7 @@ export default function AdminDashboardPage() {
                   type="primary"
                   status="danger"
                   onClick={() => setShowChangePassword(true)}
-                  className="flex-shrink-0"
+                  className={styles.passwordBannerButton}
                 >
                   立即修改密码
                 </Button>
@@ -1082,34 +1082,34 @@ export default function AdminDashboardPage() {
             </div>
           </div>
         )}
-        <div className="bg-white border-b border-gray-200 shadow-sm">
-          <div className="px-6">
-            <div className="flex items-center justify-between h-16">
-              <div className="flex items-center gap-3">
-                <div className="w-9 h-9 rounded-lg bg-gradient-to-br from-blue-500 to-blue-600 flex items-center justify-center shadow-sm">
-                  <svg className="w-5 h-5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <div className={styles.headerBar}>
+          <div className={styles.headerBarInner}>
+            <div className={styles.headerBarContent}>
+              <div className={styles.headerLogo}>
+                <div className={styles.headerLogoIcon}>
+                  <svg className={styles.headerLogoIconSvg} fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
                   </svg>
                 </div>
-                <div className="flex items-center gap-2">
-                  <h1 className="text-sm font-bold text-gray-900">管理后台</h1>
-                  <span className="text-xs text-gray-400">|</span>
-                  <p className="text-xs text-gray-500">创客AI</p>
+                <div className={styles.headerLogoText}>
+                  <h1 className={styles.headerLogoTitle}>管理后台</h1>
+                  <span className={styles.headerLogoSeparator}>|</span>
+                  <p className={styles.headerLogoSubtitle}>创客AI</p>
                 </div>
               </div>
-              <div className="flex items-center gap-3">
+              <div className={styles.headerActions}>
                 <Dropdown
                   droplist={
-                    <div className="p-4 bg-white rounded-lg shadow-lg">
-                      <div className="w-40 h-40 bg-gradient-to-br from-gray-50 to-gray-100 rounded-xl flex items-center justify-center border-2 border-gray-200">
-                        <div className="text-center">
-                          <div className="w-32 h-32 bg-white rounded-lg flex items-center justify-center">
-                            <span className="text-xs text-gray-400">客服二维码</span>
+                    <div className={styles.qrDropdown}>
+                      <div className={styles.qrContainer}>
+                        <div className={styles.qrInner}>
+                          <div className={styles.qrPlaceholder}>
+                            <span className={styles.qrPlaceholderText}>客服二维码</span>
                           </div>
                         </div>
                       </div>
-                      <p className="text-center text-xs text-gray-500 mt-2">技术问题可扫码联系客服</p>
+                      <p className={styles.qrHint}>技术问题可扫码联系客服</p>
                     </div>
                   }
                   trigger="hover"
@@ -1117,7 +1117,6 @@ export default function AdminDashboardPage() {
                 >
                   <Button
                     type="text"
-                    className="!text-gray-700 hover:!text-blue-600 hover:!bg-blue-50"
                     icon={<IconCustomerService />}
                   >
                     联系客服
@@ -1125,27 +1124,23 @@ export default function AdminDashboardPage() {
                 </Dropdown>
                 <Button
                   type="text"
-                  className="!text-gray-700 hover:!text-blue-600 hover:!bg-blue-50"
                   icon={<IconQuestionCircle />}
                   onClick={() => window.open('https://help.makerai.com', '_blank')}
                 >
                   帮助文档
                 </Button>
                 <Button
-                  className="!bg-blue-500 !text-white hover:!bg-blue-600 !border-blue-500"
                   onClick={() => window.open('/', '_blank')}
                 >
                   打开官网
                 </Button>
                 <Button
-                  className="!bg-gray-100 !text-gray-700 hover:!bg-gray-200 !border-gray-200"
                   icon={<IconLock />}
                   onClick={() => setShowChangePassword(true)}
                 >
                   修改密码
                 </Button>
                 <Button
-                  className="!bg-red-50 !text-red-600 hover:!bg-red-100 !border-red-200"
                   icon={<IconExport />}
                   onClick={handleLogout}
                 >
@@ -1156,27 +1151,24 @@ export default function AdminDashboardPage() {
           </div>
         </div>
 
-        <div className="flex" style={{ height: 'calc(100vh - 64px)' }}>
-          <div className={`${sidebarCollapsed ? 'w-16' : 'w-64'} bg-white border-r border-gray-200 transition-all duration-300 flex-shrink-0 relative`}>
-            <div className="h-full overflow-y-auto">
-              <div className="p-4">
-                <nav className="space-y-1">
+        <div className={styles.mainLayout}>
+          <div className={`${styles.sidebar} ${sidebarCollapsed ? styles.sidebarCollapsed : styles.sidebarExpanded}`}>
+            <div className={styles.sidebarContent}>
+              <div className={styles.sidebarPadding}>
+                <nav className={styles.navList}>
                   {/* 控制台 */}
                   <button
                     onClick={() => handleMenuClick('accountInfo')}
-                    className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-left transition-all ${activeMenu === 'accountInfo'
-                        ? 'bg-blue-50 text-blue-700 font-medium'
-                        : 'text-gray-700 hover:bg-gray-50'
-                      }`}
+                    className={`${styles.navItem} ${activeMenu === 'accountInfo' ? styles.navItemActive : styles.navItemInactive}`}
                   >
-                    <IconUser className="text-lg flex-shrink-0" />
-                    {!sidebarCollapsed && <span className="text-sm">控制台</span>}
+                    <IconUser className={styles.navItemIcon} />
+                    {!sidebarCollapsed && <span className={styles.navItemText}>控制台</span>}
                   </button>
 
                   {/* 站点管理 */}
-                  <div className="pt-4 pb-2">
+                  <div className={styles.navSection}>
                     {!sidebarCollapsed && (
-                      <div className="px-3 text-xs font-semibold text-gray-400 uppercase tracking-wider">
+                      <div className={styles.navSectionTitle}>
                         站点管理
                       </div>
                     )}
@@ -1184,205 +1176,151 @@ export default function AdminDashboardPage() {
 
                   <button
                     onClick={() => handleMenuClick('site')}
-                    className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-left transition-all ${activeMenu === 'site'
-                        ? 'bg-blue-50 text-blue-700 font-medium'
-                        : 'text-gray-700 hover:bg-gray-50'
-                      }`}
+                    className={`${styles.navItem} ${activeMenu === 'site' ? styles.navItemActive : styles.navItemInactive}`}
                   >
-                    <IconHome className="text-lg flex-shrink-0" />
-                    {!sidebarCollapsed && <span className="text-sm">站点基础配置</span>}
+                    <IconHome className={styles.navItemIcon} />
+                    {!sidebarCollapsed && <span className={styles.navItemText}>站点基础配置</span>}
                   </button>
 
                   <button
                     onClick={() => handleMenuClick('account')}
-                    className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-left transition-all ${activeMenu === 'account'
-                        ? 'bg-blue-50 text-blue-700 font-medium'
-                        : 'text-gray-700 hover:bg-gray-50'
-                      }`}
+                    className={`${styles.navItem} ${activeMenu === 'account' ? styles.navItemActive : styles.navItemInactive}`}
                   >
-                    <IconUser className="text-lg flex-shrink-0" />
-                    {!sidebarCollapsed && <span className="text-sm">站点账号配置</span>}
+                    <IconUser className={styles.navItemIcon} />
+                    {!sidebarCollapsed && <span className={styles.navItemText}>站点账号配置</span>}
                   </button>
 
                   <button
                     onClick={() => handleMenuClick('navigation')}
-                    className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-left transition-all ${activeMenu === 'navigation'
-                        ? 'bg-blue-50 text-blue-700 font-medium'
-                        : 'text-gray-700 hover:bg-gray-50'
-                      }`}
+                    className={`${styles.navItem} ${activeMenu === 'navigation' ? styles.navItemActive : styles.navItemInactive}`}
                   >
-                    <IconNav className="text-lg flex-shrink-0" />
-                    {!sidebarCollapsed && <span className="text-sm">顶部导航配置</span>}
+                    <IconNav className={styles.navItemIcon} />
+                    {!sidebarCollapsed && <span className={styles.navItemText}>顶部导航配置</span>}
                   </button>
 
                   <button
                     onClick={() => handleMenuClick('footer')}
-                    className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-left transition-all ${activeMenu === 'footer'
-                        ? 'bg-blue-50 text-blue-700 font-medium'
-                        : 'text-gray-700 hover:bg-gray-50'
-                      }`}
+                    className={`${styles.navItem} ${activeMenu === 'footer' ? styles.navItemActive : styles.navItemInactive}`}
                   >
-                    <IconFile className="text-lg flex-shrink-0" />
-                    {!sidebarCollapsed && <span className="text-sm">底部页脚配置</span>}
+                    <IconFile className={styles.navItemIcon} />
+                    {!sidebarCollapsed && <span className={styles.navItemText}>底部页脚配置</span>}
                   </button>
 
                   <button
                     onClick={() => handleMenuClick('seo')}
-                    className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-left transition-all ${activeMenu === 'seo'
-                        ? 'bg-blue-50 text-blue-700 font-medium'
-                        : 'text-gray-700 hover:bg-gray-50'
-                      }`}
+                    className={`${styles.navItem} ${activeMenu === 'seo' ? styles.navItemActive : styles.navItemInactive}`}
                   >
-                    <IconCode className="text-lg flex-shrink-0" />
-                    {!sidebarCollapsed && <span className="text-sm">站点SEO配置</span>}
+                    <IconCode className={styles.navItemIcon} />
+                    {!sidebarCollapsed && <span className={styles.navItemText}>站点SEO配置</span>}
                   </button>
 
                   <button
                     onClick={() => handleMenuClick('common')}
-                    className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-left transition-all ${activeMenu === 'common'
-                        ? 'bg-blue-50 text-blue-700 font-medium'
-                        : 'text-gray-700 hover:bg-gray-50'
-                      }`}
+                    className={`${styles.navItem} ${activeMenu === 'common' ? styles.navItemActive : styles.navItemInactive}`}
                   >
-                    <IconStorage className="text-lg flex-shrink-0" />
-                    {!sidebarCollapsed && <span className="text-sm">站点版本配置</span>}
+                    <IconStorage className={styles.navItemIcon} />
+                    {!sidebarCollapsed && <span className={styles.navItemText}>站点版本配置</span>}
                   </button>
 
                   {/* 页面管理 */}
-                  <div className="pt-4 pb-2">
+                  <div className={styles.navSection}>
                     {!sidebarCollapsed && (
-                      <div className="px-3 text-xs font-semibold text-gray-400 uppercase tracking-wider">
+                      <div className={styles.navSectionTitle}>
                         页面管理
                       </div>
                     )}
                   </div>
 
-                  <div className="space-y-1">
+                  <div className={styles.navList}>
                     <button
                       onClick={() => handleMenuClick('home')}
-                      className={`w-full flex items-center justify-between gap-3 px-3 py-2.5 rounded-lg text-left transition-all ${activeMenu === 'home'
-                          ? 'bg-blue-50 text-blue-700 font-medium'
-                          : 'text-gray-700 hover:bg-gray-50'
-                        }`}
+                      className={`${styles.navItem} ${activeMenu === 'home' ? styles.navItemActive : styles.navItemInactive}`}
                     >
-                      <div className="flex items-center gap-3">
-                        <IconHome className="text-lg flex-shrink-0" />
-                        {!sidebarCollapsed && <span className="text-sm">首页区块管理</span>}
+                      <div className={styles.navItemBadgeContainer}>
+                        <IconHome className={styles.navItemIcon} />
+                        {!sidebarCollapsed && <span className={styles.navItemText}>首页区块管理</span>}
                       </div>
                     </button>
-                    <div className="pl-10 space-y-1">
+                    <div className={styles.navSubList}>
                       <button
                         onClick={() => handleMenuClick('homeOrder')}
-                        className={`w-full flex items-center gap-3 px-3 py-2 rounded-lg text-left transition-all ${activeMenu === 'homeOrder'
-                            ? 'bg-blue-50 text-blue-700 font-medium'
-                            : 'text-gray-600 hover:bg-gray-50'
-                          }`}
+                        className={`${styles.navSubItem} ${activeMenu === 'homeOrder' ? styles.navSubItemActive : styles.navSubItemInactive}`}
                       >
-                        {!sidebarCollapsed && <span className="text-sm">区块顺序</span>}
+                        {!sidebarCollapsed && <span className={styles.navSubItemText}>区块顺序</span>}
                       </button>
                       <button
                         onClick={() => handleMenuClick('homeBanner')}
-                        className={`w-full flex items-center gap-3 px-3 py-2 rounded-lg text-left transition-all ${activeMenu === 'homeBanner'
-                            ? 'bg-blue-50 text-blue-700 font-medium'
-                            : 'text-gray-600 hover:bg-gray-50'
-                          }`}
+                        className={`${styles.navSubItem} ${activeMenu === 'homeBanner' ? styles.navSubItemActive : styles.navSubItemInactive}`}
                       >
-                        {!sidebarCollapsed && <span className="text-sm">[区块]Banner信息</span>}
+                        {!sidebarCollapsed && <span className={styles.navSubItemText}>[区块]Banner信息</span>}
                       </button>
                       <button
                         onClick={() => handleMenuClick('homePartners')}
-                        className={`w-full flex items-center gap-3 px-3 py-2 rounded-lg text-left transition-all ${activeMenu === 'homePartners'
-                            ? 'bg-blue-50 text-blue-700 font-medium'
-                            : 'text-gray-600 hover:bg-gray-50'
-                          }`}
+                        className={`${styles.navSubItem} ${activeMenu === 'homePartners' ? styles.navSubItemActive : styles.navSubItemInactive}`}
                       >
-                        {!sidebarCollapsed && <span className="text-sm">[区块]伙伴信息</span>}
+                        {!sidebarCollapsed && <span className={styles.navSubItemText}>[区块]伙伴信息</span>}
                       </button>
                       <button
                         onClick={() => handleMenuClick('homeProducts')}
-                        className={`w-full flex items-center gap-3 px-3 py-2 rounded-lg text-left transition-all ${activeMenu === 'homeProducts'
-                            ? 'bg-blue-50 text-blue-700 font-medium'
-                            : 'text-gray-600 hover:bg-gray-50'
-                          }`}
+                        className={`${styles.navSubItem} ${activeMenu === 'homeProducts' ? styles.navSubItemActive : styles.navSubItemInactive}`}
                       >
-                        {!sidebarCollapsed && <span className="text-sm">[区块]产品信息</span>}
+                        {!sidebarCollapsed && <span className={styles.navSubItemText}>[区块]产品信息</span>}
                       </button>
                       <button
                         onClick={() => handleMenuClick('homeServices')}
-                        className={`w-full flex items-center gap-3 px-3 py-2 rounded-lg text-left transition-all ${activeMenu === 'homeServices'
-                            ? 'bg-blue-50 text-blue-700 font-medium'
-                            : 'text-gray-600 hover:bg-gray-50'
-                          }`}
+                        className={`${styles.navSubItem} ${activeMenu === 'homeServices' ? styles.navSubItemActive : styles.navSubItemInactive}`}
                       >
-                        {!sidebarCollapsed && <span className="text-sm">[区块]服务信息</span>}
+                        {!sidebarCollapsed && <span className={styles.navSubItemText}>[区块]服务信息</span>}
                       </button>
                       <button
                         onClick={() => handleMenuClick('homePricing')}
-                        className={`w-full flex items-center gap-3 px-3 py-2 rounded-lg text-left transition-all ${activeMenu === 'homePricing'
-                            ? 'bg-blue-50 text-blue-700 font-medium'
-                            : 'text-gray-600 hover:bg-gray-50'
-                          }`}
+                        className={`${styles.navSubItem} ${activeMenu === 'homePricing' ? styles.navSubItemActive : styles.navSubItemInactive}`}
                       >
-                        {!sidebarCollapsed && <span className="text-sm">[区块]价格信息</span>}
+                        {!sidebarCollapsed && <span className={styles.navSubItemText}>[区块]价格信息</span>}
                       </button>
                       <button
                         onClick={() => handleMenuClick('homeAbout')}
-                        className={`w-full flex items-center gap-3 px-3 py-2 rounded-lg text-left transition-all ${activeMenu === 'homeAbout'
-                            ? 'bg-blue-50 text-blue-700 font-medium'
-                            : 'text-gray-600 hover:bg-gray-50'
-                          }`}
+                        className={`${styles.navSubItem} ${activeMenu === 'homeAbout' ? styles.navSubItemActive : styles.navSubItemInactive}`}
                       >
-                        {!sidebarCollapsed && <span className="text-sm">[区块]关于我们</span>}
+                        {!sidebarCollapsed && <span className={styles.navSubItemText}>[区块]关于我们</span>}
                       </button>
                       <button
                         onClick={() => handleMenuClick('homeContact')}
-                        className={`w-full flex items-center gap-3 px-3 py-2 rounded-lg text-left transition-all ${activeMenu === 'homeContact'
-                            ? 'bg-blue-50 text-blue-700 font-medium'
-                            : 'text-gray-600 hover:bg-gray-50'
-                          }`}
+                        className={`${styles.navSubItem} ${activeMenu === 'homeContact' ? styles.navSubItemActive : styles.navSubItemInactive}`}
                       >
-                        {!sidebarCollapsed && <span className="text-sm">[区块]联系我们</span>}
+                        {!sidebarCollapsed && <span className={styles.navSubItemText}>[区块]联系我们</span>}
                       </button>
                     </div>
                   </div>
 
                   <button
                     onClick={() => handleMenuClick('products')}
-                    className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-left transition-all ${activeMenu === 'products'
-                        ? 'bg-blue-50 text-blue-700 font-medium'
-                        : 'text-gray-700 hover:bg-gray-50'
-                      }`}
+                    className={`${styles.navItem} ${activeMenu === 'products' ? styles.navItemActive : styles.navItemInactive}`}
                   >
-                    <IconTrophy className="text-lg flex-shrink-0" />
-                    {!sidebarCollapsed && <span className="text-sm">产品列表配置</span>}
+                    <IconTrophy className={styles.navItemIcon} />
+                    {!sidebarCollapsed && <span className={styles.navItemText}>产品列表配置</span>}
                   </button>
 
                   <button
                     onClick={() => handleMenuClick('otherPages')}
-                    className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-left transition-all ${activeMenu === 'otherPages'
-                        ? 'bg-blue-50 text-blue-700 font-medium'
-                        : 'text-gray-700 hover:bg-gray-50'
-                      }`}
+                    className={`${styles.navItem} ${activeMenu === 'otherPages' ? styles.navItemActive : styles.navItemInactive}`}
                   >
-                    <IconFile className="text-lg flex-shrink-0" />
-                    {!sidebarCollapsed && <span className="text-sm">自定义页面配置</span>}
+                    <IconFile className={styles.navItemIcon} />
+                    {!sidebarCollapsed && <span className={styles.navItemText}>自定义页面配置</span>}
                   </button>
 
                   <button
                     onClick={() => router.push('/admin/articles')}
-                    className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-left transition-all ${activeMenu === 'articles'
-                        ? 'bg-blue-50 text-blue-700 font-medium'
-                        : 'text-gray-700 hover:bg-gray-50'
-                      }`}
+                    className={`${styles.navItem} ${activeMenu === 'articles' ? styles.navItemActive : styles.navItemInactive}`}
                   >
-                    <IconFile className="text-lg flex-shrink-0" />
-                    {!sidebarCollapsed && <span className="text-sm">文章管理</span>}
+                    <IconFile className={styles.navItemIcon} />
+                    {!sidebarCollapsed && <span className={styles.navItemText}>文章管理</span>}
                   </button>
 
                   {/* 主题管理 */}
-                  <div className="pt-4 pb-2">
+                  <div className={styles.navSection}>
                     {!sidebarCollapsed && (
-                      <div className="px-3 text-xs font-semibold text-gray-400 uppercase tracking-wider">
+                      <div className={styles.navSectionTitle}>
                         主题管理
                       </div>
                     )}
@@ -1390,30 +1328,24 @@ export default function AdminDashboardPage() {
 
                   <button
                     onClick={() => handleMenuClick('theme')}
-                    className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-left transition-all ${activeMenu === 'theme'
-                        ? 'bg-blue-50 text-blue-700 font-medium'
-                        : 'text-gray-700 hover:bg-gray-50'
-                      }`}
+                    className={`${styles.navItem} ${activeMenu === 'theme' ? styles.navItemActive : styles.navItemInactive}`}
                   >
-                    <IconSettings className="text-lg flex-shrink-0" />
-                    {!sidebarCollapsed && <span className="text-sm">主题皮肤选择</span>}
+                    <IconSettings className={styles.navItemIcon} />
+                    {!sidebarCollapsed && <span className={styles.navItemText}>主题皮肤选择</span>}
                   </button>
 
                   <button
                     onClick={() => handleMenuClick('custom')}
-                    className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-left transition-all ${activeMenu === 'custom'
-                        ? 'bg-blue-50 text-blue-700 font-medium'
-                        : 'text-gray-700 hover:bg-gray-50'
-                      }`}
+                    className={`${styles.navItem} ${activeMenu === 'custom' ? styles.navItemActive : styles.navItemInactive}`}
                   >
-                    <IconSettings className="text-lg flex-shrink-0" />
-                    {!sidebarCollapsed && <span className="text-sm">主题个性化配置</span>}
+                    <IconSettings className={styles.navItemIcon} />
+                    {!sidebarCollapsed && <span className={styles.navItemText}>主题个性化配置</span>}
                   </button>
 
                   {/* 系统管理 */}
-                  <div className="pt-4 pb-2">
+                  <div className={styles.navSection}>
                     {!sidebarCollapsed && (
-                      <div className="px-3 text-xs font-semibold text-gray-400 uppercase tracking-wider">
+                      <div className={styles.navSectionTitle}>
                         系统管理
                       </div>
                     )}
@@ -1421,24 +1353,18 @@ export default function AdminDashboardPage() {
 
                   <button
                     onClick={() => handleMenuClick('system')}
-                    className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-left transition-all ${activeMenu === 'system'
-                        ? 'bg-blue-50 text-blue-700 font-medium'
-                        : 'text-gray-700 hover:bg-gray-50'
-                      }`}
+                    className={`${styles.navItem} ${activeMenu === 'system' ? styles.navItemActive : styles.navItemInactive}`}
                   >
-                    <IconSettings className="text-lg flex-shrink-0" />
-                    {!sidebarCollapsed && <span className="text-sm">配置管理</span>}
+                    <IconSettings className={styles.navItemIcon} />
+                    {!sidebarCollapsed && <span className={styles.navItemText}>配置管理</span>}
                   </button>
 
                   <button
                     onClick={() => handleMenuClick('operationLogs')}
-                    className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-left transition-all ${activeMenu === 'operationLogs'
-                        ? 'bg-blue-50 text-blue-700 font-medium'
-                        : 'text-gray-700 hover:bg-gray-50'
-                      }`}
+                    className={`${styles.navItem} ${activeMenu === 'operationLogs' ? styles.navItemActive : styles.navItemInactive}`}
                   >
-                    <IconClockCircle className="text-lg flex-shrink-0" />
-                    {!sidebarCollapsed && <span className="text-sm">操作记录</span>}
+                    <IconClockCircle className={styles.navItemIcon} />
+                    {!sidebarCollapsed && <span className={styles.navItemText}>操作记录</span>}
                   </button>
                 </nav>
               </div>
@@ -1447,63 +1373,63 @@ export default function AdminDashboardPage() {
 
           </div>
 
-          <div className="flex-1 overflow-auto bg-gray-50 h-full">
-            <div className="p-8 h-full">
+          <div className={styles.contentArea}>
+            <div className={styles.contentPadding}>
               {activeMenu === 'accountInfo' && (
                 <Card>
                   {currentUser && (
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                      <div className="bg-gradient-to-br from-blue-50 to-blue-100 rounded-xl p-6 border border-blue-200">
-                        <div className="flex items-center gap-3 mb-4">
-                          <div className="w-12 h-12 rounded-full bg-gradient-to-br from-blue-500 to-blue-600 flex items-center justify-center">
-                            <svg className="w-6 h-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <div className={styles.accountInfoGrid}>
+                      <div className={`${styles.accountInfoCard} ${styles.accountInfoCardBlue}`}>
+                        <div className={styles.accountInfoCardHeader}>
+                          <div className={styles.accountInfoIcon}>
+                            <svg className={styles.accountInfoIconSvg} fill="none" viewBox="0 0 24 24" stroke="currentColor">
                               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
                             </svg>
                           </div>
                           <div>
-                            <p className="text-sm text-gray-600">当前账号</p>
-                            <p className="text-lg font-bold text-gray-900">{currentUser.username}</p>
+                            <p className={styles.accountInfoLabel}>当前账号</p>
+                            <p className={styles.accountInfoValue}>{currentUser.username}</p>
                           </div>
                         </div>
-                        <div className="text-sm text-gray-600">
+                        <div className={styles.accountInfoDescription}>
                           当前登录的管理员账号
                         </div>
                       </div>
 
-                      <div className="bg-gradient-to-br from-green-50 to-green-100 rounded-xl p-6 border border-green-200">
-                        <div className="flex items-center gap-3 mb-4">
-                          <div className="w-12 h-12 rounded-full bg-gradient-to-br from-green-500 to-green-600 flex items-center justify-center">
-                            <svg className="w-6 h-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <div className={`${styles.accountInfoCard} ${styles.accountInfoCardGreen}`}>
+                        <div className={styles.accountInfoCardHeader}>
+                          <div className={`${styles.accountInfoIcon} ${styles.accountInfoIconGreen}`}>
+                            <svg className={styles.accountInfoIconSvg} fill="none" viewBox="0 0 24 24" stroke="currentColor">
                               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
                             </svg>
                           </div>
                           <div>
-                            <p className="text-sm text-gray-600">上次登录</p>
-                            <p className="text-lg font-bold text-gray-900">
+                            <p className={styles.accountInfoLabel}>上次登录</p>
+                            <p className={styles.accountInfoValue}>
                               {currentUser.lastLoginTime || '首次登录'}
                             </p>
                           </div>
                         </div>
-                        <div className="text-sm text-gray-600">
+                        <div className={styles.accountInfoDescription}>
                           上次成功登录的时间
                         </div>
                       </div>
 
-                      <div className="bg-gradient-to-br from-purple-50 to-purple-100 rounded-xl p-6 border border-purple-200">
-                        <div className="flex items-center gap-3 mb-4">
-                          <div className="w-12 h-12 rounded-full bg-gradient-to-br from-purple-500 to-purple-600 flex items-center justify-center">
-                            <svg className="w-6 h-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <div className={`${styles.accountInfoCard} ${styles.accountInfoCardPurple}`}>
+                        <div className={styles.accountInfoCardHeader}>
+                          <div className={`${styles.accountInfoIcon} ${styles.accountInfoIconPurple}`}>
+                            <svg className={styles.accountInfoIconSvg} fill="none" viewBox="0 0 24 24" stroke="currentColor">
                               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9" />
                             </svg>
                           </div>
                           <div>
-                            <p className="text-sm text-gray-600">当前IP</p>
-                            <p className="text-lg font-bold text-gray-900 font-mono">
+                            <p className={styles.accountInfoLabel}>当前IP</p>
+                            <p className={styles.accountInfoValueMono}>
                               {currentUser.currentLoginIP || '未知'}
                             </p>
                           </div>
                         </div>
-                        <div className="text-sm text-gray-600">
+                        <div className={styles.accountInfoDescription}>
                           当前登录的IP地址
                         </div>
                       </div>
@@ -1616,56 +1542,52 @@ export default function AdminDashboardPage() {
 
               {activeMenu === 'theme' && (
                 <Card title="主题皮肤选择">
-                  <div className="mb-6">
-                    <p className="text-sm text-gray-500">选择您喜欢的主题皮肤，不同主题有不同的配色方案和布局风格。</p>
+                  <div className={styles.themeSection}>
+                    <p className={styles.themeDescription}>选择您喜欢的主题皮肤，不同主题有不同的配色方案和布局风格。</p>
                   </div>
                   
-                  <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                  <div className={styles.themeGrid}>
                     {configs.theme && configs.theme.themes && Object.entries(configs.theme.themes).map(([key, theme]: [string, any]) => (
                       <div
                         key={key}
-                        className={`relative border-2 rounded-xl p-6 cursor-pointer transition-all hover:shadow-lg ${
-                          configs.theme.currentTheme === key
-                            ? 'border-blue-500 bg-blue-50 shadow-md'
-                            : 'border-gray-200 hover:border-blue-300'
-                        }`}
+                        className={`${styles.themeCard} ${configs.theme.currentTheme === key ? styles.themeCardActive : styles.themeCardInactive}`}
                         onClick={() => handleThemeChange(key)}
                       >
                         {configs.theme.currentTheme === key && (
-                          <div className="absolute top-3 right-3">
-                            <div className="w-6 h-6 rounded-full bg-blue-500 flex items-center justify-center">
-                              <svg className="w-4 h-4 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                          <div className={styles.themeCheckmark}>
+                            <div className={styles.themeCheckmarkCircle}>
+                              <svg className={styles.themeCheckmarkSvg} fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                               </svg>
                             </div>
                           </div>
                         )}
                         
-                        <div className="mb-4">
+                        <div className={styles.themePreview}>
                           <div 
-                            className="w-full h-24 rounded-lg mb-3"
+                            className={styles.themePreviewBar}
                             style={{
                               background: `linear-gradient(135deg, ${theme.colors.primary} 0%, ${theme.colors.secondary} 100%)`
                             }}
                           />
                         </div>
                         
-                        <h3 className="text-lg font-bold text-gray-900 mb-2">{theme.name}</h3>
-                        <p className="text-sm text-gray-600 mb-4">{theme.description}</p>
+                        <h3 className={styles.themeName}>{theme.name}</h3>
+                        <p className={styles.themeDescriptionText}>{theme.description}</p>
                         
-                        <div className="flex gap-2 flex-wrap">
+                        <div className={styles.themeColors}>
                           <div 
-                            className="w-8 h-8 rounded-full border-2 border-white shadow-md"
+                            className={styles.themeColorDot}
                             style={{ backgroundColor: theme.colors.primary }}
                             title="主色"
                           />
                           <div 
-                            className="w-8 h-8 rounded-full border-2 border-white shadow-md"
+                            className={styles.themeColorDot}
                             style={{ backgroundColor: theme.colors.secondary }}
                             title="辅助色"
                           />
                           <div 
-                            className="w-8 h-8 rounded-full border-2 border-white shadow-md"
+                            className={styles.themeColorDot}
                             style={{ backgroundColor: theme.colors.accent }}
                             title="强调色"
                           />
@@ -1686,16 +1608,16 @@ export default function AdminDashboardPage() {
 
               {activeMenu === 'operationLogs' && (
                 <Card title="操作记录">
-                  <div className="mb-4">
-                    <div className="bg-blue-50 border-l-4 border-blue-400 p-4 rounded-r">
-                      <div className="flex items-start">
-                        <div className="flex-shrink-0">
-                          <svg className="h-5 w-5 text-blue-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <div className={styles.logsInfo}>
+                    <div className={styles.logsAlert}>
+                      <div className={styles.logsAlertContent}>
+                        <div className={styles.logsAlertIcon}>
+                          <svg className={styles.logsAlertIconSvg} fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                           </svg>
                         </div>
-                        <div className="ml-3">
-                          <p className="text-sm text-blue-700">
+                        <div className={styles.logsAlertText}>
+                          <p className={styles.logsAlertMessage}>
                             系统最多保留最近50条操作记录，超出后将自动删除最早的记录。
                           </p>
                         </div>
@@ -1703,42 +1625,42 @@ export default function AdminDashboardPage() {
                     </div>
                   </div>
                   {operationLogs.length === 0 ? (
-                    <div className="text-center py-12">
-                      <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-gray-100 mb-4">
-                        <svg className="w-8 h-8 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <div className={styles.logsEmpty}>
+                      <div className={styles.logsEmptyIcon}>
+                        <svg className={styles.logsEmptyIconSvg} fill="none" viewBox="0 0 24 24" stroke="currentColor">
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
                         </svg>
                       </div>
-                      <p className="text-gray-500 text-sm">暂无操作记录</p>
+                      <p className={styles.logsEmptyText}>暂无操作记录</p>
                     </div>
                   ) : (
-                    <div className="overflow-x-auto rounded-lg border border-gray-200">
-                      <table className="w-full text-sm">
+                    <div className={styles.logsTableContainer}>
+                      <table className={styles.logsTable}>
                         <thead>
-                          <tr className="bg-gradient-to-r from-gray-50 to-gray-100 border-b-2 border-gray-300">
-                            <th className="text-center py-5 px-8 font-bold text-gray-800 text-base min-w-[120px]">用户名</th>
-                            <th className="text-center py-5 px-8 font-bold text-gray-800 text-base min-w-[140px]">操作类型</th>
-                            <th className="text-center py-5 px-8 font-bold text-gray-800 text-base min-w-[200px]">描述</th>
-                            <th className="text-center py-5 px-8 font-bold text-gray-800 text-base min-w-[150px]">IP地址</th>
-                            <th className="text-center py-5 px-8 font-bold text-gray-800 text-base min-w-[180px]">时间</th>
+                          <tr className={styles.logsTableHeader}>
+                            <th className={styles.logsTableHeaderCell}>用户名</th>
+                            <th className={styles.logsTableHeaderCell}>操作类型</th>
+                            <th className={styles.logsTableHeaderCell}>描述</th>
+                            <th className={styles.logsTableHeaderCell}>IP地址</th>
+                            <th className={styles.logsTableHeaderCell}>时间</th>
                           </tr>
                         </thead>
                         <tbody>
                           {operationLogs.map((log, index) => (
-                            <tr key={log.id} className={`border-b border-gray-100 hover:bg-blue-50 transition-colors ${index % 2 === 0 ? 'bg-white' : 'bg-gray-50/50'}`}>
-                              <td className="py-5 px-8">
-                                <div className="flex items-center gap-2">
-                                  <div className="w-8 h-8 rounded-full bg-gradient-to-br from-blue-500 to-purple-500 flex items-center justify-center text-white text-xs font-semibold">
+                            <tr key={log.id} className={`${styles.logsTableRow} ${index % 2 === 0 ? styles.logsTableRowEven : styles.logsTableRowOdd}`}>
+                              <td className={styles.logsTableCell}>
+                                <div className={styles.logsTableCellContent}>
+                                  <div className={styles.logsUserAvatar}>
                                     {log.username.charAt(0).toUpperCase()}
                                   </div>
-                                  <span className="text-gray-900 font-medium">{log.username}</span>
+                                  <span className={styles.logsUserName}>{log.username}</span>
                                 </div>
                               </td>
-                              <td className="py-5 px-8">
-                                <span className={`inline-flex items-center px-3 py-1.5 text-xs font-medium rounded-full ${log.type === 'login' ? 'bg-blue-100 text-blue-700 border border-blue-200' :
-                                    log.type === 'update_config' ? 'bg-green-100 text-green-700 border border-green-200' :
-                                      log.type === 'change_password' ? 'bg-purple-100 text-purple-700 border border-purple-200' :
-                                        'bg-gray-100 text-gray-700 border border-gray-200'
+                              <td className={styles.logsTableCell}>
+                                <span className={`${styles.logsTypeBadge} ${log.type === 'login' ? styles.logsTypeBadgeLogin :
+                                    log.type === 'update_config' ? styles.logsTypeBadgeUpdate :
+                                      log.type === 'change_password' ? styles.logsTypeBadgePassword :
+                                        styles.logsTypeBadgeDefault
                                   }`}>
                                   {log.type === 'login' ? '🔐 登录' :
                                     log.type === 'update_config' ? '⚙️ 更新配置' :
@@ -1746,17 +1668,17 @@ export default function AdminDashboardPage() {
                                         log.type}
                                 </span>
                               </td>
-                              <td className="py-5 px-8 text-gray-700">{log.description}</td>
-                              <td className="py-5 px-8">
-                                <span className="inline-flex items-center gap-1 text-gray-600 font-mono text-xs bg-gray-100 px-2 py-1 rounded">
-                                  <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                              <td className={`${styles.logsTableCell} ${styles.logsDescription}`}>{log.description}</td>
+                              <td className={styles.logsTableCell}>
+                                <span className={styles.logsIpBadge}>
+                                  <svg className={styles.logsIpIcon} fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9" />
                                   </svg>
                                   {log.ip}
                                 </span>
                               </td>
-                              <td className="py-5 px-8">
-                                <span className="text-gray-600 text-xs">{log.timestamp}</span>
+                              <td className={styles.logsTableCell}>
+                                <span className={styles.logsTimestamp}>{log.timestamp}</span>
                               </td>
                             </tr>
                           ))}
@@ -1782,12 +1704,12 @@ export default function AdminDashboardPage() {
           okText="确认修改"
           style={{ width: '90vw', maxWidth: 1200 }}
         >
-          <div id="edit-config-container" className="flex gap-0 relative" style={{ maxHeight: '65vh' }}>
-            <div style={{ width: showFieldDescription ? `${editLeftWidth}%` : '100%' }} className="flex-shrink-0 overflow-auto">
-              <div className="mb-4">
-                <div className="flex items-center justify-between mb-2">
-                  <div className="flex items-center gap-2">
-                    <p className="text-sm text-gray-500">
+          <div id="edit-config-container" className={styles.editConfigContainer}>
+            <div style={{ width: showFieldDescription ? `${editLeftWidth}%` : '100%' }} className={styles.editConfigLeft}>
+              <div className={styles.editConfigHeader}>
+                <div className={styles.editConfigHeaderTop}>
+                  <div className={styles.editConfigHeaderLeft}>
+                    <p className={styles.editConfigHint}>
                       请直接编辑JSON配置内容
                     </p>
                     <Button
@@ -1811,7 +1733,7 @@ export default function AdminDashboardPage() {
                       恢复原配置
                     </Button>
                   </div>
-                  <div className="flex items-center gap-2">
+                  <div className={styles.editConfigHeaderRight}>
                     <Button
                       size="small"
                       icon={<IconInfoCircle />}
@@ -1834,7 +1756,7 @@ export default function AdminDashboardPage() {
                   <Alert
                     type="error"
                     content={jsonError}
-                    className="mb-2"
+                    className={styles.editConfigError}
                     closable
                     onClose={() => setJsonError("")}
                   />
@@ -1853,20 +1775,16 @@ export default function AdminDashboardPage() {
                     value={editValue}
                     onChange={handleEditValueChange}
                     rows={textareaRows}
-                    className="font-mono"
+                    className={styles.editConfigTextarea}
                     status={jsonError ? "error" : undefined}
                   />
                 )}
 
 
               </div>
-              <div className="flex items-center justify-center gap-4 mt-3 pt-3 " style={{
-                position: 'absolute',
-                bottom: '-70px',
-                left: '10px'
-              }}>
-                <span className="text-xs text-gray-500">输入框高度：</span>
-                <div className="flex items-center gap-2">
+              <div className={styles.editConfigActionsBottom}>
+                <span className={styles.editConfigRowsLabel}>输入框高度：</span>
+                <div className={styles.editConfigRowsControls}>
                   <Button
                     size="mini"
                     onClick={() => setTextareaRows(Math.max(15, textareaRows - 5))}
@@ -1874,7 +1792,7 @@ export default function AdminDashboardPage() {
                   >
                     - 5行
                   </Button>
-                  <span className="text-xs text-gray-600 min-w-[60px] text-center">{textareaRows} 行</span>
+                  <span className={styles.editConfigRowsValue}>{textareaRows} 行</span>
                   <Button
                     size="mini"
                     onClick={() => setTextareaRows(Math.min(50, textareaRows + 5))}
@@ -1883,7 +1801,7 @@ export default function AdminDashboardPage() {
                     + 5行
                   </Button>
                 </div>
-                <div className="flex items-center gap-1">
+                <div className={styles.editConfigPresets}>
                   <Button
                     size="mini"
                     onClick={() => setTextareaRows(20)}
@@ -1909,43 +1827,42 @@ export default function AdminDashboardPage() {
             {showFieldDescription && (
               <>
                 <div
-                  className={`flex-shrink-0 w-1 bg-gray-200 hover:bg-blue-400 cursor-col-resize transition-colors relative group ${isEditDragging ? 'bg-blue-500' : ''}`}
+                  className={`${styles.editConfigResizer} ${isEditDragging ? styles.editConfigResizerDragging : ''}`}
                   onMouseDown={handleEditMouseDown}
-                  style={{ margin: '0 8px' }}
                 >
-                  <div className="absolute inset-y-0 -left-1 -right-1" />
-                  <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-1 h-12 bg-gray-300 rounded group-hover:bg-blue-500 transition-colors" />
+                  <div className={styles.editConfigResizerHandle} />
+                  <div className={styles.editConfigResizerVisual} />
                 </div>
 
-                <div style={{ width: `${100 - editLeftWidth}%` }} className="flex-shrink-0 overflow-auto">
+                <div style={{ width: `${100 - editLeftWidth}%` }} className={styles.editConfigRight}>
                   {editingConfig && schema[editingConfig] && (
                     <Card
                       title={
-                        <div className="flex items-center gap-2">
-                          <IconInfoCircle className="text-blue-600" />
-                          <span className="text-base font-semibold">字段说明</span>
+                        <div className={styles.schemaCardTitle}>
+                          <IconInfoCircle className={styles.schemaCardTitleIcon} />
+                          <span className={styles.schemaCardTitleText}>字段说明</span>
                         </div>
                       }
                     >
-                      <div className="space-y-3" style={{ maxHeight: '60vh', overflow: 'auto' }}>
+                      <div className={styles.schemaContent} style={{ maxHeight: '60vh', overflow: 'auto' }}>
                         {Object.entries(schema[editingConfig]).map(([key, value]: [string, any]) => (
-                          <div key={key} className="border-b border-gray-100 pb-2 last:border-b-0 last:pb-0">
-                            <div className="flex items-center gap-2 mb-1">
-                              <h4 className="text-sm font-semibold text-gray-900">{key}</h4>
+                          <div key={key} className={styles.schemaItem}>
+                            <div className={styles.schemaItemHeader}>
+                              <h4 className={styles.schemaItemName}>{key}</h4>
                               {value.required && (
-                                <span className="px-1.5 py-0.5 text-xs bg-red-50 text-red-600 rounded">必填</span>
+                                <span className={`${styles.schemaItemBadge} ${styles.schemaItemBadgeRequired}`}>必填</span>
                               )}
                               {value.type && (
-                                <span className="px-1.5 py-0.5 text-xs bg-blue-50 text-blue-600 rounded">{value.type}</span>
+                                <span className={`${styles.schemaItemBadge} ${styles.schemaItemBadgeType}`}>{value.type}</span>
                               )}
                             </div>
-                            <p className="text-xs text-gray-600 mb-1">{value.description}</p>
+                            <p className={styles.schemaItemDescription}>{value.description}</p>
                             {value.fields && (
-                              <div className="ml-2 mt-1 space-y-0.5">
+                              <div className={styles.schemaItemFields}>
                                 {Object.entries(value.fields).map(([fieldKey, fieldDesc]: [string, any]) => (
-                                  <div key={fieldKey} className="flex items-start gap-1 text-xs">
-                                    <span className="font-medium text-gray-700 min-w-[80px]">{fieldKey}:</span>
-                                    <span className="text-gray-600">{fieldDesc}</span>
+                                  <div key={fieldKey} className={styles.schemaField}>
+                                    <span className={styles.schemaFieldName}>{fieldKey}:</span>
+                                    <span className={styles.schemaFieldDescription}>{fieldDesc}</span>
                                   </div>
                                 ))}
                               </div>
@@ -1968,9 +1885,9 @@ export default function AdminDashboardPage() {
           footer={null}
           style={{ width: '90vw', maxWidth: 1000 }}
         >
-          <div className="mb-4">
-            <div className="flex items-center justify-between mb-2">
-              <p className="text-sm text-gray-500">
+          <div className={styles.viewConfigModalBody}>
+            <div className={styles.viewConfigModalHeader}>
+              <p className={styles.viewConfigModalHint}>
                 配置内容（只读）
               </p>
               <Button
@@ -1993,8 +1910,8 @@ export default function AdminDashboardPage() {
 
         <Modal
           title={
-            <div className="flex items-center gap-2">
-              <IconHistory className="text-blue-600" />
+            <div className={styles.viewConfigModalTitle}>
+              <IconHistory className={styles.schemaCardTitleIcon} />
               <span>查看上一版本配置</span>
             </div>
           }
@@ -2006,7 +1923,7 @@ export default function AdminDashboardPage() {
             setShowDiff(false)
           }}
           footer={
-            <div className="flex justify-end gap-2">
+            <div className={styles.viewConfigModalFooter}>
               <Button onClick={() => {
                 setViewingPreviousVersion(null)
                 setPreviousVersionData(null)
@@ -2035,17 +1952,17 @@ export default function AdminDashboardPage() {
           }
           style={{ width: '90vw', maxWidth: 1200 }}
         >
-          <div className="mb-4">
+          <div className={styles.viewConfigModalBody}>
             {previousVersionInfo && (
               <Alert
                 type="info"
                 content={`版本时间：${new Date(previousVersionInfo.createdAt).toLocaleString('zh-CN')}`}
-                className="mb-4"
+                className={styles.viewConfigVersionInfo}
               />
             )}
 
-            <div className="flex items-center justify-between mb-2">
-              <div className="flex items-center gap-2">
+            <div className={styles.viewConfigModalHeader}>
+              <div className={styles.viewConfigModalHeaderLeft}>
                 <Button
                   type={showDiff ? "secondary" : "primary"}
                   size="small"
@@ -2106,9 +2023,9 @@ export default function AdminDashboardPage() {
           okButtonProps={{ loading: changePasswordLoading }}
           style={{ width: 500 }}
         >
-          <div className="space-y-4">
+          <div className={styles.changePasswordForm}>
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
+              <label className={styles.changePasswordLabel}>
                 原密码
               </label>
               <Input.Password
@@ -2118,7 +2035,7 @@ export default function AdminDashboardPage() {
               />
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
+              <label className={styles.changePasswordLabel}>
                 新密码
               </label>
               <Input.Password
@@ -2128,7 +2045,7 @@ export default function AdminDashboardPage() {
               />
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
+              <label className={styles.changePasswordLabel}>
                 确认新密码
               </label>
               <Input.Password

@@ -9,6 +9,7 @@ import { About } from "@/components/home/about"
 import { Contact } from "@/components/home/contact"
 import { Footer } from "@/components/common/footer"
 import { loadInitialData } from "@/lib/initial-data"
+import styles from "./home.module.css"
 
 // 区块组件映射
 const sectionComponents: Record<string, React.ComponentType<{ data: any }>> = {
@@ -31,7 +32,7 @@ export default function Home() {
   const moduleData = data.moduleData || []
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className={styles.homeContainer}>
       <Header />
       <SidebarNav />
       <main>
