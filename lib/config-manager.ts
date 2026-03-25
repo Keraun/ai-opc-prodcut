@@ -17,7 +17,28 @@ export function getConfigPath(configType: string): string {
 }
 
 export function getTemplatePath(configType: string): string {
-  return path.join(TEMPLATES_DIR, `${configType}.json`)
+  const typeToFileMap: Record<string, string> = {
+    'site': 'site-config',
+    'navigation': 'site-navigation',
+    'footer': 'site-footer',
+    'seo': 'site-seo',
+    'common': 'site-common',
+    'theme': 'theme-config',
+    'custom': 'theme-custom',
+    'account': 'system-account',
+    'products': 'page-products',
+    'otherPages': 'page-other',
+    'homeBanner': 'home-banner',
+    'homeProducts': 'home-products',
+    'homeServices': 'home-services',
+    'homePricing': 'home-pricing',
+    'homeAbout': 'home-about',
+    'homeContact': 'home-contact',
+    'homePartners': 'home-partners',
+    'homeOrder': 'home-order'
+  }
+  const fileName = typeToFileMap[configType] || configType
+  return path.join(TEMPLATES_DIR, `${fileName}.json`)
 }
 
 export function getRuntimePath(configType: string): string {
@@ -73,12 +94,33 @@ export function readTemplate(configType: string): any {
 
 export function readAllConfigs(): Record<string, any> {
   const configs: Record<string, any> = {}
+  const fileToTypeMap: Record<string, string> = {
+    'site-config': 'site',
+    'site-navigation': 'navigation',
+    'site-footer': 'footer',
+    'site-seo': 'seo',
+    'site-common': 'common',
+    'theme-config': 'theme',
+    'theme-custom': 'custom',
+    'system-account': 'account',
+    'page-products': 'products',
+    'page-other': 'otherPages',
+    'home-banner': 'homeBanner',
+    'home-products': 'homeProducts',
+    'home-services': 'homeServices',
+    'home-pricing': 'homePricing',
+    'home-about': 'homeAbout',
+    'home-contact': 'homeContact',
+    'home-partners': 'homePartners',
+    'home-order': 'homeOrder'
+  }
   
   if (fs.existsSync(TEMPLATES_DIR)) {
     const templateFiles = fs.readdirSync(TEMPLATES_DIR).filter(file => file.endsWith('.json'))
     
     for (const file of templateFiles) {
-      const configType = file.replace('.json', '')
+      const baseName = file.replace('.json', '')
+      const configType = fileToTypeMap[baseName] || baseName
       configs[configType] = readConfig(configType)
     }
   }
