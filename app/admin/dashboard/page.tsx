@@ -555,6 +555,7 @@ export default function AdminDashboardPage() {
       <div id="config-container" className="flex gap-0 mb-4 relative" style={{ height: 'calc(100vh - 64px - 64px)' }}>
         <div style={{ width: `${leftWidth}%` }} className="flex-shrink-0">
           <Card
+            style={{ height: 'calc(100vh - 64px - 64px)' }}
             title={
               <div className="flex items-center justify-between">
                 <span className="text-lg font-semibold">{title}</span>
@@ -936,19 +937,7 @@ export default function AdminDashboardPage() {
             </div>
           </div>
           
-          <button
-            onClick={() => setSidebarCollapsed(!sidebarCollapsed)}
-            className="absolute top-1/2 -right-4 w-8 h-16 bg-white border border-gray-200 rounded-r-lg flex items-center justify-center hover:bg-gray-50 transition-colors shadow-md z-10"
-          >
-            <svg 
-              className={`w-4 h-4 text-gray-600 transition-transform duration-300 ${sidebarCollapsed ? 'rotate-180' : ''}`} 
-              fill="none" 
-              viewBox="0 0 24 24" 
-              stroke="currentColor"
-            >
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
-            </svg>
-          </button>
+
         </div>
 
         <div className="flex-1 overflow-auto bg-gray-50 h-full">
