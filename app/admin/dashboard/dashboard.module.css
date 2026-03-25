@@ -379,6 +379,29 @@
   margin-top: 8.0px;
 }
 
+.userDropdown {
+  padding: 8px;
+  background-color: #ffffff;
+  border-radius: 8px;
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 140px;
+}
+
+.userDropdownButton {
+  justify-content: flex-start !important;
+  width: 100%;
+  padding: 8px 12px;
+  border-radius: 6px;
+  transition: background-color 0.2s;
+}
+
+.userDropdownButton:hover {
+  background-color: #f3f4f6;
+}
+
 .mainLayout {
   display: flex;
   height: calc(100vh - 64.0px);
@@ -1309,6 +1332,29 @@
   font-size: 12.0px;
   color: #6b7280;
   margin-top: 8.0px;
+}
+
+.userDropdown {
+  padding: 8px;
+  background-color: #ffffff;
+  border-radius: 8px;
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 140px;
+}
+
+.userDropdownButton {
+  justify-content: flex-start !important;
+  width: 100%;
+  padding: 8px 12px;
+  border-radius: 6px;
+  transition: background-color 0.2s;
+}
+
+.userDropdownButton:hover {
+  background-color: #f3f4f6;
 }
 
 .mainLayout {

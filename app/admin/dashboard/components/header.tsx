@@ -1,7 +1,7 @@
 "use client"
 
 import { Button, Dropdown } from "@arco-design/web-react"
-import { IconUser, IconSettings, IconExport } from "@arco-design/web-react/icon"
+import { IconUser, IconSettings, IconExport, IconCustomerService } from "@arco-design/web-react/icon"
 import styles from "../dashboard.module.css"
 
 interface HeaderProps {
@@ -36,28 +36,28 @@ export function Header({ currentUser, onLogout, onChangePassword }: HeaderProps)
                   <div className={styles.qrContainer}>
                     <div className={styles.qrInner}>
                       <div className={styles.qrPlaceholder}>
-                        <span className={styles.qrPlaceholderText}>二维码</span>
+                        <span className={styles.qrPlaceholderText}>客服二维码</span>
                       </div>
                     </div>
                   </div>
-                  <p className={styles.qrHint}>扫码访问网站</p>
+                  <p className={styles.qrHint}>联系客服获取帮助</p>
                 </div>
               }
               position="br"
             >
-              <Button type="text" icon={<IconUser />}>
-                扫码访问
+              <Button type="text" icon={<IconCustomerService />}>
+                联系客服
               </Button>
             </Dropdown>
 
             <Dropdown
               droplist={
-                <div>
-                  <Button type="text" onClick={onChangePassword}>
+                <div className={styles.userDropdown}>
+                  <Button type="text" onClick={onChangePassword} className={styles.userDropdownButton}>
                     <IconSettings style={{ marginRight: 8 }} />
                     修改密码
                   </Button>
-                  <Button type="text" onClick={onLogout}>
+                  <Button type="text" onClick={onLogout} className={styles.userDropdownButton}>
                     <IconExport style={{ marginRight: 8 }} />
                     退出登录
                   </Button>

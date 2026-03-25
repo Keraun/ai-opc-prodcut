@@ -36,7 +36,7 @@ export async function GET(request: Request) {
   try {
     const schemaPath = path.join(
       process.cwd(),
-      'config/json/templates',
+      'config/json/form-schema',
       schemaMap[type]
     )
     
