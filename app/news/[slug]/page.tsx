@@ -64,56 +64,53 @@ export default function ArticleDetailPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      {/* Breadcrumb */}
-      <div className="bg-white border-b border-gray-200 py-4">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div className={styles.container}>
+      <Header />
+      
+      <div className={styles.breadcrumb}>
+        <div className={styles.breadcrumbContainer}>
           <button
             onClick={() => router.push('/news')}
-            className="flex items-center text-sm text-gray-600 hover:text-blue-600"
+            className={styles.backButton}
           >
-            <ArrowLeft className="w-4 h-4 mr-2" />
+            <svg className={styles.backIcon} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+            </svg>
             返回资讯列表
           </button>
         </div>
       </div>
 
-      {/* Article Content */}
-      <article className="py-12">
-        <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
-          {/* Title */}
-          <h1 className="text-3xl md:text-4xl font-bold text-gray-900 mb-6">
+      <article className={styles.article}>
+        <div className={styles.articleContainer}>
+          <h1 className={styles.articleTitle}>
             {article.title}
           </h1>
 
-          {/* Meta */}
-          <div className="flex items-center text-sm text-gray-500 mb-8">
-            <Calendar className="w-4 h-4 mr-2" />
+          <div className={styles.articleMeta}>
+            <svg className={styles.metaIcon} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+            </svg>
             <span>{article.date}</span>
             {article.author && (
-              <span className="mx-2">•</span>
-            )}
-            {article.author && (
-              <span>作者：{article.author}</span>
+              <>
+                <span className={styles.metaDivider}>•</span>
+                <span>作者：{article.author}</span>
+              </>
             )}
           </div>
 
-          {/* Tags */}
           {article.tags && article.tags.length > 0 && (
-            <div className="flex flex-wrap gap-2 mb-8">
+            <div className={styles.articleTags}>
               {article.tags.map((tag, index) => (
-                <span
-                  key={index}
-                  className="px-3 py-1 bg-blue-50 text-blue-700 rounded-full text-sm"
-                >
+                <Tag key={index} color="blue">
                   {tag}
-                </span>
+                </Tag>
               ))}
             </div>
           )}
 
-          {/* Content */}
-          <div className="prose max-w-none">
+          <div className={styles.articleContent}>
             {article.contentFormat === 'markdown' ? (
               <ReactMarkdown>{article.content}</ReactMarkdown>
             ) : (
@@ -122,6 +119,8 @@ export default function ArticleDetailPage() {
           </div>
         </div>
       </article>
+
+      <Footer />
     </div>
   )
 }
