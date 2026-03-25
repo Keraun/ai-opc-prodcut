@@ -1,0 +1,36 @@
+{
+  "title": {
+    "main": "关于",
+    "highlight": "创客AI"
+  },
+  "description": [
+    "创客AI专注于为个人创业者提供AI赋能服务",
+    "我们深知一人公司的挑战与机遇，致力于通过AI工具、课程和工作流，帮助创业者提升效率、降低成本、实现增长"
+  ],
+  "mission": {
+    "title": "使命",
+    "description": "让每一个创业者都能用上AI，实现业务自动化增长"
+  },
+  "vision": {
+    "title": "愿景",
+    "description": "成为最受信赖的AI一人公司服务平台"
+  },
+  "values": {
+    "title": "价值观",
+    "description": "客户第一、持续创新、简单可信赖"
+  },
+  "stats": [
+    {
+      "value": "1000+",
+      "label": "AI工具"
+    },
+    {
+      "value": "10万+",
+      "label": "服务用户"
+    },
+    {
+      "value": "99%",
+      "label": "满意度"
+    }
+  ]
+}

@@ -1,0 +1,49 @@
+{
+  "title": "选择适合你的计划",
+  "description": "无论你是个人创业者还是企业用户，我们都有适合你的AI解决方案",
+  "plans": [
+    {
+      "title": "免费版",
+      "price": "¥0",
+      "description": "适合个人用户和小型项目",
+      "features": [
+        "1000+ AI工具访问",
+        "基础工作流模板",
+        "社区支持",
+        "每月100次API调用"
+      ],
+      "buttonText": "开始免费使用",
+      "buttonLink": "/products"
+    },
+    {
+      "title": "专业版",
+      "price": "¥999",
+      "description": "适合专业用户和小型企业",
+      "features": [
+        "全部AI工具访问",
+        "高级工作流定制",
+        "优先技术支持",
+        "每月1000次API调用",
+        "AI GEO课程访问"
+      ],
+      "buttonText": "升级专业版",
+      "buttonLink": "/products",
+      "isPopular": true
+    },
+    {
+      "title": "企业版",
+      "price": "¥2999",
+      "description": "适合企业级用户和团队",
+      "features": [
+        "全部AI工具访问",
+        "企业级工作流定制",
+        "专属技术支持",
+        "无限制API调用",
+        "AI GEO课程访问",
+        "企业级安全保障"
+      ],
+      "buttonText": "联系销售",
+      "buttonLink": "/contact"
+    }
+  ]
+}

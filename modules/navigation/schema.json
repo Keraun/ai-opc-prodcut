@@ -1,0 +1,57 @@
+{
+  "title": "导航配置",
+  "description": "配置网站导航菜单",
+  "type": "object",
+  "properties": {
+    "main": {
+      "type": "array",
+      "title": "主导航菜单",
+      "items": {
+        "type": "object",
+        "properties": {
+          "label": {
+            "type": "string",
+            "title": "菜单名称",
+            "ui": {"widget": "input", "width": "100%"}
+          },
+          "href": {
+            "type": "string",
+            "title": "链接地址",
+            "ui": {"widget": "input", "width": "100%"}
+          }
+        }
+      },
+      "ui": {"widget": "array", "itemTitle": "菜单项", "width": "100%"}
+    },
+    "sidebar": {
+      "type": "array",
+      "title": "侧边栏导航",
+      "items": {
+        "type": "object",
+        "properties": {
+          "label": {
+            "type": "string",
+            "title": "菜单名称",
+            "ui": {"widget": "input", "width": "100%"}
+          },
+          "href": {
+            "type": "string",
+            "title": "链接地址",
+            "ui": {"widget": "input", "width": "100%"}
+          }
+        }
+      },
+      "ui": {"widget": "array", "itemTitle": "菜单项", "width": "100%"}
+    }
+  },
+  "ui": {
+    "layout": "vertical",
+    "labelAlign": "left",
+    "groups": [
+      {
+        "title": "导航配置",
+        "fields": ["main", "sidebar"]
+      }
+    ]
+  }
+}

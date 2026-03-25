@@ -1,53 +1,24 @@
 import { Header } from "@/components/common/header"
 import { SidebarNav } from "@/components/home/sidebar-nav"
-import { Hero } from "@/components/home/hero"
-import { Partner } from "@/components/home/partner"
-import { Products } from "@/components/home/products"
-import { Services } from "@/components/home/services"
-import { Pricing } from "@/components/home/pricing"
-import { About } from "@/components/home/about"
-import { Contact } from "@/components/home/contact"
 import { Footer } from "@/components/common/footer"
 import { loadInitialData } from "@/lib/initial-data"
+import { ModuleRenderer } from "@/modules/renderer"
+import { initializeModules } from "@/modules/init"
 import styles from "./home.module.css"
 
-// 区块组件映射
-const sectionComponents: Record<string, React.ComponentType<{ data: any }>> = {
-  hero: Hero,
-  partner: Partner,
-  products: Products,
-  services: Services,
-  pricing: Pricing,
-  about: About,
-  contact: Contact
-}
+initializeModules()
 
 export default function Home() {
-  // 服务端直接读取配置（SSR）
   const initialData = loadInitialData()
   const { data } = initialData
-  
-  // 获取模块顺序和数据
-  const module = data.module || []
-  const moduleData = data.moduleData || []
+  const modules = data.modules || []
 
   return (
     <div className={styles.homeContainer}>
       <Header />
       <SidebarNav />
       <main>
-        {module.map((moduleId: string, index: number) => {
-          const Component = sectionComponents[moduleId]
-          if (!Component) return null
-          
-          const moduleConfig = moduleData[index]?.data || {}
-          
-          return (
-            <div key={moduleId}>
-              <Component data={moduleConfig} />
-            </div>
-          )
-        })}
+        <ModuleRenderer modules={modules} />
       </main>
       <Footer />
     </div>

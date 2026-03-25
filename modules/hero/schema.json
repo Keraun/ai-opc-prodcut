@@ -1,0 +1,140 @@
+{
+  "title": "Hero 区块配置",
+  "description": "配置首页 Hero 区域的内容",
+  "type": "object",
+  "properties": {
+    "layout": {
+      "type": "string",
+      "title": "布局类型",
+      "default": "layout1",
+      "enum": ["layout1", "layout2", "layout3"],
+      "ui": {
+        "widget": "select",
+        "width": "100%"
+      }
+    },
+    "badge": {
+      "type": "string",
+      "title": "徽章文本",
+      "ui": {
+        "widget": "input",
+        "width": "100%"
+      }
+    },
+    "title": {
+      "type": "object",
+      "title": "标题配置",
+      "properties": {
+        "main": {
+          "type": "string",
+          "title": "主标题",
+          "ui": {
+            "widget": "input",
+            "width": "100%"
+          }
+        },
+        "sub": {
+          "type": "string",
+          "title": "副标题",
+          "ui": {
+            "widget": "input",
+            "width": "100%"
+          }
+        }
+      }
+    },
+    "subtitle": {
+      "type": "string",
+      "title": "描述文本",
+      "ui": {
+        "widget": "textarea",
+        "rows": 3,
+        "width": "100%"
+      }
+    },
+    "buttons": {
+      "type": "object",
+      "title": "按钮配置",
+      "properties": {
+        "primary": {
+          "type": "object",
+          "title": "主按钮",
+          "properties": {
+            "text": {
+              "type": "string",
+              "title": "按钮文本",
+              "ui": {
+                "widget": "input",
+                "width": "100%"
+              }
+            },
+            "href": {
+              "type": "string",
+              "title": "链接地址",
+              "ui": {
+                "widget": "input",
+                "width": "100%"
+              }
+            }
+          }
+        },
+        "secondary": {
+          "type": "object",
+          "title": "次按钮",
+          "properties": {
+            "text": {
+              "type": "string",
+              "title": "按钮文本",
+              "ui": {
+                "widget": "input",
+                "width": "100%"
+              }
+            },
+            "href": {
+              "type": "string",
+              "title": "链接地址",
+              "ui": {
+                "widget": "input",
+                "width": "100%"
+              }
+            }
+          }
+        }
+      }
+    },
+    "featurePills": {
+      "type": "array",
+      "title": "特性标签",
+      "items": {
+        "type": "string"
+      },
+      "ui": {
+        "widget": "tags",
+        "placeholder": "输入特性后按回车添加",
+        "width": "100%"
+      }
+    }
+  },
+  "ui": {
+    "layout": "vertical",
+    "labelAlign": "left",
+    "groups": [
+      {
+        "title": "基础配置",
+        "fields": ["layout", "badge"]
+      },
+      {
+        "title": "标题与描述",
+        "fields": ["title", "subtitle"]
+      },
+      {
+        "title": "按钮配置",
+        "fields": ["buttons"]
+      },
+      {
+        "title": "特性标签",
+        "fields": ["featurePills"]
+      }
+    ]
+  }
+}
