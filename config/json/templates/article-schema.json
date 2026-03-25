@@ -1,0 +1,171 @@
+{
+  "title": "文章配置表单",
+  "description": "用于创建和编辑文章的动态表单配置",
+  "type": "object",
+  "properties": {
+    "title": {
+      "type": "string",
+      "title": "文章标题",
+      "description": "文章的标题,将显示在文章列表和详情页",
+      "required": true,
+      "minLength": 2,
+      "maxLength": 200,
+      "ui": {
+        "widget": "input",
+        "placeholder": "请输入文章标题",
+        "width": "100%"
+      }
+    },
+    "slug": {
+      "type": "string",
+      "title": "URL别名",
+      "description": "用于生成文章的URL路径,只能包含字母、数字和连字符",
+      "required": true,
+      "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$",
+      "ui": {
+        "widget": "input",
+        "placeholder": "例如: my-article-title",
+        "width": "100%"
+      }
+    },
+    "summary": {
+      "type": "string",
+      "title": "文章摘要",
+      "description": "文章的简短描述,将显示在文章列表中",
+      "required": true,
+      "minLength": 10,
+      "maxLength": 500,
+      "ui": {
+        "widget": "textarea",
+        "placeholder": "请输入文章摘要",
+        "rows": 3,
+        "width": "100%"
+      }
+    },
+    "content": {
+      "type": "string",
+      "title": "文章内容",
+      "description": "文章的正文内容,支持HTML或Markdown格式",
+      "required": true,
+      "ui": {
+        "widget": "textarea",
+        "placeholder": "请输入文章内容",
+        "rows": 15,
+        "width": "100%"
+      }
+    },
+    "contentFormat": {
+      "type": "string",
+      "title": "内容格式",
+      "description": "文章内容的格式类型",
+      "required": true,
+      "default": "markdown",
+      "enum": [
+        {
+          "value": "markdown",
+          "label": "Markdown"
+        },
+        {
+          "value": "html",
+          "label": "HTML"
+        }
+      ],
+      "ui": {
+        "widget": "select",
+        "placeholder": "请选择内容格式",
+        "width": "50%"
+      }
+    },
+    "date": {
+      "type": "string",
+      "title": "发布日期",
+      "description": "文章的发布日期",
+      "required": true,
+      "format": "date",
+      "ui": {
+        "widget": "date",
+        "placeholder": "请选择发布日期",
+        "width": "50%"
+      }
+    },
+    "author": {
+      "type": "string",
+      "title": "作者",
+      "description": "文章的作者名称",
+      "required": false,
+      "ui": {
+        "widget": "input",
+        "placeholder": "请输入作者名称",
+        "width": "50%"
+      }
+    },
+    "tags": {
+      "type": "array",
+      "title": "标签",
+      "description": "文章的标签,用于分类和搜索",
+      "required": false,
+      "items": {
+        "type": "string"
+      },
+      "ui": {
+        "widget": "tags",
+        "placeholder": "输入标签后按回车添加",
+        "width": "100%"
+      }
+    },
+    "image": {
+      "type": "string",
+      "title": "封面图片",
+      "description": "文章的封面图片URL",
+      "required": false,
+      "format": "uri",
+      "ui": {
+        "widget": "upload",
+        "accept": "image/*",
+        "placeholder": "上传封面图片",
+        "width": "100%"
+      }
+    },
+    "status": {
+      "type": "string",
+      "title": "发布状态",
+      "description": "文章的发布状态",
+      "required": true,
+      "default": "draft",
+      "enum": [
+        {
+          "value": "draft",
+          "label": "草稿"
+        },
+        {
+          "value": "published",
+          "label": "已发布"
+        }
+      ],
+      "ui": {
+        "widget": "select",
+        "placeholder": "请选择发布状态",
+        "width": "50%"
+      }
+    }
+  },
+  "required": ["title", "slug", "summary", "content", "contentFormat", "date", "status"],
+  "ui": {
+    "layout": "vertical",
+    "labelAlign": "left",
+    "groups": [
+      {
+        "title": "基本信息",
+        "fields": ["title", "slug", "summary", "date", "author", "status"]
+      },
+      {
+        "title": "内容信息",
+        "fields": ["contentFormat", "content"]
+      },
+      {
+        "title": "附加信息",
+        "fields": ["tags", "image"]
+      }
+    ]
+  }
+}

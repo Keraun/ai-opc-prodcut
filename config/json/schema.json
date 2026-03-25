@@ -316,5 +316,25 @@
         "darkMode": "暗色模式配置"
       }
     }
+  },
+  "articles": {
+    "article": {
+      "description": "文章配置",
+      "type": "object",
+      "required": true,
+      "fields": {
+        "id": "文章唯一标识",
+        "title": "文章标题",
+        "slug": "URL别名（用于生成文章URL路径）",
+        "summary": "文章摘要",
+        "content": "文章内容",
+        "contentFormat": "内容格式（markdown或html）",
+        "date": "发布日期",
+        "author": "作者名称",
+        "tags": "标签数组",
+        "image": "封面图片URL",
+        "status": "发布状态（published或draft）"
+      }
+    }
   }
 }

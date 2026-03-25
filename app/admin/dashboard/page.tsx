@@ -16,7 +16,9 @@ import {
   SystemManagement,
   Sidebar,
   Header,
-  AccountInfo
+  AccountInfo,
+  ArticlesManagement,
+  ConfigFormEditor
 } from "./components"
 
 interface ThemeColors {
@@ -883,10 +885,19 @@ export default function AdminDashboardPage() {
               />
             )}
 
-            {activeMenu === 'site' && renderConfigCard(
-              "站点配置",
-              "site",
-              "包含站点名称、描述、联系方式等基本信息"
+            {activeMenu === 'site' && (
+              <ConfigFormEditor
+                configType="site"
+                title="站点配置"
+                description="包含站点名称、描述、联系方式等基本信息"
+                configData={configs.site}
+                onSave={async (data) => {
+                  setConfigs(prev => ({ ...prev, site: data }))
+                  await handleSave('site')
+                }}
+                hasChanges={hasConfigChanges('site')}
+                loading={loading}
+              />
             )}
 
             {activeMenu === 'common' && renderConfigCard(
@@ -966,6 +977,8 @@ export default function AdminDashboardPage() {
               "products",
               "包含产品分类、产品列表等产品列表配置"
             )}
+
+            {activeMenu === 'articles' && <ArticlesManagement />}
 
             {activeMenu === 'seo' && renderConfigCard(
               "站点SEO配置",
