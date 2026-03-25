@@ -7,6 +7,7 @@ import { IconSave, IconExport, IconEdit, IconLock, IconCheck, IconInfoCircle, Ic
 import { toast, Toaster } from "sonner"
 import { compareJSON, getLineClass, hasChanges } from "@/lib/json-compare"
 import { useTheme } from "@/components/theme-provider"
+import styles from "./dashboard.module.css"
 
 interface ThemeColors {
   primary: string
@@ -75,18 +76,18 @@ const JSONViewerWithLineNumbers = ({
   const lines = content.split('\n')
 
   return (
-    <div className="bg-gray-50 rounded-lg overflow-auto font-mono text-sm" style={{ maxHeight }}>
+    <div className={styles.jsonViewer} style={{ maxHeight }}>
       {lines.map((line, index) => {
         const lineNumber = index + 1
         const diffLine = diffLines?.find(d => d.lineNumber === lineNumber)
         const lineClass = diffLine ? getLineClass(diffLine.type) : ''
 
         return (
-          <div key={index} className={`flex ${lineClass}`}>
-            <div className="flex-shrink-0 w-12 px-2 py-0.5 text-right text-gray-400 select-none border-r border-gray-200 bg-gray-100">
+          <div key={index} className={`${styles.jsonLine} ${lineClass}`}>
+            <div className={styles.jsonLineNumber}>
               {lineNumber}
             </div>
-            <div className="flex-1 px-4 py-0.5 whitespace-pre-wrap break-words">
+            <div className={styles.jsonLineContent}>
               {line || ' '}
             </div>
           </div>
@@ -114,16 +115,16 @@ const JSONDiffViewer = ({
   const { oldLines, newLines } = compareJSON(oldObj, newObj)
 
   return (
-    <div className="grid grid-cols-2 gap-4">
+    <div className={styles.diffContainer}>
       <div>
-        <div className="mb-2 font-semibold text-gray-700">{oldTitle}</div>
-        <div className="bg-gray-50 rounded-lg overflow-auto font-mono text-sm" style={{ maxHeight }}>
+        <div className={styles.diffTitle}>{oldTitle}</div>
+        <div className={styles.jsonViewer} style={{ maxHeight }}>
           {oldLines.map((line, index) => (
-            <div key={index} className={`flex ${getLineClass(line.type)}`}>
-              <div className="flex-shrink-0 w-12 px-2 py-0.5 text-right text-gray-400 select-none border-r border-gray-200 bg-gray-100">
+            <div key={index} className={`${styles.jsonLine} ${getLineClass(line.type)}`}>
+              <div className={styles.jsonLineNumber}>
                 {line.lineNumber}
               </div>
-              <div className="flex-1 px-4 py-0.5 whitespace-pre-wrap break-words">
+              <div className={styles.jsonLineContent}>
                 {line.content || ' '}
               </div>
             </div>
@@ -131,14 +132,14 @@ const JSONDiffViewer = ({
         </div>
       </div>
       <div>
-        <div className="mb-2 font-semibold text-gray-700">{newTitle}</div>
-        <div className="bg-gray-50 rounded-lg overflow-auto font-mono text-sm" style={{ maxHeight }}>
+        <div className={styles.diffTitle}>{newTitle}</div>
+        <div className={styles.jsonViewer} style={{ maxHeight }}>
           {newLines.map((line, index) => (
-            <div key={index} className={`flex ${getLineClass(line.type)}`}>
-              <div className="flex-shrink-0 w-12 px-2 py-0.5 text-right text-gray-400 select-none border-r border-gray-200 bg-gray-100">
+            <div key={index} className={`${styles.jsonLine} ${getLineClass(line.type)}`}>
+              <div className={styles.jsonLineNumber}>
                 {line.lineNumber}
               </div>
-              <div className="flex-1 px-4 py-0.5 whitespace-pre-wrap break-words">
+              <div className={styles.jsonLineContent}>
                 {line.content || ' '}
               </div>
             </div>
@@ -696,14 +697,15 @@ export default function AdminDashboardPage() {
     const versionInfo = versionInfos[configType]
 
     return (
-      <div id="config-container" className="flex gap-0 mb-4 relative" style={{ height: 'calc(100vh - 64px - 64px)' }}>
-        <div style={{ width: showSchema ? `${leftWidth}%` : '100%' }} className="flex-shrink-0">
+      <div id="config-container" className={styles.configContainer}>
+        <div style={{ width: showSchema ? `${leftWidth}%` : '100%' }} className={styles.configLeft}>
           <Card
-            style={{ height: 'calc(100vh - 64px - 64px)' }}
+            style={{ height: 'calc(100vh - 8rem)' }}
+            className={styles.configCard}
             title={
-              <div className="flex items-center justify-between">
-                <span className="text-lg font-semibold">{title}</span>
-                <div className="flex gap-2">
+              <div className={styles.cardHeader}>
+                <span className={styles.cardTitle}>{title}</span>
+                <div className={styles.cardActions}>
                   <Button
                     size="small"
                     type="text"
@@ -747,15 +749,15 @@ export default function AdminDashboardPage() {
               </div>
             }
           >
-            <div className="mb-4">
-              <p className="text-sm text-gray-500">{description}</p>
+            <div className={styles.configContent}>
+              <p className={styles.configValue}>{description}</p>
               {versionInfo && (
-                <p className="text-xs text-gray-400 mt-1">
+                <p className={styles.versionInfo}>
                   最后更新时间：{new Date(versionInfo.createdAt).toLocaleString('zh-CN')}
                 </p>
               )}
             </div>
-            <pre className="bg-gray-50 p-4 rounded-lg overflow-auto max-h-96 text-sm">
+            <pre className={styles.jsonViewer} style={{ maxHeight: '24rem', padding: '1rem' }}>
               {JSON.stringify(configs[configType as keyof typeof configs], null, 2)}
             </pre>
           </Card>
@@ -764,43 +766,42 @@ export default function AdminDashboardPage() {
         {showSchema && (
           <>
             <div
-              className={`flex-shrink-0 w-1 bg-gray-200 hover:bg-blue-400 cursor-col-resize transition-colors relative group ${isDragging ? 'bg-blue-500' : ''}`}
+              className={`${styles.resizer} ${isDragging ? styles.resizerActive : ''}`}
               onMouseDown={handleMouseDown}
-              style={{ margin: '0 8px' }}
+              style={{ margin: '0 0.5rem' }}
             >
-              <div className="absolute inset-y-0 -left-1 -right-1" />
-              <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-1 h-12 bg-gray-300 rounded group-hover:bg-blue-500 transition-colors" />
+              <div style={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', width: '0.25rem', height: '3rem', backgroundColor: '#d1d5db', borderRadius: '0.25rem' }} />
             </div>
 
-            <div style={{ width: `${100 - leftWidth}%` }} className="flex-shrink-0">
+            <div style={{ width: `${100 - leftWidth}%` }} className={styles.configRight}>
               {schemaData && (
                 <Card
                   title={
-                    <div className="flex items-center gap-2">
-                      <IconInfoCircle className="text-blue-600" />
-                      <span className="text-lg font-semibold">字段说明</span>
+                    <div className={styles.configItem}>
+                      <IconInfoCircle style={{ color: '#2563eb' }} />
+                      <span className={styles.cardTitle}>字段说明</span>
                     </div>
                   }
                 >
-                  <div className="space-y-4 max-h-[500px] overflow-auto">
+                  <div className={styles.configContent} style={{ maxHeight: '31.25rem', overflow: 'auto' }}>
                     {Object.entries(schemaData).map(([key, value]: [string, any]) => (
-                      <div key={key} className="border-b border-gray-100 pb-3 last:border-b-0 last:pb-0">
-                        <div className="flex items-center gap-2 mb-1">
-                          <h4 className="text-sm font-semibold text-gray-900">{key}</h4>
+                      <div key={key} style={{ borderBottom: '1px solid #f3f4f6', paddingBottom: '0.75rem', marginBottom: '0.75rem' }}>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.25rem' }}>
+                          <h4 className={styles.configLabel}>{key}</h4>
                           {value.required && (
-                            <span className="px-1.5 py-0.5 text-xs bg-red-50 text-red-600 rounded">必填</span>
+                            <span style={{ padding: '0.125rem 0.375rem', fontSize: '0.75rem', backgroundColor: '#fef2f2', color: '#dc2626', borderRadius: '0.25rem' }}>必填</span>
                           )}
                           {value.type && (
-                            <span className="px-1.5 py-0.5 text-xs bg-blue-50 text-blue-600 rounded">{value.type}</span>
+                            <span style={{ padding: '0.125rem 0.375rem', fontSize: '0.75rem', backgroundColor: '#eff6ff', color: '#2563eb', borderRadius: '0.25rem' }}>{value.type}</span>
                           )}
                         </div>
-                        <p className="text-xs text-gray-600 mb-1">{value.description}</p>
+                        <p className={styles.configValue}>{value.description}</p>
                         {value.fields && (
-                          <div className="ml-2 mt-1 space-y-0.5">
+                          <div style={{ marginLeft: '0.5rem', marginTop: '0.25rem' }}>
                             {Object.entries(value.fields).map(([fieldKey, fieldDesc]: [string, any]) => (
-                              <div key={fieldKey} className="flex items-start gap-1 text-xs">
-                                <span className="font-medium text-gray-700 min-w-[80px]">{fieldKey}:</span>
-                                <span className="text-gray-600">{fieldDesc}</span>
+                              <div key={fieldKey} style={{ display: 'flex', alignItems: 'flex-start', gap: '0.25rem', fontSize: '0.75rem' }}>
+                                <span style={{ fontWeight: 500, color: '#374151', minWidth: '5rem' }}>{fieldKey}:</span>
+                                <span className={styles.configValue}>{fieldDesc}</span>
                               </div>
                             ))}
                           </div>
@@ -933,23 +934,23 @@ export default function AdminDashboardPage() {
 
   const renderSystemManagement = () => {
     return (
-      <div className="p-6">
+      <div className={styles.content}>
         <Card
           title={
-            <div className="flex items-center gap-2">
-              <IconSettings className="text-blue-600" />
-              <span className="text-lg font-semibold">系统管理</span>
+            <div className={styles.configItem}>
+              <IconSettings style={{ color: '#2563eb' }} />
+              <span className={styles.cardTitle}>系统管理</span>
             </div>
           }
         >
-          <div className="space-y-6">
-            <div className="p-6 bg-gray-50 rounded-lg">
-              <h3 className="text-lg font-semibold mb-4">性能配置</h3>
-              <div className="space-y-4">
-                <div className="flex items-center justify-between">
-                  <div className="flex-1">
-                    <h4 className="font-medium text-gray-900 mb-1">配置缓存</h4>
-                    <p className="text-sm text-gray-600">启用配置缓存可以提高系统性能，但可能导致配置更新延迟</p>
+          <div className={styles.configContent}>
+            <div style={{ padding: '1.5rem', backgroundColor: '#f9fafb', borderRadius: '0.5rem' }}>
+              <h3 className={styles.cardTitle} style={{ marginBottom: '1rem' }}>性能配置</h3>
+              <div className={styles.configContent}>
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                  <div style={{ flex: 1 }}>
+                    <h4 className={styles.configLabel} style={{ marginBottom: '0.25rem' }}>配置缓存</h4>
+                    <p className={styles.configValue}>启用配置缓存可以提高系统性能，但可能导致配置更新延迟</p>
                   </div>
                   <Switch
                     checked={configs.site?.cache?.enabled ?? true}
@@ -989,11 +990,11 @@ export default function AdminDashboardPage() {
               </div>
             </div>
 
-            <div className="p-6 bg-gray-50 rounded-lg">
-              <h3 className="text-lg font-semibold mb-4">配置管理</h3>
-              <div className="space-y-4">
-                <p className="text-gray-600">通过以下功能可以导出或导入配置，用于备份和恢复系统配置。</p>
-                <div className="flex gap-4">
+            <div style={{ padding: '1.5rem', backgroundColor: '#f9fafb', borderRadius: '0.5rem' }}>
+              <h3 className={styles.cardTitle} style={{ marginBottom: '1rem' }}>配置管理</h3>
+              <div className={styles.configContent}>
+                <p className={styles.configValue}>通过以下功能可以导出或导入配置，用于备份和恢复系统配置。</p>
+                <div style={{ display: 'flex', gap: '1rem' }}>
                   <Button
                     type="primary"
                     icon={<IconExport />}
@@ -1006,14 +1007,14 @@ export default function AdminDashboardPage() {
                       type="file"
                       accept=".zip"
                       onChange={handleImportConfig}
-                      className="hidden"
+                      style={{ display: 'none' }}
                       id="config-import"
                     />
                     <label
                       htmlFor="config-import"
-                      className="inline-flex items-center justify-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-gray-700 hover:bg-gray-800 transition-colors cursor-pointer"
+                      style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center', padding: '0.5rem 1rem', border: '1px solid transparent', fontSize: '0.875rem', fontWeight: 500, borderRadius: '0.375rem', color: 'white', backgroundColor: '#374151', cursor: 'pointer', transition: 'background-color 0.2s' }}
                     >
-                      <IconFile className="mr-2" />
+                      <IconFile style={{ marginRight: '0.5rem' }} />
                       导入配置
                     </label>
                   </div>
@@ -1021,21 +1022,22 @@ export default function AdminDashboardPage() {
               </div>
             </div>
 
-            <div className="p-6 bg-red-50 rounded-lg border-2 border-red-200">
-              <h3 className="text-lg font-semibold mb-4 text-red-800">危险区域</h3>
-              <div className="space-y-4">
+            <div style={{ padding: '1.5rem', backgroundColor: '#fef2f2', borderRadius: '0.5rem', border: '2px solid #fecaca' }}>
+              <h3 className={styles.cardTitle} style={{ marginBottom: '1rem', color: '#991b1b' }}>危险区域</h3>
+              <div className={styles.configContent}>
                 <Alert
                   type="error"
                   title="警告"
                   content="以下操作具有破坏性，请谨慎使用。建议在执行前先导出配置备份。"
+                  className={styles.alertWarning}
                 />
-                <div className="flex gap-4">
+                <div style={{ display: 'flex', gap: '1rem' }}>
                   <Button
                     status="danger"
                     icon={<IconUndo />}
                     onClick={handleResetWebsite}
                     loading={loading}
-                    className="!bg-red-500 !text-white hover:!bg-red-600 !border-red-500"
+                    style={{ backgroundColor: '#ef4444', color: 'white', borderColor: '#ef4444' }}
                   >
                     一键还原网站
                   </Button>
@@ -1052,21 +1054,21 @@ export default function AdminDashboardPage() {
     <>
       <Toaster position="top-center" richColors />
 
-      <div className="min-h-screen bg-gray-50">
+      <div className={styles.container}>
         {mustChangePassword && (
-          <div className="bg-red-50 border-b-2 border-red-400">
-            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
-              <div className="flex items-start gap-3">
-                <div className="flex-shrink-0">
-                  <svg className="h-6 w-6 text-red-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <div style={{ backgroundColor: '#fef2f2', borderBottom: '2px solid #f87171' }}>
+            <div style={{ maxWidth: '80rem', margin: '0 auto', padding: '1rem 1.5rem' }}>
+              <div style={{ display: 'flex', alignItems: 'flex-start', gap: '0.75rem' }}>
+                <div style={{ flexShrink: 0 }}>
+                  <svg style={{ height: '1.5rem', width: '1.5rem', color: '#dc2626' }} fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
                   </svg>
                 </div>
-                <div className="flex-1">
-                  <h3 className="text-lg font-semibold text-red-800 mb-1">
+                <div style={{ flex: 1 }}>
+                  <h3 style={{ fontSize: '1.125rem', fontWeight: 600, color: '#991b1b', marginBottom: '0.25rem' }}>
                     安全提示
                   </h3>
-                  <p className="text-red-700 mb-2">
+                  <p style={{ color: '#b91c1c', marginBottom: '0.5rem' }}>
                     这是您首次登录，请立即修改密码以确保账户安全。
                   </p>
                 </div>
@@ -1074,7 +1076,7 @@ export default function AdminDashboardPage() {
                   type="primary"
                   status="danger"
                   onClick={() => setShowChangePassword(true)}
-                  className="flex-shrink-0"
+                  style={{ flexShrink: 0 }}
                 >
                   立即修改密码
                 </Button>
@@ -1082,34 +1084,34 @@ export default function AdminDashboardPage() {
             </div>
           </div>
         )}
-        <div className="bg-white border-b border-gray-200 shadow-sm">
-          <div className="px-6">
-            <div className="flex items-center justify-between h-16">
-              <div className="flex items-center gap-3">
-                <div className="w-9 h-9 rounded-lg bg-gradient-to-br from-blue-500 to-blue-600 flex items-center justify-center shadow-sm">
-                  <svg className="w-5 h-5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <div className={styles.header}>
+          <div style={{ padding: '0 1.5rem' }}>
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', height: '4rem' }}>
+              <div className={styles.headerLeft}>
+                <div style={{ width: '2.25rem', height: '2.25rem', borderRadius: '0.5rem', background: 'linear-gradient(135deg, #3b82f6, #2563eb)', display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: '0 1px 2px 0 rgba(0, 0, 0, 0.05)' }}>
+                  <svg style={{ width: '1.25rem', height: '1.25rem', color: 'white' }} fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
                   </svg>
                 </div>
-                <div className="flex items-center gap-2">
-                  <h1 className="text-sm font-bold text-gray-900">管理后台</h1>
-                  <span className="text-xs text-gray-400">|</span>
-                  <p className="text-xs text-gray-500">创客AI</p>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                  <h1 style={{ fontSize: '0.875rem', fontWeight: 700, color: '#111827' }}>管理后台</h1>
+                  <span style={{ fontSize: '0.75rem', color: '#9ca3af' }}>|</span>
+                  <p style={{ fontSize: '0.75rem', color: '#6b7280' }}>创客AI</p>
                 </div>
               </div>
-              <div className="flex items-center gap-3">
+              <div className={styles.headerRight}>
                 <Dropdown
                   droplist={
-                    <div className="p-4 bg-white rounded-lg shadow-lg">
-                      <div className="w-40 h-40 bg-gradient-to-br from-gray-50 to-gray-100 rounded-xl flex items-center justify-center border-2 border-gray-200">
-                        <div className="text-center">
-                          <div className="w-32 h-32 bg-white rounded-lg flex items-center justify-center">
-                            <span className="text-xs text-gray-400">客服二维码</span>
+                    <div style={{ padding: '1rem', backgroundColor: 'white', borderRadius: '0.5rem', boxShadow: '0 10px 15px -3px rgba(0, 0, 0, 0.1)' }}>
+                      <div style={{ width: '10rem', height: '10rem', background: 'linear-gradient(135deg, #f9fafb, #f3f4f6)', borderRadius: '0.75rem', display: 'flex', alignItems: 'center', justifyContent: 'center', border: '2px solid #e5e7eb' }}>
+                        <div style={{ textAlign: 'center' }}>
+                          <div style={{ width: '8rem', height: '8rem', backgroundColor: 'white', borderRadius: '0.5rem', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                            <span style={{ fontSize: '0.75rem', color: '#9ca3af' }}>客服二维码</span>
                           </div>
                         </div>
                       </div>
-                      <p className="text-center text-xs text-gray-500 mt-2">技术问题可扫码联系客服</p>
+                      <p style={{ textAlign: 'center', fontSize: '0.75rem', color: '#6b7280', marginTop: '0.5rem' }}>技术问题可扫码联系客服</p>
                     </div>
                   }
                   trigger="hover"
@@ -1117,7 +1119,7 @@ export default function AdminDashboardPage() {
                 >
                   <Button
                     type="text"
-                    className="!text-gray-700 hover:!text-blue-600 hover:!bg-blue-50"
+                    style={{ color: '#374151' }}
                     icon={<IconCustomerService />}
                   >
                     联系客服
@@ -1125,27 +1127,27 @@ export default function AdminDashboardPage() {
                 </Dropdown>
                 <Button
                   type="text"
-                  className="!text-gray-700 hover:!text-blue-600 hover:!bg-blue-50"
+                  style={{ color: '#374151' }}
                   icon={<IconQuestionCircle />}
                   onClick={() => window.open('https://help.makerai.com', '_blank')}
                 >
                   帮助文档
                 </Button>
                 <Button
-                  className="!bg-blue-500 !text-white hover:!bg-blue-600 !border-blue-500"
+                  style={{ backgroundColor: '#3b82f6', color: 'white', borderColor: '#3b82f6' }}
                   onClick={() => window.open('/', '_blank')}
                 >
                   打开官网
                 </Button>
                 <Button
-                  className="!bg-gray-100 !text-gray-700 hover:!bg-gray-200 !border-gray-200"
+                  style={{ backgroundColor: '#f3f4f6', color: '#374151', borderColor: '#e5e7eb' }}
                   icon={<IconLock />}
                   onClick={() => setShowChangePassword(true)}
                 >
                   修改密码
                 </Button>
                 <Button
-                  className="!bg-red-50 !text-red-600 hover:!bg-red-100 !border-red-200"
+                  style={{ backgroundColor: '#fef2f2', color: '#dc2626', borderColor: '#fecaca' }}
                   icon={<IconExport />}
                   onClick={handleLogout}
                 >
@@ -1156,27 +1158,23 @@ export default function AdminDashboardPage() {
           </div>
         </div>
 
-        <div className="flex" style={{ height: 'calc(100vh - 64px)' }}>
-          <div className={`${sidebarCollapsed ? 'w-16' : 'w-64'} bg-white border-r border-gray-200 transition-all duration-300 flex-shrink-0 relative`}>
-            <div className="h-full overflow-y-auto">
-              <div className="p-4">
-                <nav className="space-y-1">
+        <div style={{ display: 'flex', height: 'calc(100vh - 4rem)' }}>
+          <div className={`${sidebarCollapsed ? styles.sidebarCollapsed : styles.sidebar}`}>
+            <div style={{ height: '100%', overflowY: 'auto' }}>
+              <div style={{ padding: '1rem' }}>
+                <nav style={{ display: 'flex', flexDirection: 'column', gap: '0.25rem' }}>
                   {/* 控制台 */}
                   <button
                     onClick={() => handleMenuClick('accountInfo')}
-                    className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-left transition-all ${activeMenu === 'accountInfo'
-                        ? 'bg-blue-50 text-blue-700 font-medium'
-                        : 'text-gray-700 hover:bg-gray-50'
-                      }`}
+                    className={`${styles.menuItem} ${activeMenu === 'accountInfo' ? styles.menuItemActive : ''}`}
                   >
-                    <IconUser className="text-lg flex-shrink-0" />
-                    {!sidebarCollapsed && <span className="text-sm">控制台</span>}
+                    <IconUser className={styles.menuIcon} />
+                    {!sidebarCollapsed && <span className={styles.menuText}>控制台</span>}
                   </button>
 
-                  {/* 站点管理 */}
-                  <div className="pt-4 pb-2">
+                  <div style={{ paddingTop: '1rem', paddingBottom: '0.5rem' }}>
                     {!sidebarCollapsed && (
-                      <div className="px-3 text-xs font-semibold text-gray-400 uppercase tracking-wider">
+                      <div style={{ padding: '0 0.75rem', fontSize: '0.75rem', fontWeight: 600, color: '#9ca3af', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
                         站点管理
                       </div>
                     )}
@@ -1184,205 +1182,149 @@ export default function AdminDashboardPage() {
 
                   <button
                     onClick={() => handleMenuClick('site')}
-                    className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-left transition-all ${activeMenu === 'site'
-                        ? 'bg-blue-50 text-blue-700 font-medium'
-                        : 'text-gray-700 hover:bg-gray-50'
-                      }`}
+                    className={`${styles.menuItem} ${activeMenu === 'site' ? styles.menuItemActive : ''}`}
                   >
-                    <IconHome className="text-lg flex-shrink-0" />
-                    {!sidebarCollapsed && <span className="text-sm">站点基础配置</span>}
+                    <IconHome className={styles.menuIcon} />
+                    {!sidebarCollapsed && <span className={styles.menuText}>站点基础配置</span>}
                   </button>
 
                   <button
                     onClick={() => handleMenuClick('account')}
-                    className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-left transition-all ${activeMenu === 'account'
-                        ? 'bg-blue-50 text-blue-700 font-medium'
-                        : 'text-gray-700 hover:bg-gray-50'
-                      }`}
+                    className={`${styles.menuItem} ${activeMenu === 'account' ? styles.menuItemActive : ''}`}
                   >
-                    <IconUser className="text-lg flex-shrink-0" />
-                    {!sidebarCollapsed && <span className="text-sm">站点账号配置</span>}
+                    <IconUser className={styles.menuIcon} />
+                    {!sidebarCollapsed && <span className={styles.menuText}>站点账号配置</span>}
                   </button>
 
                   <button
                     onClick={() => handleMenuClick('navigation')}
-                    className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-left transition-all ${activeMenu === 'navigation'
-                        ? 'bg-blue-50 text-blue-700 font-medium'
-                        : 'text-gray-700 hover:bg-gray-50'
-                      }`}
+                    className={`${styles.menuItem} ${activeMenu === 'navigation' ? styles.menuItemActive : ''}`}
                   >
-                    <IconNav className="text-lg flex-shrink-0" />
-                    {!sidebarCollapsed && <span className="text-sm">顶部导航配置</span>}
+                    <IconNav className={styles.menuIcon} />
+                    {!sidebarCollapsed && <span className={styles.menuText}>顶部导航配置</span>}
                   </button>
 
                   <button
                     onClick={() => handleMenuClick('footer')}
-                    className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-left transition-all ${activeMenu === 'footer'
-                        ? 'bg-blue-50 text-blue-700 font-medium'
-                        : 'text-gray-700 hover:bg-gray-50'
-                      }`}
+                    className={`${styles.menuItem} ${activeMenu === 'footer' ? styles.menuItemActive : ''}`}
                   >
-                    <IconFile className="text-lg flex-shrink-0" />
-                    {!sidebarCollapsed && <span className="text-sm">底部页脚配置</span>}
+                    <IconFile className={styles.menuIcon} />
+                    {!sidebarCollapsed && <span className={styles.menuText}>底部页脚配置</span>}
                   </button>
 
                   <button
                     onClick={() => handleMenuClick('seo')}
-                    className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-left transition-all ${activeMenu === 'seo'
-                        ? 'bg-blue-50 text-blue-700 font-medium'
-                        : 'text-gray-700 hover:bg-gray-50'
-                      }`}
+                    className={`${styles.menuItem} ${activeMenu === 'seo' ? styles.menuItemActive : ''}`}
                   >
-                    <IconCode className="text-lg flex-shrink-0" />
-                    {!sidebarCollapsed && <span className="text-sm">站点SEO配置</span>}
+                    <IconCode className={styles.menuIcon} />
+                    {!sidebarCollapsed && <span className={styles.menuText}>站点SEO配置</span>}
                   </button>
 
                   <button
                     onClick={() => handleMenuClick('common')}
-                    className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-left transition-all ${activeMenu === 'common'
-                        ? 'bg-blue-50 text-blue-700 font-medium'
-                        : 'text-gray-700 hover:bg-gray-50'
-                      }`}
+                    className={`${styles.menuItem} ${activeMenu === 'common' ? styles.menuItemActive : ''}`}
                   >
-                    <IconStorage className="text-lg flex-shrink-0" />
-                    {!sidebarCollapsed && <span className="text-sm">站点版本配置</span>}
+                    <IconStorage className={styles.menuIcon} />
+                    {!sidebarCollapsed && <span className={styles.menuText}>站点版本配置</span>}
                   </button>
 
-                  {/* 页面管理 */}
-                  <div className="pt-4 pb-2">
+                  <div style={{ paddingTop: '1rem', paddingBottom: '0.5rem' }}>
                     {!sidebarCollapsed && (
-                      <div className="px-3 text-xs font-semibold text-gray-400 uppercase tracking-wider">
+                      <div style={{ padding: '0 0.75rem', fontSize: '0.75rem', fontWeight: 600, color: '#9ca3af', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
                         页面管理
                       </div>
                     )}
                   </div>
 
-                  <div className="space-y-1">
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: '0.25rem' }}>
                     <button
                       onClick={() => handleMenuClick('home')}
-                      className={`w-full flex items-center justify-between gap-3 px-3 py-2.5 rounded-lg text-left transition-all ${activeMenu === 'home'
-                          ? 'bg-blue-50 text-blue-700 font-medium'
-                          : 'text-gray-700 hover:bg-gray-50'
-                        }`}
+                      className={`${styles.menuItem} ${activeMenu === 'home' ? styles.menuItemActive : ''}`}
                     >
-                      <div className="flex items-center gap-3">
-                        <IconHome className="text-lg flex-shrink-0" />
-                        {!sidebarCollapsed && <span className="text-sm">首页区块管理</span>}
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+                        <IconHome className={styles.menuIcon} />
+                        {!sidebarCollapsed && <span className={styles.menuText}>首页区块管理</span>}
                       </div>
                     </button>
-                    <div className="pl-10 space-y-1">
+                    <div style={{ paddingLeft: '2.5rem', display: 'flex', flexDirection: 'column', gap: '0.25rem' }}>
                       <button
                         onClick={() => handleMenuClick('homeOrder')}
-                        className={`w-full flex items-center gap-3 px-3 py-2 rounded-lg text-left transition-all ${activeMenu === 'homeOrder'
-                            ? 'bg-blue-50 text-blue-700 font-medium'
-                            : 'text-gray-600 hover:bg-gray-50'
-                          }`}
+                        className={`${styles.menuItem} ${activeMenu === 'homeOrder' ? styles.menuItemActive : ''}`}
                       >
-                        {!sidebarCollapsed && <span className="text-sm">区块顺序</span>}
+                        {!sidebarCollapsed && <span className={styles.menuText}>区块顺序</span>}
                       </button>
                       <button
                         onClick={() => handleMenuClick('homeBanner')}
-                        className={`w-full flex items-center gap-3 px-3 py-2 rounded-lg text-left transition-all ${activeMenu === 'homeBanner'
-                            ? 'bg-blue-50 text-blue-700 font-medium'
-                            : 'text-gray-600 hover:bg-gray-50'
-                          }`}
+                        className={`${styles.menuItem} ${activeMenu === 'homeBanner' ? styles.menuItemActive : ''}`}
                       >
-                        {!sidebarCollapsed && <span className="text-sm">[区块]Banner信息</span>}
+                        {!sidebarCollapsed && <span className={styles.menuText}>[区块]Banner信息</span>}
                       </button>
                       <button
                         onClick={() => handleMenuClick('homePartners')}
-                        className={`w-full flex items-center gap-3 px-3 py-2 rounded-lg text-left transition-all ${activeMenu === 'homePartners'
-                            ? 'bg-blue-50 text-blue-700 font-medium'
-                            : 'text-gray-600 hover:bg-gray-50'
-                          }`}
+                        className={`${styles.menuItem} ${activeMenu === 'homePartners' ? styles.menuItemActive : ''}`}
                       >
-                        {!sidebarCollapsed && <span className="text-sm">[区块]伙伴信息</span>}
+                        {!sidebarCollapsed && <span className={styles.menuText}>[区块]伙伴信息</span>}
                       </button>
                       <button
                         onClick={() => handleMenuClick('homeProducts')}
-                        className={`w-full flex items-center gap-3 px-3 py-2 rounded-lg text-left transition-all ${activeMenu === 'homeProducts'
-                            ? 'bg-blue-50 text-blue-700 font-medium'
-                            : 'text-gray-600 hover:bg-gray-50'
-                          }`}
+                        className={`${styles.menuItem} ${activeMenu === 'homeProducts' ? styles.menuItemActive : ''}`}
                       >
-                        {!sidebarCollapsed && <span className="text-sm">[区块]产品信息</span>}
+                        {!sidebarCollapsed && <span className={styles.menuText}>[区块]产品信息</span>}
                       </button>
                       <button
                         onClick={() => handleMenuClick('homeServices')}
-                        className={`w-full flex items-center gap-3 px-3 py-2 rounded-lg text-left transition-all ${activeMenu === 'homeServices'
-                            ? 'bg-blue-50 text-blue-700 font-medium'
-                            : 'text-gray-600 hover:bg-gray-50'
-                          }`}
+                        className={`${styles.menuItem} ${activeMenu === 'homeServices' ? styles.menuItemActive : ''}`}
                       >
-                        {!sidebarCollapsed && <span className="text-sm">[区块]服务信息</span>}
+                        {!sidebarCollapsed && <span className={styles.menuText}>[区块]服务信息</span>}
                       </button>
                       <button
                         onClick={() => handleMenuClick('homePricing')}
-                        className={`w-full flex items-center gap-3 px-3 py-2 rounded-lg text-left transition-all ${activeMenu === 'homePricing'
-                            ? 'bg-blue-50 text-blue-700 font-medium'
-                            : 'text-gray-600 hover:bg-gray-50'
-                          }`}
+                        className={`${styles.menuItem} ${activeMenu === 'homePricing' ? styles.menuItemActive : ''}`}
                       >
-                        {!sidebarCollapsed && <span className="text-sm">[区块]价格信息</span>}
+                        {!sidebarCollapsed && <span className={styles.menuText}>[区块]价格信息</span>}
                       </button>
                       <button
                         onClick={() => handleMenuClick('homeAbout')}
-                        className={`w-full flex items-center gap-3 px-3 py-2 rounded-lg text-left transition-all ${activeMenu === 'homeAbout'
-                            ? 'bg-blue-50 text-blue-700 font-medium'
-                            : 'text-gray-600 hover:bg-gray-50'
-                          }`}
+                        className={`${styles.menuItem} ${activeMenu === 'homeAbout' ? styles.menuItemActive : ''}`}
                       >
-                        {!sidebarCollapsed && <span className="text-sm">[区块]关于我们</span>}
+                        {!sidebarCollapsed && <span className={styles.menuText}>[区块]关于我们</span>}
                       </button>
                       <button
                         onClick={() => handleMenuClick('homeContact')}
-                        className={`w-full flex items-center gap-3 px-3 py-2 rounded-lg text-left transition-all ${activeMenu === 'homeContact'
-                            ? 'bg-blue-50 text-blue-700 font-medium'
-                            : 'text-gray-600 hover:bg-gray-50'
-                          }`}
+                        className={`${styles.menuItem} ${activeMenu === 'homeContact' ? styles.menuItemActive : ''}`}
                       >
-                        {!sidebarCollapsed && <span className="text-sm">[区块]联系我们</span>}
+                        {!sidebarCollapsed && <span className={styles.menuText}>[区块]联系我们</span>}
                       </button>
                     </div>
                   </div>
 
                   <button
                     onClick={() => handleMenuClick('products')}
-                    className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-left transition-all ${activeMenu === 'products'
-                        ? 'bg-blue-50 text-blue-700 font-medium'
-                        : 'text-gray-700 hover:bg-gray-50'
-                      }`}
+                    className={`${styles.menuItem} ${activeMenu === 'products' ? styles.menuItemActive : ''}`}
                   >
-                    <IconTrophy className="text-lg flex-shrink-0" />
-                    {!sidebarCollapsed && <span className="text-sm">产品列表配置</span>}
+                    <IconTrophy className={styles.menuIcon} />
+                    {!sidebarCollapsed && <span className={styles.menuText}>产品列表配置</span>}
                   </button>
 
                   <button
                     onClick={() => handleMenuClick('otherPages')}
-                    className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-left transition-all ${activeMenu === 'otherPages'
-                        ? 'bg-blue-50 text-blue-700 font-medium'
-                        : 'text-gray-700 hover:bg-gray-50'
-                      }`}
+                    className={`${styles.menuItem} ${activeMenu === 'otherPages' ? styles.menuItemActive : ''}`}
                   >
-                    <IconFile className="text-lg flex-shrink-0" />
-                    {!sidebarCollapsed && <span className="text-sm">自定义页面配置</span>}
+                    <IconFile className={styles.menuIcon} />
+                    {!sidebarCollapsed && <span className={styles.menuText}>自定义页面配置</span>}
                   </button>
 
                   <button
                     onClick={() => router.push('/admin/articles')}
-                    className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-left transition-all ${activeMenu === 'articles'
-                        ? 'bg-blue-50 text-blue-700 font-medium'
-                        : 'text-gray-700 hover:bg-gray-50'
-                      }`}
+                    className={`${styles.menuItem} ${activeMenu === 'articles' ? styles.menuItemActive : ''}`}
                   >
-                    <IconFile className="text-lg flex-shrink-0" />
-                    {!sidebarCollapsed && <span className="text-sm">文章管理</span>}
+                    <IconFile className={styles.menuIcon} />
+                    {!sidebarCollapsed && <span className={styles.menuText}>文章管理</span>}
                   </button>
 
-                  {/* 主题管理 */}
-                  <div className="pt-4 pb-2">
+                  <div style={{ paddingTop: '1rem', paddingBottom: '0.5rem' }}>
                     {!sidebarCollapsed && (
-                      <div className="px-3 text-xs font-semibold text-gray-400 uppercase tracking-wider">
+                      <div style={{ padding: '0 0.75rem', fontSize: '0.75rem', fontWeight: 600, color: '#9ca3af', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
                         主题管理
                       </div>
                     )}
@@ -1390,30 +1332,23 @@ export default function AdminDashboardPage() {
 
                   <button
                     onClick={() => handleMenuClick('theme')}
-                    className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-left transition-all ${activeMenu === 'theme'
-                        ? 'bg-blue-50 text-blue-700 font-medium'
-                        : 'text-gray-700 hover:bg-gray-50'
-                      }`}
+                    className={`${styles.menuItem} ${activeMenu === 'theme' ? styles.menuItemActive : ''}`}
                   >
-                    <IconSettings className="text-lg flex-shrink-0" />
-                    {!sidebarCollapsed && <span className="text-sm">主题皮肤选择</span>}
+                    <IconSettings className={styles.menuIcon} />
+                    {!sidebarCollapsed && <span className={styles.menuText}>主题皮肤选择</span>}
                   </button>
 
                   <button
                     onClick={() => handleMenuClick('custom')}
-                    className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-left transition-all ${activeMenu === 'custom'
-                        ? 'bg-blue-50 text-blue-700 font-medium'
-                        : 'text-gray-700 hover:bg-gray-50'
-                      }`}
+                    className={`${styles.menuItem} ${activeMenu === 'custom' ? styles.menuItemActive : ''}`}
                   >
-                    <IconSettings className="text-lg flex-shrink-0" />
-                    {!sidebarCollapsed && <span className="text-sm">主题个性化配置</span>}
+                    <IconSettings className={styles.menuIcon} />
+                    {!sidebarCollapsed && <span className={styles.menuText}>主题个性化配置</span>}
                   </button>
 
-                  {/* 系统管理 */}
-                  <div className="pt-4 pb-2">
+                  <div style={{ paddingTop: '1rem', paddingBottom: '0.5rem' }}>
                     {!sidebarCollapsed && (
-                      <div className="px-3 text-xs font-semibold text-gray-400 uppercase tracking-wider">
+                      <div style={{ padding: '0 0.75rem', fontSize: '0.75rem', fontWeight: 600, color: '#9ca3af', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
                         系统管理
                       </div>
                     )}
@@ -1421,51 +1356,43 @@ export default function AdminDashboardPage() {
 
                   <button
                     onClick={() => handleMenuClick('system')}
-                    className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-left transition-all ${activeMenu === 'system'
-                        ? 'bg-blue-50 text-blue-700 font-medium'
-                        : 'text-gray-700 hover:bg-gray-50'
-                      }`}
+                    className={`${styles.menuItem} ${activeMenu === 'system' ? styles.menuItemActive : ''}`}
                   >
-                    <IconSettings className="text-lg flex-shrink-0" />
-                    {!sidebarCollapsed && <span className="text-sm">配置管理</span>}
+                    <IconSettings className={styles.menuIcon} />
+                    {!sidebarCollapsed && <span className={styles.menuText}>配置管理</span>}
                   </button>
 
                   <button
                     onClick={() => handleMenuClick('operationLogs')}
-                    className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-left transition-all ${activeMenu === 'operationLogs'
-                        ? 'bg-blue-50 text-blue-700 font-medium'
-                        : 'text-gray-700 hover:bg-gray-50'
-                      }`}
+                    className={`${styles.menuItem} ${activeMenu === 'operationLogs' ? styles.menuItemActive : ''}`}
                   >
-                    <IconClockCircle className="text-lg flex-shrink-0" />
-                    {!sidebarCollapsed && <span className="text-sm">操作记录</span>}
+                    <IconClockCircle className={styles.menuIcon} />
+                    {!sidebarCollapsed && <span className={styles.menuText}>操作记录</span>}
                   </button>
                 </nav>
               </div>
             </div>
-
-
           </div>
 
-          <div className="flex-1 overflow-auto bg-gray-50 h-full">
-            <div className="p-8 h-full">
+          <div className={styles.mainContent}>
+            <div style={{ padding: '2rem', height: '100%' }}>
               {activeMenu === 'accountInfo' && (
                 <Card>
                   {currentUser && (
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                      <div className="bg-gradient-to-br from-blue-50 to-blue-100 rounded-xl p-6 border border-blue-200">
-                        <div className="flex items-center gap-3 mb-4">
-                          <div className="w-12 h-12 rounded-full bg-gradient-to-br from-blue-500 to-blue-600 flex items-center justify-center">
-                            <svg className="w-6 h-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(18rem, 1fr))', gap: '1.5rem' }}>
+                      <div style={{ background: 'linear-gradient(135deg, #eff6ff, #dbeafe)', borderRadius: '0.75rem', padding: '1.5rem', border: '1px solid #bfdbfe' }}>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '1rem' }}>
+                          <div style={{ width: '3rem', height: '3rem', borderRadius: '9999px', background: 'linear-gradient(135deg, #3b82f6, #2563eb)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                            <svg style={{ width: '1.5rem', height: '1.5rem', color: 'white' }} fill="none" viewBox="0 0 24 24" stroke="currentColor">
                               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
                             </svg>
                           </div>
                           <div>
-                            <p className="text-sm text-gray-600">当前账号</p>
-                            <p className="text-lg font-bold text-gray-900">{currentUser.username}</p>
+                            <p style={{ fontSize: '0.875rem', color: '#4b5563' }}>当前账号</p>
+                            <p style={{ fontSize: '1.125rem', fontWeight: 700, color: '#111827' }}>{currentUser.username}</p>
                           </div>
                         </div>
-                        <div className="text-sm text-gray-600">
+                        <div style={{ fontSize: '0.875rem', color: '#4b5563' }}>
                           当前登录的管理员账号
                         </div>
                       </div>

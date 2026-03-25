@@ -3,9 +3,10 @@
 import { useState, useEffect } from "react"
 import { useRouter } from "next/navigation"
 import { Button, Card, Table, Input, Upload, Modal, Form, Select, Alert, Message } from "@arco-design/web-react"
-import { IconPlus, IconDelete, IconEdit, IconSave, IconCancel, IconFileText, IconImage, IconCalendar, IconTags } from "@arco-design/web-react/icon"
+import { IconPlus, IconDelete, IconEdit, IconSave, IconClose, IconFile, IconImage, IconCalendar, IconTags } from "@arco-design/web-react/icon"
 import { toast, Toaster } from "sonner"
 import { useTheme } from "@/components/theme-provider"
+import styles from "./articles.module.css"
 
 interface Article {
   id: string
@@ -160,7 +161,7 @@ export default function ArticlesPage() {
       dataIndex: 'title',
       key: 'title',
       render: (text: string, record: Article) => (
-        <div className="font-medium">{text}</div>
+        <div className={styles.titleCell}>{text}</div>
       )
     },
     {
@@ -168,7 +169,7 @@ export default function ArticlesPage() {
       dataIndex: 'summary',
       key: 'summary',
       render: (text: string) => (
-        <div className="text-gray-600 text-sm line-clamp-2">{text}</div>
+        <div className={styles.summaryCell}>{text}</div>
       )
     },
     {
@@ -183,7 +184,7 @@ export default function ArticlesPage() {
       key: 'status',
       width: 100,
       render: (status: string) => (
-        <span className={`px-2 py-1 rounded-full text-xs ${status === 'published' ? 'bg-green-100 text-green-800' : 'bg-gray-100 text-gray-800'}`}>
+        <span className={`${styles.statusBadge} ${status === 'published' ? styles.statusPublished : styles.statusDraft}`}>
           {status === 'published' ? '已发布' : '草稿'}
         </span>
       )
@@ -193,7 +194,7 @@ export default function ArticlesPage() {
       key: 'action',
       width: 150,
       render: (_: any, record: Article) => (
-        <div className="flex gap-2">
+        <div className={styles.actionButtons}>
           <Button
             type="primary"
             size="small"
@@ -203,7 +204,7 @@ export default function ArticlesPage() {
             编辑
           </Button>
           <Button
-            type="danger"
+            status="danger"
             size="small"
             icon={<IconDelete />}
             onClick={() => handleDeleteArticle(record)}
@@ -216,13 +217,12 @@ export default function ArticlesPage() {
   ]
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className={styles.container}>
       <Toaster />
       
-      {/* Header */}
-      <div className="bg-white border-b border-gray-200 py-4 px-6">
-        <div className="flex items-center justify-between">
-          <h1 className="text-2xl font-bold text-gray-900">文章管理</h1>
+      <div className={styles.header}>
+        <div className={styles.headerContent}>
+          <h1 className={styles.headerTitle}>文章管理</h1>
           <Button
             type="primary"
             icon={<IconPlus />}
@@ -233,9 +233,8 @@ export default function ArticlesPage() {
         </div>
       </div>
 
-      {/* Content */}
-      <div className="p-6">
-        <Card>
+      <div className={styles.content}>
+        <Card className={styles.tableCard}>
           <Table
             columns={columns}
             data={articles}
@@ -249,7 +248,7 @@ export default function ArticlesPage() {
       {/* Modal */}
       <Modal
         title={currentArticle ? '编辑文章' : '新建文章'}
-        open={modalVisible}
+        visible={modalVisible}
         onCancel={() => setModalVisible(false)}
         footer={[
           <Button key="cancel" onClick={() => setModalVisible(false)}>

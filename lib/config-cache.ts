@@ -179,10 +179,13 @@ export function setupFileWatchers() {
   const configDir = path.join(process.cwd(), "config/json")
   const runtimeDir = path.join(configDir, "runtime")
 
+  // runtime 目录的文件是驼峰命名
+  const runtimeConfigFiles = Object.values(filenameToCamelCase)
+
   // 监听 runtime 目录
   if (fs.existsSync(runtimeDir)) {
     fs.watch(runtimeDir, (eventType, filename) => {
-      if (filename && configFiles.includes(filename)) {
+      if (filename && runtimeConfigFiles.includes(filename)) {
         console.log(`Config file changed: ${filename}`)
         if (cacheEnabled) {
           console.log(`Reloading cache...`)
@@ -194,7 +197,7 @@ export function setupFileWatchers() {
     })
   }
 
-  // 监听根配置目录
+  // 监听根配置目录（templates 目录使用短横线命名）
   fs.watch(configDir, (eventType, filename) => {
     if (filename && configFiles.includes(filename)) {
       console.log(`Config file changed: ${filename}`)

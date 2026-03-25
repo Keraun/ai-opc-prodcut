@@ -1,8 +1,8 @@
 "use client"
 
-import { useState, useEffect } from "react"
+import { useState, useEffect, useRef } from "react"
 import { Button, Tag, Card, Input, Tooltip, Modal } from "@arco-design/web-react"
-import { IconSearch, IconAt, IconEye } from "@arco-design/web-react/icon"
+import { IconSearch, IconAt, IconEye, IconClose } from "@arco-design/web-react/icon"
 import { Header } from "@/components/common/header"
 import { Footer } from "@/components/common/footer"
 import { products, productCategories, Product } from "@/config/client"
@@ -66,32 +66,32 @@ function ProductCard({ product }: { product: Product }) {
           </div>
           
           <Tooltip content={product.title} position="top">
-            <h3 className="text-base font-semibold text-gray-900 mb-1.5 line-clamp-1 cursor-pointer">
+            <h3 className={styles.productTitle}>
               {product.title}
             </h3>
           </Tooltip>
           
           <Tooltip content={product.description} position="top">
-            <p className="text-xs text-gray-500 mb-3 line-clamp-5 leading-relaxed cursor-pointer max-h-[60px] overflow-hidden">
+            <p className={styles.productDescription}>
               {product.description}
             </p>
           </Tooltip>
           
-          <div className="mt-auto">
-            <div className="flex items-center justify-between mb-3">
-              <div className="flex items-baseline gap-1.5">
+          <div className={styles.productFooter}>
+            <div className={styles.productPriceRow}>
+              <div className={styles.productPriceWrapper}>
                 {product.price === 0 ? (
-                  <span className="text-lg font-bold text-green-600">免费</span>
+                  <span className={styles.productPriceFree}>免费</span>
                 ) : (
                   <>
                     <span 
-                      className="text-lg font-bold"
+                      className={styles.productPrice}
                       style={{ color: primaryColor }}
                     >
                       ¥{product.price}
                     </span>
                     {product.originalPrice && (
-                      <span className="text-xs text-gray-400 line-through">
+                      <span className={styles.productOriginalPrice}>
                         ¥{product.originalPrice}
                       </span>
                     )}
@@ -100,7 +100,7 @@ function ProductCard({ product }: { product: Product }) {
               </div>
             </div>
             
-            <div className="flex gap-2">
+            <div className={styles.productButtons}>
               <Button
                 type="primary"
                 size="small"
@@ -109,7 +109,7 @@ function ProductCard({ product }: { product: Product }) {
                   backgroundColor: primaryColor,
                   color: 'white'
                 }}
-                className="flex-1 !h-8"
+                className={`${styles.productButton} ${styles.productButtonPrimary}`}
                 onClick={() => setVisible(true)}
               >
                 {product.price === 0 ? "获取" : "购买"}
@@ -123,7 +123,7 @@ function ProductCard({ product }: { product: Product }) {
                     borderColor: primaryColor,
                     color: primaryColor
                   }}
-                  className="!h-8"
+                  className={styles.productButton}
                   onClick={() => setVisible(true)}
                 >
                   详情
@@ -138,7 +138,7 @@ function ProductCard({ product }: { product: Product }) {
                     borderColor: primaryColor,
                     color: primaryColor
                   }}
-                  className="!h-8"
+                  className={styles.productButton}
                   onClick={() => window.open(product.details?.link, '_blank')}
                 >
                   详情
@@ -155,22 +155,18 @@ function ProductCard({ product }: { product: Product }) {
           visible={visible}
           onCancel={() => setVisible(false)}
           footer={null}
-          className="!max-w-4xl"
           style={{ width: '80%', maxWidth: '800px' }}
         >
-          <div className="py-4 max-h-[80vh] overflow-y-auto">
+          <div className={styles.modalContent}>
             {product.details?.type === 'markdown' && (
-              <div className="prose prose-sm max-w-none">
+              <div>
                 <ReactMarkdown remarkPlugins={[remarkGfm]}>
                   {product.details.content}
                 </ReactMarkdown>
               </div>
             )}
             {product.details?.type === 'html' && (
-              <div 
-                className="prose prose-sm max-w-none"
-                dangerouslySetInnerHTML={{ __html: product.details.content || '' }}
-              />
+              <div dangerouslySetInnerHTML={{ __html: product.details.content || '' }} />
             )}
           </div>
         </Modal>
@@ -182,21 +178,20 @@ function ProductCard({ product }: { product: Product }) {
           visible={visible}
           onCancel={() => setVisible(false)}
           footer={null}
-          className="!max-w-lg"
           style={{ width: '60%', maxWidth: '500px' }}
         >
-          <div className="text-center py-8 max-h-[80vh] overflow-y-auto">
-            <div className="w-80 h-80 mx-auto mb-6 bg-gradient-to-br from-gray-50 to-gray-100 rounded-xl flex items-center justify-center border-2 border-gray-200">
-              <div className="text-center">
-                <div className="w-64 h-64 bg-white rounded-lg flex items-center justify-center mb-3">
-                  <span className="text-sm text-gray-400">扫码咨询</span>
+          <div className={styles.modalQRContainer}>
+            <div className={styles.modalQRWrapper}>
+              <div className={styles.modalQRInner}>
+                <div className={styles.modalQRPlaceholder}>
+                  <span>扫码咨询</span>
                 </div>
               </div>
             </div>
-            <p className="text-base text-gray-600 mb-3">
+            <p className={styles.modalQRText}>
               {product.price === 0 ? "扫描二维码免费获取" : "扫描二维码咨询购买"}
             </p>
-            <p className="text-sm text-gray-400">
+            <p className={styles.modalQRSubtext}>
               工作时间：9:00-18:00
             </p>
           </div>
@@ -213,7 +208,6 @@ export default function ProductsPage() {
   const { themeConfig } = useTheme()
   
   const primaryColor = themeConfig?.colors?.primary || "#1e40af"
-  const secondaryColor = themeConfig?.colors?.secondary || "#3b82f6"
   const accentColor = themeConfig?.colors?.accent || "#06b6d4"
 
   useEffect(() => {
@@ -272,43 +266,42 @@ export default function ProductsPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className={styles.container}>
       <Header />
       
-      <main className="pt-20">
-        {/* Search Section */}
-        <section className="relative py-8 md:py-12 overflow-hidden bg-gradient-to-br from-slate-50 via-white to-blue-50">
-          <div className="absolute inset-0 overflow-hidden">
-            <div className="absolute top-10 left-10 w-48 h-48 bg-blue-400/10 rounded-full blur-3xl" />
-            <div className="absolute bottom-10 right-10 w-64 h-64 bg-purple-400/10 rounded-full blur-3xl" />
+      <main className={styles.main}>
+        <section className={styles.searchSection}>
+          <div className={styles.searchBackground}>
+            <div className={styles.searchBgCircle1} />
+            <div className={styles.searchBgCircle2} />
           </div>
           
-          <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="flex items-center justify-between gap-8">
+          <div className={styles.searchContent}>
+            <div className={styles.searchHeader}>
               <div>
-                <h1 className="text-3xl md:text-4xl font-bold text-gray-900 mb-2">
+                <h1 className={styles.searchTitle}>
                   探索 <span 
-                    className="text-transparent bg-clip-text"
+                    className={styles.searchTitleGradient}
                     style={{ backgroundImage: `linear-gradient(to right, ${primaryColor}, ${accentColor})` }}
                   >
                     AI 产品
                   </span>
                 </h1>
-                <p className="text-sm text-gray-600">
+                <p className={styles.searchSubtitle}>
                   精选优质 AI 工具、课程和服务
                 </p>
-                <p className="text-xs text-gray-500 mt-1 h-[18px]">
+                <p className={styles.searchResult}>
                   {searchText.trim() ? (
                     <span>
-                      筛选结果：共找到 <span className="font-semibold" style={{ color: primaryColor }}>{filteredProducts.length}</span> 个产品
+                      筛选结果：共找到 <span style={{ fontWeight: 600, color: primaryColor }}>{filteredProducts.length}</span> 个产品
                     </span>
                   ) : (
-                    <span className="invisible">筛选结果：共找到 0 个产品</span>
+                    <span className={styles.searchResultHidden}>筛选结果：共找到 0 个产品</span>
                   )}
                 </p>
               </div>
               
-              <div className="w-80">
+              <div className={styles.searchInputWrapper}>
                 <Input
                   prefix={<IconSearch />}
                   placeholder="搜索产品..."
@@ -317,40 +310,33 @@ export default function ProductsPage() {
                   suffix={
                     searchText.trim() && (
                       <div 
-                        className="cursor-pointer hover:text-gray-600 text-gray-400"
+                        style={{ cursor: 'pointer' }}
                         onClick={() => setSearchText("")}
                       >
                         <IconClose />
                       </div>
                     )
                   }
-                  className="!bg-white !border-gray-200 !h-10 !rounded-lg shadow-sm [&_input]:!text-gray-900 [&_input]:placeholder:!text-gray-400 [&_.arco-input-prefix]:!text-gray-400"
                 />
               </div>
             </div>
           </div>
         </section>
 
-        {/* Products Section */}
-        <section className="py-12 md:py-16">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="flex flex-col md:flex-row gap-8">
-              {/* Left Sidebar - Tabs */}
-              <div className="md:w-56 flex-shrink-0">
-                <div className="sticky top-24 space-y-1">
+        <section className={styles.productsSection}>
+          <div className={styles.productsContainer}>
+            <div className={styles.productsLayout}>
+              <div className={styles.sidebar}>
+                <div className={styles.sidebarContent}>
                   {productCategories.map((cat) => (
                     <button
                       key={cat.key}
                       onClick={() => scrollToSection(cat.key)}
-                      className={`w-full text-left px-4 py-2.5 rounded-lg transition-all duration-300 relative text-sm ${
-                        activeTab === cat.key
-                          ? "text-white shadow-md"
-                          : "bg-white text-gray-600 hover:bg-gray-50 hover:text-gray-900"
-                      }`}
+                      className={`${styles.categoryButton} ${activeTab === cat.key ? styles.categoryButtonActive : styles.categoryButtonInactive}`}
                       style={activeTab === cat.key ? { backgroundColor: primaryColor } : undefined}
                     >
                       {activeTab === cat.key && (
-                        <div className="absolute left-0 top-1/2 -translate-y-1/2 w-1 h-5 bg-white rounded-r" />
+                        <div className={styles.categoryButtonIndicator} />
                       )}
                       {cat.title}
                     </button>
@@ -358,8 +344,7 @@ export default function ProductsPage() {
                 </div>
               </div>
 
-              {/* Right Content - Products */}
-              <div className="flex-1">
+              <div className={styles.productsContent}>
                 {productCategories.map((cat) => {
                   const categoryProducts = filteredProducts.filter((p) => cat.key === "all" || p.category === cat.key)
                   if (cat.key === "all") return null
@@ -371,28 +356,28 @@ export default function ProductsPage() {
                         sectionRefs.current[cat.key] = el
                       }}
                       id={cat.key}
-                      className="mb-12 scroll-mt-24"
+                      className={styles.categorySection}
                     >
-                      <h2 className="text-xl font-bold text-gray-900 mb-4 flex items-center gap-3">
+                      <h2 className={styles.categoryHeader}>
                         <div 
-                          className="w-1 h-6 rounded-full"
+                          className={styles.categoryIndicator}
                           style={{ backgroundColor: primaryColor }}
                         />
                         {cat.title}
-                        <span className="text-xs font-normal text-gray-500">
+                        <span className={styles.categoryCount}>
                           ({categoryProducts.length})
                         </span>
                       </h2>
                       
                       {categoryProducts.length > 0 ? (
-                        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                        <div className={styles.productsGrid}>
                           {categoryProducts.map((product) => (
                             <ProductCard key={product.id} product={product} />
                           ))}
                         </div>
                       ) : (
-                        <div className="text-center py-12 bg-white rounded-xl border border-gray-100">
-                          <p className="text-gray-500">暂无{cat.title}</p>
+                        <div className={styles.emptyState}>
+                          <p className={styles.emptyText}>暂无{cat.title}</p>
                         </div>
                       )}
                     </div>
