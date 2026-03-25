@@ -136,13 +136,13 @@ export function Sidebar({
               <span className={styles.navSectionTitle}>内容管理</span>
             </div>
 
-            <a
-              href="/admin/articles"
-              className={`${styles.navItem} ${styles.navItemInactive}`}
+            <button
+              onClick={() => onMenuClick('articles')}
+              className={`${styles.navItem} ${activeMenu === 'articles' ? styles.navItemActive : styles.navItemInactive}`}
             >
               <span className={styles.navItemIcon}>📝</span>
               {!collapsed && <span className={styles.navItemText}>文章管理</span>}
-            </a>
+            </button>
 
             <div className={styles.navSection}>
               <span className={styles.navSectionTitle}>其他配置</span>

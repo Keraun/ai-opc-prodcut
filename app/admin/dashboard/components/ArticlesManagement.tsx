@@ -1,8 +1,8 @@
 "use client"
 
 import { useState, useEffect } from "react"
-import { Button, Card, Table, Modal, Message } from "@arco-design/web-react"
-import { IconPlus, IconDelete, IconEdit, IconEye } from "@arco-design/web-react/icon"
+import { Button, Card, Table, Spin } from "@arco-design/web-react"
+import { IconPlus, IconDelete, IconEdit, IconEye, IconLeft } from "@arco-design/web-react/icon"
 import { toast } from "sonner"
 import { DynamicForm } from "@/components/dynamic-form"
 import styles from "./ArticlesManagement.module.css"
@@ -30,13 +30,13 @@ interface FormSchema {
   ui?: any
 }
 
+type ViewMode = 'list' | 'new' | 'edit' | 'view'
+
 export function ArticlesManagement() {
   const [articles, setArticles] = useState<Article[]>([])
   const [loading, setLoading] = useState(true)
-  const [modalVisible, setModalVisible] = useState(false)
-  const [viewModalVisible, setViewModalVisible] = useState(false)
+  const [viewMode, setViewMode] = useState<ViewMode>('list')
   const [currentArticle, setCurrentArticle] = useState<Article | null>(null)
-  const [viewingArticle, setViewingArticle] = useState<Article | null>(null)
   const [schema, setSchema] = useState<FormSchema | null>(null)
   const [submitting, setSubmitting] = useState(false)
 
@@ -75,17 +75,17 @@ export function ArticlesManagement() {
 
   const handleAddArticle = () => {
     setCurrentArticle(null)
-    setModalVisible(true)
+    setViewMode('new')
   }
 
   const handleEditArticle = (article: Article) => {
     setCurrentArticle(article)
-    setModalVisible(true)
+    setViewMode('edit')
   }
 
   const handleViewArticle = (article: Article) => {
-    setViewingArticle(article)
-    setViewModalVisible(true)
+    setCurrentArticle(article)
+    setViewMode('view')
   }
 
   const handleDeleteArticle = async (article: Article) => {
@@ -144,7 +144,7 @@ export function ArticlesManagement() {
           setArticles([...articles, savedArticle])
           toast.success('文章创建成功')
         }
-        setModalVisible(false)
+        setViewMode('list')
         fetchArticles()
       } else {
         toast.error('保存文章失败')
@@ -155,6 +155,11 @@ export function ArticlesManagement() {
     } finally {
       setSubmitting(false)
     }
+  }
+
+  const handleBack = () => {
+    setViewMode('list')
+    setCurrentArticle(null)
   }
 
   const columns = [
@@ -233,118 +238,143 @@ export function ArticlesManagement() {
     }
   ]
 
-  return (
-    <div className={styles.container}>
-      <div className={styles.header}>
-        <div className={styles.headerContent}>
-          <div>
-            <h1 className={styles.headerTitle}>文章管理</h1>
-            <p className={styles.headerDescription}>管理网站文章内容，支持Markdown和HTML格式</p>
-          </div>
+  if (viewMode === 'new' || viewMode === 'edit') {
+    return (
+      <div className={styles.formContainer}>
+        <div className={styles.formHeader}>
           <Button
-            type="primary"
-            icon={<IconPlus />}
-            onClick={handleAddArticle}
+            type="text"
+            icon={<IconLeft />}
+            onClick={handleBack}
           >
-            新建文章
+            返回文章列表
           </Button>
+          <h2 className={styles.formTitle}>
+            {viewMode === 'new' ? '新建文章' : '编辑文章'}
+          </h2>
         </div>
-      </div>
-
-      <div className={styles.content}>
-        <Card className={styles.tableCard}>
-          <Table
-            columns={columns}
-            data={articles}
-            loading={loading}
-            rowKey="id"
-            pagination={{ 
-              pageSize: 10,
-              showTotal: true,
-              showJumper: true
-            }}
-          />
+        <Card className={styles.formCard}>
+          {schema && (
+            <DynamicForm
+              schema={schema}
+              initialValues={currentArticle || {}}
+              onSubmit={handleSubmit}
+              onCancel={handleBack}
+              loading={submitting}
+            />
+          )}
         </Card>
       </div>
+    )
+  }
 
-      {/* 编辑/新建文章Modal */}
-      <Modal
-        title={currentArticle ? '编辑文章' : '新建文章'}
-        visible={modalVisible}
-        onCancel={() => setModalVisible(false)}
-        footer={null}
-        style={{ width: 900 }}
-      >
-        {schema && (
-          <DynamicForm
-            schema={schema}
-            initialValues={currentArticle || {}}
-            onSubmit={handleSubmit}
-            onCancel={() => setModalVisible(false)}
-            loading={submitting}
-          />
-        )}
-      </Modal>
-
-      {/* 查看文章Modal */}
-      <Modal
-        title="文章详情"
-        visible={viewModalVisible}
-        onCancel={() => setViewModalVisible(false)}
-        footer={[
-          <Button key="close" onClick={() => setViewModalVisible(false)}>
-            关闭
+  if (viewMode === 'view' && currentArticle) {
+    return (
+      <div className={styles.viewContainer}>
+        <div className={styles.viewHeader}>
+          <Button
+            type="text"
+            icon={<IconLeft />}
+            onClick={handleBack}
+          >
+            返回文章列表
           </Button>
-        ]}
-        style={{ width: 800 }}
-      >
-        {viewingArticle && (
+          <h2 className={styles.viewTitle}>{currentArticle.title}</h2>
+          <Button
+            type="primary"
+            icon={<IconEdit />}
+            onClick={() => handleEditArticle(currentArticle)}
+          >
+            编辑文章
+          </Button>
+        </div>
+        <Card className={styles.viewCard}>
           <div className={styles.viewContent}>
             <div className={styles.viewField}>
-              <label className={styles.viewLabel}>标题：</label>
-              <span>{viewingArticle.title}</span>
+              <label className={styles.viewLabel}>标题</label>
+              <p className={styles.viewValue}>{currentArticle.title}</p>
             </div>
             <div className={styles.viewField}>
-              <label className={styles.viewLabel}>URL别名：</label>
-              <span>{viewingArticle.slug}</span>
+              <label className={styles.viewLabel}>URL别名</label>
+              <p className={styles.viewValue}>{currentArticle.slug}</p>
             </div>
             <div className={styles.viewField}>
-              <label className={styles.viewLabel}>摘要：</label>
-              <p>{viewingArticle.summary}</p>
+              <label className={styles.viewLabel}>摘要</label>
+              <p className={styles.viewValue}>{currentArticle.summary}</p>
             </div>
-            <div className={styles.viewField}>
-              <label className={styles.viewLabel}>作者：</label>
-              <span>{viewingArticle.author || '未设置'}</span>
-            </div>
-            <div className={styles.viewField}>
-              <label className={styles.viewLabel}>发布日期：</label>
-              <span>{viewingArticle.date}</span>
-            </div>
-            <div className={styles.viewField}>
-              <label className={styles.viewLabel}>状态：</label>
-              <span className={`${styles.statusBadge} ${viewingArticle.status === 'published' ? styles.statusPublished : styles.statusDraft}`}>
-                {viewingArticle.status === 'published' ? '已发布' : '草稿'}
-              </span>
-            </div>
-            <div className={styles.viewField}>
-              <label className={styles.viewLabel}>标签：</label>
-              <div className={styles.tagsList}>
-                {viewingArticle.tags?.map((tag, index) => (
-                  <span key={index} className={styles.tag}>{tag}</span>
-                ))}
+            <div className={styles.viewRow}>
+              <div className={styles.viewField}>
+                <label className={styles.viewLabel}>作者</label>
+                <p className={styles.viewValue}>{currentArticle.author || '未设置'}</p>
+              </div>
+              <div className={styles.viewField}>
+                <label className={styles.viewLabel}>发布日期</label>
+                <p className={styles.viewValue}>{currentArticle.date}</p>
+              </div>
+              <div className={styles.viewField}>
+                <label className={styles.viewLabel}>状态</label>
+                <span className={`${styles.statusBadge} ${currentArticle.status === 'published' ? styles.statusPublished : styles.statusDraft}`}>
+                  {currentArticle.status === 'published' ? '已发布' : '草稿'}
+                </span>
               </div>
             </div>
             <div className={styles.viewField}>
-              <label className={styles.viewLabel}>内容格式：</label>
-              <span>{viewingArticle.contentFormat === 'markdown' ? 'Markdown' : 'HTML'}</span>
+              <label className={styles.viewLabel}>标签</label>
+              <div className={styles.tagsList}>
+                {currentArticle.tags && currentArticle.tags.length > 0 ? (
+                  currentArticle.tags.map((tag, index) => (
+                    <span key={index} className={styles.tag}>{tag}</span>
+                  ))
+                ) : (
+                  <span className={styles.noTags}>无标签</span>
+                )}
+              </div>
             </div>
             <div className={styles.viewField}>
-              <label className={styles.viewLabel}>文章内容：</label>
-              <pre className={styles.contentPreview}>{viewingArticle.content}</pre>
+              <label className={styles.viewLabel}>内容格式</label>
+              <p className={styles.viewValue}>
+                {currentArticle.contentFormat === 'markdown' ? 'Markdown' : 'HTML'}
+              </p>
+            </div>
+            <div className={styles.viewField}>
+              <label className={styles.viewLabel}>文章内容</label>
+              <pre className={styles.contentPreview}>{currentArticle.content}</pre>
             </div>
           </div>
-        )}
-      </Modal>
+        </Card>
+      </div>
+    )
+  }
+
+  return (
+    <div className={styles.listContainer}>
+      <div className={styles.listHeader}>
+        <div>
+          <h2 className={styles.listTitle}>文章管理</h2>
+          <p className={styles.listDescription}>管理网站文章内容，支持Markdown和HTML格式</p>
+        </div>
+        <Button
+          type="primary"
+          icon={<IconPlus />}
+          onClick={handleAddArticle}
+        >
+          新建文章
+        </Button>
+      </div>
+
+      <Card className={styles.tableCard}>
+        <Table
+          columns={columns}
+          data={articles}
+          loading={loading}
+          rowKey="id"
+          pagination={{ 
+            pageSize: 10,
+            showTotal: true,
+            showJumper: true
+          }}
+        />
+      </Card>
     </div>
   )
 }

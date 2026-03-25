@@ -900,96 +900,231 @@ export default function AdminDashboardPage() {
               />
             )}
 
-            {activeMenu === 'common' && renderConfigCard(
-              "通用配置",
-              "common",
-              "包含网站通用配置项"
+            {activeMenu === 'common' && (
+              <ConfigFormEditor
+                configType="common"
+                title="通用配置"
+                description="包含网站通用配置项"
+                configData={configs.common}
+                onSave={async (data) => {
+                  setConfigs(prev => ({ ...prev, common: data }))
+                  await handleSave('common')
+                }}
+                hasChanges={hasConfigChanges('common')}
+                loading={loading}
+              />
             )}
 
-            {activeMenu === 'navigation' && renderConfigCard(
-              "导航配置",
-              "navigation",
-              "配置网站顶部导航菜单"
+            {activeMenu === 'navigation' && (
+              <ConfigFormEditor
+                configType="navigation"
+                title="导航配置"
+                description="配置网站顶部导航菜单"
+                configData={configs.navigation}
+                onSave={async (data) => {
+                  setConfigs(prev => ({ ...prev, navigation: data }))
+                  await handleSave('navigation')
+                }}
+                hasChanges={hasConfigChanges('navigation')}
+                loading={loading}
+              />
             )}
 
-            {activeMenu === 'footer' && renderConfigCard(
-              "页脚配置",
-              "footer",
-              "配置网站页脚信息"
+            {activeMenu === 'footer' && (
+              <ConfigFormEditor
+                configType="footer"
+                title="页脚配置"
+                description="配置网站页脚信息"
+                configData={configs.footer}
+                onSave={async (data) => {
+                  setConfigs(prev => ({ ...prev, footer: data }))
+                  await handleSave('footer')
+                }}
+                hasChanges={hasConfigChanges('footer')}
+                loading={loading}
+              />
             )}
 
-            {activeMenu === 'home' && renderConfigCard(
-              "首页配置",
-              "home",
-              "包含首页整体配置"
+            {activeMenu === 'home' && (
+              <ConfigFormEditor
+                configType="home"
+                title="首页配置"
+                description="包含首页整体配置"
+                configData={configs.home}
+                onSave={async (data) => {
+                  setConfigs(prev => ({ ...prev, home: data }))
+                  await handleSave('home')
+                }}
+                hasChanges={hasConfigChanges('home')}
+                loading={loading}
+              />
             )}
 
-            {activeMenu === 'homeOrder' && renderConfigCard(
-              "[区块]排序配置",
-              "homeOrder",
-              "配置首页各区块的显示顺序"
+            {activeMenu === 'homeOrder' && (
+              <ConfigFormEditor
+                configType="homeOrder"
+                title="[区块]排序配置"
+                description="配置首页各区块的显示顺序"
+                configData={configs.homeOrder}
+                onSave={async (data) => {
+                  setConfigs(prev => ({ ...prev, homeOrder: data }))
+                  await handleSave('homeOrder')
+                }}
+                hasChanges={hasConfigChanges('homeOrder')}
+                loading={loading}
+              />
             )}
 
-            {activeMenu === 'homeBanner' && renderConfigCard(
-              "[区块]Banner配置",
-              "homeBanner",
-              "配置首页Banner区域的内容"
+            {activeMenu === 'homeBanner' && (
+              <ConfigFormEditor
+                configType="homeBanner"
+                title="[区块]Banner配置"
+                description="配置首页Banner区域的内容"
+                configData={configs.homeBanner}
+                onSave={async (data) => {
+                  setConfigs(prev => ({ ...prev, homeBanner: data }))
+                  await handleSave('homeBanner')
+                }}
+                hasChanges={hasConfigChanges('homeBanner')}
+                loading={loading}
+              />
             )}
 
-            {activeMenu === 'homePartners' && renderConfigCard(
-              "[区块]合作伙伴",
-              "homePartners",
-              "配置首页合作伙伴区域的内容"
+            {activeMenu === 'homePartners' && (
+              <ConfigFormEditor
+                configType="homePartners"
+                title="[区块]合作伙伴"
+                description="配置首页合作伙伴区域的内容"
+                configData={configs.homePartners}
+                onSave={async (data) => {
+                  setConfigs(prev => ({ ...prev, homePartners: data }))
+                  await handleSave('homePartners')
+                }}
+                hasChanges={hasConfigChanges('homePartners')}
+                loading={loading}
+              />
             )}
 
-            {activeMenu === 'homeProducts' && renderConfigCard(
-              "[区块]产品展示",
-              "homeProducts",
-              "配置首页产品展示区域的内容"
+            {activeMenu === 'homeProducts' && (
+              <ConfigFormEditor
+                configType="homeProducts"
+                title="[区块]产品展示"
+                description="配置首页产品展示区域的内容"
+                configData={configs.homeProducts}
+                onSave={async (data) => {
+                  setConfigs(prev => ({ ...prev, homeProducts: data }))
+                  await handleSave('homeProducts')
+                }}
+                hasChanges={hasConfigChanges('homeProducts')}
+                loading={loading}
+              />
             )}
 
-            {activeMenu === 'homeServices' && renderConfigCard(
-              "[区块]服务信息",
-              "homeServices",
-              "配置首页服务信息区域的内容"
+            {activeMenu === 'homeServices' && (
+              <ConfigFormEditor
+                configType="homeServices"
+                title="[区块]服务信息"
+                description="配置首页服务信息区域的内容"
+                configData={configs.homeServices}
+                onSave={async (data) => {
+                  setConfigs(prev => ({ ...prev, homeServices: data }))
+                  await handleSave('homeServices')
+                }}
+                hasChanges={hasConfigChanges('homeServices')}
+                loading={loading}
+              />
             )}
 
-            {activeMenu === 'homePricing' && renderConfigCard(
-              "[区块]价格信息",
-              "homePricing",
-              "配置首页价格信息区域的内容"
+            {activeMenu === 'homePricing' && (
+              <ConfigFormEditor
+                configType="homePricing"
+                title="[区块]价格信息"
+                description="配置首页价格信息区域的内容"
+                configData={configs.homePricing}
+                onSave={async (data) => {
+                  setConfigs(prev => ({ ...prev, homePricing: data }))
+                  await handleSave('homePricing')
+                }}
+                hasChanges={hasConfigChanges('homePricing')}
+                loading={loading}
+              />
             )}
 
-            {activeMenu === 'homeAbout' && renderConfigCard(
-              "[区块]关于我们",
-              "homeAbout",
-              "配置首页关于我们区域的内容"
+            {activeMenu === 'homeAbout' && (
+              <ConfigFormEditor
+                configType="homeAbout"
+                title="[区块]关于我们"
+                description="配置首页关于我们区域的内容"
+                configData={configs.homeAbout}
+                onSave={async (data) => {
+                  setConfigs(prev => ({ ...prev, homeAbout: data }))
+                  await handleSave('homeAbout')
+                }}
+                hasChanges={hasConfigChanges('homeAbout')}
+                loading={loading}
+              />
             )}
 
-            {activeMenu === 'homeContact' && renderConfigCard(
-              "[区块]联系我们",
-              "homeContact",
-              "配置首页联系我们区域的内容"
+            {activeMenu === 'homeContact' && (
+              <ConfigFormEditor
+                configType="homeContact"
+                title="[区块]联系我们"
+                description="配置首页联系我们区域的内容"
+                configData={configs.homeContact}
+                onSave={async (data) => {
+                  setConfigs(prev => ({ ...prev, homeContact: data }))
+                  await handleSave('homeContact')
+                }}
+                hasChanges={hasConfigChanges('homeContact')}
+                loading={loading}
+              />
             )}
 
-            {activeMenu === 'products' && renderConfigCard(
-              "产品列表配置",
-              "products",
-              "包含产品分类、产品列表等产品列表配置"
+            {activeMenu === 'products' && (
+              <ConfigFormEditor
+                configType="products"
+                title="产品列表配置"
+                description="包含产品分类、产品列表等产品列表配置"
+                configData={configs.products}
+                onSave={async (data) => {
+                  setConfigs(prev => ({ ...prev, products: data }))
+                  await handleSave('products')
+                }}
+                hasChanges={hasConfigChanges('products')}
+                loading={loading}
+              />
             )}
 
             {activeMenu === 'articles' && <ArticlesManagement />}
 
-            {activeMenu === 'seo' && renderConfigCard(
-              "站点SEO配置",
-              "seo",
-              "包含全局SEO、产品页面SEO等搜索引擎优化配置"
+            {activeMenu === 'seo' && (
+              <ConfigFormEditor
+                configType="seo"
+                title="站点SEO配置"
+                description="包含全局SEO、产品页面SEO等搜索引擎优化配置"
+                configData={configs.seo}
+                onSave={async (data) => {
+                  setConfigs(prev => ({ ...prev, seo: data }))
+                  await handleSave('seo')
+                }}
+                hasChanges={hasConfigChanges('seo')}
+                loading={loading}
+              />
             )}
 
-            {activeMenu === 'custom' && renderConfigCard(
-              "主题个性化配置",
-              "custom",
-              "包含主题、功能开关等个性化配置"
+            {activeMenu === 'custom' && (
+              <ConfigFormEditor
+                configType="custom"
+                title="主题个性化配置"
+                description="包含主题、功能开关等个性化配置"
+                configData={configs.custom}
+                onSave={async (data) => {
+                  setConfigs(prev => ({ ...prev, custom: data }))
+                  await handleSave('custom')
+                }}
+                hasChanges={hasConfigChanges('custom')}
+                loading={loading}
+              />
             )}
 
             {activeMenu === 'theme' && (
@@ -999,10 +1134,19 @@ export default function AdminDashboardPage() {
               />
             )}
 
-            {activeMenu === 'otherPages' && renderConfigCard(
-              "自定义页面配置",
-              "otherPages",
-              "包含关于我们、服务条款、隐私政策等其他页面配置"
+            {activeMenu === 'otherPages' && (
+              <ConfigFormEditor
+                configType="otherPages"
+                title="自定义页面配置"
+                description="包含关于我们、服务条款、隐私政策等其他页面配置"
+                configData={configs.otherPages}
+                onSave={async (data) => {
+                  setConfigs(prev => ({ ...prev, otherPages: data }))
+                  await handleSave('otherPages')
+                }}
+                hasChanges={hasConfigChanges('otherPages')}
+                loading={loading}
+              />
             )}
 
             {activeMenu === 'system' && (

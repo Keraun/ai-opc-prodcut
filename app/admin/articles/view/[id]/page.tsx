@@ -5,7 +5,7 @@ import { useRouter, useParams } from "next/navigation"
 import { Button, Card, Spin } from "@arco-design/web-react"
 import { IconLeft, IconEdit } from "@arco-design/web-react/icon"
 import { toast } from "sonner"
-import styles from "./articles.module.css"
+import styles from "../../articles.module.css"
 
 interface Article {
   id: string

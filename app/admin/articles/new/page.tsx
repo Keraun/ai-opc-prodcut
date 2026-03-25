@@ -6,7 +6,7 @@ import { Button, Card, Message } from "@arco-design/web-react"
 import { IconLeft } from "@arco-design/web-react/icon"
 import { toast } from "sonner"
 import { DynamicForm } from "@/components/dynamic-form"
-import styles from "./articles.module.css"
+import styles from "../articles.module.css"
 
 interface FormSchema {
   title: string

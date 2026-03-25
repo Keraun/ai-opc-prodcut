@@ -1,0 +1,84 @@
+{
+  "title": "首页Banner配置",
+  "description": "配置首页Banner区域的内容",
+  "type": "object",
+  "properties": {
+    "hero": {
+      "type": "object",
+      "title": "Banner配置",
+      "description": "首页Banner区域的配置",
+      "properties": {
+        "layout": {
+          "type": "string",
+          "title": "布局类型",
+          "description": "Banner的布局样式",
+          "default": "layout1",
+          "enum": [
+            {"value": "layout1", "label": "布局1"},
+            {"value": "layout2", "label": "布局2"}
+          ],
+          "ui": {
+            "widget": "select",
+            "width": "50%"
+          }
+        },
+        "badge": {
+          "type": "string",
+          "title": "徽章文字",
+          "description": "Banner顶部的徽章文字",
+          "ui": {
+            "widget": "input",
+            "placeholder": "例如: 专注AI一人公司服务",
+            "width": "100%"
+          }
+        },
+        "title": {
+          "type": "object",
+          "title": "标题配置",
+          "description": "Banner的主标题和副标题",
+          "properties": {
+            "main": {
+              "type": "string",
+              "title": "主标题",
+              "ui": {
+                "widget": "input",
+                "placeholder": "主标题文字",
+                "width": "50%"
+              }
+            },
+            "sub": {
+              "type": "string",
+              "title": "副标题",
+              "ui": {
+                "widget": "input",
+                "placeholder": "副标题文字",
+                "width": "50%"
+              }
+            }
+          }
+        },
+        "subtitle": {
+          "type": "string",
+          "title": "描述文字",
+          "description": "Banner下方的描述文字",
+          "ui": {
+            "widget": "textarea",
+            "placeholder": "请输入描述文字",
+            "rows": 3,
+            "width": "100%"
+          }
+        }
+      }
+    }
+  },
+  "ui": {
+    "layout": "vertical",
+    "labelAlign": "left",
+    "groups": [
+      {
+        "title": "Banner基本信息",
+        "fields": ["hero"]
+      }
+    ]
+  }
+}

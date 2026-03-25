@@ -6,7 +6,22 @@ const schemaMap: Record<string, string> = {
   'article': 'article-schema.json',
   'site': 'site-config-schema.json',
   'navigation': 'navigation-schema.json',
-  'homeBanner': 'home-banner-schema.json'
+  'homeBanner': 'home-banner-schema.json',
+  'common': 'site-config-schema.json',
+  'seo': 'site-config-schema.json',
+  'footer': 'site-config-schema.json',
+  'home': 'site-config-schema.json',
+  'homeOrder': 'site-config-schema.json',
+  'homePartners': 'site-config-schema.json',
+  'homeProducts': 'site-config-schema.json',
+  'homeServices': 'site-config-schema.json',
+  'homePricing': 'site-config-schema.json',
+  'homeAbout': 'site-config-schema.json',
+  'homeContact': 'site-config-schema.json',
+  'products': 'site-config-schema.json',
+  'otherPages': 'site-config-schema.json',
+  'custom': 'site-config-schema.json',
+  'theme': 'site-config-schema.json'
 }
 
 export async function GET(request: NextRequest) {
