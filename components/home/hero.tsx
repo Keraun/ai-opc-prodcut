@@ -298,7 +298,7 @@ export function Hero() {
 
   return (
     <section
-      id="home"
+      id="hero"
       className={`relative min-h-screen flex items-center justify-center overflow-hidden ${layoutType === 'layout3' ? 'bg-gradient-to-br from-slate-100 via-white to-slate-100' : 'bg-gradient-to-br from-slate-50 via-white to-cyan-50'}`}
     >
       {/* Decorative Background Elements */}

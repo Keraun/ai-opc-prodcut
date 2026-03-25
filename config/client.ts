@@ -4,6 +4,7 @@ import seoConfigData from "./json/site-seo.json"
 import navigationConfigData from "./json/site-navigation.json"
 import footerConfigData from "./json/site-footer.json"
 import homeConfig from "./json/home-config.json"
+import homeOrderConfig from "./json/home-order.json"
 import productsConfigData from "./json/page-products.json"
 import otherPagesConfig from "./json/page-other.json"
 import customConfig from "./json/theme-custom.json"
@@ -58,7 +59,7 @@ export const heroConfig = homeConfig.hero || {}
 
 export const aboutConfig = homeConfig.about || {}
 export const pricingConfig = homeConfig.pricing || {}
-export const sectionsConfig = homeConfig.sections || []
+export const sectionsConfig = homeOrderConfig.sections || []
 
 export const pagesConfigExport: Record<string, {
   title: string

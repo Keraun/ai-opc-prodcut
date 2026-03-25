@@ -21,6 +21,7 @@ const seoConfigData = loadConfig("site-seo.json")
 const navigationConfigData = loadConfig("site-navigation.json")
 const footerConfigData = loadConfig("site-footer.json")
 const homeConfigData = loadConfig("home-config.json")
+const homeOrderConfigData = loadConfig("home-order.json")
 const productsConfigData = loadConfig("page-products.json")
 const otherPagesConfigData = loadConfig("page-other.json")
 const customConfigData = loadConfig("theme-custom.json")
@@ -70,6 +71,8 @@ export const servicesConfig = homeConfigData.homeServices || []
 export const heroConfig = homeConfigData.hero || {}
 
 export const aboutConfig = homeConfigData.about || {}
+
+export const sectionsConfig = homeOrderConfigData.sections || []
 
 export const pagesConfig: Record<string, {
   title: string

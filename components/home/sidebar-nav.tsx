@@ -1,19 +1,20 @@
 "use client"
 
 import { useState, useEffect } from "react"
-import { IconHome, IconApps, IconThunderbolt, IconUserGroup, IconPhone } from "@arco-design/web-react/icon"
+import { IconHome, IconThunderbolt, IconUserGroup, IconPhone, IconGift } from "@arco-design/web-react/icon"
 import { useTheme } from "@/components/theme-provider"
 
+// 硬编码的侧边导航项目
 const sidebarItems = [
-  { id: "home", label: "介绍", icon: IconHome, href: "#home" },
-  { id: "products", label: "产品", icon: IconApps, href: "#products" },
+  { id: "hero", label: "介绍", icon: IconHome, href: "#hero" },
+  { id: "pricing", label: "价格", icon: IconGift, href: "#pricing" },
   { id: "services", label: "服务", icon: IconThunderbolt, href: "#services" },
   { id: "about", label: "关于我们", icon: IconUserGroup, href: "#about" },
   { id: "contact", label: "联系我们", icon: IconPhone, href: "#contact" },
 ]
 
 export function SidebarNav() {
-  const [activeSection, setActiveSection] = useState("home")
+  const [activeSection, setActiveSection] = useState("hero")
   const { themeConfig } = useTheme()
   
   const primaryColor = themeConfig?.colors?.primary || "#1e40af"

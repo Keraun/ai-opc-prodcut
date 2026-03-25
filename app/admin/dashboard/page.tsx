@@ -232,8 +232,11 @@ export default function AdminDashboardPage() {
   const [versionInfos, setVersionInfos] = useState<Record<string, any>>({})
   const [activeMenu, setActiveMenu] = useState(() => {
     // 从URL查询参数中获取activeMenu，如果没有则使用默认值
-    const urlParams = new URLSearchParams(window.location.search)
-    return urlParams.get('menu') || 'accountInfo'
+    if (typeof window !== 'undefined') {
+      const urlParams = new URLSearchParams(window.location.search)
+      return urlParams.get('menu') || 'accountInfo'
+    }
+    return 'accountInfo'
   })
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false)
   const [showSchema, setShowSchema] = useState(true)

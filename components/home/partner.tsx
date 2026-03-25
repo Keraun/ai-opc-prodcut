@@ -17,7 +17,7 @@ const images = [
 ]
 export function Partner() {
   return (
-    <div className="flex flex-col items-center justify-center gap-4 " style={{ padding: '0 24px 24px 24px' }}>
+    <div id="partner" className="flex flex-col items-center justify-center gap-4 " style={{ padding: '0 24px 24px 24px' }}>
       <div className="mt-12 text-xl sm:text-2xl font-bold text-gray-900">来自优秀伙伴的信任</div>
       <ul className="flex flex-wrap gap-4">
         {images?.map((imgSrc, index) => (
