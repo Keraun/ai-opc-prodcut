@@ -1,6 +1,14 @@
 {
   "logs": [
     {
+      "id": 1774473974032,
+      "username": "admin",
+      "type": "login",
+      "description": "管理员登录",
+      "ip": "::1",
+      "timestamp": "2026/03/26 05:26:14"
+    },
+    {
       "id": 1774456886398,
       "username": "admin",
       "type": "update_config",

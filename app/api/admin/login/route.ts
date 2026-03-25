@@ -3,6 +3,7 @@ import fs from "fs"
 import path from "path"
 import { cookies } from "next/headers"
 import { logOperation } from "@/lib/operation-logger"
+import { readConfig, writeConfig } from "@/lib/config-manager"
 
 function generateSuperAdminToken(): string {
   const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789'
@@ -18,8 +19,7 @@ export async function POST(request: NextRequest) {
     const body = await request.json()
     const { username, password } = body
 
-    const accountConfigPath = path.join(process.cwd(), "config/json/system-account.json")
-    const accountConfig = JSON.parse(fs.readFileSync(accountConfigPath, "utf-8"))
+    const accountConfig = readConfig('account')
 
     const adminIndex = accountConfig.admins?.findIndex((admin: any) => admin.username === username)
 
@@ -89,7 +89,13 @@ export async function POST(request: NextRequest) {
     let superAdminToken = ''
 
     const tokenConfigPath = path.join(process.cwd(), "config/json/system-token.json")
-    const tokenConfig = JSON.parse(fs.readFileSync(tokenConfigPath, "utf-8"))
+    let tokenConfig = { superAdminToken: '' }
+    
+    try {
+      tokenConfig = JSON.parse(fs.readFileSync(tokenConfigPath, "utf-8"))
+    } catch (error) {
+      tokenConfig = { superAdminToken: '' }
+    }
 
     if (!tokenConfig.superAdminToken) {
       superAdminToken = generateSuperAdminToken()
@@ -100,7 +106,7 @@ export async function POST(request: NextRequest) {
       superAdminToken = tokenConfig.superAdminToken
     }
 
-    fs.writeFileSync(accountConfigPath, JSON.stringify(accountConfig, null, 2))
+    writeConfig('account', accountConfig)
 
     logOperation(admin.username, 'login', '管理员登录', currentIP)
 

@@ -9,18 +9,18 @@ export async function GET() {
     if (!adminUserCookie) {
       return NextResponse.json({
         authenticated: false
-      })
+      }, { status: 401 })
     }
-    
-    const user = JSON.parse(adminUserCookie.value)
+
+    const adminUser = JSON.parse(adminUserCookie.value)
     
     return NextResponse.json({
       authenticated: true,
-      user: user
+      user: adminUser
     })
   } catch (error) {
     return NextResponse.json({
       authenticated: false
-    })
+    }, { status: 401 })
   }
 }

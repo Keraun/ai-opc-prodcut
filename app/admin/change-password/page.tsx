@@ -2,146 +2,142 @@
 
 import { useState } from "react"
 import { useRouter } from "next/navigation"
-import { Button, Input, Message } from "@arco-design/web-react"
-import { IconLock } from "@arco-design/web-react/icon"
-import styles from "./change-password.module.css"
+import { Form, Input, Button, Card, Alert } from "@arco-design/web-react"
+import { IconLock, IconCheck } from "@arco-design/web-react/icon"
+import { toast, Toaster } from "sonner"
+import { AdminLayout } from '../components'
+import styles from './change-password.module.css'
+
+const FormItem = Form.Item
 
 export default function ChangePasswordPage() {
   const router = useRouter()
-  const [oldPassword, setOldPassword] = useState("")
-  const [newPassword, setNewPassword] = useState("")
-  const [confirmPassword, setConfirmPassword] = useState("")
+  const [form] = Form.useForm()
   const [loading, setLoading] = useState(false)
 
-  const handleChangePassword = async () => {
-    if (!oldPassword || !newPassword || !confirmPassword) {
-      Message.error("请填写所有字段")
-      return
-    }
-
-    if (newPassword !== confirmPassword) {
-      Message.error("两次输入的新密码不一致")
-      return
-    }
-
-    if (newPassword.length < 8) {
-      Message.error("新密码长度至少为8位")
-      return
-    }
-
-    const currentUserStr = sessionStorage.getItem('currentUser')
-    if (!currentUserStr) {
-      Message.error("未找到用户信息，请重新登录")
-      router.push("/admin")
-      return
-    }
-
-    const currentUser = JSON.parse(currentUserStr)
-
-    setLoading(true)
-
+  const handleSubmit = async (values: any) => {
     try {
-      const response = await fetch("/api/admin/change-password", {
-        method: "POST",
+      setLoading(true)
+      
+      const response = await fetch('/api/admin/change-password', {
+        method: 'POST',
         headers: {
-          "Content-Type": "application/json",
+          'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ 
-          username: currentUser.username,
-          oldPassword, 
-          newPassword 
+        body: JSON.stringify({
+          oldPassword: values.oldPassword,
+          newPassword: values.newPassword,
         }),
       })
 
       const data = await response.json()
 
-      if (response.ok) {
-        Message.success("密码修改成功，请重新登录")
-        router.push("/admin")
-      } else {
-        Message.error(data.message || "密码修改失败")
+      if (!response.ok) {
+        throw new Error(data.message || '修改失败')
       }
+
+      toast.success('密码修改成功，请重新登录')
+      
+      setTimeout(() => {
+        router.push('/admin')
+      }, 2000)
     } catch (error) {
-      Message.error("密码修改失败，请重试")
+      toast.error(error instanceof Error ? error.message : '修改失败')
     } finally {
       setLoading(false)
     }
   }
 
   return (
-    <div className={styles.container}>
-      <div className={styles.formWrapper}>
-        <div className={styles.formCard}>
-          <div className={styles.formHeader}>
-            <h1 className={styles.formTitle}>修改密码</h1>
-            <p className={styles.formSubtitle}>首次登录需要修改密码</p>
-          </div>
-
-          <div className={styles.formFields}>
-            <div className={styles.formField}>
-              <label className={styles.formLabel}>
-                原密码
-              </label>
-              <Input
-                prefix={<IconLock />}
-                placeholder="请输入原密码"
-                type="password"
-                value={oldPassword}
-                onChange={setOldPassword}
-                style={{ height: '3rem' }}
-              />
+    <>
+      <Toaster position="top-center" richColors />
+      
+      <AdminLayout title="修改密码">
+        <div className={styles.container}>
+          <Card className={styles.formCard}>
+            <div className={styles.header}>
+              <IconLock className={styles.icon} />
+              <h2>修改密码</h2>
             </div>
 
-            <div className={styles.formField}>
-              <label className={styles.formLabel}>
-                新密码
-              </label>
-              <Input
-                prefix={<IconLock />}
-                placeholder="请输入新密码（至少8位）"
-                type="password"
-                value={newPassword}
-                onChange={setNewPassword}
-                style={{ height: '3rem' }}
-              />
-            </div>
+            <Alert
+              type="warning"
+              content="修改密码后需要重新登录"
+              style={{ marginBottom: 24 }}
+            />
 
-            <div className={styles.formField}>
-              <label className={styles.formLabel}>
-                确认新密码
-              </label>
-              <Input
-                prefix={<IconLock />}
-                placeholder="请再次输入新密码"
-                type="password"
-                value={confirmPassword}
-                onChange={setConfirmPassword}
-                style={{ height: '3rem' }}
-                onPressEnter={handleChangePassword}
-              />
-            </div>
-
-            <Button
-              type="primary"
-              long
-              loading={loading}
-              onClick={handleChangePassword}
-              className={styles.submitButton}
+            <Form
+              form={form}
+              layout="vertical"
+              onSubmit={handleSubmit}
+              autoComplete="off"
             >
-              确认修改
-            </Button>
-          </div>
+              <FormItem
+                label="旧密码"
+                field="oldPassword"
+                rules={[
+                  { required: true, message: '请输入旧密码' },
+                  { minLength: 6, message: '密码长度不能少于6位' },
+                ]}
+              >
+                <Input.Password
+                  placeholder="请输入旧密码"
+                  prefix={<IconLock />}
+                />
+              </FormItem>
 
-          <div className={styles.backLink}>
-            <button
-              onClick={() => router.push("/admin")}
-              className={styles.backLinkButton}
-            >
-              返回登录
-            </button>
-          </div>
+              <FormItem
+                label="新密码"
+                field="newPassword"
+                rules={[
+                  { required: true, message: '请输入新密码' },
+                  { minLength: 6, message: '密码长度不能少于6位' },
+                ]}
+              >
+                <Input.Password
+                  placeholder="请输入新密码"
+                  prefix={<IconLock />}
+                />
+              </FormItem>
+
+              <FormItem
+                label="确认新密码"
+                field="confirmPassword"
+                dependencies={['newPassword']}
+                rules={[
+                  { required: true, message: '请确认新密码' },
+                  {
+                    validator: (value, callback) => {
+                      if (value !== form.getFieldValue('newPassword')) {
+                        callback('两次输入的密码不一致')
+                      } else {
+                        callback()
+                      }
+                    }
+                  }
+                ]}
+              >
+                <Input.Password
+                  placeholder="请再次输入新密码"
+                  prefix={<IconLock />}
+                />
+              </FormItem>
+
+              <FormItem>
+                <Button
+                  type="primary"
+                  htmlType="submit"
+                  loading={loading}
+                  icon={<IconCheck />}
+                  long
+                >
+                  确认修改
+                </Button>
+              </FormItem>
+            </Form>
+          </Card>
         </div>
-      </div>
-    </div>
+      </AdminLayout>
+    </>
   )
 }

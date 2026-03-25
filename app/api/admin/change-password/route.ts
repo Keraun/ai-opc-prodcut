@@ -1,70 +1,80 @@
 import { NextRequest, NextResponse } from "next/server"
-import fs from "fs"
-import path from "path"
 import { cookies } from "next/headers"
+import { readConfig, writeConfig } from "@/lib/config-manager"
 import { logOperation } from "@/lib/operation-logger"
 
 export async function POST(request: NextRequest) {
   try {
+    const cookieStore = await cookies()
+    const adminUserCookie = cookieStore.get('adminUser')
+    
+    if (!adminUserCookie) {
+      return NextResponse.json({
+        success: false,
+        message: '未登录'
+      }, { status: 401 })
+    }
+
+    const adminUser = JSON.parse(adminUserCookie.value)
     const body = await request.json()
-    const { username, oldPassword, newPassword } = body
+    const { oldPassword, newPassword } = body
 
-    const accountConfigPath = path.join(process.cwd(), "config/json/system-account.json")
-    const accountConfig = JSON.parse(fs.readFileSync(accountConfigPath, "utf-8"))
+    if (!oldPassword || !newPassword) {
+      return NextResponse.json({
+        success: false,
+        message: '参数错误'
+      }, { status: 400 })
+    }
 
-    const adminIndex = accountConfig.admins?.findIndex((admin: any) => admin.username === username)
+    if (newPassword.length < 6) {
+      return NextResponse.json({
+        success: false,
+        message: '新密码长度不能少于6位'
+      }, { status: 400 })
+    }
+
+    const accountConfig = readConfig('account')
+    const adminIndex = accountConfig.admins?.findIndex(
+      (admin: any) => admin.username === adminUser.username
+    )
 
     if (adminIndex === -1 || adminIndex === undefined) {
       return NextResponse.json({
         success: false,
-        message: "用户不存在"
-      }, { status: 400 })
+        message: '用户不存在'
+      }, { status: 404 })
     }
 
-    if (oldPassword !== accountConfig.admins[adminIndex].password) {
+    const admin = accountConfig.admins[adminIndex]
+
+    if (admin.password !== oldPassword) {
       return NextResponse.json({
         success: false,
-        message: "原密码错误"
-      }, { status: 400 })
+        message: '旧密码错误'
+      }, { status: 401 })
     }
 
     accountConfig.admins[adminIndex].password = newPassword
     accountConfig.admins[adminIndex].mustChangePassword = false
 
-    fs.writeFileSync(accountConfigPath, JSON.stringify(accountConfig, null, 2))
+    writeConfig('account', accountConfig)
 
     const currentIP = request.headers.get('x-forwarded-for') || 
                       request.headers.get('x-real-ip') || 
                       'unknown'
-    logOperation(username, 'change_password', '修改登录密码', currentIP)
-
-    const cookieStore = await cookies()
-    const admin = accountConfig.admins[adminIndex]
-    const userData = {
-      username: admin.username,
-      remark: admin.remark,
-      mustChangePassword: false,
-      lastLoginTime: admin.lastLoginTime,
-      lastLoginIP: admin.lastLoginIP,
-      currentLoginIP: admin.currentLoginIP
-    }
     
-    cookieStore.set('adminUser', JSON.stringify(userData), {
-      httpOnly: true,
-      secure: process.env.NODE_ENV === 'production',
-      sameSite: 'lax',
-      maxAge: 60 * 60 * 24 * 7
-    })
+    logOperation(admin.username, 'change_password', '修改密码', currentIP)
+
+    cookieStore.delete('adminUser')
 
     return NextResponse.json({
       success: true,
-      message: "密码修改成功",
-      user: userData
+      message: '密码修改成功'
     })
   } catch (error) {
     return NextResponse.json({
       success: false,
-      message: "密码修改失败"
+      message: '修改密码失败'
     }, { status: 500 })
   }
 }
