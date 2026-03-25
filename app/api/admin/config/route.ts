@@ -3,6 +3,7 @@ import { readConfig, writeConfig, readAllConfigs, readTemplate } from "@/lib/con
 import { createVersion } from "@/lib/version-manager"
 import { logOperation } from "@/lib/operation-logger"
 import { cookies } from "next/headers"
+import { loadAllConfigs } from "@/lib/config-cache"
 
 export async function GET() {
   try {
@@ -31,6 +32,9 @@ export async function POST(request: NextRequest) {
     const existingData = readConfig(type)
     createVersion(type, existingData)
     writeConfig(type, data)
+
+    // 刷新配置缓存
+    loadAllConfigs()
 
     const cookieStore = await cookies()
     const userCookie = cookieStore.get('adminUser')?.value
