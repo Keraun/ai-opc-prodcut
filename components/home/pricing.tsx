@@ -1,13 +1,14 @@
 "use client"
 
-import { Button, Card, Space } from "@arco-design/web-react"
-import { IconCheck, IconArrowRight } from "@arco-design/web-react/icon"
-import Link from "next/link"
+import { Button, Card, Modal } from "@arco-design/web-react"
+import { IconCheck, IconArrowRight, IconQrcode } from "@arco-design/web-react/icon"
 import { useTheme } from "@/components/theme-provider"
 import { pricingConfig } from "@/config/client"
+import { useState } from "react"
 
 export function Pricing() {
   const { themeConfig } = useTheme()
+  const [qrModalVisible, setQrModalVisible] = useState(false)
 
   const primaryColor = themeConfig?.colors?.primary || "#1e40af"
   const secondaryColor = themeConfig?.colors?.secondary || "#3b82f6"
@@ -24,8 +25,7 @@ export function Pricing() {
         "社区支持",
         "每月100次API调用"
       ],
-      buttonText: "开始免费使用",
-      buttonLink: "/products"
+      buttonText: "开始免费使用"
     },
     {
       title: "专业版",
@@ -39,7 +39,6 @@ export function Pricing() {
         "AI GEO课程访问"
       ],
       buttonText: "升级专业版",
-      buttonLink: "/products",
       isPopular: true
     },
     {
@@ -54,10 +53,13 @@ export function Pricing() {
         "AI GEO课程访问",
         "企业级安全保障"
       ],
-      buttonText: "联系销售",
-      buttonLink: "/contact"
+      buttonText: "联系销售"
     }
   ]
+
+  const handleButtonClick = () => {
+    setQrModalVisible(true)
+  }
 
   return (
     <section
@@ -92,28 +94,31 @@ export function Pricing() {
                   最受欢迎
                 </div>
               )}
-              <div className="p-6">
-                <h3 className="text-xl font-bold text-gray-900 mb-2">{plan.title}</h3>
-                <div className="mb-4">
-                  <span className="text-4xl font-bold text-gray-900">{plan.price}</span>
-                  <span className="text-gray-500">/月</span>
+              <div className="p-6 flex flex-col h-[100%]">
+                <div>
+                  <h3 className="text-xl font-bold text-gray-900 mb-2">{plan.title}</h3>
+                  <div className="mb-4">
+                    <span className="text-4xl font-bold text-gray-900">{plan.price}</span>
+                    <span className="text-gray-500">/月</span>
+                  </div>
+                  <p className="text-gray-500 mb-6">{plan.description}</p>
+                  <ul className="space-y-3 mb-8">
+                    {plan.features.map((feature, featureIndex) => (
+                      <li key={featureIndex} className="flex items-start gap-2">
+                        <IconCheck
+                          className="text-green-500 mt-0.5 flex-shrink-0"
+                          style={{ color: accentColor }}
+                        />
+                        <span className="text-gray-600">{feature}</span>
+                      </li>
+                    ))}
+                  </ul>
                 </div>
-                <p className="text-gray-500 mb-6">{plan.description}</p>
-                <ul className="space-y-3 mb-8">
-                  {plan.features.map((feature, featureIndex) => (
-                    <li key={featureIndex} className="flex items-start gap-2">
-                      <IconCheck
-                        className="text-green-500 mt-0.5 flex-shrink-0"
-                        style={{ color: accentColor }}
-                      />
-                      <span className="text-gray-600">{feature}</span>
-                    </li>
-                  ))}
-                </ul>
-                <Link href={plan.buttonLink}>
+                <div className="mt-auto">
                   <Button
                     type={plan.isPopular ? "primary" : "secondary"}
                     long
+                    onClick={handleButtonClick}
                     style={{
                       backgroundColor: plan.isPopular ? primaryColor : 'white',
                       color: plan.isPopular ? 'white' : primaryColor,
@@ -124,11 +129,27 @@ export function Pricing() {
                     {plan.buttonText}
                     {!plan.isPopular && <IconArrowRight className="ml-2" />}
                   </Button>
-                </Link>
+                </div>
               </div>
             </Card>
           ))}
         </div>
+
+        <Modal
+          title="联系客服"
+          open={qrModalVisible}
+          onCancel={() => setQrModalVisible(false)}
+          footer={null}
+          width={320}
+        >
+          <div className="text-center py-4">
+            <p className="mb-4 text-gray-600">扫码添加客服微信</p>
+            <div className="w-48 h-48 bg-gray-100 mx-auto flex items-center justify-center rounded-lg mb-4">
+              <IconQrcode className="text-6xl text-gray-400" />
+            </div>
+            <p className="text-sm text-gray-500">客服微信：makerai_official</p>
+          </div>
+        </Modal>
 
       </div>
     </section>
