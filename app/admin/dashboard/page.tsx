@@ -230,7 +230,11 @@ export default function AdminDashboardPage() {
   const [showDiff, setShowDiff] = useState(false)
   const [showEditDiff, setShowEditDiff] = useState(false)
   const [versionInfos, setVersionInfos] = useState<Record<string, any>>({})
-  const [activeMenu, setActiveMenu] = useState('accountInfo')
+  const [activeMenu, setActiveMenu] = useState(() => {
+    // 从URL查询参数中获取activeMenu，如果没有则使用默认值
+    const urlParams = new URLSearchParams(window.location.search)
+    return urlParams.get('menu') || 'accountInfo'
+  })
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false)
   const [showSchema, setShowSchema] = useState(true)
 
@@ -543,6 +547,15 @@ export default function AdminDashboardPage() {
         }
       }
     })
+  }
+
+  // 处理菜单点击事件
+  const handleMenuClick = (menu: string) => {
+    setActiveMenu(menu)
+    // 更新URL查询参数
+    const url = new URL(window.location.href)
+    url.searchParams.set('menu', menu)
+    window.history.pushState({}, '', url.toString())
   }
 
   const handleChangePassword = async () => {
@@ -911,7 +924,7 @@ export default function AdminDashboardPage() {
               <div className="p-4">
                 <nav className="space-y-1">
                   <button
-                    onClick={() => setActiveMenu('accountInfo')}
+                    onClick={() => handleMenuClick('accountInfo')}
                     className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-left transition-all ${activeMenu === 'accountInfo'
                         ? 'bg-blue-50 text-blue-700 font-medium'
                         : 'text-gray-700 hover:bg-gray-50'
@@ -930,7 +943,7 @@ export default function AdminDashboardPage() {
                   </div>
 
                   <button
-                    onClick={() => setActiveMenu('site')}
+                    onClick={() => handleMenuClick('site')}
                     className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-left transition-all ${activeMenu === 'site'
                         ? 'bg-blue-50 text-blue-700 font-medium'
                         : 'text-gray-700 hover:bg-gray-50'
@@ -941,7 +954,7 @@ export default function AdminDashboardPage() {
                   </button>
 
                   <button
-                    onClick={() => setActiveMenu('common')}
+                    onClick={() => handleMenuClick('common')}
                     className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-left transition-all ${activeMenu === 'common'
                         ? 'bg-blue-50 text-blue-700 font-medium'
                         : 'text-gray-700 hover:bg-gray-50'
@@ -952,7 +965,7 @@ export default function AdminDashboardPage() {
                   </button>
 
                   <button
-                    onClick={() => setActiveMenu('account')}
+                    onClick={() => handleMenuClick('account')}
                     className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-left transition-all ${activeMenu === 'account'
                         ? 'bg-blue-50 text-blue-700 font-medium'
                         : 'text-gray-700 hover:bg-gray-50'
@@ -963,7 +976,7 @@ export default function AdminDashboardPage() {
                   </button>
 
                   <button
-                    onClick={() => setActiveMenu('navigation')}
+                    onClick={() => handleMenuClick('navigation')}
                     className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-left transition-all ${activeMenu === 'navigation'
                         ? 'bg-blue-50 text-blue-700 font-medium'
                         : 'text-gray-700 hover:bg-gray-50'
@@ -974,7 +987,7 @@ export default function AdminDashboardPage() {
                   </button>
 
                   <button
-                    onClick={() => setActiveMenu('footer')}
+                    onClick={() => handleMenuClick('footer')}
                     className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-left transition-all ${activeMenu === 'footer'
                         ? 'bg-blue-50 text-blue-700 font-medium'
                         : 'text-gray-700 hover:bg-gray-50'
@@ -985,7 +998,7 @@ export default function AdminDashboardPage() {
                   </button>
 
                   <button
-                    onClick={() => setActiveMenu('seo')}
+                    onClick={() => handleMenuClick('seo')}
                     className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-left transition-all ${activeMenu === 'seo'
                         ? 'bg-blue-50 text-blue-700 font-medium'
                         : 'text-gray-700 hover:bg-gray-50'
@@ -1005,7 +1018,7 @@ export default function AdminDashboardPage() {
 
                   <div className="space-y-1">
                     <button
-                      onClick={() => setActiveMenu('home')}
+                      onClick={() => handleMenuClick('home')}
                       className={`w-full flex items-center justify-between gap-3 px-3 py-2.5 rounded-lg text-left transition-all ${activeMenu === 'home'
                           ? 'bg-blue-50 text-blue-700 font-medium'
                           : 'text-gray-700 hover:bg-gray-50'
@@ -1018,7 +1031,7 @@ export default function AdminDashboardPage() {
                     </button>
                     <div className="pl-10 space-y-1">
                       <button
-                        onClick={() => setActiveMenu('homeOrder')}
+                        onClick={() => handleMenuClick('homeOrder')}
                         className={`w-full flex items-center gap-3 px-3 py-2 rounded-lg text-left transition-all ${activeMenu === 'homeOrder'
                             ? 'bg-blue-50 text-blue-700 font-medium'
                             : 'text-gray-600 hover:bg-gray-50'
@@ -1027,7 +1040,7 @@ export default function AdminDashboardPage() {
                         {!sidebarCollapsed && <span className="text-sm">区块顺序配置</span>}
                       </button>
                       <button
-                        onClick={() => setActiveMenu('homeBanner')}
+                        onClick={() => handleMenuClick('homeBanner')}
                         className={`w-full flex items-center gap-3 px-3 py-2 rounded-lg text-left transition-all ${activeMenu === 'homeBanner'
                             ? 'bg-blue-50 text-blue-700 font-medium'
                             : 'text-gray-600 hover:bg-gray-50'
@@ -1036,7 +1049,7 @@ export default function AdminDashboardPage() {
                         {!sidebarCollapsed && <span className="text-sm">Banner信息区块</span>}
                       </button>
                       <button
-                        onClick={() => setActiveMenu('homePartners')}
+                        onClick={() => handleMenuClick('homePartners')}
                         className={`w-full flex items-center gap-3 px-3 py-2 rounded-lg text-left transition-all ${activeMenu === 'homePartners'
                             ? 'bg-blue-50 text-blue-700 font-medium'
                             : 'text-gray-600 hover:bg-gray-50'
@@ -1045,7 +1058,7 @@ export default function AdminDashboardPage() {
                         {!sidebarCollapsed && <span className="text-sm">伙伴信息区块</span>}
                       </button>
                       <button
-                        onClick={() => setActiveMenu('homeProducts')}
+                        onClick={() => handleMenuClick('homeProducts')}
                         className={`w-full flex items-center gap-3 px-3 py-2 rounded-lg text-left transition-all ${activeMenu === 'homeProducts'
                             ? 'bg-blue-50 text-blue-700 font-medium'
                             : 'text-gray-600 hover:bg-gray-50'
@@ -1054,7 +1067,7 @@ export default function AdminDashboardPage() {
                         {!sidebarCollapsed && <span className="text-sm">产品信息区块</span>}
                       </button>
                       <button
-                        onClick={() => setActiveMenu('homeServices')}
+                        onClick={() => handleMenuClick('homeServices')}
                         className={`w-full flex items-center gap-3 px-3 py-2 rounded-lg text-left transition-all ${activeMenu === 'homeServices'
                             ? 'bg-blue-50 text-blue-700 font-medium'
                             : 'text-gray-600 hover:bg-gray-50'
@@ -1063,7 +1076,7 @@ export default function AdminDashboardPage() {
                         {!sidebarCollapsed && <span className="text-sm">服务信息区块</span>}
                       </button>
                       <button
-                        onClick={() => setActiveMenu('homePricing')}
+                        onClick={() => handleMenuClick('homePricing')}
                         className={`w-full flex items-center gap-3 px-3 py-2 rounded-lg text-left transition-all ${activeMenu === 'homePricing'
                             ? 'bg-blue-50 text-blue-700 font-medium'
                             : 'text-gray-600 hover:bg-gray-50'
@@ -1072,7 +1085,7 @@ export default function AdminDashboardPage() {
                         {!sidebarCollapsed && <span className="text-sm">价格信息区块</span>}
                       </button>
                       <button
-                        onClick={() => setActiveMenu('homeAbout')}
+                        onClick={() => handleMenuClick('homeAbout')}
                         className={`w-full flex items-center gap-3 px-3 py-2 rounded-lg text-left transition-all ${activeMenu === 'homeAbout'
                             ? 'bg-blue-50 text-blue-700 font-medium'
                             : 'text-gray-600 hover:bg-gray-50'
@@ -1081,7 +1094,7 @@ export default function AdminDashboardPage() {
                         {!sidebarCollapsed && <span className="text-sm">关于我们区块</span>}
                       </button>
                       <button
-                        onClick={() => setActiveMenu('homeContact')}
+                        onClick={() => handleMenuClick('homeContact')}
                         className={`w-full flex items-center gap-3 px-3 py-2 rounded-lg text-left transition-all ${activeMenu === 'homeContact'
                             ? 'bg-blue-50 text-blue-700 font-medium'
                             : 'text-gray-600 hover:bg-gray-50'
@@ -1093,7 +1106,7 @@ export default function AdminDashboardPage() {
                   </div>
 
                   <button
-                    onClick={() => setActiveMenu('products')}
+                    onClick={() => handleMenuClick('products')}
                     className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-left transition-all ${activeMenu === 'products'
                         ? 'bg-blue-50 text-blue-700 font-medium'
                         : 'text-gray-700 hover:bg-gray-50'
@@ -1104,7 +1117,7 @@ export default function AdminDashboardPage() {
                   </button>
 
                   <button
-                    onClick={() => setActiveMenu('otherPages')}
+                    onClick={() => handleMenuClick('otherPages')}
                     className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-left transition-all ${activeMenu === 'otherPages'
                         ? 'bg-blue-50 text-blue-700 font-medium'
                         : 'text-gray-700 hover:bg-gray-50'
@@ -1123,7 +1136,7 @@ export default function AdminDashboardPage() {
                   </div>
 
                   <button
-                    onClick={() => setActiveMenu('custom')}
+                    onClick={() => handleMenuClick('custom')}
                     className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-left transition-all ${activeMenu === 'custom'
                         ? 'bg-blue-50 text-blue-700 font-medium'
                         : 'text-gray-700 hover:bg-gray-50'
@@ -1134,7 +1147,7 @@ export default function AdminDashboardPage() {
                   </button>
 
                   <button
-                    onClick={() => setActiveMenu('theme')}
+                    onClick={() => handleMenuClick('theme')}
                     className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-left transition-all ${activeMenu === 'theme'
                         ? 'bg-blue-50 text-blue-700 font-medium'
                         : 'text-gray-700 hover:bg-gray-50'
@@ -1153,7 +1166,7 @@ export default function AdminDashboardPage() {
                   </div>
 
                   <button
-                    onClick={() => setActiveMenu('operationLogs')}
+                    onClick={() => handleMenuClick('operationLogs')}
                     className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-left transition-all ${activeMenu === 'operationLogs'
                         ? 'bg-blue-50 text-blue-700 font-medium'
                         : 'text-gray-700 hover:bg-gray-50'

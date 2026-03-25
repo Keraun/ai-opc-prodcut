@@ -13,7 +13,7 @@ const _geistMono = Geist_Mono({ subsets: ["latin"] });
 
 function getThemeConfig() {
   try {
-    const themePath = join(process.cwd(), 'config', 'json', 'theme.json')
+    const themePath = join(process.cwd(), 'config', 'json', 'theme-config.json')
     const themeData = readFileSync(themePath, 'utf-8')
     const themeConfig = JSON.parse(themeData)
     const currentTheme = themeConfig.themes[themeConfig.currentTheme]
@@ -41,7 +41,7 @@ export const metadata: Metadata = {
     telephone: false,
   },
   openGraph: {
-    type: seoConfig?.openGraph?.type as 'website',
+    type: (seoConfig?.openGraph?.type || 'website') as 'website',
     locale: seoConfig?.openGraph?.locale,
     url: siteConfig?.url,
     siteName: seoConfig?.openGraph?.siteName,
@@ -50,7 +50,7 @@ export const metadata: Metadata = {
     images: seoConfig?.openGraph?.images,
   },
   twitter: {
-    card: seoConfig?.twitter?.card as 'summary_large_image',
+    card: (seoConfig?.twitter?.card || 'summary_large_image') as 'summary_large_image',
     title: `${siteConfig?.name || '创客AI'} - ${siteConfig?.description || ''}`,
     description: siteConfig?.description,
     images: seoConfig?.openGraph?.images?.map((img: any) => img.url),

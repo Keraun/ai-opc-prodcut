@@ -115,53 +115,106 @@
     }
   },
   "home": {
+    "description": "首页整体配置"
+  },
+  "homeOrder": {
+    "sections": {
+      "description": "区块顺序配置",
+      "type": "array",
+      "required": true,
+      "fields": {
+        "id": "区块ID",
+        "name": "区块名称",
+        "visible": "是否可见",
+        "order": "显示顺序"
+      }
+    }
+  },
+  "homeBanner": {
     "hero": {
-      "description": "首页Hero区域配置",
+      "description": "Banner信息区块配置",
       "type": "object",
       "required": false,
       "fields": {
+        "layout": "布局类型",
         "badge": "徽章文字",
         "title": "标题（main: 主标题, sub: 副标题）",
         "subtitle": "副标题描述",
         "buttons": "按钮配置（primary: 主按钮, secondary: 次按钮）"
       }
-    },
-    "about": {
-      "description": "关于我们区域配置",
+    }
+  },
+  "homePartners": {
+    "partner": {
+      "description": "伙伴信息区块配置",
       "type": "object",
       "required": false,
       "fields": {
-        "title": "标题配置",
+        "title": "标题",
+        "description": "描述"
+      }
+    }
+  },
+  "homeProducts": {
+    "products": {
+      "description": "产品信息区块配置",
+      "type": "object",
+      "required": false,
+      "fields": {
+        "title": "标题",
+        "description": "描述",
+        "items": "产品列表（id: 产品ID, name: 产品名称, description: 产品描述, icon: 图标名称, tag: 标签文字, tagColor: 标签颜色, features: 特性列表, link: 跳转链接）"
+      }
+    }
+  },
+  "homeServices": {
+    "services": {
+      "description": "服务信息区块配置",
+      "type": "object",
+      "required": false,
+      "fields": {
+        "title": "标题",
+        "description": "描述",
+        "items": "服务列表（title: 服务标题, description: 服务描述, highlights: 亮点列表）"
+      }
+    }
+  },
+  "homePricing": {
+    "pricing": {
+      "description": "价格信息区块配置",
+      "type": "object",
+      "required": false,
+      "fields": {
+        "title": "标题",
+        "description": "描述",
+        "plans": "价格计划列表（title: 计划名称, price: 价格, description: 描述, features: 特性列表, buttonText: 按钮文字, buttonLink: 按钮链接, isPopular: 是否热门）"
+      }
+    }
+  },
+  "homeAbout": {
+    "about": {
+      "description": "关于我们区块配置",
+      "type": "object",
+      "required": false,
+      "fields": {
+        "title": "标题配置（main: 主标题, highlight: 高亮部分）",
         "description": "描述数组",
-        "mission": "使命",
-        "vision": "愿景",
-        "values": "价值观",
-        "stats": "统计数据"
+        "mission": "使命（title: 标题, description: 描述）",
+        "vision": "愿景（title: 标题, description: 描述）",
+        "values": "价值观（title: 标题, description: 描述）",
+        "stats": "统计数据（value: 值, label: 标签）"
       }
-    },
-    "homeProducts": {
-      "description": "首页产品展示配置",
-      "type": "array",
+    }
+  },
+  "homeContact": {
+    "contact": {
+      "description": "联系我们区块配置",
+      "type": "object",
       "required": false,
       "fields": {
-        "id": "产品ID",
-        "name": "产品名称",
-        "description": "产品描述",
-        "icon": "图标名称",
-        "tag": "标签文字",
-        "tagColor": "标签颜色",
-        "features": "特性列表",
-        "link": "跳转链接"
-      }
-    },
-    "homeServices": {
-      "description": "首页服务展示配置",
-      "type": "array",
-      "required": false,
-      "fields": {
-        "title": "服务标题",
-        "description": "服务描述",
-        "highlights": "亮点列表"
+        "title": "标题",
+        "description": "描述",
+        "methods": "联系方式列表（type: 类型, value: 值, label: 标签）"
       }
     }
   },

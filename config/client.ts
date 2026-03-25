@@ -1,13 +1,13 @@
-import siteConfigData from "./json/site.json"
-import commonConfig from "./json/common.json"
-import seoConfigData from "./json/seo.json"
-import navigationConfigData from "./json/navigation.json"
-import footerConfigData from "./json/footer.json"
-import homeConfig from "./json/home.json"
-import productsConfigData from "./json/products.json"
-import otherPagesConfig from "./json/other-pages.json"
-import customConfig from "./json/custom.json"
-import accountConfig from "./json/account.json"
+import siteConfigData from "./json/site-config.json"
+import commonConfig from "./json/site-common.json"
+import seoConfigData from "./json/site-seo.json"
+import navigationConfigData from "./json/site-navigation.json"
+import footerConfigData from "./json/site-footer.json"
+import homeConfig from "./json/home-config.json"
+import productsConfigData from "./json/page-products.json"
+import otherPagesConfig from "./json/page-other.json"
+import customConfig from "./json/theme-custom.json"
+import accountConfig from "./json/system-account.json"
 
 export const siteConfig = {
   ...siteConfigData,

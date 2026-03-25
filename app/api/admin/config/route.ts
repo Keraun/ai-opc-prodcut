@@ -9,12 +9,12 @@ export async function GET() {
   try {
     const configDir = path.join(process.cwd(), "config/json")
     
-    const siteConfig = JSON.parse(fs.readFileSync(path.join(configDir, "site.json"), "utf-8"))
-    const commonConfig = JSON.parse(fs.readFileSync(path.join(configDir, "common.json"), "utf-8"))
-    const seoConfig = JSON.parse(fs.readFileSync(path.join(configDir, "seo.json"), "utf-8"))
-    const navigationConfig = JSON.parse(fs.readFileSync(path.join(configDir, "navigation.json"), "utf-8"))
-    const footerConfig = JSON.parse(fs.readFileSync(path.join(configDir, "footer.json"), "utf-8"))
-    const homeConfig = JSON.parse(fs.readFileSync(path.join(configDir, "home.json"), "utf-8"))
+    const siteConfig = JSON.parse(fs.readFileSync(path.join(configDir, "site-config.json"), "utf-8"))
+    const commonConfig = JSON.parse(fs.readFileSync(path.join(configDir, "site-common.json"), "utf-8"))
+    const seoConfig = JSON.parse(fs.readFileSync(path.join(configDir, "site-seo.json"), "utf-8"))
+    const navigationConfig = JSON.parse(fs.readFileSync(path.join(configDir, "site-navigation.json"), "utf-8"))
+    const footerConfig = JSON.parse(fs.readFileSync(path.join(configDir, "site-footer.json"), "utf-8"))
+    const homeConfig = JSON.parse(fs.readFileSync(path.join(configDir, "home-config.json"), "utf-8"))
     const homeOrderConfig = JSON.parse(fs.readFileSync(path.join(configDir, "home-order.json"), "utf-8"))
     const homeBannerConfig = JSON.parse(fs.readFileSync(path.join(configDir, "home-banner.json"), "utf-8"))
     const homePartnersConfig = JSON.parse(fs.readFileSync(path.join(configDir, "home-partners.json"), "utf-8"))
@@ -23,12 +23,12 @@ export async function GET() {
     const homePricingConfig = JSON.parse(fs.readFileSync(path.join(configDir, "home-pricing.json"), "utf-8"))
     const homeAboutConfig = JSON.parse(fs.readFileSync(path.join(configDir, "home-about.json"), "utf-8"))
     const homeContactConfig = JSON.parse(fs.readFileSync(path.join(configDir, "home-contact.json"), "utf-8"))
-    const productsConfig = JSON.parse(fs.readFileSync(path.join(configDir, "products.json"), "utf-8"))
-    const otherPagesConfig = JSON.parse(fs.readFileSync(path.join(configDir, "other-pages.json"), "utf-8"))
-    const customConfig = JSON.parse(fs.readFileSync(path.join(configDir, "custom.json"), "utf-8"))
-    const accountConfig = JSON.parse(fs.readFileSync(path.join(configDir, "account.json"), "utf-8"))
-    const loginLogsConfig = JSON.parse(fs.readFileSync(path.join(configDir, "login-logs.json"), "utf-8"))
-    const themeConfig = JSON.parse(fs.readFileSync(path.join(configDir, "theme.json"), "utf-8"))
+    const productsConfig = JSON.parse(fs.readFileSync(path.join(configDir, "page-products.json"), "utf-8"))
+    const otherPagesConfig = JSON.parse(fs.readFileSync(path.join(configDir, "page-other.json"), "utf-8"))
+    const customConfig = JSON.parse(fs.readFileSync(path.join(configDir, "theme-custom.json"), "utf-8"))
+    const accountConfig = JSON.parse(fs.readFileSync(path.join(configDir, "system-account.json"), "utf-8"))
+    const loginLogsConfig = JSON.parse(fs.readFileSync(path.join(configDir, "system-login-logs.json"), "utf-8"))
+    const themeConfig = JSON.parse(fs.readFileSync(path.join(configDir, "theme-config.json"), "utf-8"))
 
     return NextResponse.json({
       site: siteConfig,
@@ -67,11 +67,57 @@ export async function POST(request: NextRequest) {
 
     let configPath: string
     
-    if (type === 'otherPages') {
-      configPath = path.join(process.cwd(), "config/json/other-pages.json")
+    // 处理特殊的配置类型命名
+    let fileName: string
+    if (type === 'site') {
+      fileName = 'site-config'
+    } else if (type === 'common') {
+      fileName = 'site-common'
+    } else if (type === 'seo') {
+      fileName = 'site-seo'
+    } else if (type === 'navigation') {
+      fileName = 'site-navigation'
+    } else if (type === 'footer') {
+      fileName = 'site-footer'
+    } else if (type === 'home') {
+      fileName = 'home-config'
+    } else if (type === 'homeOrder') {
+      fileName = 'home-order'
+    } else if (type === 'homeBanner') {
+      fileName = 'home-banner'
+    } else if (type === 'homePartners') {
+      fileName = 'home-partners'
+    } else if (type === 'homeProducts') {
+      fileName = 'home-products'
+    } else if (type === 'homeServices') {
+      fileName = 'home-services'
+    } else if (type === 'homePricing') {
+      fileName = 'home-pricing'
+    } else if (type === 'homeAbout') {
+      fileName = 'home-about'
+    } else if (type === 'homeContact') {
+      fileName = 'home-contact'
+    } else if (type === 'products') {
+      fileName = 'page-products'
+    } else if (type === 'otherPages') {
+      fileName = 'page-other'
+    } else if (type === 'custom') {
+      fileName = 'theme-custom'
+    } else if (type === 'theme') {
+      fileName = 'theme-config'
+    } else if (type === 'account') {
+      fileName = 'system-account'
+    } else if (type === 'loginLogs') {
+      fileName = 'system-login-logs'
+    } else if (type === 'operationLogs') {
+      fileName = 'system-operation-logs'
+    } else if (type === 'verificationCodes') {
+      fileName = 'system-verification-codes'
     } else {
-      configPath = path.join(process.cwd(), `config/json/${type}.json`)
+      fileName = type
     }
+    
+    configPath = path.join(process.cwd(), `config/json/${fileName}.json`)
     
     let existingData: any = {}
     try {

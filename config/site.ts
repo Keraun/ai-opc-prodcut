@@ -15,16 +15,16 @@ const loadConfig = (filename: string) => {
   }
 }
 
-const siteConfigData = loadConfig("site.json")
-const commonConfigData = loadConfig("common.json")
-const seoConfigData = loadConfig("seo.json")
-const navigationConfigData = loadConfig("navigation.json")
-const footerConfigData = loadConfig("footer.json")
-const homeConfigData = loadConfig("home.json")
-const productsConfigData = loadConfig("products.json")
-const otherPagesConfigData = loadConfig("other-pages.json")
-const customConfigData = loadConfig("custom.json")
-const accountConfigData = loadConfig("account.json")
+const siteConfigData = loadConfig("site-config.json")
+const commonConfigData = loadConfig("site-common.json")
+const seoConfigData = loadConfig("site-seo.json")
+const navigationConfigData = loadConfig("site-navigation.json")
+const footerConfigData = loadConfig("site-footer.json")
+const homeConfigData = loadConfig("home-config.json")
+const productsConfigData = loadConfig("page-products.json")
+const otherPagesConfigData = loadConfig("page-other.json")
+const customConfigData = loadConfig("theme-custom.json")
+const accountConfigData = loadConfig("system-account.json")
 
 export const siteConfig = {
   name: siteConfigData.name || "创客AI",
