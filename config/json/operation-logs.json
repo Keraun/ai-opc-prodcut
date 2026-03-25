@@ -1,6 +1,17 @@
 {
   "logs": [
     {
+      "id": 1774448899883,
+      "username": "admin",
+      "type": "update_config",
+      "description": "更新区块顺序",
+      "ip": "unknown",
+      "timestamp": "2026/03/25 22:28:19",
+      "details": {
+        "configType": "homeOrder"
+      }
+    },
+    {
       "id": 1774448725543,
       "username": "admin",
       "type": "update_config",

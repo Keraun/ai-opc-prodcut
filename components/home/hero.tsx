@@ -92,7 +92,7 @@ export function Hero() {
 
       {/* Feature Pills */}
       <div className="flex flex-wrap justify-center gap-3 text-sm text-gray-500">
-        {['AI工具站', 'GEO课程', '工作流定制', '一人公司'].map((item, index) => (
+        {(heroConfig?.featurePills || ['AI工具站', 'GEO课程', '工作流定制', '一人公司']).map((item: string, index: number) => (
           <span 
             key={index}
             className="px-4 py-2 rounded-full bg-white/60 backdrop-blur-sm border border-gray-100"
@@ -180,7 +180,7 @@ export function Hero() {
 
           {/* Feature Pills */}
           <div className="flex flex-wrap gap-3 text-sm text-gray-500">
-            {['AI工具站', 'GEO课程', '工作流定制', '一人公司'].map((item, index) => (
+            {(heroConfig?.featurePills || ['AI工具站', 'GEO课程', '工作流定制', '一人公司']).map((item: string, index: number) => (
               <span 
                 key={index}
                 className="px-4 py-2 rounded-full bg-white/60 backdrop-blur-sm border border-gray-100"

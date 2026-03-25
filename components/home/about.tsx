@@ -46,7 +46,7 @@ export function About() {
             {aboutConfig?.title && (
               <>
                 <span className="inline-block px-4 py-1.5 rounded-full bg-cyan-50 text-cyan-600 text-sm font-medium mb-6 border border-cyan-100">
-                  关于我们
+                  {aboutConfig?.sectionTag || "关于我们"}
                 </span>
                 <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-gray-900 mb-6 leading-tight">
                   {aboutConfig.title?.main}

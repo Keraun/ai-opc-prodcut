@@ -1,7 +1,8 @@
 {
   "products": {
-    "title": "我们的产品",
-    "description": "为个人创业者提供全方位的AI解决方案",
+    "sectionTag": "产品服务",
+    "title": "AI一人公司解决方案",
+    "description": "从工具到课程，从学习到实践，全方位助力个人创业者实现AI赋能",
     "items": [
       {
         "id": "workflow",

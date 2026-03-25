@@ -93,15 +93,19 @@ export const productCategories: ProductCategory[] = []
 
 export const products: Product[] = []
 
-export const productsConfig = []
+export const productsConfig: any = {}
 
-export const servicesConfig = []
+export const servicesConfig: any = {}
 
-export const heroConfig = {}
+export const heroConfig: any = {}
 
-export const aboutConfig = {}
+export const aboutConfig: any = {}
 
-export const pricingConfig = {}
+export const pricingConfig: any = {}
+
+export const partnersConfig: any = {}
+
+export const contactConfig: any = {}
 
 export const sectionsConfig = []
 

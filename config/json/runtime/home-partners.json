@@ -1,6 +1,16 @@
 {
-  "partner": {
-    "title": "合作伙伴",
-    "description": "与行业领先的企业和机构合作，为用户提供更好的服务"
+  "partners": {
+    "title": "来自优秀伙伴的信任",
+    "description": "与行业领先的企业和机构合作，为用户提供更好的服务",
+    "items": [
+      { "src": "/partner/partner_01.png", "alt": "合作伙伴1" },
+      { "src": "/partner/partner_02.png", "alt": "合作伙伴2" },
+      { "src": "/partner/partner_03.png", "alt": "合作伙伴3" },
+      { "src": "/partner/partner_04.png", "alt": "合作伙伴4" },
+      { "src": "/partner/partner_05.png", "alt": "合作伙伴5" },
+      { "src": "/partner/partner_06.png", "alt": "合作伙伴6" },
+      { "src": "/partner/partner_07.png", "alt": "合作伙伴7" },
+      { "src": "/partner/partner_08.png", "alt": "合作伙伴8" }
+    ]
   }
 }

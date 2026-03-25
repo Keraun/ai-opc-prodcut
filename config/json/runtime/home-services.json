@@ -1,7 +1,8 @@
 {
   "services": {
-    "title": "我们的服务",
-    "description": "为个人创业者提供专业的AI服务",
+    "sectionTag": "服务内容",
+    "title": "全方位AI赋能服务",
+    "description": "从工具到课程，从定制到咨询，为个人创业者提供一站式AI服务支持",
     "items": [
       {
         "title": "AI 工具站",

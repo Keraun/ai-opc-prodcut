@@ -2,28 +2,47 @@ import { NextRequest, NextResponse } from "next/server"
 import fs from "fs"
 import path from "path"
 
+// 辅助函数：优先读取 runtime 配置，如果不存在则读取默认配置
+function readConfig(configDir: string, runtimeDir: string, filename: string): any {
+  const runtimePath = path.join(runtimeDir, filename)
+  const defaultPath = path.join(configDir, filename)
+
+  try {
+    if (fs.existsSync(runtimePath)) {
+      return JSON.parse(fs.readFileSync(runtimePath, "utf-8"))
+    }
+    if (fs.existsSync(defaultPath)) {
+      return JSON.parse(fs.readFileSync(defaultPath, "utf-8"))
+    }
+  } catch (error) {
+    console.error(`Failed to read config: ${filename}`, error)
+  }
+  return {}
+}
+
 export async function GET(request: NextRequest) {
   try {
     const configDir = path.join(process.cwd(), "config/json")
-    
-    const siteConfig = JSON.parse(fs.readFileSync(path.join(configDir, "site-config.json"), "utf-8"))
-    const commonConfig = JSON.parse(fs.readFileSync(path.join(configDir, "site-common.json"), "utf-8"))
-    const seoConfig = JSON.parse(fs.readFileSync(path.join(configDir, "site-seo.json"), "utf-8"))
-    const navigationConfig = JSON.parse(fs.readFileSync(path.join(configDir, "site-navigation.json"), "utf-8"))
-    const footerConfig = JSON.parse(fs.readFileSync(path.join(configDir, "site-footer.json"), "utf-8"))
-    const homeConfig = JSON.parse(fs.readFileSync(path.join(configDir, "home-config.json"), "utf-8"))
-    const homeOrderConfig = JSON.parse(fs.readFileSync(path.join(configDir, "home-order.json"), "utf-8"))
-    const homeBannerConfig = JSON.parse(fs.readFileSync(path.join(configDir, "home-banner.json"), "utf-8"))
-    const homePartnersConfig = JSON.parse(fs.readFileSync(path.join(configDir, "home-partners.json"), "utf-8"))
-    const homeProductsConfig = JSON.parse(fs.readFileSync(path.join(configDir, "home-products.json"), "utf-8"))
-    const homeServicesConfig = JSON.parse(fs.readFileSync(path.join(configDir, "home-services.json"), "utf-8"))
-    const homePricingConfig = JSON.parse(fs.readFileSync(path.join(configDir, "home-pricing.json"), "utf-8"))
-    const homeAboutConfig = JSON.parse(fs.readFileSync(path.join(configDir, "home-about.json"), "utf-8"))
-    const homeContactConfig = JSON.parse(fs.readFileSync(path.join(configDir, "home-contact.json"), "utf-8"))
-    const productsConfig = JSON.parse(fs.readFileSync(path.join(configDir, "page-products.json"), "utf-8"))
-    const otherPagesConfig = JSON.parse(fs.readFileSync(path.join(configDir, "page-other.json"), "utf-8"))
-    const customConfig = JSON.parse(fs.readFileSync(path.join(configDir, "theme-custom.json"), "utf-8"))
-    const themeConfig = JSON.parse(fs.readFileSync(path.join(configDir, "theme-config.json"), "utf-8"))
+    const runtimeDir = path.join(configDir, "runtime")
+
+    const siteConfig = readConfig(configDir, runtimeDir, "site-config.json")
+    const commonConfig = readConfig(configDir, runtimeDir, "site-common.json")
+    const seoConfig = readConfig(configDir, runtimeDir, "site-seo.json")
+    const navigationConfig = readConfig(configDir, runtimeDir, "site-navigation.json")
+    const footerConfig = readConfig(configDir, runtimeDir, "site-footer.json")
+    const homeConfig = readConfig(configDir, runtimeDir, "home-config.json")
+    const homeOrderConfig = readConfig(configDir, runtimeDir, "home-order.json")
+    const homeBannerConfig = readConfig(configDir, runtimeDir, "home-banner.json")
+    const homePartnersConfig = readConfig(configDir, runtimeDir, "home-partners.json")
+    const homeProductsConfig = readConfig(configDir, runtimeDir, "home-products.json")
+    const homeServicesConfig = readConfig(configDir, runtimeDir, "home-services.json")
+    const homePricingConfig = readConfig(configDir, runtimeDir, "home-pricing.json")
+    const homeAboutConfig = readConfig(configDir, runtimeDir, "home-about.json")
+    const homeContactConfig = readConfig(configDir, runtimeDir, "home-contact.json")
+    const productsConfig = readConfig(configDir, runtimeDir, "page-products.json")
+    const otherPagesConfig = readConfig(configDir, runtimeDir, "page-other.json")
+    const customConfig = readConfig(configDir, runtimeDir, "theme-custom.json")
+    const themeConfig = readConfig(configDir, runtimeDir, "theme-config.json")
 
     return NextResponse.json({
       site: siteConfig,
@@ -46,6 +65,7 @@ export async function GET(request: NextRequest) {
       theme: themeConfig
     })
   } catch (error) {
+    console.error("Config API error:", error)
     return NextResponse.json({
       success: false,
       message: "获取配置失败"

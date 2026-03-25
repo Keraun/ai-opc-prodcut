@@ -18,14 +18,36 @@ const iconMap: Record<string, any> = {
   IconCustomerService,
 }
 
-const products = productsConfig.map((product) => ({
+interface ProductsConfig {
+  products?: {
+    sectionTag?: string
+    title?: string
+    description?: string
+    items?: Array<{
+      id: string
+      name: string
+      description: string
+      icon: string
+      tag?: string
+      tagColor?: string
+      features?: string[]
+      link?: string
+    }>
+  }
+}
+
+const config = (productsConfig as ProductsConfig)?.products || {}
+
+const items = config.items || []
+
+const products = items.map((product) => ({
   ...product,
   icon: iconMap[product.icon],
 }))
 
 export function Products() {
   const { themeConfig } = useTheme()
-  
+
   const primaryColor = themeConfig?.colors?.primary || "#1e40af"
   const secondaryColor = themeConfig?.colors?.secondary || "#3b82f6"
   const accentColor = themeConfig?.colors?.accent || "#06b6d4"
@@ -41,21 +63,21 @@ export function Products() {
       <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Section Header */}
         <div className="text-center mb-16">
-          <span 
+          <span
             className="inline-block px-4 py-1.5 rounded-full text-sm font-medium mb-4 border"
-            style={{ 
+            style={{
               backgroundColor: `${accentColor}0D`,
               color: accentColor,
               borderColor: `${accentColor}33`
             }}
           >
-            产品服务
+            {config.sectionTag || "产品服务"}
           </span>
           <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-gray-900 mb-4 text-balance">
-            AI一人公司解决方案
+            {config.title || "AI一人公司解决方案"}
           </h2>
           <p className="text-lg text-gray-500 max-w-2xl mx-auto leading-relaxed">
-            从工具到课程，从学习到实践，全方位助力个人创业者实现AI赋能
+            {config.description || "从工具到课程，从学习到实践，全方位助力个人创业者实现AI赋能"}
           </p>
         </div>
 

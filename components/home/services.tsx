@@ -16,7 +16,24 @@ const iconMap: Record<string, any> = {
   IconCustomerService,
 }
 
-const services = servicesConfig.map((service, index) => ({
+interface ServicesConfig {
+  services?: {
+    sectionTag?: string
+    title?: string
+    description?: string
+    items?: Array<{
+      title: string
+      description: string
+      highlights: string[]
+    }>
+  }
+}
+
+const config = (servicesConfig as ServicesConfig)?.services || {}
+
+const items = config.items || []
+
+const services = items.map((service, index) => ({
   icon: index === 0 ? IconBulb : index === 1 ? IconBook : index === 2 ? IconSettings : IconCustomerService,
   number: `0${index + 1}`,
   title: service.title,
@@ -42,13 +59,13 @@ export function Services() {
         {/* Section Header */}
         <div className="text-center mb-16">
           <span className="inline-block px-4 py-1.5 rounded-full bg-cyan-50 text-cyan-600 text-sm font-medium mb-4 border border-cyan-100">
-            服务内容
+            {config.sectionTag || "服务内容"}
           </span>
           <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-gray-900 mb-4 text-balance">
-            全方位AI赋能服务
+            {config.title || "全方位AI赋能服务"}
           </h2>
           <p className="text-lg text-gray-500 max-w-2xl mx-auto leading-relaxed">
-            从工具到课程，从定制到咨询，为个人创业者提供一站式AI服务支持
+            {config.description || "从工具到课程，从定制到咨询，为个人创业者提供一站式AI服务支持"}
           </p>
         </div>
 

@@ -1,7 +1,8 @@
 {
   "contact": {
-    "title": "联系我们",
-    "description": "有任何问题或需求，欢迎随时联系我们",
+    "sectionTag": "联系我们",
+    "title": "准备好开启AI之旅了吗？",
+    "description": "留下您的联系方式，我们会尽快与您取得联系",
     "methods": [
       {
         "type": "email",

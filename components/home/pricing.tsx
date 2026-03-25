@@ -97,7 +97,7 @@ export function Pricing() {
                     backgroundColor: primaryColor,
                   }}
                 >
-                  最受欢迎
+                  {pricingConfig?.popularLabel || "最受欢迎"}
                 </div>
               )}
               <div className="p-6 flex flex-col h-[100%]">
