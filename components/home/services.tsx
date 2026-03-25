@@ -7,7 +7,6 @@ import {
   IconBook,
   IconCustomerService,
 } from "@arco-design/web-react/icon"
-import { servicesConfig } from "@/config/client"
 
 const iconMap: Record<string, any> = {
   IconBulb,
@@ -16,32 +15,6 @@ const iconMap: Record<string, any> = {
   IconCustomerService,
 }
 
-interface ServicesConfig {
-  services?: {
-    sectionTag?: string
-    title?: string
-    description?: string
-    items?: Array<{
-      title: string
-      description: string
-      highlights: string[]
-    }>
-  }
-}
-
-const config = (servicesConfig as ServicesConfig)?.services || {}
-
-const items = config.items || []
-
-const services = items.map((service, index) => ({
-  icon: index === 0 ? IconBulb : index === 1 ? IconBook : index === 2 ? IconSettings : IconCustomerService,
-  number: `0${index + 1}`,
-  title: service.title,
-  description: service.description,
-  highlights: service.highlights,
-  color: index === 0 ? "orange" : index === 1 ? "blue" : index === 2 ? "green" : "purple",
-}))
-
 const colorMap: Record<string, { bg: string; text: string; light: string }> = {
   orange: { bg: "bg-cyan-500", text: "text-cyan-600", light: "bg-cyan-50" },
   blue: { bg: "bg-blue-800", text: "text-blue-600", light: "bg-blue-50" },
@@ -49,7 +22,23 @@ const colorMap: Record<string, { bg: string; text: string; light: string }> = {
   purple: { bg: "bg-purple-500", text: "text-purple-600", light: "bg-purple-50" },
 }
 
-export function Services() {
+interface ServicesProps {
+  data?: any
+}
+
+export function Services({ data }: ServicesProps) {
+  const config = data || {}
+  const items = config.items || []
+
+  const services = items.map((service: any, index: number) => ({
+    icon: index === 0 ? IconBulb : index === 1 ? IconBook : index === 2 ? IconSettings : IconCustomerService,
+    number: `0${index + 1}`,
+    title: service.title,
+    description: service.description,
+    highlights: service.highlights,
+    color: index === 0 ? "orange" : index === 1 ? "blue" : index === 2 ? "green" : "purple",
+  }))
+
   return (
     <section id="services" className="relative py-24 md:py-32 bg-gray-50/50">
       {/* Background Pattern */}
@@ -71,7 +60,7 @@ export function Services() {
 
         {/* Services Grid */}
         <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
-          {services.map((service, index) => {
+          {services.map((service: any, index: number) => {
             const Icon = service.icon
             const colors = colorMap[service.color]
             return (
@@ -97,10 +86,10 @@ export function Services() {
 
                   {/* Highlights */}
                   <div className="space-y-2">
-                    {service.highlights.map((highlight, i) => (
-                      <div key={i} className="flex items-center gap-2 text-xs text-gray-600">
+                    {service.highlights.map((highlight: string, i: number) => (
+                      <div key={i} className="flex items-center gap-2 text-sm text-gray-600">
                         <div className={`w-1.5 h-1.5 rounded-full ${colors.bg}`} />
-                        {highlight}
+                        <span>{highlight}</span>
                       </div>
                     ))}
                   </div>

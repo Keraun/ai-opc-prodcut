@@ -4,7 +4,6 @@ import { useState } from "react"
 import { Card, Form, Input, Button, Message, Radio } from "@arco-design/web-react"
 import { IconSend } from "@arco-design/web-react/icon"
 import { useTheme } from "@/components/theme-provider"
-import { contactConfig } from "@/config/client"
 
 const FormItem = Form.Item
 const TextArea = Input.TextArea
@@ -16,25 +15,18 @@ const contactPreferences = [
   { label: "邮箱", value: "email" },
 ]
 
-interface ContactConfig {
-  contact?: {
-    sectionTag?: string
-    title?: string
-    description?: string
-    formTitle?: string
-    submitButtonText?: string
-  }
+interface ContactProps {
+  data?: any
 }
 
-const config = (contactConfig as ContactConfig)?.contact || {}
-
-export function Contact() {
+export function Contact({ data }: ContactProps) {
   const [form] = Form.useForm()
   const [loading, setLoading] = useState(false)
   const { themeConfig } = useTheme()
 
+  const config = data || {}
+
   const primaryColor = themeConfig?.colors?.primary || "#1e40af"
-  const secondaryColor = themeConfig?.colors?.secondary || "#3b82f6"
   const accentColor = themeConfig?.colors?.accent || "#06b6d4"
 
   const handleSubmit = async (values: Record<string, unknown>) => {
@@ -47,7 +39,7 @@ export function Contact() {
         },
         body: JSON.stringify(values)
       })
-      
+
       const data = await response.json()
       if (data.success) {
         Message.success(data.message)
@@ -66,7 +58,7 @@ export function Contact() {
     <section id="contact" className="relative py-16 md:py-24 bg-gradient-to-b from-gray-50/50 to-white">
       {/* Background Pattern */}
       <div className="absolute inset-0 bg-[linear-gradient(rgba(59,130,246,0.02)_1px,transparent_1px),linear-gradient(90deg,rgba(59,130,246,0.02)_1px,transparent_1px)] bg-[size:60px_60px]" />
-      
+
       {/* Decorative Orbs */}
       <div className="absolute top-20 left-10 w-72 h-72 bg-blue-100/50 rounded-full blur-3xl" />
       <div className="absolute bottom-20 right-10 w-96 h-96 bg-purple-100/50 rounded-full blur-3xl" />
@@ -98,97 +90,61 @@ export function Contact() {
               form={form}
               layout="vertical"
               onSubmit={handleSubmit}
-              initialValues={{ preference: "phone" }}
-              className="[&_.arco-form-label-item]:!text-gray-600 [&_.arco-form-label-item>label]:!text-gray-600 [&_.arco-form-label-item>label]:!font-medium [&_.arco-form-label-item>label]:!text-sm"
+              className="space-y-5"
             >
-              <div className="grid sm:grid-cols-2 gap-4">
+              <div className="grid sm:grid-cols-2 gap-5">
                 <FormItem
-                  label="您的姓名"
+                  label="姓名"
                   field="name"
-                  rules={[{ required: true, message: "请输入姓名" }]}
+                  rules={[{ required: true, message: '请输入姓名' }]}
                 >
-                  <Input
-                    placeholder="请输入姓名"
-                    className="!bg-gray-50 !border-gray-200 !text-gray-900 placeholder:!text-gray-400 hover:!border-blue-300 focus:!border-blue-500 transition-colors !rounded-lg !h-10"
-                  />
+                  <Input placeholder="请输入您的姓名" />
                 </FormItem>
-                <FormItem
-                  label="联系电话"
-                  field="phone"
-                  rules={[{ required: true, message: "请输入联系电话" }]}
-                >
-                  <Input
-                    placeholder="请输入电话"
-                    className="!bg-gray-50 !border-gray-200 !text-gray-900 placeholder:!text-gray-400 hover:!border-blue-300 focus:!border-blue-500 transition-colors !rounded-lg !h-10"
-                  />
-                </FormItem>
-              </div>
 
-              <div className="grid sm:grid-cols-2 gap-4">
                 <FormItem
-                  label="微信号"
-                  field="wechat"
-                >
-                  <Input
-                    placeholder="请输入微信号（选填）"
-                    className="!bg-gray-50 !border-gray-200 !text-gray-900 placeholder:!text-gray-400 hover:!border-blue-300 focus:!border-blue-500 transition-colors !rounded-lg !h-10"
-                  />
-                </FormItem>
-                <FormItem
-                  label="电子邮箱"
-                  field="email"
+                  label="手机号"
+                  field="phone"
                   rules={[
-                    { type: "email", message: "请输入有效的邮箱地址" },
+                    { required: true, message: '请输入手机号' },
+                    { pattern: /^1[3-9]\d{9}$/, message: '请输入正确的手机号' }
                   ]}
                 >
-                  <Input
-                    placeholder="请输入邮箱（选填）"
-                    className="!bg-gray-50 !border-gray-200 !text-gray-900 placeholder:!text-gray-400 hover:!border-blue-300 focus:!border-blue-500 transition-colors !rounded-lg !h-10"
-                  />
+                  <Input placeholder="请输入您的手机号" />
                 </FormItem>
               </div>
 
               <FormItem
-                label="偏好联系方式"
-                field="preference"
+                label="联系偏好"
+                field="contactPreference"
+                initialValue="phone"
               >
-                <RadioGroup>
-                  {contactPreferences.map((item) => (
-                    <Radio key={item.value} value={item.value}>
-                      {item.label}
-                    </Radio>
-                  ))}
-                </RadioGroup>
+                <RadioGroup options={contactPreferences} type="button" />
               </FormItem>
 
               <FormItem
                 label="留言内容"
                 field="message"
-                rules={[{ required: true, message: "请输入留言内容" }]}
+                rules={[{ required: true, message: '请输入留言内容' }]}
               >
                 <TextArea
                   placeholder="请描述您的需求或问题..."
-                  autoSize={{ minRows: 3, maxRows: 5 }}
-                  className="!bg-gray-50 !border-gray-200 !text-gray-900 placeholder:!text-gray-400 hover:!border-blue-300 focus:!border-blue-500 transition-colors !rounded-lg"
+                  rows={4}
+                  maxLength={{ length: 500, errorOnly: true }}
+                  showWordLimit
                 />
               </FormItem>
 
-              <FormItem className="mb-0">
-                <Button
-                  type="primary"
-                  htmlType="submit"
-                  long
-                  loading={loading}
-                  style={{ 
-                    backgroundColor: primaryColor,
-                    color: 'white'
-                  }}
-                  className="!h-11 !text-base !rounded-lg shadow-lg hover:shadow-xl transition-all duration-300"
-                >
-                  <IconSend className="mr-2" />
-                  提交留言
-                </Button>
-              </FormItem>
+              <Button
+                type="primary"
+                htmlType="submit"
+                loading={loading}
+                long
+                size="large"
+                style={{ backgroundColor: primaryColor }}
+                icon={<IconSend />}
+              >
+                {config.submitButtonText || "提交留言"}
+              </Button>
             </Form>
           </div>
         </Card>

@@ -1,39 +1,22 @@
 "use client"
 
-import { Button, Space } from "@arco-design/web-react"
+import { Button } from "@arco-design/web-react"
 import { IconArrowRight, IconCommand, IconStar, IconThunderbolt } from "@arco-design/web-react/icon"
 import Link from "next/link"
 import { Logo } from "@/components/common/logo"
-import { heroConfig } from "@/config/client"
 import { useTheme } from "@/components/theme-provider"
-import { useState, useEffect } from "react"
 
-export function Hero() {
+interface HeroProps {
+  data?: any
+}
+
+export function Hero({ data }: HeroProps) {
   const { themeConfig } = useTheme()
-  const [config, setConfig] = useState<any>(heroConfig)
-  
-  useEffect(() => {
-    const loadConfig = async () => {
-      try {
-        const response = await fetch('/api/config')
-        if (response.ok) {
-          const data = await response.json()
-          if (data.homeBanner?.hero) {
-            setConfig(data.homeBanner.hero)
-          }
-        }
-      } catch (error) {
-        console.error('Failed to load hero config:', error)
-      }
-    }
-    
-    loadConfig()
-  }, [])
-  
+  const config = data || {}
+
   const primaryColor = themeConfig?.colors?.primary || "#1e40af"
-  const secondaryColor = themeConfig?.colors?.secondary || "#3b82f6"
   const accentColor = themeConfig?.colors?.accent || "#06b6d4"
-  
+
   // 获取布局类型，默认为 layout1
   const layoutType = config?.layout || 'layout1'
 
@@ -42,11 +25,11 @@ export function Hero() {
     <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
       {/* Badge */}
       {config?.badge && (
-        <div 
+        <div
           className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/80 backdrop-blur-sm border shadow-sm mb-8"
           style={{ borderColor: `${accentColor}33` }}
         >
-          <span 
+          <span
             className="w-2 h-2 rounded-full animate-pulse"
             style={{ backgroundColor: accentColor }}
           />
@@ -57,7 +40,7 @@ export function Hero() {
       {/* Main Heading */}
       <h1 className="text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-bold mb-6 leading-[1.1] tracking-tight">
         {config?.title?.main && (
-          <span 
+          <span
             className="block mb-2"
             style={{ color: primaryColor }}
           >
@@ -86,7 +69,7 @@ export function Hero() {
             <Button
               type="primary"
               size="large"
-              style={{ 
+              style={{
                 backgroundColor: primaryColor,
                 color: 'white'
               }}
@@ -113,7 +96,7 @@ export function Hero() {
       {/* Feature Pills */}
       <div className="flex flex-wrap justify-center gap-3 text-sm text-gray-500">
         {(config?.featurePills || ['AI工具站', 'GEO课程', '工作流定制', '一人公司']).map((item: string, index: number) => (
-          <span 
+          <span
             key={index}
             className="px-4 py-2 rounded-full bg-white/60 backdrop-blur-sm border border-gray-100"
           >
@@ -131,11 +114,11 @@ export function Hero() {
         <div className="text-left">
           {/* Badge */}
           {config?.badge && (
-            <div 
+            <div
               className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/80 backdrop-blur-sm border shadow-sm mb-6"
               style={{ borderColor: `${accentColor}33` }}
             >
-              <span 
+              <span
                 className="w-2 h-2 rounded-full animate-pulse"
                 style={{ backgroundColor: accentColor }}
               />
@@ -146,7 +129,7 @@ export function Hero() {
           {/* Main Heading */}
           <h1 className="text-4xl sm:text-5xl md:text-6xl font-bold mb-6 leading-[1.1] tracking-tight">
             {config?.title?.main && (
-              <span 
+              <span
                 className="block mb-2"
                 style={{ color: primaryColor }}
               >
@@ -174,7 +157,7 @@ export function Hero() {
                 <Button
                   type="primary"
                   size="large"
-                  style={{ 
+                  style={{
                     backgroundColor: primaryColor,
                     color: 'white'
                   }}
@@ -201,7 +184,7 @@ export function Hero() {
           {/* Feature Pills */}
           <div className="flex flex-wrap gap-3 text-sm text-gray-500">
             {(config?.featurePills || ['AI工具站', 'GEO课程', '工作流定制', '一人公司']).map((item: string, index: number) => (
-              <span 
+              <span
                 key={index}
                 className="px-4 py-2 rounded-full bg-white/60 backdrop-blur-sm border border-gray-100"
               >
@@ -233,11 +216,11 @@ export function Hero() {
         <div className="text-center">
           {/* Badge */}
           {config?.badge && (
-            <div 
+            <div
               className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-blue-50 border shadow-sm mb-6"
               style={{ borderColor: `${accentColor}33` }}
             >
-              <span 
+              <span
                 className="w-2 h-2 rounded-full animate-pulse"
                 style={{ backgroundColor: accentColor }}
               />
@@ -248,7 +231,7 @@ export function Hero() {
           {/* Main Heading */}
           <h1 className="text-4xl sm:text-5xl font-bold mb-6 leading-[1.1] tracking-tight">
             {config?.title?.main && (
-              <span 
+              <span
                 className="block mb-2"
                 style={{ color: primaryColor }}
               >
@@ -276,7 +259,7 @@ export function Hero() {
                 <Button
                   type="primary"
                   size="large"
-                  style={{ 
+                  style={{
                     backgroundColor: primaryColor,
                     color: 'white'
                   }}
@@ -303,7 +286,7 @@ export function Hero() {
           {/* Feature Pills */}
           <div className="flex flex-wrap justify-center gap-3 text-sm text-gray-500">
             {['AI工具站', 'GEO课程', '工作流定制', '一人公司'].map((item, index) => (
-              <span 
+              <span
                 key={index}
                 className="px-4 py-2 rounded-full bg-gray-50 border border-gray-100"
               >
@@ -323,17 +306,17 @@ export function Hero() {
     >
       {/* Decorative Background Elements */}
       <div className="absolute inset-0 overflow-hidden">
-        <div 
+        <div
           className="absolute top-20 left-10 w-72 h-72 rounded-full blur-3xl animate-pulse"
           style={{ backgroundColor: `${primaryColor}33` }}
         />
-        <div 
+        <div
           className="absolute bottom-20 right-10 w-96 h-96 rounded-full blur-3xl animate-pulse"
           style={{ backgroundColor: `${accentColor}33`, animationDelay: "1s" }}
         />
-        <div 
+        <div
           className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] rounded-full blur-3xl"
-          style={{ 
+          style={{
             background: `linear-gradient(135deg, ${primaryColor}66 0%, ${accentColor}66 100%)`
           }}
         />
@@ -348,7 +331,7 @@ export function Hero() {
       <div className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2">
         <span className="text-xs text-gray-400">向下滚动</span>
         <div className="w-6 h-10 rounded-full border-2 border-gray-300 flex justify-center pt-2">
-          <div 
+          <div
             className="w-1.5 h-3 rounded-full animate-bounce"
             style={{ backgroundColor: accentColor }}
           />

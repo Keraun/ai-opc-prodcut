@@ -29,14 +29,47 @@ const configFiles = [
   "theme-config.json"
 ]
 
+// 短横线命名到驼峰命名的映射
+const filenameToCamelCase: Record<string, string> = {
+  "site-config.json": "site.json",
+  "site-common.json": "common.json",
+  "site-seo.json": "seo.json",
+  "site-navigation.json": "navigation.json",
+  "site-footer.json": "footer.json",
+  "home-config.json": "home.json",
+  "home-order.json": "homeOrder.json",
+  "home-banner.json": "homeBanner.json",
+  "home-partners.json": "homePartners.json",
+  "home-products.json": "homeProducts.json",
+  "home-services.json": "homeServices.json",
+  "home-pricing.json": "homePricing.json",
+  "home-about.json": "homeAbout.json",
+  "home-contact.json": "homeContact.json",
+  "page-products.json": "products.json",
+  "page-other.json": "otherPages.json",
+  "page-news.json": "news.json",
+  "theme-custom.json": "custom.json",
+  "theme-config.json": "theme.json"
+}
+
 // 辅助函数：优先读取 runtime 配置，如果不存在则读取默认配置
 function readConfig(configDir: string, runtimeDir: string, filename: string): any {
-  const runtimePath = path.join(runtimeDir, filename)
+  // runtime 目录使用驼峰命名
+  const runtimeFilename = filenameToCamelCase[filename] || filename
+  const runtimePath = path.join(runtimeDir, runtimeFilename)
+  
+  // templates 目录使用短横线命名
+  const templatesPath = path.join(configDir, "templates", filename)
+  
+  // 根目录配置文件
   const defaultPath = path.join(configDir, filename)
 
   try {
     if (fs.existsSync(runtimePath)) {
       return JSON.parse(fs.readFileSync(runtimePath, "utf-8"))
+    }
+    if (fs.existsSync(templatesPath)) {
+      return JSON.parse(fs.readFileSync(templatesPath, "utf-8"))
     }
     if (fs.existsSync(defaultPath)) {
       return JSON.parse(fs.readFileSync(defaultPath, "utf-8"))

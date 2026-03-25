@@ -3,16 +3,19 @@
 import { Button, Card, Modal } from "@arco-design/web-react"
 import { IconCheck, IconArrowRight, IconQrcode } from "@arco-design/web-react/icon"
 import { useTheme } from "@/components/theme-provider"
-import { pricingConfig } from "@/config/client"
 import { useState } from "react"
 
-export function Pricing() {
+interface PricingProps {
+  data?: any
+}
+
+export function Pricing({ data }: PricingProps) {
   const { themeConfig } = useTheme()
+  const pricingConfig = data || {}
+
   const [qrModalVisible, setQrModalVisible] = useState(false)
 
   const primaryColor = themeConfig?.colors?.primary || "#1e40af"
-  const secondaryColor = themeConfig?.colors?.secondary || "#3b82f6"
-  const accentColor = themeConfig?.colors?.accent || "#06b6d4"
 
   const pricingPlans = pricingConfig?.plans || [
     {
@@ -81,7 +84,7 @@ export function Pricing() {
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-          {pricingPlans.map((plan, index) => (
+          {pricingPlans.map((plan: any, index: number) => (
             <Card
               key={index}
               className={`overflow-hidden transition-all duration-300 hover:shadow-xl ${plan.isPopular ? 'border-2' : 'border'}`}
@@ -100,63 +103,54 @@ export function Pricing() {
                   {pricingConfig?.popularLabel || "最受欢迎"}
                 </div>
               )}
-              <div className="p-6 flex flex-col h-[100%]">
-                <div>
-                  <h3 className="text-xl font-bold text-gray-900 mb-2">{plan.title}</h3>
-                  <div className="mb-4">
-                    <span className="text-4xl font-bold text-gray-900">{plan.price}</span>
-                    <span className="text-gray-500">/月</span>
-                  </div>
-                  <p className="text-gray-500 mb-6">{plan.description}</p>
-                  <ul className="space-y-3 mb-8">
-                    {plan.features.map((feature, featureIndex) => (
-                      <li key={featureIndex} className="flex items-start gap-2">
-                        <IconCheck
-                          className="text-green-500 mt-0.5 flex-shrink-0"
-                          style={{ color: accentColor }}
-                        />
-                        <span className="text-gray-600">{feature}</span>
-                      </li>
-                    ))}
-                  </ul>
+
+              <div className="p-6">
+                <h3 className="text-xl font-bold text-gray-900 mb-2">{plan.title}</h3>
+                <div className="flex items-baseline mb-4">
+                  <span className="text-4xl font-bold text-gray-900">{plan.price}</span>
+                  {plan.price !== '¥0' && <span className="text-gray-500 ml-2">/年</span>}
                 </div>
-                <div className="mt-auto">
-                  <Button
-                    type={plan.isPopular ? "primary" : "secondary"}
-                    long
-                    onClick={() => handleButtonClick(plan)}
-                    style={{
-                      backgroundColor: plan.isPopular ? primaryColor : 'white',
-                      color: plan.isPopular ? 'white' : primaryColor,
-                      borderColor: primaryColor
-                    }}
-                    className={`!h-12 !rounded-xl transition-all duration-300 ${plan.isPopular ? 'hover:shadow-lg' : 'hover:bg-gray-50'}`}
-                  >
-                    {plan.buttonText}
-                    {!plan.isPopular && <IconArrowRight className="ml-2" />}
-                  </Button>
-                </div>
+                <p className="text-gray-500 mb-6">{plan.description}</p>
+
+                <ul className="space-y-3 mb-8">
+                  {plan.features.map((feature: string, featureIndex: number) => (
+                    <li key={featureIndex} className="flex items-start">
+                      <IconCheck className="text-green-500 mt-0.5 mr-2 flex-shrink-0" />
+                      <span className="text-gray-600">{feature}</span>
+                    </li>
+                  ))}
+                </ul>
+
+                <Button
+                  type={plan.isPopular ? 'primary' : 'secondary'}
+                  long
+                  onClick={() => handleButtonClick(plan)}
+                  style={plan.isPopular ? { backgroundColor: primaryColor } : {}}
+                >
+                  {plan.buttonText}
+                  <IconArrowRight className="ml-2" />
+                </Button>
               </div>
             </Card>
           ))}
         </div>
-
-        <Modal
-          title="联系客服"
-          visible={qrModalVisible}
-          onCancel={() => setQrModalVisible(false)}
-          footer={null}
-        >
-          <div className="text-center py-4">
-            <p className="mb-4 text-gray-600">扫码添加客服微信</p>
-            <div className="w-48 h-48 bg-gray-100 mx-auto flex items-center justify-center rounded-lg mb-4">
-              <IconQrcode className="text-6xl text-gray-400" />
-            </div>
-            <p className="text-sm text-gray-500">客服微信：makerai_official</p>
-          </div>
-        </Modal>
-
       </div>
+
+      <Modal
+        title="联系销售"
+        visible={qrModalVisible}
+        onCancel={() => setQrModalVisible(false)}
+        footer={null}
+        style={{ maxWidth: 400 }}
+      >
+        <div className="text-center py-8">
+          <div className="w-48 h-48 bg-gray-100 rounded-lg mx-auto mb-4 flex items-center justify-center">
+            <IconQrcode className="text-6xl text-gray-400" />
+          </div>
+          <p className="text-gray-600">扫描二维码添加客服微信</p>
+          <p className="text-gray-500 text-sm mt-2">或拨打客服电话：400-888-4889</p>
+        </div>
+      </Modal>
     </section>
   )
 }

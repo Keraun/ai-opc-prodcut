@@ -8,7 +8,6 @@ import {
   IconCustomerService,
   IconArrowRight,
 } from "@arco-design/web-react/icon"
-import { productsConfig } from "@/config/client"
 import { useTheme } from "@/components/theme-provider"
 
 const iconMap: Record<string, any> = {
@@ -18,38 +17,21 @@ const iconMap: Record<string, any> = {
   IconCustomerService,
 }
 
-interface ProductsConfig {
-  products?: {
-    sectionTag?: string
-    title?: string
-    description?: string
-    items?: Array<{
-      id: string
-      name: string
-      description: string
-      icon: string
-      tag?: string
-      tagColor?: string
-      features?: string[]
-      link?: string
-    }>
-  }
+interface ProductsProps {
+  data?: any
 }
 
-const config = (productsConfig as ProductsConfig)?.products || {}
-
-const items = config.items || []
-
-const products = items.map((product) => ({
-  ...product,
-  icon: iconMap[product.icon],
-}))
-
-export function Products() {
+export function Products({ data }: ProductsProps) {
   const { themeConfig } = useTheme()
+  const config = data || {}
+
+  const items = config.items || []
+  const products = items.map((product: any) => ({
+    ...product,
+    icon: iconMap[product.icon],
+  }))
 
   const primaryColor = themeConfig?.colors?.primary || "#1e40af"
-  const secondaryColor = themeConfig?.colors?.secondary || "#3b82f6"
   const accentColor = themeConfig?.colors?.accent || "#06b6d4"
 
   return (
@@ -84,10 +66,10 @@ export function Products() {
         {/* Products Grid */}
         {products && products.length > 0 && (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
-            {products.map((product, index) => {
+            {products.map((product: any, index: number) => {
               const Icon = product?.icon
               if (!Icon) return null
-              
+
               return (
                 <Card
                   key={product?.id || index}
@@ -98,7 +80,7 @@ export function Products() {
                     {/* Header */}
                     <div className="flex items-start justify-between mb-4">
                       <div className="w-12 h-12 rounded-xl flex items-center justify-center">
-                        <Icon 
+                        <Icon
                           className="text-3xl"
                           style={{ color: primaryColor }}
                         />
@@ -121,7 +103,7 @@ export function Products() {
                     {/* Features */}
                     {product?.features && product.features.length > 0 && (
                       <div className="flex flex-wrap gap-1.5 mb-4">
-                        {product.features.map((feature, i) => (
+                        {product.features.map((feature: string, i: number) => (
                           <span
                             key={i}
                             className="px-2.5 py-1 rounded-full bg-gray-50 text-gray-600 text-xs font-medium border border-gray-100"

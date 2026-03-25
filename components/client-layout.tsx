@@ -1,7 +1,12 @@
 "use client"
 
 import { ThemeProvider } from "@/components/theme-provider"
+import { InitialDataProvider } from "@/components/initial-data-provider"
 
 export function ClientLayout({ children }: { children: React.ReactNode }) {
-  return <ThemeProvider>{children}</ThemeProvider>
+  return (
+    <InitialDataProvider>
+      <ThemeProvider>{children}</ThemeProvider>
+    </InitialDataProvider>
+  )
 }

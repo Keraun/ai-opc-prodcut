@@ -5,6 +5,7 @@ import '@arco-design/web-react/dist/css/arco.css'
 import './globals.css'
 import { siteConfig, seoConfig } from '@/config/site'
 import { ClientLayout } from '@/components/client-layout'
+import { loadInitialData, generateInitialDataScript } from '@/lib/initial-data'
 
 const _geist = Geist({ subsets: ["latin"] });
 const _geistMono = Geist_Mono({ subsets: ["latin"] });
@@ -94,6 +95,10 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode
 }>) {
+  // 服务端加载首屏初始数据
+  const initialData = loadInitialData()
+  const initialDataScript = generateInitialDataScript()
+
   const themeConfig = getThemeConfig()
   const colors = themeConfig?.colors || {}
   const effects = themeConfig?.effects || {}
@@ -138,6 +143,12 @@ export default function RootLayout({
         <meta name="theme-color" content={seoConfig?.themeColor} />
         <link rel="manifest" href="/manifest.json" />
         <style dangerouslySetInnerHTML={{ __html: `:root { ${styleString} }` }} />
+        {/* 注入首屏初始数据到 window 对象 */}
+        <script
+          dangerouslySetInnerHTML={{
+            __html: initialDataScript,
+          }}
+        />
       </head>
       <body className="font-sans antialiased">
         <ClientLayout>
