@@ -84,7 +84,7 @@ export function Pricing() {
             >
               {plan.isPopular && (
                 <div
-                  className="bg-gradient-to-r from-blue-600 to-indigo-600 text-white text-center py-2 text-sm font-medium"
+                  className="text-white text-center py-2 text-sm font-medium"
                   style={{
                     backgroundColor: primaryColor,
                   }}

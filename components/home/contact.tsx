@@ -26,10 +26,27 @@ export function Contact() {
 
   const handleSubmit = async (values: Record<string, unknown>) => {
     setLoading(true)
-    await new Promise((resolve) => setTimeout(resolve, 1000))
-    setLoading(false)
-    Message.success("感谢您的留言，我们会尽快与您联系！")
-    form.resetFields()
+    try {
+      const response = await fetch('/api/contact', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(values)
+      })
+      
+      const data = await response.json()
+      if (data.success) {
+        Message.success(data.message)
+        form.resetFields()
+      } else {
+        Message.error(data.message)
+      }
+    } catch (error) {
+      Message.error("提交留言失败，请稍后重试")
+    } finally {
+      setLoading(false)
+    }
   }
 
   return (

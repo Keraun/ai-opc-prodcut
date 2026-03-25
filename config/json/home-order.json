@@ -10,7 +10,7 @@
       "id": "partner",
       "name": "合作伙伴区块",
       "visible": true,
-      "order": 2
+      "order": 99
     },
     {
       "id": "products",

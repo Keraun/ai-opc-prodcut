@@ -1,3 +1,4 @@
+// Fallback static imports for initial load
 import siteConfigData from "./json/site-config.json"
 import commonConfig from "./json/site-common.json"
 import seoConfigData from "./json/site-seo.json"
@@ -76,3 +77,30 @@ export const pagesConfigExport: Record<string, {
 }>
 
 export const customConfigExport = customConfig || {}
+
+// Dynamic fetch function for server-side rendering
+export async function fetchConfig() {
+  try {
+    const response = await fetch('/api/config')
+    if (!response.ok) {
+      throw new Error('获取配置失败')
+    }
+    return await response.json()
+  } catch (error) {
+    console.error('Failed to fetch config:', error)
+    // Return fallback static configs
+    return {
+      site: siteConfigData,
+      common: commonConfig,
+      seo: seoConfigData,
+      navigation: navigationConfigData,
+      footer: footerConfigData,
+      home: homeConfig,
+      homeOrder: homeOrderConfig,
+      products: productsConfigData,
+      otherPages: otherPagesConfig,
+      custom: customConfig
+    }
+  }
+}
+
