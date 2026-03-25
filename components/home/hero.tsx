@@ -6,22 +6,42 @@ import Link from "next/link"
 import { Logo } from "@/components/common/logo"
 import { heroConfig } from "@/config/client"
 import { useTheme } from "@/components/theme-provider"
+import { useState, useEffect } from "react"
 
 export function Hero() {
   const { themeConfig } = useTheme()
+  const [config, setConfig] = useState<any>(heroConfig)
+  
+  useEffect(() => {
+    const loadConfig = async () => {
+      try {
+        const response = await fetch('/api/config')
+        if (response.ok) {
+          const data = await response.json()
+          if (data.homeBanner?.hero) {
+            setConfig(data.homeBanner.hero)
+          }
+        }
+      } catch (error) {
+        console.error('Failed to load hero config:', error)
+      }
+    }
+    
+    loadConfig()
+  }, [])
   
   const primaryColor = themeConfig?.colors?.primary || "#1e40af"
   const secondaryColor = themeConfig?.colors?.secondary || "#3b82f6"
   const accentColor = themeConfig?.colors?.accent || "#06b6d4"
   
   // 获取布局类型，默认为 layout1
-  const layoutType = heroConfig?.layout || 'layout1'
+  const layoutType = config?.layout || 'layout1'
 
   // 布局1：默认布局
   const renderLayout1 = () => (
     <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
       {/* Badge */}
-      {heroConfig?.badge && (
+      {config?.badge && (
         <div 
           className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/80 backdrop-blur-sm border shadow-sm mb-8"
           style={{ borderColor: `${accentColor}33` }}
@@ -30,39 +50,39 @@ export function Hero() {
             className="w-2 h-2 rounded-full animate-pulse"
             style={{ backgroundColor: accentColor }}
           />
-          <span className="text-sm text-gray-600 font-medium">{heroConfig.badge}</span>
+          <span className="text-sm text-gray-600 font-medium">{config.badge}</span>
         </div>
       )}
 
       {/* Main Heading */}
       <h1 className="text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-bold mb-6 leading-[1.1] tracking-tight">
-        {heroConfig?.title?.main && (
+        {config?.title?.main && (
           <span 
             className="block mb-2"
             style={{ color: primaryColor }}
           >
-            {heroConfig.title.main}
+            {config.title.main}
           </span>
         )}
-        {heroConfig?.title?.sub && (
+        {config?.title?.sub && (
           <span className="text-gray-900 block">
-            {heroConfig.title.sub}
+            {config.title.sub}
           </span>
         )}
       </h1>
 
       {/* Subtitle */}
-      {heroConfig?.subtitle && (
+      {config?.subtitle && (
         <p className="text-lg text-gray-500 mb-12 inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-white/60 backdrop-blur-sm border border-gray-100 shadow-sm">
           <Logo className="w-6 h-6" />
-          <span>{heroConfig.subtitle}</span>
+          <span>{config.subtitle}</span>
         </p>
       )}
 
       {/* CTA Buttons */}
       <div className="flex flex-wrap justify-center gap-4 mb-16">
-        {heroConfig?.buttons?.primary?.href && heroConfig?.buttons?.primary?.text && (
-          <Link href={heroConfig.buttons.primary.href}>
+        {config?.buttons?.primary?.href && config?.buttons?.primary?.text && (
+          <Link href={config.buttons.primary.href}>
             <Button
               type="primary"
               size="large"
@@ -73,18 +93,18 @@ export function Hero() {
               className="!h-14 !px-10 !text-base !rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-0.5"
             >
               <IconCommand className="mr-2 text-lg" />
-              {heroConfig.buttons.primary.text}
+              {config.buttons.primary.text}
             </Button>
           </Link>
         )}
 
-        {heroConfig?.buttons?.secondary?.text && (
+        {config?.buttons?.secondary?.text && (
           <Button
             type="secondary"
             size="large"
             className="!bg-white !border-gray-200 !text-gray-700 hover:!bg-gray-50 hover:!border-gray-300 !h-14 !px-10 !text-base !rounded-xl shadow-sm hover:shadow-md transition-all duration-300 hover:-translate-y-0.5"
           >
-            {heroConfig.buttons.secondary.text}
+            {config.buttons.secondary.text}
             <IconArrowRight className="ml-2" />
           </Button>
         )}
@@ -92,7 +112,7 @@ export function Hero() {
 
       {/* Feature Pills */}
       <div className="flex flex-wrap justify-center gap-3 text-sm text-gray-500">
-        {(heroConfig?.featurePills || ['AI工具站', 'GEO课程', '工作流定制', '一人公司']).map((item: string, index: number) => (
+        {(config?.featurePills || ['AI工具站', 'GEO课程', '工作流定制', '一人公司']).map((item: string, index: number) => (
           <span 
             key={index}
             className="px-4 py-2 rounded-full bg-white/60 backdrop-blur-sm border border-gray-100"
@@ -110,7 +130,7 @@ export function Hero() {
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
         <div className="text-left">
           {/* Badge */}
-          {heroConfig?.badge && (
+          {config?.badge && (
             <div 
               className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/80 backdrop-blur-sm border shadow-sm mb-6"
               style={{ borderColor: `${accentColor}33` }}
@@ -119,38 +139,38 @@ export function Hero() {
                 className="w-2 h-2 rounded-full animate-pulse"
                 style={{ backgroundColor: accentColor }}
               />
-              <span className="text-sm text-gray-600 font-medium">{heroConfig.badge}</span>
+              <span className="text-sm text-gray-600 font-medium">{config.badge}</span>
             </div>
           )}
 
           {/* Main Heading */}
           <h1 className="text-4xl sm:text-5xl md:text-6xl font-bold mb-6 leading-[1.1] tracking-tight">
-            {heroConfig?.title?.main && (
+            {config?.title?.main && (
               <span 
                 className="block mb-2"
                 style={{ color: primaryColor }}
               >
-                {heroConfig.title.main}
+                {config.title.main}
               </span>
             )}
-            {heroConfig?.title?.sub && (
+            {config?.title?.sub && (
               <span className="text-gray-900 block">
-                {heroConfig.title.sub}
+                {config.title.sub}
               </span>
             )}
           </h1>
 
           {/* Subtitle */}
-          {heroConfig?.subtitle && (
+          {config?.subtitle && (
             <p className="text-lg text-gray-500 mb-8">
-              {heroConfig.subtitle}
+              {config.subtitle}
             </p>
           )}
 
           {/* CTA Buttons */}
           <div className="flex flex-wrap gap-4 mb-8">
-            {heroConfig?.buttons?.primary?.href && heroConfig?.buttons?.primary?.text && (
-              <Link href={heroConfig.buttons.primary.href}>
+            {config?.buttons?.primary?.href && config?.buttons?.primary?.text && (
+              <Link href={config.buttons.primary.href}>
                 <Button
                   type="primary"
                   size="large"
@@ -161,18 +181,18 @@ export function Hero() {
                   className="!h-14 !px-10 !text-base !rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-0.5"
                 >
                   <IconStar className="mr-2 text-lg" />
-                  {heroConfig.buttons.primary.text}
+                  {config.buttons.primary.text}
                 </Button>
               </Link>
             )}
 
-            {heroConfig?.buttons?.secondary?.text && (
+            {config?.buttons?.secondary?.text && (
               <Button
                 type="secondary"
                 size="large"
                 className="!bg-white !border-gray-200 !text-gray-700 hover:!bg-gray-50 hover:!border-gray-300 !h-14 !px-10 !text-base !rounded-xl shadow-sm hover:shadow-md transition-all duration-300 hover:-translate-y-0.5"
               >
-                {heroConfig.buttons.secondary.text}
+                {config.buttons.secondary.text}
                 <IconArrowRight className="ml-2" />
               </Button>
             )}
@@ -180,7 +200,7 @@ export function Hero() {
 
           {/* Feature Pills */}
           <div className="flex flex-wrap gap-3 text-sm text-gray-500">
-            {(heroConfig?.featurePills || ['AI工具站', 'GEO课程', '工作流定制', '一人公司']).map((item: string, index: number) => (
+            {(config?.featurePills || ['AI工具站', 'GEO课程', '工作流定制', '一人公司']).map((item: string, index: number) => (
               <span 
                 key={index}
                 className="px-4 py-2 rounded-full bg-white/60 backdrop-blur-sm border border-gray-100"
@@ -212,7 +232,7 @@ export function Hero() {
       <div className="bg-white/90 backdrop-blur-xl rounded-3xl shadow-xl p-8 md:p-12 border border-gray-100">
         <div className="text-center">
           {/* Badge */}
-          {heroConfig?.badge && (
+          {config?.badge && (
             <div 
               className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-blue-50 border shadow-sm mb-6"
               style={{ borderColor: `${accentColor}33` }}
@@ -221,38 +241,38 @@ export function Hero() {
                 className="w-2 h-2 rounded-full animate-pulse"
                 style={{ backgroundColor: accentColor }}
               />
-              <span className="text-sm text-gray-600 font-medium">{heroConfig.badge}</span>
+              <span className="text-sm text-gray-600 font-medium">{config.badge}</span>
             </div>
           )}
 
           {/* Main Heading */}
           <h1 className="text-4xl sm:text-5xl font-bold mb-6 leading-[1.1] tracking-tight">
-            {heroConfig?.title?.main && (
+            {config?.title?.main && (
               <span 
                 className="block mb-2"
                 style={{ color: primaryColor }}
               >
-                {heroConfig.title.main}
+                {config.title.main}
               </span>
             )}
-            {heroConfig?.title?.sub && (
+            {config?.title?.sub && (
               <span className="text-gray-900 block">
-                {heroConfig.title.sub}
+                {config.title.sub}
               </span>
             )}
           </h1>
 
           {/* Subtitle */}
-          {heroConfig?.subtitle && (
+          {config?.subtitle && (
             <p className="text-lg text-gray-500 mb-8 max-w-2xl mx-auto">
-              {heroConfig.subtitle}
+              {config.subtitle}
             </p>
           )}
 
           {/* CTA Buttons */}
           <div className="flex flex-wrap justify-center gap-4 mb-8">
-            {heroConfig?.buttons?.primary?.href && heroConfig?.buttons?.primary?.text && (
-              <Link href={heroConfig.buttons.primary.href}>
+            {config?.buttons?.primary?.href && config?.buttons?.primary?.text && (
+              <Link href={config.buttons.primary.href}>
                 <Button
                   type="primary"
                   size="large"
@@ -263,18 +283,18 @@ export function Hero() {
                   className="!h-14 !px-10 !text-base !rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-0.5"
                 >
                   <IconCommand className="mr-2 text-lg" />
-                  {heroConfig.buttons.primary.text}
+                  {config.buttons.primary.text}
                 </Button>
               </Link>
             )}
 
-            {heroConfig?.buttons?.secondary?.text && (
+            {config?.buttons?.secondary?.text && (
               <Button
                 type="secondary"
                 size="large"
                 className="!bg-gray-50 !border-gray-200 !text-gray-700 hover:!bg-gray-100 hover:!border-gray-300 !h-14 !px-10 !text-base !rounded-xl shadow-sm hover:shadow-md transition-all duration-300 hover:-translate-y-0.5"
               >
-                {heroConfig.buttons.secondary.text}
+                {config.buttons.secondary.text}
                 <IconArrowRight className="ml-2" />
               </Button>
             )}
