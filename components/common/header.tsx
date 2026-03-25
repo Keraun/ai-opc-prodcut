@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react"
 import { Button, Drawer, Dropdown, Menu } from "@arco-design/web-react"
-import { IconMenu, IconPhone, IconSettings } from "@arco-design/web-react/icon"
+import { IconMenu, IconCustomerService, IconSettings } from "@arco-design/web-react/icon"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
 import { Logo } from "@/components/common/logo"
@@ -119,7 +119,7 @@ export function Header() {
                 className="!text-gray-700 hover:!px-4 !h-10 !rounded-full transition-all duration-300"
                 style={{ color: accentColor }}
               >
-                <IconPhone className="mr-1.5" />
+                <IconCustomerService className="mr-1.5" />
                 联系我们
               </Button>
             </Dropdown>

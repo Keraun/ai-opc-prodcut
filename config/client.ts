@@ -50,13 +50,15 @@ export const productCategories: ProductCategory[] = productsConfigData.products?
 
 export const products: Product[] = productsConfigData.products?.items || []
 
-export const productsConfig = homeConfig.homeProducts || []
+export const productsConfig = homeConfig.products?.items || []
 
-export const servicesConfig = homeConfig.homeServices || []
+export const servicesConfig = homeConfig.services?.items || []
 
 export const heroConfig = homeConfig.hero || {}
 
 export const aboutConfig = homeConfig.about || {}
+export const pricingConfig = homeConfig.pricing || {}
+export const sectionsConfig = homeConfig.sections || []
 
 export const pagesConfigExport: Record<string, {
   title: string
