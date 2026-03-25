@@ -2,25 +2,25 @@
   "sections": [
     {
       "id": "hero",
-      "name": "Hero 区块",
+      "name": "介绍",
       "visible": true,
       "order": 1
     },
     {
       "id": "partner",
-      "name": "合作伙伴区块",
+      "name": "合作伙伴",
       "visible": true,
-      "order": 99
+      "order": 2
     },
     {
       "id": "products",
-      "name": "产品区块",
+      "name": "产品",
       "visible": true,
       "order": 3
     },
     {
       "id": "services",
-      "name": "服务区块",
+      "name": "服务",
       "visible": true,
       "order": 4
     },
@@ -32,13 +32,13 @@
     },
     {
       "id": "about",
-      "name": "[区块]关于我们",
+      "name": "关于我们",
       "visible": true,
       "order": 6
     },
     {
       "id": "contact",
-      "name": "[区块]联系我们",
+      "name": "联系我们",
       "visible": true,
       "order": 7
     }

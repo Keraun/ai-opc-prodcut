@@ -147,11 +147,12 @@ function ProductCard({ product }: { product: Product }) {
           visible={visible}
           onCancel={() => setVisible(false)}
           footer={null}
-          className="!max-w-3xl"
+          className="!max-w-4xl"
+          style={{ width: '80%', maxWidth: '800px' }}
         >
           <div className="py-4">
             {product.details?.type === 'markdown' && (
-              <div className="prose prose-sm max-w-none">
+              <div className="prose prose-sm max-w-none whitespace-pre-wrap">
                 {product.details.content}
               </div>
             )}
@@ -171,20 +172,21 @@ function ProductCard({ product }: { product: Product }) {
           visible={visible}
           onCancel={() => setVisible(false)}
           footer={null}
-          className="!max-w-md"
+          className="!max-w-lg"
+          style={{ width: '60%', maxWidth: '500px' }}
         >
-          <div className="text-center py-6">
-            <div className="w-64 h-64 mx-auto mb-4 bg-gradient-to-br from-gray-50 to-gray-100 rounded-xl flex items-center justify-center border-2 border-gray-200">
+          <div className="text-center py-8">
+            <div className="w-80 h-80 mx-auto mb-6 bg-gradient-to-br from-gray-50 to-gray-100 rounded-xl flex items-center justify-center border-2 border-gray-200">
               <div className="text-center">
-                <div className="w-48 h-48 bg-white rounded-lg flex items-center justify-center mb-2">
+                <div className="w-64 h-64 bg-white rounded-lg flex items-center justify-center mb-3">
                   <span className="text-sm text-gray-400">扫码咨询</span>
                 </div>
               </div>
             </div>
-            <p className="text-sm text-gray-600 mb-2">
+            <p className="text-base text-gray-600 mb-3">
               {product.price === 0 ? "扫描二维码免费获取" : "扫描二维码咨询购买"}
             </p>
-            <p className="text-xs text-gray-400">
+            <p className="text-sm text-gray-400">
               工作时间：9:00-18:00
             </p>
           </div>
