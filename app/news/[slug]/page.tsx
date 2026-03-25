@@ -2,9 +2,12 @@
 
 import { useState, useEffect } from 'react'
 import { useParams, useRouter } from 'next/navigation'
-import { Calendar, ArrowLeft } from 'lucide-react'
 import { useTheme } from '@/components/theme-provider'
+import { Header } from '@/components/common/header'
+import { Footer } from '@/components/common/footer'
+import { Tag } from '@arco-design/web-react'
 import ReactMarkdown from 'react-markdown'
+import styles from './article.module.css'
 
 interface Article {
   id: string
@@ -26,13 +29,11 @@ export default function ArticleDetailPage() {
   useEffect(() => {
     const fetchArticle = async () => {
       try {
-        // 从API获取文章内容
         const response = await fetch(`/api/articles?slug=${slug}`)
         if (response.ok) {
           const foundArticle = await response.json()
           setArticle(foundArticle)
         } else {
-          // 文章不存在，返回404
           router.push('/news')
         }
       } catch (error) {
@@ -48,16 +49,16 @@ export default function ArticleDetailPage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="text-gray-500">加载中...</div>
+      <div className={styles.loading}>
+        <div className={styles.loadingText}>加载中...</div>
       </div>
     )
   }
 
   if (!article) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="text-gray-500">文章不存在</div>
+      <div className={styles.loading}>
+        <div className={styles.loadingText}>文章不存在</div>
       </div>
     )
   }
