@@ -1035,6 +1035,7 @@ export default function AdminDashboardPage() {
             <div className="h-full overflow-y-auto">
               <div className="p-4">
                 <nav className="space-y-1">
+                  {/* 控制台 */}
                   <button
                     onClick={() => handleMenuClick('accountInfo')}
                     className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-left transition-all ${activeMenu === 'accountInfo'
@@ -1046,6 +1047,7 @@ export default function AdminDashboardPage() {
                     {!sidebarCollapsed && <span className="text-sm">控制台</span>}
                   </button>
 
+                  {/* 站点管理 */}
                   <div className="pt-4 pb-2">
                     {!sidebarCollapsed && (
                       <div className="px-3 text-xs font-semibold text-gray-400 uppercase tracking-wider">
@@ -1063,17 +1065,6 @@ export default function AdminDashboardPage() {
                   >
                     <IconHome className="text-lg flex-shrink-0" />
                     {!sidebarCollapsed && <span className="text-sm">站点基础配置</span>}
-                  </button>
-
-                  <button
-                    onClick={() => handleMenuClick('common')}
-                    className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-left transition-all ${activeMenu === 'common'
-                        ? 'bg-blue-50 text-blue-700 font-medium'
-                        : 'text-gray-700 hover:bg-gray-50'
-                      }`}
-                  >
-                    <IconStorage className="text-lg flex-shrink-0" />
-                    {!sidebarCollapsed && <span className="text-sm">站点版本配置</span>}
                   </button>
 
                   <button
@@ -1120,6 +1111,18 @@ export default function AdminDashboardPage() {
                     {!sidebarCollapsed && <span className="text-sm">站点SEO配置</span>}
                   </button>
 
+                  <button
+                    onClick={() => handleMenuClick('common')}
+                    className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-left transition-all ${activeMenu === 'common'
+                        ? 'bg-blue-50 text-blue-700 font-medium'
+                        : 'text-gray-700 hover:bg-gray-50'
+                      }`}
+                  >
+                    <IconStorage className="text-lg flex-shrink-0" />
+                    {!sidebarCollapsed && <span className="text-sm">站点版本配置</span>}
+                  </button>
+
+                  {/* 页面管理 */}
                   <div className="pt-4 pb-2">
                     {!sidebarCollapsed && (
                       <div className="px-3 text-xs font-semibold text-gray-400 uppercase tracking-wider">
@@ -1217,25 +1220,6 @@ export default function AdminDashboardPage() {
                     </div>
                   </div>
 
-                  <div className="pt-4 pb-2">
-                    {!sidebarCollapsed && (
-                      <div className="px-3 text-xs font-semibold text-gray-400 uppercase tracking-wider">
-                        页面配置
-                      </div>
-                    )}
-                  </div>
-
-                  <button
-                    onClick={() => handleMenuClick('system')}
-                    className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-left transition-all ${activeMenu === 'system'
-                        ? 'bg-blue-50 text-blue-700 font-medium'
-                        : 'text-gray-700 hover:bg-gray-50'
-                      }`}
-                  >
-                    <IconSettings className="text-lg flex-shrink-0" />
-                    {!sidebarCollapsed && <span className="text-sm">页面配置</span>}
-                  </button>
-
                   <button
                     onClick={() => handleMenuClick('products')}
                     className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-left transition-all ${activeMenu === 'products'
@@ -1258,6 +1242,7 @@ export default function AdminDashboardPage() {
                     {!sidebarCollapsed && <span className="text-sm">自定义页面配置</span>}
                   </button>
 
+                  {/* 主题管理 */}
                   <div className="pt-4 pb-2">
                     {!sidebarCollapsed && (
                       <div className="px-3 text-xs font-semibold text-gray-400 uppercase tracking-wider">
@@ -1265,17 +1250,6 @@ export default function AdminDashboardPage() {
                       </div>
                     )}
                   </div>
-
-                  <button
-                    onClick={() => handleMenuClick('custom')}
-                    className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-left transition-all ${activeMenu === 'custom'
-                        ? 'bg-blue-50 text-blue-700 font-medium'
-                        : 'text-gray-700 hover:bg-gray-50'
-                      }`}
-                  >
-                    <IconSettings className="text-lg flex-shrink-0" />
-                    {!sidebarCollapsed && <span className="text-sm">主题个性化配置</span>}
-                  </button>
 
                   <button
                     onClick={() => handleMenuClick('theme')}
@@ -1288,6 +1262,18 @@ export default function AdminDashboardPage() {
                     {!sidebarCollapsed && <span className="text-sm">主题皮肤选择</span>}
                   </button>
 
+                  <button
+                    onClick={() => handleMenuClick('custom')}
+                    className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-left transition-all ${activeMenu === 'custom'
+                        ? 'bg-blue-50 text-blue-700 font-medium'
+                        : 'text-gray-700 hover:bg-gray-50'
+                      }`}
+                  >
+                    <IconSettings className="text-lg flex-shrink-0" />
+                    {!sidebarCollapsed && <span className="text-sm">主题个性化配置</span>}
+                  </button>
+
+                  {/* 系统管理 */}
                   <div className="pt-4 pb-2">
                     {!sidebarCollapsed && (
                       <div className="px-3 text-xs font-semibold text-gray-400 uppercase tracking-wider">
@@ -1295,6 +1281,17 @@ export default function AdminDashboardPage() {
                       </div>
                     )}
                   </div>
+
+                  <button
+                    onClick={() => handleMenuClick('system')}
+                    className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-left transition-all ${activeMenu === 'system'
+                        ? 'bg-blue-50 text-blue-700 font-medium'
+                        : 'text-gray-700 hover:bg-gray-50'
+                      }`}
+                  >
+                    <IconSettings className="text-lg flex-shrink-0" />
+                    {!sidebarCollapsed && <span className="text-sm">配置管理</span>}
+                  </button>
 
                   <button
                     onClick={() => handleMenuClick('operationLogs')}
