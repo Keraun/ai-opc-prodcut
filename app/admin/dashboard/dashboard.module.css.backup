@@ -115,10 +115,10 @@
 
 .jsonViewerContainer {
   background-color: #f9fafb;
-  border-radius: 8.0px;
+  border-radius: 0.5rem;
   overflow: auto;
   font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
-  font-size: 14.0px;
+  font-size: 0.875rem;
 }
 
 .jsonLine {
@@ -162,12 +162,12 @@
 .diffContainer {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 16.0px;
+  gap: 1rem;
 }
 
 .diffTitle {
-  margin-bottom: 8.0px;
-  font-size: 14.0px;
+  margin-bottom: 0.5rem;
+  font-size: 0.875rem;
   font-weight: 600;
   color: #374151;
 }
@@ -178,10 +178,10 @@
 
 .jsonLineNumberFlex {
   flex-shrink: 0;
-  width: 48.0px;
-  padding: 0 8.0px;
-  padding-top: 2.0px;
-  padding-bottom: 2.0px;
+  width: 3rem;
+  padding: 0 0.5rem;
+  padding-top: 0.125rem;
+  padding-bottom: 0.125rem;
   text-align: right;
   color: #9ca3af;
   user-select: none;
@@ -191,10 +191,10 @@
 
 .jsonLineContentFlex {
   flex: 1;
-  padding-left: 16.0px;
-  padding-right: 16.0px;
-  padding-top: 2.0px;
-  padding-bottom: 2.0px;
+  padding-left: 1rem;
+  padding-right: 1rem;
+  padding-top: 0.125rem;
+  padding-bottom: 0.125rem;
   white-space: pre-wrap;
   word-wrap: break-word;
 }
@@ -216,29 +216,29 @@
 }
 
 .passwordBannerContainer {
-  max-width: 1280.0px;
+  max-width: 80rem;
   margin: 0 auto;
-  padding: 16.0px;
+  padding: 1rem;
 }
 
 @media (min-width: 640px) {
   .passwordBannerContainer {
-    padding-left: 24.0px;
-    padding-right: 24.0px;
+    padding-left: 1.5rem;
+    padding-right: 1.5rem;
   }
 }
 
 @media (min-width: 1024px) {
   .passwordBannerContainer {
-    padding-left: 32.0px;
-    padding-right: 32.0px;
+    padding-left: 2rem;
+    padding-right: 2rem;
   }
 }
 
 .passwordBannerContent {
   display: flex;
   align-items: flex-start;
-  gap: 12.0px;
+  gap: 0.75rem;
 }
 
 .passwordBannerIcon {
@@ -250,15 +250,15 @@
 }
 
 .passwordBannerTitle {
-  font-size: 18.0px;
+  font-size: 1.125rem;
   font-weight: 600;
   color: #991b1b;
-  margin-bottom: 4.0px;
+  margin-bottom: 0.25rem;
 }
 
 .passwordBannerMessage {
   color: #b91c1c;
-  margin-bottom: 8.0px;
+  margin-bottom: 0.5rem;
 }
 
 .passwordBannerButton {
@@ -273,26 +273,26 @@
 }
 
 .headerBarContainer {
-  padding: 0 24.0px;
+  padding: 0 1.5rem;
 }
 
 .headerBarContent {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  height: 64.0px;
+  height: 4rem;
 }
 
 .headerLogo {
   display: flex;
   align-items: center;
-  gap: 12.0px;
+  gap: 0.75rem;
 }
 
 .headerLogoIcon {
-  width: 36.0px;
-  height: 36.0px;
-  border-radius: 8.0px;
+  width: 2.25rem;
+  height: 2.25rem;
+  border-radius: 0.5rem;
   background: linear-gradient(to bottom right, #3b82f6, #2563eb);
   display: flex;
   align-items: center;
@@ -301,51 +301,51 @@
 }
 
 .headerLogoIconSvg {
-  width: 20.0px;
-  height: 20.0px;
+  width: 1.25rem;
+  height: 1.25rem;
   color: #ffffff;
 }
 
 .headerLogoText {
   display: flex;
   align-items: center;
-  gap: 8.0px;
+  gap: 0.5rem;
 }
 
 .headerLogoTitle {
-  font-size: 14.0px;
+  font-size: 0.875rem;
   font-weight: 700;
   color: #111827;
 }
 
 .headerLogoSeparator {
-  font-size: 12.0px;
+  font-size: 0.75rem;
   color: #9ca3af;
 }
 
 .headerLogoSubtitle {
-  font-size: 12.0px;
+  font-size: 0.75rem;
   color: #6b7280;
 }
 
 .headerActions {
   display: flex;
   align-items: center;
-  gap: 12.0px;
+  gap: 0.75rem;
 }
 
 .qrDropdown {
-  padding: 16.0px;
+  padding: 1rem;
   background-color: #ffffff;
-  border-radius: 8.0px;
+  border-radius: 0.5rem;
   box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
 }
 
 .qrContainer {
-  width: 160.0px;
-  height: 160.0px;
+  width: 10rem;
+  height: 10rem;
   background: linear-gradient(to bottom right, #f9fafb, #f3f4f6);
-  border-radius: 12.0px;
+  border-radius: 0.75rem;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -358,30 +358,30 @@
 }
 
 .qrPlaceholder {
-  width: 128.0px;
-  height: 128.0px;
+  width: 8rem;
+  height: 8rem;
   background-color: #ffffff;
-  border-radius: 8.0px;
+  border-radius: 0.5rem;
   display: flex;
   align-items: center;
   justify-content: center;
 }
 
 .qrPlaceholderText {
-  font-size: 12.0px;
+  font-size: 0.75rem;
   color: #9ca3af;
 }
 
 .qrHint {
   text-align: center;
-  font-size: 12.0px;
+  font-size: 0.75rem;
   color: #6b7280;
-  margin-top: 8.0px;
+  margin-top: 0.5rem;
 }
 
 .mainLayout {
   display: flex;
-  height: calc(100vh - 64.0px);
+  height: calc(100vh - 4rem);
 }
 
 .sidebar {
@@ -394,11 +394,11 @@
 }
 
 .sidebarExpanded {
-  width: 256.0px;
+  width: 16rem;
 }
 
 .sidebarCollapsed {
-  width: 64.0px;
+  width: 4rem;
 }
 
 .sidebarContent {
@@ -407,22 +407,22 @@
 }
 
 .sidebarPadding {
-  padding: 16.0px;
+  padding: 1rem;
 }
 
 .navList {
   display: flex;
   flex-direction: column;
-  gap: 4.0px;
+  gap: 0.25rem;
 }
 
 .navItem {
   width: 100%;
   display: flex;
   align-items: center;
-  gap: 12.0px;
-  padding: 10.0px 12.0px;
-  border-radius: 8.0px;
+  gap: 0.75rem;
+  padding: 0.625rem 0.75rem;
+  border-radius: 0.5rem;
   text-align: left;
   transition: all 0.2s;
   background: none;
@@ -445,22 +445,22 @@
 }
 
 .navItemIcon {
-  font-size: 18.0px;
+  font-size: 1.125rem;
   flex-shrink: 0;
 }
 
 .navItemText {
-  font-size: 14.0px;
+  font-size: 0.875rem;
 }
 
 .navSection {
-  padding-top: 16.0px;
-  padding-bottom: 8.0px;
+  padding-top: 1rem;
+  padding-bottom: 0.5rem;
 }
 
 .navSectionTitle {
-  padding-left: 12.0px;
-  font-size: 12.0px;
+  padding-left: 0.75rem;
+  font-size: 0.75rem;
   font-weight: 600;
   color: #9ca3af;
   text-transform: uppercase;
@@ -468,19 +468,19 @@
 }
 
 .navSubList {
-  padding-left: 40.0px;
+  padding-left: 2.5rem;
   display: flex;
   flex-direction: column;
-  gap: 4.0px;
+  gap: 0.25rem;
 }
 
 .navSubItem {
   width: 100%;
   display: flex;
   align-items: center;
-  gap: 12.0px;
-  padding: 8.0px 12.0px;
-  border-radius: 8.0px;
+  gap: 0.75rem;
+  padding: 0.5rem 0.75rem;
+  border-radius: 0.5rem;
   text-align: left;
   transition: all 0.2s;
   background: none;
@@ -503,7 +503,7 @@
 }
 
 .navSubItemText {
-  font-size: 14.0px;
+  font-size: 0.875rem;
 }
 
 .navItemWithBadge {
@@ -513,7 +513,7 @@
 .navItemBadgeContainer {
   display: flex;
   align-items: center;
-  gap: 12.0px;
+  gap: 0.75rem;
 }
 
 .contentArea {
@@ -524,14 +524,14 @@
 }
 
 .contentPadding {
-  padding: 32.0px;
+  padding: 2rem;
   height: 100%;
 }
 
 .accountInfoGrid {
   display: grid;
   grid-template-columns: repeat(1, minmax(0, 1fr));
-  gap: 24.0px;
+  gap: 1.5rem;
 }
 
 @media (min-width: 768px) {
@@ -542,8 +542,8 @@
 
 .accountInfoCard {
   background: linear-gradient(to bottom right, #eff6ff, #dbeafe);
-  border-radius: 12.0px;
-  padding: 24.0px;
+  border-radius: 0.75rem;
+  padding: 1.5rem;
   border: 1px solid #bfdbfe;
 }
 
@@ -560,13 +560,13 @@
 .accountInfoCardHeader {
   display: flex;
   align-items: center;
-  gap: 12.0px;
-  margin-bottom: 16.0px;
+  gap: 0.75rem;
+  margin-bottom: 1rem;
 }
 
 .accountInfoIcon {
-  width: 48.0px;
-  height: 48.0px;
+  width: 3rem;
+  height: 3rem;
   border-radius: 9999px;
   background: linear-gradient(to bottom right, #3b82f6, #2563eb);
   display: flex;
@@ -583,31 +583,31 @@
 }
 
 .accountInfoIconSvg {
-  width: 24.0px;
-  height: 24.0px;
+  width: 1.5rem;
+  height: 1.5rem;
   color: #ffffff;
 }
 
 .accountInfoLabel {
-  font-size: 14.0px;
+  font-size: 0.875rem;
   color: #4b5563;
 }
 
 .accountInfoValue {
-  font-size: 18.0px;
+  font-size: 1.125rem;
   font-weight: 700;
   color: #111827;
 }
 
 .accountInfoValueMono {
-  font-size: 18.0px;
+  font-size: 1.125rem;
   font-weight: 700;
   color: #111827;
   font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
 }
 
 .accountInfoDescription {
-  font-size: 14.0px;
+  font-size: 0.875rem;
   color: #4b5563;
 }
 
@@ -624,67 +624,67 @@
 }
 
 .editConfigHeader {
-  margin-bottom: 16.0px;
+  margin-bottom: 1rem;
 }
 
 .editConfigHeaderTop {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-bottom: 8.0px;
+  margin-bottom: 0.5rem;
 }
 
 .editConfigHeaderLeft {
   display: flex;
   align-items: center;
-  gap: 8.0px;
+  gap: 0.5rem;
 }
 
 .editConfigHint {
-  font-size: 14.0px;
+  font-size: 0.875rem;
   color: #6b7280;
 }
 
 .editConfigHeaderRight {
   display: flex;
   align-items: center;
-  gap: 8.0px;
+  gap: 0.5rem;
 }
 
 .editConfigActionsBottom {
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 16.0px;
-  margin-top: 12.0px;
-  padding-top: 12.0px;
+  gap: 1rem;
+  margin-top: 0.75rem;
+  padding-top: 0.75rem;
   position: absolute;
   bottom: -70px;
   left: 10px;
 }
 
 .editConfigRowsLabel {
-  font-size: 12.0px;
+  font-size: 0.75rem;
   color: #6b7280;
 }
 
 .editConfigRowsControls {
   display: flex;
   align-items: center;
-  gap: 8.0px;
+  gap: 0.5rem;
 }
 
 .editConfigRowsValue {
-  font-size: 12.0px;
+  font-size: 0.75rem;
   color: #4b5563;
-  min-width: 60.0px;
+  min-width: 3.75rem;
   text-align: center;
 }
 
 .editConfigPresets {
   display: flex;
   align-items: center;
-  gap: 4.0px;
+  gap: 0.25rem;
 }
 
 .editConfigRight {
@@ -693,31 +693,31 @@
 }
 
 .viewConfigHeader {
-  margin-bottom: 16.0px;
+  margin-bottom: 1rem;
 }
 
 .viewConfigHeaderTop {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-bottom: 8.0px;
+  margin-bottom: 0.5rem;
 }
 
 .viewConfigHint {
-  font-size: 14.0px;
+  font-size: 0.875rem;
   color: #6b7280;
 }
 
 .viewConfigTitle {
   display: flex;
   align-items: center;
-  gap: 8.0px;
+  gap: 0.5rem;
 }
 
 .configContainer {
   display: flex;
   gap: 0;
-  margin-bottom: 16.0px;
+  margin-bottom: 1rem;
   position: relative;
   height: calc(100vh - 64px - 64px);
 }
@@ -727,32 +727,32 @@
 }
 
 .configCardContent {
-  margin-bottom: 16.0px;
+  margin-bottom: 1rem;
 }
 
 .configCardDescription {
-  font-size: 14.0px;
+  font-size: 0.875rem;
   color: #6b7280;
 }
 
 .configCardVersion {
-  font-size: 12.0px;
+  font-size: 0.75rem;
   color: #9ca3af;
-  margin-top: 4.0px;
+  margin-top: 0.25rem;
 }
 
 .configCardPreview {
   background-color: #f9fafb;
-  padding: 16.0px;
-  border-radius: 8.0px;
+  padding: 1rem;
+  border-radius: 0.5rem;
   overflow: auto;
-  max-height: 384.0px;
-  font-size: 14.0px;
+  max-height: 24rem;
+  font-size: 0.875rem;
 }
 
 .configResizer {
   flex-shrink: 0;
-  width: 4.0px;
+  width: 0.25rem;
   background-color: #e5e7eb;
   cursor: col-resize;
   transition: background-color 0.2s;
@@ -771,8 +771,8 @@
 .configResizerHandle {
   position: absolute;
   inset-y: 0;
-  left: -4.0px;
-  right: -4.0px;
+  left: -0.25rem;
+  right: -0.25rem;
 }
 
 .configResizerVisual {
@@ -780,8 +780,8 @@
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  width: 4.0px;
-  height: 48.0px;
+  width: 0.25rem;
+  height: 3rem;
   background-color: #d1d5db;
   border-radius: 9999px;
   transition: background-color 0.2s;
@@ -799,7 +799,7 @@
 .schemaCardTitle {
   display: flex;
   align-items: center;
-  gap: 8.0px;
+  gap: 0.5rem;
 }
 
 .schemaCardTitleIcon {
@@ -807,22 +807,22 @@
 }
 
 .schemaCardTitleText {
-  font-size: 18.0px;
+  font-size: 1.125rem;
   font-weight: 600;
 }
 
 .schemaContent {
   display: flex;
   flex-direction: column;
-  gap: 16.0px;
-  max-height: 500.0px;
+  gap: 1rem;
+  max-height: 31.25rem;
   overflow: auto;
 }
 
 .schemaItem {
   border-bottom-width: 1px;
   border-color: #f3f4f6;
-  padding-bottom: 12.0px;
+  padding-bottom: 0.75rem;
 }
 
 .schemaItem:last-child {
@@ -833,20 +833,20 @@
 .schemaItemHeader {
   display: flex;
   align-items: center;
-  gap: 8.0px;
-  margin-bottom: 4.0px;
+  gap: 0.5rem;
+  margin-bottom: 0.25rem;
 }
 
 .schemaItemName {
-  font-size: 14.0px;
+  font-size: 0.875rem;
   font-weight: 600;
   color: #111827;
 }
 
 .schemaItemBadge {
-  padding: 2.0px 6.0px;
-  font-size: 12.0px;
-  border-radius: 4.0px;
+  padding: 0.125rem 0.375rem;
+  font-size: 0.75rem;
+  border-radius: 0.25rem;
 }
 
 .schemaItemBadgeRequired {
@@ -860,30 +860,30 @@
 }
 
 .schemaItemDescription {
-  font-size: 12.0px;
+  font-size: 0.75rem;
   color: #4b5563;
-  margin-bottom: 4.0px;
+  margin-bottom: 0.25rem;
 }
 
 .schemaItemFields {
-  margin-left: 8.0px;
-  margin-top: 4.0px;
+  margin-left: 0.5rem;
+  margin-top: 0.25rem;
   display: flex;
   flex-direction: column;
-  gap: 2.0px;
+  gap: 0.125rem;
 }
 
 .schemaField {
   display: flex;
   align-items: flex-start;
-  gap: 4.0px;
-  font-size: 12.0px;
+  gap: 0.25rem;
+  font-size: 0.75rem;
 }
 
 .schemaFieldName {
   font-weight: 500;
   color: #374151;
-  min-width: 80.0px;
+  min-width: 5rem;
 }
 
 .schemaFieldDescription {
@@ -891,19 +891,19 @@
 }
 
 .systemManagement {
-  padding: 24.0px;
+  padding: 1.5rem;
 }
 
 .performanceSection {
-  padding: 24.0px;
+  padding: 1.5rem;
   background-color: #f9fafb;
-  border-radius: 8.0px;
+  border-radius: 0.5rem;
 }
 
 .sectionTitle {
-  font-size: 18.0px;
+  font-size: 1.125rem;
   font-weight: 600;
-  margin-bottom: 16.0px;
+  margin-bottom: 1rem;
 }
 
 .performanceItem {
@@ -919,28 +919,28 @@
 .performanceItemTitle {
   font-weight: 500;
   color: #111827;
-  margin-bottom: 4.0px;
+  margin-bottom: 0.25rem;
 }
 
 .performanceItemDescription {
-  font-size: 14.0px;
+  font-size: 0.875rem;
   color: #4b5563;
 }
 
 .configSection {
-  padding: 24.0px;
+  padding: 1.5rem;
   background-color: #f9fafb;
-  border-radius: 8.0px;
+  border-radius: 0.5rem;
 }
 
 .configSectionDescription {
   color: #4b5563;
-  margin-bottom: 16.0px;
+  margin-bottom: 1rem;
 }
 
 .configSectionActions {
   display: flex;
-  gap: 16.0px;
+  gap: 1rem;
 }
 
 .importInput {
@@ -951,11 +951,11 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  padding: 8.0px 16.0px;
+  padding: 0.5rem 1rem;
   border: 1px solid transparent;
-  font-size: 14.0px;
+  font-size: 0.875rem;
   font-weight: 500;
-  border-radius: 6.0px;
+  border-radius: 0.375rem;
   color: #ffffff;
   background-color: #374151;
   cursor: pointer;
@@ -967,39 +967,39 @@
 }
 
 .importLabelIcon {
-  margin-right: 8.0px;
+  margin-right: 0.5rem;
 }
 
 .dangerSection {
-  padding: 24.0px;
+  padding: 1.5rem;
   background-color: #fef2f2;
-  border-radius: 8.0px;
+  border-radius: 0.5rem;
   border-width: 2px;
   border-color: #fecaca;
 }
 
 .dangerSectionTitle {
-  font-size: 18.0px;
+  font-size: 1.125rem;
   font-weight: 600;
-  margin-bottom: 16.0px;
+  margin-bottom: 1rem;
   color: #991b1b;
 }
 
 .dangerSectionAlert {
-  margin-bottom: 16.0px;
+  margin-bottom: 1rem;
 }
 
 .dangerSectionActions {
   display: flex;
-  gap: 16.0px;
+  gap: 1rem;
 }
 
 .jsonViewerContainer {
   background-color: #f9fafb;
-  border-radius: 8.0px;
+  border-radius: 0.5rem;
   overflow: auto;
   font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
-  font-size: 14.0px;
+  font-size: 0.875rem;
 }
 
 .jsonViewerLine {
@@ -1008,10 +1008,10 @@
 
 .jsonViewerLineNumber {
   flex-shrink: 0;
-  width: 48.0px;
-  padding: 0 8.0px;
-  padding-top: 2.0px;
-  padding-bottom: 2.0px;
+  width: 3rem;
+  padding: 0 0.5rem;
+  padding-top: 0.125rem;
+  padding-bottom: 0.125rem;
   text-align: right;
   color: #9ca3af;
   user-select: none;
@@ -1021,10 +1021,10 @@
 
 .jsonViewerLineContent {
   flex: 1;
-  padding-left: 16.0px;
-  padding-right: 16.0px;
-  padding-top: 2.0px;
-  padding-bottom: 2.0px;
+  padding-left: 1rem;
+  padding-right: 1rem;
+  padding-top: 0.125rem;
+  padding-bottom: 0.125rem;
   white-space: pre-wrap;
   word-wrap: break-word;
 }
@@ -1032,12 +1032,12 @@
 .diffGrid {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 16.0px;
+  gap: 1rem;
 }
 
 .diffTitle {
-  margin-bottom: 8.0px;
-  font-size: 14.0px;
+  margin-bottom: 0.5rem;
+  font-size: 0.875rem;
   font-weight: 600;
   color: #374151;
 }
@@ -1049,62 +1049,62 @@
 }
 
 .configCardTitleText {
-  font-size: 18.0px;
+  font-size: 1.125rem;
   font-weight: 600;
 }
 
 .configCardActions {
   display: flex;
-  gap: 8.0px;
+  gap: 0.5rem;
 }
 
 .configCardBodyDescription {
-  font-size: 14.0px;
+  font-size: 0.875rem;
   color: #6b7280;
-  margin-bottom: 16.0px;
+  margin-bottom: 1rem;
 }
 
 .configCardBodyVersion {
-  font-size: 12.0px;
+  font-size: 0.75rem;
   color: #9ca3af;
-  margin-top: 4.0px;
+  margin-top: 0.25rem;
 }
 
 .configCardBodyPreview {
   background-color: #f9fafb;
-  padding: 16.0px;
-  border-radius: 8.0px;
+  padding: 1rem;
+  border-radius: 0.5rem;
   overflow: auto;
-  max-height: 384.0px;
-  font-size: 14.0px;
+  max-height: 24rem;
+  font-size: 0.875rem;
 }
 
 .editConfigModalBody {
-  margin-bottom: 16.0px;
+  margin-bottom: 1rem;
 }
 
 .editConfigModalHeader {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-bottom: 8.0px;
+  margin-bottom: 0.5rem;
 }
 
 .editConfigModalHeaderLeft {
   display: flex;
   align-items: center;
-  gap: 8.0px;
+  gap: 0.5rem;
 }
 
 .editConfigModalHint {
-  font-size: 14.0px;
+  font-size: 0.875rem;
   color: #6b7280;
 }
 
 .editConfigModalHeaderRight {
   display: flex;
   align-items: center;
-  gap: 8.0px;
+  gap: 0.5rem;
 }
 
 .editConfigTextarea {
@@ -1112,25 +1112,25 @@
 }
 
 .viewConfigModalBody {
-  margin-bottom: 16.0px;
+  margin-bottom: 1rem;
 }
 
 .viewConfigModalHeader {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-bottom: 8.0px;
+  margin-bottom: 0.5rem;
 }
 
 .viewConfigModalHint {
-  font-size: 14.0px;
+  font-size: 0.875rem;
   color: #6b7280;
 }
 
 .viewConfigModalTitle {
   display: flex;
   align-items: center;
-  gap: 8.0px;
+  gap: 0.5rem;
 }
 
 .mainContainer {
@@ -1144,29 +1144,29 @@
 }
 
 .passwordBannerInner {
-  max-width: 1280.0px;
+  max-width: 80rem;
   margin: 0 auto;
-  padding: 16.0px;
+  padding: 1rem;
 }
 
 @media (min-width: 640px) {
   .passwordBannerInner {
-    padding-left: 24.0px;
-    padding-right: 24.0px;
+    padding-left: 1.5rem;
+    padding-right: 1.5rem;
   }
 }
 
 @media (min-width: 1024px) {
   .passwordBannerInner {
-    padding-left: 32.0px;
-    padding-right: 32.0px;
+    padding-left: 2rem;
+    padding-right: 2rem;
   }
 }
 
 .passwordBannerContent {
   display: flex;
   align-items: flex-start;
-  gap: 12.0px;
+  gap: 0.75rem;
 }
 
 .passwordBannerIcon {
@@ -1174,8 +1174,8 @@
 }
 
 .passwordBannerIconSvg {
-  height: 24.0px;
-  width: 24.0px;
+  height: 1.5rem;
+  width: 1.5rem;
   color: #dc2626;
 }
 
@@ -1184,15 +1184,15 @@
 }
 
 .passwordBannerTitle {
-  font-size: 18.0px;
+  font-size: 1.125rem;
   font-weight: 600;
   color: #991b1b;
-  margin-bottom: 4.0px;
+  margin-bottom: 0.25rem;
 }
 
 .passwordBannerMessage {
   color: #b91c1c;
-  margin-bottom: 8.0px;
+  margin-bottom: 0.5rem;
 }
 
 .passwordBannerButton {
@@ -1206,26 +1206,26 @@
 }
 
 .headerBarInner {
-  padding: 0 24.0px;
+  padding: 0 1.5rem;
 }
 
 .headerBarContent {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  height: 64.0px;
+  height: 4rem;
 }
 
 .headerLogo {
   display: flex;
   align-items: center;
-  gap: 12.0px;
+  gap: 0.75rem;
 }
 
 .headerLogoIcon {
-  width: 36.0px;
-  height: 36.0px;
-  border-radius: 8.0px;
+  width: 2.25rem;
+  height: 2.25rem;
+  border-radius: 0.5rem;
   background: linear-gradient(to bottom right, #3b82f6, #2563eb);
   display: flex;
   align-items: center;
@@ -1234,51 +1234,51 @@
 }
 
 .headerLogoIconSvg {
-  width: 20.0px;
-  height: 20.0px;
+  width: 1.25rem;
+  height: 1.25rem;
   color: #ffffff;
 }
 
 .headerLogoText {
   display: flex;
   align-items: center;
-  gap: 8.0px;
+  gap: 0.5rem;
 }
 
 .headerLogoTitle {
-  font-size: 14.0px;
+  font-size: 0.875rem;
   font-weight: 700;
   color: #111827;
 }
 
 .headerLogoSeparator {
-  font-size: 12.0px;
+  font-size: 0.75rem;
   color: #9ca3af;
 }
 
 .headerLogoSubtitle {
-  font-size: 12.0px;
+  font-size: 0.75rem;
   color: #6b7280;
 }
 
 .headerActions {
   display: flex;
   align-items: center;
-  gap: 12.0px;
+  gap: 0.75rem;
 }
 
 .qrDropdown {
-  padding: 16.0px;
+  padding: 1rem;
   background-color: #ffffff;
-  border-radius: 8.0px;
+  border-radius: 0.5rem;
   box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
 }
 
 .qrContainer {
-  width: 160.0px;
-  height: 160.0px;
+  width: 10rem;
+  height: 10rem;
   background: linear-gradient(to bottom right, #f9fafb, #f3f4f6);
-  border-radius: 12.0px;
+  border-radius: 0.75rem;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -1290,30 +1290,30 @@
 }
 
 .qrPlaceholder {
-  width: 128.0px;
-  height: 128.0px;
+  width: 8rem;
+  height: 8rem;
   background-color: #ffffff;
-  border-radius: 8.0px;
+  border-radius: 0.5rem;
   display: flex;
   align-items: center;
   justify-content: center;
 }
 
 .qrPlaceholderText {
-  font-size: 12.0px;
+  font-size: 0.75rem;
   color: #9ca3af;
 }
 
 .qrHint {
   text-align: center;
-  font-size: 12.0px;
+  font-size: 0.75rem;
   color: #6b7280;
-  margin-top: 8.0px;
+  margin-top: 0.5rem;
 }
 
 .mainLayout {
   display: flex;
-  height: calc(100vh - 64.0px);
+  height: calc(100vh - 4rem);
 }
 
 .sidebar {
@@ -1325,11 +1325,11 @@
 }
 
 .sidebarExpanded {
-  width: 256.0px;
+  width: 16rem;
 }
 
 .sidebarCollapsed {
-  width: 64.0px;
+  width: 4rem;
 }
 
 .sidebarContent {
@@ -1338,22 +1338,22 @@
 }
 
 .sidebarPadding {
-  padding: 16.0px;
+  padding: 1rem;
 }
 
 .navList {
   display: flex;
   flex-direction: column;
-  gap: 4.0px;
+  gap: 0.25rem;
 }
 
 .navItem {
   width: 100%;
   display: flex;
   align-items: center;
-  gap: 12.0px;
-  padding: 10.0px 12.0px;
-  border-radius: 8.0px;
+  gap: 0.75rem;
+  padding: 0.625rem 0.75rem;
+  border-radius: 0.5rem;
   text-align: left;
   transition: all 0.2s;
   background: none;
@@ -1376,22 +1376,22 @@
 }
 
 .navItemIcon {
-  font-size: 18.0px;
+  font-size: 1.125rem;
   flex-shrink: 0;
 }
 
 .navItemText {
-  font-size: 14.0px;
+  font-size: 0.875rem;
 }
 
 .navSection {
-  padding-top: 16.0px;
-  padding-bottom: 8.0px;
+  padding-top: 1rem;
+  padding-bottom: 0.5rem;
 }
 
 .navSectionTitle {
-  padding-left: 12.0px;
-  font-size: 12.0px;
+  padding-left: 0.75rem;
+  font-size: 0.75rem;
   font-weight: 600;
   color: #9ca3af;
   text-transform: uppercase;
@@ -1399,19 +1399,19 @@
 }
 
 .navSubList {
-  padding-left: 40.0px;
+  padding-left: 2.5rem;
   display: flex;
   flex-direction: column;
-  gap: 4.0px;
+  gap: 0.25rem;
 }
 
 .navSubItem {
   width: 100%;
   display: flex;
   align-items: center;
-  gap: 12.0px;
-  padding: 8.0px 12.0px;
-  border-radius: 8.0px;
+  gap: 0.75rem;
+  padding: 0.5rem 0.75rem;
+  border-radius: 0.5rem;
   text-align: left;
   transition: all 0.2s;
   background: none;
@@ -1434,7 +1434,7 @@
 }
 
 .navSubItemText {
-  font-size: 14.0px;
+  font-size: 0.875rem;
 }
 
 .navItemWithBadge {
@@ -1444,7 +1444,7 @@
 .navItemBadgeContainer {
   display: flex;
   align-items: center;
-  gap: 12.0px;
+  gap: 0.75rem;
 }
 
 .contentArea {
@@ -1455,14 +1455,14 @@
 }
 
 .contentPadding {
-  padding: 32.0px;
+  padding: 2rem;
   height: 100%;
 }
 
 .accountInfoGrid {
   display: grid;
   grid-template-columns: repeat(1, minmax(0, 1fr));
-  gap: 24.0px;
+  gap: 1.5rem;
 }
 
 @media (min-width: 768px) {
@@ -1473,8 +1473,8 @@
 
 .accountInfoCard {
   background: linear-gradient(to bottom right, #eff6ff, #dbeafe);
-  border-radius: 12.0px;
-  padding: 24.0px;
+  border-radius: 0.75rem;
+  padding: 1.5rem;
   border: 1px solid #bfdbfe;
 }
 
@@ -1491,13 +1491,13 @@
 .accountInfoCardHeader {
   display: flex;
   align-items: center;
-  gap: 12.0px;
-  margin-bottom: 16.0px;
+  gap: 0.75rem;
+  margin-bottom: 1rem;
 }
 
 .accountInfoIcon {
-  width: 48.0px;
-  height: 48.0px;
+  width: 3rem;
+  height: 3rem;
   border-radius: 9999px;
   background: linear-gradient(to bottom right, #3b82f6, #2563eb);
   display: flex;
@@ -1514,40 +1514,40 @@
 }
 
 .accountInfoIconSvg {
-  width: 24.0px;
-  height: 24.0px;
+  width: 1.5rem;
+  height: 1.5rem;
   color: #ffffff;
 }
 
 .accountInfoLabel {
-  font-size: 14.0px;
+  font-size: 0.875rem;
   color: #4b5563;
 }
 
 .accountInfoValue {
-  font-size: 18.0px;
+  font-size: 1.125rem;
   font-weight: 700;
   color: #111827;
 }
 
 .accountInfoDescription {
-  font-size: 14.0px;
+  font-size: 0.875rem;
   color: #4b5563;
 }
 
 .themeSection {
-  margin-bottom: 24.0px;
+  margin-bottom: 1.5rem;
 }
 
 .themeDescription {
-  font-size: 14.0px;
+  font-size: 0.875rem;
   color: #6b7280;
 }
 
 .themeGrid {
   display: grid;
   grid-template-columns: repeat(1, minmax(0, 1fr));
-  gap: 24.0px;
+  gap: 1.5rem;
 }
 
 @media (min-width: 768px) {
@@ -1559,8 +1559,8 @@
 .themeCard {
   position: relative;
   border: 2px solid;
-  border-radius: 12.0px;
-  padding: 24.0px;
+  border-radius: 0.75rem;
+  padding: 1.5rem;
   cursor: pointer;
   transition: all 0.2s;
 }
@@ -1585,13 +1585,13 @@
 
 .themeCheckmark {
   position: absolute;
-  top: 12.0px;
-  right: 12.0px;
+  top: 0.75rem;
+  right: 0.75rem;
 }
 
 .themeCheckmarkCircle {
-  width: 24.0px;
-  height: 24.0px;
+  width: 1.5rem;
+  height: 1.5rem;
   border-radius: 9999px;
   background-color: #3b82f6;
   display: flex;
@@ -1600,58 +1600,58 @@
 }
 
 .themeCheckmarkSvg {
-  width: 16.0px;
-  height: 16.0px;
+  width: 1rem;
+  height: 1rem;
   color: #ffffff;
 }
 
 .themePreview {
-  margin-bottom: 16.0px;
+  margin-bottom: 1rem;
 }
 
 .themePreviewBar {
   width: 100%;
-  height: 96.0px;
-  border-radius: 8.0px;
-  margin-bottom: 12.0px;
+  height: 6rem;
+  border-radius: 0.5rem;
+  margin-bottom: 0.75rem;
 }
 
 .themeName {
-  font-size: 18.0px;
+  font-size: 1.125rem;
   font-weight: 700;
   color: #111827;
-  margin-bottom: 8.0px;
+  margin-bottom: 0.5rem;
 }
 
 .themeDescriptionText {
-  font-size: 14.0px;
+  font-size: 0.875rem;
   color: #4b5563;
-  margin-bottom: 16.0px;
+  margin-bottom: 1rem;
 }
 
 .themeColors {
   display: flex;
-  gap: 8.0px;
+  gap: 0.5rem;
   flex-wrap: wrap;
 }
 
 .themeColorDot {
-  width: 32.0px;
-  height: 32.0px;
+  width: 2rem;
+  height: 2rem;
   border-radius: 9999px;
   border: 2px solid #ffffff;
   box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
 }
 
 .logsInfo {
-  margin-bottom: 16.0px;
+  margin-bottom: 1rem;
 }
 
 .logsAlert {
   background-color: #eff6ff;
   border-left: 4px solid #60a5fa;
-  padding: 16.0px;
-  border-radius: 0 6.0px 6.0px 0;
+  padding: 1rem;
+  border-radius: 0 0.375rem 0.375rem 0;
 }
 
 .logsAlertContent {
@@ -1664,56 +1664,56 @@
 }
 
 .logsAlertIconSvg {
-  height: 20.0px;
-  width: 20.0px;
+  height: 1.25rem;
+  width: 1.25rem;
   color: #60a5fa;
 }
 
 .logsAlertText {
-  margin-left: 12.0px;
+  margin-left: 0.75rem;
 }
 
 .logsAlertMessage {
-  font-size: 14.0px;
+  font-size: 0.875rem;
   color: #1e40af;
 }
 
 .logsEmpty {
   text-align: center;
-  padding: 48.0px 0;
+  padding: 3rem 0;
 }
 
 .logsEmptyIcon {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 64.0px;
-  height: 64.0px;
+  width: 4rem;
+  height: 4rem;
   border-radius: 9999px;
   background-color: #f3f4f6;
-  margin-bottom: 16.0px;
+  margin-bottom: 1rem;
 }
 
 .logsEmptyIconSvg {
-  width: 32.0px;
-  height: 32.0px;
+  width: 2rem;
+  height: 2rem;
   color: #9ca3af;
 }
 
 .logsEmptyText {
   color: #6b7280;
-  font-size: 14.0px;
+  font-size: 0.875rem;
 }
 
 .logsTableContainer {
   overflow-x: auto;
-  border-radius: 8.0px;
+  border-radius: 0.5rem;
   border: 1px solid #e5e7eb;
 }
 
 .logsTable {
   width: 100%;
-  font-size: 14.0px;
+  font-size: 0.875rem;
 }
 
 .logsTableHeader {
@@ -1723,11 +1723,11 @@
 
 .logsTableHeaderCell {
   text-align: center;
-  padding: 20.0px 32.0px;
+  padding: 1.25rem 2rem;
   font-weight: 700;
   color: #1f2937;
-  font-size: 16.0px;
-  min-width: 120.0px;
+  font-size: 1rem;
+  min-width: 7.5rem;
 }
 
 .logsTableRow {
@@ -1748,25 +1748,25 @@
 }
 
 .logsTableCell {
-  padding: 20.0px 32.0px;
+  padding: 1.25rem 2rem;
 }
 
 .logsTableCellContent {
   display: flex;
   align-items: center;
-  gap: 8.0px;
+  gap: 0.5rem;
 }
 
 .logsUserAvatar {
-  width: 32.0px;
-  height: 32.0px;
+  width: 2rem;
+  height: 2rem;
   border-radius: 9999px;
   background: linear-gradient(to bottom right, #3b82f6, #a855f7);
   display: flex;
   align-items: center;
   justify-content: center;
   color: #ffffff;
-  font-size: 12.0px;
+  font-size: 0.75rem;
   font-weight: 600;
 }
 
@@ -1778,8 +1778,8 @@
 .logsTypeBadge {
   display: inline-flex;
   align-items: center;
-  padding: 6.0px 12.0px;
-  font-size: 12.0px;
+  padding: 0.375rem 0.75rem;
+  font-size: 0.75rem;
   font-weight: 500;
   border-radius: 9999px;
   border: 1px solid;
@@ -1816,21 +1816,21 @@
 .logsIpBadge {
   display: inline-flex;
   align-items: center;
-  gap: 4.0px;
+  gap: 0.25rem;
   color: #4b5563;
   font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
-  font-size: 12.0px;
+  font-size: 0.75rem;
   background-color: #f3f4f6;
-  padding: 4.0px 8.0px;
-  border-radius: 4.0px;
+  padding: 0.25rem 0.5rem;
+  border-radius: 0.25rem;
 }
 
 .logsIpIcon {
-  width: 12.0px;
-  height: 12.0px;
+  width: 0.75rem;
+  height: 0.75rem;
 }
 
 .logsTimestamp {
   color: #4b5563;
-  font-size: 12.0px;
+  font-size: 0.75rem;
 }
