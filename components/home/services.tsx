@@ -7,6 +7,7 @@ import {
   IconBook,
   IconCustomerService,
 } from "@arco-design/web-react/icon"
+import styles from "./services.module.css"
 
 const iconMap: Record<string, any> = {
   IconBulb,
@@ -15,11 +16,27 @@ const iconMap: Record<string, any> = {
   IconCustomerService,
 }
 
-const colorMap: Record<string, { bg: string; text: string; light: string }> = {
-  orange: { bg: "bg-cyan-500", text: "text-cyan-600", light: "bg-cyan-50" },
-  blue: { bg: "bg-blue-800", text: "text-blue-600", light: "bg-blue-50" },
-  green: { bg: "bg-green-500", text: "text-green-600", light: "bg-green-50" },
-  purple: { bg: "bg-purple-500", text: "text-purple-600", light: "bg-purple-50" },
+const colorMap: Record<string, { iconWrapper: string; icon: string; highlightDot: string }> = {
+  orange: { 
+    iconWrapper: styles.iconWrapperOrange, 
+    icon: styles.iconOrange, 
+    highlightDot: styles.highlightDotOrange 
+  },
+  blue: { 
+    iconWrapper: styles.iconWrapperBlue, 
+    icon: styles.iconBlue, 
+    highlightDot: styles.highlightDotBlue 
+  },
+  green: { 
+    iconWrapper: styles.iconWrapperGreen, 
+    icon: styles.iconGreen, 
+    highlightDot: styles.highlightDotGreen 
+  },
+  purple: { 
+    iconWrapper: styles.iconWrapperPurple, 
+    icon: styles.iconPurple, 
+    highlightDot: styles.highlightDotPurple 
+  },
 }
 
 interface ServicesProps {
@@ -40,55 +57,49 @@ export function Services({ data }: ServicesProps) {
   }))
 
   return (
-    <section id="services" className="relative py-24 md:py-32 bg-gray-50/50">
-      {/* Background Pattern */}
-      <div className="absolute inset-0 bg-[linear-gradient(rgba(30,64,175,0.02)_1px,transparent_1px),linear-gradient(90deg,rgba(30,64,175,0.02)_1px,transparent_1px)] bg-[size:60px_60px]" />
+    <section id="services" className={styles.section}>
+      <div className={styles.bgPattern} />
 
-      <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        {/* Section Header */}
-        <div className="text-center mb-16">
-          <span className="inline-block px-4 py-1.5 rounded-full bg-cyan-50 text-cyan-600 text-sm font-medium mb-4 border border-cyan-100">
+      <div className={styles.container}>
+        <div className={styles.header}>
+          <span className={styles.tag}>
             {config.sectionTag || "服务内容"}
           </span>
-          <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-gray-900 mb-4 text-balance">
+          <h2 className={styles.title}>
             {config.title || "全方位AI赋能服务"}
           </h2>
-          <p className="text-lg text-gray-500 max-w-2xl mx-auto leading-relaxed">
+          <p className={styles.description}>
             {config.description || "从工具到课程，从定制到咨询，为个人创业者提供一站式AI服务支持"}
           </p>
         </div>
 
-        {/* Services Grid */}
-        <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div className={styles.grid}>
           {services.map((service: any, index: number) => {
             const Icon = service.icon
             const colors = colorMap[service.color]
             return (
               <Card
                 key={index}
-                className="group !bg-white !border-gray-100 hover:!border-gray-200 hover:!shadow-xl transition-all duration-300 hover:-translate-y-1"
+                className={styles.card}
                 hoverable
               >
-                <div className="p-6">
-                  {/* Number Badge */}
-                  <div className="flex items-center justify-between mb-6">
-                    <div className={`w-12 h-12 rounded-xl ${colors.light} flex items-center justify-center`}>
-                      <Icon className={`text-2xl ${colors.text}`} />
+                <div className={styles.cardContent}>
+                  <div className={styles.cardHeader}>
+                    <div className={`${styles.iconWrapper} ${colors.iconWrapper}`}>
+                      <Icon className={`${styles.icon} ${colors.icon}`} />
                     </div>
-                    <span className="text-3xl font-bold text-gray-100 group-hover:text-gray-200 transition-colors">
+                    <span className={styles.number}>
                       {service.number}
                     </span>
                   </div>
 
-                  {/* Content */}
-                  <h3 className="text-lg font-bold text-gray-900 mb-3">{service.title}</h3>
-                  <p className="text-gray-500 text-sm leading-relaxed mb-4">{service.description}</p>
+                  <h3 className={styles.cardTitle}>{service.title}</h3>
+                  <p className={styles.cardDescription}>{service.description}</p>
 
-                  {/* Highlights */}
-                  <div className="space-y-2">
+                  <div className={styles.highlights}>
                     {service.highlights.map((highlight: string, i: number) => (
-                      <div key={i} className="flex items-center gap-2 text-sm text-gray-600">
-                        <div className={`w-1.5 h-1.5 rounded-full ${colors.bg}`} />
+                      <div key={i} className={styles.highlight}>
+                        <div className={`${styles.highlightDot} ${colors.highlightDot}`} />
                         <span>{highlight}</span>
                       </div>
                     ))}

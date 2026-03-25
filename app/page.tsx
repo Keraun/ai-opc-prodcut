@@ -39,7 +39,6 @@ export default function Home() {
           const Component = sectionComponents[moduleId]
           if (!Component) return null
           
-          // 获取对应模块的数据
           const moduleConfig = moduleData[index]?.data || {}
           
           return (

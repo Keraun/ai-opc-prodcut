@@ -5,6 +5,7 @@ import { IconArrowRight, IconCommand, IconStar, IconThunderbolt } from "@arco-de
 import Link from "next/link"
 import { Logo } from "@/components/common/logo"
 import { useTheme } from "@/components/theme-provider"
+import styles from "./hero.module.css"
 
 interface HeroProps {
   data?: any
@@ -17,53 +18,47 @@ export function Hero({ data }: HeroProps) {
   const primaryColor = themeConfig?.colors?.primary || "#1e40af"
   const accentColor = themeConfig?.colors?.accent || "#06b6d4"
 
-  // 获取布局类型，默认为 layout1
   const layoutType = config?.layout || 'layout1'
 
-  // 布局1：默认布局
   const renderLayout1 = () => (
-    <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-      {/* Badge */}
+    <div className={styles.container}>
       {config?.badge && (
         <div
-          className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/80 backdrop-blur-sm border shadow-sm mb-8"
+          className={styles.badge}
           style={{ borderColor: `${accentColor}33` }}
         >
           <span
-            className="w-2 h-2 rounded-full animate-pulse"
+            className={styles.badgeDot}
             style={{ backgroundColor: accentColor }}
           />
-          <span className="text-sm text-gray-600 font-medium">{config.badge}</span>
+          <span className={styles.badgeText}>{config.badge}</span>
         </div>
       )}
 
-      {/* Main Heading */}
-      <h1 className="text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-bold mb-6 leading-[1.1] tracking-tight">
+      <h1 className={styles.mainTitle}>
         {config?.title?.main && (
           <span
-            className="block mb-2"
+            className={styles.titleBlock}
             style={{ color: primaryColor }}
           >
             {config.title.main}
           </span>
         )}
         {config?.title?.sub && (
-          <span className="text-gray-900 block">
+          <span className={styles.titleBlock} style={{ color: '#111827' }}>
             {config.title.sub}
           </span>
         )}
       </h1>
 
-      {/* Subtitle */}
       {config?.subtitle && (
-        <p className="text-lg text-gray-500 mb-12 inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-white/60 backdrop-blur-sm border border-gray-100 shadow-sm">
-          <Logo className="w-6 h-6" />
+        <p className={styles.subtitle}>
+          <Logo className={styles.subtitleLogo} />
           <span>{config.subtitle}</span>
         </p>
       )}
 
-      {/* CTA Buttons */}
-      <div className="flex flex-wrap justify-center gap-4 mb-16">
+      <div className={styles.ctaButtons}>
         {config?.buttons?.primary?.href && config?.buttons?.primary?.text && (
           <Link href={config.buttons.primary.href}>
             <Button
@@ -71,11 +66,17 @@ export function Hero({ data }: HeroProps) {
               size="large"
               style={{
                 backgroundColor: primaryColor,
-                color: 'white'
+                color: 'white',
+                height: '3.5rem',
+                paddingLeft: '2.5rem',
+                paddingRight: '2.5rem',
+                fontSize: '1rem',
+                borderRadius: '0.75rem',
+                boxShadow: '0 10px 15px -3px rgba(0, 0, 0, 0.1)',
+                transition: 'all 0.3s ease'
               }}
-              className="!h-14 !px-10 !text-base !rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-0.5"
             >
-              <IconCommand className="mr-2 text-lg" />
+              <IconCommand style={{ marginRight: '0.5rem', fontSize: '1.125rem' }} />
               {config.buttons.primary.text}
             </Button>
           </Link>
@@ -85,21 +86,28 @@ export function Hero({ data }: HeroProps) {
           <Button
             type="secondary"
             size="large"
-            className="!bg-white !border-gray-200 !text-gray-700 hover:!bg-gray-50 hover:!border-gray-300 !h-14 !px-10 !text-base !rounded-xl shadow-sm hover:shadow-md transition-all duration-300 hover:-translate-y-0.5"
+            style={{
+              backgroundColor: 'white',
+              border: '1px solid #e5e7eb',
+              color: '#374151',
+              height: '3.5rem',
+              paddingLeft: '2.5rem',
+              paddingRight: '2.5rem',
+              fontSize: '1rem',
+              borderRadius: '0.75rem',
+              boxShadow: '0 1px 3px 0 rgba(0, 0, 0, 0.1)',
+              transition: 'all 0.3s ease'
+            }}
           >
             {config.buttons.secondary.text}
-            <IconArrowRight className="ml-2" />
+            <IconArrowRight style={{ marginLeft: '0.5rem' }} />
           </Button>
         )}
       </div>
 
-      {/* Feature Pills */}
-      <div className="flex flex-wrap justify-center gap-3 text-sm text-gray-500">
+      <div className={styles.featurePills}>
         {(config?.featurePills || ['AI工具站', 'GEO课程', '工作流定制', '一人公司']).map((item: string, index: number) => (
-          <span
-            key={index}
-            className="px-4 py-2 rounded-full bg-white/60 backdrop-blur-sm border border-gray-100"
-          >
+          <span key={index} className={styles.featurePill}>
             {item}
           </span>
         ))}
@@ -107,51 +115,46 @@ export function Hero({ data }: HeroProps) {
     </div>
   )
 
-  // 布局2：左侧文字，右侧图像
   const renderLayout2 = () => (
-    <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-        <div className="text-left">
-          {/* Badge */}
+    <div className={styles.container}>
+      <div className={styles.layout2Grid}>
+        <div className={styles.containerLeft}>
           {config?.badge && (
             <div
-              className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/80 backdrop-blur-sm border shadow-sm mb-6"
+              className={styles.badge}
               style={{ borderColor: `${accentColor}33` }}
             >
               <span
-                className="w-2 h-2 rounded-full animate-pulse"
+                className={styles.badgeDot}
                 style={{ backgroundColor: accentColor }}
               />
-              <span className="text-sm text-gray-600 font-medium">{config.badge}</span>
+              <span className={styles.badgeText}>{config.badge}</span>
             </div>
           )}
 
-          {/* Main Heading */}
-          <h1 className="text-4xl sm:text-5xl md:text-6xl font-bold mb-6 leading-[1.1] tracking-tight">
+          <h1 className={styles.mainTitle}>
             {config?.title?.main && (
               <span
-                className="block mb-2"
+                className={styles.titleBlock}
                 style={{ color: primaryColor }}
               >
                 {config.title.main}
               </span>
             )}
             {config?.title?.sub && (
-              <span className="text-gray-900 block">
+              <span className={styles.titleBlock} style={{ color: '#111827' }}>
                 {config.title.sub}
               </span>
             )}
           </h1>
 
-          {/* Subtitle */}
           {config?.subtitle && (
-            <p className="text-lg text-gray-500 mb-8">
+            <p className={`${styles.subtitle} ${styles.subtitlePlain}`}>
               {config.subtitle}
             </p>
           )}
 
-          {/* CTA Buttons */}
-          <div className="flex flex-wrap gap-4 mb-8">
+          <div className={`${styles.ctaButtons} ${styles.ctaButtonsLeft}`}>
             {config?.buttons?.primary?.href && config?.buttons?.primary?.text && (
               <Link href={config.buttons.primary.href}>
                 <Button
@@ -159,11 +162,17 @@ export function Hero({ data }: HeroProps) {
                   size="large"
                   style={{
                     backgroundColor: primaryColor,
-                    color: 'white'
+                    color: 'white',
+                    height: '3.5rem',
+                    paddingLeft: '2.5rem',
+                    paddingRight: '2.5rem',
+                    fontSize: '1rem',
+                    borderRadius: '0.75rem',
+                    boxShadow: '0 10px 15px -3px rgba(0, 0, 0, 0.1)',
+                    transition: 'all 0.3s ease'
                   }}
-                  className="!h-14 !px-10 !text-base !rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-0.5"
                 >
-                  <IconStar className="mr-2 text-lg" />
+                  <IconStar style={{ marginRight: '0.5rem', fontSize: '1.125rem' }} />
                   {config.buttons.primary.text}
                 </Button>
               </Link>
@@ -173,34 +182,41 @@ export function Hero({ data }: HeroProps) {
               <Button
                 type="secondary"
                 size="large"
-                className="!bg-white !border-gray-200 !text-gray-700 hover:!bg-gray-50 hover:!border-gray-300 !h-14 !px-10 !text-base !rounded-xl shadow-sm hover:shadow-md transition-all duration-300 hover:-translate-y-0.5"
+                style={{
+                  backgroundColor: 'white',
+                  border: '1px solid #e5e7eb',
+                  color: '#374151',
+                  height: '3.5rem',
+                  paddingLeft: '2.5rem',
+                  paddingRight: '2.5rem',
+                  fontSize: '1rem',
+                  borderRadius: '0.75rem',
+                  boxShadow: '0 1px 3px 0 rgba(0, 0, 0, 0.1)',
+                  transition: 'all 0.3s ease'
+                }}
               >
                 {config.buttons.secondary.text}
-                <IconArrowRight className="ml-2" />
+                <IconArrowRight style={{ marginLeft: '0.5rem' }} />
               </Button>
             )}
           </div>
 
-          {/* Feature Pills */}
-          <div className="flex flex-wrap gap-3 text-sm text-gray-500">
+          <div className={`${styles.featurePills} ${styles.featurePillsLeft}`}>
             {(config?.featurePills || ['AI工具站', 'GEO课程', '工作流定制', '一人公司']).map((item: string, index: number) => (
-              <span
-                key={index}
-                className="px-4 py-2 rounded-full bg-white/60 backdrop-blur-sm border border-gray-100"
-              >
+              <span key={index} className={styles.featurePill}>
                 {item}
               </span>
             ))}
           </div>
         </div>
-        <div className="hidden lg:block">
-          <div className="relative w-full h-[400px] rounded-2xl overflow-hidden shadow-2xl">
-            <div className="absolute inset-0 bg-gradient-to-br from-blue-500/20 to-indigo-500/20 animate-pulse" />
-            <div className="absolute inset-0 flex items-center justify-center">
-              <div className="text-center">
-                <IconThunderbolt className="w-24 h-24 text-blue-500 mb-4" />
-                <h3 className="text-xl font-bold text-gray-800">AI 赋能</h3>
-                <p className="text-gray-500">提升业务效率</p>
+        <div className={styles.layout2Image}>
+          <div className={styles.layout2ImageContainer}>
+            <div className={styles.layout2ImageBg} />
+            <div className={styles.layout2ImageContent}>
+              <div className={styles.layout2ImageText}>
+                <IconThunderbolt className={styles.layout2ImageIcon} />
+                <h3 className={styles.layout2ImageTitle}>AI 赋能</h3>
+                <p className={styles.layout2ImageDesc}>提升业务效率</p>
               </div>
             </div>
           </div>
@@ -209,51 +225,46 @@ export function Hero({ data }: HeroProps) {
     </div>
   )
 
-  // 布局3：居中卡片式布局
   const renderLayout3 = () => (
-    <div className="relative z-10 max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-      <div className="bg-white/90 backdrop-blur-xl rounded-3xl shadow-xl p-8 md:p-12 border border-gray-100">
-        <div className="text-center">
-          {/* Badge */}
+    <div className={styles.layout3Container}>
+      <div className={styles.layout3Card}>
+        <div className={styles.container}>
           {config?.badge && (
             <div
-              className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-blue-50 border shadow-sm mb-6"
-              style={{ borderColor: `${accentColor}33` }}
+              className={styles.badge}
+              style={{ borderColor: `${accentColor}33`, backgroundColor: '#eff6ff' }}
             >
               <span
-                className="w-2 h-2 rounded-full animate-pulse"
+                className={styles.badgeDot}
                 style={{ backgroundColor: accentColor }}
               />
-              <span className="text-sm text-gray-600 font-medium">{config.badge}</span>
+              <span className={styles.badgeText}>{config.badge}</span>
             </div>
           )}
 
-          {/* Main Heading */}
-          <h1 className="text-4xl sm:text-5xl font-bold mb-6 leading-[1.1] tracking-tight">
+          <h1 className={styles.mainTitle}>
             {config?.title?.main && (
               <span
-                className="block mb-2"
+                className={styles.titleBlock}
                 style={{ color: primaryColor }}
               >
                 {config.title.main}
               </span>
             )}
             {config?.title?.sub && (
-              <span className="text-gray-900 block">
+              <span className={styles.titleBlock} style={{ color: '#111827' }}>
                 {config.title.sub}
               </span>
             )}
           </h1>
 
-          {/* Subtitle */}
           {config?.subtitle && (
-            <p className="text-lg text-gray-500 mb-8 max-w-2xl mx-auto">
+            <p className={`${styles.subtitle} ${styles.subtitlePlain}`} style={{ maxWidth: '42rem', margin: '0 auto 2rem' }}>
               {config.subtitle}
             </p>
           )}
 
-          {/* CTA Buttons */}
-          <div className="flex flex-wrap justify-center gap-4 mb-8">
+          <div className={styles.ctaButtons}>
             {config?.buttons?.primary?.href && config?.buttons?.primary?.text && (
               <Link href={config.buttons.primary.href}>
                 <Button
@@ -261,11 +272,17 @@ export function Hero({ data }: HeroProps) {
                   size="large"
                   style={{
                     backgroundColor: primaryColor,
-                    color: 'white'
+                    color: 'white',
+                    height: '3.5rem',
+                    paddingLeft: '2.5rem',
+                    paddingRight: '2.5rem',
+                    fontSize: '1rem',
+                    borderRadius: '0.75rem',
+                    boxShadow: '0 10px 15px -3px rgba(0, 0, 0, 0.1)',
+                    transition: 'all 0.3s ease'
                   }}
-                  className="!h-14 !px-10 !text-base !rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-0.5"
                 >
-                  <IconCommand className="mr-2 text-lg" />
+                  <IconCommand style={{ marginRight: '0.5rem', fontSize: '1.125rem' }} />
                   {config.buttons.primary.text}
                 </Button>
               </Link>
@@ -275,21 +292,28 @@ export function Hero({ data }: HeroProps) {
               <Button
                 type="secondary"
                 size="large"
-                className="!bg-gray-50 !border-gray-200 !text-gray-700 hover:!bg-gray-100 hover:!border-gray-300 !h-14 !px-10 !text-base !rounded-xl shadow-sm hover:shadow-md transition-all duration-300 hover:-translate-y-0.5"
+                style={{
+                  backgroundColor: '#f9fafb',
+                  border: '1px solid #e5e7eb',
+                  color: '#374151',
+                  height: '3.5rem',
+                  paddingLeft: '2.5rem',
+                  paddingRight: '2.5rem',
+                  fontSize: '1rem',
+                  borderRadius: '0.75rem',
+                  boxShadow: '0 1px 3px 0 rgba(0, 0, 0, 0.1)',
+                  transition: 'all 0.3s ease'
+                }}
               >
                 {config.buttons.secondary.text}
-                <IconArrowRight className="ml-2" />
+                <IconArrowRight style={{ marginLeft: '0.5rem' }} />
               </Button>
             )}
           </div>
 
-          {/* Feature Pills */}
-          <div className="flex flex-wrap justify-center gap-3 text-sm text-gray-500">
+          <div className={styles.featurePills}>
             {['AI工具站', 'GEO课程', '工作流定制', '一人公司'].map((item, index) => (
-              <span
-                key={index}
-                className="px-4 py-2 rounded-full bg-gray-50 border border-gray-100"
-              >
+              <span key={index} className={styles.featurePill} style={{ backgroundColor: '#f9fafb' }}>
                 {item}
               </span>
             ))}
@@ -302,37 +326,34 @@ export function Hero({ data }: HeroProps) {
   return (
     <section
       id="hero"
-      className={`relative min-h-screen flex items-center justify-center overflow-hidden ${layoutType === 'layout3' ? 'bg-gradient-to-br from-slate-100 via-white to-slate-100' : 'bg-gradient-to-br from-slate-50 via-white to-cyan-50'}`}
+      className={`${styles.hero} ${layoutType === 'layout3' ? styles.heroLayout3 : styles.heroLayout1}`}
     >
-      {/* Decorative Background Elements */}
-      <div className="absolute inset-0 overflow-hidden">
+      <div className={styles.decorativeBg}>
         <div
-          className="absolute top-20 left-10 w-72 h-72 rounded-full blur-3xl animate-pulse"
+          className={`${styles.decorativeCircle} ${styles.decorativeCircle1}`}
           style={{ backgroundColor: `${primaryColor}33` }}
         />
         <div
-          className="absolute bottom-20 right-10 w-96 h-96 rounded-full blur-3xl animate-pulse"
-          style={{ backgroundColor: `${accentColor}33`, animationDelay: "1s" }}
+          className={`${styles.decorativeCircle} ${styles.decorativeCircle2}`}
+          style={{ backgroundColor: `${accentColor}33` }}
         />
         <div
-          className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] rounded-full blur-3xl"
+          className={`${styles.decorativeCircle} ${styles.decorativeCircle3}`}
           style={{
             background: `linear-gradient(135deg, ${primaryColor}66 0%, ${accentColor}66 100%)`
           }}
         />
       </div>
 
-      {/* Render selected layout */}
       {layoutType === 'layout1' && renderLayout1()}
       {layoutType === 'layout2' && renderLayout2()}
       {layoutType === 'layout3' && renderLayout3()}
 
-      {/* Scroll Indicator */}
-      <div className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2">
-        <span className="text-xs text-gray-400">向下滚动</span>
-        <div className="w-6 h-10 rounded-full border-2 border-gray-300 flex justify-center pt-2">
+      <div className={styles.scrollIndicator}>
+        <span className={styles.scrollText}>向下滚动</span>
+        <div className={styles.scrollMouse}>
           <div
-            className="w-1.5 h-3 rounded-full animate-bounce"
+            className={styles.scrollDot}
             style={{ backgroundColor: accentColor }}
           />
         </div>

@@ -4,6 +4,7 @@ import { useState } from "react"
 import { Card, Form, Input, Button, Message, Radio } from "@arco-design/web-react"
 import { IconSend } from "@arco-design/web-react/icon"
 import { useTheme } from "@/components/theme-provider"
+import styles from "./contact.module.css"
 
 const FormItem = Form.Item
 const TextArea = Input.TextArea
@@ -55,18 +56,15 @@ export function Contact({ data }: ContactProps) {
   }
 
   return (
-    <section id="contact" className="relative py-16 md:py-24 bg-gradient-to-b from-gray-50/50 to-white">
-      {/* Background Pattern */}
-      <div className="absolute inset-0 bg-[linear-gradient(rgba(59,130,246,0.02)_1px,transparent_1px),linear-gradient(90deg,rgba(59,130,246,0.02)_1px,transparent_1px)] bg-[size:60px_60px]" />
+    <section id="contact" className={styles.section}>
+      <div className={styles.bgPattern} />
+      <div className={styles.decorativeOrb1} />
+      <div className={styles.decorativeOrb2} />
 
-      {/* Decorative Orbs */}
-      <div className="absolute top-20 left-10 w-72 h-72 bg-blue-100/50 rounded-full blur-3xl" />
-      <div className="absolute bottom-20 right-10 w-96 h-96 bg-purple-100/50 rounded-full blur-3xl" />
-
-      <div className="relative z-10 max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="text-center mb-12">
+      <div className={styles.container}>
+        <div className={styles.header}>
           <span
-            className="inline-block px-4 py-1.5 rounded-full text-sm font-medium mb-4 border"
+            className={styles.tag}
             style={{
               backgroundColor: `${accentColor}0D`,
               color: accentColor,
@@ -75,24 +73,23 @@ export function Contact({ data }: ContactProps) {
           >
             {config.sectionTag || "联系我们"}
           </span>
-          <h2 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-3">
+          <h2 className={styles.title}>
             {config.title || "准备好开启AI之旅了吗？"}
           </h2>
-          <p className="text-base text-gray-500 max-w-xl mx-auto">
+          <p className={styles.description}>
             {config.description || "留下您的联系方式，我们会尽快与您取得联系"}
           </p>
         </div>
 
-        {/* Contact Form */}
-        <Card className="!bg-white !border-gray-100 hover:!shadow-lg transition-all duration-300">
-          <div className="p-5 md:p-6">
+        <Card className={styles.card}>
+          <div className={styles.cardContent}>
             <Form
               form={form}
               layout="vertical"
               onSubmit={handleSubmit}
-              className="space-y-5"
+              className={styles.form}
             >
-              <div className="grid sm:grid-cols-2 gap-5">
+              <div className={styles.formGrid}>
                 <FormItem
                   label="姓名"
                   field="name"
@@ -102,49 +99,69 @@ export function Contact({ data }: ContactProps) {
                 </FormItem>
 
                 <FormItem
-                  label="手机号"
+                  label="电话"
                   field="phone"
-                  rules={[
-                    { required: true, message: '请输入手机号' },
-                    { pattern: /^1[3-9]\d{9}$/, message: '请输入正确的手机号' }
-                  ]}
+                  rules={[{ required: true, message: '请输入电话' }]}
                 >
-                  <Input placeholder="请输入您的手机号" />
+                  <Input placeholder="请输入您的电话号码" />
                 </FormItem>
               </div>
 
               <FormItem
-                label="联系偏好"
-                field="contactPreference"
-                initialValue="phone"
+                label="邮箱"
+                field="email"
+                rules={[
+                  { required: true, message: '请输入邮箱' },
+                  { type: 'email', message: '请输入有效的邮箱地址' }
+                ]}
               >
-                <RadioGroup options={contactPreferences} type="button" />
+                <Input placeholder="请输入您的邮箱地址" />
               </FormItem>
 
               <FormItem
-                label="留言内容"
+                label="公司名称"
+                field="company"
+              >
+                <Input placeholder="请输入您的公司名称（选填）" />
+              </FormItem>
+
+              <FormItem
+                label="偏好联系方式"
+                field="contactPreference"
+                initialValue="wechat"
+              >
+                <RadioGroup>
+                  {contactPreferences.map((pref) => (
+                    <Radio key={pref.value} value={pref.value}>
+                      {pref.label}
+                    </Radio>
+                  ))}
+                </RadioGroup>
+              </FormItem>
+
+              <FormItem
+                label="留言"
                 field="message"
                 rules={[{ required: true, message: '请输入留言内容' }]}
               >
                 <TextArea
-                  placeholder="请描述您的需求或问题..."
-                  rows={4}
-                  maxLength={{ length: 500, errorOnly: true }}
-                  showWordLimit
+                  placeholder="请简单描述您的需求或问题"
+                  autoSize={{ minRows: 4, maxRows: 6 }}
                 />
               </FormItem>
 
-              <Button
-                type="primary"
-                htmlType="submit"
-                loading={loading}
-                long
-                size="large"
-                style={{ backgroundColor: primaryColor }}
-                icon={<IconSend />}
-              >
-                {config.submitButtonText || "提交留言"}
-              </Button>
+              <FormItem>
+                <Button
+                  type="primary"
+                  htmlType="submit"
+                  loading={loading}
+                  className={styles.submitButton}
+                  style={{ backgroundColor: primaryColor }}
+                >
+                  <IconSend style={{ marginRight: '0.5rem' }} />
+                  提交留言
+                </Button>
+              </FormItem>
             </Form>
           </div>
         </Card>

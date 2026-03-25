@@ -4,8 +4,8 @@ import { useState, useEffect } from "react"
 import { IconHome, IconThunderbolt, IconUserGroup, IconPhone, IconGift, IconStar } from "@arco-design/web-react/icon"
 import { useTheme } from "@/components/theme-provider"
 import { fetchConfig } from "@/config/client"
+import styles from "./sidebar-nav.module.css"
 
-// 图标映射
 const iconMap: Record<string, any> = {
   hero: IconHome,
   partner: IconStar,
@@ -16,7 +16,6 @@ const iconMap: Record<string, any> = {
   contact: IconPhone,
 }
 
-// 标签映射
 const labelMap: Record<string, string> = {
   hero: "介绍",
   partner: "合作伙伴",
@@ -33,10 +32,7 @@ export function SidebarNav() {
   const { themeConfig } = useTheme()
   
   const primaryColor = themeConfig?.colors?.primary || "#1e40af"
-  const secondaryColor = themeConfig?.colors?.secondary || "#3b82f6"
-  const accentColor = themeConfig?.colors?.accent || "#06b6d4"
 
-  // 加载动态配置
   useEffect(() => {
     const loadConfig = async () => {
       try {
@@ -97,31 +93,31 @@ export function SidebarNav() {
   }
 
   return (
-    <div className="fixed left-6 top-1/2 -translate-y-1/2 z-40 hidden lg:block">
-      <div className="bg-white/90 backdrop-blur-xl border border-gray-100 rounded-2xl shadow-xl p-3 space-y-2">
+    <div className={styles.sidebar}>
+      <nav className={styles.navList}>
         {sidebarItems.map((item) => {
           const Icon = item.icon
           const isActive = activeSection === item.id
+
           return (
             <button
               key={item.id}
               onClick={() => scrollToSection(item.href)}
-              className={`relative w-12 h-12 rounded-xl flex items-center justify-center transition-all duration-300 group ${
-                isActive
-                  ? "text-white shadow-lg"
-                  : "text-gray-500 hover:text-gray-900 hover:bg-gray-50"
-              }`}
-              style={isActive ? { backgroundColor: primaryColor } : undefined}
+              className={`${styles.navItem} ${isActive ? styles.navItemActive : ''}`}
               title={item.label}
             >
-              <Icon className="text-xl" />
-              <span className="absolute left-full ml-3 px-3 py-1.5 bg-gray-900 text-white text-sm rounded-lg opacity-0 group-hover:opacity-100 transition-opacity duration-300 whitespace-nowrap pointer-events-none">
-                {item.label}
-              </span>
+              <Icon className={styles.navIcon} style={isActive ? { color: primaryColor } : {}} />
+              <span className={styles.tooltip}>{item.label}</span>
+              {isActive && (
+                <div 
+                  className={styles.activeIndicator}
+                  style={{ backgroundColor: primaryColor }}
+                />
+              )}
             </button>
           )
         })}
-      </div>
+      </nav>
     </div>
   )
 }

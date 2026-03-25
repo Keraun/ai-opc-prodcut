@@ -4,6 +4,7 @@ import { Button, Card, Modal } from "@arco-design/web-react"
 import { IconCheck, IconArrowRight, IconQrcode } from "@arco-design/web-react/icon"
 import { useTheme } from "@/components/theme-provider"
 import { useState } from "react"
+import styles from "./pricing.module.css"
 
 interface PricingProps {
   data?: any
@@ -71,64 +72,62 @@ export function Pricing({ data }: PricingProps) {
   }
 
   return (
-    <section
-      id="pricing"
-      className="py-20 bg-gradient-to-b from-white to-slate-50"
-    >
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="text-center mb-16">
-          <h2 className="text-4xl font-bold text-gray-900 mb-4">{pricingConfig?.title || '选择适合你的计划'}</h2>
-          <p className="text-lg text-gray-500 max-w-3xl mx-auto">
+    <section id="pricing" className={styles.section}>
+      <div className={styles.container}>
+        <div className={styles.header}>
+          <h2 className={styles.title}>{pricingConfig?.title || '选择适合你的计划'}</h2>
+          <p className={styles.description}>
             {pricingConfig?.description || '无论你是个人创业者还是企业用户，我们都有适合你的AI解决方案'}
           </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+        <div className={styles.grid}>
           {pricingPlans.map((plan: any, index: number) => (
             <Card
               key={index}
-              className={`overflow-hidden transition-all duration-300 hover:shadow-xl ${plan.isPopular ? 'border-2' : 'border'}`}
+              className={`${styles.card} ${plan.isPopular ? styles.cardPopular : ''}`}
               style={{
-                borderColor: plan.isPopular ? primaryColor : '#e5e7eb',
-                transform: plan.isPopular ? 'translateY(-10px)' : 'none'
+                borderColor: plan.isPopular ? primaryColor : '#e5e7eb'
               }}
             >
               {plan.isPopular && (
                 <div
-                  className="text-white text-center py-2 text-sm font-medium"
-                  style={{
-                    backgroundColor: primaryColor,
-                  }}
+                  className={styles.popularBadge}
+                  style={{ backgroundColor: primaryColor }}
                 >
-                  {pricingConfig?.popularLabel || "最受欢迎"}
+                  最受欢迎
                 </div>
               )}
-
-              <div className="p-6">
-                <h3 className="text-xl font-bold text-gray-900 mb-2">{plan.title}</h3>
-                <div className="flex items-baseline mb-4">
-                  <span className="text-4xl font-bold text-gray-900">{plan.price}</span>
-                  {plan.price !== '¥0' && <span className="text-gray-500 ml-2">/年</span>}
+              <div className={styles.cardContent}>
+                <h3 className={styles.planTitle}>{plan.title}</h3>
+                <div
+                  className={styles.planPrice}
+                  style={{ color: plan.isPopular ? primaryColor : '#111827' }}
+                >
+                  {plan.price}
+                  <span style={{ fontSize: '1rem', fontWeight: '400', color: '#6b7280' }}>
+                    /月
+                  </span>
                 </div>
-                <p className="text-gray-500 mb-6">{plan.description}</p>
+                <p className={styles.planDescription}>{plan.description}</p>
 
-                <ul className="space-y-3 mb-8">
-                  {plan.features.map((feature: string, featureIndex: number) => (
-                    <li key={featureIndex} className="flex items-start">
-                      <IconCheck className="text-green-500 mt-0.5 mr-2 flex-shrink-0" />
-                      <span className="text-gray-600">{feature}</span>
+                <ul className={styles.features}>
+                  {plan.features.map((feature: string, i: number) => (
+                    <li key={i} className={styles.featureItem}>
+                      <IconCheck className={styles.featureIcon} />
+                      <span>{feature}</span>
                     </li>
                   ))}
                 </ul>
 
                 <Button
-                  type={plan.isPopular ? 'primary' : 'secondary'}
-                  long
-                  onClick={() => handleButtonClick(plan)}
+                  type={plan.isPopular ? "primary" : "secondary"}
+                  className={`${styles.button} ${plan.isPopular ? styles.buttonPrimary : styles.buttonSecondary}`}
                   style={plan.isPopular ? { backgroundColor: primaryColor } : {}}
+                  onClick={() => handleButtonClick(plan)}
                 >
                   {plan.buttonText}
-                  <IconArrowRight className="ml-2" />
+                  <IconArrowRight style={{ marginLeft: '0.5rem' }} />
                 </Button>
               </div>
             </Card>
@@ -137,18 +136,20 @@ export function Pricing({ data }: PricingProps) {
       </div>
 
       <Modal
-        title="联系销售"
+        title="扫码咨询"
         visible={qrModalVisible}
         onCancel={() => setQrModalVisible(false)}
         footer={null}
-        style={{ maxWidth: 400 }}
       >
-        <div className="text-center py-8">
-          <div className="w-48 h-48 bg-gray-100 rounded-lg mx-auto mb-4 flex items-center justify-center">
-            <IconQrcode className="text-6xl text-gray-400" />
-          </div>
-          <p className="text-gray-600">扫描二维码添加客服微信</p>
-          <p className="text-gray-500 text-sm mt-2">或拨打客服电话：400-888-4889</p>
+        <div className={styles.qrCodeContainer}>
+          <img
+            src="/wechat-qr.png"
+            alt="微信二维码"
+            className={styles.qrCodeImage}
+          />
+          <p className={styles.qrCodeText}>
+            扫描二维码添加微信咨询
+          </p>
         </div>
       </Modal>
     </section>

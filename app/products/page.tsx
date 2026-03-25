@@ -1,24 +1,21 @@
 "use client"
 
-import { useState, useEffect, useRef } from "react"
+import { useState, useEffect } from "react"
 import { Button, Tag, Card, Input, Tooltip, Modal } from "@arco-design/web-react"
-import { IconSearch, IconAt, IconEye, IconClose } from "@arco-design/web-react/icon"
-import Image from "next/image"
-import Link from "next/link"
+import { IconSearch, IconAt, IconEye } from "@arco-design/web-react/icon"
 import { Header } from "@/components/common/header"
 import { Footer } from "@/components/common/footer"
 import { products, productCategories, Product } from "@/config/client"
 import { useTheme } from "@/components/theme-provider"
 import ReactMarkdown from "react-markdown"
 import remarkGfm from "remark-gfm"
+import styles from "./products.module.css"
 
 function ProductCard({ product }: { product: Product }) {
   const [visible, setVisible] = useState(false)
   const { themeConfig } = useTheme()
   
   const primaryColor = themeConfig?.colors?.primary || "#1e40af"
-  const secondaryColor = themeConfig?.colors?.secondary || "#3b82f6"
-  const accentColor = themeConfig?.colors?.accent || "#06b6d4"
   
   const hasDetails = product.details && (product.details.type === 'markdown' || product.details.type === 'html')
   const hasLink = product.details && product.details.type === 'link' && product.details.link
@@ -27,32 +24,41 @@ function ProductCard({ product }: { product: Product }) {
     <>
       <Card
         hoverable
-        className="!bg-white !border-gray-100 overflow-hidden group hover:!border-gray-200 hover:!shadow-lg transition-all duration-300"
+        className={styles.productCard}
         bodyStyle={{ padding: 0 }}
         cover={
-          <div className="relative h-32 overflow-hidden bg-gradient-to-br from-gray-50 to-gray-100">
-            <div className="absolute inset-0 flex items-center justify-center">
-              <span className="text-gray-300 text-xs">产品图片</span>
+          <div className={styles.productCover}>
+            <div className={styles.productCoverPlaceholder}>
+              <span>产品图片</span>
             </div>
-            <div className="absolute inset-0 bg-gradient-to-t from-white/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
+            <div className={styles.productCoverOverlay} />
           </div>
         }
       >
-        <div className="p-4 flex flex-col h-[268px]">
-          <div className="flex flex-wrap gap-1.5 mb-2">
+        <div className={styles.productContent}>
+          <div className={styles.productTags}>
             {product.tags.map((tag) => (
               <Tag
                 key={tag}
                 size="small"
-                className={`!border-0 !text-xs ${
-                  tag === "热销" || tag === "限时特惠"
-                    ? "!bg-red-500/20 !text-red-600"
-                    : tag === "新品"
-                    ? "!bg-blue-500/20 !text-blue-600"
+                style={{
+                  border: 'none',
+                  fontSize: '0.75rem',
+                  backgroundColor: tag === "热销" || tag === "限时特惠" 
+                    ? 'rgba(239, 68, 68, 0.2)' 
+                    : tag === "新品" 
+                    ? 'rgba(59, 130, 246, 0.2)'
                     : tag === "免费"
-                    ? "!bg-green-500/20 !text-green-600"
-                    : "!bg-gray-100 !text-gray-600"
-                }`}
+                    ? 'rgba(34, 197, 94, 0.2)'
+                    : '#f3f4f6',
+                  color: tag === "热销" || tag === "限时特惠"
+                    ? '#dc2626'
+                    : tag === "新品"
+                    ? '#2563eb'
+                    : tag === "免费"
+                    ? '#16a34a'
+                    : '#4b5563'
+                }}
               >
                 {tag}
               </Tag>

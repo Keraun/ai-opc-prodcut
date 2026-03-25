@@ -3,7 +3,9 @@
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import { useTheme } from '@/components/theme-provider'
-import { Calendar, Clock } from 'lucide-react'
+import { Header } from '@/components/common/header'
+import { Footer } from '@/components/common/footer'
+import styles from './news.module.css'
 
 interface Article {
   id: string
@@ -20,13 +22,11 @@ export default function NewsPage() {
   const { themeConfig } = useTheme()
 
   useEffect(() => {
-    // 从API获取文章列表
     const fetchArticles = async () => {
       try {
         const response = await fetch('/api/articles')
         if (response.ok) {
           const data = await response.json()
-          // 只显示已发布的文章并按日期排序
           const publishedArticles = data
             .filter((article: any) => article.status === 'published')
             .sort((a: any, b: any) => new Date(b.date).getTime() - new Date(a.date).getTime())
@@ -44,36 +44,35 @@ export default function NewsPage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="text-gray-500">加载中...</div>
+      <div className={styles.loading}>
+        <div className={styles.loadingText}>加载中...</div>
       </div>
     )
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      {/* Hero Section */}
-      <section className="bg-gradient-to-b from-blue-600 to-blue-800 text-white py-20">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h1 className="text-4xl md:text-5xl font-bold mb-4">资讯中心</h1>
-          <p className="text-xl text-blue-100 max-w-3xl">
+    <div className={styles.container}>
+      <Header />
+      
+      <section className={styles.hero}>
+        <div className={styles.heroContainer}>
+          <h1 className={styles.heroTitle}>资讯中心</h1>
+          <p className={styles.heroSubtitle}>
             最新行业动态、深度分析与实战案例
           </p>
         </div>
       </section>
 
-      {/* Article List */}
-      <section className="py-16">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="space-y-8">
+      <section className={styles.main}>
+        <div className={styles.mainContainer}>
+          <div className={styles.articleList}>
             {articles.map((article, index) => (
-              <div key={article.id} className="flex flex-col md:flex-row gap-6 pb-8 border-b border-gray-200 last:border-0">
-                {/* Date Badge */}
-                <div className="md:w-24 flex flex-col items-center justify-start">
-                  <div className="text-3xl font-bold text-gray-900">
+              <div key={article.id} className={styles.articleItem}>
+                <div className={styles.dateBadge}>
+                  <div className={styles.dateDay}>
                     {new Date(article.date).getDate().toString().padStart(2, '0')}
                   </div>
-                  <div className="text-sm text-gray-500 mt-1">
+                  <div className={styles.dateMonth}>
                     {new Date(article.date).toLocaleDateString('zh-CN', {
                       year: 'numeric',
                       month: 'numeric'
@@ -81,17 +80,18 @@ export default function NewsPage() {
                   </div>
                 </div>
 
-                {/* Article Content */}
-                <div className="flex-1">
-                  <Link href={`/news/${article.slug}`} className="group">
-                    <h2 className="text-xl font-bold text-gray-900 group-hover:text-blue-600 transition-colors mb-2">
+                <div className={styles.articleContent}>
+                  <Link href={`/news/${article.slug}`} className={styles.articleLink}>
+                    <h2 className={styles.articleTitle}>
                       {article.title}
                     </h2>
-                    <p className="text-gray-600 mb-4 line-clamp-3">
+                    <p className={styles.articleSummary}>
                       {article.summary}
                     </p>
-                    <div className="flex items-center text-sm text-gray-500">
-                      <Calendar className="w-4 h-4 mr-2" />
+                    <div className={styles.articleMeta}>
+                      <svg className={styles.articleMetaIcon} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                      </svg>
                       <span>{article.date}</span>
                     </div>
                   </Link>
@@ -101,6 +101,8 @@ export default function NewsPage() {
           </div>
         </div>
       </section>
+
+      <Footer />
     </div>
   )
 }

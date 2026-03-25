@@ -2,12 +2,13 @@
 
 import { useState, useEffect } from "react"
 import { Button, Drawer, Dropdown, Menu } from "@arco-design/web-react"
-import { IconMenu, IconCustomerService, IconSettings } from "@arco-design/web-react/icon"
+import { IconMenu, IconCustomerService } from "@arco-design/web-react/icon"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
 import { Logo } from "@/components/common/logo"
 import { siteConfig, navigationConfig } from "@/config/client"
 import { useTheme } from "@/components/theme-provider"
+import styles from "./header.module.css"
 
 const navItems = navigationConfig.main || []
 
@@ -46,17 +47,20 @@ export function Header() {
   }
 
   const dropdownMenu = (
-    <Menu className="!bg-white !border-gray-100 min-w-[160px] rounded-xl shadow-lg">
+    <Menu style={{ backgroundColor: 'white', border: '1px solid #f3f4f6', minWidth: '160px', borderRadius: '0.75rem', boxShadow: '0 10px 15px -3px rgba(0, 0, 0, 0.1)' }}>
       {navItems.map((item) => (
         <Menu.Item
           key={item?.href}
           onClick={() => handleNavClick(item?.href)}
-          className="!text-gray-700 hover:!bg-gray-50 cursor-pointer rounded-lg mx-1"
-        >{item?.label}
-
+          style={{ color: '#374151', cursor: 'pointer', borderRadius: '0.5rem', margin: '0 0.25rem' }}
+        >
+          {item?.label}
         </Menu.Item>
       ))}
-      <Menu.Item key="trial" className="!text-blue-600 hover:!bg-blue-50 cursor-pointer rounded-lg mx-1">
+      <Menu.Item 
+        key="trial" 
+        style={{ color: '#2563eb', cursor: 'pointer', borderRadius: '0.5rem', margin: '0 0.25rem' }}
+      >
         开始使用
       </Menu.Item>
     </Menu>
@@ -64,51 +68,47 @@ export function Header() {
 
   return (
     <header
-      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${isScrolled
-        ? "bg-white/90 backdrop-blur-xl border-b border-gray-100 shadow-sm"
-        : "bg-transparent"
-        }`}
+      className={`${styles.header} ${isScrolled ? styles.headerScrolled : styles.headerTransparent}`}
     >
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center h-16 md:h-20">
-          {/* Logo */}
+      <div className={styles.container}>
+        <div className={styles.headerInner}>
           {siteConfig?.name && (
-            <div className="flex items-center gap-2.5 w-[200px]">
-              <Logo className="w-9 h-9 md:w-10 md:h-10 flex-shrink-0" />
-              <span className="text-lg md:text-xl font-bold text-gray-900 leading-none">{siteConfig.name}</span>
+            <div className={styles.logoSection}>
+              <Logo className={styles.logo} />
+              <span className={styles.logoText}>{siteConfig.name}</span>
             </div>
           )}
-            {/* Desktop Navigation */}
-            {navItems && navItems.length > 0 && (
-              <nav className="hidden md:flex items-center justify-center gap-8 flex-1">
-                {navItems.map((item) => (
-                  <button
-                    key={item?.href}
-                    onClick={() => handleNavClick(item?.href)}
-                    className="text-gray-600 hover:text-gray-900 transition-colors text-sm font-medium cursor-pointer relative group"
-                  >
-                    {item?.label}
-                    <span 
-                      className="absolute -bottom-1 left-0 w-0 h-0.5 group-hover:w-full transition-all duration-300"
-                      style={{ backgroundColor: accentColor }}
-                    />
-                  </button>
-                ))}
-              </nav>
-            )}
-          {/* Desktop CTA */}
-          <div className="hidden md:flex items-center gap-3 w-[200px] justify-end">
+          
+          {navItems && navItems.length > 0 && (
+            <nav className={styles.nav}>
+              {navItems.map((item) => (
+                <button
+                  key={item?.href}
+                  onClick={() => handleNavClick(item?.href)}
+                  className={styles.navButton}
+                >
+                  {item?.label}
+                  <span 
+                    className={styles.navUnderline}
+                    style={{ backgroundColor: accentColor }}
+                  />
+                </button>
+              ))}
+            </nav>
+          )}
+          
+          <div className={styles.ctaSection}>
             <Dropdown
               droplist={
-                <div className="p-4">
-                  <div className="w-32 h-32 bg-gradient-to-br from-gray-50 to-gray-100 rounded-xl flex items-center justify-center border-2 border-gray-200">
-                    <div className="text-center">
-                      <div className="w-24 h-24 bg-white rounded-lg flex items-center justify-center">
-                        <span className="text-xs text-gray-400">客服二维码</span>
+                <div className={styles.dropdownContent}>
+                  <div className={styles.dropdownQrContainer}>
+                    <div className={styles.dropdownQrInner}>
+                      <div className={styles.dropdownQrPlaceholder}>
+                        <span className={styles.dropdownQrText}>客服二维码</span>
                       </div>
                     </div>
                   </div>
-                  <p className="text-center text-xs text-gray-500 mt-2">扫码联系客服</p>
+                  <p className={styles.dropdownHint}>扫码联系客服</p>
                 </div>
               }
               trigger="hover"
@@ -116,10 +116,9 @@ export function Header() {
             >
               <Button
                 type="text"
-                className="!text-gray-700 hover:!px-4 !h-10 !rounded-full transition-all duration-300"
-                style={{ color: accentColor }}
+                style={{ color: accentColor, height: '2.5rem', borderRadius: '9999px', transition: 'all 0.3s ease' }}
               >
-                <IconCustomerService className="mr-1.5" />
+                <IconCustomerService style={{ marginRight: '0.375rem' }} />
                 联系我们
               </Button>
             </Dropdown>
@@ -128,42 +127,49 @@ export function Header() {
                 style={{ 
                   backgroundColor: primaryColor,
                   color: 'white',
-                  borderColor: primaryColor
+                  borderColor: primaryColor,
+                  height: '2.5rem',
+                  paddingLeft: '1.5rem',
+                  paddingRight: '1.5rem',
+                  borderRadius: '9999px',
+                  boxShadow: '0 10px 15px -3px rgba(0, 0, 0, 0.1)',
+                  transition: 'all 0.3s ease'
                 }}
-                className="!px-6 !h-10 !rounded-full shadow-lg hover:shadow-xl transition-all duration-300 hover:!opacity-90"
               >
                 开始使用
               </Button>
             </Link>
           </div>
 
-          {/* Mobile Menu Button */}
-          <div className="md:hidden ml-auto">
-            <Button
-              type="text"
-              className="!text-gray-700"
-              icon={<IconMenu className="text-xl" />}
-              onClick={() => setDrawerVisible(true)}
-            />
-          </div>
+          <button 
+            className={styles.mobileMenuButton}
+            onClick={() => setDrawerVisible(true)}
+          >
+            <IconMenu style={{ fontSize: '1.25rem', color: '#374151' }} />
+          </button>
         </div>
       </div>
 
-      {/* Mobile Drawer */}
       <Drawer
         width={320}
         title={
-          <div className="flex items-center gap-3">
+          <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
             <div 
-              className="w-10 h-10 rounded-xl flex items-center justify-center shadow-lg"
-              style={{ 
+              style={{
+                width: '2.5rem',
+                height: '2.5rem',
+                borderRadius: '0.75rem',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                boxShadow: '0 10px 15px -3px rgba(0, 0, 0, 0.1)',
                 background: `linear-gradient(135deg, ${primaryColor} 0%, ${secondaryColor} 100%)`,
                 color: 'white'
               }}
             >
-              <span className="text-white font-bold text-lg">N</span>
+              <span style={{ color: 'white', fontWeight: 700, fontSize: '1.125rem' }}>N</span>
             </div>
-            <span className="font-bold text-gray-900 text-lg">NexusAI</span>
+            <span style={{ fontWeight: 700, color: '#111827', fontSize: '1.125rem' }}>NexusAI</span>
           </div>
         }
         visible={drawerVisible}
@@ -171,41 +177,44 @@ export function Header() {
         closable
         onCancel={() => setDrawerVisible(false)}
         footer={null}
-        className="[&_.arco-drawer-content]:!bg-gradient-to-br [&_.arco-drawer-content]:from-gray-50 [&_.arco-drawer-content]:to-white [&_.arco-drawer-header]:!bg-white [&_.arco-drawer-header]:!border-gray-100 [&_.arco-drawer-close-btn]:!text-gray-500 [&_.arco-drawer-close-btn]:hover:!text-gray-900"
       >
-        <div className="flex flex-col gap-2 py-6">
-          {navItems.map((item, index) => (
+        <div className={styles.drawerContent}>
+          {navItems.map((item) => (
             <button
               key={item.href}
               onClick={() => handleNavClick(item.href)}
-              className="group flex items-center gap-4 px-4 py-4 rounded-xl text-left text-gray-700 hover:bg-white hover:shadow-md hover:shadow-blue-500/5 transition-all duration-300 border border-transparent hover:border-gray-100"
+              className={styles.drawerNavItem}
             >
-              <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-blue-50 to-blue-100 flex items-center justify-center group-hover:from-blue-500 group-hover:to-blue-600 transition-all duration-300">
-                <span className="text-blue-600 group-hover:text-white font-semibold text-sm">
+              <div className={styles.drawerNavIcon}>
+                <span className={styles.drawerNavIconText}>
                   {item.label[0]}
                 </span>
               </div>
-              <span className="text-base font-medium group-hover:text-blue-600 transition-colors">
+              <span className={styles.drawerNavText}>
                 {item.label}
               </span>
             </button>
           ))}
 
-          <div className="mt-8 pt-8 border-t border-gray-200">
+          <div className={styles.drawerFooter}>
             <Link href="/products" onClick={() => setDrawerVisible(false)}>
               <Button
                 long
                 style={{ 
                   backgroundColor: primaryColor,
                   color: 'white',
-                  borderColor: primaryColor
+                  borderColor: primaryColor,
+                  height: '3rem',
+                  borderRadius: '0.75rem',
+                  boxShadow: '0 10px 15px -3px rgba(0, 0, 0, 0.1)',
+                  fontWeight: 600,
+                  fontSize: '1rem'
                 }}
-                className="!h-12 !rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 !font-semibold !text-base hover:!opacity-90"
               >
                 立即开始使用
               </Button>
             </Link>
-            <p className="text-center text-xs text-gray-400 mt-4">
+            <p className={styles.drawerHint}>
               免费试用 · 无需充值
             </p>
           </div>
