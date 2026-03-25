@@ -1322,6 +1322,17 @@ export default function AdminDashboardPage() {
                     {!sidebarCollapsed && <span className="text-sm">自定义页面配置</span>}
                   </button>
 
+                  <button
+                    onClick={() => router.push('/admin/articles')}
+                    className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-left transition-all ${activeMenu === 'articles'
+                        ? 'bg-blue-50 text-blue-700 font-medium'
+                        : 'text-gray-700 hover:bg-gray-50'
+                      }`}
+                  >
+                    <IconFile className="text-lg flex-shrink-0" />
+                    {!sidebarCollapsed && <span className="text-sm">文章管理</span>}
+                  </button>
+
                   {/* 主题管理 */}
                   <div className="pt-4 pb-2">
                     {!sidebarCollapsed && (

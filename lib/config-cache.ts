@@ -23,6 +23,7 @@ const configFiles = [
   "home-contact.json",
   "page-products.json",
   "page-other.json",
+  "page-news.json",
   "theme-custom.json",
   "theme-config.json"
 ]
@@ -66,6 +67,7 @@ export function loadAllConfigs() {
   const homeContactConfig = readConfig(configDir, runtimeDir, "home-contact.json")
   const productsConfig = readConfig(configDir, runtimeDir, "page-products.json")
   const otherPagesConfig = readConfig(configDir, runtimeDir, "page-other.json")
+  const newsConfig = readConfig(configDir, runtimeDir, "page-news.json")
   const customConfig = readConfig(configDir, runtimeDir, "theme-custom.json")
   const themeConfig = readConfig(configDir, runtimeDir, "theme-config.json")
 
@@ -86,6 +88,7 @@ export function loadAllConfigs() {
     homeContact: homeContactConfig,
     products: productsConfig,
     otherPages: otherPagesConfig,
+    news: newsConfig,
     custom: customConfig,
     theme: themeConfig
   }

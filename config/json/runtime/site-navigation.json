@@ -10,6 +10,10 @@
         "href": "/products"
       },
       {
+        "label": "资讯",
+        "href": "/news"
+      },
+      {
         "label": "关于我们",
         "href": "/about"
       }
@@ -26,6 +30,10 @@
       {
         "label": "服务",
         "href": "services"
+      },
+      {
+        "label": "资讯",
+        "href": "/news"
       },
       {
         "label": "关于我们",

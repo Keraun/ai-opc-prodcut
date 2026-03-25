@@ -1,0 +1,18 @@
+{
+  "news": {
+    "sectionTag": "资讯中心",
+    "title": "最新资讯",
+    "description": "了解行业最新动态和深度分析",
+    "pageSize": 10,
+    "showDate": true,
+    "showAuthor": true,
+    "showTags": true,
+    "showSummary": true,
+    "defaultImage": "/news/default.jpg",
+    "banner": {
+      "title": "资讯中心",
+      "subtitle": "最新行业动态、深度分析与实战案例",
+      "backgroundImage": "/news/banner.jpg"
+    }
+  }
+}
