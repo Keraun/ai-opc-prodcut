@@ -16,20 +16,23 @@ const defaultSidebarItems = [
 export function SidebarNavModule({ data }: ModuleProps) {
   const config: SidebarNavData = (data as SidebarNavData) || {}
   const sidebarItems = defaultSidebarItems
+  
+  // 支持小、中、大三种尺寸，默认使用small
+  const size = config?.size || 'small'
 
   return (
     <div className={styles.sidebar}>
-      <nav className={styles.navList}>
+      <nav className={`${styles.navList} ${styles[`navList_${size}`]}`}>
         {sidebarItems.map((item) => {
           const Icon = item.icon
           return (
             <a
               key={item.id}
               href={item.href}
-              className={styles.navItem}
+              className={`${styles.navItem} ${styles[`navItem_${size}`]}`}
               title={item.label}
             >
-              <span className={styles.navIcon}>{Icon}</span>
+              <span className={`${styles.navIcon} ${styles[`navIcon_${size}`]}`}>{Icon}</span>
               <span className={styles.tooltip}>{item.label}</span>
               <span className={styles.activeIndicator} />
             </a>

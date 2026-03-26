@@ -14,6 +14,7 @@
   }
 }
 
+/* 导航列表基础样式 */
 .navList {
   display: flex;
   flex-direction: column;
@@ -21,7 +22,6 @@
   background-color: rgba(255, 255, 255, 0.95);
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
-  padding: 0.5rem;
   border-radius: 1rem;
   border: 1px solid rgba(229, 231, 235, 0.5);
   box-shadow: 
@@ -30,20 +30,58 @@
     0 0 0 1px rgba(0, 0, 0, 0.02);
 }
 
+/* 小尺寸 */
+.navList_small {
+  padding: 0.375rem;
+  border-radius: 0.75rem;
+}
+
+/* 中尺寸 */
+.navList_medium {
+  padding: 0.5rem;
+  border-radius: 1rem;
+}
+
+/* 大尺寸 */
+.navList_large {
+  padding: 0.625rem;
+  border-radius: 1.25rem;
+}
+
+/* 导航项基础样式 */
 .navItem {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  width: 3rem;
-  height: 3rem;
-  border-radius: 0.75rem;
+  border-radius: 0.5rem;
   cursor: pointer;
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   position: relative;
   background-color: transparent;
   border: none;
   padding: 0;
+}
+
+/* 小尺寸导航项 */
+.navItem_small {
+  width: 2rem;
+  height: 2rem;
+  border-radius: 0.5rem;
+}
+
+/* 中尺寸导航项 */
+.navItem_medium {
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: 0.625rem;
+}
+
+/* 大尺寸导航项 */
+.navItem_large {
+  width: 3rem;
+  height: 3rem;
+  border-radius: 0.75rem;
 }
 
 .navItem:hover {
@@ -55,13 +93,28 @@
   transform: scale(0.95);
 }
 
+/* 图标基础样式 */
 .navIcon {
-  font-size: 1.125rem;
   color: #9ca3af;
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   display: flex;
   align-items: center;
   justify-content: center;
+}
+
+/* 小尺寸图标 */
+.navIcon_small {
+  font-size: 0.875rem;
+}
+
+/* 中尺寸图标 */
+.navIcon_medium {
+  font-size: 1rem;
+}
+
+/* 大尺寸图标 */
+.navIcon_large {
+  font-size: 1.125rem;
 }
 
 .navItem:hover .navIcon {
@@ -119,7 +172,7 @@
 }
 
 .navItem:hover .activeIndicator {
-  height: 2rem;
+  height: 1.5rem;
   opacity: 1;
 }
 
@@ -132,6 +185,6 @@
 }
 
 .navItemActive .activeIndicator {
-  height: 2rem;
+  height: 1.5rem;
   opacity: 1;
 }

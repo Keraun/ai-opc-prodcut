@@ -135,6 +135,7 @@ export interface HeaderData {
 
 export interface SidebarNavData {
   visible?: boolean
+  size?: 'small' | 'medium' | 'large'
 }
 
 export interface FooterData {
