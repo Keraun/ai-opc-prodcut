@@ -92,7 +92,7 @@ export async function POST(request: NextRequest) {
 
     fs.writeFileSync(accountConfigPath, JSON.stringify(admins, null, 2))
 
-    const loginLogsPath = path.join(process.cwd(), "config/json/login-logs.json")
+    const loginLogsPath = path.join(process.cwd(), "config/json/system-login-logs.json")
     const loginLogs = JSON.parse(fs.readFileSync(loginLogsPath, "utf-8"))
     
     loginLogs.logs.unshift({

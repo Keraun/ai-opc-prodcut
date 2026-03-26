@@ -19,7 +19,7 @@ export function loadInitialData(): Record<string, any> {
     moduleName: '顶部导航',
     moduleId: 'header',
     moduleInstanceId: `header-${Date.now()}`,
-    data: configs.navigation?.header || {}
+    data: configs.navigation || {}
   }
 
   const sidebarNavModule: ModuleData = {

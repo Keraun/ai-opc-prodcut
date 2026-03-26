@@ -8,7 +8,7 @@ function generateVerificationCode(): string {
 }
 
 function getVerificationCodesPath(): string {
-  return path.join(process.cwd(), "config/json/verification-codes.json")
+  return path.join(process.cwd(), "config/json/system-verification-codes.json")
 }
 
 function loadVerificationCodes(): Record<string, { code: string; expiresAt: number }> {

@@ -21,7 +21,7 @@ export function logOperation(
   details?: any
 ) {
   try {
-    const logsPath = path.join(process.cwd(), "config/json/operation-logs.json")
+    const logsPath = path.join(process.cwd(), "config/json/system-operation-logs.json")
     let operationLogs: { logs: OperationLog[] } = { logs: [] }
     
     if (fs.existsSync(logsPath)) {

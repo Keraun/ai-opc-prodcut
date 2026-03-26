@@ -4,7 +4,7 @@ import path from "path"
 
 export async function GET() {
   try {
-    const loginLogsPath = path.join(process.cwd(), "config/json/login-logs.json")
+    const loginLogsPath = path.join(process.cwd(), "config/json/system-login-logs.json")
     const loginLogs = JSON.parse(fs.readFileSync(loginLogsPath, "utf-8"))
     
     return NextResponse.json(loginLogs)

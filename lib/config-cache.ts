@@ -92,6 +92,7 @@ export function loadAllConfigs() {
     cacheEnabled = siteConfig.cache.enabled
     console.log(`Cache ${cacheEnabled ? 'enabled' : 'disabled'}`)
   }
+  
   const commonConfig = readConfig(configDir, runtimeDir, "site-common.json")
   const seoConfig = readConfig(configDir, runtimeDir, "site-seo.json")
   const navigationConfig = readConfig(configDir, runtimeDir, "site-navigation.json")
