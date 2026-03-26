@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react"
 import { Input, InputNumber, Switch, Select, Space, Message } from "@arco-design/web-react"
-import styles from "../dashboard.module.css"
+import styles from "../../dashboard.module.css"
 
 interface SchemaProperty {
   type: string

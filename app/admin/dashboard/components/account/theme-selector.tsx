@@ -1,7 +1,7 @@
 "use client"
 
 import { Card } from "@arco-design/web-react"
-import styles from "../dashboard.module.css"
+import styles from "../../dashboard.module.css"
 
 interface ThemeConfig {
   id: string

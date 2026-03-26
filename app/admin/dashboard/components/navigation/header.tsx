@@ -2,7 +2,7 @@
 
 import { Button, Dropdown } from "@arco-design/web-react"
 import { IconUser, IconSettings, IconExport, IconCustomerService } from "@arco-design/web-react/icon"
-import styles from "../dashboard.module.css"
+import styles from "../../dashboard.module.css"
 
 interface HeaderProps {
   currentUser: any

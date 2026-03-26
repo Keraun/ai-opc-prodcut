@@ -4,7 +4,7 @@ import { useState, useEffect } from "react"
 import { useRouter } from "next/navigation"
 import { Button, Card, Modal, Input, Table, Space, Tag, Popconfirm, Message, Radio } from "@arco-design/web-react"
 import { IconPlus, IconEdit, IconDelete, IconEye } from "@arco-design/web-react/icon"
-import styles from "../dashboard.module.css"
+import styles from "../../dashboard.module.css"
 
 interface PageInfo {
   id: string

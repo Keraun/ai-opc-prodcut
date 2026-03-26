@@ -2,7 +2,7 @@
 
 import { getLineClass } from "@/lib/json-compare"
 import { compareJSON } from "@/lib/json-compare"
-import styles from "../dashboard.module.css"
+import styles from "../../dashboard.module.css"
 
 interface JSONViewerWithLineNumbersProps {
   content: string

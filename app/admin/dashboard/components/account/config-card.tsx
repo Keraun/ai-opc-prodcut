@@ -2,7 +2,7 @@
 
 import { Button, Card } from "@arco-design/web-react"
 import { IconSave, IconEdit, IconHistory, IconEye, IconInfoCircle } from "@arco-design/web-react/icon"
-import styles from "../dashboard.module.css"
+import styles from "../../dashboard.module.css"
 
 interface ConfigCardProps {
   title: string

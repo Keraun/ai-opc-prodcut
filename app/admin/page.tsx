@@ -5,7 +5,6 @@ import { useRouter } from "next/navigation"
 import { Button, Input, Modal, Dropdown, Tabs } from "@arco-design/web-react"
 import { IconCustomerService, IconEye, IconEyeInvisible } from "@arco-design/web-react/icon"
 import { toast, Toaster } from "sonner"
-import { ThemeProvider } from "@/components/theme-provider"
 import styles from "./admin.module.css"
 
 const TabPane = Tabs.TabPane
@@ -27,14 +26,6 @@ interface ResetPasswordResponse {
 }
 
 export default function AdminLoginPage() {
-  return (
-    <ThemeProvider>
-      <AdminLoginContent />
-    </ThemeProvider>
-  )
-}
-
-function AdminLoginContent() {
   const router = useRouter()
   
   const [username, setUsername] = useState<string>("")

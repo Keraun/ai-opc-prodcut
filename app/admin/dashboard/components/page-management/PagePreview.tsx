@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react"
 import { Message, Spin } from "@arco-design/web-react"
-import styles from "../dashboard.module.css"
+import styles from "../../dashboard.module.css"
 
 interface ModuleInfo {
   moduleId: string

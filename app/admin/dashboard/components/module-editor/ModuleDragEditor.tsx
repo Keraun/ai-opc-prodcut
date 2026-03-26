@@ -3,7 +3,7 @@
 import { useState, useEffect, useCallback } from "react"
 import { Card, Button, Space, Tag, Modal, Message, Collapse } from "@arco-design/web-react"
 import { IconDragDotVertical, IconDelete, IconPlus, IconSettings, IconEye } from "@arco-design/web-react/icon"
-import styles from "../dashboard.module.css"
+import styles from "../../dashboard.module.css"
 import { ModuleFieldEditor } from "./ModuleFieldEditor"
 
 interface ModuleInfo {

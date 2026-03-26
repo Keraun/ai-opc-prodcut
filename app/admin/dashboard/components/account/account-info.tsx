@@ -2,7 +2,7 @@
 
 import { Button } from "@arco-design/web-react"
 import { IconLock } from "@arco-design/web-react/icon"
-import styles from "../dashboard.module.css"
+import styles from "../../dashboard.module.css"
 
 interface AccountInfoProps {
   currentUser: any

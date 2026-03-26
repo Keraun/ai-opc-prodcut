@@ -2,7 +2,7 @@
 
 import { Button, Card, Switch } from "@arco-design/web-react"
 import { IconExport, IconSettings } from "@arco-design/web-react/icon"
-import styles from "../dashboard.module.css"
+import styles from "../../dashboard.module.css"
 
 interface SystemManagementProps {
   siteConfig: any

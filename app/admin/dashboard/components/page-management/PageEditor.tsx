@@ -1,10 +1,12 @@
 "use client"
 
 import { useState, useEffect, useCallback } from "react"
-import { Button, Card, Message, Tabs, TabPane, Drawer } from "@arco-design/web-react"
+import { Button, Card, Message, Tabs, Drawer } from "@arco-design/web-react"
+
+const TabPane = Tabs.TabPane
 import { IconSave, IconEye, IconArrowLeft } from "@arco-design/web-react/icon"
-import styles from "../dashboard.module.css"
-import { ModuleDragEditor } from "./ModuleDragEditor"
+import styles from "../../dashboard.module.css"
+import { ModuleDragEditor } from "../module-editor/ModuleDragEditor"
 import { PagePreview } from "./PagePreview"
 
 interface ModuleInfo {
