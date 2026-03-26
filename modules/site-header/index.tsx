@@ -65,7 +65,7 @@ export function HeaderModule({ data }: ModuleProps) {
           )}
           
           <div className={styles.ctaSection}>
-            <Link href="/contact" className="flex items-center gap-2 text-gray-600 hover:text-gray-900 font-medium transition-colors">
+            <Link href="/contact" className={styles.textButton}>
               <CustomerServiceIcon />
               联系我们
             </Link>

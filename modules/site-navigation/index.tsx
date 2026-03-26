@@ -67,13 +67,17 @@ export function NavigationModule({ data }: ModuleProps) {
           )}
           
           <div className={styles.ctaSection}>
-            <Link href="/contact" className="flex items-center gap-2 text-gray-600 hover:text-gray-900 font-medium transition-colors">
+            <Link href="/contact" className={styles.textButton}>
               <CustomerServiceIcon />
               联系我们
             </Link>
             <Link 
               href="/products" 
-              className="px-5 py-2.5 bg-blue-600 text-white font-medium rounded-lg hover:bg-blue-700 transition-colors shadow-lg"
+              className={styles.primaryButton}
+              style={{ 
+                backgroundColor: primaryColor,
+                boxShadow: '0 10px 15px -3px rgba(0, 0, 0, 0.1)'
+              }}
             >
               开始使用
             </Link>

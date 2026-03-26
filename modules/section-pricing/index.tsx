@@ -2,16 +2,17 @@ import Link from "next/link"
 import { Card, Section, Button } from "@/components/ui"
 import type { ModuleProps } from "@/modules/types"
 import type { PricingData, PricingFeature } from "./types"
+import styles from "./index.module.css"
 
 // SVG 图标组件
 const CheckIcon = () => (
-  <svg className="w-5 h-5 text-green-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+  <svg className={styles.checkIcon} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
     <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
   </svg>
 )
 
 const ArrowRightIcon = () => (
-  <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+  <svg className={styles.arrowIcon} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
     <path strokeLinecap="round" strokeLinejoin="round" d="M14 5l7 7m0 0l-7 7m7-7H3" />
   </svg>
 )
@@ -77,10 +78,10 @@ export function PricingModule({ data }: ModuleProps) {
       padding="lg"
       centered
     >
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mt-12">
+      <div className={styles.grid}>
         {pricingPlans.map((plan: PricingFeature, index: number) => {
           const cardFooter = plan.link ? (
-            <Link href={plan.link} className="w-full">
+            <Link href={plan.link} className={styles.buttonLink}>
               <Button
                 variant={plan.isPopular ? "primary" : "outline"}
                 size="lg"
@@ -110,35 +111,35 @@ export function PricingModule({ data }: ModuleProps) {
               variant={plan.isPopular ? "elevated" : "default"}
               padding="lg"
               hover
-              className={`relative ${plan.isPopular ? 'ring-2 ring-blue-600' : ''}`}
+              className={`${styles.card} ${plan.isPopular ? styles.cardPopular : ''}`}
             >
               {plan.isPopular && (
-                <div className="absolute -top-4 left-1/2 -translate-x-1/2">
-                  <span className="px-4 py-1 bg-blue-600 text-white text-sm font-medium rounded-full">
-                    最受欢迎
-                  </span>
+                <div className={styles.popularBadge} style={{ backgroundColor: primaryColor }}>
+                  最受欢迎
                 </div>
               )}
 
-              <div className="text-center mb-6">
-                <h3 className="text-xl font-semibold text-gray-900 mb-2">{plan.title}</h3>
-                <div className="text-4xl font-bold text-gray-900 mb-2">
-                  <span style={{ color: plan.isPopular ? primaryColor : undefined }}>{plan.price}</span>
-                  <span className="text-base font-normal text-gray-500">/月</span>
+              <div className={styles.planHeader}>
+                <h3 className={styles.planTitle}>{plan.title}</h3>
+                <div className={styles.planPrice} style={{ color: plan.isPopular ? primaryColor : '#111827' }}>
+                  {plan.price}
+                  <span className={styles.priceUnit}>/月</span>
                 </div>
-                <p className="text-gray-600">{plan.description}</p>
+                <p className={styles.planDescription}>{plan.description}</p>
               </div>
 
-              <ul className="space-y-3 mb-8">
+              <ul className={styles.features}>
                 {(plan.features || []).map((feature: string, i: number) => (
-                  <li key={i} className="flex items-center gap-3">
-                    <CheckIcon />
-                    <span className="text-gray-700">{feature}</span>
+                  <li key={i} className={styles.featureItem}>
+                    <span className={styles.featureIcon}><CheckIcon /></span>
+                    <span>{feature}</span>
                   </li>
                 ))}
               </ul>
 
-              {cardFooter}
+              <div className={styles.cardFooter}>
+                {cardFooter}
+              </div>
             </Card>
           )
         })}

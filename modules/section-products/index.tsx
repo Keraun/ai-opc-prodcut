@@ -69,7 +69,7 @@ export function ProductsModule({ data }: ModuleProps) {
       </div>
 
       {products && products.length > 0 && (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mt-12">
+        <div className={styles.grid}>
           {products.map((product, index: number) => {
             const Icon = product?.icon
             if (!Icon) return null
@@ -77,15 +77,19 @@ export function ProductsModule({ data }: ModuleProps) {
             const cardFooter = product?.link ? (
               <Link
                 href={product.link}
-                className="inline-flex items-center gap-2 text-cyan-500 hover:text-cyan-600 font-medium transition-colors"
+                className={styles.ctaButton}
+                style={{ color: accentColor }}
               >
                 了解更多
-                <ArrowRightIcon />
+                <span className={styles.ctaIcon}><ArrowRightIcon /></span>
               </Link>
             ) : (
-              <span className="inline-flex items-center gap-2 text-cyan-500 font-medium">
+              <span
+                className={styles.ctaButton}
+                style={{ color: accentColor }}
+              >
                 了解更多
-                <ArrowRightIcon />
+                <span className={styles.ctaIcon}><ArrowRightIcon /></span>
               </span>
             )
 
@@ -95,37 +99,47 @@ export function ProductsModule({ data }: ModuleProps) {
                 variant="elevated"
                 padding="md"
                 hover
-                className="relative"
+                className={styles.card}
               >
-                <div className="flex items-center gap-3 mb-4">
-                  <div className="w-12 h-12 rounded-xl bg-blue-50 flex items-center justify-center text-blue-600">
-                    {Icon}
+                <div className={styles.cardHeader}>
+                  <div className={styles.iconWrapper}>
+                    <div className={styles.icon}>
+                      {Icon}
+                    </div>
                   </div>
                   {product?.tag && (
-                    <span className="px-2.5 py-0.5 text-xs font-medium bg-gray-100 text-gray-700 rounded-full">
+                    <span 
+                      className={styles.tag} 
+                      style={{ 
+                        backgroundColor: product?.tagColor || '#e5e7eb',
+                        borderRadius: '9999px', 
+                        padding: '0.125rem 0.625rem', 
+                        fontSize: '0.75rem' 
+                      }}
+                    >
                       {product.tag}
                     </span>
                   )}
                 </div>
 
                 {product?.name && (
-                  <h3 className="text-xl font-semibold text-gray-900 mb-2">{product.name}</h3>
+                  <h3 className={styles.cardTitle}>{product.name}</h3>
                 )}
                 {product?.description && (
-                  <p className="text-gray-600 mb-4">{product.description}</p>
+                  <p className={styles.cardDescription}>{product.description}</p>
                 )}
 
                 {product?.features && product.features.length > 0 && (
-                  <div className="flex flex-wrap gap-2 mb-4">
+                  <div className={styles.features}>
                     {product.features.map((feature: string, i: number) => (
-                      <span key={i} className="px-3 py-1 text-sm bg-gray-50 text-gray-600 rounded-full">
+                      <span key={i} className={styles.feature}>
                         {feature}
                       </span>
                     ))}
                   </div>
                 )}
 
-                <div className="mt-4 pt-4 border-t border-gray-100">
+                <div className={styles.cardFooter}>
                   {cardFooter}
                 </div>
               </Card>
