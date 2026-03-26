@@ -175,3 +175,27 @@ export const ContactIcon = () => (
     <path strokeLinecap="round" strokeLinejoin="round" d="M22 6l-10 7L2 6" />
   </svg>
 )
+
+
+export const NotFoundIcon = () => (
+  <svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path
+      d="M50 5L85 25V65L50 85L15 65V25L50 5Z"
+      stroke="currentColor"
+      strokeWidth="2"
+      fill="none"
+      className={styles.hexagonPath}
+    />
+    <circle cx="50" cy="20" r="6" fill="currentColor" className={styles.circle1} />
+    <circle cx="25" cy="50" r="6" fill="currentColor" className={styles.circle2} />
+    <circle cx="75" cy="50" r="6" fill="currentColor" className={styles.circle3} />
+    <circle cx="50" cy="75" r="6" fill="currentColor" className={styles.circle4} />
+    <path
+      d="M50 20L25 50M50 20L75 50M25 50L50 75M75 50L50 75M25 50L75 50"
+      stroke="currentColor"
+      strokeWidth="1.5"
+      strokeLinecap="round"
+      className={styles.connections}
+    />
+  </svg>
+)
