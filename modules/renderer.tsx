@@ -48,20 +48,16 @@ const MODULE_COMPONENT_NAMES: Record<string, string> = {
 
 export function ModuleRenderer({ modules }: ModuleRendererProps) {
   const [isClient, setIsClient] = useState(false)
-  const [loadedCount, setLoadedCount] = useState(0)
+  const [allLoaded, setAllLoaded] = useState(false)
   const moduleIds = useMemo(() => [...new Set(modules.map(m => m.moduleId))], [modules])
-  const totalModules = moduleIds.length
 
   useEffect(() => {
     setIsClient(true)
     
     const loadModules = async () => {
-      let count = 0
-      
       for (const moduleId of moduleIds) {
         const existingComponent = getModuleComponent(moduleId)
         if (existingComponent) {
-          count++
           continue
         }
 
@@ -80,7 +76,6 @@ export function ModuleRenderer({ modules }: ModuleRendererProps) {
                 schema: moduleExports.schema,
                 defaultData: moduleExports.defaultData
               })
-              count++
             } else {
               console.error(`Component "${componentName}" not found in module "${moduleId}"`)
             }
@@ -92,14 +87,14 @@ export function ModuleRenderer({ modules }: ModuleRendererProps) {
         }
       }
 
-      setLoadedCount(count)
+      setAllLoaded(true)
     }
 
     loadModules()
   }, [moduleIds])
 
-  if (!isClient || loadedCount < totalModules) {
-    return null
+  if (!isClient || !allLoaded) {
+    return <div style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>Loading...</div>
   }
 
   return (

@@ -12,6 +12,9 @@ interface PathMapping {
 
 const typeToPathMap: Record<string, PathMapping> = {
   'site': { dir: 'site-info', prefix: 'site-config' },
+  'site-seo': { dir: 'site-info', prefix: 'site-config' },
+  'site-footer': { dir: 'page-data', prefix: 'data-site-footer' },
+  'site-navigation': { dir: 'page-data', prefix: 'data-site-navigation' },
   
   'page-home': { dir: 'page-module', prefix: 'page-home' },
   'page-news': { dir: 'page-module', prefix: 'page-news' },
@@ -21,8 +24,6 @@ const typeToPathMap: Record<string, PathMapping> = {
   
   'site-root': { dir: 'page-data', prefix: 'data-site-root' },
   'site-header': { dir: 'page-data', prefix: 'data-site-header' },
-  'site-footer': { dir: 'page-data', prefix: 'data-site-footer' },
-  'site-navigation': { dir: 'page-data', prefix: 'data-site-navigation' },
   'sidebar-nav': { dir: 'page-data', prefix: 'data-sidebar-nav' },
   'hero': { dir: 'page-data', prefix: 'data-section-hero' },
   'section-hero': { dir: 'page-data', prefix: 'data-section-hero' },

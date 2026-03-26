@@ -1,6 +1,5 @@
 import { NextRequest, NextResponse } from "next/server"
 import { readConfig, writeConfig, readAllConfigs, readTemplate } from "@/lib/config-manager"
-import { createVersion } from "@/lib/version-manager"
 import { logOperation } from "@/lib/operation-logger"
 import { cookies } from "next/headers"
 
@@ -28,11 +27,8 @@ export async function POST(request: NextRequest) {
       }, { status: 400 })
     }
 
-    const existingData = readConfig(type)
-    createVersion(type, existingData)
     writeConfig(type, data)
 
-    // 刷新配置缓存逻辑已移除（不再使用缓存）
     console.log(`Config updated: ${type}`)
 
     const cookieStore = await cookies()
@@ -63,6 +59,7 @@ export async function POST(request: NextRequest) {
       'hero': 'Hero区块',
       'section-partner': '合作伙伴区块',
       'partners': '合作伙伴区块',
+      'section-partners': '合作伙伴区块',
       'section-products': '产品区块',
       'products': '产品区块',
       'section-services': '服务区块',
