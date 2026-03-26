@@ -1,5 +1,5 @@
-import { LocationIcon, PhoneIcon, EmailIcon, SettingsGearIcon } from "../icons"
-import { Logo } from "@/components/common/logo"
+import { LocationIcon, PhoneIcon, EmailIcon } from "../icons"
+import { Footer } from "@/components/common/footer"
 import type { ModuleProps } from "@/modules/types"
 import type { FooterData } from "./types"
 import styles from "./index.module.css"
@@ -42,80 +42,6 @@ export function FooterModule({ data }: ModuleProps) {
   ]
 
   return (
-    <footer className={styles.footer}>
-      <div className={styles.container}>
-        <div className={styles.grid}>
-          <div className={styles.companyInfo}>
-            <div className={styles.logoSection}>
-              <Logo className={styles.logo} />
-              <span className={styles.logoText}>{defaultSiteConfig.name}</span>
-            </div>
-            <p className={styles.description}>
-              {config?.description || defaultFooterConfig.description}
-            </p>
-          </div>
-
-          <div>
-            <h4 className={styles.sectionTitle}>联系方式</h4>
-            <ul className={styles.contactList}>
-              {contactInfo.map((info, index) => {
-                const Icon = info.icon
-                return (
-                  <li key={index} className={styles.contactItem}>
-                    <span className={styles.contactIcon}>{Icon}</span>
-                    <div className={styles.contactContent}>
-                      <p className={styles.contactLabel}>{info.title}</p>
-                      <p className={styles.contactText}>{info.content}</p>
-                    </div>
-                  </li>
-                )
-              })}
-            </ul>
-          </div>
-
-          <div>
-            <h4 className={styles.sectionTitle}>关注我们</h4>
-            <div className={styles.qrSection}>
-              <div className={styles.qrItem}>
-                <div className={styles.qrContainer}>
-                  <div className={styles.qrPlaceholder}>
-                    <span className={styles.qrText}>微信二维码</span>
-                  </div>
-                </div>
-                <p className={styles.qrLabel}>扫码关注</p>
-              </div>
-              <div className={styles.qrItem}>
-                <div className={styles.qrContainer}>
-                  <div className={styles.qrPlaceholder}>
-                    <span className={styles.qrText}>公众号二维码</span>
-                  </div>
-                </div>
-                <p className={styles.qrLabel}>扫码关注</p>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div className={styles.bottomSection}>
-          <div className={styles.bottomContent}>
-            <p className={styles.copyright}>
-              &copy; {currentYear} {defaultSiteConfig.name}. All rights reserved.
-            </p>
-            <p className={styles.icp}>
-              {defaultSiteConfig.icp}
-            </p>
-            <a 
-              href="/admin" 
-              target="_blank" 
-              rel="noopener noreferrer"
-              className={styles.adminLink}
-            >
-              <span className={styles.adminIcon}><SettingsGearIcon /></span>
-              管理后台
-            </a>
-          </div>
-        </div>
-      </div>
-    </footer>
+   <Footer/>
   )
 }
