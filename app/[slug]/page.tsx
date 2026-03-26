@@ -17,6 +17,7 @@ export async function generateStaticParams() {
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const { slug } = await params
   const routeConfig = getRouteConfig(slug)
+  const baseUrl = siteConfig?.url || 'http://localhost:3000'
   
   return {
     title: `${routeConfig?.title || slug} | ${siteConfig?.name || ''}`,
@@ -24,7 +25,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     openGraph: {
       title: `${routeConfig?.title || slug} | ${siteConfig?.name || ''}`,
       description: routeConfig?.description || siteConfig?.description || '',
-      url: `${window.location.href}`,
+      url: `${baseUrl}/${slug}`,
     },
   }
 }

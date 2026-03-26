@@ -6,6 +6,8 @@ import type { ModuleData } from "@/modules/types"
 let initialDataCache: Record<string, any> | null = null
 let pageDataCache: Record<string, Record<string, any>> = {}
 
+const PAGE_TEMPLATES_DIR = path.join(process.cwd(), 'config', 'json', 'page-templates')
+
 function loadConfigs() {
   const configPath = path.join(process.cwd(), 'config', 'json', 'runtime')
   const configs: Record<string, any> = {}
@@ -27,6 +29,130 @@ function loadConfigs() {
   }
 
   return configs
+}
+
+function loadPageTemplate(pageId: string): any {
+  const templatePath = path.join(PAGE_TEMPLATES_DIR, `page-${pageId}.json`)
+  try {
+    if (fs.existsSync(templatePath)) {
+      const content = fs.readFileSync(templatePath, 'utf8')
+      return JSON.parse(content)
+    }
+  } catch (error) {
+    console.error(`Error loading page template for ${pageId}:`, error)
+  }
+  return null
+}
+
+function createModuleData(
+  moduleId: string,
+  pageId: string,
+  configs: Record<string, any>,
+  extraConfig?: Record<string, any>
+): ModuleData | null {
+  const moduleIdToName: Record<string, string> = {
+    'site-root': '站点根容器',
+    'site-header': '站点头部',
+    'site-footer': '站点页脚',
+    'sidebar-nav': '侧边栏导航',
+    'section-hero': 'Hero 区块',
+    'section-partners': '合作伙伴区块',
+    'section-products': '产品区块',
+    'section-services': '服务区块',
+    'section-pricing': '价格区块',
+    'section-about': '关于我们区块',
+    'section-contact': '联系我们区块',
+    'product-list': '产品列表',
+    'news-list': '新闻列表',
+    'news-detail': '新闻详情',
+    'section-404': '404 页面',
+  }
+
+  const moduleName = moduleIdToName[moduleId] || moduleId
+
+  let moduleData: any = {}
+
+  switch (moduleId) {
+    case 'site-root':
+      moduleData = {}
+      break
+    case 'site-header':
+      moduleData = configs.navigation || {}
+      break
+    case 'site-footer':
+      moduleData = configs.footer || {}
+      break
+    case 'sidebar-nav':
+      moduleData = { visible: true }
+      break
+    case 'section-hero':
+      moduleData = configs.homeBanner?.hero || configs.homeBanner || {}
+      break
+    case 'section-partners':
+      moduleData = configs.homePartners?.partners || configs.homePartners || {}
+      break
+    case 'section-products':
+      moduleData = { ...(configs.homeProducts?.products || configs.homeProducts || {}), ...extraConfig }
+      break
+    case 'section-services':
+      moduleData = configs.homeServices?.services || configs.homeServices || {}
+      break
+    case 'section-pricing':
+      moduleData = configs.homePricing?.pricing || configs.homePricing || {}
+      break
+    case 'section-about':
+      moduleData = configs.homeAbout?.about || configs.homeAbout || {}
+      break
+    case 'section-contact':
+      moduleData = configs.homeContact?.contact || configs.homeContact || {}
+      break
+    case 'product-list':
+      moduleData = { 
+        ...(configs.products || {}), 
+        products: configs.products?.items || [],
+        ...extraConfig 
+      }
+      break
+    case 'news-list':
+      moduleData = { ...configs.newsList || {}, ...extraConfig }
+      break
+    case 'news-detail':
+      moduleData = { ...configs.newsDetail || {}, ...extraConfig }
+      break
+    case 'section-404':
+      moduleData = {}
+      break
+    default:
+      console.warn(`Unknown module type: ${moduleId}`)
+      return null
+  }
+
+  return {
+    moduleName,
+    moduleId,
+    moduleInstanceId: `${moduleId}-${pageId}-${Date.now()}`,
+    data: moduleData
+  }
+}
+
+function buildModulesFromTemplate(
+  configs: Record<string, any>,
+  pageTemplate: any,
+  pageId: string,
+  extraConfig?: Record<string, any>
+): ModuleData[] {
+  const moduleIds = pageTemplate?.modules || []
+  
+  const modules: ModuleData[] = []
+  
+  for (const moduleId of moduleIds) {
+    const moduleData = createModuleData(moduleId, pageId, configs, extraConfig)
+    if (moduleData) {
+      modules.push(moduleData)
+    }
+  }
+  
+  return modules
 }
 
 function buildModulesFromConfig(
@@ -155,14 +281,20 @@ export function loadInitialData(): Record<string, any> {
   }
 
   const configs = loadConfigs()
-  const homeOrderConfig = configs.homeOrder || []
+  const pageTemplate = loadPageTemplate('home')
   
-  const modules = buildModulesFromConfig(configs, homeOrderConfig, 'home')
+  let modules: ModuleData[]
+  if (pageTemplate) {
+    modules = buildModulesFromTemplate(configs, pageTemplate, 'home')
+  } else {
+    const homeOrderConfig = configs.homeOrder || []
+    modules = buildModulesFromConfig(configs, homeOrderConfig, 'home')
+  }
 
   initialDataCache = {
     data: {
       theme: configs.theme || {},
-      layout: configs.homeOrder?.layout || 'default',
+      layout: 'default',
       modules,
       common: {
         site: configs.site || {},
@@ -188,19 +320,27 @@ export function loadPageData(
   }
 
   const configs = loadConfigs()
-  const orderConfigKeyToUse = orderConfigKey || `${pageId}Order`
-  let pageOrderConfig = configs[orderConfigKeyToUse]
   
-  if (!pageOrderConfig) {
-    pageOrderConfig = configs.homeOrder || []
+  let modules: ModuleData[]
+  const pageTemplate = loadPageTemplate(pageId)
+  
+  if (pageTemplate) {
+    modules = buildModulesFromTemplate(configs, pageTemplate, pageId, extraConfig)
+  } else {
+    const orderConfigKeyToUse = orderConfigKey || `${pageId}Order`
+    let pageOrderConfig = configs[orderConfigKeyToUse]
+    
+    if (!pageOrderConfig) {
+      pageOrderConfig = configs.homeOrder || []
+    }
+    
+    modules = buildModulesFromConfig(configs, pageOrderConfig, pageId, extraConfig)
   }
-
-  const modules = buildModulesFromConfig(configs, pageOrderConfig, pageId, extraConfig)
 
   const pageData = {
     data: {
       theme: configs.theme || {},
-      layout: pageOrderConfig?.layout || configs.homeOrder?.layout || 'default',
+      layout: 'default',
       modules,
       common: {
         site: configs.site || {},

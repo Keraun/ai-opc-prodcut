@@ -12,6 +12,7 @@ import { registerSiteFooterModule } from "./site-footer/register"
 import { registerSiteRootModule } from "./site-root/register"
 import { registerNewsListModule } from "./news-list/register"
 import { registerNewsDetailModule } from "./news-detail/register"
+import { registerProductListModule } from "./product-list/register"
 
 export function initializeModules() {
   registerSiteRootModule()
@@ -28,6 +29,7 @@ export function initializeModules() {
   registerSiteFooterModule()
   registerNewsListModule()
   registerNewsDetailModule()
+  registerProductListModule()
 }
 
 export { HeaderModule } from "./site-header/register"
@@ -44,3 +46,4 @@ export { FooterModule } from "./site-footer/register"
 export { SiteRootModule } from "./site-root/register"
 export { NewsListModule } from "./news-list/register"
 export { NewsDetailModule } from "./news-detail/register"
+export { ProductListModule } from "./product-list/register"

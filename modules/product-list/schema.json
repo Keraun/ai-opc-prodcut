@@ -1,0 +1,22 @@
+{
+  "type": "object",
+  "title": "Product List Configuration",
+  "properties": {
+    "title": {
+      "type": "string",
+      "title": "页面标题"
+    },
+    "subtitle": {
+      "type": "string",
+      "title": "页面副标题"
+    },
+    "showPrice": {
+      "type": "boolean",
+      "title": "显示价格"
+    },
+    "showTags": {
+      "type": "boolean",
+      "title": "显示标签"
+    }
+  }
+}
