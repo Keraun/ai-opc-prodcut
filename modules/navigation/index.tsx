@@ -10,7 +10,7 @@ import { siteConfig } from "@/config/client"
 import { useTheme } from "@/components/theme-provider"
 import type { ModuleProps } from "@/modules/types"
 import type { NavigationData } from "./types"
-import styles from "./navigation.module.css"
+import styles from "./index.module.css"
 
 export function NavigationModule({ data }: ModuleProps) {
   const router = useRouter()

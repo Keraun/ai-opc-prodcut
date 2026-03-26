@@ -1,0 +1,17 @@
+{
+  "title": "侧边栏导航配置",
+  "description": "配置侧边栏导航",
+  "type": "object",
+  "properties": {
+    "visible": {
+      "type": "boolean",
+      "title": "是否显示",
+      "default": true,
+      "ui": {"widget": "switch", "width": "100%"}
+    }
+  },
+  "ui": {
+    "layout": "vertical",
+    "labelAlign": "left"
+  }
+}

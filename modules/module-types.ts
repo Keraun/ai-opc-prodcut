@@ -1,6 +1,7 @@
 export interface HeroTitle {
   main?: string
   sub?: string
+  highlight?: string
 }
 
 export interface HeroButton {
@@ -35,9 +36,15 @@ export interface ServicesData {
   items?: ServicesItem[]
 }
 
+export interface PartnerItem {
+  src?: string
+  alt?: string
+}
+
 export interface PartnerData {
   title?: string
   description?: string
+  items?: PartnerItem[]
 }
 
 export interface ProductsItem {
@@ -54,6 +61,7 @@ export interface ProductsItem {
 export interface ProductsData {
   title?: string
   description?: string
+  sectionTag?: string
   items?: ProductsItem[]
 }
 
@@ -64,6 +72,7 @@ export interface PricingFeature {
   features?: string[]
   buttonText?: string
   buttonLink?: string
+  link?: string
   isPopular?: boolean
 }
 
@@ -84,6 +93,7 @@ export interface AboutMission {
 }
 
 export interface AboutData {
+  sectionTag?: string
   title?: HeroTitle
   description?: string[]
   mission?: AboutMission
@@ -101,6 +111,7 @@ export interface ContactMethod {
 export interface ContactData {
   title?: string
   description?: string
+  sectionTag?: string
   methods?: ContactMethod[]
 }
 
@@ -112,6 +123,10 @@ export interface NavigationItem {
 export interface NavigationData {
   main?: NavigationItem[]
   sidebar?: NavigationItem[]
+}
+
+export interface SidebarNavData {
+  visible?: boolean
 }
 
 export interface FooterData {

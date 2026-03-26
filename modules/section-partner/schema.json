@@ -1,0 +1,36 @@
+{
+  "title": "合作伙伴配置",
+  "description": "配置首页合作伙伴区域的内容",
+  "type": "object",
+  "properties": {
+    "title": {
+      "type": "string",
+      "title": "区块标题",
+      "ui": {"widget": "input", "width": "100%"}
+    },
+    "items": {
+      "type": "array",
+      "title": "合作伙伴列表",
+      "items": {
+        "type": "object",
+        "properties": {
+          "src": {
+            "type": "string",
+            "title": "图片地址",
+            "ui": {"widget": "input", "width": "100%"}
+          },
+          "alt": {
+            "type": "string",
+            "title": "图片描述",
+            "ui": {"widget": "input", "width": "100%"}
+          }
+        }
+      },
+      "ui": {"widget": "array", "itemTitle": "合作伙伴", "width": "100%"}
+    }
+  },
+  "ui": {
+    "layout": "vertical",
+    "labelAlign": "left"
+  }
+}

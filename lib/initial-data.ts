@@ -18,44 +18,44 @@ export function loadInitialData(): Record<string, any> {
   const moduleDataMap: Record<string, () => ModuleData> = {
     hero: () => ({
       moduleName: 'Hero 区块',
-      moduleId: 'hero',
-      moduleInstanceId: `hero-${Date.now()}`,
+      moduleId: 'section-hero',
+      moduleInstanceId: `section-hero-${Date.now()}`,
       data: configs.homeBanner?.hero || configs.homeBanner || {}
     }),
     partner: () => ({
       moduleName: '合作伙伴区块',
-      moduleId: 'partner',
-      moduleInstanceId: `partner-${Date.now()}`,
+      moduleId: 'section-partner',
+      moduleInstanceId: `section-partner-${Date.now()}`,
       data: configs.homePartners?.partners || configs.homePartners || {}
     }),
     products: () => ({
       moduleName: '产品区块',
-      moduleId: 'products',
-      moduleInstanceId: `products-${Date.now()}`,
+      moduleId: 'section-products',
+      moduleInstanceId: `section-products-${Date.now()}`,
       data: configs.homeProducts?.products || configs.homeProducts || {}
     }),
     services: () => ({
       moduleName: '服务区块',
-      moduleId: 'services',
-      moduleInstanceId: `services-${Date.now()}`,
+      moduleId: 'section-services',
+      moduleInstanceId: `section-services-${Date.now()}`,
       data: configs.homeServices?.services || configs.homeServices || {}
     }),
     pricing: () => ({
       moduleName: '价格区块',
-      moduleId: 'pricing',
-      moduleInstanceId: `pricing-${Date.now()}`,
+      moduleId: 'section-pricing',
+      moduleInstanceId: `section-pricing-${Date.now()}`,
       data: configs.homePricing?.pricing || configs.homePricing || {}
     }),
     about: () => ({
       moduleName: '关于我们区块',
-      moduleId: 'about',
-      moduleInstanceId: `about-${Date.now()}`,
+      moduleId: 'section-about',
+      moduleInstanceId: `section-about-${Date.now()}`,
       data: configs.homeAbout?.about || configs.homeAbout || {}
     }),
     contact: () => ({
       moduleName: '联系我们区块',
-      moduleId: 'contact',
-      moduleInstanceId: `contact-${Date.now()}`,
+      moduleId: 'section-contact',
+      moduleInstanceId: `section-contact-${Date.now()}`,
       data: configs.homeContact?.contact || configs.homeContact || {}
     }),
   }

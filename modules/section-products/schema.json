@@ -1,0 +1,77 @@
+{
+  "title": "产品配置",
+  "description": "配置首页产品区域的内容",
+  "type": "object",
+  "properties": {
+    "title": {
+      "type": "string",
+      "title": "区块标题",
+      "ui": {"widget": "input", "width": "100%"}
+    },
+    "description": {
+      "type": "string",
+      "title": "区块描述",
+      "ui": {"widget": "textarea", "rows": 2, "width": "100%"}
+    },
+    "sectionTag": {
+      "type": "string",
+      "title": "区块标签",
+      "ui": {"widget": "input", "width": "100%"}
+    },
+    "items": {
+      "type": "array",
+      "title": "产品列表",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "title": "产品ID",
+            "ui": {"widget": "input", "width": "100%"}
+          },
+          "name": {
+            "type": "string",
+            "title": "产品名称",
+            "ui": {"widget": "input", "width": "100%"}
+          },
+          "description": {
+            "type": "string",
+            "title": "产品描述",
+            "ui": {"widget": "textarea", "rows": 2, "width": "100%"}
+          },
+          "icon": {
+            "type": "string",
+            "title": "图标名称",
+            "ui": {"widget": "input", "width": "100%"}
+          },
+          "tag": {
+            "type": "string",
+            "title": "标签文本",
+            "ui": {"widget": "input", "width": "100%"}
+          },
+          "tagColor": {
+            "type": "string",
+            "title": "标签颜色",
+            "ui": {"widget": "input", "width": "100%"}
+          },
+          "features": {
+            "type": "array",
+            "title": "特性列表",
+            "items": {"type": "string"},
+            "ui": {"widget": "tags", "placeholder": "输入特性后按回车添加", "width": "100%"}
+          },
+          "link": {
+            "type": "string",
+            "title": "链接地址",
+            "ui": {"widget": "input", "width": "100%"}
+          }
+        }
+      },
+      "ui": {"widget": "array", "itemTitle": "产品项", "width": "100%"}
+    }
+  },
+  "ui": {
+    "layout": "vertical",
+    "labelAlign": "left"
+  }
+}
