@@ -24,7 +24,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     openGraph: {
       title: `${routeConfig?.title || slug} | ${siteConfig?.name || ''}`,
       description: routeConfig?.description || siteConfig?.description || '',
-      url: `${siteConfig?.url || 'https://makerai.com'}/${slug}`,
+      url: `${window.location.href}`,
     },
   }
 }
