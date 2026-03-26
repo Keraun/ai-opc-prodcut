@@ -1,0 +1,8 @@
+{
+    "modules": [
+        "site-root",
+        "site-header",
+        "product-list",
+        "site-footer"
+    ]
+}
