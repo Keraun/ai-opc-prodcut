@@ -1,106 +1,177 @@
 {
-  "title": "关于我们配置",
-  "description": "配置首页关于我们区域的内容",
   "type": "object",
+  "title": "",
   "properties": {
     "sectionTag": {
       "type": "string",
-      "title": "区块标签",
-      "ui": {"widget": "input", "width": "100%"}
+      "title": "sectionTag",
+      "default": "关于我们"
     },
     "title": {
       "type": "object",
-      "title": "标题配置",
+      "title": "title",
       "properties": {
         "main": {
           "type": "string",
-          "title": "主标题",
-          "ui": {"widget": "input", "width": "100%"}
+          "title": "main",
+          "default": "关于"
         },
         "highlight": {
           "type": "string",
-          "title": "高亮文字",
-          "ui": {"widget": "input", "width": "100%"}
+          "title": "highlight",
+          "default": "创客AI"
         }
+      },
+      "default": {
+        "main": "关于",
+        "highlight": "创客AI"
       }
     },
     "description": {
       "type": "array",
-      "title": "描述列表",
-      "items": {"type": "string"},
-      "ui": {"widget": "tags", "placeholder": "输入描述后按回车添加", "width": "100%"}
+      "title": "description",
+      "items": {
+        "type": "string"
+      },
+      "default": [
+        "创客AI专注于为个人创业者提供AI赋能服务",
+        "我们深知一人公司的挑战与机遇，致力于通过AI工具、课程和工作流，帮助创业者提升效率、降低成本、实现增长"
+      ]
     },
     "mission": {
       "type": "object",
-      "title": "使命",
+      "title": "mission",
       "properties": {
         "title": {
           "type": "string",
-          "title": "标题",
-          "ui": {"widget": "input", "width": "100%"}
+          "title": "title",
+          "default": "使命"
         },
         "description": {
           "type": "string",
-          "title": "描述",
-          "ui": {"widget": "textarea", "rows": 2, "width": "100%"}
+          "title": "description",
+          "default": "让每一个创业者都能用上AI，实现业务自动化增长"
         }
+      },
+      "default": {
+        "title": "使命",
+        "description": "让每一个创业者都能用上AI，实现业务自动化增长"
       }
     },
     "vision": {
       "type": "object",
-      "title": "愿景",
+      "title": "vision",
       "properties": {
         "title": {
           "type": "string",
-          "title": "标题",
-          "ui": {"widget": "input", "width": "100%"}
+          "title": "title",
+          "default": "愿景"
         },
         "description": {
           "type": "string",
-          "title": "描述",
-          "ui": {"widget": "textarea", "rows": 2, "width": "100%"}
+          "title": "description",
+          "default": "成为最受信赖的AI一人公司服务平台"
         }
+      },
+      "default": {
+        "title": "愿景",
+        "description": "成为最受信赖的AI一人公司服务平台"
       }
     },
     "values": {
       "type": "object",
-      "title": "价值观",
+      "title": "values",
       "properties": {
         "title": {
           "type": "string",
-          "title": "标题",
-          "ui": {"widget": "input", "width": "100%"}
+          "title": "title",
+          "default": "价值观"
         },
         "description": {
           "type": "string",
-          "title": "描述",
-          "ui": {"widget": "textarea", "rows": 2, "width": "100%"}
+          "title": "description",
+          "default": "客户第一、持续创新、简单可信赖"
         }
+      },
+      "default": {
+        "title": "价值观",
+        "description": "客户第一、持续创新、简单可信赖"
       }
     },
     "stats": {
       "type": "array",
-      "title": "统计数据",
+      "title": "stats",
       "items": {
         "type": "object",
+        "title": "",
         "properties": {
           "value": {
             "type": "string",
-            "title": "数值",
-            "ui": {"widget": "input", "width": "100%"}
+            "title": "value",
+            "default": "1000+"
           },
           "label": {
             "type": "string",
-            "title": "标签",
-            "ui": {"widget": "input", "width": "100%"}
+            "title": "label",
+            "default": "AI工具"
           }
+        },
+        "default": {
+          "value": "1000+",
+          "label": "AI工具"
         }
       },
-      "ui": {"widget": "array", "itemTitle": "统计项", "width": "100%"}
+      "default": [
+        {
+          "value": "1000+",
+          "label": "AI工具"
+        },
+        {
+          "value": "10万+",
+          "label": "服务用户"
+        },
+        {
+          "value": "99%",
+          "label": "满意度"
+        }
+      ]
     }
   },
-  "ui": {
-    "layout": "vertical",
-    "labelAlign": "left"
+  "default": {
+    "sectionTag": "关于我们",
+    "title": {
+      "main": "关于",
+      "highlight": "创客AI"
+    },
+    "description": [
+      "创客AI专注于为个人创业者提供AI赋能服务",
+      "我们深知一人公司的挑战与机遇，致力于通过AI工具、课程和工作流，帮助创业者提升效率、降低成本、实现增长"
+    ],
+    "mission": {
+      "title": "使命",
+      "description": "让每一个创业者都能用上AI，实现业务自动化增长"
+    },
+    "vision": {
+      "title": "愿景",
+      "description": "成为最受信赖的AI一人公司服务平台"
+    },
+    "values": {
+      "title": "价值观",
+      "description": "客户第一、持续创新、简单可信赖"
+    },
+    "stats": [
+      {
+        "value": "1000+",
+        "label": "AI工具"
+      },
+      {
+        "value": "10万+",
+        "label": "服务用户"
+      },
+      {
+        "value": "99%",
+        "label": "满意度"
+      }
+    ]
   }
 }

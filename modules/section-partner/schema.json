@@ -1,36 +1,112 @@
 {
-  "title": "合作伙伴配置",
-  "description": "配置首页合作伙伴区域的内容",
   "type": "object",
+  "title": "",
   "properties": {
     "title": {
       "type": "string",
-      "title": "区块标题",
-      "ui": {"widget": "input", "width": "100%"}
+      "title": "title",
+      "default": "合作伙伴"
+    },
+    "description": {
+      "type": "string",
+      "title": "description",
+      "default": "与行业领先的企业和机构合作，为用户提供更好的服务"
     },
     "items": {
       "type": "array",
-      "title": "合作伙伴列表",
+      "title": "items",
       "items": {
         "type": "object",
+        "title": "",
         "properties": {
           "src": {
             "type": "string",
-            "title": "图片地址",
-            "ui": {"widget": "input", "width": "100%"}
+            "title": "src",
+            "default": "/partner/partner_01.png"
           },
           "alt": {
             "type": "string",
-            "title": "图片描述",
-            "ui": {"widget": "input", "width": "100%"}
+            "title": "alt",
+            "default": "合作伙伴1"
           }
+        },
+        "default": {
+          "src": "/partner/partner_01.png",
+          "alt": "合作伙伴1"
         }
       },
-      "ui": {"widget": "array", "itemTitle": "合作伙伴", "width": "100%"}
+      "default": [
+        {
+          "src": "/partner/partner_01.png",
+          "alt": "合作伙伴1"
+        },
+        {
+          "src": "/partner/partner_02.png",
+          "alt": "合作伙伴2"
+        },
+        {
+          "src": "/partner/partner_03.png",
+          "alt": "合作伙伴3"
+        },
+        {
+          "src": "/partner/partner_04.png",
+          "alt": "合作伙伴4"
+        },
+        {
+          "src": "/partner/partner_05.png",
+          "alt": "合作伙伴5"
+        },
+        {
+          "src": "/partner/partner_06.png",
+          "alt": "合作伙伴6"
+        },
+        {
+          "src": "/partner/partner_07.png",
+          "alt": "合作伙伴7"
+        },
+        {
+          "src": "/partner/partner_08.png",
+          "alt": "合作伙伴8"
+        }
+      ]
     }
   },
-  "ui": {
-    "layout": "vertical",
-    "labelAlign": "left"
+  "default": {
+    "title": "合作伙伴",
+    "description": "与行业领先的企业和机构合作，为用户提供更好的服务",
+    "items": [
+      {
+        "src": "/partner/partner_01.png",
+        "alt": "合作伙伴1"
+      },
+      {
+        "src": "/partner/partner_02.png",
+        "alt": "合作伙伴2"
+      },
+      {
+        "src": "/partner/partner_03.png",
+        "alt": "合作伙伴3"
+      },
+      {
+        "src": "/partner/partner_04.png",
+        "alt": "合作伙伴4"
+      },
+      {
+        "src": "/partner/partner_05.png",
+        "alt": "合作伙伴5"
+      },
+      {
+        "src": "/partner/partner_06.png",
+        "alt": "合作伙伴6"
+      },
+      {
+        "src": "/partner/partner_07.png",
+        "alt": "合作伙伴7"
+      },
+      {
+        "src": "/partner/partner_08.png",
+        "alt": "合作伙伴8"
+      }
+    ]
   }
 }
