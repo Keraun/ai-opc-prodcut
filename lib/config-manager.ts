@@ -106,6 +106,22 @@ export function writeConfig(configType: string, data: any): void {
   fs.writeFileSync(runtimePath, JSON.stringify(data, null, 2), "utf-8")
 }
 
+export function deleteConfig(configType: string): boolean {
+  try {
+    const runtimePath = getRuntimePath(configType)
+    
+    if (fs.existsSync(runtimePath)) {
+      fs.unlinkSync(runtimePath)
+      return true
+    }
+    
+    return false
+  } catch (error) {
+    console.error(`Error deleting config ${configType}:`, error)
+    return false
+  }
+}
+
 export function readTemplate(configType: string): any {
   const templatePath = getTemplatePath(configType)
   

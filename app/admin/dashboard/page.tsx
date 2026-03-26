@@ -18,7 +18,9 @@ import {
   Header,
   AccountInfo,
   ArticlesManagement,
-  ConfigFormEditor
+  ConfigFormEditor,
+  PageManagement,
+  PageEditor
 } from "./components"
 
 interface ThemeColors {
@@ -179,6 +181,7 @@ export default function AdminDashboardPage() {
   const [showEditDiff, setShowEditDiff] = useState(false)
   const [versionInfos, setVersionInfos] = useState<Record<string, any>>({})
   const [activeMenu, setActiveMenu] = useState('accountInfo')
+  const [editingPageId, setEditingPageId] = useState<string | null>(null)
 
   useEffect(() => {
     if (typeof window !== 'undefined') {
@@ -904,6 +907,19 @@ export default function AdminDashboardPage() {
                 currentUser={currentUser}
                 onChangePassword={() => setShowChangePassword(true)}
               />
+            )}
+
+            {activeMenu === 'pages' && (
+              editingPageId ? (
+                <PageEditor
+                  pageId={editingPageId}
+                  onBack={() => setEditingPageId(null)}
+                />
+              ) : (
+                <PageManagement
+                  onEditPage={(pageId) => setEditingPageId(pageId)}
+                />
+              )
             )}
 
             {activeMenu === 'site' && (
