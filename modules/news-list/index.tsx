@@ -1,51 +1,19 @@
-"use client"
-
-import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import type { ModuleProps } from '@/modules/types'
 import type { NewsListData, Article } from './types'
 import styles from './index.module.css'
 
 export function NewsListModule({ data }: ModuleProps) {
-  const [articles, setArticles] = useState<Article[]>([])
-  const [loading, setLoading] = useState(true)
-  
   const config: NewsListData = (data as NewsListData) || {
     title: '资讯中心',
     subtitle: '最新行业动态、深度分析与实战案例',
     showDate: true,
     showSummary: true,
-    itemsPerPage: 10
+    itemsPerPage: 10,
+    articles: []
   }
 
-  useEffect(() => {
-    const fetchArticles = async () => {
-      try {
-        const response = await fetch('/api/articles')
-        if (response.ok) {
-          const data = await response.json()
-          const publishedArticles = data
-            .filter((article: any) => article.status === 'published')
-            .sort((a: any, b: any) => new Date(b.date).getTime() - new Date(a.date).getTime())
-          setArticles(publishedArticles)
-        }
-      } catch (error) {
-        console.error('Failed to fetch articles:', error)
-      } finally {
-        setLoading(false)
-      }
-    }
-
-    fetchArticles()
-  }, [])
-
-  if (loading) {
-    return (
-      <div className={styles.loading}>
-        <div className={styles.loadingText}>加载中...</div>
-      </div>
-    )
-  }
+  const { articles = [] } = config
 
   return (
     <div className={styles.newsList}>

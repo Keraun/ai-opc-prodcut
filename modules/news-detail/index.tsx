@@ -1,83 +1,27 @@
-"use client"
-
-import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import type { ModuleProps } from '@/modules/types'
 import type { NewsDetailData } from './types'
 import styles from './index.module.css'
 
 export function NewsDetailModule({ data }: ModuleProps) {
-  const [article, setArticle] = useState<any>(null)
-  const [relatedArticles, setRelatedArticles] = useState<any[]>([])
-  const [loading, setLoading] = useState(true)
-  const [error, setError] = useState<string | null>(null)
-  
   const config: NewsDetailData = (data as NewsDetailData) || {
     showAuthor: true,
     showDate: true,
     showRelated: true,
     relatedCount: 3,
     showShare: true,
-    showComments: false
+    showComments: false,
+    article: null,
+    relatedArticles: []
   }
 
-  useEffect(() => {
-    const fetchArticle = async () => {
-      try {
-        // 从 URL 获取 slug
-        const pathname = window.location.pathname
-        const slug = pathname.split('/').pop()
-        
-        if (!slug) {
-          throw new Error('Article slug not found')
-        }
+  const { article, relatedArticles } = config
 
-        const response = await fetch('/api/articles')
-        if (response.ok) {
-          const articles = await response.json()
-          const foundArticle = articles.find((a: any) => a.slug === slug)
-          
-          if (foundArticle) {
-            setArticle(foundArticle)
-            
-            // 获取相关文章
-            if (config.showRelated) {
-              const related = articles
-                .filter((a: any) => a.id !== foundArticle.id && a.status === 'published')
-                .sort((a: any, b: any) => new Date(b.date).getTime() - new Date(a.date).getTime())
-                .slice(0, config.relatedCount)
-              setRelatedArticles(related)
-            }
-          } else {
-            throw new Error('Article not found')
-          }
-        } else {
-          throw new Error('Failed to fetch articles')
-        }
-      } catch (err) {
-        setError(err instanceof Error ? err.message : 'Failed to load article')
-        console.error('Failed to fetch article:', err)
-      } finally {
-        setLoading(false)
-      }
-    }
-
-    fetchArticle()
-  }, [config.showRelated, config.relatedCount])
-
-  if (loading) {
-    return (
-      <div className={styles.loading}>
-        <div className={styles.loadingText}>加载中...</div>
-      </div>
-    )
-  }
-
-  if (error || !article) {
+  if (!article) {
     return (
       <div className={styles.error}>
         <div className={styles.errorText}>
-          {error || '文章不存在'}
+          文章不存在
         </div>
       </div>
     )
