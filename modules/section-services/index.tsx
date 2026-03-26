@@ -1,5 +1,3 @@
-"use client"
-
 import { Card } from "@arco-design/web-react"
 import {
   IconBulb,

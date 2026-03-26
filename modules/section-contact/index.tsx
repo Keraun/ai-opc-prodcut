@@ -1,9 +1,5 @@
-"use client"
-
-import { useState } from "react"
-import { Card, Form, Input, Button, Message, Radio } from "@arco-design/web-react"
+import { Card, Form, Input, Button, Radio } from "@arco-design/web-react"
 import { IconSend } from "@arco-design/web-react/icon"
-import { useTheme } from "@/components/theme-provider"
 import type { ModuleProps } from "@/modules/types"
 import type { ContactData } from "./types"
 import styles from "./index.module.css"
@@ -19,39 +15,10 @@ const contactPreferences = [
 ]
 
 export function ContactModule({ data }: ModuleProps) {
-  const [form] = Form.useForm()
-  const [loading, setLoading] = useState(false)
-  const { themeConfig } = useTheme()
-
   const config: ContactData = (data as ContactData) || {}
 
-  const primaryColor = themeConfig?.colors?.primary || "#1e40af"
-  const accentColor = themeConfig?.colors?.accent || "#06b6d4"
-
-  const handleSubmit = async (values: Record<string, unknown>) => {
-    setLoading(true)
-    try {
-      const response = await fetch('/api/contact', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(values)
-      })
-
-      const result = await response.json()
-      if (result.success) {
-        Message.success(result.message)
-        form.resetFields()
-      } else {
-        Message.error(result.message)
-      }
-    } catch (error) {
-      Message.error("提交留言失败，请稍后重试")
-    } finally {
-      setLoading(false)
-    }
-  }
+  const primaryColor = "#1e40af" // 默认主色
+  const accentColor = "#06b6d4" // 默认强调色
 
   return (
     <section id="contact" className={styles.section}>
@@ -81,86 +48,106 @@ export function ContactModule({ data }: ModuleProps) {
 
         <Card className={styles.card}>
           <div className={styles.cardContent}>
-            <Form
-              form={form}
-              layout="vertical"
-              onSubmit={handleSubmit}
+            <form
               className={styles.form}
+              onSubmit={async (e) => {
+                e.preventDefault()
+                const formData = new FormData(e.currentTarget)
+                const values = Object.fromEntries(formData)
+                
+                try {
+                  const response = await fetch('/api/contact', {
+                    method: 'POST',
+                    headers: {
+                      'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(values)
+                  })
+
+                  const result = await response.json()
+                  if (result.success) {
+                    alert(result.message)
+                    e.currentTarget.reset()
+                  } else {
+                    alert(result.message)
+                  }
+                } catch (error) {
+                  alert("提交留言失败，请稍后重试")
+                }
+              }}
             >
               <div className={styles.formGrid}>
-                <FormItem
-                  label="姓名"
-                  field="name"
-                  rules={[{ required: true, message: '请输入姓名' }]}
-                >
-                  <Input placeholder="请输入您的姓名" />
-                </FormItem>
+                <div className={styles.formItem}>
+                  <label className={styles.formLabel}>姓名 *</label>
+                  <Input
+                    name="name"
+                    placeholder="请输入您的姓名"
+                    className={styles.formInput}
+                  />
+                </div>
 
-                <FormItem
-                  label="电话"
-                  field="phone"
-                  rules={[{ required: true, message: '请输入电话' }]}
-                >
-                  <Input placeholder="请输入您的电话号码" />
-                </FormItem>
+                <div className={styles.formItem}>
+                  <label className={styles.formLabel}>电话 *</label>
+                  <Input
+                    name="phone"
+                    placeholder="请输入您的电话号码"
+                    className={styles.formInput}
+                  />
+                </div>
               </div>
 
-              <FormItem
-                label="邮箱"
-                field="email"
-                rules={[
-                  { required: true, message: '请输入邮箱' },
-                  { type: 'email', message: '请输入有效的邮箱地址' }
-                ]}
-              >
-                <Input placeholder="请输入您的邮箱地址" />
-              </FormItem>
+              <div className={styles.formItem}>
+                <label className={styles.formLabel}>邮箱 *</label>
+                <Input
+                  name="email"
+                  type="email"
+                  placeholder="请输入您的邮箱地址"
+                  className={styles.formInput}
+                />
+              </div>
 
-              <FormItem
-                label="公司名称"
-                field="company"
-              >
-                <Input placeholder="请输入您的公司名称（选填）" />
-              </FormItem>
+              <div className={styles.formItem}>
+                <label className={styles.formLabel}>公司名称</label>
+                <Input
+                  name="company"
+                  placeholder="请输入您的公司名称（选填）"
+                  className={styles.formInput}
+                />
+              </div>
 
-              <FormItem
-                label="偏好联系方式"
-                field="contactPreference"
-                initialValue="wechat"
-              >
-                <RadioGroup>
+              <div className={styles.formItem}>
+                <label className={styles.formLabel}>偏好联系方式</label>
+                <RadioGroup name="contactPreference">
                   {contactPreferences.map((pref) => (
                     <Radio key={pref.value} value={pref.value}>
                       {pref.label}
                     </Radio>
                   ))}
                 </RadioGroup>
-              </FormItem>
+              </div>
 
-              <FormItem
-                label="留言"
-                field="message"
-                rules={[{ required: true, message: '请输入留言内容' }]}
-              >
+              <div className={styles.formItem}>
+                <label className={styles.formLabel}>留言 *</label>
                 <TextArea
+                  name="message"
                   placeholder="请简单描述您的需求或问题"
                   autoSize={{ minRows: 4, maxRows: 6 }}
+                  className={styles.formTextArea}
                 />
-              </FormItem>
+              </div>
 
-              <FormItem>
+              <div className={styles.formItem}>
                 <Button
                   type="primary"
                   htmlType="submit"
-                  loading={loading}
                   className={styles.submitButton}
                   style={{ backgroundColor: primaryColor }}
                 >
                   <IconSend style={{ marginRight: '0.5rem' }} />
                   提交留言
                 </Button>
-              </FormItem>
-            </Form>
+              </div>
+            </form>
           </div>
         </Card>
       </div>

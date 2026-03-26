@@ -1,5 +1,3 @@
-"use client"
-
 import { Card, Tag } from "@arco-design/web-react"
 import {
   IconApps,
@@ -8,7 +6,6 @@ import {
   IconCustomerService,
   IconArrowRight,
 } from "@arco-design/web-react/icon"
-import { useTheme } from "@/components/theme-provider"
 import type { ModuleProps } from "@/modules/types"
 import type { ProductsData } from "./types"
 import styles from "./index.module.css"
@@ -21,7 +18,6 @@ const iconMap: Record<string, any> = {
 }
 
 export function ProductsModule({ data }: ModuleProps) {
-  const { themeConfig } = useTheme()
   const config: ProductsData = (data as ProductsData) || {}
 
   const items = config.items || []
@@ -30,8 +26,8 @@ export function ProductsModule({ data }: ModuleProps) {
     icon: product.icon ? iconMap[product.icon] : null,
   }))
 
-  const primaryColor = themeConfig?.colors?.primary || "#1e40af"
-  const accentColor = themeConfig?.colors?.accent || "#06b6d4"
+  const primaryColor = "#1e40af" // 默认主色
+  const accentColor = "#06b6d4" // 默认强调色
 
   return (
     <section id="products" className={styles.section}>

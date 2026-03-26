@@ -1,5 +1,3 @@
-"use client"
-
 import { IconStar, IconCompass, IconHeart, IconThunderbolt, IconUser, IconCheckCircle } from "@arco-design/web-react/icon"
 import type { ModuleProps } from "@/modules/types"
 import type { AboutData } from "./types"

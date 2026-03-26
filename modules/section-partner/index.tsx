@@ -1,5 +1,3 @@
-"use client"
-
 import Image from 'next/image'
 import type { ModuleProps } from "@/modules/types"
 import type { PartnerData, PartnerItem } from "./types"

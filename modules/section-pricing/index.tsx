@@ -1,20 +1,13 @@
-"use client"
-
-import { Button, Card, Modal } from "@arco-design/web-react"
+import { Button, Card } from "@arco-design/web-react"
 import { IconCheck, IconArrowRight } from "@arco-design/web-react/icon"
-import { useTheme } from "@/components/theme-provider"
-import { useState } from "react"
 import type { ModuleProps } from "@/modules/types"
 import type { PricingData, PricingFeature } from "./types"
 import styles from "./index.module.css"
 
 export function PricingModule({ data }: ModuleProps) {
-  const { themeConfig } = useTheme()
   const config: PricingData = (data as PricingData) || {}
 
-  const [qrModalVisible, setQrModalVisible] = useState(false)
-
-  const primaryColor = themeConfig?.colors?.primary || "#1e40af"
+  const primaryColor = "#1e40af" // 默认主色
 
   const defaultPlans: PricingFeature[] = [
     {
@@ -62,14 +55,6 @@ export function PricingModule({ data }: ModuleProps) {
   ]
 
   const pricingPlans: PricingFeature[] = config?.plans || defaultPlans
-
-  const handleButtonClick = (plan: PricingFeature) => {
-    if (plan.link) {
-      window.location.href = plan.link
-    } else {
-      setQrModalVisible(true)
-    }
-  }
 
   return (
     <section id="pricing" className={styles.section}>
@@ -120,38 +105,32 @@ export function PricingModule({ data }: ModuleProps) {
                   ))}
                 </ul>
 
-                <Button
-                  type={plan.isPopular ? "primary" : "secondary"}
-                  className={`${styles.button} ${plan.isPopular ? styles.buttonPrimary : styles.buttonSecondary}`}
-                  style={plan.isPopular ? { backgroundColor: primaryColor } : {}}
-                  onClick={() => handleButtonClick(plan)}
-                >
-                  {plan.buttonText}
-                  <IconArrowRight style={{ marginLeft: '0.5rem' }} />
-                </Button>
+                {plan.link ? (
+                  <a href={plan.link} className={styles.buttonLink}>
+                    <Button
+                      type={plan.isPopular ? "primary" : "secondary"}
+                      className={`${styles.button} ${plan.isPopular ? styles.buttonPrimary : styles.buttonSecondary}`}
+                      style={plan.isPopular ? { backgroundColor: primaryColor } : {}}
+                    >
+                      {plan.buttonText}
+                      <IconArrowRight style={{ marginLeft: '0.5rem' }} />
+                    </Button>
+                  </a>
+                ) : (
+                  <button
+                    className={`${styles.button} ${plan.isPopular ? styles.buttonPrimary : styles.buttonSecondary}`}
+                    style={plan.isPopular ? { backgroundColor: primaryColor, color: 'white', border: 'none', padding: '0.75rem 1.5rem', borderRadius: '0.5rem', cursor: 'pointer' } : {}}
+                    onClick={() => alert('请联系客服咨询企业版详情')}
+                  >
+                    {plan.buttonText}
+                    <IconArrowRight style={{ marginLeft: '0.5rem' }} />
+                  </button>
+                )}
               </div>
             </Card>
           ))}
         </div>
       </div>
-
-      <Modal
-        title="扫码咨询"
-        visible={qrModalVisible}
-        onCancel={() => setQrModalVisible(false)}
-        footer={null}
-      >
-        <div className={styles.qrCodeContainer}>
-          <img
-            src="/wechat-qr.png"
-            alt="微信二维码"
-            className={styles.qrCodeImage}
-          />
-          <p className={styles.qrCodeText}>
-            扫描二维码添加微信咨询
-          </p>
-        </div>
-      </Modal>
     </section>
   )
 }

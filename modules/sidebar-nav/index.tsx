@@ -1,9 +1,4 @@
-"use client"
-
-import { useState, useEffect } from "react"
 import { IconHome, IconThunderbolt, IconUserGroup, IconPhone, IconGift, IconStar } from "@arco-design/web-react/icon"
-import { useTheme } from "@/components/theme-provider"
-import { fetchConfig } from "@/config/client"
 import type { ModuleProps } from "@/modules/types"
 import type { SidebarNavData } from "./types"
 import styles from "./index.module.css"
@@ -28,96 +23,40 @@ const labelMap: Record<string, string> = {
   contact: "联系我们",
 }
 
+// 默认导航项
+const defaultSidebarItems = [
+  { id: 'hero', label: '介绍', icon: IconHome, href: '#hero' },
+  { id: 'products', label: '产品', icon: IconGift, href: '#products' },
+  { id: 'services', label: '服务', icon: IconThunderbolt, href: '#services' },
+  { id: 'pricing', label: '价格', icon: IconGift, href: '#pricing' },
+  { id: 'about', label: '关于我们', icon: IconUserGroup, href: '#about' },
+  { id: 'contact', label: '联系我们', icon: IconPhone, href: '#contact' },
+  { id: 'partner', label: '合作伙伴', icon: IconStar, href: '#partner' },
+]
+
 export function SidebarNavModule({ data }: ModuleProps) {
-  const [activeSection, setActiveSection] = useState("hero")
-  const [sidebarItems, setSidebarItems] = useState<any[]>([])
-  const { themeConfig } = useTheme()
-  
   const config: SidebarNavData = (data as SidebarNavData) || {}
-  const primaryColor = themeConfig?.colors?.primary || "#1e40af"
+  const primaryColor = "#1e40af" // 默认主色
 
-  useEffect(() => {
-    const loadConfig = async () => {
-      try {
-        const config = await fetchConfig()
-        if (config.homeOrder?.sections) {
-          const items = config.homeOrder.sections
-            .filter((section: any) => section.visible !== false && section.sidebar !== false)
-            .sort((a: any, b: any) => (a.order || 0) - (b.order || 0))
-            .map((section: any) => ({
-              id: section.id,
-              label: labelMap[section.id] || section.name || section.id,
-              icon: iconMap[section.id] || IconStar,
-              href: `#${section.id}`
-            }))
-          setSidebarItems(items)
-        }
-      } catch (error) {
-        console.error('Failed to load sidebar config:', error)
-      }
-    }
-
-    loadConfig()
-  }, [])
-
-  useEffect(() => {
-    const handleScroll = () => {
-      if (sidebarItems.length === 0) return
-      
-      const sections = sidebarItems.map((item) => item.href)
-      const scrollPosition = window.scrollY + 100
-
-      for (let i = sections.length - 1; i >= 0; i--) {
-        const section = document.querySelector(sections[i]) as HTMLElement
-        if (section) {
-          const sectionTop = section.offsetTop
-          if (scrollPosition >= sectionTop) {
-            setActiveSection(sidebarItems[i].id)
-            break
-          }
-        }
-      }
-    }
-
-    window.addEventListener("scroll", handleScroll)
-    handleScroll()
-    return () => window.removeEventListener("scroll", handleScroll)
-  }, [sidebarItems])
-
-  const scrollToSection = (href: string) => {
-    const element = document.querySelector(href)
-    if (element) {
-      element.scrollIntoView({ behavior: "smooth" })
-    }
-  }
-
-  if (sidebarItems.length === 0) {
-    return null
-  }
+  // 使用默认导航项，服务端渲染
+  const sidebarItems = defaultSidebarItems
 
   return (
     <div className={styles.sidebar}>
       <nav className={styles.navList}>
         {sidebarItems.map((item) => {
           const Icon = item.icon
-          const isActive = activeSection === item.id
 
           return (
-            <button
+            <a
               key={item.id}
-              onClick={() => scrollToSection(item.href)}
-              className={`${styles.navItem} ${isActive ? styles.navItemActive : ''}`}
+              href={item.href}
+              className={styles.navItem}
               title={item.label}
             >
-              <Icon className={styles.navIcon} style={isActive ? { color: primaryColor } : {}} />
+              <Icon className={styles.navIcon} />
               <span className={styles.tooltip}>{item.label}</span>
-              {isActive && (
-                <div 
-                  className={styles.activeIndicator}
-                  style={{ backgroundColor: primaryColor }}
-                />
-              )}
-            </button>
+            </a>
           )
         })}
       </nav>

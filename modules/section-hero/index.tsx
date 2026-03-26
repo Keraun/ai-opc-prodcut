@@ -1,20 +1,16 @@
-"use client"
-
 import { Button } from "@arco-design/web-react"
 import { IconArrowRight, IconCommand, IconStar, IconThunderbolt } from "@arco-design/web-react/icon"
 import Link from "next/link"
 import { Logo } from "@/components/common/logo"
-import { useTheme } from "@/components/theme-provider"
 import type { ModuleProps } from "@/modules/types"
 import type { HeroData } from "./types"
 import styles from "./index.module.css"
 
 export function HeroModule({ data }: ModuleProps) {
-  const { themeConfig } = useTheme()
   const config: HeroData = (data as HeroData) || {}
 
-  const primaryColor = themeConfig?.colors?.primary || "#1e40af"
-  const accentColor = themeConfig?.colors?.accent || "#06b6d4"
+  const primaryColor = "#1e40af" // 默认主色
+  const accentColor = "#06b6d4" // 默认强调色
 
   const layoutType = config.layout || 'layout1'
 

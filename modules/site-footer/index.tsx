@@ -1,11 +1,23 @@
-"use client"
-
 import { IconLocation, IconPhone, IconEmail, IconSettings } from "@arco-design/web-react/icon"
 import { Logo } from "@/components/common/logo"
-import { siteConfig, footerConfig } from "@/config/client"
 import type { ModuleProps } from "@/modules/types"
 import type { FooterData } from "./types"
 import styles from "./index.module.css"
+
+// 默认配置
+const defaultSiteConfig = {
+  name: "AI 一人公司",
+  contact: {
+    address: "北京市朝阳区科技园区",
+    phone: "138-0013-8000",
+    email: "contact@ai-company.com"
+  },
+  icp: "京ICP备12345678号"
+}
+
+const defaultFooterConfig = {
+  description: "AI 一人公司，为个人创业者提供全方位的AI解决方案"
+}
 
 export function FooterModule({ data }: ModuleProps) {
   const config: FooterData = (data as FooterData) || {}
@@ -15,17 +27,17 @@ export function FooterModule({ data }: ModuleProps) {
     {
       icon: IconLocation,
       title: "公司地址",
-      content: config?.address || siteConfig.contact.address,
+      content: config?.address || defaultSiteConfig.contact.address,
     },
     {
       icon: IconPhone,
       title: "联系电话",
-      content: config?.phone || siteConfig.contact.phone,
+      content: config?.phone || defaultSiteConfig.contact.phone,
     },
     {
       icon: IconEmail,
       title: "电子邮箱",
-      content: config?.email || siteConfig.contact.email,
+      content: config?.email || defaultSiteConfig.contact.email,
     },
   ]
 
@@ -36,10 +48,10 @@ export function FooterModule({ data }: ModuleProps) {
           <div className={styles.companyInfo}>
             <div className={styles.logoSection}>
               <Logo className={styles.logo} />
-              <span className={styles.logoText}>{siteConfig.name}</span>
+              <span className={styles.logoText}>{defaultSiteConfig.name}</span>
             </div>
             <p className={styles.description}>
-              {config?.description || footerConfig.description}
+              {config?.description || defaultFooterConfig.description}
             </p>
           </div>
 
@@ -87,10 +99,10 @@ export function FooterModule({ data }: ModuleProps) {
         <div className={styles.bottomSection}>
           <div className={styles.bottomContent}>
             <p className={styles.copyright}>
-              &copy; {currentYear} {siteConfig.name}. All rights reserved.
+              &copy; {currentYear} {defaultSiteConfig.name}. All rights reserved.
             </p>
             <p className={styles.icp}>
-              {siteConfig.icp}
+              {defaultSiteConfig.icp}
             </p>
             <a 
               href="/admin" 
