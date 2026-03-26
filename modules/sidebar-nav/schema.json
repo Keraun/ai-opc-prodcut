@@ -1,17 +1,14 @@
 {
-  "title": "侧边栏导航配置",
-  "description": "配置侧边栏导航",
   "type": "object",
+  "title": "Sidebar Navigation Configuration",
   "properties": {
     "visible": {
       "type": "boolean",
       "title": "是否显示",
-      "default": true,
-      "ui": {"widget": "switch", "width": "100%"}
+      "default": true
     }
   },
-  "ui": {
-    "layout": "vertical",
-    "labelAlign": "left"
+  "default": {
+    "visible": true
   }
 }

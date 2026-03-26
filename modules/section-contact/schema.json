@@ -1,49 +1,49 @@
 {
   "type": "object",
-  "title": "",
+  "title": "Contact Section Configuration",
   "properties": {
     "title": {
       "type": "string",
-      "title": "title",
+      "title": "标题",
       "default": "联系我们"
     },
     "description": {
       "type": "string",
-      "title": "description",
+      "title": "描述",
       "default": "有任何问题或需求，欢迎随时联系我们"
     },
     "sectionTag": {
       "type": "string",
-      "title": "sectionTag",
+      "title": "区块标签",
       "default": "联系我们"
     },
     "methods": {
       "type": "array",
-      "title": "methods",
+      "title": "联系方式列表",
       "items": {
         "type": "object",
-        "title": "",
         "properties": {
           "type": {
             "type": "string",
-            "title": "type",
+            "title": "联系方式类型",
+            "enum": ["email", "phone", "address", "wechat", "other"],
             "default": "email"
           },
           "value": {
             "type": "string",
-            "title": "value",
-            "default": "contact@example.com"
+            "title": "联系方式值",
+            "default": ""
           },
           "label": {
             "type": "string",
-            "title": "label",
-            "default": "邮箱"
+            "title": "标签",
+            "default": ""
           }
         },
         "default": {
           "type": "email",
-          "value": "contact@example.com",
-          "label": "邮箱"
+          "value": "",
+          "label": ""
         }
       },
       "default": [

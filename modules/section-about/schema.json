@@ -1,24 +1,24 @@
 {
   "type": "object",
-  "title": "",
+  "title": "About Section Configuration",
   "properties": {
     "sectionTag": {
       "type": "string",
-      "title": "sectionTag",
+      "title": "区块标签",
       "default": "关于我们"
     },
     "title": {
       "type": "object",
-      "title": "title",
+      "title": "标题配置",
       "properties": {
         "main": {
           "type": "string",
-          "title": "main",
+          "title": "主标题",
           "default": "关于"
         },
         "highlight": {
           "type": "string",
-          "title": "highlight",
+          "title": "高亮文本",
           "default": "创客AI"
         }
       },
@@ -29,7 +29,7 @@
     },
     "description": {
       "type": "array",
-      "title": "description",
+      "title": "描述列表",
       "items": {
         "type": "string"
       },
@@ -40,16 +40,16 @@
     },
     "mission": {
       "type": "object",
-      "title": "mission",
+      "title": "使命",
       "properties": {
         "title": {
           "type": "string",
-          "title": "title",
+          "title": "标题",
           "default": "使命"
         },
         "description": {
           "type": "string",
-          "title": "description",
+          "title": "描述",
           "default": "让每一个创业者都能用上AI，实现业务自动化增长"
         }
       },
@@ -60,16 +60,16 @@
     },
     "vision": {
       "type": "object",
-      "title": "vision",
+      "title": "愿景",
       "properties": {
         "title": {
           "type": "string",
-          "title": "title",
+          "title": "标题",
           "default": "愿景"
         },
         "description": {
           "type": "string",
-          "title": "description",
+          "title": "描述",
           "default": "成为最受信赖的AI一人公司服务平台"
         }
       },
@@ -80,16 +80,16 @@
     },
     "values": {
       "type": "object",
-      "title": "values",
+      "title": "价值观",
       "properties": {
         "title": {
           "type": "string",
-          "title": "title",
+          "title": "标题",
           "default": "价值观"
         },
         "description": {
           "type": "string",
-          "title": "description",
+          "title": "描述",
           "default": "客户第一、持续创新、简单可信赖"
         }
       },
@@ -100,40 +100,30 @@
     },
     "stats": {
       "type": "array",
-      "title": "stats",
+      "title": "统计数据",
       "items": {
         "type": "object",
-        "title": "",
         "properties": {
           "value": {
             "type": "string",
-            "title": "value",
-            "default": "1000+"
+            "title": "数值",
+            "default": ""
           },
           "label": {
             "type": "string",
-            "title": "label",
-            "default": "AI工具"
+            "title": "标签",
+            "default": ""
           }
         },
         "default": {
-          "value": "1000+",
-          "label": "AI工具"
+          "value": "",
+          "label": ""
         }
       },
       "default": [
-        {
-          "value": "1000+",
-          "label": "AI工具"
-        },
-        {
-          "value": "10万+",
-          "label": "服务用户"
-        },
-        {
-          "value": "99%",
-          "label": "满意度"
-        }
+        { "value": "1000+", "label": "AI工具" },
+        { "value": "10万+", "label": "服务用户" },
+        { "value": "99%", "label": "满意度" }
       ]
     }
   },
@@ -160,18 +150,9 @@
       "description": "客户第一、持续创新、简单可信赖"
     },
     "stats": [
-      {
-        "value": "1000+",
-        "label": "AI工具"
-      },
-      {
-        "value": "10万+",
-        "label": "服务用户"
-      },
-      {
-        "value": "99%",
-        "label": "满意度"
-      }
+      { "value": "1000+", "label": "AI工具" },
+      { "value": "10万+", "label": "服务用户" },
+      { "value": "99%", "label": "满意度" }
     ]
   }
 }

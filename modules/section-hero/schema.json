@@ -1,58 +1,65 @@
 {
   "type": "object",
-  "title": "",
+  "title": "Hero Section Configuration",
   "properties": {
     "layout": {
       "type": "string",
-      "title": "layout",
+      "title": "布局样式",
+      "enum": ["layout1", "layout2", "layout3"],
       "default": "layout1"
     },
     "badge": {
       "type": "string",
-      "title": "badge",
+      "title": "徽章文本",
       "default": "专注AI一人公司服务"
     },
     "title": {
       "type": "object",
-      "title": "title",
+      "title": "标题配置",
       "properties": {
         "main": {
           "type": "string",
-          "title": "main",
+          "title": "主标题",
           "default": "让AI成为你的"
         },
         "sub": {
           "type": "string",
-          "title": "sub",
+          "title": "副标题",
           "default": "超级员工"
+        },
+        "highlight": {
+          "type": "string",
+          "title": "高亮文本",
+          "default": ""
         }
       },
       "default": {
         "main": "让AI成为你的",
-        "sub": "超级员工"
+        "sub": "超级员工",
+        "highlight": ""
       }
     },
     "subtitle": {
       "type": "string",
-      "title": "subtitle",
+      "title": "副标题描述",
       "default": "为个人创业者提供AI工具、课程和工作流，助力一人公司实现10倍效率提升"
     },
     "buttons": {
       "type": "object",
-      "title": "buttons",
+      "title": "按钮配置",
       "properties": {
         "primary": {
           "type": "object",
-          "title": "primary",
+          "title": "主要按钮",
           "properties": {
             "text": {
               "type": "string",
-              "title": "text",
+              "title": "按钮文本",
               "default": "开始探索"
             },
             "href": {
               "type": "string",
-              "title": "href",
+              "title": "链接地址",
               "default": "/products"
             }
           },
@@ -63,16 +70,16 @@
         },
         "secondary": {
           "type": "object",
-          "title": "secondary",
+          "title": "次要按钮",
           "properties": {
             "text": {
               "type": "string",
-              "title": "text",
+              "title": "按钮文本",
               "default": "了解更多"
             },
             "href": {
               "type": "string",
-              "title": "href",
+              "title": "链接地址",
               "default": "/about"
             }
           },
@@ -95,16 +102,11 @@
     },
     "featurePills": {
       "type": "array",
-      "title": "featurePills",
+      "title": "特性标签",
       "items": {
         "type": "string"
       },
-      "default": [
-        "AI工具站",
-        "GEO课程",
-        "工作流定制",
-        "一人公司"
-      ]
+      "default": ["AI工具站", "GEO课程", "工作流定制", "一人公司"]
     }
   },
   "default": {
@@ -112,7 +114,8 @@
     "badge": "专注AI一人公司服务",
     "title": {
       "main": "让AI成为你的",
-      "sub": "超级员工"
+      "sub": "超级员工",
+      "highlight": ""
     },
     "subtitle": "为个人创业者提供AI工具、课程和工作流，助力一人公司实现10倍效率提升",
     "buttons": {
@@ -125,11 +128,6 @@
         "href": "/about"
       }
     },
-    "featurePills": [
-      "AI工具站",
-      "GEO课程",
-      "工作流定制",
-      "一人公司"
-    ]
+    "featurePills": ["AI工具站", "GEO课程", "工作流定制", "一人公司"]
   }
 }

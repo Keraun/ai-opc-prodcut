@@ -1,67 +1,166 @@
 {
-  "title": "价格配置",
-  "description": "配置首页价格区域的内容",
   "type": "object",
+  "title": "Pricing Section Configuration",
   "properties": {
     "title": {
       "type": "string",
-      "title": "区块标题",
-      "ui": {"widget": "input", "width": "100%"}
+      "title": "标题",
+      "default": "选择适合你的计划"
     },
     "description": {
       "type": "string",
-      "title": "区块描述",
-      "ui": {"widget": "textarea", "rows": 2, "width": "100%"}
+      "title": "描述",
+      "default": "无论你是个人创业者还是企业用户，我们都有适合你的AI解决方案"
     },
     "plans": {
       "type": "array",
-      "title": "价格方案",
+      "title": "价格计划列表",
       "items": {
         "type": "object",
         "properties": {
           "title": {
             "type": "string",
-            "title": "方案名称",
-            "ui": {"widget": "input", "width": "100%"}
+            "title": "计划标题",
+            "default": ""
           },
           "price": {
             "type": "string",
             "title": "价格",
-            "ui": {"widget": "input", "width": "100%"}
+            "default": ""
           },
           "description": {
             "type": "string",
-            "title": "方案描述",
-            "ui": {"widget": "textarea", "rows": 2, "width": "100%"}
+            "title": "计划描述",
+            "default": ""
           },
           "features": {
             "type": "array",
             "title": "功能列表",
-            "items": {"type": "string"},
-            "ui": {"widget": "tags", "placeholder": "输入功能后按回车添加", "width": "100%"}
+            "items": {
+              "type": "string"
+            },
+            "default": []
           },
           "buttonText": {
             "type": "string",
             "title": "按钮文本",
-            "ui": {"widget": "input", "width": "100%"}
+            "default": ""
           },
           "buttonLink": {
             "type": "string",
             "title": "按钮链接",
-            "ui": {"widget": "input", "width": "100%"}
+            "default": ""
           },
           "isPopular": {
             "type": "boolean",
-            "title": "是否推荐",
-            "ui": {"widget": "switch", "width": "100%"}
+            "title": "是否热门",
+            "default": false
           }
+        },
+        "default": {
+          "title": "",
+          "price": "",
+          "description": "",
+          "features": [],
+          "buttonText": "",
+          "buttonLink": "",
+          "isPopular": false
         }
       },
-      "ui": {"widget": "array", "itemTitle": "价格方案", "width": "100%"}
+      "default": [
+        {
+          "title": "免费版",
+          "price": "¥0",
+          "description": "适合个人用户和小型项目",
+          "features": [
+            "1000+ AI工具访问",
+            "基础工作流模板",
+            "社区支持",
+            "每月100次API调用"
+          ],
+          "buttonText": "开始免费使用",
+          "buttonLink": "/products"
+        },
+        {
+          "title": "专业版",
+          "price": "¥999",
+          "description": "适合专业用户和小型企业",
+          "features": [
+            "全部AI工具访问",
+            "高级工作流定制",
+            "优先技术支持",
+            "每月1000次API调用",
+            "AI GEO课程访问"
+          ],
+          "buttonText": "升级专业版",
+          "buttonLink": "/products",
+          "isPopular": true
+        },
+        {
+          "title": "企业版",
+          "price": "¥2999",
+          "description": "适合企业级用户和团队",
+          "features": [
+            "全部AI工具访问",
+            "企业级工作流定制",
+            "专属技术支持",
+            "无限制API调用",
+            "AI GEO课程访问",
+            "企业级安全保障"
+          ],
+          "buttonText": "联系销售",
+          "buttonLink": "/contact"
+        }
+      ]
     }
   },
-  "ui": {
-    "layout": "vertical",
-    "labelAlign": "left"
+  "default": {
+    "title": "选择适合你的计划",
+    "description": "无论你是个人创业者还是企业用户，我们都有适合你的AI解决方案",
+    "plans": [
+      {
+        "title": "免费版",
+        "price": "¥0",
+        "description": "适合个人用户和小型项目",
+        "features": [
+          "1000+ AI工具访问",
+          "基础工作流模板",
+          "社区支持",
+          "每月100次API调用"
+        ],
+        "buttonText": "开始免费使用",
+        "buttonLink": "/products"
+      },
+      {
+        "title": "专业版",
+        "price": "¥999",
+        "description": "适合专业用户和小型企业",
+        "features": [
+          "全部AI工具访问",
+          "高级工作流定制",
+          "优先技术支持",
+          "每月1000次API调用",
+          "AI GEO课程访问"
+        ],
+        "buttonText": "升级专业版",
+        "buttonLink": "/products",
+        "isPopular": true
+      },
+      {
+        "title": "企业版",
+        "price": "¥2999",
+        "description": "适合企业级用户和团队",
+        "features": [
+          "全部AI工具访问",
+          "企业级工作流定制",
+          "专属技术支持",
+          "无限制API调用",
+          "AI GEO课程访问",
+          "企业级安全保障"
+        ],
+        "buttonText": "联系销售",
+        "buttonLink": "/contact"
+      }
+    ]
   }
 }

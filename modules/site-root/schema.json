@@ -1,0 +1,155 @@
+{
+  "type": "object",
+  "title": "Site Root Configuration",
+  "properties": {
+    "name": {
+      "type": "string",
+      "title": "网站名称",
+      "default": "创客AI"
+    },
+    "description": {
+      "type": "string",
+      "title": "网站描述",
+      "default": "专注AI一人公司服务"
+    },
+    "url": {
+      "type": "string",
+      "title": "网站URL",
+      "default": "https://makerai.com"
+    },
+    "ogImage": {
+      "type": "string",
+      "title": "OG图片路径",
+      "default": "/og-image.png"
+    },
+    "links": {
+      "type": "object",
+      "title": "社交链接",
+      "properties": {
+        "email": {
+          "type": "string",
+          "title": "邮箱",
+          "default": "wuly93@163.com"
+        },
+        "wechat": {
+          "type": "string",
+          "title": "微信",
+          "default": "makerai_official"
+        },
+        "github": {
+          "type": "string",
+          "title": "GitHub",
+          "default": "https://github.com/makerai"
+        },
+        "twitter": {
+          "type": "string",
+          "title": "Twitter",
+          "default": "https://twitter.com/makerai"
+        }
+      },
+      "default": {
+        "email": "wuly93@163.com",
+        "wechat": "makerai_official",
+        "github": "https://github.com/makerai",
+        "twitter": "https://twitter.com/makerai"
+      }
+    },
+    "creator": {
+      "type": "object",
+      "title": "创建者信息",
+      "properties": {
+        "name": {
+          "type": "string",
+          "title": "创建者名称",
+          "default": "创客AI"
+        },
+        "url": {
+          "type": "string",
+          "title": "创建者URL",
+          "default": "https://makerai.com"
+        }
+      },
+      "default": {
+        "name": "创客AI",
+        "url": "https://makerai.com"
+      }
+    },
+    "contact": {
+      "type": "object",
+      "title": "联系信息",
+      "properties": {
+        "address": {
+          "type": "string",
+          "title": "地址",
+          "default": "浙江省杭州市西湖区三墩镇西园八路3号浙大森林"
+        },
+        "phone": {
+          "type": "string",
+          "title": "电话",
+          "default": "400-888-4889"
+        },
+        "email": {
+          "type": "string",
+          "title": "邮箱",
+          "default": "wuly93@163.com"
+        }
+      },
+      "default": {
+        "address": "浙江省杭州市西湖区三墩镇西园八路3号浙大森林",
+        "phone": "400-888-4889",
+        "email": "wuly93@163.com"
+      }
+    },
+    "support": {
+      "type": "object",
+      "title": "支持信息",
+      "properties": {
+        "customerServiceQRCode": {
+          "type": "string",
+          "title": "客服二维码路径",
+          "default": "/images/customer-service-qr.png"
+        },
+        "helpDocUrl": {
+          "type": "string",
+          "title": "帮助文档URL",
+          "default": "https://help.makerai.com"
+        }
+      },
+      "default": {
+        "customerServiceQRCode": "/images/customer-service-qr.png",
+        "helpDocUrl": "https://help.makerai.com"
+      }
+    },
+    "icp": {
+      "type": "string",
+      "title": "ICP备案号",
+      "default": "浙ICP备XXXXXXXX号"
+    }
+  },
+  "default": {
+    "name": "创客AI",
+    "description": "专注AI一人公司服务",
+    "url": "https://makerai.com",
+    "ogImage": "/og-image.png",
+    "links": {
+      "email": "wuly93@163.com",
+      "wechat": "makerai_official",
+      "github": "https://github.com/makerai",
+      "twitter": "https://twitter.com/makerai"
+    },
+    "creator": {
+      "name": "创客AI",
+      "url": "https://makerai.com"
+    },
+    "contact": {
+      "address": "浙江省杭州市西湖区三墩镇西园八路3号浙大森林",
+      "phone": "400-888-4889",
+      "email": "wuly93@163.com"
+    },
+    "support": {
+      "customerServiceQRCode": "/images/customer-service-qr.png",
+      "helpDocUrl": "https://help.makerai.com"
+    },
+    "icp": "浙ICP备XXXXXXXX号"
+  }
+}

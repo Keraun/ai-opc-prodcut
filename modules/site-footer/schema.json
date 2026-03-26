@@ -1,0 +1,50 @@
+{
+  "type": "object",
+  "title": "Footer Configuration",
+  "properties": {
+    "description": {
+      "type": "string",
+      "title": "描述",
+      "default": "专注AI一人公司服务，为企业提供智能化解决方案"
+    },
+    "address": {
+      "type": "string",
+      "title": "地址",
+      "default": "北京市朝阳区某某大厦"
+    },
+    "phone": {
+      "type": "string",
+      "title": "电话",
+      "default": "400-123-4567"
+    },
+    "email": {
+      "type": "string",
+      "title": "邮箱",
+      "default": "contact@example.com"
+    },
+    "wechatQrCode": {
+      "type": "string",
+      "title": "微信二维码路径",
+      "default": ""
+    },
+    "officialAccountQrCode": {
+      "type": "string",
+      "title": "公众号二维码路径",
+      "default": ""
+    },
+    "showAdminLink": {
+      "type": "boolean",
+      "title": "显示管理后台链接",
+      "default": true
+    }
+  },
+  "default": {
+    "description": "专注AI一人公司服务，为企业提供智能化解决方案",
+    "address": "北京市朝阳区某某大厦",
+    "phone": "400-123-4567",
+    "email": "contact@example.com",
+    "wechatQrCode": "",
+    "officialAccountQrCode": "",
+    "showAdminLink": true
+  }
+}

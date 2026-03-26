@@ -3,10 +3,10 @@ import { HeaderModule } from "./index"
 import schema from "./schema.json"
 import defaultData from "./default.json"
 
-export function registerHeaderModule() {
+export function registerSiteHeaderModule() {
   registerModule({
-    moduleName: "顶部导航",
-    moduleId: "header",
+    moduleName: "站点头部",
+    moduleId: "site-header",
     component: HeaderModule,
     schema,
     defaultData

@@ -16,9 +16,9 @@ export function loadInitialData(): Record<string, any> {
     .sort((a: any, b: any) => (a.order || 0) - (b.order || 0))
 
   const headerModule: ModuleData = {
-    moduleName: '顶部导航',
-    moduleId: 'header',
-    moduleInstanceId: `header-${Date.now()}`,
+    moduleName: '站点头部',
+    moduleId: 'site-header',
+    moduleInstanceId: `site-header-${Date.now()}`,
     data: configs.navigation || {}
   }
 
@@ -30,9 +30,9 @@ export function loadInitialData(): Record<string, any> {
   }
 
   const footerModule: ModuleData = {
-    moduleName: '页脚',
-    moduleId: 'footer',
-    moduleInstanceId: `footer-${Date.now()}`,
+    moduleName: '站点页脚',
+    moduleId: 'site-footer',
+    moduleInstanceId: `site-footer-${Date.now()}`,
     data: configs.footer || {}
   }
 
