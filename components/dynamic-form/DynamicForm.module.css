@@ -25,6 +25,18 @@
   margin-bottom: 0;
 }
 
+.fieldLabel {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.requiredMark {
+  color: #f53f3f;
+  margin-left: 2px;
+  font-weight: 500;
+}
+
 .tagsContainer {
   width: 100%;
 }
@@ -39,10 +51,70 @@
   margin: 0;
 }
 
+.arrayField {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.arrayItem {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  padding: 12px;
+  background-color: #f7f8fa;
+  border-radius: 4px;
+  border: 1px solid #e5e6eb;
+}
+
+.arrayObjectItem {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.arraySubField {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.arraySubLabel {
+  font-size: 13px;
+  font-weight: 500;
+  color: #4e5969;
+}
+
+.arrayItemDelete {
+  flex-shrink: 0;
+  margin-top: 4px;
+}
+
+.arrayAddButton {
+  border-style: dashed;
+}
+
 .formActions {
   display: flex;
   justify-content: flex-end;
   margin-top: 32px;
   padding-top: 24px;
   border-top: 1px solid #e5e7eb;
+}
+
+.loadingContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 48px;
+  gap: 16px;
+}
+
+.loadingText {
+  color: #86909c;
+  font-size: 14px;
+  margin: 0;
 }

@@ -72,6 +72,15 @@ interface Configs {
   account: any
   loginLogs: any
   theme: ThemeData
+  header: any
+  'sidebar-nav': any
+  'section-hero': any
+  'section-partner': any
+  'section-products': any
+  'section-services': any
+  'section-pricing': any
+  'section-about': any
+  'section-contact': any
 }
 
 export default function AdminDashboardPage() {
@@ -98,7 +107,16 @@ export default function AdminDashboardPage() {
     theme: {
       currentTheme: 'modern',
       themes: {}
-    }
+    },
+    header: {},
+    'sidebar-nav': {},
+    'section-hero': {},
+    'section-partner': {},
+    'section-products': {},
+    'section-services': {},
+    'section-pricing': {},
+    'section-about': {},
+    'section-contact': {}
   })
   const [originalConfigs, setOriginalConfigs] = useState<Configs>({
     site: {},
@@ -121,7 +139,16 @@ export default function AdminDashboardPage() {
     theme: {
       currentTheme: 'modern',
       themes: {}
-    }
+    },
+    header: {},
+    'sidebar-nav': {},
+    'section-hero': {},
+    'section-partner': {},
+    'section-products': {},
+    'section-services': {},
+    'section-pricing': {},
+    'section-about': {},
+    'section-contact': {}
   })
   const [loading, setLoading] = useState(false)
   const [editingConfig, setEditingConfig] = useState<string | null>(null)
@@ -894,17 +921,137 @@ export default function AdminDashboardPage() {
               />
             )}
 
-            {activeMenu === 'navigation' && (
+            {activeMenu === 'header' && (
               <ConfigFormEditor
-                configType="navigation"
-                title="导航配置"
-                description="配置网站顶部导航菜单"
-                configData={configs.navigation}
+                configType="header"
+                title="顶部导航配置"
+                description="配置网站顶部导航栏"
+                configData={configs.header || {}}
                 onSave={async (data) => {
-                  setConfigs(prev => ({ ...prev, navigation: data }))
-                  await handleSave('navigation')
+                  setConfigs(prev => ({ ...prev, header: data }))
+                  await handleSave('header')
                 }}
-                hasChanges={hasConfigChanges('navigation')}
+                hasChanges={hasConfigChanges('header')}
+                loading={loading}
+              />
+            )}
+
+            {activeMenu === 'sidebar-nav' && (
+              <ConfigFormEditor
+                configType="sidebar-nav"
+                title="侧边栏导航配置"
+                description="配置网站侧边栏导航"
+                configData={configs['sidebar-nav'] || {}}
+                onSave={async (data) => {
+                  setConfigs(prev => ({ ...prev, 'sidebar-nav': data }))
+                  await handleSave('sidebar-nav')
+                }}
+                hasChanges={hasConfigChanges('sidebar-nav')}
+                loading={loading}
+              />
+            )}
+
+            {activeMenu === 'section-hero' && (
+              <ConfigFormEditor
+                configType="section-hero"
+                title="Hero 区块配置"
+                description="配置首页 Hero 区块内容"
+                configData={configs['section-hero'] || configs.homeBanner?.hero || configs.homeBanner || {}}
+                onSave={async (data) => {
+                  setConfigs(prev => ({ ...prev, 'section-hero': data }))
+                  await handleSave('section-hero')
+                }}
+                hasChanges={hasConfigChanges('section-hero')}
+                loading={loading}
+              />
+            )}
+
+            {activeMenu === 'section-partner' && (
+              <ConfigFormEditor
+                configType="section-partner"
+                title="合作伙伴区块配置"
+                description="配置首页合作伙伴区块内容"
+                configData={configs['section-partner'] || configs.homePartners?.partners || configs.homePartners || {}}
+                onSave={async (data) => {
+                  setConfigs(prev => ({ ...prev, 'section-partner': data }))
+                  await handleSave('section-partner')
+                }}
+                hasChanges={hasConfigChanges('section-partner')}
+                loading={loading}
+              />
+            )}
+
+            {activeMenu === 'section-products' && (
+              <ConfigFormEditor
+                configType="section-products"
+                title="产品展示区块配置"
+                description="配置首页产品展示区块内容"
+                configData={configs['section-products'] || configs.homeProducts?.products || configs.homeProducts || {}}
+                onSave={async (data) => {
+                  setConfigs(prev => ({ ...prev, 'section-products': data }))
+                  await handleSave('section-products')
+                }}
+                hasChanges={hasConfigChanges('section-products')}
+                loading={loading}
+              />
+            )}
+
+            {activeMenu === 'section-services' && (
+              <ConfigFormEditor
+                configType="section-services"
+                title="服务信息区块配置"
+                description="配置首页服务信息区块内容"
+                configData={configs['section-services'] || configs.homeServices?.services || configs.homeServices || {}}
+                onSave={async (data) => {
+                  setConfigs(prev => ({ ...prev, 'section-services': data }))
+                  await handleSave('section-services')
+                }}
+                hasChanges={hasConfigChanges('section-services')}
+                loading={loading}
+              />
+            )}
+
+            {activeMenu === 'section-pricing' && (
+              <ConfigFormEditor
+                configType="section-pricing"
+                title="价格信息区块配置"
+                description="配置首页价格信息区块内容"
+                configData={configs['section-pricing'] || configs.homePricing?.pricing || configs.homePricing || {}}
+                onSave={async (data) => {
+                  setConfigs(prev => ({ ...prev, 'section-pricing': data }))
+                  await handleSave('section-pricing')
+                }}
+                hasChanges={hasConfigChanges('section-pricing')}
+                loading={loading}
+              />
+            )}
+
+            {activeMenu === 'section-about' && (
+              <ConfigFormEditor
+                configType="section-about"
+                title="关于我们区块配置"
+                description="配置首页关于我们区块内容"
+                configData={configs['section-about'] || configs.homeAbout?.about || configs.homeAbout || {}}
+                onSave={async (data) => {
+                  setConfigs(prev => ({ ...prev, 'section-about': data }))
+                  await handleSave('section-about')
+                }}
+                hasChanges={hasConfigChanges('section-about')}
+                loading={loading}
+              />
+            )}
+
+            {activeMenu === 'section-contact' && (
+              <ConfigFormEditor
+                configType="section-contact"
+                title="联系我们区块配置"
+                description="配置首页联系我们区块内容"
+                configData={configs['section-contact'] || configs.homeContact?.contact || configs.homeContact || {}}
+                onSave={async (data) => {
+                  setConfigs(prev => ({ ...prev, 'section-contact': data }))
+                  await handleSave('section-contact')
+                }}
+                hasChanges={hasConfigChanges('section-contact')}
                 loading={loading}
               />
             )}
@@ -914,147 +1061,12 @@ export default function AdminDashboardPage() {
                 configType="footer"
                 title="页脚配置"
                 description="配置网站页脚信息"
-                configData={configs.footer}
+                configData={configs.footer || {}}
                 onSave={async (data) => {
                   setConfigs(prev => ({ ...prev, footer: data }))
                   await handleSave('footer')
                 }}
                 hasChanges={hasConfigChanges('footer')}
-                loading={loading}
-              />
-            )}
-
-            {activeMenu === 'home' && (
-              <ConfigFormEditor
-                configType="home"
-                title="首页配置"
-                description="包含首页整体配置"
-                configData={configs.home}
-                onSave={async (data) => {
-                  setConfigs(prev => ({ ...prev, home: data }))
-                  await handleSave('home')
-                }}
-                hasChanges={hasConfigChanges('home')}
-                loading={loading}
-              />
-            )}
-
-            {activeMenu === 'homeOrder' && (
-              <ConfigFormEditor
-                configType="homeOrder"
-                title="[区块]排序配置"
-                description="配置首页各区块的显示顺序"
-                configData={configs.homeOrder}
-                onSave={async (data) => {
-                  setConfigs(prev => ({ ...prev, homeOrder: data }))
-                  await handleSave('homeOrder')
-                }}
-                hasChanges={hasConfigChanges('homeOrder')}
-                loading={loading}
-              />
-            )}
-
-            {activeMenu === 'homeBanner' && (
-              <ConfigFormEditor
-                configType="homeBanner"
-                title="[区块]Banner配置"
-                description="配置首页Banner区域的内容"
-                configData={configs.homeBanner}
-                onSave={async (data) => {
-                  setConfigs(prev => ({ ...prev, homeBanner: data }))
-                  await handleSave('homeBanner')
-                }}
-                hasChanges={hasConfigChanges('homeBanner')}
-                loading={loading}
-              />
-            )}
-
-            {activeMenu === 'homePartners' && (
-              <ConfigFormEditor
-                configType="homePartners"
-                title="[区块]合作伙伴"
-                description="配置首页合作伙伴区域的内容"
-                configData={configs.homePartners}
-                onSave={async (data) => {
-                  setConfigs(prev => ({ ...prev, homePartners: data }))
-                  await handleSave('homePartners')
-                }}
-                hasChanges={hasConfigChanges('homePartners')}
-                loading={loading}
-              />
-            )}
-
-            {activeMenu === 'homeProducts' && (
-              <ConfigFormEditor
-                configType="homeProducts"
-                title="[区块]产品展示"
-                description="配置首页产品展示区域的内容"
-                configData={configs.homeProducts}
-                onSave={async (data) => {
-                  setConfigs(prev => ({ ...prev, homeProducts: data }))
-                  await handleSave('homeProducts')
-                }}
-                hasChanges={hasConfigChanges('homeProducts')}
-                loading={loading}
-              />
-            )}
-
-            {activeMenu === 'homeServices' && (
-              <ConfigFormEditor
-                configType="homeServices"
-                title="[区块]服务信息"
-                description="配置首页服务信息区域的内容"
-                configData={configs.homeServices}
-                onSave={async (data) => {
-                  setConfigs(prev => ({ ...prev, homeServices: data }))
-                  await handleSave('homeServices')
-                }}
-                hasChanges={hasConfigChanges('homeServices')}
-                loading={loading}
-              />
-            )}
-
-            {activeMenu === 'homePricing' && (
-              <ConfigFormEditor
-                configType="homePricing"
-                title="[区块]价格信息"
-                description="配置首页价格信息区域的内容"
-                configData={configs.homePricing}
-                onSave={async (data) => {
-                  setConfigs(prev => ({ ...prev, homePricing: data }))
-                  await handleSave('homePricing')
-                }}
-                hasChanges={hasConfigChanges('homePricing')}
-                loading={loading}
-              />
-            )}
-
-            {activeMenu === 'homeAbout' && (
-              <ConfigFormEditor
-                configType="homeAbout"
-                title="[区块]关于我们"
-                description="配置首页关于我们区域的内容"
-                configData={configs.homeAbout}
-                onSave={async (data) => {
-                  setConfigs(prev => ({ ...prev, homeAbout: data }))
-                  await handleSave('homeAbout')
-                }}
-                hasChanges={hasConfigChanges('homeAbout')}
-                loading={loading}
-              />
-            )}
-
-            {activeMenu === 'homeContact' && (
-              <ConfigFormEditor
-                configType="homeContact"
-                title="[区块]联系我们"
-                description="配置首页联系我们区域的内容"
-                configData={configs.homeContact}
-                onSave={async (data) => {
-                  setConfigs(prev => ({ ...prev, homeContact: data }))
-                  await handleSave('homeContact')
-                }}
-                hasChanges={hasConfigChanges('homeContact')}
                 loading={loading}
               />
             )}

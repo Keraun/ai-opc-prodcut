@@ -15,7 +15,28 @@ export function loadInitialData(): Record<string, any> {
     .filter((s: any) => s.visible !== false)
     .sort((a: any, b: any) => (a.order || 0) - (b.order || 0))
 
-  const moduleDataMap: Record<string, () => ModuleData> = {
+  const headerModule: ModuleData = {
+    moduleName: '顶部导航',
+    moduleId: 'header',
+    moduleInstanceId: `header-${Date.now()}`,
+    data: configs.navigation?.header || {}
+  }
+
+  const sidebarNavModule: ModuleData = {
+    moduleName: '侧边栏导航',
+    moduleId: 'sidebar-nav',
+    moduleInstanceId: `sidebar-nav-${Date.now()}`,
+    data: { visible: true }
+  }
+
+  const footerModule: ModuleData = {
+    moduleName: '页脚',
+    moduleId: 'footer',
+    moduleInstanceId: `footer-${Date.now()}`,
+    data: configs.footer || {}
+  }
+
+  const sectionModuleDataMap: Record<string, () => ModuleData> = {
     hero: () => ({
       moduleName: 'Hero 区块',
       moduleId: 'section-hero',
@@ -60,12 +81,19 @@ export function loadInitialData(): Record<string, any> {
     }),
   }
 
-  const modules: ModuleData[] = visibleSections
+  const sectionModules: ModuleData[] = visibleSections
     .map((section: any) => {
-      const generator = moduleDataMap[section.id]
+      const generator = sectionModuleDataMap[section.id]
       return generator ? generator() : null
     })
     .filter((module: ModuleData | null): module is ModuleData => module !== null)
+
+  const modules: ModuleData[] = [
+    headerModule,
+    sidebarNavModule,
+    ...sectionModules,
+    footerModule
+  ]
 
   initialDataCache = {
     data: {

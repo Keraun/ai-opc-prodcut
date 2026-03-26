@@ -125,10 +125,24 @@ export interface NavigationData {
   sidebar?: NavigationItem[]
 }
 
+export interface HeaderData {
+  navItems?: NavigationItem[]
+  showContactButton?: boolean
+  showCtaButton?: boolean
+  ctaButtonText?: string
+  ctaButtonLink?: string
+}
+
 export interface SidebarNavData {
   visible?: boolean
 }
 
 export interface FooterData {
   description?: string
+  address?: string
+  phone?: string
+  email?: string
+  wechatQrCode?: string
+  officialAccountQrCode?: string
+  showAdminLink?: boolean
 }
