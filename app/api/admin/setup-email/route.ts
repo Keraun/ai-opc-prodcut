@@ -35,25 +35,28 @@ export async function POST(request: NextRequest) {
       }, { status: 400 })
     }
 
-    const accountConfigPath = path.join(process.cwd(), "config/json/system-account.json")
+    const accountConfigPath = path.join(process.cwd(), "config/json/runtime/account.json")
     const accountConfig = JSON.parse(fs.readFileSync(accountConfigPath, "utf-8"))
 
-    const adminIndex = accountConfig.admins?.findIndex((admin: any) => admin.username === userData.username)
+    // 兼容两种格式：数组格式和 { admins: [...] } 对象格式
+    const admins = Array.isArray(accountConfig) ? accountConfig : accountConfig.admins || []
 
-    if (adminIndex === -1 || adminIndex === undefined) {
+    const adminIndex = admins.findIndex((admin: any) => admin.username === userData.username)
+
+    if (adminIndex === -1) {
       return NextResponse.json({
         success: false,
         message: "用户不存在"
       }, { status: 404 })
     }
 
-    accountConfig.admins[adminIndex].email = email
+    admins[adminIndex].email = email
 
-    const currentIP = request.headers.get('x-forwarded-for') || 
-                      request.headers.get('x-real-ip') || 
+    const currentIP = request.headers.get('x-forwarded-for') ||
+                      request.headers.get('x-real-ip') ||
                       'unknown'
-    
-    const currentTime = new Date().toLocaleString('zh-CN', { 
+
+    const currentTime = new Date().toLocaleString('zh-CN', {
       timeZone: 'Asia/Shanghai',
       year: 'numeric',
       month: '2-digit',
@@ -63,14 +66,14 @@ export async function POST(request: NextRequest) {
       second: '2-digit'
     })
 
-    const admin = accountConfig.admins[adminIndex]
+    const admin = admins[adminIndex]
     const lastLoginTime = admin.currentLoginTime || admin.lastLoginTime || ''
     const lastLoginIP = admin.currentLoginIP || admin.lastLoginIP || ''
 
-    accountConfig.admins[adminIndex].lastLoginTime = lastLoginTime
-    accountConfig.admins[adminIndex].lastLoginIP = lastLoginIP
-    accountConfig.admins[adminIndex].currentLoginIP = currentIP
-    accountConfig.admins[adminIndex].currentLoginTime = currentTime
+    admins[adminIndex].lastLoginTime = lastLoginTime
+    admins[adminIndex].lastLoginIP = lastLoginIP
+    admins[adminIndex].currentLoginIP = currentIP
+    admins[adminIndex].currentLoginTime = currentTime
 
     let showSuperAdminToken = false
     let superAdminToken = ''
@@ -87,7 +90,7 @@ export async function POST(request: NextRequest) {
       superAdminToken = tokenConfig.superAdminToken
     }
 
-    fs.writeFileSync(accountConfigPath, JSON.stringify(accountConfig, null, 2))
+    fs.writeFileSync(accountConfigPath, JSON.stringify(admins, null, 2))
 
     const loginLogsPath = path.join(process.cwd(), "config/json/login-logs.json")
     const loginLogs = JSON.parse(fs.readFileSync(loginLogsPath, "utf-8"))

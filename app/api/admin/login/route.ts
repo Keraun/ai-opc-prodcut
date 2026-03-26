@@ -21,16 +21,19 @@ export async function POST(request: NextRequest) {
 
     const accountConfig = readConfig('account')
 
-    const adminIndex = accountConfig.admins?.findIndex((admin: any) => admin.username === username)
+    // 兼容两种格式：数组格式和 { admins: [...] } 对象格式
+    const admins = Array.isArray(accountConfig) ? accountConfig : accountConfig.admins || []
 
-    if (adminIndex === -1 || adminIndex === undefined) {
+    const adminIndex = admins.findIndex((admin: any) => admin.username === username)
+
+    if (adminIndex === -1) {
       return NextResponse.json({
         success: false,
         message: "用户名不存在"
       }, { status: 401 })
     }
 
-    const admin = accountConfig.admins[adminIndex]
+    const admin = admins[adminIndex]
 
     if (admin.password !== password) {
       return NextResponse.json({
@@ -80,10 +83,11 @@ export async function POST(request: NextRequest) {
     const lastLoginTime = admin.currentLoginTime || admin.lastLoginTime || ''
     const lastLoginIP = admin.currentLoginIP || admin.lastLoginIP || ''
 
-    accountConfig.admins[adminIndex].lastLoginTime = lastLoginTime
-    accountConfig.admins[adminIndex].lastLoginIP = lastLoginIP
-    accountConfig.admins[adminIndex].currentLoginIP = currentIP
-    accountConfig.admins[adminIndex].currentLoginTime = currentTime
+    // 更新管理员登录信息
+    admins[adminIndex].lastLoginTime = lastLoginTime
+    admins[adminIndex].lastLoginIP = lastLoginIP
+    admins[adminIndex].currentLoginIP = currentIP
+    admins[adminIndex].currentLoginTime = currentTime
 
     let showSuperAdminToken = false
     let superAdminToken = ''
@@ -106,7 +110,8 @@ export async function POST(request: NextRequest) {
       superAdminToken = tokenConfig.superAdminToken
     }
 
-    writeConfig('account', accountConfig)
+    // 保存时保持原有格式（数组格式）
+    writeConfig('account', admins)
 
     logOperation(admin.username, 'login', '管理员登录', currentIP)
 

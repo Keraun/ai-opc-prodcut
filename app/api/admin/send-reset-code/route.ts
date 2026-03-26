@@ -41,10 +41,13 @@ export async function POST(request: NextRequest) {
       }, { status: 400 })
     }
 
-    const accountConfigPath = path.join(process.cwd(), "config/json/account.json")
+    const accountConfigPath = path.join(process.cwd(), "config/json/runtime/account.json")
     const accountConfig = JSON.parse(fs.readFileSync(accountConfigPath, "utf-8"))
 
-    const admin = accountConfig.admins?.find((admin: any) => admin.email === email)
+    // 兼容两种格式：数组格式和 { admins: [...] } 对象格式
+    const admins = Array.isArray(accountConfig) ? accountConfig : accountConfig.admins || []
+
+    const admin = admins.find((admin: any) => admin.email === email)
 
     if (!admin) {
       return NextResponse.json({

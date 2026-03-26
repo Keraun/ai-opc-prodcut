@@ -34,18 +34,22 @@ export async function POST(request: NextRequest) {
     }
 
     const accountConfig = readConfig('account')
-    const adminIndex = accountConfig.admins?.findIndex(
+
+    // 兼容两种格式：数组格式和 { admins: [...] } 对象格式
+    const admins = Array.isArray(accountConfig) ? accountConfig : accountConfig.admins || []
+
+    const adminIndex = admins.findIndex(
       (admin: any) => admin.username === adminUser.username
     )
 
-    if (adminIndex === -1 || adminIndex === undefined) {
+    if (adminIndex === -1) {
       return NextResponse.json({
         success: false,
         message: '用户不存在'
       }, { status: 404 })
     }
 
-    const admin = accountConfig.admins[adminIndex]
+    const admin = admins[adminIndex]
 
     if (admin.password !== oldPassword) {
       return NextResponse.json({
@@ -54,10 +58,10 @@ export async function POST(request: NextRequest) {
       }, { status: 401 })
     }
 
-    accountConfig.admins[adminIndex].password = newPassword
-    accountConfig.admins[adminIndex].mustChangePassword = false
+    admins[adminIndex].password = newPassword
+    admins[adminIndex].mustChangePassword = false
 
-    writeConfig('account', accountConfig)
+    writeConfig('account', admins)
 
     const currentIP = request.headers.get('x-forwarded-for') || 
                       request.headers.get('x-real-ip') || 

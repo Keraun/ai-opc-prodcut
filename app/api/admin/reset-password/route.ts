@@ -43,8 +43,11 @@ export async function POST(request: NextRequest) {
       }, { status: 400 })
     }
 
-    const accountConfigPath = path.join(process.cwd(), "config/json/system-account.json")
+    const accountConfigPath = path.join(process.cwd(), "config/json/runtime/account.json")
     const accountConfig = JSON.parse(fs.readFileSync(accountConfigPath, "utf-8"))
+
+    // 兼容两种格式：数组格式和 { admins: [...] } 对象格式
+    const admins = Array.isArray(accountConfig) ? accountConfig : accountConfig.admins || []
 
     let adminIndex = -1
 
@@ -66,9 +69,9 @@ export async function POST(request: NextRequest) {
         }, { status: 401 })
       }
 
-      adminIndex = accountConfig.admins?.findIndex((admin: any) => admin.username === username)
+      adminIndex = admins.findIndex((admin: any) => admin.username === username)
 
-      if (adminIndex === -1 || adminIndex === undefined) {
+      if (adminIndex === -1) {
         return NextResponse.json({
           success: false,
           message: "用户不存在"
@@ -108,9 +111,9 @@ export async function POST(request: NextRequest) {
         }, { status: 401 })
       }
 
-      adminIndex = accountConfig.admins?.findIndex((admin: any) => admin.email === email)
+      adminIndex = admins.findIndex((admin: any) => admin.email === email)
 
-      if (adminIndex === -1 || adminIndex === undefined) {
+      if (adminIndex === -1) {
         return NextResponse.json({
           success: false,
           message: "该邮箱未绑定任何管理员账号"
@@ -126,10 +129,10 @@ export async function POST(request: NextRequest) {
       }, { status: 400 })
     }
 
-    accountConfig.admins[adminIndex].password = newPassword
-    accountConfig.admins[adminIndex].mustChangePassword = false
+    admins[adminIndex].password = newPassword
+    admins[adminIndex].mustChangePassword = false
 
-    fs.writeFileSync(accountConfigPath, JSON.stringify(accountConfig, null, 2))
+    fs.writeFileSync(accountConfigPath, JSON.stringify(admins, null, 2))
 
     const response: any = {
       success: true,
@@ -137,7 +140,7 @@ export async function POST(request: NextRequest) {
     }
 
     if (method === "email") {
-      response.username = accountConfig.admins[adminIndex].username
+      response.username = admins[adminIndex].username
     }
 
     return NextResponse.json(response)
