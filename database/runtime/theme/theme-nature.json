@@ -1,0 +1,46 @@
+{
+  "id": "nature",
+  "name": "清新自然",
+  "description": "明亮清新的设计风格，绿色系配色，适合环保、健康类产品",
+  "colors": {
+    "primary": "#059669",
+    "primaryHover": "#047857",
+    "secondary": "#10b981",
+    "accent": "#f59e0b",
+    "background": "#ffffff",
+    "backgroundSecondary": "#f0fdf4",
+    "text": "#1f2937",
+    "textSecondary": "#6b7280",
+    "border": "#d1d5db",
+    "success": "#10b981",
+    "warning": "#f59e0b",
+    "error": "#ef4444"
+  },
+  "layout": {
+    "headerStyle": "floating",
+    "footerStyle": "minimal",
+    "cardStyle": "soft",
+    "buttonStyle": "pill"
+  },
+  "effects": {
+    "shadow": "soft",
+    "borderRadius": "large",
+    "animation": "gentle"
+  },
+  "darkMode": {
+    "colors": {
+      "primary": "#34d399",
+      "primaryHover": "#10b981",
+      "secondary": "#6ee7b7",
+      "accent": "#fbbf24",
+      "background": "#022c22",
+      "backgroundSecondary": "#064e3b",
+      "text": "#f0fdf4",
+      "textSecondary": "#a7f3d0",
+      "border": "#065f46",
+      "success": "#34d399",
+      "warning": "#fbbf24",
+      "error": "#f87171"
+    }
+  }
+}

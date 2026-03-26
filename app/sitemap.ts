@@ -1,7 +1,17 @@
 import { MetadataRoute } from 'next'
-import { siteConfig } from '@/config/site'
+import { readConfig } from '@/lib/config-manager'
+
+function getSiteConfig() {
+  try {
+    return readConfig('site') || {}
+  } catch (error) {
+    console.error('Failed to read site config:', error)
+    return {}
+  }
+}
 
 export default function sitemap(): MetadataRoute.Sitemap {
+  const siteConfig = getSiteConfig()
   const baseUrl = siteConfig?.url || 'https://makerai.com'
   
   return [

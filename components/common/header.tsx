@@ -6,18 +6,20 @@ import { IconMenu, IconCustomerService } from "@arco-design/web-react/icon"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
 import { Logo } from "@/components/common/logo"
-import { siteConfig, navigationConfig } from "@/config/client"
+import { useConfig } from "@/components/initial-data-provider"
 import { useTheme } from "@/components/theme-provider"
 import styles from "./header.module.css"
-
-const navItems = navigationConfig.main || []
 
 export function Header() {
   const router = useRouter()
   const { themeConfig } = useTheme()
+  const siteConfig = useConfig('site')
+  const navigationConfig = useConfig('site-navigation')
   const [isScrolled, setIsScrolled] = useState(false)
   const [drawerVisible, setDrawerVisible] = useState(false)
   const [isMobile, setIsMobile] = useState(false)
+
+  const navItems = navigationConfig?.main || []
 
   const primaryColor = themeConfig?.colors?.primary || "#1e40af"
   const secondaryColor = themeConfig?.colors?.secondary || "#3b82f6"
@@ -62,7 +64,7 @@ export function Header() {
           
           {navItems && navItems.length > 0 && (
             <nav className={styles.nav}>
-              {navItems.map((item) => (
+              {navItems.map((item: any) => (
                 <button
                   key={item?.href}
                   onClick={() => handleNavClick(item?.href)}
@@ -160,7 +162,7 @@ export function Header() {
         footer={null}
       >
         <div className={styles.drawerContent}>
-          {navItems.map((item) => (
+          {navItems.map((item: any) => (
             <button
               key={item.href}
               onClick={() => handleNavClick(item.href)}

@@ -1,8 +1,9 @@
 import fs from "fs"
 import path from "path"
+import { getRuntimePath } from "./config-manager"
 
-const configDir = path.join(process.cwd(), "config/json")
-const versionsDir = path.join(configDir, "versions")
+const databaseDir = path.join(process.cwd(), "database")
+const versionsDir = path.join(databaseDir, "versions")
 const versionsIndexFile = path.join(versionsDir, "index.json")
 
 interface VersionInfo {
@@ -141,15 +142,15 @@ export const restoreVersion = (configType: string, filename: string): boolean =>
     return false
   }
   
-  const runtimeDir = path.join(configDir, "runtime")
+  const runtimePath = getRuntimePath(configType)
+  const runtimeDir = path.dirname(runtimePath)
+  
   if (!fs.existsSync(runtimeDir)) {
     fs.mkdirSync(runtimeDir, { recursive: true })
   }
   
-  const configPath = path.join(runtimeDir, `${configType}.json`)
-  
   try {
-    fs.writeFileSync(configPath, JSON.stringify(data, null, 2))
+    fs.writeFileSync(runtimePath, JSON.stringify(data, null, 2))
     return true
   } catch (error) {
     console.error(`Failed to restore version: ${configType}`, error)

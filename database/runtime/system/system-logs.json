@@ -1,0 +1,24 @@
+[
+  {
+    "id": 1774485604002,
+    "username": "",
+    "type": "login",
+    "description": "管理员登录",
+    "ip": "",
+    "timestamp": "",
+    "details": {
+      "loginType": "admin"
+    }
+  },
+  {
+    "id": 1774480767803,
+    "username": "",
+    "type": "update_config",
+    "description": "更新配置",
+    "ip": "",
+    "timestamp": "",
+    "details": {
+      "configType": "theme"
+    }
+  }
+]

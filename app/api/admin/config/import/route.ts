@@ -3,11 +3,10 @@ import fs from 'fs/promises'
 import fsSync from 'fs'
 import path from 'path'
 import unzipper from 'unzipper'
-import { writeConfig } from '@/lib/config-manager'
 
-const CONFIG_DIR = path.join(process.cwd(), 'config', 'json')
-const RUNTIME_DIR = path.join(CONFIG_DIR, 'runtime')
-const VERSIONS_DIR = path.join(CONFIG_DIR, 'versions')
+const DATABASE_DIR = path.join(process.cwd(), 'database')
+const RUNTIME_DIR = path.join(DATABASE_DIR, 'runtime')
+const VERSIONS_DIR = path.join(DATABASE_DIR, 'versions')
 
 export async function POST(request: NextRequest) {
   try {
@@ -22,18 +21,14 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'File must be a zip file' }, { status: 400 })
     }
 
-    // 创建临时目录和文件
     const tempDir = path.join(process.cwd(), 'temp-import')
     const tempZipPath = path.join(tempDir, 'import.zip')
 
-    // 确保临时目录存在
     await fs.mkdir(tempDir, { recursive: true })
 
-    // 保存上传的文件
     const fileBuffer = Buffer.from(await file.arrayBuffer())
     await fs.writeFile(tempZipPath, fileBuffer)
 
-    // 解压文件
     await fs.mkdir(tempDir, { recursive: true })
     await new Promise<void>((resolve, reject) => {
       fsSync.createReadStream(tempZipPath)
@@ -42,7 +37,6 @@ export async function POST(request: NextRequest) {
         .on('error', reject)
     })
 
-    // 检查解压后的目录结构
     const extractedRuntimeDir = path.join(tempDir, 'runtime')
     const extractedVersionsDir = path.join(tempDir, 'versions')
     
@@ -57,12 +51,10 @@ export async function POST(request: NextRequest) {
       .catch(() => false)
 
     if (!extractedRuntimeDirExists && !extractedVersionsDirExists) {
-      // 清理临时文件
       await fs.rm(tempDir, { recursive: true, force: true })
       return NextResponse.json({ error: 'Invalid zip file structure' }, { status: 400 })
     }
 
-    // 导入运行时配置
     if (extractedRuntimeDirExists) {
       const copyDirectory = async (src: string, dest: string) => {
         const entries = await fs.readdir(src, { withFileTypes: true })
@@ -80,7 +72,6 @@ export async function POST(request: NextRequest) {
         }
       }
 
-      // 确保运行时目录存在
       if (!fsSync.existsSync(RUNTIME_DIR)) {
         await fs.mkdir(RUNTIME_DIR, { recursive: true })
       }
@@ -88,7 +79,6 @@ export async function POST(request: NextRequest) {
       await copyDirectory(extractedRuntimeDir, RUNTIME_DIR)
     }
 
-    // 导入版本历史
     if (extractedVersionsDirExists) {
       const copyDirectory = async (src: string, dest: string) => {
         const entries = await fs.readdir(src, { withFileTypes: true })
@@ -106,7 +96,6 @@ export async function POST(request: NextRequest) {
         }
       }
 
-      // 清空现有的 versions 目录
       if (fsSync.existsSync(VERSIONS_DIR)) {
         await fs.rm(VERSIONS_DIR, { recursive: true, force: true })
       }
@@ -115,7 +104,6 @@ export async function POST(request: NextRequest) {
       await copyDirectory(extractedVersionsDir, VERSIONS_DIR)
     }
 
-    // 清理临时文件
     await fs.rm(tempDir, { recursive: true, force: true })
 
     return NextResponse.json({ success: true })

@@ -3,20 +3,16 @@ import { Geist, Geist_Mono } from 'next/font/google'
 import { Analytics } from '@vercel/analytics/next'
 import '@arco-design/web-react/dist/css/arco.css'
 import './globals.css'
-import { siteConfig, seoConfig } from '@/config/site'
 import { ClientLayout } from '@/components/client-layout'
 import { loadInitialData, generateInitialDataScript } from '@/lib/initial-data'
+import { readConfig } from '@/lib/config-manager'
 
 const _geist = Geist({ subsets: ["latin"] });
 const _geistMono = Geist_Mono({ subsets: ["latin"] });
 
 function getThemeConfig() {
   try {
-    const themePath = process.cwd() + '/config/json/runtime/theme.json'
-    const fs = require('fs')
-    const path = require('path')
-    const themeData = fs.readFileSync(themePath, 'utf-8')
-    const themeConfig = JSON.parse(themeData)
+    const themeConfig = readConfig('theme')
     const currentTheme = themeConfig.themes[themeConfig.currentTheme]
     return currentTheme
   } catch (error) {
@@ -24,6 +20,27 @@ function getThemeConfig() {
     return null
   }
 }
+
+function getSiteConfig() {
+  try {
+    return readConfig('site') || {}
+  } catch (error) {
+    console.error('Failed to read site config:', error)
+    return {}
+  }
+}
+
+function getSeoConfig() {
+  try {
+    return readConfig('site-seo') || {}
+  } catch (error) {
+    console.error('Failed to read seo config:', error)
+    return {}
+  }
+}
+
+const siteConfig = getSiteConfig()
+const seoConfig = getSeoConfig()
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteConfig?.url || 'https://makerai.com'),

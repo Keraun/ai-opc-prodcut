@@ -1,84 +1,107 @@
 import fs from "fs"
 import path from "path"
 
-const CONFIG_DIR = path.join(process.cwd(), "config", "json")
-const TEMPLATES_DIR = path.join(CONFIG_DIR, "templates")
-const RUNTIME_DIR = path.join(CONFIG_DIR, "runtime")
-const VERSIONS_DIR = path.join(CONFIG_DIR, "versions")
+const DATABASE_DIR = path.join(process.cwd(), "database")
+const TEMPLATES_DIR = path.join(DATABASE_DIR, "templates")
+const RUNTIME_DIR = path.join(DATABASE_DIR, "runtime")
 
-export function getConfigPath(configType: string): string {
-  const runtimePath = path.join(RUNTIME_DIR, `${configType}.json`)
-  const templatePath = path.join(TEMPLATES_DIR, `${configType}.json`)
+interface PathMapping {
+  dir: string
+  prefix: string
+}
 
-  if (fs.existsSync(runtimePath)) {
-    return runtimePath
-  }
-  return templatePath
+const typeToPathMap: Record<string, PathMapping> = {
+  'site': { dir: 'site-info', prefix: 'site-config' },
+  
+  'page-home': { dir: 'page-module', prefix: 'page-home' },
+  'page-news': { dir: 'page-module', prefix: 'page-news' },
+  'page-product': { dir: 'page-module', prefix: 'page-product' },
+  'page-new-detail': { dir: 'page-module', prefix: 'page-new-detail' },
+  'page-404': { dir: 'page-module', prefix: 'page-404' },
+  
+  'site-root': { dir: 'page-data', prefix: 'data-site-root' },
+  'site-header': { dir: 'page-data', prefix: 'data-site-header' },
+  'site-footer': { dir: 'page-data', prefix: 'data-site-footer' },
+  'site-navigation': { dir: 'page-data', prefix: 'data-site-navigation' },
+  'sidebar-nav': { dir: 'page-data', prefix: 'data-sidebar-nav' },
+  'hero': { dir: 'page-data', prefix: 'data-section-hero' },
+  'section-hero': { dir: 'page-data', prefix: 'data-section-hero' },
+  'partners': { dir: 'page-data', prefix: 'data-section-partner' },
+  'section-partner': { dir: 'page-data', prefix: 'data-section-partner' },
+  'products': { dir: 'page-data', prefix: 'data-section-products' },
+  'section-products': { dir: 'page-data', prefix: 'data-section-products' },
+  'services': { dir: 'page-data', prefix: 'data-section-services' },
+  'section-services': { dir: 'page-data', prefix: 'data-section-services' },
+  'pricing': { dir: 'page-data', prefix: 'data-section-pricing' },
+  'section-pricing': { dir: 'page-data', prefix: 'data-section-pricing' },
+  'about': { dir: 'page-data', prefix: 'data-section-about' },
+  'section-about': { dir: 'page-data', prefix: 'data-section-about' },
+  'contact': { dir: 'page-data', prefix: 'data-section-contact' },
+  'section-contact': { dir: 'page-data', prefix: 'data-section-contact' },
+  'section-404': { dir: 'page-data', prefix: 'data-section-404' },
+  'news-list': { dir: 'page-data', prefix: 'data-news-list' },
+  'news-detail': { dir: 'page-data', prefix: 'data-news-detail' },
+  'product-list': { dir: 'page-data', prefix: 'data-product-list' },
+  
+  'theme': { dir: 'theme', prefix: 'theme-config' },
+  'theme-custom': { dir: 'theme', prefix: 'theme-custom' },
+  'theme-modern': { dir: 'theme', prefix: 'theme-modern' },
+  'theme-nature': { dir: 'theme', prefix: 'theme-nature' },
+  'theme-tech': { dir: 'theme', prefix: 'theme-tech' },
+  
+  'account': { dir: 'system', prefix: 'system-account' },
+  'token': { dir: 'system', prefix: 'system-token' },
+  'operation-logs': { dir: 'system', prefix: 'operation-logs' },
+  'system-logs': { dir: 'system', prefix: 'system-logs' },
+  'verification-codes': { dir: 'system', prefix: 'system-verification-codes' },
+}
+
+function getPathMapping(configType: string): PathMapping {
+  return typeToPathMap[configType] || { dir: 'page-data', prefix: configType }
 }
 
 export function getTemplatePath(configType: string): string {
-  const typeToFileMap: Record<string, string> = {
-    'site': 'site-config',
-    'navigation': 'site-navigation',
-    'footer': 'site-footer',
-    'seo': 'site-seo',
-    'common': 'site-common',
-    'theme': 'theme-config',
-    'custom': 'theme-custom',
-    'account': 'system-account',
-    'products': 'page-products',
-    'otherPages': 'page-other',
-    'homeBanner': 'home-banner',
-    'homeProducts': 'home-products',
-    'homeServices': 'home-services',
-    'homePricing': 'home-pricing',
-    'homeAbout': 'home-about',
-    'homeContact': 'home-contact',
-    'homePartners': 'home-partners',
-    'homeOrder': 'home-order'
-  }
-  const fileName = typeToFileMap[configType] || configType
-  return path.join(TEMPLATES_DIR, `${fileName}.json`)
+  const { dir, prefix } = getPathMapping(configType)
+  return path.join(TEMPLATES_DIR, dir, `${prefix}.json`)
 }
 
 export function getRuntimePath(configType: string): string {
-  return path.join(RUNTIME_DIR, `${configType}.json`)
+  const { dir, prefix } = getPathMapping(configType)
+  return path.join(RUNTIME_DIR, dir, `${prefix}.json`)
 }
 
 export function readConfig(configType: string): any {
   const runtimePath = getRuntimePath(configType)
   const templatePath = getTemplatePath(configType)
   
-  // 如果runtime配置存在，直接读取
   if (fs.existsSync(runtimePath)) {
     return JSON.parse(fs.readFileSync(runtimePath, "utf-8"))
   }
   
-  // 如果runtime配置不存在但template存在，复制到runtime再读取
   if (fs.existsSync(templatePath)) {
     const templateData = JSON.parse(fs.readFileSync(templatePath, "utf-8"))
     
-    // 确保runtime目录存在
-    if (!fs.existsSync(RUNTIME_DIR)) {
-      fs.mkdirSync(RUNTIME_DIR, { recursive: true })
+    const runtimeDir = path.dirname(runtimePath)
+    if (!fs.existsSync(runtimeDir)) {
+      fs.mkdirSync(runtimeDir, { recursive: true })
     }
     
-    // 复制template到runtime
     fs.writeFileSync(runtimePath, JSON.stringify(templateData, null, 2), "utf-8")
     
     return templateData
   }
   
-  // 都不存在时返回空对象
   return {}
 }
 
 export function writeConfig(configType: string, data: any): void {
-  if (!fs.existsSync(RUNTIME_DIR)) {
-    fs.mkdirSync(RUNTIME_DIR, { recursive: true })
+  const runtimePath = getRuntimePath(configType)
+  const runtimeDir = path.dirname(runtimePath)
+  
+  if (!fs.existsSync(runtimeDir)) {
+    fs.mkdirSync(runtimeDir, { recursive: true })
   }
   
-  const runtimePath = getRuntimePath(configType)
   fs.writeFileSync(runtimePath, JSON.stringify(data, null, 2), "utf-8")
 }
 
@@ -92,38 +115,47 @@ export function readTemplate(configType: string): any {
   return JSON.parse(fs.readFileSync(templatePath, "utf-8"))
 }
 
-export function readAllConfigs(): Record<string, any> {
-  const configs: Record<string, any> = {}
-  const fileToTypeMap: Record<string, string> = {
-    'site-config': 'site',
-    'site-navigation': 'navigation',
-    'site-footer': 'footer',
-    'site-seo': 'seo',
-    'site-common': 'common',
-    'theme-config': 'theme',
-    'theme-custom': 'custom',
-    'system-account': 'account',
-    'page-products': 'products',
-    'page-other': 'otherPages',
-    'home-banner': 'homeBanner',
-    'home-products': 'homeProducts',
-    'home-services': 'homeServices',
-    'home-pricing': 'homePricing',
-    'home-about': 'homeAbout',
-    'home-contact': 'homeContact',
-    'home-partners': 'homePartners',
-    'home-order': 'homeOrder'
-  }
+function readAllFromDir(dir: string, typePrefix: string = ''): Record<string, any> {
+  const result: Record<string, any> = {}
+  const templateDir = path.join(TEMPLATES_DIR, dir)
   
-  if (fs.existsSync(TEMPLATES_DIR)) {
-    const templateFiles = fs.readdirSync(TEMPLATES_DIR).filter(file => file.endsWith('.json'))
+  if (fs.existsSync(templateDir)) {
+    const files = fs.readdirSync(templateDir).filter(file => file.endsWith('.json'))
     
-    for (const file of templateFiles) {
+    for (const file of files) {
       const baseName = file.replace('.json', '')
-      const configType = fileToTypeMap[baseName] || baseName
-      configs[configType] = readConfig(configType)
+      let configType = baseName
+      
+      if (dir === 'page-data' && baseName.startsWith('data-')) {
+        configType = baseName.replace('data-', '')
+      } else if (dir === 'page-module' && baseName.startsWith('page-')) {
+        configType = baseName
+      } else if (dir === 'site-info') {
+        configType = 'site'
+      } else if (dir === 'theme' && baseName === 'theme-config') {
+        configType = 'theme'
+      } else if (dir === 'system') {
+        if (baseName === 'system-account') configType = 'account'
+        else if (baseName === 'system-token') configType = 'token'
+        else if (baseName === 'operation-logs') configType = 'operation-logs'
+        else configType = baseName
+      }
+      
+      result[configType] = readConfig(configType)
     }
   }
+  
+  return result
+}
+
+export function readAllConfigs(): Record<string, any> {
+  const configs: Record<string, any> = {}
+  
+  Object.assign(configs, readAllFromDir('site-info'))
+  Object.assign(configs, readAllFromDir('page-module'))
+  Object.assign(configs, readAllFromDir('page-data'))
+  Object.assign(configs, readAllFromDir('theme'))
+  Object.assign(configs, readAllFromDir('system'))
   
   return configs
 }
@@ -139,4 +171,32 @@ export function resetAllToTemplates(): void {
   for (const configType of Object.keys(configs)) {
     resetToTemplate(configType)
   }
+}
+
+export function getPageResponse(pageId: string): any {
+  const pageModuleType = `page-${pageId}`
+  const pageModule = readConfig(pageModuleType)
+  
+  const response = {
+    pageName: pageId,
+    pageId: pageId,
+    modules: pageModule.modules || [],
+    data: [] as any[],
+    common: {
+      site: readConfig('site'),
+      theme: readConfig('theme')
+    }
+  }
+  
+  if (pageModule.modules && Array.isArray(pageModule.modules)) {
+    for (const moduleId of pageModule.modules) {
+      const moduleData = readConfig(moduleId)
+      response.data.push({
+        moduleId,
+        data: moduleData
+      })
+    }
+  }
+  
+  return response
 }

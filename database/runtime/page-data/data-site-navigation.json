@@ -1,0 +1,16 @@
+{
+  "main": [
+    {
+      "label": "首页",
+      "href": "/"
+    },
+    {
+      "label": "产品服务",
+      "href": "/products"
+    },
+    {
+      "label": "资讯",
+      "href": "/news"
+    }
+  ]
+}

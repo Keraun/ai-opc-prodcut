@@ -2,29 +2,31 @@
 
 import { IconLocation, IconPhone, IconEmail, IconSettings } from "@arco-design/web-react/icon"
 import { Logo } from "@/components/common/logo"
-import { siteConfig, footerConfig } from "@/config/client"
+import { useConfig } from "@/components/initial-data-provider"
 import styles from "./footer.module.css"
 
-const contactInfo = [
-  {
-    icon: IconLocation,
-    title: "公司地址",
-    content: siteConfig.contact.address,
-  },
-  {
-    icon: IconPhone,
-    title: "联系电话",
-    content: siteConfig.contact.phone,
-  },
-  {
-    icon: IconEmail,
-    title: "电子邮箱",
-    content: siteConfig.contact.email,
-  },
-]
-
 export function Footer() {
+  const siteConfig = useConfig('site')
+  const footerConfig = useConfig('site-footer')
   const currentYear = new Date().getFullYear()
+
+  const contactInfo = [
+    {
+      icon: IconLocation,
+      title: "公司地址",
+      content: siteConfig?.contact?.address || '',
+    },
+    {
+      icon: IconPhone,
+      title: "联系电话",
+      content: siteConfig?.contact?.phone || '',
+    },
+    {
+      icon: IconEmail,
+      title: "电子邮箱",
+      content: siteConfig?.contact?.email || '',
+    },
+  ]
 
   return (
     <footer className={styles.footer}>
@@ -33,10 +35,10 @@ export function Footer() {
           <div className={styles.companyInfo}>
             <div className={styles.logoSection}>
               <Logo className={styles.logo} />
-              <span className={styles.logoText}>{siteConfig.name}</span>
+              <span className={styles.logoText}>{siteConfig?.name || ''}</span>
             </div>
             <p className={styles.description}>
-              {footerConfig.description}
+              {footerConfig?.description || ''}
             </p>
           </div>
 
@@ -84,10 +86,10 @@ export function Footer() {
         <div className={styles.bottomSection}>
           <div className={styles.bottomContent}>
             <p className={styles.copyright}>
-              &copy; {currentYear} {siteConfig.name}. All rights reserved.
+              &copy; {currentYear} {siteConfig?.name || ''}. All rights reserved.
             </p>
             <p className={styles.icp}>
-              {siteConfig.icp}
+              {siteConfig?.icp || ''}
             </p>
             <a 
               href="/admin" 

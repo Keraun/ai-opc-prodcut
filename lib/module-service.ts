@@ -1,9 +1,7 @@
 import fs from 'fs'
 import path from 'path'
 import type { ModuleData, ModuleRegistration } from '@/modules/types'
-
-const CONFIG_PATH = path.join(process.cwd(), 'config/json/runtime')
-const TEMPLATE_PATH = path.join(process.cwd(), 'config/json/templates')
+import { readConfig, writeConfig, getRuntimePath, getTemplatePath } from './config-manager'
 
 interface PageModuleConfig {
   id: string
@@ -18,7 +16,7 @@ interface PageModuleConfig {
 interface PageConfig {
   layout?: string
   sections?: PageModuleConfig[]
-  modules?: ModuleData[]
+  modules?: string[]
   [key: string]: unknown
 }
 
@@ -45,19 +43,11 @@ function saveJsonFile(filePath: string, data: Record<string, unknown>): boolean 
 }
 
 export function getPageConfig(pageId: string): PageConfig | null {
-  const pageConfigFiles = [
-    `${pageId}Order.json`,
-    `${pageId}.json`,
-    `page-${pageId}.json`
-  ]
-
-  for (const fileName of pageConfigFiles) {
-    const filePath = path.join(CONFIG_PATH, fileName)
-    const config = loadJsonFile(filePath)
-    
-    if (config) {
-      return config as PageConfig
-    }
+  const configType = `page-${pageId}`
+  const config = readConfig(configType)
+  
+  if (config && Object.keys(config).length > 0) {
+    return config as PageConfig
   }
 
   return null
@@ -71,7 +61,21 @@ export function getPageModules(pageId: string): ModuleData[] {
   }
 
   if (pageConfig.modules && Array.isArray(pageConfig.modules)) {
-    return pageConfig.modules
+    const moduleInstanceIdMap: Record<string, string> = {}
+    
+    return pageConfig.modules.map((moduleId: string) => {
+      const moduleInstanceId = moduleInstanceIdMap[moduleId] || 
+        `${moduleId}-${Date.now()}`
+      
+      moduleInstanceIdMap[moduleId] = moduleInstanceId
+
+      return {
+        moduleName: moduleId,
+        moduleId: moduleId,
+        moduleInstanceId,
+        data: readConfig(moduleId) || {}
+      }
+    })
   }
 
   if (pageConfig.sections && Array.isArray(pageConfig.sections)) {
@@ -92,7 +96,7 @@ export function getPageModules(pageId: string): ModuleData[] {
         moduleName: section.name || section.id,
         moduleId: section.moduleId || section.id,
         moduleInstanceId,
-        data: getModuleInstanceData(moduleInstanceId) || {}
+        data: readConfig(section.moduleId || section.id) || {}
       }
     })
   }
@@ -104,24 +108,7 @@ export function getModuleInstanceData(moduleInstanceId: string): Record<string, 
   const parts = moduleInstanceId.split('-')
   const moduleId = parts[0]
   
-  const dataFiles = [
-    `${moduleInstanceId}.json`,
-    `${moduleId}.json`,
-    `site-${moduleId}.json`,
-    `page-${moduleId}.json`,
-    `home-${moduleId}.json`
-  ]
-
-  for (const fileName of dataFiles) {
-    const filePath = path.join(CONFIG_PATH, fileName)
-    const data = loadJsonFile(filePath)
-    
-    if (data) {
-      return data
-    }
-  }
-
-  return null
+  return readConfig(moduleId)
 }
 
 export function getModuleData(moduleId: string): ModuleData | null {
@@ -146,30 +133,13 @@ export function updateModuleInstanceData(
   const parts = moduleInstanceId.split('-')
   const moduleId = parts[0]
   
-  const existingFiles = [
-    { path: path.join(CONFIG_PATH, `${moduleInstanceId}.json`), name: `${moduleInstanceId}.json` },
-    { path: path.join(CONFIG_PATH, `${moduleId}.json`), name: `${moduleId}.json` },
-    { path: path.join(CONFIG_PATH, `site-${moduleId}.json`), name: `site-${moduleId}.json` },
-    { path: path.join(CONFIG_PATH, `page-${moduleId}.json`), name: `page-${moduleId}.json` },
-    { path: path.join(CONFIG_PATH, `home-${moduleId}.json`), name: `home-${moduleId}.json` }
-  ]
-
-  for (const { path: filePath } of existingFiles) {
-    if (fs.existsSync(filePath)) {
-      const existingData = loadJsonFile(filePath)
-      if (existingData) {
-        const updatedData = { ...existingData, ...data }
-        return saveJsonFile(filePath, updatedData)
-      }
-    }
-  }
-
-  const newFilePath = path.join(CONFIG_PATH, `${moduleInstanceId}.json`)
-  return saveJsonFile(newFilePath, data)
+  writeConfig(moduleId, data)
+  return true
 }
 
 export function updatePageModules(pageId: string, modules: ModuleData[]): boolean {
-  const pageConfig = getPageConfig(pageId)
+  const configType = `page-${pageId}`
+  const pageConfig = readConfig(configType)
   
   if (!pageConfig) {
     return false
@@ -184,48 +154,28 @@ export function updatePageModules(pageId: string, modules: ModuleData[]): boolea
     moduleId: module.moduleId
   }))
 
+  const moduleIds = modules.map((module) => module.moduleId)
+
   const updatedConfig = {
     ...pageConfig,
     sections,
-    modules
+    modules: moduleIds
   }
 
-  const pageConfigFiles = [
-    `${pageId}Order.json`,
-    `${pageId}.json`,
-    `page-${pageId}.json`
-  ]
-
-  for (const fileName of pageConfigFiles) {
-    const filePath = path.join(CONFIG_PATH, fileName)
-    if (fs.existsSync(filePath)) {
-      return saveJsonFile(filePath, updatedConfig)
-    }
-  }
-
-  const newFilePath = path.join(CONFIG_PATH, `${pageId}Order.json`)
-  return saveJsonFile(newFilePath, updatedConfig)
+  writeConfig(configType, updatedConfig)
+  return true
 }
 
 export function getModuleTemplate(moduleId: string): ModuleRegistration | null {
-  const templateFiles = [
-    `${moduleId}.json`,
-    `site-${moduleId}.json`,
-    `page-${moduleId}.json`
-  ]
-
-  for (const fileName of templateFiles) {
-    const filePath = path.join(TEMPLATE_PATH, fileName)
-    const template = loadJsonFile(filePath)
-    
-    if (template) {
-      return {
-        moduleName: (template.moduleName as string) || moduleId,
-        moduleId: (template.moduleId as string) || moduleId,
-        component: null as any,
-        schema: (template.schema as Record<string, unknown>) || {},
-        defaultData: (template.defaultData as Record<string, unknown>) || template
-      }
+  const template = readConfig(moduleId)
+  
+  if (template) {
+    return {
+      moduleName: (template.moduleName as string) || moduleId,
+      moduleId: (template.moduleId as string) || moduleId,
+      component: null as any,
+      schema: (template.schema as Record<string, unknown>) || {},
+      defaultData: (template.defaultData as Record<string, unknown>) || template
     }
   }
 
@@ -236,21 +186,16 @@ export function getAllAvailableModules(): string[] {
   const modules = new Set<string>()
   
   try {
-    const runtimeFiles = fs.readdirSync(CONFIG_PATH)
-    runtimeFiles.forEach(file => {
-      if (file.endsWith('.json') && !file.includes('Order')) {
-        const moduleId = file.replace('.json', '').replace(/^(site-|page-|home-)/, '')
-        modules.add(moduleId)
-      }
-    })
-
-    const templateFiles = fs.readdirSync(TEMPLATE_PATH)
-    templateFiles.forEach(file => {
-      if (file.endsWith('.json')) {
-        const moduleId = file.replace('.json', '').replace(/^(site-|page-|home-)/, '')
-        modules.add(moduleId)
-      }
-    })
+    const pageDataDir = path.join(process.cwd(), 'database', 'templates', 'page-data')
+    if (fs.existsSync(pageDataDir)) {
+      const templateFiles = fs.readdirSync(pageDataDir)
+      templateFiles.forEach(file => {
+        if (file.endsWith('.json') && file.startsWith('data-')) {
+          const moduleId = file.replace('.json', '').replace('data-', '')
+          modules.add(moduleId)
+        }
+      })
+    }
   } catch (error) {
     console.error('Error getting available modules:', error)
   }
