@@ -1,11 +1,3 @@
-import { NewsDetailModule } from './index'
-import schema from './schema.json'
-import defaultData from './default.json'
-
-export const module = {
-  id: 'news-detail',
-  name: '资讯详情',
-  component: NewsDetailModule,
-  schema,
-  defaultData
-}
+export { NewsDetailModule } from './index'
+export { default as schema } from './schema.json'
+export { default as defaultData } from './default.json'
