@@ -5,6 +5,8 @@ import styles from "./home.module.css"
 
 initializeModules()
 
+
+
 export default function Home() {
   const initialData = loadInitialData()
   const { data } = initialData

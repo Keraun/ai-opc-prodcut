@@ -1,15 +1,11 @@
 'use client'
 
 import styles from "./not-found.module.css"
-import { registerSiteHeaderModule } from "@/modules/site-header/register"
-import { registerSiteFooterModule } from "@/modules/site-footer/register"
-import { registerNotFoundModule } from "@/modules/section-404/register"
 import { ModuleRenderer } from "@/modules/renderer"
 import type { ModuleData } from "@/modules/types"
+import { initializeModules } from "@/modules/init"
 
-registerSiteHeaderModule()
-registerSiteFooterModule()
-registerNotFoundModule()
+initializeModules()
 
 const notFoundModules: ModuleData[] = [
   {
