@@ -224,8 +224,6 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
       setCurrentTheme("modern")
       setThemeConfig(themeConfigs["modern"])
     }
-    
-    fetchThemeConfig()
   }, [])
 
   useEffect(() => {
@@ -246,19 +244,7 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
     }
   }, [mounted, themeConfig])
 
-  const fetchThemeConfig = async () => {
-    try {
-      const response = await fetch("/api/admin/config")
-      if (response.ok) {
-        const data = await response.json()
-        if (data.theme) {
-          setThemes(data.theme.themes)
-        }
-      }
-    } catch (error) {
-      console.error("Failed to fetch theme config:", error)
-    }
-  }
+
 
   const applyThemeColors = () => {
     if (!themeConfig) return

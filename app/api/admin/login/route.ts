@@ -92,7 +92,7 @@ export async function POST(request: NextRequest) {
     let showSuperAdminToken = false
     let superAdminToken = ''
 
-    const tokenConfigPath = path.join(process.cwd(), "config/json/system-token.json")
+    const tokenConfigPath = path.join(process.cwd(), "database/runtime/system/system-token.json")
     let tokenConfig = { superAdminToken: '' }
     
     try {

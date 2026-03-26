@@ -1,5 +1,16 @@
 import { NextRequest, NextResponse } from "next/server"
-import { readAllConfigs, getPageResponse } from "@/lib/config-manager"
+import { readAllConfigs, getPageResponse, readConfig } from "@/lib/config-manager"
+
+const SAFE_CONFIG_TYPES = [
+  'site',
+  'site-seo',
+  'site-navigation',
+  'theme',
+  'theme-modern',
+  'theme-nature',
+  'theme-tech',
+  'theme-custom',
+]
 
 export async function GET(request: NextRequest) {
   try {
@@ -12,7 +23,18 @@ export async function GET(request: NextRequest) {
     }
     
     const configs = readAllConfigs()
-    return NextResponse.json(configs)
+    const safeConfigs: Record<string, any> = {}
+    
+    for (const [key, value] of Object.entries(configs)) {
+      if (SAFE_CONFIG_TYPES.includes(key) || 
+          key.startsWith('page-') || 
+          key.startsWith('data-') ||
+          key.startsWith('section-')) {
+        safeConfigs[key] = value
+      }
+    }
+    
+    return NextResponse.json(safeConfigs)
   } catch (error) {
     console.error("Config API error:", error)
     return NextResponse.json({

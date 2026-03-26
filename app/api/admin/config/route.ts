@@ -3,8 +3,22 @@ import { readConfig, writeConfig, readAllConfigs, readTemplate } from "@/lib/con
 import { logOperation } from "@/lib/operation-logger"
 import { cookies } from "next/headers"
 
+async function checkAdminAuth() {
+  const cookieStore = await cookies()
+  const userCookie = cookieStore.get('adminUser')?.value
+  return !!userCookie
+}
+
 export async function GET() {
   try {
+    const isAuthenticated = await checkAdminAuth()
+    if (!isAuthenticated) {
+      return NextResponse.json({
+        success: false,
+        message: "未登录"
+      }, { status: 401 })
+    }
+    
     const configs = readAllConfigs()
     return NextResponse.json(configs)
   } catch (error) {
@@ -17,6 +31,14 @@ export async function GET() {
 
 export async function POST(request: NextRequest) {
   try {
+    const isAuthenticated = await checkAdminAuth()
+    if (!isAuthenticated) {
+      return NextResponse.json({
+        success: false,
+        message: "未登录"
+      }, { status: 401 })
+    }
+
     const body = await request.json()
     const { type, data } = body
 
