@@ -12,3 +12,5 @@ export type { MenuProps, MenuItem } from "./menu"
 
 export { MobileMenu } from "./mobile-menu"
 export type { MobileMenuProps, MobileMenuItem } from "./mobile-menu"
+
+export { NotFoundResult } from "./not-found-result"
