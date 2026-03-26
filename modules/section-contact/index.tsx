@@ -1,12 +1,13 @@
-import { Card, Form, Input, Button, Radio } from "@arco-design/web-react"
-import { IconSend } from "@arco-design/web-react/icon"
 import type { ModuleProps } from "@/modules/types"
 import type { ContactData } from "./types"
 import styles from "./index.module.css"
 
-const FormItem = Form.Item
-const TextArea = Input.TextArea
-const RadioGroup = Radio.Group
+// SVG 图标组件
+const SendIcon = () => (
+  <svg className={styles.svgIcon} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+    <path strokeLinecap="round" strokeLinejoin="round" d="M22 2L11 13M22 2l-7 20-4-20 4 7 20" />
+  </svg>
+)
 
 const contactPreferences = [
   { label: "电话", value: "phone" },
@@ -46,7 +47,7 @@ export function ContactModule({ data }: ModuleProps) {
           </p>
         </div>
 
-        <Card className={styles.card}>
+        <div className={styles.card}>
           <div className={styles.cardContent}>
             <form
               className={styles.form}
@@ -78,38 +79,48 @@ export function ContactModule({ data }: ModuleProps) {
             >
               <div className={styles.formGrid}>
                 <div className={styles.formItem}>
-                  <label className={styles.formLabel}>姓名 *</label>
-                  <Input
+                  <label className={styles.formLabel} htmlFor="name">姓名 *</label>
+                  <input
+                    id="name"
                     name="name"
+                    type="text"
                     placeholder="请输入您的姓名"
                     className={styles.formInput}
+                    required
                   />
                 </div>
 
                 <div className={styles.formItem}>
-                  <label className={styles.formLabel}>电话 *</label>
-                  <Input
+                  <label className={styles.formLabel} htmlFor="phone">电话 *</label>
+                  <input
+                    id="phone"
                     name="phone"
+                    type="tel"
                     placeholder="请输入您的电话号码"
                     className={styles.formInput}
+                    required
                   />
                 </div>
               </div>
 
               <div className={styles.formItem}>
-                <label className={styles.formLabel}>邮箱 *</label>
-                <Input
+                <label className={styles.formLabel} htmlFor="email">邮箱 *</label>
+                <input
+                  id="email"
                   name="email"
                   type="email"
                   placeholder="请输入您的邮箱地址"
                   className={styles.formInput}
+                  required
                 />
               </div>
 
               <div className={styles.formItem}>
-                <label className={styles.formLabel}>公司名称</label>
-                <Input
+                <label className={styles.formLabel} htmlFor="company">公司名称</label>
+                <input
+                  id="company"
                   name="company"
+                  type="text"
                   placeholder="请输入您的公司名称（选填）"
                   className={styles.formInput}
                 />
@@ -117,39 +128,47 @@ export function ContactModule({ data }: ModuleProps) {
 
               <div className={styles.formItem}>
                 <label className={styles.formLabel}>偏好联系方式</label>
-                <RadioGroup name="contactPreference">
+                <div className={styles.radioGroup}>
                   {contactPreferences.map((pref) => (
-                    <Radio key={pref.value} value={pref.value}>
-                      {pref.label}
-                    </Radio>
+                    <label key={pref.value} className={styles.radioLabel}>
+                      <input
+                        type="radio"
+                        name="contactPreference"
+                        value={pref.value}
+                        defaultChecked={pref.value === 'wechat'}
+                        className={styles.radioInput}
+                      />
+                      <span className={styles.radioText}>{pref.label}</span>
+                    </label>
                   ))}
-                </RadioGroup>
+                </div>
               </div>
 
               <div className={styles.formItem}>
-                <label className={styles.formLabel}>留言 *</label>
-                <TextArea
+                <label className={styles.formLabel} htmlFor="message">留言 *</label>
+                <textarea
+                  id="message"
                   name="message"
                   placeholder="请简单描述您的需求或问题"
-                  autoSize={{ minRows: 4, maxRows: 6 }}
+                  rows={4}
                   className={styles.formTextArea}
+                  required
                 />
               </div>
 
               <div className={styles.formItem}>
-                <Button
-                  type="primary"
-                  htmlType="submit"
+                <button
+                  type="submit"
                   className={styles.submitButton}
                   style={{ backgroundColor: primaryColor }}
                 >
-                  <IconSend style={{ marginRight: '0.5rem' }} />
+                  <span style={{ marginRight: '0.5rem' }}><SendIcon /></span>
                   提交留言
-                </Button>
+                </button>
               </div>
             </form>
           </div>
-        </Card>
+        </div>
       </div>
     </section>
   )

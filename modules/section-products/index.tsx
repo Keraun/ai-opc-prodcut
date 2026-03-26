@@ -1,20 +1,43 @@
-import { Card, Tag } from "@arco-design/web-react"
-import {
-  IconApps,
-  IconBook,
-  IconThunderbolt,
-  IconCustomerService,
-  IconArrowRight,
-} from "@arco-design/web-react/icon"
 import type { ModuleProps } from "@/modules/types"
 import type { ProductsData } from "./types"
 import styles from "./index.module.css"
 
+// SVG 图标组件
+const AppsIcon = () => (
+  <svg className={styles.svgIcon} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+    <path strokeLinecap="round" strokeLinejoin="round" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" />
+  </svg>
+)
+
+const BookIcon = () => (
+  <svg className={styles.svgIcon} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+    <path strokeLinecap="round" strokeLinejoin="round" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+  </svg>
+)
+
+const ThunderboltIcon = () => (
+  <svg className={styles.svgIcon} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+    <path strokeLinecap="round" strokeLinejoin="round" d="M13 2L3 14h9l-1 8 10-12h-9l1-8z" />
+  </svg>
+)
+
+const CustomerServiceIcon = () => (
+  <svg className={styles.svgIcon} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+    <path strokeLinecap="round" strokeLinejoin="round" d="M18.364 5.636l-3.536 3.536m0 5.656l3.536 3.536M9.172 9.172L5.636 5.636m3.536 9.192l-3.536 3.536M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-5 0a4 4 0 11-8 0 4 4 0 018 0z" />
+  </svg>
+)
+
+const ArrowRightIcon = () => (
+  <svg className={styles.svgIcon} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+    <path strokeLinecap="round" strokeLinejoin="round" d="M14 5l7 7m0 0l-7 7m7-7H3" />
+  </svg>
+)
+
 const iconMap: Record<string, any> = {
-  IconApps,
-  IconBook,
-  IconThunderbolt,
-  IconCustomerService,
+  IconApps: <AppsIcon />,
+  IconBook: <BookIcon />,
+  IconThunderbolt: <ThunderboltIcon />,
+  IconCustomerService: <CustomerServiceIcon />,
 }
 
 export function ProductsModule({ data }: ModuleProps) {
@@ -63,23 +86,32 @@ export function ProductsModule({ data }: ModuleProps) {
               if (!Icon) return null
 
               return (
-                <Card
+                <div
                   key={product?.id || index}
                   className={styles.card}
-                  hoverable
                 >
                   <div className={styles.cardContent}>
                     <div className={styles.cardHeader}>
                       <div className={styles.iconWrapper}>
-                        <Icon
+                        <div
                           className={styles.icon}
                           style={{ color: primaryColor }}
-                        />
+                        >
+                          {Icon}
+                        </div>
                       </div>
                       {product?.tag && (
-                        <Tag color={product?.tagColor} style={{ borderRadius: '9999px', padding: '0.125rem 0.625rem', fontSize: '0.75rem' }}>
+                        <span 
+                          className={styles.tag} 
+                          style={{ 
+                            backgroundColor: product?.tagColor || '#e5e7eb',
+                            borderRadius: '9999px', 
+                            padding: '0.125rem 0.625rem', 
+                            fontSize: '0.75rem' 
+                          }}
+                        >
                           {product.tag}
-                        </Tag>
+                        </span>
                       )}
                     </div>
 
@@ -105,10 +137,10 @@ export function ProductsModule({ data }: ModuleProps) {
                       style={{ color: accentColor }}
                     >
                       了解更多
-                      <IconArrowRight className={styles.ctaIcon} />
+                      <span className={styles.ctaIcon}><ArrowRightIcon /></span>
                     </button>
                   </div>
-                </Card>
+                </div>
               )
             })}
           </div>

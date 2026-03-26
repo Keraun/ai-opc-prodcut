@@ -1,8 +1,19 @@
-import { Button, Card } from "@arco-design/web-react"
-import { IconCheck, IconArrowRight } from "@arco-design/web-react/icon"
 import type { ModuleProps } from "@/modules/types"
 import type { PricingData, PricingFeature } from "./types"
 import styles from "./index.module.css"
+
+// SVG 图标组件
+const CheckIcon = () => (
+  <svg className={styles.svgIcon} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+    <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+  </svg>
+)
+
+const ArrowRightIcon = () => (
+  <svg className={styles.svgIcon} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+    <path strokeLinecap="round" strokeLinejoin="round" d="M14 5l7 7m0 0l-7 7m7-7H3" />
+  </svg>
+)
 
 export function PricingModule({ data }: ModuleProps) {
   const config: PricingData = (data as PricingData) || {}
@@ -68,7 +79,7 @@ export function PricingModule({ data }: ModuleProps) {
 
         <div className={styles.grid}>
           {pricingPlans.map((plan: PricingFeature, index: number) => (
-            <Card
+            <div
               key={index}
               className={`${styles.card} ${plan.isPopular ? styles.cardPopular : ''}`}
               style={{
@@ -99,7 +110,7 @@ export function PricingModule({ data }: ModuleProps) {
                 <ul className={styles.features}>
                   {(plan.features || []).map((feature: string, i: number) => (
                     <li key={i} className={styles.featureItem}>
-                      <IconCheck className={styles.featureIcon} />
+                      <span className={styles.featureIcon}><CheckIcon /></span>
                       <span>{feature}</span>
                     </li>
                   ))}
@@ -107,14 +118,13 @@ export function PricingModule({ data }: ModuleProps) {
 
                 {plan.link ? (
                   <a href={plan.link} className={styles.buttonLink}>
-                    <Button
-                      type={plan.isPopular ? "primary" : "secondary"}
+                    <button
                       className={`${styles.button} ${plan.isPopular ? styles.buttonPrimary : styles.buttonSecondary}`}
                       style={plan.isPopular ? { backgroundColor: primaryColor } : {}}
                     >
                       {plan.buttonText}
-                      <IconArrowRight style={{ marginLeft: '0.5rem' }} />
-                    </Button>
+                      <span style={{ marginLeft: '0.5rem' }}><ArrowRightIcon /></span>
+                    </button>
                   </a>
                 ) : (
                   <button
@@ -123,11 +133,11 @@ export function PricingModule({ data }: ModuleProps) {
                     onClick={() => alert('请联系客服咨询企业版详情')}
                   >
                     {plan.buttonText}
-                    <IconArrowRight style={{ marginLeft: '0.5rem' }} />
+                    <span style={{ marginLeft: '0.5rem' }}><ArrowRightIcon /></span>
                   </button>
                 )}
               </div>
-            </Card>
+            </div>
           ))}
         </div>
       </div>

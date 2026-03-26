@@ -1,5 +1,4 @@
-import { Button } from "@arco-design/web-react"
-import { IconMenu, IconCustomerService } from "@arco-design/web-react/icon"
+import { MenuIcon, CustomerServiceIcon } from "../icons"
 import Link from "next/link"
 import { Logo } from "@/components/common/logo"
 import type { ModuleProps } from "@/modules/types"
@@ -57,35 +56,24 @@ export function HeaderModule({ data }: ModuleProps) {
           )}
           
           <div className={styles.ctaSection}>
-            <Link href="/contact">
-              <Button
-                type="text"
-                style={{ color: accentColor, height: '2.5rem', borderRadius: '9999px' }}
-              >
-                <IconCustomerService style={{ marginRight: '0.375rem' }} />
-                联系我们
-              </Button>
+            <Link href="/contact" className={styles.textButton}>
+              <CustomerServiceIcon />
+              联系我们
             </Link>
-            <Link href="/products">
-              <Button
-                style={{ 
-                  backgroundColor: primaryColor,
-                  color: 'white',
-                  borderColor: primaryColor,
-                  height: '2.5rem',
-                  paddingLeft: '1.5rem',
-                  paddingRight: '1.5rem',
-                  borderRadius: '9999px',
-                  boxShadow: '0 10px 15px -3px rgba(0, 0, 0, 0.1)'
-                }}
-              >
-                开始使用
-              </Button>
+            <Link 
+              href="/products" 
+              className={styles.primaryButton}
+              style={{ 
+                backgroundColor: primaryColor,
+                boxShadow: '0 10px 15px -3px rgba(0, 0, 0, 0.1)'
+              }}
+            >
+              开始使用
             </Link>
           </div>
 
           <Link href="#" className={styles.mobileMenuButton}>
-            <IconMenu style={{ fontSize: '1.25rem', color: '#374151' }} />
+            <MenuIcon />
           </Link>
         </div>
       </div>

@@ -1,10 +1,33 @@
-import { Button } from "@arco-design/web-react"
-import { IconArrowRight, IconCommand, IconStar, IconThunderbolt } from "@arco-design/web-react/icon"
 import Link from "next/link"
 import { Logo } from "@/components/common/logo"
 import type { ModuleProps } from "@/modules/types"
 import type { HeroData } from "./types"
 import styles from "./index.module.css"
+
+// SVG 图标组件
+const ArrowRightIcon = () => (
+  <svg className={styles.svgIcon} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+    <path strokeLinecap="round" strokeLinejoin="round" d="M14 5l7 7m0 0l-7 7m7-7H3" />
+  </svg>
+)
+
+const CommandIcon = () => (
+  <svg className={styles.svgIcon} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+    <path strokeLinecap="round" strokeLinejoin="round" d="M9 3v2m6-2v2M9 19v2m6-2v2M5 9H3m2 6H3m18-6h-2m2 6h-2M7 19h10a2 2 0 002-2V7a2 2 0 00-2-2H7a2 2 0 00-2 2v10a2 2 0 002 2zM9 9h6v6H9V9z" />
+  </svg>
+)
+
+const StarIcon = () => (
+  <svg className={styles.svgIcon} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+    <path strokeLinecap="round" strokeLinejoin="round" d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.78.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.783-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z" />
+  </svg>
+)
+
+const ThunderboltIcon = () => (
+  <svg className={styles.svgIcon} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+    <path strokeLinecap="round" strokeLinejoin="round" d="M13 2L3 14h9l-1 8 10-12h-9l1-8z" />
+  </svg>
+)
 
 export function HeroModule({ data }: ModuleProps) {
   const config: HeroData = (data as HeroData) || {}
@@ -54,48 +77,17 @@ export function HeroModule({ data }: ModuleProps) {
 
       <div className={styles.ctaButtons}>
         {config.buttons?.primary?.href && config.buttons?.primary?.text && (
-          <Link href={config.buttons.primary.href}>
-            <Button
-              type="primary"
-              size="large"
-              style={{
-                backgroundColor: primaryColor,
-                color: 'white',
-                height: '3.5rem',
-                paddingLeft: '2.5rem',
-                paddingRight: '2.5rem',
-                fontSize: '1rem',
-                borderRadius: '0.75rem',
-                boxShadow: '0 10px 15px -3px rgba(0, 0, 0, 0.1)',
-                transition: 'all 0.3s ease'
-              }}
-            >
-              <IconCommand style={{ marginRight: '0.5rem', fontSize: '1.125rem' }} />
-              {config.buttons.primary.text}
-            </Button>
+          <Link href={config.buttons.primary.href} className={styles.primaryButton}>
+            <span style={{ marginRight: '0.5rem' }}><CommandIcon /></span>
+            {config.buttons.primary.text}
           </Link>
         )}
 
         {config.buttons?.secondary?.text && (
-          <Button
-            type="secondary"
-            size="large"
-            style={{
-              backgroundColor: 'white',
-              border: '1px solid #e5e7eb',
-              color: '#374151',
-              height: '3.5rem',
-              paddingLeft: '2.5rem',
-              paddingRight: '2.5rem',
-              fontSize: '1rem',
-              borderRadius: '0.75rem',
-              boxShadow: '0 1px 3px 0 rgba(0, 0, 0, 0.1)',
-              transition: 'all 0.3s ease'
-            }}
-          >
+          <button className={styles.secondaryButton}>
             {config.buttons.secondary.text}
-            <IconArrowRight style={{ marginLeft: '0.5rem' }} />
-          </Button>
+            <span style={{ marginLeft: '0.5rem' }}><ArrowRightIcon /></span>
+          </button>
         )}
       </div>
 
@@ -150,48 +142,17 @@ export function HeroModule({ data }: ModuleProps) {
 
           <div className={`${styles.ctaButtons} ${styles.ctaButtonsLeft}`}>
             {config.buttons?.primary?.href && config.buttons?.primary?.text && (
-              <Link href={config.buttons.primary.href}>
-                <Button
-                  type="primary"
-                  size="large"
-                  style={{
-                    backgroundColor: primaryColor,
-                    color: 'white',
-                    height: '3.5rem',
-                    paddingLeft: '2.5rem',
-                    paddingRight: '2.5rem',
-                    fontSize: '1rem',
-                    borderRadius: '0.75rem',
-                    boxShadow: '0 10px 15px -3px rgba(0, 0, 0, 0.1)',
-                    transition: 'all 0.3s ease'
-                  }}
-                >
-                  <IconStar style={{ marginRight: '0.5rem', fontSize: '1.125rem' }} />
-                  {config.buttons.primary.text}
-                </Button>
+              <Link href={config.buttons.primary.href} className={styles.primaryButton}>
+                <span style={{ marginRight: '0.5rem' }}><StarIcon /></span>
+                {config.buttons.primary.text}
               </Link>
             )}
 
             {config.buttons?.secondary?.text && (
-              <Button
-                type="secondary"
-                size="large"
-                style={{
-                  backgroundColor: 'white',
-                  border: '1px solid #e5e7eb',
-                  color: '#374151',
-                  height: '3.5rem',
-                  paddingLeft: '2.5rem',
-                  paddingRight: '2.5rem',
-                  fontSize: '1rem',
-                  borderRadius: '0.75rem',
-                  boxShadow: '0 1px 3px 0 rgba(0, 0, 0, 0.1)',
-                  transition: 'all 0.3s ease'
-                }}
-              >
+              <button className={styles.secondaryButton}>
                 {config.buttons.secondary.text}
-                <IconArrowRight style={{ marginLeft: '0.5rem' }} />
-              </Button>
+                <span style={{ marginLeft: '0.5rem' }}><ArrowRightIcon /></span>
+              </button>
             )}
           </div>
 
@@ -208,7 +169,7 @@ export function HeroModule({ data }: ModuleProps) {
             <div className={styles.layout2ImageBg} />
             <div className={styles.layout2ImageContent}>
               <div className={styles.layout2ImageText}>
-                <IconThunderbolt className={styles.layout2ImageIcon} />
+                <span className={styles.layout2ImageIcon}><ThunderboltIcon /></span>
                 <h3 className={styles.layout2ImageTitle}>AI 赋能</h3>
                 <p className={styles.layout2ImageDesc}>提升业务效率</p>
               </div>
@@ -260,48 +221,17 @@ export function HeroModule({ data }: ModuleProps) {
 
           <div className={styles.ctaButtons}>
             {config.buttons?.primary?.href && config.buttons?.primary?.text && (
-              <Link href={config.buttons.primary.href}>
-                <Button
-                  type="primary"
-                  size="large"
-                  style={{
-                    backgroundColor: primaryColor,
-                    color: 'white',
-                    height: '3.5rem',
-                    paddingLeft: '2.5rem',
-                    paddingRight: '2.5rem',
-                    fontSize: '1rem',
-                    borderRadius: '0.75rem',
-                    boxShadow: '0 10px 15px -3px rgba(0, 0, 0, 0.1)',
-                    transition: 'all 0.3s ease'
-                  }}
-                >
-                  <IconCommand style={{ marginRight: '0.5rem', fontSize: '1.125rem' }} />
-                  {config.buttons.primary.text}
-                </Button>
+              <Link href={config.buttons.primary.href} className={styles.primaryButton}>
+                <span style={{ marginRight: '0.5rem' }}><CommandIcon /></span>
+                {config.buttons.primary.text}
               </Link>
             )}
 
             {config.buttons?.secondary?.text && (
-              <Button
-                type="secondary"
-                size="large"
-                style={{
-                  backgroundColor: '#f9fafb',
-                  border: '1px solid #e5e7eb',
-                  color: '#374151',
-                  height: '3.5rem',
-                  paddingLeft: '2.5rem',
-                  paddingRight: '2.5rem',
-                  fontSize: '1rem',
-                  borderRadius: '0.75rem',
-                  boxShadow: '0 1px 3px 0 rgba(0, 0, 0, 0.1)',
-                  transition: 'all 0.3s ease'
-                }}
-              >
+              <button className={styles.secondaryButton} style={{ backgroundColor: '#f9fafb' }}>
                 {config.buttons.secondary.text}
-                <IconArrowRight style={{ marginLeft: '0.5rem' }} />
-              </Button>
+                <span style={{ marginLeft: '0.5rem' }}><ArrowRightIcon /></span>
+              </button>
             )}
           </div>
 

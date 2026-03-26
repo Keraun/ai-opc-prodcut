@@ -1,4 +1,4 @@
-import { IconLocation, IconPhone, IconEmail, IconSettings } from "@arco-design/web-react/icon"
+import { LocationIcon, PhoneIcon, EmailIcon, SettingsGearIcon } from "../icons"
 import { Logo } from "@/components/common/logo"
 import type { ModuleProps } from "@/modules/types"
 import type { FooterData } from "./types"
@@ -25,17 +25,17 @@ export function FooterModule({ data }: ModuleProps) {
 
   const contactInfo = [
     {
-      icon: IconLocation,
+      icon: <LocationIcon />,
       title: "公司地址",
       content: config?.address || defaultSiteConfig.contact.address,
     },
     {
-      icon: IconPhone,
+      icon: <PhoneIcon />,
       title: "联系电话",
       content: config?.phone || defaultSiteConfig.contact.phone,
     },
     {
-      icon: IconEmail,
+      icon: <EmailIcon />,
       title: "电子邮箱",
       content: config?.email || defaultSiteConfig.contact.email,
     },
@@ -62,7 +62,7 @@ export function FooterModule({ data }: ModuleProps) {
                 const Icon = info.icon
                 return (
                   <li key={index} className={styles.contactItem}>
-                    <Icon className={styles.contactIcon} />
+                    <span className={styles.contactIcon}>{Icon}</span>
                     <div className={styles.contactContent}>
                       <p className={styles.contactLabel}>{info.title}</p>
                       <p className={styles.contactText}>{info.content}</p>
@@ -110,7 +110,7 @@ export function FooterModule({ data }: ModuleProps) {
               rel="noopener noreferrer"
               className={styles.adminLink}
             >
-              <IconSettings className={styles.adminIcon} />
+              <span className={styles.adminIcon}><SettingsGearIcon /></span>
               管理后台
             </a>
           </div>
