@@ -1,22 +1,18 @@
 {
-  "title": "服务信息配置",
-  "description": "配置首页服务信息区域的内容",
   "type": "object",
+  "title": "Services Section Configuration",
   "properties": {
     "title": {
       "type": "string",
-      "title": "区块标题",
-      "ui": {"widget": "input", "width": "100%"}
+      "title": "标题"
     },
     "description": {
       "type": "string",
-      "title": "区块描述",
-      "ui": {"widget": "textarea", "rows": 2, "width": "100%"}
+      "title": "描述"
     },
     "sectionTag": {
       "type": "string",
-      "title": "区块标签",
-      "ui": {"widget": "input", "width": "100%"}
+      "title": "区块标签"
     },
     "items": {
       "type": "array",
@@ -26,33 +22,21 @@
         "properties": {
           "title": {
             "type": "string",
-            "title": "服务名称",
-            "ui": {"widget": "input", "width": "100%"}
+            "title": "标题"
           },
           "description": {
             "type": "string",
-            "title": "服务描述",
-            "ui": {"widget": "textarea", "rows": 2, "width": "100%"}
+            "title": "描述"
           },
           "highlights": {
             "type": "array",
-            "title": "亮点列表",
-            "items": {"type": "string"},
-            "ui": {"widget": "tags", "placeholder": "输入亮点后按回车添加", "width": "100%"}
+            "title": "特性列表",
+            "items": {
+              "type": "string"
+            }
           }
         }
-      },
-      "ui": {"widget": "array", "itemTitle": "服务项", "width": "100%"}
-    }
-  },
-  "ui": {
-    "layout": "vertical",
-    "labelAlign": "left",
-    "groups": [
-      {
-        "title": "服务信息配置",
-        "fields": ["title", "description", "sectionTag", "items"]
       }
-    ]
+    }
   }
 }

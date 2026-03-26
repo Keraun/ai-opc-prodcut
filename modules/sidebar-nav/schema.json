@@ -4,11 +4,7 @@
   "properties": {
     "visible": {
       "type": "boolean",
-      "title": "是否显示",
-      "default": true
+      "title": "是否显示"
     }
-  },
-  "default": {
-    "visible": true
   }
 }

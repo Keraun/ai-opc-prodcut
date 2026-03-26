@@ -4,18 +4,15 @@
   "properties": {
     "title": {
       "type": "string",
-      "title": "标题",
-      "default": "联系我们"
+      "title": "标题"
     },
     "description": {
       "type": "string",
-      "title": "描述",
-      "default": "有任何问题或需求，欢迎随时联系我们"
+      "title": "描述"
     },
     "sectionTag": {
       "type": "string",
-      "title": "区块标签",
-      "default": "联系我们"
+      "title": "区块标签"
     },
     "methods": {
       "type": "array",
@@ -26,65 +23,18 @@
           "type": {
             "type": "string",
             "title": "联系方式类型",
-            "enum": ["email", "phone", "address", "wechat", "other"],
-            "default": "email"
+            "enum": ["email", "phone", "address", "wechat", "other"]
           },
           "value": {
             "type": "string",
-            "title": "联系方式值",
-            "default": ""
+            "title": "联系方式值"
           },
           "label": {
             "type": "string",
-            "title": "标签",
-            "default": ""
+            "title": "标签"
           }
-        },
-        "default": {
-          "type": "email",
-          "value": "",
-          "label": ""
         }
-      },
-      "default": [
-        {
-          "type": "email",
-          "value": "contact@example.com",
-          "label": "邮箱"
-        },
-        {
-          "type": "phone",
-          "value": "400-123-4567",
-          "label": "电话"
-        },
-        {
-          "type": "address",
-          "value": "北京市朝阳区某某大厦",
-          "label": "地址"
-        }
-      ]
-    }
-  },
-  "default": {
-    "title": "联系我们",
-    "description": "有任何问题或需求，欢迎随时联系我们",
-    "sectionTag": "联系我们",
-    "methods": [
-      {
-        "type": "email",
-        "value": "contact@example.com",
-        "label": "邮箱"
-      },
-      {
-        "type": "phone",
-        "value": "400-123-4567",
-        "label": "电话"
-      },
-      {
-        "type": "address",
-        "value": "北京市朝阳区某某大厦",
-        "label": "地址"
       }
-    ]
+    }
   }
 }

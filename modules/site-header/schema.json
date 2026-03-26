@@ -10,58 +10,30 @@
         "properties": {
           "label": {
             "type": "string",
-            "title": "标签",
-            "default": ""
+            "title": "标签"
           },
           "href": {
             "type": "string",
-            "title": "链接地址",
-            "default": ""
+            "title": "链接地址"
           }
-        },
-        "default": {
-          "label": "",
-          "href": ""
         }
-      },
-      "default": [
-        { "label": "首页", "href": "/" },
-        { "label": "产品", "href": "/products" },
-        { "label": "服务", "href": "/services" },
-        { "label": "关于我们", "href": "/about" }
-      ]
+      }
     },
     "showContactButton": {
       "type": "boolean",
-      "title": "显示联系按钮",
-      "default": true
+      "title": "显示联系按钮"
     },
     "showCtaButton": {
       "type": "boolean",
-      "title": "显示CTA按钮",
-      "default": true
+      "title": "显示CTA按钮"
     },
     "ctaButtonText": {
       "type": "string",
-      "title": "CTA按钮文本",
-      "default": "开始使用"
+      "title": "CTA按钮文本"
     },
     "ctaButtonLink": {
       "type": "string",
-      "title": "CTA按钮链接",
-      "default": "/products"
+      "title": "CTA按钮链接"
     }
-  },
-  "default": {
-    "navItems": [
-      { "label": "首页", "href": "/" },
-      { "label": "产品", "href": "/products" },
-      { "label": "服务", "href": "/services" },
-      { "label": "关于我们", "href": "/about" }
-    ],
-    "showContactButton": true,
-    "showCtaButton": true,
-    "ctaButtonText": "开始使用",
-    "ctaButtonLink": "/products"
   }
 }

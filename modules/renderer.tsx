@@ -9,8 +9,8 @@ interface ModuleRendererProps {
 }
 
 const MODULE_LOADERS: Record<string, () => Promise<any>> = {
-  'header': () => import('./header/mod'),
-  'footer': () => import('./footer/mod'),
+  'site-header': () => import('./site-header/mod'),
+  'site-footer': () => import('./site-footer/mod'),
   'sidebar-nav': () => import('./sidebar-nav/mod'),
   'section-hero': () => import('./section-hero/mod'),
   'section-services': () => import('./section-services/mod'),
@@ -19,11 +19,12 @@ const MODULE_LOADERS: Record<string, () => Promise<any>> = {
   'section-pricing': () => import('./section-pricing/mod'),
   'section-about': () => import('./section-about/mod'),
   'section-contact': () => import('./section-contact/mod'),
+  'site-root': () => import('./site-root/mod'),
 }
 
 const MODULE_COMPONENT_NAMES: Record<string, string> = {
-  'header': 'HeaderModule',
-  'footer': 'FooterModule',
+  'site-header': 'HeaderModule',
+  'site-footer': 'FooterModule',
   'sidebar-nav': 'SidebarNavModule',
   'section-hero': 'HeroModule',
   'section-services': 'ServicesModule',
@@ -32,6 +33,7 @@ const MODULE_COMPONENT_NAMES: Record<string, string> = {
   'section-pricing': 'PricingModule',
   'section-about': 'AboutModule',
   'section-contact': 'ContactModule',
+  'site-root': 'SiteRootModule',
 }
 
 export function ModuleRenderer({ modules }: ModuleRendererProps) {

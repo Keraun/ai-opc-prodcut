@@ -1,14 +1,36 @@
-import { loadAllConfigs } from "./config-cache"
+import fs from 'fs'
+import path from 'path'
 import type { ModuleData } from "@/modules/types"
 
 let initialDataCache: Record<string, any> | null = null
+
+function loadConfigs() {
+  const configPath = path.join(process.cwd(), 'config')
+  const configs: Record<string, any> = {}
+
+  try {
+    const files = fs.readdirSync(configPath)
+    files.forEach(file => {
+      if (file.endsWith('.json')) {
+        const filePath = path.join(configPath, file)
+        const content = fs.readFileSync(filePath, 'utf8')
+        const key = file.replace('.json', '')
+        configs[key] = JSON.parse(content)
+      }
+    })
+  } catch (error) {
+    console.error('Error loading configs:', error)
+  }
+
+  return configs
+}
 
 export function loadInitialData(): Record<string, any> {
   if (initialDataCache) {
     return initialDataCache
   }
 
-  const configs = loadAllConfigs()
+  const configs = loadConfigs()
 
   const sections = configs.homeOrder?.sections || []
   const visibleSections = sections
