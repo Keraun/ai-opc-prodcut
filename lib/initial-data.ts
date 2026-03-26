@@ -51,6 +51,13 @@ export function loadInitialData(): Record<string, any> {
     data: { visible: true }
   }
 
+  const navigationModule: ModuleData = {
+    moduleName: '导航栏',
+    moduleId: 'site-navigation',
+    moduleInstanceId: `site-navigation-${Date.now()}`,
+    data: configs.navigation || {}
+  }
+
   const footerModule: ModuleData = {
     moduleName: '站点页脚',
     moduleId: 'site-footer',
@@ -112,6 +119,7 @@ export function loadInitialData(): Record<string, any> {
 
   const modules: ModuleData[] = [
     headerModule,
+    navigationModule,
     sidebarNavModule,
     ...sectionModules,
     footerModule

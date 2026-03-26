@@ -6,7 +6,7 @@ import defaultData from "./default.json"
 export function registerNavigationModule() {
   registerModule({
     moduleName: "导航栏",
-    moduleId: "navigation",
+    moduleId: "site-navigation",
     component: NavigationModule,
     schema,
     defaultData
