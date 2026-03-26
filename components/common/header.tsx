@@ -46,25 +46,6 @@ export function Header() {
     setDrawerVisible(false)
   }
 
-  const dropdownMenu = (
-    <Menu style={{ backgroundColor: 'white', border: '1px solid #f3f4f6', minWidth: '160px', borderRadius: '0.75rem', boxShadow: '0 10px 15px -3px rgba(0, 0, 0, 0.1)' }}>
-      {navItems.map((item) => (
-        <Menu.Item
-          key={item?.href}
-          onClick={() => handleNavClick(item?.href)}
-          style={{ color: '#374151', cursor: 'pointer', borderRadius: '0.5rem', margin: '0 0.25rem' }}
-        >
-          {item?.label}
-        </Menu.Item>
-      ))}
-      <Menu.Item 
-        key="trial" 
-        style={{ color: '#2563eb', cursor: 'pointer', borderRadius: '0.5rem', margin: '0 0.25rem' }}
-      >
-        开始使用
-      </Menu.Item>
-    </Menu>
-  )
 
   return (
     <header
