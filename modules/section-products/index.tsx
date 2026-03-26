@@ -1,4 +1,5 @@
 import Link from "next/link"
+import { Card, Section } from "@/components/ui"
 import type { ModuleProps } from "@/modules/types"
 import type { ProductsData } from "./types"
 import styles from "./index.module.css"
@@ -50,114 +51,88 @@ export function ProductsModule({ data }: ModuleProps) {
     icon: product.icon ? iconMap[product.icon] : null,
   }))
 
-  const primaryColor = "#1e40af" // 默认主色
   const accentColor = "#06b6d4" // 默认强调色
 
   return (
-    <section id="products" className={styles.section}>
+    <Section
+      id="products"
+      title={config.title || "AI一人公司解决方案"}
+      description={config.description || "从工具到课程，从学习到实践，全方位助力个人创业者实现AI赋能"}
+      badge={config.sectionTag || "产品服务"}
+      variant="default"
+      padding="lg"
+      centered
+    >
       <div className={styles.bgElements}>
         <div className={styles.bgCircle1} />
         <div className={styles.bgCircle2} />
       </div>
 
-      <div className={styles.container}>
-        <div className={styles.header}>
-          <span
-            className={styles.tag}
-            style={{
-              backgroundColor: `${accentColor}0D`,
-              color: accentColor,
-              borderColor: `${accentColor}33`
-            }}
-          >
-            {config.sectionTag || "产品服务"}
-          </span>
-          <h2 className={styles.title}>
-            {config.title || "AI一人公司解决方案"}
-          </h2>
-          <p className={styles.description}>
-            {config.description || "从工具到课程，从学习到实践，全方位助力个人创业者实现AI赋能"}
-          </p>
-        </div>
+      {products && products.length > 0 && (
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mt-12">
+          {products.map((product, index: number) => {
+            const Icon = product?.icon
+            if (!Icon) return null
 
-        {products && products.length > 0 && (
-          <div className={styles.grid}>
-            {products.map((product, index: number) => {
-              const Icon = product?.icon
-              if (!Icon) return null
+            const cardFooter = product?.link ? (
+              <Link
+                href={product.link}
+                className="inline-flex items-center gap-2 text-cyan-500 hover:text-cyan-600 font-medium transition-colors"
+              >
+                了解更多
+                <ArrowRightIcon />
+              </Link>
+            ) : (
+              <span className="inline-flex items-center gap-2 text-cyan-500 font-medium">
+                了解更多
+                <ArrowRightIcon />
+              </span>
+            )
 
-              return (
-                <div
-                  key={product?.id || index}
-                  className={styles.card}
-                >
-                  <div className={styles.cardContent}>
-                    <div className={styles.cardHeader}>
-                      <div className={styles.iconWrapper}>
-                        <div
-                          className={styles.icon}
-                          style={{ color: primaryColor }}
-                        >
-                          {Icon}
-                        </div>
-                      </div>
-                      {product?.tag && (
-                        <span 
-                          className={styles.tag} 
-                          style={{ 
-                            backgroundColor: product?.tagColor || '#e5e7eb',
-                            borderRadius: '9999px', 
-                            padding: '0.125rem 0.625rem', 
-                            fontSize: '0.75rem' 
-                          }}
-                        >
-                          {product.tag}
-                        </span>
-                      )}
-                    </div>
-
-                    {product?.name && (
-                      <h3 className={styles.cardTitle}>{product.name}</h3>
-                    )}
-                    {product?.description && (
-                      <p className={styles.cardDescription}>{product.description}</p>
-                    )}
-
-                    {product?.features && product.features.length > 0 && (
-                      <div className={styles.features}>
-                        {product.features.map((feature: string, i: number) => (
-                          <span key={i} className={styles.feature}>
-                            {feature}
-                          </span>
-                        ))}
-                      </div>
-                    )}
-
-                    {product?.link ? (
-                      <Link
-                        href={product.link}
-                        className={styles.ctaButton}
-                        style={{ color: accentColor }}
-                      >
-                        了解更多
-                        <span className={styles.ctaIcon}><ArrowRightIcon /></span>
-                      </Link>
-                    ) : (
-                      <span
-                        className={styles.ctaButton}
-                        style={{ color: accentColor }}
-                      >
-                        了解更多
-                        <span className={styles.ctaIcon}><ArrowRightIcon /></span>
-                      </span>
-                    )}
+            return (
+              <Card
+                key={product?.id || index}
+                variant="elevated"
+                padding="md"
+                hover
+                className="relative"
+              >
+                <div className="flex items-center gap-3 mb-4">
+                  <div className="w-12 h-12 rounded-xl bg-blue-50 flex items-center justify-center text-blue-600">
+                    {Icon}
                   </div>
+                  {product?.tag && (
+                    <span className="px-2.5 py-0.5 text-xs font-medium bg-gray-100 text-gray-700 rounded-full">
+                      {product.tag}
+                    </span>
+                  )}
                 </div>
-              )
-            })}
-          </div>
-        )}
-      </div>
-    </section>
+
+                {product?.name && (
+                  <h3 className="text-xl font-semibold text-gray-900 mb-2">{product.name}</h3>
+                )}
+                {product?.description && (
+                  <p className="text-gray-600 mb-4">{product.description}</p>
+                )}
+
+                {product?.features && product.features.length > 0 && (
+                  <div className="flex flex-wrap gap-2 mb-4">
+                    {product.features.map((feature: string, i: number) => (
+                      <span key={i} className="px-3 py-1 text-sm bg-gray-50 text-gray-600 rounded-full">
+                        {feature}
+                      </span>
+                    ))}
+                  </div>
+                )}
+
+                <div className="mt-4 pt-4 border-t border-gray-100">
+                  {cardFooter}
+                </div>
+              </Card>
+            )
+          })}
+        </div>
+      )}
+    </Section>
   )
 }

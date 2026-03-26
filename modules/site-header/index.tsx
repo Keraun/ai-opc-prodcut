@@ -1,6 +1,7 @@
-import { MenuIcon, CustomerServiceIcon } from "../icons"
+import { MenuIcon, CustomerServiceIcon, HomeIcon, ProductsIcon, ServicesIcon, AboutIcon, ContactIcon } from "../icons"
 import Link from "next/link"
 import { Logo } from "@/components/common/logo"
+import { Menu, Button } from "@/components/ui"
 import type { ModuleProps } from "@/modules/types"
 import type { HeaderData } from "./types"
 import styles from "./index.module.css"
@@ -19,12 +20,27 @@ const defaultNavItems = [
   { label: '联系我们', href: '/contact' },
 ]
 
+// 图标映射
+const iconMap: Record<string, React.ReactNode> = {
+  '/': <HomeIcon />,
+  '/products': <ProductsIcon />,
+  '/services': <ServicesIcon />,
+  '/about': <AboutIcon />,
+  '/contact': <ContactIcon />,
+}
+
 export function HeaderModule({ data }: ModuleProps) {
   const config: HeaderData = (data as HeaderData) || {}
-  const primaryColor = "#1e40af" // 默认主色
-  const accentColor = "#06b6d4" // 默认强调色
 
   const navItems = config?.navItems || defaultNavItems
+
+  // 转换为Menu组件需要的格式
+  const menuItems = navItems.map((item) => ({
+    id: item.href,
+    label: item.label,
+    href: item.href,
+    icon: iconMap[item.href],
+  }))
 
   return (
     <header className={styles.header}>
@@ -39,36 +55,24 @@ export function HeaderModule({ data }: ModuleProps) {
           
           {navItems && navItems.length > 0 && (
             <nav className={styles.nav}>
-              {navItems.map((item) => (
-                <Link
-                  key={item?.href}
-                  href={item?.href}
-                  className={styles.navLink}
-                >
-                  {item?.label}
-                  <span 
-                    className={styles.navUnderline}
-                    style={{ backgroundColor: accentColor }}
-                  />
-                </Link>
-              ))}
+              <Menu 
+                items={menuItems}
+                orientation="horizontal"
+                variant="underline"
+                size="md"
+              />
             </nav>
           )}
           
           <div className={styles.ctaSection}>
-            <Link href="/contact" className={styles.textButton}>
+            <Link href="/contact" className="flex items-center gap-2 text-gray-600 hover:text-gray-900 font-medium transition-colors">
               <CustomerServiceIcon />
               联系我们
             </Link>
-            <Link 
-              href="/products" 
-              className={styles.primaryButton}
-              style={{ 
-                backgroundColor: primaryColor,
-                boxShadow: '0 10px 15px -3px rgba(0, 0, 0, 0.1)'
-              }}
-            >
-              开始使用
+            <Link href="/products">
+              <Button variant="primary" size="md">
+                开始使用
+              </Button>
             </Link>
           </div>
 

@@ -1,5 +1,6 @@
 import Link from "next/link"
 import { Logo } from "@/components/common/logo"
+import { Section, Button } from "@/components/ui"
 import type { ModuleProps } from "@/modules/types"
 import type { HeroData } from "./types"
 import styles from "./index.module.css"
@@ -38,69 +39,67 @@ export function HeroModule({ data }: ModuleProps) {
   const layoutType = config.layout || 'layout1'
 
   const renderLayout1 = () => (
-    <div className={styles.container}>
+    <div className="text-center">
       {config.badge && (
         <div
-          className={styles.badge}
-          style={{ borderColor: `${accentColor}33` }}
+          className="inline-flex items-center gap-2 px-4 py-2 rounded-full border mb-6"
+          style={{ borderColor: `${accentColor}33`, backgroundColor: `${accentColor}0D` }}
         >
           <span
-            className={styles.badgeDot}
+            className="w-2 h-2 rounded-full"
             style={{ backgroundColor: accentColor }}
           />
-          <span className={styles.badgeText}>{config.badge}</span>
+          <span className="text-sm font-medium text-gray-700">{config.badge}</span>
         </div>
       )}
 
-      <h1 className={styles.mainTitle}>
+      <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold mb-6">
         {config.title?.main && (
-          <span
-            className={styles.titleBlock}
-            style={{ color: primaryColor }}
-          >
+          <span style={{ color: primaryColor }}>
             {config.title.main}
           </span>
         )}
         {config.title?.sub && (
-          <span className={styles.titleBlock} style={{ color: '#111827' }}>
+          <span className="text-gray-900">
             {config.title.sub}
           </span>
         )}
       </h1>
 
       {config.subtitle && (
-        <p className={styles.subtitle}>
-          <Logo className={styles.subtitleLogo} />
+        <p className="text-xl text-gray-600 mb-8 flex items-center justify-center gap-2">
+          <Logo className="w-8 h-8" />
           <span>{config.subtitle}</span>
         </p>
       )}
 
-      <div className={styles.ctaButtons}>
+      <div className="flex flex-wrap justify-center gap-4 mb-8">
         {config.buttons?.primary?.href && config.buttons?.primary?.text && (
-          <Link href={config.buttons.primary.href} className={styles.primaryButton}>
-            <span style={{ marginRight: '0.5rem' }}><CommandIcon /></span>
-            {config.buttons.primary.text}
+          <Link href={config.buttons.primary.href}>
+            <Button variant="primary" size="lg" icon={<CommandIcon />} iconPosition="left">
+              {config.buttons.primary.text}
+            </Button>
           </Link>
         )}
 
         {config.buttons?.secondary?.text && (
           config.buttons?.secondary?.href ? (
-            <Link href={config.buttons.secondary.href} className={styles.secondaryButton}>
-              {config.buttons.secondary.text}
-              <span style={{ marginLeft: '0.5rem' }}><ArrowRightIcon /></span>
+            <Link href={config.buttons.secondary.href}>
+              <Button variant="secondary" size="lg" icon={<ArrowRightIcon />} iconPosition="right">
+                {config.buttons.secondary.text}
+              </Button>
             </Link>
           ) : (
-            <span className={styles.secondaryButton}>
+            <Button variant="secondary" size="lg" icon={<ArrowRightIcon />} iconPosition="right" disabled>
               {config.buttons.secondary.text}
-              <span style={{ marginLeft: '0.5rem' }}><ArrowRightIcon /></span>
-            </span>
+            </Button>
           )
         )}
       </div>
 
-      <div className={styles.featurePills}>
+      <div className="flex flex-wrap justify-center gap-3">
         {(config.featurePills || ['AI工具站', 'GEO课程', '工作流定制', '一人公司']).map((item: string, index: number) => (
-          <span key={index} className={styles.featurePill}>
+          <span key={index} className="px-4 py-2 bg-gray-100 text-gray-700 rounded-full text-sm font-medium">
             {item}
           </span>
         ))}
@@ -109,85 +108,79 @@ export function HeroModule({ data }: ModuleProps) {
   )
 
   const renderLayout2 = () => (
-    <div className={styles.container}>
-      <div className={styles.layout2Grid}>
-        <div className={styles.containerLeft}>
-          {config.badge && (
-            <div
-              className={styles.badge}
-              style={{ borderColor: `${accentColor}33` }}
-            >
-              <span
-                className={styles.badgeDot}
-                style={{ backgroundColor: accentColor }}
-              />
-              <span className={styles.badgeText}>{config.badge}</span>
-            </div>
+    <div className="grid lg:grid-cols-2 gap-12 items-center">
+      <div>
+        {config.badge && (
+          <div
+            className="inline-flex items-center gap-2 px-4 py-2 rounded-full border mb-6"
+            style={{ borderColor: `${accentColor}33`, backgroundColor: `${accentColor}0D` }}
+          >
+            <span
+              className="w-2 h-2 rounded-full"
+              style={{ backgroundColor: accentColor }}
+            />
+            <span className="text-sm font-medium text-gray-700">{config.badge}</span>
+          </div>
+        )}
+
+        <h1 className="text-4xl sm:text-5xl font-bold mb-6">
+          {config.title?.main && (
+            <span style={{ color: primaryColor }}>
+              {config.title.main}
+            </span>
           )}
-
-          <h1 className={styles.mainTitle}>
-            {config.title?.main && (
-              <span
-                className={styles.titleBlock}
-                style={{ color: primaryColor }}
-              >
-                {config.title.main}
-              </span>
-            )}
-            {config.title?.sub && (
-              <span className={styles.titleBlock} style={{ color: '#111827' }}>
-                {config.title.sub}
-              </span>
-            )}
-          </h1>
-
-          {config.subtitle && (
-            <p className={`${styles.subtitle} ${styles.subtitlePlain}`}>
-              {config.subtitle}
-            </p>
+          {config.title?.sub && (
+            <span className="text-gray-900">
+              {config.title.sub}
+            </span>
           )}
+        </h1>
 
-          <div className={`${styles.ctaButtons} ${styles.ctaButtonsLeft}`}>
-            {config.buttons?.primary?.href && config.buttons?.primary?.text && (
-              <Link href={config.buttons.primary.href} className={styles.primaryButton}>
-                <span style={{ marginRight: '0.5rem' }}><StarIcon /></span>
+        {config.subtitle && (
+          <p className="text-xl text-gray-600 mb-8">
+            {config.subtitle}
+          </p>
+        )}
+
+        <div className="flex flex-wrap gap-4 mb-8">
+          {config.buttons?.primary?.href && config.buttons?.primary?.text && (
+            <Link href={config.buttons.primary.href}>
+              <Button variant="primary" size="lg" icon={<StarIcon />} iconPosition="left">
                 {config.buttons.primary.text}
+              </Button>
+            </Link>
+          )}
+
+          {config.buttons?.secondary?.text && (
+            config.buttons?.secondary?.href ? (
+              <Link href={config.buttons.secondary.href}>
+                <Button variant="secondary" size="lg" icon={<ArrowRightIcon />} iconPosition="right">
+                  {config.buttons.secondary.text}
+                </Button>
               </Link>
-            )}
-
-            {config.buttons?.secondary?.text && (
-              config.buttons?.secondary?.href ? (
-                <Link href={config.buttons.secondary.href} className={styles.secondaryButton}>
-                  {config.buttons.secondary.text}
-                  <span style={{ marginLeft: '0.5rem' }}><ArrowRightIcon /></span>
-                </Link>
-              ) : (
-                <span className={styles.secondaryButton}>
-                  {config.buttons.secondary.text}
-                  <span style={{ marginLeft: '0.5rem' }}><ArrowRightIcon /></span>
-                </span>
-              )
-            )}
-          </div>
-
-          <div className={`${styles.featurePills} ${styles.featurePillsLeft}`}>
-            {(config.featurePills || ['AI工具站', 'GEO课程', '工作流定制', '一人公司']).map((item: string, index: number) => (
-              <span key={index} className={styles.featurePill}>
-                {item}
-              </span>
-            ))}
-          </div>
+            ) : (
+              <Button variant="secondary" size="lg" icon={<ArrowRightIcon />} iconPosition="right" disabled>
+                {config.buttons.secondary.text}
+              </Button>
+            )
+          )}
         </div>
-        <div className={styles.layout2Image}>
-          <div className={styles.layout2ImageContainer}>
-            <div className={styles.layout2ImageBg} />
-            <div className={styles.layout2ImageContent}>
-              <div className={styles.layout2ImageText}>
-                <span className={styles.layout2ImageIcon}><ThunderboltIcon /></span>
-                <h3 className={styles.layout2ImageTitle}>AI 赋能</h3>
-                <p className={styles.layout2ImageDesc}>提升业务效率</p>
-              </div>
-            </div>
+
+        <div className="flex flex-wrap gap-3">
+          {(config.featurePills || ['AI工具站', 'GEO课程', '工作流定制', '一人公司']).map((item: string, index: number) => (
+            <span key={index} className="px-4 py-2 bg-gray-100 text-gray-700 rounded-full text-sm font-medium">
+              {item}
+            </span>
+          ))}
+        </div>
+      </div>
+
+      <div className="relative">
+        <div className="aspect-square rounded-2xl bg-gradient-to-br from-blue-100 to-cyan-100 flex items-center justify-center">
+          <div className="text-center">
+            <ThunderboltIcon />
+            <h3 className="text-2xl font-bold text-gray-900 mt-4">AI 赋能</h3>
+            <p className="text-gray-600">提升业务效率</p>
           </div>
         </div>
       </div>
@@ -195,83 +188,81 @@ export function HeroModule({ data }: ModuleProps) {
   )
 
   const renderLayout3 = () => (
-    <div className={styles.layout3Container}>
-      <div className={styles.layout3Card}>
-        <div className={styles.container}>
-          {config.badge && (
-            <div
-              className={styles.badge}
-              style={{ borderColor: `${accentColor}33`, backgroundColor: '#eff6ff' }}
-            >
-              <span
-                className={styles.badgeDot}
-                style={{ backgroundColor: accentColor }}
-              />
-              <span className={styles.badgeText}>{config.badge}</span>
-            </div>
+    <div className="bg-white rounded-2xl shadow-xl p-8 lg:p-12">
+      <div className="text-center">
+        {config.badge && (
+          <div
+            className="inline-flex items-center gap-2 px-4 py-2 rounded-full border mb-6"
+            style={{ borderColor: `${accentColor}33`, backgroundColor: '#eff6ff' }}
+          >
+            <span
+              className="w-2 h-2 rounded-full"
+              style={{ backgroundColor: accentColor }}
+            />
+            <span className="text-sm font-medium text-gray-700">{config.badge}</span>
+          </div>
+        )}
+
+        <h1 className="text-4xl sm:text-5xl font-bold mb-6">
+          {config.title?.main && (
+            <span style={{ color: primaryColor }}>
+              {config.title.main}
+            </span>
           )}
-
-          <h1 className={styles.mainTitle}>
-            {config.title?.main && (
-              <span
-                className={styles.titleBlock}
-                style={{ color: primaryColor }}
-              >
-                {config.title.main}
-              </span>
-            )}
-            {config.title?.sub && (
-              <span className={styles.titleBlock} style={{ color: '#111827' }}>
-                {config.title.sub}
-              </span>
-            )}
-          </h1>
-
-          {config.subtitle && (
-            <p className={`${styles.subtitle} ${styles.subtitlePlain}`} style={{ maxWidth: '42rem', margin: '0 auto 2rem' }}>
-              {config.subtitle}
-            </p>
+          {config.title?.sub && (
+            <span className="text-gray-900">
+              {config.title.sub}
+            </span>
           )}
+        </h1>
 
-          <div className={styles.ctaButtons}>
-            {config.buttons?.primary?.href && config.buttons?.primary?.text && (
-              <Link href={config.buttons.primary.href} className={styles.primaryButton}>
-                <span style={{ marginRight: '0.5rem' }}><CommandIcon /></span>
+        {config.subtitle && (
+          <p className="text-xl text-gray-600 mb-8 max-w-2xl mx-auto">
+            {config.subtitle}
+          </p>
+        )}
+
+        <div className="flex flex-wrap justify-center gap-4 mb-8">
+          {config.buttons?.primary?.href && config.buttons?.primary?.text && (
+            <Link href={config.buttons.primary.href}>
+              <Button variant="primary" size="lg" icon={<CommandIcon />} iconPosition="left">
                 {config.buttons.primary.text}
+              </Button>
+            </Link>
+          )}
+
+          {config.buttons?.secondary?.text && (
+            config.buttons?.secondary?.href ? (
+              <Link href={config.buttons.secondary.href}>
+                <Button variant="secondary" size="lg" icon={<ArrowRightIcon />} iconPosition="right">
+                  {config.buttons.secondary.text}
+                </Button>
               </Link>
-            )}
+            ) : (
+              <Button variant="secondary" size="lg" icon={<ArrowRightIcon />} iconPosition="right" disabled>
+                {config.buttons.secondary.text}
+              </Button>
+            )
+          )}
+        </div>
 
-            {config.buttons?.secondary?.text && (
-              config.buttons?.secondary?.href ? (
-                <Link href={config.buttons.secondary.href} className={styles.secondaryButton} style={{ backgroundColor: '#f9fafb' }}>
-                  {config.buttons.secondary.text}
-                  <span style={{ marginLeft: '0.5rem' }}><ArrowRightIcon /></span>
-                </Link>
-              ) : (
-                <span className={styles.secondaryButton} style={{ backgroundColor: '#f9fafb' }}>
-                  {config.buttons.secondary.text}
-                  <span style={{ marginLeft: '0.5rem' }}><ArrowRightIcon /></span>
-                </span>
-              )
-            )}
-          </div>
-
-          <div className={styles.featurePills}>
-            {['AI工具站', 'GEO课程', '工作流定制', '一人公司'].map((item, index) => (
-              <span key={index} className={styles.featurePill} style={{ backgroundColor: '#f9fafb' }}>
-                {item}
-              </span>
-            ))}
-          </div>
+        <div className="flex flex-wrap justify-center gap-3">
+          {['AI工具站', 'GEO课程', '工作流定制', '一人公司'].map((item, index) => (
+            <span key={index} className="px-4 py-2 bg-gray-50 text-gray-700 rounded-full text-sm font-medium">
+              {item}
+            </span>
+          ))}
         </div>
       </div>
     </div>
   )
 
   return (
-    <section
+    <Section
       id="hero"
-      className={`${styles.hero} ${layoutType === 'layout3' ? styles.heroLayout3 : styles.heroLayout1}`}
+      variant={layoutType === 'layout3' ? 'minimal' : 'gradient'}
+      padding="lg"
+      maxWidth="xl"
     >
       <div className={styles.decorativeBg}>
         <div
@@ -293,6 +284,6 @@ export function HeroModule({ data }: ModuleProps) {
       {layoutType === 'layout1' && renderLayout1()}
       {layoutType === 'layout2' && renderLayout2()}
       {layoutType === 'layout3' && renderLayout3()}
-    </section>
+    </Section>
   )
 }

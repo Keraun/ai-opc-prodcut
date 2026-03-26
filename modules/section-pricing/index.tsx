@@ -1,17 +1,17 @@
 import Link from "next/link"
+import { Card, Section, Button } from "@/components/ui"
 import type { ModuleProps } from "@/modules/types"
 import type { PricingData, PricingFeature } from "./types"
-import styles from "./index.module.css"
 
 // SVG 图标组件
 const CheckIcon = () => (
-  <svg className={styles.svgIcon} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+  <svg className="w-5 h-5 text-green-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
     <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
   </svg>
 )
 
 const ArrowRightIcon = () => (
-  <svg className={styles.svgIcon} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+  <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
     <path strokeLinecap="round" strokeLinejoin="round" d="M14 5l7 7m0 0l-7 7m7-7H3" />
   </svg>
 )
@@ -69,77 +69,80 @@ export function PricingModule({ data }: ModuleProps) {
   const pricingPlans: PricingFeature[] = config?.plans || defaultPlans
 
   return (
-    <section id="pricing" className={styles.section}>
-      <div className={styles.container}>
-        <div className={styles.header}>
-          <h2 className={styles.title}>{config?.title || '选择适合你的计划'}</h2>
-          <p className={styles.description}>
-            {config?.description || '无论你是个人创业者还是企业用户，我们都有适合你的AI解决方案'}
-          </p>
-        </div>
+    <Section
+      id="pricing"
+      title={config?.title || '选择适合你的计划'}
+      description={config?.description || '无论你是个人创业者还是企业用户，我们都有适合你的AI解决方案'}
+      variant="default"
+      padding="lg"
+      centered
+    >
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mt-12">
+        {pricingPlans.map((plan: PricingFeature, index: number) => {
+          const cardFooter = plan.link ? (
+            <Link href={plan.link} className="w-full">
+              <Button
+                variant={plan.isPopular ? "primary" : "outline"}
+                size="lg"
+                fullWidth
+                icon={<ArrowRightIcon />}
+                iconPosition="right"
+              >
+                {plan.buttonText}
+              </Button>
+            </Link>
+          ) : (
+            <Button
+              variant={plan.isPopular ? "primary" : "outline"}
+              size="lg"
+              fullWidth
+              disabled
+              icon={<ArrowRightIcon />}
+              iconPosition="right"
+            >
+              {plan.buttonText}
+            </Button>
+          )
 
-        <div className={styles.grid}>
-          {pricingPlans.map((plan: PricingFeature, index: number) => (
-            <div
+          return (
+            <Card
               key={index}
-              className={`${styles.card} ${plan.isPopular ? styles.cardPopular : ''}`}
-              style={{
-                borderColor: plan.isPopular ? primaryColor : '#e5e7eb'
-              }}
+              variant={plan.isPopular ? "elevated" : "default"}
+              padding="lg"
+              hover
+              className={`relative ${plan.isPopular ? 'ring-2 ring-blue-600' : ''}`}
             >
               {plan.isPopular && (
-                <div
-                  className={styles.popularBadge}
-                  style={{ backgroundColor: primaryColor }}
-                >
-                  最受欢迎
+                <div className="absolute -top-4 left-1/2 -translate-x-1/2">
+                  <span className="px-4 py-1 bg-blue-600 text-white text-sm font-medium rounded-full">
+                    最受欢迎
+                  </span>
                 </div>
               )}
-              <div className={styles.cardContent}>
-                <h3 className={styles.planTitle}>{plan.title}</h3>
-                <div
-                  className={styles.planPrice}
-                  style={{ color: plan.isPopular ? primaryColor : '#111827' }}
-                >
-                  {plan.price}
-                  <span style={{ fontSize: '1rem', fontWeight: '400', color: '#6b7280' }}>
-                    /月
-                  </span>
+
+              <div className="text-center mb-6">
+                <h3 className="text-xl font-semibold text-gray-900 mb-2">{plan.title}</h3>
+                <div className="text-4xl font-bold text-gray-900 mb-2">
+                  <span style={{ color: plan.isPopular ? primaryColor : undefined }}>{plan.price}</span>
+                  <span className="text-base font-normal text-gray-500">/月</span>
                 </div>
-                <p className={styles.planDescription}>{plan.description}</p>
-
-                <ul className={styles.features}>
-                  {(plan.features || []).map((feature: string, i: number) => (
-                    <li key={i} className={styles.featureItem}>
-                      <span className={styles.featureIcon}><CheckIcon /></span>
-                      <span>{feature}</span>
-                    </li>
-                  ))}
-                </ul>
-
-                {plan.link ? (
-                  <Link
-                    href={plan.link}
-                    className={`${styles.button} ${plan.isPopular ? styles.buttonPrimary : styles.buttonSecondary}`}
-                    style={plan.isPopular ? { backgroundColor: primaryColor } : {}}
-                  >
-                    {plan.buttonText}
-                    <span style={{ marginLeft: '0.5rem' }}><ArrowRightIcon /></span>
-                  </Link>
-                ) : (
-                  <span
-                    className={`${styles.button} ${plan.isPopular ? styles.buttonPrimary : styles.buttonSecondary}`}
-                    style={plan.isPopular ? { backgroundColor: primaryColor, color: 'white', border: 'none', padding: '0.75rem 1.5rem', borderRadius: '0.5rem', cursor: 'pointer' } : {}}
-                  >
-                    {plan.buttonText}
-                    <span style={{ marginLeft: '0.5rem' }}><ArrowRightIcon /></span>
-                  </span>
-                )}
+                <p className="text-gray-600">{plan.description}</p>
               </div>
-            </div>
-          ))}
-        </div>
+
+              <ul className="space-y-3 mb-8">
+                {(plan.features || []).map((feature: string, i: number) => (
+                  <li key={i} className="flex items-center gap-3">
+                    <CheckIcon />
+                    <span className="text-gray-700">{feature}</span>
+                  </li>
+                ))}
+              </ul>
+
+              {cardFooter}
+            </Card>
+          )
+        })}
       </div>
-    </section>
+    </Section>
   )
 }
