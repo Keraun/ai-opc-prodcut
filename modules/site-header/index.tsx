@@ -2,11 +2,7 @@ import { HomeIcon, ProductsIcon, ServicesIcon, AboutIcon, ContactIcon } from "..
 import type { ModuleProps } from "@/modules/types"
 import { Header } from "@/components/common/header"
 import type { HeaderData } from "./types"
-
-// 默认配置
-const defaultSiteConfig = {
-  name: "AI 一人公司"
-}
+import { useConfig } from "@/components/initial-data-provider"
 
 // 默认导航项
 const defaultNavItems = [
@@ -16,19 +12,26 @@ const defaultNavItems = [
   { label: '联系我们', href: '/contact' },
 ]
 
-
 export function HeaderModule({ data }: ModuleProps) {
   const config: HeaderData = (data as HeaderData) || {}
+  const siteNavigation = useConfig('site-navigation') || {}
 
-  const navItems = config?.navItems || defaultNavItems
+  const navItems = config?.navItems || siteNavigation?.main || defaultNavItems
 
   // 转换为Menu组件需要的格式
   const menuItems = navItems.map((item) => ({
     id: item.href,
     label: item.label,
     href: item.href,
-    // icon: iconMap[item.href],
   }))
 
-  return (<Header />)
+  return (
+    <Header 
+      navItems={menuItems}
+      showContactButton={config?.showContactButton}
+      showCtaButton={config?.showCtaButton}
+      ctaButtonText={config?.ctaButtonText}
+      ctaButtonLink={config?.ctaButtonLink}
+    />
+  )
 }

@@ -10,7 +10,21 @@ import { useConfig } from "@/components/initial-data-provider"
 import { useTheme } from "@/components/theme-provider"
 import styles from "./header.module.css"
 
-export function Header() {
+interface HeaderProps {
+  navItems?: Array<{ id: string; label: string; href: string }>
+  showContactButton?: boolean
+  showCtaButton?: boolean
+  ctaButtonText?: string
+  ctaButtonLink?: string
+}
+
+export function Header({
+  navItems: propNavItems,
+  showContactButton = true,
+  showCtaButton = true,
+  ctaButtonText = "开始使用",
+  ctaButtonLink = "/products"
+}: HeaderProps) {
   const router = useRouter()
   const { themeConfig } = useTheme()
   const siteConfig = useConfig('site')
@@ -19,7 +33,11 @@ export function Header() {
   const [drawerVisible, setDrawerVisible] = useState(false)
   const [isMobile, setIsMobile] = useState(false)
 
-  const navItems = navigationConfig?.main || []
+  const navItems = propNavItems || (navigationConfig?.main?.map((item: any) => ({
+    id: item.href,
+    label: item.label,
+    href: item.href
+  })) || [])
 
   const primaryColor = themeConfig?.colors?.primary || "#1e40af"
   const secondaryColor = themeConfig?.colors?.secondary || "#3b82f6"
@@ -81,47 +99,51 @@ export function Header() {
           )}
           
           <div className={styles.ctaSection}>
-            <Dropdown
-              droplist={
-                <div className={styles.dropdownContent}>
-                  <div className={styles.dropdownQrContainer}>
-                    <div className={styles.dropdownQrInner}>
-                      <div className={styles.dropdownQrPlaceholder}>
-                        <span className={styles.dropdownQrText}>客服二维码</span>
+            {showContactButton && (
+              <Dropdown
+                droplist={
+                  <div className={styles.dropdownContent}>
+                    <div className={styles.dropdownQrContainer}>
+                      <div className={styles.dropdownQrInner}>
+                        <div className={styles.dropdownQrPlaceholder}>
+                          <span className={styles.dropdownQrText}>客服二维码</span>
+                        </div>
                       </div>
                     </div>
+                    <p className={styles.dropdownHint}>扫码联系客服</p>
                   </div>
-                  <p className={styles.dropdownHint}>扫码联系客服</p>
-                </div>
-              }
-              trigger="hover"
-              position="br"
-            >
-              <Button
-                type="text"
-                style={{ color: accentColor, height: '2.5rem', borderRadius: '9999px', transition: 'all 0.3s ease' }}
+                }
+                trigger="hover"
+                position="br"
               >
-                <IconCustomerService style={{ marginRight: '0.375rem' }} />
-                联系我们
-              </Button>
-            </Dropdown>
-            <Link href="/products">
-              <Button
-                style={{ 
-                  backgroundColor: primaryColor,
-                  color: 'white',
-                  borderColor: primaryColor,
-                  height: '2.5rem',
-                  paddingLeft: '1.5rem',
-                  paddingRight: '1.5rem',
-                  borderRadius: '9999px',
-                  boxShadow: '0 10px 15px -3px rgba(0, 0, 0, 0.1)',
-                  transition: 'all 0.3s ease'
-                }}
-              >
-                开始使用
-              </Button>
-            </Link>
+                <Button
+                  type="text"
+                  style={{ color: accentColor, height: '2.5rem', borderRadius: '9999px', transition: 'all 0.3s ease' }}
+                >
+                  <IconCustomerService style={{ marginRight: '0.375rem' }} />
+                  联系我们
+                </Button>
+              </Dropdown>
+            )}
+            {showCtaButton && (
+              <Link href={ctaButtonLink}>
+                <Button
+                  style={{ 
+                    backgroundColor: primaryColor,
+                    color: 'white',
+                    borderColor: primaryColor,
+                    height: '2.5rem',
+                    paddingLeft: '1.5rem',
+                    paddingRight: '1.5rem',
+                    borderRadius: '9999px',
+                    boxShadow: '0 10px 15px -3px rgba(0, 0, 0, 0.1)',
+                    transition: 'all 0.3s ease'
+                  }}
+                >
+                  {ctaButtonText}
+                </Button>
+              </Link>
+            )}
           </div>
 
           <button 
