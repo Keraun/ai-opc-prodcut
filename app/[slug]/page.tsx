@@ -1,7 +1,6 @@
 import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
-import { loadPageData } from '@/lib/initial-data'
-import { ModuleRenderer } from '@/modules/renderer'
+import { GenericPage } from '@/components/common/GenericPage'
 import { siteConfig } from '@/config/site'
 import { getRouteConfig, getAllSlugs } from '@/config/routes'
 
@@ -46,14 +45,10 @@ export default async function DynamicPage({ params }: PageProps) {
       orderConfigKey = `${slug}Order`
     }
     
-    const pageData = loadPageData(pageId, orderConfigKey)
-    const modules = pageData.data.modules || []
-    
-    if (modules.length === 0) {
-      notFound()
-    }
-    
-    return <ModuleRenderer modules={modules} />
+    return <GenericPage 
+      pageId={pageId} 
+      orderConfigKey={orderConfigKey} 
+    />
   } catch (error) {
     console.error(`Error loading page ${slug}:`, error)
     notFound()

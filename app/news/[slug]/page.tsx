@@ -1,5 +1,4 @@
-import { ModuleRenderer } from '@/modules/renderer'
-import { loadPageData } from '@/lib/initial-data'
+import { GenericPage } from '@/components/common/GenericPage'
 import fs from 'fs/promises'
 import path from 'path'
 
@@ -70,18 +69,18 @@ export default async function NewsDetailPage({ params }: { params: { slug: strin
   const article = await getArticle(slug)
   const relatedArticles = article ? await getRelatedArticles(article.id, 3) : []
 
-  const pageData = loadPageData('news-detail', 'newsDetailOrder', {
-    showAuthor: true,
-    showDate: true,
-    showRelated: true,
-    relatedCount: 3,
-    showShare: true,
-    showComments: false,
-    article,
-    relatedArticles
-  })
-
-  const modules = pageData.data.modules || []
-
-  return <ModuleRenderer modules={modules} />
+  return <GenericPage 
+    pageId="news-detail" 
+    orderConfigKey="newsDetailOrder"
+    extraConfig={{
+      showAuthor: true,
+      showDate: true,
+      showRelated: true,
+      relatedCount: 3,
+      showShare: true,
+      showComments: false,
+      article,
+      relatedArticles
+    }}
+  />
 }

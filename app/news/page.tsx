@@ -1,5 +1,4 @@
-import { ModuleRenderer } from '@/modules/renderer'
-import { loadPageData } from '@/lib/initial-data'
+import { GenericPage } from '@/components/common/GenericPage'
 import fs from 'fs/promises'
 import path from 'path'
 
@@ -54,16 +53,17 @@ async function getArticles(): Promise<Article[]> {
 
 export default async function NewsPage() {
   const articles = await getArticles()
-  const pageData = loadPageData('news', 'newsOrder', {
-    title: '资讯中心',
-    subtitle: '最新行业动态、深度分析与实战案例',
-    showDate: true,
-    showSummary: true,
-    itemsPerPage: 10,
-    articles
-  })
-
-  const modules = pageData.data.modules || []
-
-  return <ModuleRenderer modules={modules} />
+  
+  return <GenericPage 
+    pageId="news" 
+    orderConfigKey="newsOrder"
+    extraConfig={{
+      title: '资讯中心',
+      subtitle: '最新行业动态、深度分析与实战案例',
+      showDate: true,
+      showSummary: true,
+      itemsPerPage: 10,
+      articles
+    }}
+  />
 }
