@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useCallback } from "react"
 import { Card, Button, Space, Tag, Modal, Message, Collapse } from "@arco-design/web-react"
-import { IconDragDotVertical, IconDelete, IconPlus, IconSettings } from "@arco-design/web-react/icon"
+import { IconDragDotVertical, IconDelete, IconPlus, IconSettings, IconEye } from "@arco-design/web-react/icon"
 import styles from "../dashboard.module.css"
 import { ModuleFieldEditor } from "./ModuleFieldEditor"
 
@@ -26,8 +26,8 @@ interface ModuleDragEditorProps {
 
 export function ModuleDragEditor({ modules, onChange }: ModuleDragEditorProps) {
   const [availableModules, setAvailableModules] = useState<AvailableModule[]>([])
-  const [showAddPanel, setShowAddPanel] = useState(false)
   const [editingModule, setEditingModule] = useState<ModuleInfo | null>(null)
+  const [previewModule, setPreviewModule] = useState<AvailableModule | null>(null)
   const [draggedIndex, setDraggedIndex] = useState<number | null>(null)
 
   useEffect(() => {
@@ -55,7 +55,6 @@ export function ModuleDragEditor({ modules, onChange }: ModuleDragEditorProps) {
     }
 
     onChange([...modules, newModule])
-    setShowAddPanel(false)
     Message.success("模块添加成功")
   }
 
@@ -112,50 +111,68 @@ export function ModuleDragEditor({ modules, onChange }: ModuleDragEditorProps) {
   }, {} as Record<string, AvailableModule[]>)
 
   return (
-    <div className={styles.moduleDragEditor}>
-      <div className={styles.moduleList}>
+    <div className={styles.moduleEditorLayout}>
+      <div className={styles.modulePickerPanel}>
+        <div className={styles.modulePickerHeader}>
+          <h3 style={{ margin: 0 }}>可用模块</h3>
+          <span style={{ fontSize: 12, color: "#9ca3af" }}>
+            点击添加到页面
+          </span>
+        </div>
+        
+        <div className={styles.modulePickerContent}>
+          {Object.entries(groupedModules).map(([category, mods]) => (
+            <div key={category} className={styles.moduleCategory}>
+              <div className={styles.moduleCategoryTitle}>{category}</div>
+              <div className={styles.moduleGrid}>
+                {mods.map((mod) => (
+                  <Card
+                    key={mod.moduleId}
+                    className={styles.moduleCard}
+                    hoverable
+                  >
+                    <div className={styles.moduleCardContent}>
+                      <div className={styles.moduleCardName}>{mod.moduleName}</div>
+                      <Tag size="small" color="arcoblue">{mod.moduleId}</Tag>
+                      <div className={styles.moduleCardActions}>
+                        <Button
+                          type="primary"
+                          size="small"
+                          onClick={() => handleAddModule(mod)}
+                        >
+                          添加
+                        </Button>
+                        <Button
+                          type="text"
+                          size="small"
+                          icon={<IconEye />}
+                          onClick={(e) => {
+                            e.stopPropagation()
+                            setPreviewModule(mod)
+                          }}
+                        />
+                      </div>
+                    </div>
+                  </Card>
+                ))}
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <div className={styles.moduleListPanel}>
         <div className={styles.moduleListHeader}>
           <h3 style={{ margin: 0 }}>页面模块</h3>
-          <Button
-            type="primary"
-            size="small"
-            icon={<IconPlus />}
-            onClick={() => setShowAddPanel(!showAddPanel)}
-          >
-            {showAddPanel ? "收起" : "添加模块"}
-          </Button>
+          <span style={{ fontSize: 12, color: "#9ca3af" }}>
+            拖拽调整顺序
+          </span>
         </div>
-
-        {showAddPanel && (
-          <div className={styles.modulePicker}>
-            <Collapse defaultActiveKey={Object.keys(groupedModules)}>
-              {Object.entries(groupedModules).map(([category, mods]) => (
-                <Collapse.Item key={category} header={category}>
-                  <div className={styles.moduleGrid}>
-                    {mods.map((mod) => (
-                      <Card
-                        key={mod.moduleId}
-                        className={styles.moduleCard}
-                        hoverable
-                        onClick={() => handleAddModule(mod)}
-                      >
-                        <div className={styles.moduleCardContent}>
-                          <div className={styles.moduleCardName}>{mod.moduleName}</div>
-                          <Tag size="small" color="arcoblue">{mod.moduleId}</Tag>
-                        </div>
-                      </Card>
-                    ))}
-                  </div>
-                </Collapse.Item>
-              ))}
-            </Collapse>
-          </div>
-        )}
 
         {modules.length === 0 ? (
           <Card className={styles.emptyModuleCard}>
             <div style={{ textAlign: "center", color: "#9ca3af" }}>
-              <p>暂无模块，点击上方按钮添加</p>
+              <p>暂无模块，从左侧选择添加</p>
             </div>
           </Card>
         ) : (
@@ -226,6 +243,31 @@ export function ModuleDragEditor({ modules, onChange }: ModuleDragEditorProps) {
             data={editingModule.data}
             onChange={(data) => setEditingModule({ ...editingModule, data })}
           />
+        )}
+      </Modal>
+
+      <Modal
+        title={`模块预览：${previewModule?.moduleName || ""}`}
+        visible={!!previewModule}
+        onCancel={() => setPreviewModule(null)}
+        footer={null}
+        style={{ width: 800 }}
+      >
+        {previewModule && (
+          <div className={styles.modulePreviewContent}>
+            <div className={styles.modulePreviewInfo}>
+              <p><strong>模块ID：</strong>{previewModule.moduleId}</p>
+              <p><strong>模块名称：</strong>{previewModule.moduleName}</p>
+              <p><strong>分类：</strong>{previewModule.category || "其他"}</p>
+            </div>
+            <div className={styles.modulePreviewFrame}>
+              <iframe
+                src={`/api/modules/${previewModule.moduleId}/preview`}
+                className={styles.previewFrame}
+                title="模块预览"
+              />
+            </div>
+          </div>
         )}
       </Modal>
     </div>

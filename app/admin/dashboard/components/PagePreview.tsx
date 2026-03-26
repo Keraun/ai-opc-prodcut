@@ -1,7 +1,7 @@
 "use client"
 
 import { useEffect, useState } from "react"
-import { Message } from "@arco-design/web-react"
+import { Message, Spin } from "@arco-design/web-react"
 import styles from "../dashboard.module.css"
 
 interface ModuleInfo {
@@ -17,23 +17,32 @@ interface PagePreviewProps {
 }
 
 export function PagePreview({ pageId, modules }: PagePreviewProps) {
-  const [previewUrl, setPreviewUrl] = useState<string>("")
+  const [previewHtml, setPreviewHtml] = useState<string>("")
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
-    fetchPreviewData()
+    generatePreview()
   }, [pageId, modules])
 
-  const fetchPreviewData = async () => {
+  const generatePreview = async () => {
     setLoading(true)
     try {
-      const response = await fetch(`/api/admin/pages/${pageId}`)
+      const response = await fetch(`/api/admin/pages/${pageId}/preview`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ modules }),
+      })
+
       if (response.ok) {
         const data = await response.json()
-        setPreviewUrl(`/${data.slug}?preview=true`)
+        setPreviewHtml(data.html || '')
+      } else {
+        Message.error("生成预览失败")
       }
     } catch (error) {
-      Message.error("获取预览数据失败")
+      Message.error("生成预览失败")
     } finally {
       setLoading(false)
     }
@@ -42,7 +51,10 @@ export function PagePreview({ pageId, modules }: PagePreviewProps) {
   if (loading) {
     return (
       <div className={styles.pagePreview}>
-        <div className={styles.loading}>加载预览...</div>
+        <div className={styles.previewLoading}>
+          <Spin size={40} />
+          <p style={{ marginTop: 16, color: "#6b7280" }}>正在生成预览...</p>
+        </div>
       </div>
     )
   }
@@ -51,9 +63,10 @@ export function PagePreview({ pageId, modules }: PagePreviewProps) {
     <div className={styles.pagePreview}>
       <div className={styles.previewContainer}>
         <iframe
-          src={previewUrl}
+          srcDoc={previewHtml}
           className={styles.previewFrame}
           title="页面预览"
+          sandbox="allow-scripts"
         />
       </div>
     </div>
