@@ -1,0 +1,25 @@
+{
+  "routes": [
+    {
+      "slug": "home",
+      "pageId": "home",
+      "orderConfigKey": "homeOrder",
+      "title": "首页",
+      "description": "AI一人公司解决方案"
+    },
+    {
+      "slug": "news",
+      "pageId": "news",
+      "orderConfigKey": "newsOrder",
+      "title": "资讯中心",
+      "description": "最新行业动态、深度分析与实战案例"
+    },
+    {
+      "slug": "products",
+      "pageId": "products",
+      "orderConfigKey": "productsOrder",
+      "title": "AI产品",
+      "description": "精选优质 AI 工具、课程和服务"
+    }
+  ]
+}
