@@ -1,0 +1,8 @@
+{
+  "currentTheme": "nature",
+  "themes": ["mordern", "tech", "nature"],
+  "customConfig": {
+    "primaryColor": "#3b82f6",
+    "secondaryColor": "#8b5cf6"
+  }
+}

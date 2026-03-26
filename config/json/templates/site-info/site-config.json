@@ -22,5 +22,10 @@
     "customerServiceQRCode": "/images/customer-service-qr.png",
     "helpDocUrl": "https://help.makerai.com"
   },
-  "icp": "浙ICP备XXXXXXXX号"
+  "icp": "浙ICP备XXXXXXXX号",
+  "features": {
+    "enableTOC": true,
+    "enableReadingProgress": true,
+    "enableSearch": true
+  }
 }
