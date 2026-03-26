@@ -1,22 +1,7 @@
 .menu {
   display: flex;
-}
-
-.web {
-}
-
-.mobile {
-}
-
-.horizontal {
   flex-direction: row;
   align-items: center;
-  gap: 0.25rem;
-}
-
-.vertical {
-  flex-direction: column;
-  align-items: stretch;
   gap: 0.25rem;
 }
 

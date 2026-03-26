@@ -9,3 +9,6 @@ export type { SectionProps } from "./section"
 
 export { Menu } from "./menu"
 export type { MenuProps, MenuItem } from "./menu"
+
+export { MobileMenu } from "./mobile-menu"
+export type { MobileMenuProps, MobileMenuItem } from "./mobile-menu"

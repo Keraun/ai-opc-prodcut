@@ -127,20 +127,20 @@ export const HomeIcon = () => (
 - **Mobile 形态**：移动端浏览器环境，简化布局和交互
 
 #### 3.2 Menu 组件设备形态
-Menu 组件必须支持两种设备形态：
-- **device="web"**：Web 端形态，横向布局（适用于桌面端浏览器）
-- **device="mobile"**：Mobile 端形态，纵向布局（适用于移动端浏览器）
+项目提供两个独立的菜单组件：
+- **Menu 组件**：Web 端横向布局菜单（适用于桌面端浏览器）
+- **MobileMenu 组件**：Mobile 端侧滑抽屉菜单（适用于移动端浏览器）
 
-组件应根据设备类型选择形态：
-- 在 Web 浏览器环境下，可以根据屏幕宽度选择合适的形态
-- 在移动端环境下，使用 mobile 形态
+组件应根据设备类型选择使用：
+- 在 Web 浏览器环境下，使用 Menu 组件
+- 在移动端环境下，使用 MobileMenu 组件
 
 ```tsx
 // ✅ 正确示例
 'use client'
 
 import { useState, useEffect } from 'react'
-import { Menu } from '@/components/ui'
+import { Menu, MobileMenu } from '@/components/ui'
 
 export function Navigation() {
   const [isMobile, setIsMobile] = useState(false)
@@ -152,12 +152,11 @@ export function Navigation() {
     return () => window.removeEventListener('resize', checkIsMobile)
   }, [])
 
-  return (
-    <Menu 
-      items={menuItems}
-      device={isMobile ? 'mobile' : 'web'}
-    />
-  )
+  if (isMobile) {
+    return <MobileMenu items={menuItems} />
+  }
+
+  return <Menu items={menuItems} variant="underline" />
 }
 ```
 

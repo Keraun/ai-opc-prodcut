@@ -13,23 +13,18 @@ export interface MenuItem {
 
 export interface MenuProps extends HTMLAttributes<HTMLElement> {
   items: MenuItem[]
-  device?: "web" | "mobile"
   variant?: "default" | "pills" | "underline"
   size?: "sm" | "md" | "lg"
 }
 
 export function Menu({
   items,
-  device = "web",
   variant = "default",
   size = "md",
   className = "",
   style = {},
   ...props
 }: MenuProps) {
-  const isMobile = device === "mobile"
-  const orientationClass = isMobile ? styles.vertical : styles.horizontal
-  const deviceClass = isMobile ? styles.mobile : styles.web
   const variantClass = styles[`variant_${variant}`] || styles.variant_default
   const sizeClass = styles[`size_${size}`] || styles.size_md
 
@@ -56,7 +51,7 @@ export function Menu({
 
   return (
     <nav
-      className={`${styles.menu} ${deviceClass} ${orientationClass} ${variantClass} ${className}`}
+      className={`${styles.menu} ${variantClass} ${className}`}
       style={style}
       {...props}
     >
