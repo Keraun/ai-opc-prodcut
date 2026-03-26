@@ -18,23 +18,6 @@
           }
         }
       }
-    },
-    "sidebar": {
-      "type": "array",
-      "title": "侧边栏导航",
-      "items": {
-        "type": "object",
-        "properties": {
-          "label": {
-            "type": "string",
-            "title": "标签"
-          },
-          "href": {
-            "type": "string",
-            "title": "链接地址"
-          }
-        }
-      }
     }
   }
 }

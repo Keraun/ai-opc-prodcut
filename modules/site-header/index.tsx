@@ -6,7 +6,7 @@ import { IconMenu, IconCustomerService } from "@arco-design/web-react/icon"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
 import { Logo } from "@/components/common/logo"
-import { siteConfig, navigationConfig } from "@/config/client"
+import { siteConfig } from "@/config/client"
 import { useTheme } from "@/components/theme-provider"
 import type { ModuleProps } from "@/modules/types"
 import type { HeaderData } from "./types"
@@ -24,7 +24,7 @@ export function HeaderModule({ data }: ModuleProps) {
   const secondaryColor = themeConfig?.colors?.secondary || "#3b82f6"
   const accentColor = themeConfig?.colors?.accent || "#06b6d4"
 
-  const navItems = config?.navItems || navigationConfig.main || []
+  const navItems = config?.navItems || []
 
   useEffect(() => {
     const handleScroll = () => {
