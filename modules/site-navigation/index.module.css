@@ -95,7 +95,7 @@
   }
 }
 
-.navButton {
+.navLink {
   color: #4b5563;
   font-size: 0.875rem;
   font-weight: 500;
@@ -105,9 +105,10 @@
   border: none;
   padding: 0;
   transition: color 0.2s ease;
+  text-decoration: none;
 }
 
-.navButton:hover {
+.navLink:hover {
   color: #111827;
 }
 
@@ -120,8 +121,43 @@
   transition: width 0.3s ease;
 }
 
-.navButton:hover .navUnderline {
+.navLink:hover .navUnderline {
   width: 100%;
+}
+
+.textButton {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.375rem;
+  color: #06b6d4;
+  text-decoration: none;
+  font-weight: 500;
+  font-size: 0.875rem;
+  padding: 0.5rem 1rem;
+  border-radius: 9999px;
+  transition: all 0.2s ease;
+}
+
+.textButton:hover {
+  background-color: #f0fdfa;
+}
+
+.primaryButton {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  text-decoration: none;
+  font-weight: 500;
+  font-size: 0.875rem;
+  padding: 0.5rem 1.5rem;
+  border-radius: 9999px;
+  transition: all 0.2s ease;
+}
+
+.primaryButton:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 20px -3px rgba(0, 0, 0, 0.15);
 }
 
 .ctaSection {

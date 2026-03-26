@@ -84,10 +84,17 @@ export function HeroModule({ data }: ModuleProps) {
         )}
 
         {config.buttons?.secondary?.text && (
-          <button className={styles.secondaryButton}>
-            {config.buttons.secondary.text}
-            <span style={{ marginLeft: '0.5rem' }}><ArrowRightIcon /></span>
-          </button>
+          config.buttons?.secondary?.href ? (
+            <Link href={config.buttons.secondary.href} className={styles.secondaryButton}>
+              {config.buttons.secondary.text}
+              <span style={{ marginLeft: '0.5rem' }}><ArrowRightIcon /></span>
+            </Link>
+          ) : (
+            <span className={styles.secondaryButton}>
+              {config.buttons.secondary.text}
+              <span style={{ marginLeft: '0.5rem' }}><ArrowRightIcon /></span>
+            </span>
+          )
         )}
       </div>
 
@@ -149,10 +156,17 @@ export function HeroModule({ data }: ModuleProps) {
             )}
 
             {config.buttons?.secondary?.text && (
-              <button className={styles.secondaryButton}>
-                {config.buttons.secondary.text}
-                <span style={{ marginLeft: '0.5rem' }}><ArrowRightIcon /></span>
-              </button>
+              config.buttons?.secondary?.href ? (
+                <Link href={config.buttons.secondary.href} className={styles.secondaryButton}>
+                  {config.buttons.secondary.text}
+                  <span style={{ marginLeft: '0.5rem' }}><ArrowRightIcon /></span>
+                </Link>
+              ) : (
+                <span className={styles.secondaryButton}>
+                  {config.buttons.secondary.text}
+                  <span style={{ marginLeft: '0.5rem' }}><ArrowRightIcon /></span>
+                </span>
+              )
             )}
           </div>
 
@@ -228,10 +242,17 @@ export function HeroModule({ data }: ModuleProps) {
             )}
 
             {config.buttons?.secondary?.text && (
-              <button className={styles.secondaryButton} style={{ backgroundColor: '#f9fafb' }}>
-                {config.buttons.secondary.text}
-                <span style={{ marginLeft: '0.5rem' }}><ArrowRightIcon /></span>
-              </button>
+              config.buttons?.secondary?.href ? (
+                <Link href={config.buttons.secondary.href} className={styles.secondaryButton} style={{ backgroundColor: '#f9fafb' }}>
+                  {config.buttons.secondary.text}
+                  <span style={{ marginLeft: '0.5rem' }}><ArrowRightIcon /></span>
+                </Link>
+              ) : (
+                <span className={styles.secondaryButton} style={{ backgroundColor: '#f9fafb' }}>
+                  {config.buttons.secondary.text}
+                  <span style={{ marginLeft: '0.5rem' }}><ArrowRightIcon /></span>
+                </span>
+              )
             )}
           </div>
 
@@ -272,16 +293,6 @@ export function HeroModule({ data }: ModuleProps) {
       {layoutType === 'layout1' && renderLayout1()}
       {layoutType === 'layout2' && renderLayout2()}
       {layoutType === 'layout3' && renderLayout3()}
-
-      <div className={styles.scrollIndicator}>
-        <span className={styles.scrollText}>向下滚动</span>
-        <div className={styles.scrollMouse}>
-          <div
-            className={styles.scrollDot}
-            style={{ backgroundColor: accentColor }}
-          />
-        </div>
-      </div>
     </section>
   )
 }

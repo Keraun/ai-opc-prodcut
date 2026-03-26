@@ -1,3 +1,4 @@
+import Link from "next/link"
 import type { ModuleProps } from "@/modules/types"
 import type { PricingData, PricingFeature } from "./types"
 import styles from "./index.module.css"
@@ -117,24 +118,22 @@ export function PricingModule({ data }: ModuleProps) {
                 </ul>
 
                 {plan.link ? (
-                  <a href={plan.link} className={styles.buttonLink}>
-                    <button
-                      className={`${styles.button} ${plan.isPopular ? styles.buttonPrimary : styles.buttonSecondary}`}
-                      style={plan.isPopular ? { backgroundColor: primaryColor } : {}}
-                    >
-                      {plan.buttonText}
-                      <span style={{ marginLeft: '0.5rem' }}><ArrowRightIcon /></span>
-                    </button>
-                  </a>
-                ) : (
-                  <button
+                  <Link
+                    href={plan.link}
                     className={`${styles.button} ${plan.isPopular ? styles.buttonPrimary : styles.buttonSecondary}`}
-                    style={plan.isPopular ? { backgroundColor: primaryColor, color: 'white', border: 'none', padding: '0.75rem 1.5rem', borderRadius: '0.5rem', cursor: 'pointer' } : {}}
-                    onClick={() => alert('请联系客服咨询企业版详情')}
+                    style={plan.isPopular ? { backgroundColor: primaryColor } : {}}
                   >
                     {plan.buttonText}
                     <span style={{ marginLeft: '0.5rem' }}><ArrowRightIcon /></span>
-                  </button>
+                  </Link>
+                ) : (
+                  <span
+                    className={`${styles.button} ${plan.isPopular ? styles.buttonPrimary : styles.buttonSecondary}`}
+                    style={plan.isPopular ? { backgroundColor: primaryColor, color: 'white', border: 'none', padding: '0.75rem 1.5rem', borderRadius: '0.5rem', cursor: 'pointer' } : {}}
+                  >
+                    {plan.buttonText}
+                    <span style={{ marginLeft: '0.5rem' }}><ArrowRightIcon /></span>
+                  </span>
                 )}
               </div>
             </div>

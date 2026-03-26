@@ -1,3 +1,4 @@
+import Link from "next/link"
 import type { ModuleProps } from "@/modules/types"
 import type { ProductsData } from "./types"
 import styles from "./index.module.css"
@@ -132,13 +133,24 @@ export function ProductsModule({ data }: ModuleProps) {
                       </div>
                     )}
 
-                    <button
-                      className={styles.ctaButton}
-                      style={{ color: accentColor }}
-                    >
-                      了解更多
-                      <span className={styles.ctaIcon}><ArrowRightIcon /></span>
-                    </button>
+                    {product?.link ? (
+                      <Link
+                        href={product.link}
+                        className={styles.ctaButton}
+                        style={{ color: accentColor }}
+                      >
+                        了解更多
+                        <span className={styles.ctaIcon}><ArrowRightIcon /></span>
+                      </Link>
+                    ) : (
+                      <span
+                        className={styles.ctaButton}
+                        style={{ color: accentColor }}
+                      >
+                        了解更多
+                        <span className={styles.ctaIcon}><ArrowRightIcon /></span>
+                      </span>
+                    )}
                   </div>
                 </div>
               )
