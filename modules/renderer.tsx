@@ -21,6 +21,8 @@ const MODULE_LOADERS: Record<string, () => Promise<any>> = {
   'section-contact': () => import('./section-contact/mod'),
   'site-root': () => import('./site-root/mod'),
   'site-navigation': () => import('./site-navigation/mod'),
+  'news-list': () => import('./news-list/mod'),
+  'news-detail': () => import('./news-detail/mod'),
 }
 
 const MODULE_COMPONENT_NAMES: Record<string, string> = {
@@ -36,6 +38,8 @@ const MODULE_COMPONENT_NAMES: Record<string, string> = {
   'section-contact': 'ContactModule',
   'site-root': 'SiteRootModule',
   'site-navigation': 'NavigationModule',
+  'news-list': 'NewsListModule',
+  'news-detail': 'NewsDetailModule',
 }
 
 export function ModuleRenderer({ modules }: ModuleRendererProps) {

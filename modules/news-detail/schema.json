@@ -1,0 +1,30 @@
+{
+  "type": "object",
+  "title": "News Detail Configuration",
+  "properties": {
+    "showAuthor": {
+      "type": "boolean",
+      "title": "显示作者"
+    },
+    "showDate": {
+      "type": "boolean",
+      "title": "显示日期"
+    },
+    "showRelated": {
+      "type": "boolean",
+      "title": "显示相关文章"
+    },
+    "relatedCount": {
+      "type": "number",
+      "title": "相关文章数量"
+    },
+    "showShare": {
+      "type": "boolean",
+      "title": "显示分享按钮"
+    },
+    "showComments": {
+      "type": "boolean",
+      "title": "显示评论"
+    }
+  }
+}

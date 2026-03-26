@@ -10,6 +10,8 @@ import { registerSidebarNavModule } from "./sidebar-nav/register"
 import { registerSiteHeaderModule } from "./site-header/register"
 import { registerSiteFooterModule } from "./site-footer/register"
 import { registerSiteRootModule } from "./site-root/register"
+import { registerNewsListModule } from "./news-list/register"
+import { registerNewsDetailModule } from "./news-detail/register"
 
 export function initializeModules() {
   registerSiteRootModule()
@@ -24,6 +26,8 @@ export function initializeModules() {
   registerContactModule()
   registerSidebarNavModule()
   registerSiteFooterModule()
+  registerNewsListModule()
+  registerNewsDetailModule()
 }
 
 export { HeaderModule } from "./site-header/register"
@@ -38,3 +42,5 @@ export { ContactModule } from "./section-contact/register"
 export { SidebarNavModule } from "./sidebar-nav/register"
 export { FooterModule } from "./site-footer/register"
 export { SiteRootModule } from "./site-root/register"
+export { NewsListModule } from "./news-list/register"
+export { NewsDetailModule } from "./news-detail/register"
