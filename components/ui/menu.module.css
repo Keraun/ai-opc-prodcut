@@ -2,6 +2,12 @@
   display: flex;
 }
 
+.web {
+}
+
+.mobile {
+}
+
 .horizontal {
   flex-direction: row;
   align-items: center;

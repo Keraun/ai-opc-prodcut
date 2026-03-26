@@ -89,9 +89,81 @@ export function MyComponent() {
 }
 ```
 
-### 2. Arco Design 使用规范
+### 2. SVG 图标规范
 
-#### 2.1 仅用于管理后台
+#### 2.1 图标设计原则
+- **参考 Arco Design 视觉风格**：线条简洁、几何规整、圆角处理
+- **统一线条粗细**：使用 `strokeWidth="1.5"`
+- **圆角处理**：所有线条端点使用 `strokeLinecap="round"`，线条连接处使用 `strokeLinejoin="round"`
+- **不使用填充**：优先使用描边 (`stroke`) 而非填充 (`fill`)
+- **统一 viewBox**：使用 `viewBox="0 0 24 24"` 保持一致性
+
+```tsx
+// ✅ 正确示例
+export const HomeIcon = () => (
+  <svg className={styles.svgIcon} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
+    <path strokeLinecap="round" strokeLinejoin="round" d="M3 9.5L12 3l9 6.5V20a1 1 0 01-1 1h-5v-6H9v6H4a1 1 0 01-1-1V9.5z" />
+  </svg>
+)
+
+// ❌ 错误示例
+export const HomeIcon = () => (
+  <svg viewBox="0 0 24 24" fill="currentColor" strokeWidth="2">
+    <path d="M3 9.5L12 3l9 6.5V20a1 1 0 01-1 1h-5v-6H9v6H4a1 1 0 01-1-1V9.5z" />
+  </svg>
+)
+```
+
+#### 2.2 图标文件组织
+- 所有 SVG 图标存放在 `modules/icons.tsx` 文件中
+- 每个图标为独立的函数组件
+- 使用 `icons.module.css` 管理图标样式
+- 图标命名使用 PascalCase，后缀为 `Icon`
+
+### 3. 响应式组件规范
+
+#### 3.1 设备形态概念
+- **Web 形态**：桌面端浏览器环境，展示完整功能
+- **Mobile 形态**：移动端浏览器环境，简化布局和交互
+
+#### 3.2 Menu 组件设备形态
+Menu 组件必须支持两种设备形态：
+- **device="web"**：Web 端形态，横向布局（适用于桌面端浏览器）
+- **device="mobile"**：Mobile 端形态，纵向布局（适用于移动端浏览器）
+
+组件应根据设备类型选择形态：
+- 在 Web 浏览器环境下，可以根据屏幕宽度选择合适的形态
+- 在移动端环境下，使用 mobile 形态
+
+```tsx
+// ✅ 正确示例
+'use client'
+
+import { useState, useEffect } from 'react'
+import { Menu } from '@/components/ui'
+
+export function Navigation() {
+  const [isMobile, setIsMobile] = useState(false)
+
+  useEffect(() => {
+    const checkIsMobile = () => setIsMobile(window.innerWidth < 768)
+    checkIsMobile()
+    window.addEventListener('resize', checkIsMobile)
+    return () => window.removeEventListener('resize', checkIsMobile)
+  }, [])
+
+  return (
+    <Menu 
+      items={menuItems}
+      device={isMobile ? 'mobile' : 'web'}
+    />
+  )
+}
+```
+
+### 4. Arco Design 使用规范
+
+#### 4.1 仅用于管理后台
 - **重要**：Arco Design 仅用于管理后台 (admin) 模块
 - C端（客户端）模块不能使用 Arco Design
 - C端模块必须使用原生 HTML + CSS Modules
@@ -130,7 +202,7 @@ export function ClientComponent() {
 }
 ```
 
-#### 2.2 组件导入
+#### 4.2 组件导入
 - 必须按需导入组件，避免全量导入
 - 必须导入对应的 CSS 文件
 
@@ -143,23 +215,23 @@ import '@arco-design/web-react/dist/css/arco.css'
 import * as Arco from '@arco-design/web-react'
 ```
 
-### 3. Next.js App Router 规范
+### 5. Next.js App Router 规范
 
-#### 3.1 服务端组件
+#### 5.1 服务端组件
 - 默认使用服务端组件
 - 数据获取在服务端完成
 - 使用 async/await
 - C端模块优先使用服务端组件
 
-#### 3.2 客户端组件
+#### 5.2 客户端组件
 - 需要交互时使用 'use client'
 - 状态管理在客户端组件
 - 事件处理在客户端组件
 - 管理后台模块使用客户端组件
 
-### 4. API 路由规范
+### 6. API 路由规范
 
-#### 4.1 路由结构
+#### 6.1 路由结构
 ```
 app/api/
 ├── users/
@@ -168,7 +240,7 @@ app/api/
 │       └── route.ts    # GET /api/users/:id, PUT /api/users/:id, DELETE /api/users/:id
 ```
 
-#### 4.2 响应格式
+#### 6.2 响应格式
 ```typescript
 // 成功响应
 return NextResponse.json({
@@ -186,7 +258,7 @@ return NextResponse.json({
 }, { status: 400 })
 ```
 
-### 5. 环境变量
+### 7. 环境变量
 
 创建 `.env.local` 文件：
 ```env
@@ -249,3 +321,5 @@ npm run lint
 5. 确保类型安全
 6. 提供完整的错误处理
 7. 编写可维护、可测试的代码
+8. SVG 图标遵循 Arco Design 视觉风格（strokeWidth=1.5、圆角处理）
+9. 响应式组件支持 Web 和 Mobile 两种设备形态
