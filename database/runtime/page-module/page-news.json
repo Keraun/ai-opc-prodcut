@@ -1,6 +1,7 @@
 {
   "name": "新闻列表",
   "slug": "news",
+  "type": "static",
   "modules": [
     "site-root",
     "site-header",

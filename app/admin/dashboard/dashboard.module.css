@@ -1923,6 +1923,7 @@
   display: flex;
   flex-direction: column;
   gap: 16px;
+  max-width: 800px;
 }
 
 .moduleList {
@@ -1938,6 +1939,43 @@
   margin-bottom: 16px;
   padding-bottom: 12px;
   border-bottom: 1px solid #e5e7eb;
+}
+
+.modulePicker {
+  background: #f9fafb;
+  border-radius: 8px;
+  padding: 16px;
+  margin-bottom: 16px;
+}
+
+.moduleGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 12px;
+}
+
+.moduleCard {
+  cursor: pointer;
+  transition: all 0.2s;
+  border: 2px solid #e5e7eb;
+}
+
+.moduleCard:hover {
+  border-color: #3b82f6;
+  box-shadow: 0 4px 12px rgba(59, 130, 246, 0.15);
+  transform: translateY(-2px);
+}
+
+.moduleCardContent {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.moduleCardName {
+  font-weight: 500;
+  color: #111827;
+  font-size: 14px;
 }
 
 .moduleItems {

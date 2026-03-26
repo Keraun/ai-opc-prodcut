@@ -1,6 +1,7 @@
 {
   "name": "产品页面",
   "slug": "product",
+  "type": "static",
   "modules": [
     "site-root",
     "site-header",

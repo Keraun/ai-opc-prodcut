@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react"
 import { useRouter } from "next/navigation"
-import { Button, Card, Modal, Input, Table, Space, Tag, Popconfirm, Message } from "@arco-design/web-react"
+import { Button, Card, Modal, Input, Table, Space, Tag, Popconfirm, Message, Radio } from "@arco-design/web-react"
 import { IconPlus, IconEdit, IconDelete, IconEye } from "@arco-design/web-react/icon"
 import styles from "../dashboard.module.css"
 
@@ -11,6 +11,8 @@ interface PageInfo {
   name: string
   slug: string
   modules: string[]
+  type?: 'static' | 'dynamic'
+  dynamicParam?: string
   createdAt?: string
   updatedAt?: string
 }
@@ -26,6 +28,8 @@ export function PageManagement({ onEditPage }: PageManagementProps) {
   const [showCreateModal, setShowCreateModal] = useState(false)
   const [newPageName, setNewPageName] = useState("")
   const [newPageSlug, setNewPageSlug] = useState("")
+  const [newPageType, setNewPageType] = useState<'static' | 'dynamic'>('static')
+  const [newPageDynamicParam, setNewPageDynamicParam] = useState("id")
   const [creating, setCreating] = useState(false)
 
   useEffect(() => {
@@ -63,6 +67,16 @@ export function PageManagement({ onEditPage }: PageManagementProps) {
       return
     }
 
+    if (newPageType === 'dynamic' && !newPageDynamicParam.trim()) {
+      Message.error("请输入动态参数名称")
+      return
+    }
+
+    if (newPageType === 'dynamic' && !/^[a-zA-Z_][a-zA-Z0-9_]*$/.test(newPageDynamicParam)) {
+      Message.error("动态参数名称只能包含字母、数字和下划线，且必须以字母或下划线开头")
+      return
+    }
+
     setCreating(true)
     try {
       const response = await fetch("/api/admin/pages", {
@@ -73,6 +87,8 @@ export function PageManagement({ onEditPage }: PageManagementProps) {
         body: JSON.stringify({
           name: newPageName,
           slug: newPageSlug,
+          type: newPageType,
+          dynamicParam: newPageType === 'dynamic' ? newPageDynamicParam : undefined,
         }),
       })
 
@@ -82,6 +98,8 @@ export function PageManagement({ onEditPage }: PageManagementProps) {
         setShowCreateModal(false)
         setNewPageName("")
         setNewPageSlug("")
+        setNewPageType('static')
+        setNewPageDynamicParam("id")
         fetchPages()
         
         if (onEditPage) {
@@ -124,8 +142,13 @@ export function PageManagement({ onEditPage }: PageManagementProps) {
     }
   }
 
-  const handlePreviewPage = (slug: string) => {
-    window.open(`/${slug}`, "_blank")
+  const handlePreviewPage = (slug: string, type?: string, dynamicParam?: string) => {
+    if (type === 'dynamic') {
+      Message.info("动态路由页面需要在实际访问时才能预览，例如：/" + slug + "/123")
+      window.open(`/${slug}/example-id`, "_blank")
+    } else {
+      window.open(`/${slug}`, "_blank")
+    }
   }
 
   const systemPages = ['home', 'product', 'products', '404']
@@ -143,6 +166,11 @@ export function PageManagement({ onEditPage }: PageManagementProps) {
               系统页面
             </Tag>
           )}
+          {record.type === 'dynamic' && (
+            <Tag size="small" color="purple" style={{ marginLeft: 8 }}>
+              动态路由
+            </Tag>
+          )}
         </div>
       ),
     },
@@ -150,7 +178,12 @@ export function PageManagement({ onEditPage }: PageManagementProps) {
       title: "路径",
       dataIndex: "slug",
       key: "slug",
-      render: (slug: string) => <Tag color="blue">/{slug}</Tag>,
+      render: (slug: string, record: PageInfo) => {
+        if (record.type === 'dynamic') {
+          return <Tag color="purple">/{slug}/[{record.dynamicParam || 'id'}]</Tag>
+        }
+        return <Tag color="blue">/{slug}</Tag>
+      },
     },
     {
       title: "模块数量",
@@ -185,7 +218,7 @@ export function PageManagement({ onEditPage }: PageManagementProps) {
               type="text"
               size="small"
               icon={<IconEye />}
-              onClick={() => handlePreviewPage(record.slug)}
+              onClick={() => handlePreviewPage(record.slug, record.type, record.dynamicParam)}
             >
               预览
             </Button>
@@ -247,11 +280,14 @@ export function PageManagement({ onEditPage }: PageManagementProps) {
           setShowCreateModal(false)
           setNewPageName("")
           setNewPageSlug("")
+          setNewPageType('static')
+          setNewPageDynamicParam("id")
         }}
         onOk={handleCreatePage}
         confirmLoading={creating}
         okText="创建"
         cancelText="取消"
+        style={{ width: 600 }}
       >
         <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
           <div>
@@ -264,6 +300,22 @@ export function PageManagement({ onEditPage }: PageManagementProps) {
               placeholder="例如：首页、产品列表、关于我们"
             />
           </div>
+          
+          <div>
+            <label style={{ display: "block", marginBottom: 8, fontWeight: 500 }}>
+              页面类型 <span style={{ color: "#f56c6c" }}>*</span>
+            </label>
+            <Radio.Group value={newPageType} onChange={(val) => setNewPageType(val as 'static' | 'dynamic')}>
+              <Radio value="static">静态页面</Radio>
+              <Radio value="dynamic">动态路由页面</Radio>
+            </Radio.Group>
+            <p style={{ margin: "8px 0 0", fontSize: 12, color: "#9ca3af" }}>
+              {newPageType === 'static' 
+                ? "静态页面有固定的URL路径，例如：/about" 
+                : "动态路由页面包含参数，例如：/news/[id]"}
+            </p>
+          </div>
+
           <div>
             <label style={{ display: "block", marginBottom: 8, fontWeight: 500 }}>
               页面路径 <span style={{ color: "#f56c6c" }}>*</span>
@@ -278,6 +330,25 @@ export function PageManagement({ onEditPage }: PageManagementProps) {
               只能包含小写字母、数字和连字符，例如：my-page-1
             </p>
           </div>
+
+          {newPageType === 'dynamic' && (
+            <div>
+              <label style={{ display: "block", marginBottom: 8, fontWeight: 500 }}>
+                动态参数名称 <span style={{ color: "#f56c6c" }}>*</span>
+              </label>
+              <Input
+                value={newPageDynamicParam}
+                onChange={setNewPageDynamicParam}
+                placeholder="例如：id、slug"
+                addBefore="["
+                addAfter="]"
+                style={{ width: 240 }}
+              />
+              <p style={{ margin: "8px 0 0", fontSize: 12, color: "#9ca3af" }}>
+                最终路径：/{newPageSlug || 'path'}/[{newPageDynamicParam || 'id'}]
+              </p>
+            </div>
+          )}
         </div>
       </Modal>
     </div>

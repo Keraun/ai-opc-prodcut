@@ -1,6 +1,9 @@
 import { NextRequest, NextResponse } from 'next/server'
+import { initializeModules } from '@/modules/init'
 import { getModuleSchema, getModuleDefaultData } from '@/modules/registry'
 import { readConfig } from '@/lib/config-manager'
+
+initializeModules()
 
 export async function GET(
   request: NextRequest,

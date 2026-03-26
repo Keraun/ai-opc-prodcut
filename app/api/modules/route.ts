@@ -1,6 +1,9 @@
 import { NextRequest, NextResponse } from 'next/server'
+import { initializeModules } from '@/modules/init'
 import { getAllModules } from '@/modules/registry'
 import type { ModuleRegistration } from '@/modules/types'
+
+initializeModules()
 
 interface ModuleInfo {
   moduleId: string

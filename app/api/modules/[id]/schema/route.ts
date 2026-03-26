@@ -1,5 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server'
+import { initializeModules } from '@/modules/init'
 import { getModuleSchema } from '@/modules/registry'
+
+initializeModules()
 
 export async function GET(
   request: NextRequest,
@@ -16,10 +19,7 @@ export async function GET(
       }, { status: 404 })
     }
 
-    return NextResponse.json({
-      success: true,
-      ...schema,
-    })
+    return NextResponse.json(schema)
   } catch (error) {
     console.error('Get module schema error:', error)
     return NextResponse.json({

@@ -1,0 +1,59 @@
+{
+  "pages": [
+    {
+      "id": "home",
+      "name": "首页",
+      "slug": "home",
+      "type": "static",
+      "description": "网站首页",
+      "isSystem": true,
+      "isDeletable": false,
+      "route": "/"
+    },
+    {
+      "id": "product",
+      "name": "产品页面",
+      "slug": "product",
+      "type": "static",
+      "description": "产品列表页面",
+      "isSystem": true,
+      "isDeletable": false,
+      "route": "/product"
+    },
+    {
+      "id": "news",
+      "name": "新闻列表",
+      "slug": "news",
+      "type": "static",
+      "description": "新闻列表页面",
+      "isSystem": false,
+      "isDeletable": true,
+      "route": "/news"
+    },
+    {
+      "id": "new-detail",
+      "name": "新闻详情",
+      "slug": "new-detail",
+      "type": "dynamic",
+      "description": "新闻详情页面（动态路由）",
+      "isSystem": false,
+      "isDeletable": true,
+      "route": "/news/[id]",
+      "dynamicParam": "id"
+    },
+    {
+      "id": "404",
+      "name": "404页面",
+      "slug": "404",
+      "type": "static",
+      "description": "404错误页面",
+      "isSystem": true,
+      "isDeletable": false,
+      "route": "/404"
+    }
+  ],
+  "systemPages": ["home", "product", "404"],
+  "dynamicRoutePattern": "[param]",
+  "createdAt": "2024-01-01T00:00:00.000Z",
+  "updatedAt": "2024-01-01T00:00:00.000Z"
+}

@@ -1,0 +1,26 @@
+{
+  "pages": [
+    {
+      "id": "test",
+      "name": "test",
+      "slug": "test",
+      "modules": [
+        "site-root",
+        "site-header"
+      ],
+      "type": "static",
+      "isSystem": false,
+      "isDeletable": true,
+      "createdAt": "2026-03-26T23:14:03.310Z",
+      "updatedAt": "2026-03-26T23:14:03.310Z"
+    }
+  ],
+  "systemPages": [
+    "home",
+    "product",
+    "404"
+  ],
+  "dynamicRoutePattern": "[param]",
+  "createdAt": "2026-03-26T23:14:03.311Z",
+  "updatedAt": "2026-03-26T23:14:03.311Z"
+}

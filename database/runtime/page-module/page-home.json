@@ -1,6 +1,7 @@
 {
   "name": "首页",
   "slug": "home",
+  "type": "static",
   "modules": [
     "site-root",
     "site-header",

@@ -1,6 +1,8 @@
 {
   "name": "新闻详情",
   "slug": "new-detail",
+  "type": "dynamic",
+  "dynamicParam": "id",
   "modules": [
     "site-root",
     "site-header",

@@ -1,7 +1,7 @@
 "use client"
 
 import { useState, useEffect, useCallback } from "react"
-import { Card, Button, Space, Tag, Modal, Select, Message, Collapse } from "@arco-design/web-react"
+import { Card, Button, Space, Tag, Modal, Message, Collapse } from "@arco-design/web-react"
 import { IconDragDotVertical, IconDelete, IconPlus, IconSettings } from "@arco-design/web-react/icon"
 import styles from "../dashboard.module.css"
 import { ModuleFieldEditor } from "./ModuleFieldEditor"
@@ -26,8 +26,7 @@ interface ModuleDragEditorProps {
 
 export function ModuleDragEditor({ modules, onChange }: ModuleDragEditorProps) {
   const [availableModules, setAvailableModules] = useState<AvailableModule[]>([])
-  const [showAddModal, setShowAddModal] = useState(false)
-  const [selectedModuleId, setSelectedModuleId] = useState<string>("")
+  const [showAddPanel, setShowAddPanel] = useState(false)
   const [editingModule, setEditingModule] = useState<ModuleInfo | null>(null)
   const [draggedIndex, setDraggedIndex] = useState<number | null>(null)
 
@@ -47,25 +46,16 @@ export function ModuleDragEditor({ modules, onChange }: ModuleDragEditorProps) {
     }
   }
 
-  const handleAddModule = () => {
-    if (!selectedModuleId) {
-      Message.error("请选择要添加的模块")
-      return
-    }
-
-    const moduleInfo = availableModules.find((m) => m.moduleId === selectedModuleId)
-    if (!moduleInfo) return
-
+  const handleAddModule = (moduleInfo: AvailableModule) => {
     const newModule: ModuleInfo = {
-      moduleId: selectedModuleId,
+      moduleId: moduleInfo.moduleId,
       moduleName: moduleInfo.moduleName,
-      moduleInstanceId: `${selectedModuleId}-${Date.now()}`,
+      moduleInstanceId: `${moduleInfo.moduleId}-${Date.now()}`,
       data: {},
     }
 
     onChange([...modules, newModule])
-    setShowAddModal(false)
-    setSelectedModuleId("")
+    setShowAddPanel(false)
     Message.success("模块添加成功")
   }
 
@@ -130,11 +120,37 @@ export function ModuleDragEditor({ modules, onChange }: ModuleDragEditorProps) {
             type="primary"
             size="small"
             icon={<IconPlus />}
-            onClick={() => setShowAddModal(true)}
+            onClick={() => setShowAddPanel(!showAddPanel)}
           >
-            添加模块
+            {showAddPanel ? "收起" : "添加模块"}
           </Button>
         </div>
+
+        {showAddPanel && (
+          <div className={styles.modulePicker}>
+            <Collapse defaultActiveKey={Object.keys(groupedModules)}>
+              {Object.entries(groupedModules).map(([category, mods]) => (
+                <Collapse.Item key={category} header={category}>
+                  <div className={styles.moduleGrid}>
+                    {mods.map((mod) => (
+                      <Card
+                        key={mod.moduleId}
+                        className={styles.moduleCard}
+                        hoverable
+                        onClick={() => handleAddModule(mod)}
+                      >
+                        <div className={styles.moduleCardContent}>
+                          <div className={styles.moduleCardName}>{mod.moduleName}</div>
+                          <Tag size="small" color="arcoblue">{mod.moduleId}</Tag>
+                        </div>
+                      </Card>
+                    ))}
+                  </div>
+                </Collapse.Item>
+              ))}
+            </Collapse>
+          </div>
+        )}
 
         {modules.length === 0 ? (
           <Card className={styles.emptyModuleCard}>
@@ -190,45 +206,6 @@ export function ModuleDragEditor({ modules, onChange }: ModuleDragEditorProps) {
           </div>
         )}
       </div>
-
-      <Modal
-        title="添加模块"
-        visible={showAddModal}
-        onCancel={() => {
-          setShowAddModal(false)
-          setSelectedModuleId("")
-        }}
-        onOk={handleAddModule}
-        okText="添加"
-        cancelText="取消"
-        style={{ width: 600 }}
-      >
-        <div style={{ marginBottom: 16 }}>
-          <p style={{ margin: "0 0 8px", color: "#6b7280" }}>
-            选择要添加到页面的模块：
-          </p>
-          <Select
-            value={selectedModuleId}
-            onChange={setSelectedModuleId}
-            placeholder="请选择模块"
-            style={{ width: "100%" }}
-            showSearch
-            filterOption={(inputValue, option) =>
-              option.props.children.toLowerCase().includes(inputValue.toLowerCase())
-            }
-          >
-            {Object.entries(groupedModules).map(([category, mods]) => (
-              <Select.OptGroup key={category} label={category}>
-                {mods.map((mod) => (
-                  <Select.Option key={mod.moduleId} value={mod.moduleId}>
-                    {mod.moduleName}
-                  </Select.Option>
-                ))}
-              </Select.OptGroup>
-            ))}
-          </Select>
-        </div>
-      </Modal>
 
       <Modal
         title={`编辑模块：${editingModule?.moduleName || ""}`}

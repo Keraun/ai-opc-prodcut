@@ -1,0 +1,11 @@
+{
+  "name": "test",
+  "slug": "test",
+  "type": "static",
+  "modules": [
+    "site-root",
+    "site-header"
+  ],
+  "createdAt": "2026-03-26T23:14:03.309Z",
+  "updatedAt": "2026-03-26T23:14:03.309Z"
+}
