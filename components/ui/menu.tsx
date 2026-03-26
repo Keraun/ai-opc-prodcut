@@ -1,4 +1,5 @@
 import type { HTMLAttributes, ReactNode } from "react"
+import styles from "./menu.module.css"
 
 export interface MenuItem {
   id: string
@@ -26,49 +27,24 @@ export function Menu({
   style = {},
   ...props
 }: MenuProps) {
-  const baseStyles = "flex"
-
-  const orientationStyles = {
-    horizontal: "flex-row items-center gap-1",
-    vertical: "flex-col items-stretch gap-1"
-  }
-
-  const variantStyles = {
-    default: "",
-    pills: "bg-gray-100 p-1 rounded-lg",
-    underline: "border-b border-gray-200"
-  }
-
-  const sizeStyles = {
-    sm: "text-sm",
-    md: "text-base",
-    lg: "text-lg"
-  }
+  const orientationClass = styles[orientation] || styles.horizontal
+  const variantClass = styles[`variant_${variant}`] || styles.variant_default
+  const sizeClass = styles[`size_${size}`] || styles.size_md
 
   const renderMenuItem = (item: MenuItem) => {
-    const baseItemStyles = "flex items-center gap-2 px-4 py-2 rounded-md transition-all duration-200 font-medium"
-
-    const variantItemStyles = {
-      default: "text-gray-700 hover:bg-gray-50 hover:text-gray-900",
-      pills: "text-gray-700 hover:bg-white hover:shadow-sm",
-      underline: "text-gray-600 hover:text-gray-900 border-b-2 border-transparent hover:border-blue-600 -mb-0.5"
-    }
-
-    const disabledStyles = item.disabled
-      ? "opacity-50 cursor-not-allowed pointer-events-none"
-      : "cursor-pointer"
+    const variantItemClass = styles[`item_${variant}`] || styles.item_default
 
     return (
       <a
         key={item.id}
         href={item.href}
-        className={`${baseItemStyles} ${variantItemStyles[variant]} ${sizeStyles[size]} ${disabledStyles}`}
+        className={`${styles.menuItem} ${variantItemClass} ${sizeClass} ${item.disabled ? styles.disabled : ""}`}
         aria-disabled={item.disabled}
       >
-        {item.icon && <span className="flex-shrink-0">{item.icon}</span>}
+        {item.icon && <span className={styles.icon}>{item.icon}</span>}
         <span>{item.label}</span>
         {item.badge && (
-          <span className="ml-auto bg-blue-600 text-white text-xs px-2 py-0.5 rounded-full">
+          <span className={styles.badge}>
             {item.badge}
           </span>
         )}
@@ -78,7 +54,7 @@ export function Menu({
 
   return (
     <nav
-      className={`${baseStyles} ${orientationStyles[orientation]} ${variantStyles[variant]} ${className}`}
+      className={`${styles.menu} ${orientationClass} ${variantClass} ${className}`}
       style={style}
       {...props}
     >

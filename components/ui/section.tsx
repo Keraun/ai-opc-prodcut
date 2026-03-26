@@ -1,4 +1,5 @@
 import type { HTMLAttributes, ReactNode } from "react"
+import styles from "./section.module.css"
 
 export interface SectionProps extends HTMLAttributes<HTMLElement> {
   id?: string
@@ -25,51 +26,30 @@ export function Section({
   style = {},
   ...props
 }: SectionProps) {
-  const baseStyles = "w-full"
-
-  const variantStyles = {
-    default: "bg-white",
-    gradient: "bg-gradient-to-br from-blue-50 to-cyan-50",
-    minimal: "bg-transparent"
-  }
-
-  const paddingStyles = {
-    none: "",
-    sm: "py-8",
-    md: "py-12",
-    lg: "py-20"
-  }
-
-  const maxWidthStyles = {
-    sm: "max-w-2xl",
-    md: "max-w-4xl",
-    lg: "max-w-6xl",
-    xl: "max-w-7xl",
-    full: "max-w-full"
-  }
-
-  const centeredStyles = centered ? "text-center" : "text-left"
+  const variantClass = styles[variant] || styles.default
+  const paddingClass = styles[`padding_${padding}`] || styles.padding_lg
+  const maxWidthClass = styles[`maxWidth_${maxWidth}`] || styles.maxWidth_xl
 
   return (
     <section
       id={id}
-      className={`${baseStyles} ${variantStyles[variant]} ${paddingStyles[padding]} ${className}`}
+      className={`${styles.section} ${variantClass} ${paddingClass} ${className}`}
       style={style}
       {...props}
     >
-      <div className={`mx-auto px-4 sm:px-6 lg:px-8 ${maxWidthStyles[maxWidth]} ${centeredStyles}`}>
+      <div className={`${styles.container} ${maxWidthClass} ${centered ? styles.centered : ""}`}>
         {badge && (
-          <span className="inline-block px-4 py-1.5 text-sm font-medium text-blue-600 bg-blue-50 rounded-full mb-4">
+          <span className={styles.badge}>
             {badge}
           </span>
         )}
         {title && (
-          <h2 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-4">
+          <h2 className={styles.title}>
             {title}
           </h2>
         )}
         {description && (
-          <p className="text-lg text-gray-600 mb-8 max-w-3xl">
+          <p className={styles.description}>
             {description}
           </p>
         )}

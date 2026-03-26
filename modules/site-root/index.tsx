@@ -2,12 +2,13 @@
 
 import type { ModuleProps } from "@/modules/types"
 import type { SiteRootData } from "./types"
+import styles from "./index.module.css"
 
 export function SiteRootModule({ data }: ModuleProps) {
   const config: SiteRootData = (data as SiteRootData) || {}
 
   return (
-    <div className="site-root">
+    <div className={styles.siteRoot}>
       {config.name && (
         <meta name="site-name" content={config.name} />
       )}

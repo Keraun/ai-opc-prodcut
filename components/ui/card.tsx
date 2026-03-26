@@ -1,4 +1,5 @@
 import type { HTMLAttributes, ReactNode } from "react"
+import styles from "./card.module.css"
 
 export interface CardProps extends HTMLAttributes<HTMLDivElement> {
   title?: string
@@ -21,38 +22,24 @@ export function Card({
   style = {},
   ...props
 }: CardProps) {
-  const baseStyles = "rounded-xl transition-all duration-300"
-
-  const variantStyles = {
-    default: "bg-white border border-gray-200",
-    outlined: "bg-transparent border-2 border-gray-300",
-    elevated: "bg-white shadow-lg border border-gray-100"
-  }
-
-  const paddingStyles = {
-    none: "",
-    sm: "p-4",
-    md: "p-6",
-    lg: "p-8"
-  }
-
-  const hoverStyles = hover ? "hover:shadow-xl hover:-translate-y-1" : ""
+  const variantClass = styles[variant] || styles.default
+  const paddingClass = styles[`padding_${padding}`] || styles.padding_md
 
   return (
     <div
-      className={`${baseStyles} ${variantStyles[variant]} ${paddingStyles[padding]} ${hoverStyles} ${className}`}
+      className={`${styles.card} ${variantClass} ${paddingClass} ${hover ? styles.hover : ""} ${className}`}
       style={style}
       {...props}
     >
       {title && (
-        <h3 className="text-lg font-semibold text-gray-900 mb-2">{title}</h3>
+        <h3 className={styles.title}>{title}</h3>
       )}
       {description && (
-        <p className="text-gray-600 mb-4">{description}</p>
+        <p className={styles.description}>{description}</p>
       )}
       {children}
       {footer && (
-        <div className="mt-6 pt-4 border-t border-gray-100">{footer}</div>
+        <div className={styles.footer}>{footer}</div>
       )}
     </div>
   )

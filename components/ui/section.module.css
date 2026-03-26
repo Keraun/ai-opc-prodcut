@@ -1,0 +1,110 @@
+.section {
+  width: 100%;
+}
+
+.default {
+  background-color: white;
+}
+
+.gradient {
+  background: linear-gradient(135deg, #eff6ff 0%, #ecfeff 100%);
+}
+
+.minimal {
+  background-color: transparent;
+}
+
+.padding_none {
+  padding: 0;
+}
+
+.padding_sm {
+  padding-top: 2rem;
+  padding-bottom: 2rem;
+}
+
+.padding_md {
+  padding-top: 3rem;
+  padding-bottom: 3rem;
+}
+
+.padding_lg {
+  padding-top: 5rem;
+  padding-bottom: 5rem;
+}
+
+.container {
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: 1rem;
+  padding-right: 1rem;
+}
+
+@media (min-width: 640px) {
+  .container {
+    padding-left: 1.5rem;
+    padding-right: 1.5rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .container {
+    padding-left: 2rem;
+    padding-right: 2rem;
+  }
+}
+
+.maxWidth_sm {
+  max-width: 42rem;
+}
+
+.maxWidth_md {
+  max-width: 56rem;
+}
+
+.maxWidth_lg {
+  max-width: 72rem;
+}
+
+.maxWidth_xl {
+  max-width: 80rem;
+}
+
+.maxWidth_full {
+  max-width: 100%;
+}
+
+.centered {
+  text-align: center;
+}
+
+.badge {
+  display: inline-block;
+  padding: 0.375rem 1rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: #2563eb;
+  background-color: #eff6ff;
+  border-radius: 9999px;
+  margin-bottom: 1rem;
+}
+
+.title {
+  font-size: 2.25rem;
+  font-weight: 700;
+  color: #111827;
+  margin-bottom: 1rem;
+}
+
+@media (min-width: 640px) {
+  .title {
+    font-size: 2.5rem;
+  }
+}
+
+.description {
+  font-size: 1.125rem;
+  color: #4b5563;
+  margin-bottom: 2rem;
+  max-width: 48rem;
+}
