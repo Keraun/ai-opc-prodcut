@@ -9,7 +9,7 @@ export default function Home() {
   const initialData = loadInitialData()
   const { data } = initialData
   const modules = data.modules || []
-
+ console.log('modules', modules)
   return (
     <div className={styles.homeContainer}>
       <ModuleRenderer modules={modules} />
