@@ -80,8 +80,9 @@ export function PricingModule({ data }: ModuleProps) {
     >
       <div className={styles.grid}>
         {pricingPlans.map((plan: PricingFeature, index: number) => {
-          const cardFooter = plan.link ? (
-            <Link href={plan.link} className={styles.buttonLink}>
+          const planLink = (plan as any).buttonLink || (plan as any).link
+          const cardFooter = planLink ? (
+            <Link href={planLink} className={styles.buttonLink}>
               <Button
                 variant={plan.isPopular ? "primary" : "outline"}
                 size="lg"

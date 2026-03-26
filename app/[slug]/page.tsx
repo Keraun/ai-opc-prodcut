@@ -16,17 +16,9 @@ const routeConfigMap: Record<string, RouteConfig> = {
     description: '创客AI - 专注AI一人公司服务',
     pageId: 'home'
   },
-  'about': {
-    title: '关于我们',
-    pageId: 'home'
-  },
   'products': {
     title: '产品服务',
     pageId: 'product'
-  },
-  'contact': {
-    title: '联系我们',
-    pageId: 'home'
   },
   'news': {
     title: '新闻资讯',
@@ -48,6 +40,16 @@ function getSiteConfig() {
   } catch (error) {
     console.error('Failed to read site config:', error)
     return {}
+  }
+}
+
+function pageModuleExists(pageId: string): boolean {
+  try {
+    const pageModuleType = `page-${pageId}`
+    const pageModule = readConfig(pageModuleType)
+    return pageModule && pageModule.modules && Array.isArray(pageModule.modules)
+  } catch {
+    return false
   }
 }
 
@@ -82,24 +84,28 @@ export default async function DynamicPage({ params }: PageProps) {
   const { slug } = await params
   const routeConfig = getRouteConfig(slug)
   
+  let pageId: string
+  let orderConfigKey: string | undefined
+  
+  if (routeConfig) {
+    pageId = routeConfig.pageId
+    orderConfigKey = routeConfig.orderConfigKey
+  } else {
+    pageId = slug
+    orderConfigKey = `${slug}Order`
+  }
+  
+  if (!pageModuleExists(pageId)) {
+    return <GenericPage pageId="404" />
+  }
+  
   try {
-    let pageId: string
-    let orderConfigKey: string | undefined
-    
-    if (routeConfig) {
-      pageId = routeConfig.pageId
-      orderConfigKey = routeConfig.orderConfigKey
-    } else {
-      pageId = slug
-      orderConfigKey = `${slug}Order`
-    }
-    
     return <GenericPage 
       pageId={pageId} 
       orderConfigKey={orderConfigKey} 
     />
   } catch (error) {
     console.error(`Error loading page ${slug}:`, error)
-    notFound()
+    return <GenericPage pageId="404" />
   }
 }

@@ -8,8 +8,6 @@ import { useConfig } from "@/components/initial-data-provider"
 const defaultNavItems = [
   { label: '首页', href: '/' },
   { label: '产品', href: '/products' },
-  { label: '关于我们', href: '/about' },
-  { label: '联系我们', href: '/contact' },
 ]
 
 export function HeaderModule({ data }: ModuleProps) {

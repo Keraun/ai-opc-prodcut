@@ -1,9 +1,12 @@
 {
-  "navItems": [
-    { "label": "首页", "href": "/" },
-    { "label": "产品", "href": "/products" },
-    { "label": "服务", "href": "/services" },
-    { "label": "关于我们", "href": "/about" }
+  "navItems": [{
+      "label": "首页",
+      "href": "/"
+    },
+    {
+      "label": "产品",
+      "href": "/products"
+    }
   ],
   "showContactButton": true,
   "showCtaButton": true,
