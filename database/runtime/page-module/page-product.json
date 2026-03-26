@@ -1,8 +1,12 @@
 {
+  "name": "产品页面",
+  "slug": "product",
   "modules": [
     "site-root",
     "site-header",
     "product-list",
     "site-footer"
-  ]
+  ],
+  "createdAt": "2024-01-01T00:00:00.000Z",
+  "updatedAt": "2024-01-01T00:00:00.000Z"
 }

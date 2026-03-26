@@ -128,12 +128,23 @@ export function PageManagement({ onEditPage }: PageManagementProps) {
     window.open(`/${slug}`, "_blank")
   }
 
+  const systemPages = ['home', 'product', 'products', '404']
+  
   const columns = [
     {
       title: "页面名称",
       dataIndex: "name",
       key: "name",
-      render: (name: string) => <span style={{ fontWeight: 500 }}>{name}</span>,
+      render: (name: string, record: PageInfo) => (
+        <div>
+          <span style={{ fontWeight: 500 }}>{name}</span>
+          {systemPages.includes(record.id) && (
+            <Tag size="small" color="orange" style={{ marginLeft: 8 }}>
+              系统页面
+            </Tag>
+          )}
+        </div>
+      ),
     },
     {
       title: "路径",
@@ -158,35 +169,44 @@ export function PageManagement({ onEditPage }: PageManagementProps) {
     {
       title: "操作",
       key: "actions",
-      render: (_: any, record: PageInfo) => (
-        <Space>
-          <Button
-            type="text"
-            size="small"
-            icon={<IconEdit />}
-            onClick={() => handleEditPage(record.id)}
-          >
-            编辑
-          </Button>
-          <Button
-            type="text"
-            size="small"
-            icon={<IconEye />}
-            onClick={() => handlePreviewPage(record.slug)}
-          >
-            预览
-          </Button>
-          <Popconfirm
-            title="确定要删除此页面吗？"
-            content="删除后将无法恢复"
-            onOk={() => handleDeletePage(record.id)}
-          >
-            <Button type="text" size="small" status="danger" icon={<IconDelete />}>
-              删除
+      render: (_: any, record: PageInfo) => {
+        const isSystemPage = systemPages.includes(record.id)
+        return (
+          <Space>
+            <Button
+              type="text"
+              size="small"
+              icon={<IconEdit />}
+              onClick={() => handleEditPage(record.id)}
+            >
+              编辑
             </Button>
-          </Popconfirm>
-        </Space>
-      ),
+            <Button
+              type="text"
+              size="small"
+              icon={<IconEye />}
+              onClick={() => handlePreviewPage(record.slug)}
+            >
+              预览
+            </Button>
+            {!isSystemPage ? (
+              <Popconfirm
+                title="确定要删除此页面吗？"
+                content="删除后将无法恢复"
+                onOk={() => handleDeletePage(record.id)}
+              >
+                <Button type="text" size="small" status="danger" icon={<IconDelete />}>
+                  删除
+                </Button>
+              </Popconfirm>
+            ) : (
+              <Button type="text" size="small" disabled style={{ opacity: 0.5 }}>
+                删除
+              </Button>
+            )}
+          </Space>
+        )
+      },
     },
   ]
 

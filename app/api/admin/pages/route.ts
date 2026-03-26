@@ -28,13 +28,34 @@ function getPageList(): PageInfo[] {
           if (pageConfig) {
             const stats = fs.statSync(path.join(pageModuleDir, file))
             
+            const defaultNames: Record<string, string> = {
+              'home': '首页',
+              'product': '产品页面',
+              'products': '产品页面',
+              'news': '新闻列表',
+              'new-detail': '新闻详情',
+              '404': '404页面'
+            }
+            
+            const updatedConfig = {
+              name: pageConfig.name || defaultNames[pageId] || pageId,
+              slug: pageConfig.slug || pageId,
+              modules: pageConfig.modules || [],
+              createdAt: pageConfig.createdAt || stats.birthtime.toISOString(),
+              updatedAt: pageConfig.updatedAt || stats.mtime.toISOString(),
+            }
+            
+            if (!pageConfig.name || !pageConfig.slug) {
+              writeConfig(`page-${pageId}`, updatedConfig)
+            }
+            
             pages.push({
               id: pageId,
-              name: (pageConfig.name as string) || pageId,
-              slug: (pageConfig.slug as string) || pageId,
-              modules: (pageConfig.modules as string[]) || [],
-              createdAt: stats.birthtime.toISOString(),
-              updatedAt: stats.mtime.toISOString(),
+              name: updatedConfig.name,
+              slug: updatedConfig.slug,
+              modules: updatedConfig.modules,
+              createdAt: updatedConfig.createdAt,
+              updatedAt: updatedConfig.updatedAt,
             })
           }
         }
@@ -54,7 +75,14 @@ function createPage(name: string, slug: string): { success: boolean; pageId?: st
     
     const existingConfig = readConfig(configKey)
     if (existingConfig && Object.keys(existingConfig).length > 0) {
-      return { success: false, error: '页面路径已存在' }
+      const existingName = existingConfig.name as string || pageId
+      return { success: false, error: `页面路径 "/${slug}" 已被 "${existingName}" 占用，请使用其他路径` }
+    }
+
+    const existingPages = getPageList()
+    const nameConflict = existingPages.find(p => p.name.toLowerCase() === name.toLowerCase())
+    if (nameConflict) {
+      return { success: false, error: `页面名称 "${name}" 已存在，请使用其他名称` }
     }
 
     const newPageConfig = {

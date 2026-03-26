@@ -1,4 +1,6 @@
 {
+  "name": "首页",
+  "slug": "home",
   "modules": [
     "site-root",
     "site-header",
@@ -11,5 +13,7 @@
     "section-contact",
     "sidebar-nav",
     "site-footer"
-  ]
+  ],
+  "createdAt": "2024-01-01T00:00:00.000Z",
+  "updatedAt": "2024-01-01T00:00:00.000Z"
 }

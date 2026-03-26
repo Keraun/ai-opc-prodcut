@@ -1,8 +1,12 @@
 {
+  "name": "新闻详情",
+  "slug": "new-detail",
   "modules": [
     "site-root",
     "site-header",
     "news-detail",
     "site-footer"
-  ]
+  ],
+  "createdAt": "2024-01-01T00:00:00.000Z",
+  "updatedAt": "2024-01-01T00:00:00.000Z"
 }

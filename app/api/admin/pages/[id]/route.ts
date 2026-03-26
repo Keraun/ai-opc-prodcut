@@ -148,8 +148,9 @@ export async function DELETE(
 ) {
   try {
     const pageId = params.id
+    const systemPages = ['home', 'product', 'products', '404']
     
-    if (pageId === 'home' || pageId === '404') {
+    if (systemPages.includes(pageId)) {
       return NextResponse.json({
         success: false,
         message: '系统页面不能删除',

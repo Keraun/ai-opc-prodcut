@@ -1,8 +1,12 @@
 {
+  "name": "404页面",
+  "slug": "404",
   "modules": [
     "site-root",
     "site-header",
     "section-404",
     "site-footer"
-  ]
+  ],
+  "createdAt": "2024-01-01T00:00:00.000Z",
+  "updatedAt": "2024-01-01T00:00:00.000Z"
 }

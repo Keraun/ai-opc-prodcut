@@ -1,8 +1,12 @@
 {
+  "name": "新闻列表",
+  "slug": "news",
   "modules": [
     "site-root",
     "site-header",
     "news-list",
     "site-header"
-  ]
+  ],
+  "createdAt": "2024-01-01T00:00:00.000Z",
+  "updatedAt": "2024-01-01T00:00:00.000Z"
 }
