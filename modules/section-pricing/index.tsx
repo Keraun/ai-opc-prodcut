@@ -26,6 +26,7 @@ export function PricingModule({ data }: ModuleProps) {
       padding="lg"
       centered
       badgeClassName={styles.badge}
+      badgeType="orange"
     >
       <div className={styles.grid}>
         {pricingPlans.map((plan: PricingFeature, index: number) => {
@@ -33,24 +34,24 @@ export function PricingModule({ data }: ModuleProps) {
           const cardFooter = planLink ? (
             <Link href={planLink} className={styles.buttonLink}>
               <Button
-                  variant={plan.isPopular ? "primary" : "outline"}
-                  size="lg"
-                  fullWidth
-                  icon={<ArrowRightIcon />}
-                  iconPosition="right"
-                  style={{
-                    backgroundColor: plan.isPopular ? primaryColor : 'transparent',
-                    borderColor: primaryColor,
-                    color: plan.isPopular ? '#ffffff' : primaryColor,
-                    transition: 'all 0.3s ease',
-                    '&:hover': {
-                      backgroundColor: plan.isPopular ? secondaryColor : `${primaryColor}10`,
-                      borderColor: secondaryColor
-                    }
-                  }}
-                >
-                  {plan.buttonText}
-                </Button>
+                variant={plan.isPopular ? "primary" : "outline"}
+                size="lg"
+                fullWidth
+                icon={<ArrowRightIcon />}
+                iconPosition="right"
+                style={{
+                  backgroundColor: plan.isPopular ? primaryColor : 'transparent',
+                  borderColor: primaryColor,
+                  color: plan.isPopular ? '#ffffff' : primaryColor,
+                  transition: 'all 0.3s ease',
+                  '&:hover': {
+                    backgroundColor: plan.isPopular ? secondaryColor : `${primaryColor}10`,
+                    borderColor: secondaryColor
+                  }
+                }}
+              >
+                {plan.buttonText}
+              </Button>
             </Link>
           ) : (
             <Button
@@ -83,8 +84,8 @@ export function PricingModule({ data }: ModuleProps) {
               }}
             >
               {plan.isPopular && (
-                <div 
-                  className={styles.popularBadge} 
+                <div
+                  className={styles.popularBadge}
                   style={{ backgroundColor: primaryColor }}
                 >
                   最受欢迎

@@ -38,6 +38,7 @@ export function ProductsModule({ data }: ModuleProps) {
       variant="default"
       padding="lg"
       centered
+      badgeType="purple"
     >
       <div className={styles.bgElements}>
         <div className={styles.bgCircle1} />

@@ -21,7 +21,7 @@
 .bgCircle1 {
   position: relative;
   top: 0;
-  left: 25%;
+  left: 0;
   width: 24rem;
   height: 24rem;
   background-color: #eff6ff;
@@ -30,9 +30,9 @@
 }
 
 .bgCircle2 {
-  position: relative;
+  position: absolute;
   bottom: 0;
-  right: 25%;
+  right: 0;
   width: 24rem;
   height: 24rem;
   background-color: #ecfeff;
