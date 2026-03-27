@@ -31,6 +31,7 @@ export default function AdminLoginPage() {
   const [username, setUsername] = useState<string>("")
   const [password, setPassword] = useState<string>("")
   const [loading, setLoading] = useState<boolean>(false)
+  const [checkingAuth, setCheckingAuth] = useState<boolean>(true)
   const [showForgotPassword, setShowForgotPassword] = useState<boolean>(false)
   const [resetMethod, setResetMethod] = useState<string>("token")
   const [superAdminToken, setSuperAdminToken] = useState<string>("")
@@ -47,6 +48,27 @@ export default function AdminLoginPage() {
   const [showPassword, setShowPassword] = useState<boolean>(false)
   const [showNewPassword, setShowNewPassword] = useState<boolean>(false)
   const [showConfirmPassword, setShowConfirmPassword] = useState<boolean>(false)
+
+  // 检查是否有有效的cookie会话
+  useEffect(() => {
+    const checkAuth = async () => {
+      try {
+        const response = await fetch("/api/admin/auth")
+        const data = await response.json()
+
+        if (data.authenticated) {
+          // 如果有有效的会话，直接跳转到后台页面管理
+          router.push("/admin/dashboard?menu=pages")
+        }
+      } catch (error) {
+        console.error("检查认证状态失败:", error)
+      } finally {
+        setCheckingAuth(false)
+      }
+    }
+
+    checkAuth()
+  }, [router])
 
   const handleLogin = async (): Promise<void> => {
     if (!username || !password) {
@@ -79,7 +101,7 @@ export default function AdminLoginPage() {
           setShowTokenModal(true)
         } else {
           toast.success("登录成功")
-          router.push("/admin/dashboard")
+          router.push("/admin/dashboard?menu=pages")
         }
       } else {
         toast.error(data.message || "登录失败")
@@ -122,7 +144,7 @@ export default function AdminLoginPage() {
           setShowTokenModal(true)
         } else {
           toast.success("登录成功")
-          router.push("/admin/dashboard")
+          router.push("/admin/dashboard?menu=pages")
         }
       } else {
         toast.error(data.message || "邮箱设置失败")
@@ -137,7 +159,7 @@ export default function AdminLoginPage() {
   const handleTokenModalClose = (): void => {
     setShowTokenModal(false)
     toast.success("登录成功")
-    router.push("/admin/dashboard")
+    router.push("/admin/dashboard?menu=pages")
   }
 
   const handleCopyToken = (): void => {
@@ -264,9 +286,9 @@ export default function AdminLoginPage() {
             sessionStorage.setItem('currentUser', JSON.stringify(loginData.user))
           }
           toast.success("登录成功，3秒后自动跳转到管理后台...")
-          
+
           setTimeout(() => {
-            router.push("/admin/dashboard")
+            router.push("/admin/dashboard?menu=pages")
           }, 3000)
         } else {
           setShowForgotPassword(false)

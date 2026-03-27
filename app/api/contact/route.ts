@@ -4,8 +4,30 @@ import path from "path"
 
 export async function POST(request: NextRequest) {
   try {
-    const body = await request.json()
-    const { name, phone, wechat, email, preference, message } = body
+    // 支持 FormData 和 JSON 两种格式
+    let name, phone, wechat, email, preference, message
+    
+    const contentType = request.headers.get('content-type') || ''
+    
+    if (contentType.includes('application/json')) {
+      // JSON 格式
+      const body = await request.json()
+      name = body.name
+      phone = body.phone
+      wechat = body.wechat
+      email = body.email
+      preference = body.preference
+      message = body.message
+    } else {
+      // FormData 格式
+      const formData = await request.formData()
+      name = formData.get('name')
+      phone = formData.get('phone')
+      wechat = formData.get('wechat')
+      email = formData.get('email')
+      preference = formData.get('contactPreference')
+      message = formData.get('message')
+    }
 
     // Validate required fields
     if (!name || !phone || !message) {
@@ -75,12 +97,31 @@ export async function POST(request: NextRequest) {
       throw new Error("提交数据到飞书表格失败")
     }
 
+    // 检查是否是表单提交（非AJAX请求）
+    const acceptHeader = request.headers.get('accept') || ''
+    const isFormSubmit = !acceptHeader.includes('application/json')
+    
+    if (isFormSubmit) {
+      // 表单提交，重定向到首页并显示成功消息
+      return NextResponse.redirect(new URL('/?contact=success', request.url))
+    }
+
     return NextResponse.json({
       success: true,
       message: "感谢您的留言，我们会尽快与您联系！"
     })
   } catch (error) {
     console.error("提交留言失败:", error)
+    
+    // 检查是否是表单提交（非AJAX请求）
+    const acceptHeader = request.headers.get('accept') || ''
+    const isFormSubmit = !acceptHeader.includes('application/json')
+    
+    if (isFormSubmit) {
+      // 表单提交，重定向到首页并显示错误消息
+      return NextResponse.redirect(new URL('/?contact=error', request.url))
+    }
+    
     return NextResponse.json(
       { success: false, message: "提交留言失败，请稍后重试" },
       { status: 500 }

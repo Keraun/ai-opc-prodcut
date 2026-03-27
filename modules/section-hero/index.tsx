@@ -1,6 +1,6 @@
 import Link from "next/link"
 import { Logo } from "@/components/common/logo"
-import { Section, Button } from "@/components/ui"
+import { Section, Button, ScrollIndicator } from "@/components/ui"
 import { useTheme } from "@/components/theme-provider"
 import { ArrowRightIcon, CommandIcon, StarIcon, ThunderboltIcon } from "@/modules/icons"
 import type { ModuleProps } from "@/modules/types"
@@ -367,6 +367,17 @@ export function HeroModule({ data }: ModuleProps) {
       {layoutType === 'layout1' && renderLayout1()}
       {layoutType === 'layout2' && renderLayout2()}
       {layoutType === 'layout3' && renderLayout3()}
+
+      {/* 向下滑动提示 */}
+      <ScrollIndicator
+        primaryColor={primaryColor}
+        onClick={() => {
+          const nextSection = document.getElementById('hero')?.nextElementSibling
+          if (nextSection) {
+            nextSection.scrollIntoView({ behavior: 'smooth' })
+          }
+        }}
+      />
     </Section>
   )
 }

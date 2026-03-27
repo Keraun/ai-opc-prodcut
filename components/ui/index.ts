@@ -17,3 +17,6 @@ export { MobileMenu } from "./mobile-menu"
 export type { MobileMenuProps, MobileMenuItem } from "./mobile-menu"
 
 export { NotFoundResult } from "./not-found-result"
+
+export { ScrollIndicator } from "./scroll-indicator"
+export type { ScrollIndicatorProps } from "./scroll-indicator"

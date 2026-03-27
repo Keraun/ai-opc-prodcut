@@ -4,11 +4,13 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  padding-top: 6rem;
+  padding-top: 12rem;
   padding-bottom: 4rem;
   padding-left: 1rem;
   padding-right: 1rem;
   background: linear-gradient(180deg, var(--theme-background-secondary) 0%, var(--theme-background) 100%);
+  min-height: 60vh;
+
 }
 
 @media (min-width: 640px) {
