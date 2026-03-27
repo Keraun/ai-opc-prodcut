@@ -50,6 +50,7 @@ export function ServicesModule({ data }: ModuleProps) {
       description={config.description}
       className={styles.section}
       badgeType="cyan"
+      centered
     >
       <div className={styles.bgPattern} />
 

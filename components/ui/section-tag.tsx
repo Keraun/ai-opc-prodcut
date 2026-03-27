@@ -5,7 +5,7 @@ export interface SectionTagProps {
   children: ReactNode
   className?: string
   style?: React.CSSProperties
-  type?: 'blue' | 'gray' | 'green' | 'orange' | 'red' | 'cyan' | 'purple' | 'teal'
+  type?: 'blue' | 'red' | 'green' | 'orange' | 'purple' | 'pink' | 'yellow' | 'cyan'
 }
 
 export function SectionTag({

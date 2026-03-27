@@ -80,6 +80,7 @@ export function AboutModule({ data }: ModuleProps) {
       badge={config?.sectionTag}
       className={styles.section}
       badgeType="cyan"
+      centered
     >
       <div className={styles.bgPattern} />
       <div className={styles.decorativeOrb1} />
@@ -93,7 +94,7 @@ export function AboutModule({ data }: ModuleProps) {
                 {config.title?.main}
                 <br />
                 {config.title?.highlight && (
-                  <span 
+                  <span
                     className={styles.titleHighlight}
                     style={{ color: primaryColor }}
                   >
@@ -117,16 +118,16 @@ export function AboutModule({ data }: ModuleProps) {
 
                   return (
                     <div key={index} className={styles.stat}>
-                      <div 
-                        className={styles.statIconWrapper} 
-                        style={{ 
-                          backgroundColor: `${primaryColor}20` 
+                      <div
+                        className={styles.statIconWrapper}
+                        style={{
+                          backgroundColor: `${primaryColor}20`
                         }}
                       >
-                        <div 
-                          className={styles.statIcon} 
-                          style={{ 
-                            color: primaryColor 
+                        <div
+                          className={styles.statIcon}
+                          style={{
+                            color: primaryColor
                           }}
                         >
                           {stat.icon}
@@ -148,16 +149,16 @@ export function AboutModule({ data }: ModuleProps) {
               return (
                 <div key={index} className={styles.valueCard}>
                   <div className={styles.valueHeader}>
-                    <div 
-                      className={styles.valueIconWrapper} 
-                      style={{ 
-                        backgroundColor: `${primaryColor}20` 
+                    <div
+                      className={styles.valueIconWrapper}
+                      style={{
+                        backgroundColor: `${primaryColor}20`
                       }}
                     >
-                      <div 
-                        className={styles.valueIcon} 
-                        style={{ 
-                          color: primaryColor 
+                      <div
+                        className={styles.valueIcon}
+                        style={{
+                          color: primaryColor
                         }}
                       >
                         {value.icon}

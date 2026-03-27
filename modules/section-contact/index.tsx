@@ -20,6 +20,7 @@ export function ContactModule({ data }: ModuleProps) {
       description={config.description}
       className={styles.section}
       badgeType="orange"
+            centered
     >
       <div className={styles.bgPattern} />
       <div className={styles.decorativeOrb1} />
