@@ -16,7 +16,6 @@ import {
   IconSafe,
   IconFile
 } from "@arco-design/web-react/icon"
-import { AccountInfo } from "../account/account-info"
 import styles from "../../dashboard.module.css"
 
 interface SystemManagementProps {
