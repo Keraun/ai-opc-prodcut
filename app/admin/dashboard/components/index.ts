@@ -1,5 +1,4 @@
 // Account
-export { AccountInfo } from './account/account-info'
 export { ConfigCard } from './account/config-card'
 export { ThemeSelector } from './account/theme-selector'
 export { JSONViewerWithLineNumbers, JSONDiffViewer } from './account/json-viewer'

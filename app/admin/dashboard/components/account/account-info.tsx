@@ -3,6 +3,7 @@
 import { useState } from "react"
 import { Button, Modal, Input, Alert } from "@arco-design/web-react"
 import { IconLock, IconEye, IconEyeInvisible } from "@arco-design/web-react/icon"
+import { toast } from "sonner"
 import styles from "../../dashboard.module.css"
 
 interface AccountInfoProps {

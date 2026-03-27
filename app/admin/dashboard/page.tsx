@@ -15,7 +15,6 @@ import {
   SystemManagement,
   Sidebar,
   Header,
-  AccountInfo,
   ArticlesManagement,
   ConfigFormEditor,
   PageManagement,
@@ -931,12 +930,7 @@ export default function AdminDashboardPage() {
 
         <div className={styles.contentArea}>
           <div className={styles.contentPadding}>
-            {activeMenu === 'accountInfo' && (
-              <AccountInfo
-                currentUser={currentUser}
-                onChangePassword={() => setShowChangePassword(true)}
-              />
-            )}
+
 
             {activeMenu === 'pages' && (
               editingPageId ? (
@@ -1176,6 +1170,8 @@ export default function AdminDashboardPage() {
                 onExportConfig={handleExportConfig}
                 onImportConfig={handleImportConfig}
                 onResetWebsite={handleResetWebsite}
+                currentUser={currentUser}
+                onChangePassword={() => setShowChangePassword(true)}
               />
             )}
 

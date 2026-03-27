@@ -19,9 +19,8 @@ interface MenuItem {
 }
 
 const MENU_STRUCTURE: MenuItem[] = [
-  { id: 'accountInfo', label: '账户信息', icon: '👤' },
   { id: 'pages', label: '页面管理', icon: '📄' },
-    { id: 'theme', label: '主题管理', icon: '🎨' },
+  { id: 'theme', label: '主题管理', icon: '🎨' },
   { id: 'system', label: '系统管理', icon: '🔧' },
 ]
 

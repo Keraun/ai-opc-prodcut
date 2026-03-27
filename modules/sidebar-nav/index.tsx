@@ -1,3 +1,4 @@
+import { useState } from "react"
 import { HomeIcon, ThunderboltIcon, UserGroupIcon, PhoneIcon, GiftIcon, StarIcon } from "../icons"
 import type { ModuleProps } from "@/modules/types"
 import type { SidebarNavData } from "./types"
@@ -16,21 +17,50 @@ const defaultSidebarItems = [
 export function SidebarNavModule({ data }: ModuleProps) {
   const config: SidebarNavData = (data as SidebarNavData) || {}
   const sidebarItems = defaultSidebarItems
+  const [activeItem, setActiveItem] = useState<string | null>(null)
   
   // 支持小、中、大三种尺寸，默认使用small
   const size = config?.size || 'small'
+
+  const handleNavClick = (e: React.MouseEvent<HTMLAnchorElement>, href: string, id: string) => {
+    e.preventDefault()
+    
+    // 设置激活状态
+    setActiveItem(id)
+    
+    // 提取目标元素的ID（去掉#前缀）
+    const targetId = href.substring(1)
+    const targetElement = document.getElementById(targetId)
+    
+    if (targetElement) {
+      // 平滑滚动到目标元素
+      targetElement.scrollIntoView({
+        behavior: 'smooth',
+        block: 'start',
+        inline: 'nearest'
+      })
+      
+      // 3秒后清除激活状态
+      setTimeout(() => {
+        setActiveItem(null)
+      }, 3000)
+    }
+  }
 
   return (
     <div className={styles.sidebar}>
       <nav className={`${styles.navList} ${styles[`navList_${size}`]}`}>
         {sidebarItems.map((item) => {
           const Icon = item.icon
+          const isActive = activeItem === item.id
+          
           return (
             <a
               key={item.id}
               href={item.href}
-              className={`${styles.navItem} ${styles[`navItem_${size}`]}`}
+              className={`${styles.navItem} ${styles[`navItem_${size}`]} ${isActive ? styles.navItemActive : ''}`}
               title={item.label}
+              onClick={(e) => handleNavClick(e, item.href, item.id)}
             >
               <span className={`${styles.navIcon} ${styles[`navIcon_${size}`]}`}>{Icon}</span>
               <span className={styles.tooltip}>{item.label}</span>

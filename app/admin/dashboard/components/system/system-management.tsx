@@ -2,6 +2,7 @@
 
 import { Button, Card } from "@arco-design/web-react"
 import { IconExport, IconSettings } from "@arco-design/web-react/icon"
+import { AccountInfo } from "../account/account-info"
 import styles from "../../dashboard.module.css"
 
 interface SystemManagementProps {
@@ -9,16 +10,25 @@ interface SystemManagementProps {
   onExportConfig: () => void
   onImportConfig: (e: React.ChangeEvent<HTMLInputElement>) => void
   onResetWebsite: () => void
+  currentUser: any
+  onChangePassword: () => void
 }
 
 export function SystemManagement({
   siteConfig,
   onExportConfig,
   onImportConfig,
-  onResetWebsite
+  onResetWebsite,
+  currentUser,
+  onChangePassword
 }: SystemManagementProps) {
   return (
     <div className={styles.systemManagement}>
+      <AccountInfo 
+        currentUser={currentUser} 
+        onChangePassword={onChangePassword} 
+      />
+      
       <Card
         title={
           <div className={styles.sectionTitleContainer}>

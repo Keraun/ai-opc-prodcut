@@ -51,13 +51,19 @@
 .grid {
   display: grid;
   grid-template-columns: 1fr;
-  gap: 2rem;
+  gap: 1.5rem;
   align-items: start;
 }
 
 @media (min-width: 768px) {
   .grid {
-    grid-template-columns: 0.9fr 1fr 0.9fr;
+    grid-template-columns: 0.85fr 1fr 0.85fr;
+  }
+}
+
+@media (min-width: 1024px) {
+  .grid {
+    gap: 1.25rem;
   }
 }
 
