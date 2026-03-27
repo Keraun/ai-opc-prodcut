@@ -66,8 +66,9 @@ export function initializeDatabase(): void {
 
       CREATE TABLE IF NOT EXISTS theme_config (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
-        current_theme TEXT NOT NULL,
-        themes_config TEXT NOT NULL,
+        theme_id TEXT UNIQUE NOT NULL,
+        theme_name TEXT NOT NULL,
+        theme_config TEXT NOT NULL,
         created_at TEXT DEFAULT CURRENT_TIMESTAMP,
         updated_at TEXT DEFAULT CURRENT_TIMESTAMP
       );

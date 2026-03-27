@@ -116,14 +116,29 @@ export function migrateFromJson(useTemplates: boolean = false): void {
     const themeConfigPath = path.join(baseDir, 'theme', 'theme-config.json')
     const themeConfigData = readJsonFile(themeConfigPath)
     if (themeConfigData) {
-      const stmt = db.prepare(`
-        INSERT OR REPLACE INTO theme_config (current_theme, themes_config)
-        VALUES (?, ?)
-      `)
-      stmt.run(
-        themeConfigData.currentTheme || 'modern',
-        JSON.stringify(themeConfigData.themes || {})
-      )
+      if (themeConfigData.currentTheme) {
+        const currentThemeStmt = db.prepare(`
+          INSERT OR REPLACE INTO site_config (config_key, config_value)
+          VALUES ('current_theme', ?)
+        `)
+        currentThemeStmt.run(themeConfigData.currentTheme)
+      }
+      
+      if (themeConfigData.themes) {
+        const themeStmt = db.prepare(`
+          INSERT OR REPLACE INTO theme_config (theme_id, theme_name, theme_config)
+          VALUES (?, ?, ?)
+        `)
+        
+        for (const [themeId, themeData] of Object.entries(themeConfigData.themes)) {
+          const theme = themeData as any
+          themeStmt.run(
+            themeId,
+            theme.name || themeId,
+            JSON.stringify(theme)
+          )
+        }
+      }
       console.log('Migrated theme config')
     }
     
@@ -299,11 +314,21 @@ export function exportToJson(): void {
     )
     console.log('Exported site config')
     
-    const themeConfig = db.prepare('SELECT * FROM theme_config LIMIT 1').get() as any
-    if (themeConfig) {
+    const currentThemeConfig = db.prepare(`
+      SELECT config_value FROM site_config WHERE config_key = 'current_theme'
+    `).get() as any
+    
+    const themes = db.prepare('SELECT * FROM theme_config').all() as any[]
+    
+    if (currentThemeConfig || themes.length > 0) {
+      const themesMap: Record<string, any> = {}
+      themes.forEach(theme => {
+        themesMap[theme.theme_id] = JSON.parse(theme.theme_config)
+      })
+      
       const themeData = {
-        currentTheme: themeConfig.current_theme,
-        themes: JSON.parse(themeConfig.themes_config)
+        currentTheme: currentThemeConfig?.config_value || 'modern',
+        themes: themesMap
       }
       fs.writeFileSync(
         path.join(exportDir, 'theme-config.json'),

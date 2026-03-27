@@ -74,17 +74,29 @@ CREATE TABLE site_config (
 - 站点基本信息（name, description, url 等）
 - SEO 配置
 - 社交媒体链接
+- **当前主题**（current_theme）
 
 #### 5. theme_config - 主题配置表
 ```sql
 CREATE TABLE theme_config (
   id INTEGER PRIMARY KEY AUTOINCREMENT,
-  current_theme TEXT NOT NULL,
-  themes_config TEXT NOT NULL,
+  theme_id TEXT UNIQUE NOT NULL,
+  theme_name TEXT NOT NULL,
+  theme_config TEXT NOT NULL,
   created_at TEXT DEFAULT CURRENT_TIMESTAMP,
   updated_at TEXT DEFAULT CURRENT_TIMESTAMP
 );
 ```
+
+**字段说明**:
+- `theme_id`: 主题唯一标识符（如：`modern`、`tech`、`minimal`）
+- `theme_name`: 主题显示名称（如：`现代简约`、`科技深色`、`极简主义`）
+- `theme_config`: 主题配置数据（JSON 格式，包含颜色、样式等配置）
+
+**设计说明**:
+- 每个主题存储为一条独立记录
+- 支持动态添加和删除主题
+- 当前使用的主题存储在 `site_config` 表的 `current_theme` 配置项中
 
 #### 6. pages - 页面表
 ```sql
@@ -280,6 +292,19 @@ try {
 pnpm exec tsx scripts/migrate-database.ts
 ```
 
+### theme_config 表结构迁移
+如果需要从旧版本的 theme_config 表结构迁移到新版本：
+
+```bash
+# 执行主题配置表迁移
+pnpm exec tsx scripts/migrate-theme-config.ts
+```
+
+**迁移内容**:
+- 将 `current_theme` 字段移到 `site_config` 表
+- 将 `themes_config` JSON 拆分为多条记录
+- 每个主题存储为一条独立记录
+
 ### 从旧版本 JSON 数据迁移
 如果存在旧的 JSON 备份文件（runtime 目录），可以临时恢复后迁移：
 
@@ -354,11 +379,15 @@ file: config-export.zip
 | system-feishu-app.json | system_config | feishu-app | 飞书配置（key='feishu_app'） |
 | system-token.json | system_config | token | Token配置（key='super_admin_token'） |
 | system-logs.json | system_logs | system-logs | 系统日志 |
-| site-config.json | site_config | site | 站点配置 |
-| theme-config.json | theme_config | theme | 主题配置 |
+| site-config.json | site_config | site | 站点配置（包含 current_theme） |
+| theme-config.json | theme_config | theme | 主题配置（每个主题一条记录） |
 | page-list.json | pages | page-list | 页面列表（module_instance_ids字段存储实例ID数组） |
 | page-list.json | page_modules | - | 页面模块实例数据 |
 | data-*.json | module_registry | - | 模块注册信息（schema和默认数据） |
+
+**注意**:
+- `theme-config.json` 中的 `currentTheme` 字段存储在 `site_config` 表中（key='current_theme'）
+- `theme-config.json` 中的 `themes` 对象拆分为 `theme_config` 表中的多条记录
 
 ## 页面编辑数据流
 

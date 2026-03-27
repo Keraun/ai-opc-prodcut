@@ -126,14 +126,21 @@ export function readConfig(configType: string): any {
     }
     
     if (configType === 'theme') {
-      const config = db.prepare('SELECT * FROM theme_config LIMIT 1').get() as any
-      if (config) {
-        return {
-          currentTheme: config.current_theme,
-          themes: JSON.parse(config.themes_config)
-        }
+      const currentThemeConfig = db.prepare(`
+        SELECT config_value FROM site_config WHERE config_key = 'current_theme'
+      `).get() as any
+      
+      const themes = db.prepare('SELECT * FROM theme_config').all() as any[]
+      
+      const themesMap: Record<string, any> = {}
+      themes.forEach(theme => {
+        themesMap[theme.theme_id] = JSON.parse(theme.theme_config)
+      })
+      
+      return {
+        currentTheme: currentThemeConfig?.config_value || 'modern',
+        themes: themesMap
       }
-      return {}
     }
     
     if (configType === 'page-list') {
@@ -271,14 +278,32 @@ export function writeConfig(configType: string, data: any): void {
     }
     
     if (configType === 'theme') {
-      const stmt = db.prepare(`
-        INSERT OR REPLACE INTO theme_config (id, current_theme, themes_config)
-        VALUES (1, ?, ?)
-      `)
-      stmt.run(
-        data.currentTheme || 'modern',
-        JSON.stringify(data.themes || {})
-      )
+      if (data.currentTheme) {
+        const stmt = db.prepare(`
+          INSERT OR REPLACE INTO site_config (config_key, config_value)
+          VALUES ('current_theme', ?)
+        `)
+        stmt.run(data.currentTheme)
+      }
+      
+      if (data.themes) {
+        const deleteStmt = db.prepare('DELETE FROM theme_config')
+        deleteStmt.run()
+        
+        const insertStmt = db.prepare(`
+          INSERT INTO theme_config (theme_id, theme_name, theme_config)
+          VALUES (?, ?, ?)
+        `)
+        
+        for (const [themeId, themeData] of Object.entries(data.themes)) {
+          const theme = themeData as any
+          insertStmt.run(
+            themeId,
+            theme.name || themeId,
+            JSON.stringify(theme)
+          )
+        }
+      }
       return
     }
     
