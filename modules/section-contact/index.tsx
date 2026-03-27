@@ -1,13 +1,8 @@
 import type { ModuleProps } from "@/modules/types"
 import type { ContactData } from "./types"
+import { useTheme } from "@/components/theme-provider"
+import { SendIcon } from "@/modules/icons"
 import styles from "./index.module.css"
-
-// SVG 图标组件
-const SendIcon = () => (
-  <svg className={styles.svgIcon} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-    <path strokeLinecap="round" strokeLinejoin="round" d="M22 2L11 13M22 2l-7 20-4-20 4 7 20" />
-  </svg>
-)
 
 const contactPreferences = [
   { label: "电话", value: "phone" },
@@ -17,9 +12,10 @@ const contactPreferences = [
 
 export function ContactModule({ data }: ModuleProps) {
   const config: ContactData = (data as ContactData) || {}
+  const { themeConfig } = useTheme()
 
-  const primaryColor = "#1e40af" // 默认主色
-  const accentColor = "#06b6d4" // 默认强调色
+  const primaryColor = themeConfig?.colors.primary || "#1e40af" // 默认主色
+  const accentColor = themeConfig?.colors.accent || "#06b6d4" // 默认强调色
 
   return (
     <section id="contact" className={styles.section}>

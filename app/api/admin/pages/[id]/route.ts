@@ -79,8 +79,20 @@ function updatePage(pageId: string, updates: { name?: string; slug?: string; mod
 
 function deletePage(pageId: string): boolean {
   try {
+    // 删除页面配置文件
     const configKey = `page-${pageId}`
-    return deleteConfig(configKey)
+    const deleted = deleteConfig(configKey)
+    
+    // 从page-list.json中移除该页面
+    const pageListPath = getRuntimePath('page-list')
+    if (fs.existsSync(pageListPath)) {
+      const pageListData = JSON.parse(fs.readFileSync(pageListPath, 'utf-8'))
+      pageListData.pages = pageListData.pages.filter((page: any) => page.id !== pageId)
+      pageListData.updatedAt = new Date().toISOString()
+      fs.writeFileSync(pageListPath, JSON.stringify(pageListData, null, 2), 'utf-8')
+    }
+    
+    return deleted
   } catch (error) {
     console.error('Error deleting page:', error)
     return false

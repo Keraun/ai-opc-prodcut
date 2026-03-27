@@ -2,34 +2,10 @@ import Link from "next/link"
 import { Logo } from "@/components/common/logo"
 import { Section, Button } from "@/components/ui"
 import { useTheme } from "@/components/theme-provider"
+import { ArrowRightIcon, CommandIcon, StarIcon, ThunderboltIcon } from "@/modules/icons"
 import type { ModuleProps } from "@/modules/types"
 import type { HeroData } from "./types"
 import styles from "./index.module.css"
-
-// SVG 图标组件
-const ArrowRightIcon = () => (
-  <svg className={styles.svgIcon} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-    <path strokeLinecap="round" strokeLinejoin="round" d="M14 5l7 7m0 0l-7 7m7-7H3" />
-  </svg>
-)
-
-const CommandIcon = () => (
-  <svg className={styles.svgIcon} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-    <path strokeLinecap="round" strokeLinejoin="round" d="M9 3v2m6-2v2M9 19v2m6-2v2M5 9H3m2 6H3m18-6h-2m2 6h-2M7 19h10a2 2 0 002-2V7a2 2 0 00-2-2H7a2 2 0 00-2 2v10a2 2 0 002 2zM9 9h6v6H9V9z" />
-  </svg>
-)
-
-const StarIcon = () => (
-  <svg className={styles.svgIcon} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-    <path strokeLinecap="round" strokeLinejoin="round" d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.78.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.783-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z" />
-  </svg>
-)
-
-const ThunderboltIcon = () => (
-  <svg className={styles.svgIconLarge} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-    <path strokeLinecap="round" strokeLinejoin="round" d="M13 2L3 14h9l-1 8 10-12h-9l1-8z" />
-  </svg>
-)
 
 export function HeroModule({ data }: ModuleProps) {
   const config: HeroData = (data as HeroData) || {}
@@ -79,28 +55,57 @@ export function HeroModule({ data }: ModuleProps) {
       )}
 
       <div className={styles.ctaButtons}>
-        {config.buttons?.primary?.href && config.buttons?.primary?.text && (
-          <Link href={config.buttons.primary.href}>
-            <Button variant="primary" size="lg" icon={<CommandIcon />} iconPosition="left">
-              {config.buttons.primary.text}
-            </Button>
-          </Link>
-        )}
-
-        {config.buttons?.secondary?.text && (
-          config.buttons?.secondary?.href ? (
-            <Link href={config.buttons.secondary.href}>
-              <Button variant="secondary" size="lg" icon={<ArrowRightIcon />} iconPosition="right">
-                {config.buttons.secondary.text}
+          {config.buttons?.primary?.href && config.buttons?.primary?.text && (
+            <Link href={config.buttons.primary.href}>
+              <Button 
+                variant="primary" 
+                size="lg" 
+                icon={<CommandIcon />} 
+                iconPosition="left"
+                style={{ 
+                  backgroundColor: primaryColor, 
+                  borderColor: primaryColor,
+                  color: '#ffffff'
+                }}
+              >
+                {config.buttons.primary.text}
               </Button>
             </Link>
-          ) : (
-            <Button variant="secondary" size="lg" icon={<ArrowRightIcon />} iconPosition="right" disabled>
-              {config.buttons.secondary.text}
-            </Button>
-          )
-        )}
-      </div>
+          )}
+
+          {config.buttons?.secondary?.text && (
+            config.buttons?.secondary?.href ? (
+              <Link href={config.buttons.secondary.href}>
+                <Button 
+                  variant="secondary" 
+                  size="lg" 
+                  icon={<ArrowRightIcon />} 
+                  iconPosition="right"
+                  style={{ 
+                    borderColor: primaryColor, 
+                    color: primaryColor
+                  }}
+                >
+                  {config.buttons.secondary.text}
+                </Button>
+              </Link>
+            ) : (
+              <Button 
+                variant="secondary" 
+                size="lg" 
+                icon={<ArrowRightIcon />} 
+                iconPosition="right" 
+                disabled
+                style={{ 
+                  borderColor: primaryColor, 
+                  color: primaryColor
+                }}
+              >
+                {config.buttons.secondary.text}
+              </Button>
+            )
+          )}
+        </div>
 
       <div className={styles.featurePills}>
         {(config.featurePills || ['AI工具站', 'GEO课程', '工作流定制', '一人公司']).map((item: string, index: number) => (
@@ -150,7 +155,17 @@ export function HeroModule({ data }: ModuleProps) {
         <div className={`${styles.ctaButtons} ${styles.ctaButtonsLeft}`}>
           {config.buttons?.primary?.href && config.buttons?.primary?.text && (
             <Link href={config.buttons.primary.href}>
-              <Button variant="primary" size="lg" icon={<StarIcon />} iconPosition="left">
+              <Button 
+                variant="primary" 
+                size="lg" 
+                icon={<StarIcon />} 
+                iconPosition="left"
+                style={{ 
+                  backgroundColor: primaryColor, 
+                  borderColor: primaryColor,
+                  color: '#ffffff'
+                }}
+              >
                 {config.buttons.primary.text}
               </Button>
             </Link>
@@ -159,12 +174,31 @@ export function HeroModule({ data }: ModuleProps) {
           {config.buttons?.secondary?.text && (
             config.buttons?.secondary?.href ? (
               <Link href={config.buttons.secondary.href}>
-                <Button variant="secondary" size="lg" icon={<ArrowRightIcon />} iconPosition="right">
+                <Button 
+                  variant="secondary" 
+                  size="lg" 
+                  icon={<ArrowRightIcon />} 
+                  iconPosition="right"
+                  style={{ 
+                    borderColor: primaryColor, 
+                    color: primaryColor
+                  }}
+                >
                   {config.buttons.secondary.text}
                 </Button>
               </Link>
             ) : (
-              <Button variant="secondary" size="lg" icon={<ArrowRightIcon />} iconPosition="right" disabled>
+              <Button 
+                variant="secondary" 
+                size="lg" 
+                icon={<ArrowRightIcon />} 
+                iconPosition="right" 
+                disabled
+                style={{ 
+                  borderColor: primaryColor, 
+                  color: primaryColor
+                }}
+              >
                 {config.buttons.secondary.text}
               </Button>
             )
@@ -234,7 +268,17 @@ export function HeroModule({ data }: ModuleProps) {
           <div className={styles.ctaButtons}>
             {config.buttons?.primary?.href && config.buttons?.primary?.text && (
               <Link href={config.buttons.primary.href}>
-                <Button variant="primary" size="lg" icon={<CommandIcon />} iconPosition="left">
+                <Button 
+                  variant="primary" 
+                  size="lg" 
+                  icon={<CommandIcon />} 
+                  iconPosition="left"
+                  style={{ 
+                    backgroundColor: primaryColor, 
+                    borderColor: primaryColor,
+                    color: '#ffffff'
+                  }}
+                >
                   {config.buttons.primary.text}
                 </Button>
               </Link>
@@ -243,12 +287,31 @@ export function HeroModule({ data }: ModuleProps) {
             {config.buttons?.secondary?.text && (
               config.buttons?.secondary?.href ? (
                 <Link href={config.buttons.secondary.href}>
-                  <Button variant="secondary" size="lg" icon={<ArrowRightIcon />} iconPosition="right">
+                  <Button 
+                    variant="secondary" 
+                    size="lg" 
+                    icon={<ArrowRightIcon />} 
+                    iconPosition="right"
+                    style={{ 
+                      borderColor: primaryColor, 
+                      color: primaryColor
+                    }}
+                  >
                     {config.buttons.secondary.text}
                   </Button>
                 </Link>
               ) : (
-                <Button variant="secondary" size="lg" icon={<ArrowRightIcon />} iconPosition="right" disabled>
+                <Button 
+                  variant="secondary" 
+                  size="lg" 
+                  icon={<ArrowRightIcon />} 
+                  iconPosition="right" 
+                  disabled
+                  style={{ 
+                    borderColor: primaryColor, 
+                    color: primaryColor
+                  }}
+                >
                   {config.buttons.secondary.text}
                 </Button>
               )

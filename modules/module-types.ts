@@ -80,6 +80,7 @@ export interface PricingData {
   title?: string
   description?: string
   plans?: PricingFeature[]
+  popularBadgeText?: string
 }
 
 export interface AboutStat {

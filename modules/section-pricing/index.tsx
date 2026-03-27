@@ -1,26 +1,16 @@
 import Link from "next/link"
 import { Card, Section, Button } from "@/components/ui"
+import { useTheme } from "@/components/theme-provider"
+import { CheckIcon, ArrowRightIcon } from "@/modules/icons"
 import type { ModuleProps } from "@/modules/types"
 import type { PricingData, PricingFeature } from "./types"
 import styles from "./index.module.css"
 
-// SVG 图标组件
-const CheckIcon = () => (
-  <svg className={styles.checkIcon} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-    <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
-  </svg>
-)
-
-const ArrowRightIcon = () => (
-  <svg className={styles.arrowIcon} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-    <path strokeLinecap="round" strokeLinejoin="round" d="M14 5l7 7m0 0l-7 7m7-7H3" />
-  </svg>
-)
-
 export function PricingModule({ data }: ModuleProps) {
   const config: PricingData = (data as PricingData) || {}
+  const { themeConfig } = useTheme()
 
-  const primaryColor = "#1e40af" // 默认主色
+  const primaryColor = themeConfig?.colors.primary || "#1e40af" // 默认主色
 
   const defaultPlans: PricingFeature[] = [
     {
@@ -89,6 +79,11 @@ export function PricingModule({ data }: ModuleProps) {
                 fullWidth
                 icon={<ArrowRightIcon />}
                 iconPosition="right"
+                style={{
+                  backgroundColor: plan.isPopular ? primaryColor : 'transparent',
+                  borderColor: primaryColor,
+                  color: plan.isPopular ? '#ffffff' : primaryColor
+                }}
               >
                 {plan.buttonText}
               </Button>
@@ -101,6 +96,11 @@ export function PricingModule({ data }: ModuleProps) {
               disabled
               icon={<ArrowRightIcon />}
               iconPosition="right"
+              style={{
+                backgroundColor: plan.isPopular ? primaryColor : 'transparent',
+                borderColor: primaryColor,
+                color: plan.isPopular ? '#ffffff' : primaryColor
+              }}
             >
               {plan.buttonText}
             </Button>
@@ -115,8 +115,13 @@ export function PricingModule({ data }: ModuleProps) {
               className={`${styles.card} ${plan.isPopular ? styles.cardPopular : ''}`}
             >
               {plan.isPopular && (
-                <div className={styles.popularBadge}>
-                  最受欢迎
+                <div 
+                  className={styles.popularBadge}
+                  style={{
+                    background: `linear-gradient(135deg, ${primaryColor} 0%, ${primaryColor}dd 100%)`
+                  }}
+                >
+                  {config.popularBadgeText || '最受欢迎'}
                 </div>
               )}
 

@@ -48,10 +48,13 @@ export function SystemManagement({
                   className={styles.importInput}
                   id="config-import"
                 />
-                <label htmlFor="config-import" className={styles.importLabel}>
-                  <IconExport className={styles.importLabelIcon} />
+                <Button
+                  type="primary"
+                  icon={<IconExport />}
+                  onClick={() => document.getElementById('config-import')?.click()}
+                >
                   导入配置
-                </label>
+                </Button>
               </div>
             </div>
           </div>

@@ -176,7 +176,32 @@ export function PageManagement({ onEditPage }: PageManagementProps) {
     }
   }
 
+   const checkPageUsage = async (pageId: string): Promise<string[]> => {
+    try {
+      const response = await fetch(`/api/admin/pages/${pageId}/usage`)
+      if (response.ok) {
+        const data = await response.json()
+        return data.usedBy || []
+      }
+      return []
+    } catch (error) {
+      console.error('检查页面使用情况失败:', error)
+      return []
+    }
+  }
+
   const handleOfflinePage = async (pageId: string) => {
+    // 检查页面是否被其他页面使用
+    const usedBy = await checkPageUsage(pageId)
+    
+    if (usedBy.length > 0) {
+      // 显示确认对话框
+      const confirm = window.confirm(`此页面被以下页面引用：\n${usedBy.join('\n')}\n\n确定要下线吗？`)
+      if (!confirm) {
+        return
+      }
+    }
+
     try {
       const response = await fetch(`/api/admin/pages/${pageId}/status`, {
         method: "POST",
@@ -198,7 +223,7 @@ export function PageManagement({ onEditPage }: PageManagementProps) {
     }
   }
 
-  const systemPages = ['home', 'product', 'products', '404']
+  const systemPages = ['home', '404']
   
   const columns = [
     {
@@ -324,7 +349,7 @@ export function PageManagement({ onEditPage }: PageManagementProps) {
                 </Button>
               </Popconfirm>
             ) : (
-              <Button type="text" size="small" disabled style={{ opacity: 0.5 }}>
+              <Button type="text" size="small" disabled icon={<IconDelete />} style={{ opacity: 0.5 }}>
                 删除
               </Button>
             )}

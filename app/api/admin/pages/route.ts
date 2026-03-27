@@ -21,7 +21,7 @@ interface PageInfo {
 }
 
 function getPageList(): PageInfo[] {
-  const pageListPath = getRuntimePath('page-list.json')
+  const pageListPath = getRuntimePath('page-list')
   const pageListTemplatePath = getTemplatePath('page-list')
   
   try {
@@ -53,12 +53,12 @@ function getPageList(): PageInfo[] {
 }
 
 function updatePageList(pages: PageInfo[]) {
-  const pageListPath = getRuntimePath('page-list.json')
+  const pageListPath = getRuntimePath('page-list')
   
   try {
     const pageListData = {
       pages,
-      systemPages: ['home', 'product', '404'],
+      systemPages: ['home', '404'],
       dynamicRoutePattern: '[param]',
       createdAt: new Date().toISOString(),
       updatedAt: new Date().toISOString(),
@@ -80,16 +80,24 @@ function createPage(
     const pageId = slug.toLowerCase().replace(/[^a-z0-9-]/g, '-')
     const configKey = `page-${pageId}`
     
-    const existingConfig = readConfig(configKey)
-    if (existingConfig && Object.keys(existingConfig).length > 0) {
-      const existingName = existingConfig.name as string || pageId
-      return { success: false, error: `页面路径 "/${slug}" 已被 "${existingName}" 占用，请使用其他路径` }
-    }
-
     const existingPages = getPageList()
+    const pageExistsInList = existingPages.find(p => p.id === pageId)
+    
+    // 检查页面名称是否冲突
     const nameConflict = existingPages.find(p => p.name.toLowerCase() === name.toLowerCase())
     if (nameConflict) {
       return { success: false, error: `页面名称 "${name}" 已存在，请使用其他名称` }
+    }
+    
+    // 如果页面不在page-list.json中，但是配置文件存在，删除旧的配置文件
+    if (!pageExistsInList) {
+      const runtimePath = getRuntimePath(configKey)
+      if (fs.existsSync(runtimePath)) {
+        fs.unlinkSync(runtimePath)
+      }
+    } else {
+      // 如果页面在page-list.json中存在，返回错误
+      return { success: false, error: `页面路径 "/${slug}" 已被 "${pageExistsInList.name}" 占用，请使用其他路径` }
     }
 
     if (type === 'dynamic' && !dynamicParam) {
