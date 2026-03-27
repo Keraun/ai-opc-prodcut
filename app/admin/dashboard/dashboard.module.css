@@ -634,6 +634,18 @@
   color: #4b5563;
 }
 
+.accountInfoButtons {
+  display: flex;
+  flex-direction: column;
+  gap: 8.0px;
+  margin-top: 16.0px;
+}
+
+.accountInfoButtons button {
+  width: 100%;
+  justify-content: flex-start;
+}
+
 .editConfigContainer {
   display: flex;
   gap: 0;

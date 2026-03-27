@@ -47,8 +47,8 @@
       "type": "static",
       "description": "资讯列表页面",
       "status": "published",
-      "isSystem": false,
-      "isDeletable": true,
+      "isSystem": true,
+      "isDeletable": false,
       "route": "/news",
       "modules": [
         "site-root",
@@ -64,8 +64,8 @@
       "type": "dynamic",
       "description": "资讯详情页面（动态路由）",
       "status": "published",
-      "isSystem": false,
-      "isDeletable": true,
+      "isSystem": true,
+      "isDeletable": false,
       "route": "/news/[id]",
       "dynamicParam": "id",
       "modules": [

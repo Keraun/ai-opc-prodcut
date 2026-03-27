@@ -223,6 +223,7 @@ function useApi<T>(url: string) {
 - **客户端标记**：需要交互的组件使用 'use client' 指令
 - **数据获取**：服务端组件直接访问数据库，客户端组件通过 API
 - **SEO 优化**：重要页面使用服务端渲染，确保 SEO 友好
+- **组件类型保护**：严禁随意更改现有组件的类型（服务端/客户端），特别是 `modules/` 目录下的模块组件，这些组件默认都是服务端组件。如果确实需要更改组件类型，必须先与用户确认并说明原因
 
 ```typescript
 // ✅ 服务端组件 - 数据获取
@@ -254,6 +255,15 @@ export function UserList({ users }: { users: User[] }) {
       ))}
     </ul>
   )
+}
+
+// ❌ 错误示例 - 未经确认更改组件类型
+// modules/sidebar-nav/index.tsx
+// 原本是服务端组件，不应该随意添加 "use client" 指令
+'use client'  // ❌ 未经用户确认就添加
+
+export function SidebarNavModule({ data }: ModuleProps) {
+  // ...
 }
 ```
 

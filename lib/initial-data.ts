@@ -66,6 +66,12 @@ export function loadPageData(
     }
   }
 
+  // 为sidebar-nav模块添加页面模块列表
+  const sidebarNavModule = pageData.data.modules.find((m: any) => m.moduleId === 'sidebar-nav')
+  if (sidebarNavModule) {
+    sidebarNavModule.data.pageModules = pageResponse.modules || []
+  }
+
   pageDataCache[cacheKey] = pageData
   return pageData
 }

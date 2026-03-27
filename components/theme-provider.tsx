@@ -72,113 +72,85 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
       setIsDark(window.matchMedia("(prefers-color-scheme: dark)").matches)
     }
     
-    const themeConfigs: Record<string, ThemeConfig> = {
-      tech: {
-        id: "tech",
-        name: "未来科技",
-        description: "充满科技感的设计风格，紫色系配色，适合科技产品展示",
-        colors: {
-          primary: "#7c3aed",
-          primaryHover: "#6d28d9",
-          secondary: "#a78bfa",
-          accent: "#ec4899",
-          background: "#ffffff",
-          backgroundSecondary: "#faf5ff",
-          text: "#1f2937",
-          textSecondary: "#6b7280",
-          border: "#e5e7eb",
-          success: "#10b981",
-          warning: "#f59e0b",
-          error: "#ef4444"
-        },
-        layout: {
-          headerStyle: "gradient",
-          footerStyle: "gradient",
-          cardStyle: "sharp",
-          buttonStyle: "sharp"
-        },
-        effects: {
-          shadow: "large",
-          borderRadius: "small",
-          animation: "fast"
-        },
-        darkMode: {
-          colors: {
-            primary: "#a78bfa",
-            primaryHover: "#8b5cf6",
-            secondary: "#c4b5fd",
-            accent: "#f472b6",
-            background: "#0f0a1a",
-            backgroundSecondary: "#1a1025",
-            text: "#f3f4f6",
-            textSecondary: "#9ca3af",
-            border: "#374151",
-            success: "#34d399",
-            warning: "#fbbf24",
-            error: "#f87171"
+    // 从API获取主题配置
+    async function fetchThemeConfig() {
+      try {
+        const response = await fetch('/api/admin/config')
+        if (response.ok) {
+          const data = await response.json()
+          if (data.theme && data.theme.themes) {
+            setThemes(data.theme.themes)
+            const themeId = savedTheme || data.theme.currentTheme || "modern"
+            if (data.theme.themes[themeId]) {
+              setCurrentTheme(themeId)
+              setThemeConfig(data.theme.themes[themeId])
+            } else if (data.theme.themes["modern"]) {
+              setCurrentTheme("modern")
+              setThemeConfig(data.theme.themes["modern"])
+            }
           }
         }
-      },
-      blackgold: {
-        id: "blackgold",
-        name: "黑金主题",
-        description: "高端大气的黑金配色方案，适合奢华品牌和企业形象网站",
-        colors: {
-          primary: "#d4af37",
-          primaryHover: "#b8860b",
-          secondary: "#f4d03f",
-          accent: "#c0c0c0",
-          background: "#000000",
-          backgroundSecondary: "#1a1a1a",
-          text: "#ffffff",
-          textSecondary: "#d1d5db",
-          border: "#374151",
-          success: "#10b981",
-          warning: "#f59e0b",
-          error: "#ef4444"
-        },
-        layout: {
-          headerStyle: "fixed",
-          footerStyle: "luxury",
-          cardStyle: "elevated",
-          buttonStyle: "luxury"
-        },
-        effects: {
-          shadow: "strong",
-          borderRadius: "medium",
-          animation: "elegant"
-        },
-        darkMode: {
-          colors: {
-            primary: "#f4d03f",
-            primaryHover: "#d4af37",
-            secondary: "#f9e79f",
-            accent: "#e0e0e0",
-            background: "#000000",
-            backgroundSecondary: "#121212",
-            text: "#ffffff",
-            textSecondary: "#e5e7eb",
-            border: "#4b5563",
-            success: "#34d399",
-            warning: "#fbbf24",
-            error: "#f87171"
-          }
-        }
+      } catch (error) {
+        console.error('Failed to fetch theme config:', error)
+        // 降级到默认主题
+        const defaultTheme = getDefaultThemeConfig(savedTheme)
+        setThemes({ [defaultTheme.id]: defaultTheme })
+        setCurrentTheme(defaultTheme.id)
+        setThemeConfig(defaultTheme)
       }
     }
     
-    setThemes(themeConfigs)
-    
-    const themeId = savedTheme || "modern"
-    
-    if (savedTheme && themeConfigs[savedTheme]) {
-      setCurrentTheme(savedTheme)
-      setThemeConfig(themeConfigs[savedTheme])
-    } else {
-      setCurrentTheme("modern")
-      setThemeConfig(themeConfigs["modern"])
-    }
+    fetchThemeConfig()
   }, [])
+
+  function getDefaultThemeConfig(themeId?: string | null): ThemeConfig {
+    return {
+      id: themeId || "modern",
+      name: "现代简约",
+      description: "简洁大方的设计风格，蓝色系配色，适合企业官网",
+      colors: {
+        primary: "#1e40af",
+        primaryHover: "#1e3a8a",
+        secondary: "#3b82f6",
+        accent: "#06b6d4",
+        background: "#ffffff",
+        backgroundSecondary: "#f3f4f6",
+        text: "#1f2937",
+        textSecondary: "#6b7280",
+        border: "#e5e7eb",
+        success: "#10b981",
+        warning: "#f59e0b",
+        error: "#ef4444"
+      },
+      layout: {
+        headerStyle: "gradient",
+        footerStyle: "gradient",
+        cardStyle: "rounded",
+        buttonStyle: "rounded"
+      },
+      effects: {
+        shadow: "medium",
+        borderRadius: "medium",
+        animation: "smooth"
+      },
+      darkMode: {
+        colors: {
+          primary: "#60a5fa",
+          primaryHover: "#3b82f6",
+          secondary: "#93c5fd",
+          accent: "#22d3ee",
+          background: "#111827",
+          backgroundSecondary: "#1f2937",
+          text: "#f3f4f6",
+          textSecondary: "#9ca3af",
+          border: "#374151",
+          success: "#34d399",
+          warning: "#fbbf24",
+          error: "#f87171"
+        }
+      }
+    }
+  }
 
   useEffect(() => {
     if (!mounted) return
@@ -237,105 +209,10 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
   }
 
   const setTheme = (themeId: string) => {
-    const themeConfigs: Record<string, ThemeConfig> = {
-      tech: {
-        id: "tech",
-        name: "未来科技",
-        description: "充满科技感的设计风格，紫色系配色，适合科技产品展示",
-        colors: {
-          primary: "#7c3aed",
-          primaryHover: "#6d28d9",
-          secondary: "#a78bfa",
-          accent: "#ec4899",
-          background: "#ffffff",
-          backgroundSecondary: "#faf5ff",
-          text: "#1f2937",
-          textSecondary: "#6b7280",
-          border: "#e5e7eb",
-          success: "#10b981",
-          warning: "#f59e0b",
-          error: "#ef4444"
-        },
-        layout: {
-          headerStyle: "gradient",
-          footerStyle: "gradient",
-          cardStyle: "sharp",
-          buttonStyle: "sharp"
-        },
-        effects: {
-          shadow: "large",
-          borderRadius: "small",
-          animation: "fast"
-        },
-        darkMode: {
-          colors: {
-            primary: "#a78bfa",
-            primaryHover: "#8b5cf6",
-            secondary: "#c4b5fd",
-            accent: "#f472b6",
-            background: "#0f0a1a",
-            backgroundSecondary: "#1a1025",
-            text: "#f3f4f6",
-            textSecondary: "#9ca3af",
-            border: "#374151",
-            success: "#34d399",
-            warning: "#fbbf24",
-            error: "#f87171"
-          }
-        }
-      },
-      blackgold: {
-        id: "blackgold",
-        name: "黑金主题",
-        description: "高端大气的黑金配色方案，适合奢华品牌和企业形象网站",
-        colors: {
-          primary: "#d4af37",
-          primaryHover: "#b8860b",
-          secondary: "#f4d03f",
-          accent: "#c0c0c0",
-          background: "#000000",
-          backgroundSecondary: "#1a1a1a",
-          text: "#ffffff",
-          textSecondary: "#d1d5db",
-          border: "#374151",
-          success: "#10b981",
-          warning: "#f59e0b",
-          error: "#ef4444"
-        },
-        layout: {
-          headerStyle: "fixed",
-          footerStyle: "luxury",
-          cardStyle: "elevated",
-          buttonStyle: "luxury"
-        },
-        effects: {
-          shadow: "strong",
-          borderRadius: "medium",
-          animation: "elegant"
-        },
-        darkMode: {
-          colors: {
-            primary: "#f4d03f",
-            primaryHover: "#d4af37",
-            secondary: "#f9e79f",
-            accent: "#e0e0e0",
-            background: "#000000",
-            backgroundSecondary: "#121212",
-            text: "#ffffff",
-            textSecondary: "#e5e7eb",
-            border: "#4b5563",
-            success: "#34d399",
-            warning: "#fbbf24",
-            error: "#f87171"
-          }
-        }
-      }
-    }
-    
-    if (themeConfigs[themeId]) {
-      console.log('Setting theme to:', themeId, 'with primary color:', themeConfigs[themeId].colors.primary)
+    if (themes[themeId]) {
+      console.log('Setting theme to:', themeId, 'with primary color:', themes[themeId].colors.primary)
       setCurrentTheme(themeId)
-      setThemeConfig(themeConfigs[themeId])
+      setThemeConfig(themes[themeId])
       localStorage.setItem("theme", themeId)
     } else {
       console.error('Theme not found:', themeId)
