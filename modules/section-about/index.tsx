@@ -91,7 +91,10 @@ export function AboutModule({ data }: ModuleProps) {
                   {config.title?.main}
                   <br />
                   {config.title?.highlight && (
-                    <span className={styles.titleHighlight}>
+                    <span 
+                      className={styles.titleHighlight}
+                      style={{ color: primaryColor }}
+                    >
                       {config.title.highlight}
                     </span>
                   )}

@@ -2,6 +2,10 @@
   "type": "object",
   "title": "Pricing Section Configuration",
   "properties": {
+    "sectionTag": {
+      "type": "string",
+      "title": "标签"
+    },
     "title": {
       "type": "string",
       "title": "标题"

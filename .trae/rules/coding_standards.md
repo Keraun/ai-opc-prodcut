@@ -413,6 +413,40 @@ export interface User {
 }
 ```
 
+#### 5.3 默认数据管理
+- **默认数据存储**：所有模块的默认数据必须存放在对应模块的 `default.json` 文件中
+- **数据消费**：模块组件必须从 `default.json` 文件读取默认数据，而不是在核心 `index.tsx` 文件中硬编码
+- **硬编码禁止**：严禁在 `index.tsx` 中硬编码默认数据，必须删除任何硬编码的默认数据并修改逻辑以使用 `default.json`
+
+```typescript
+// ✅ 正确示例 - 从 default.json 读取默认数据
+// modules/section-pricing/index.tsx
+export function PricingModule({ data }: ModuleProps) {
+  const config: PricingData = (data as PricingData) || {}
+  // 直接使用 config.plans，默认数据由模块系统从 default.json 加载
+  const pricingPlans: PricingFeature[] = config?.plans || []
+  
+  // 实现...
+}
+
+// ❌ 错误示例 - 硬编码默认数据
+// modules/section-pricing/index.tsx
+export function PricingModule({ data }: ModuleProps) {
+  const config: PricingData = (data as PricingData) || {}
+  
+  // ❌ 禁止硬编码默认数据
+  const defaultPlans: PricingFeature[] = [
+    { title: "免费版", price: "¥0", /* ... */ },
+    { title: "专业版", price: "¥999", /* ... */ },
+    { title: "企业版", price: "¥2999", /* ... */ }
+  ]
+  
+  const pricingPlans: PricingFeature[] = config?.plans || defaultPlans
+  
+  // 实现...
+}
+```
+
 ### 6. 测试规范
 
 #### 6.1 单元测试
@@ -603,6 +637,7 @@ import moment from 'moment'  // 67KB, 已停止维护, 体积大
 - [ ] 测试覆盖充分，核心逻辑有测试
 - [ ] 文档注释完整，复杂逻辑有说明
 - [ ] Git 提交规范，信息清晰明确
+- [ ] 默认数据存放在 default.json 文件中，无硬编码默认数据
 
 ---
 
