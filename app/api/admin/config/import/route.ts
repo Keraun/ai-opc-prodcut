@@ -1,86 +1,54 @@
-import { NextRequest, NextResponse } from 'next/server'
-import fs from 'fs/promises'
+import { NextRequest } from 'next/server'
 import path from 'path'
-import { migrateFromJson } from '@/lib/migrate'
+import fs from 'fs'
+import { wrapAuthApiHandler, successResponse, badRequestResponse } from '@/lib/api-utils'
+import { createBackup } from '@/lib/backup-utils'
 
 const DATABASE_DIR = path.join(process.cwd(), 'database')
+const DB_PATH = path.join(DATABASE_DIR, 'app.db')
 
 export async function POST(request: NextRequest) {
-  try {
+  return wrapAuthApiHandler(async () => {
     const formData = await request.formData()
     const file = formData.get('file') as File
 
     if (!file) {
-      return NextResponse.json({ error: 'No file provided' }, { status: 400 })
+      return badRequestResponse('请上传数据库文件')
     }
 
-    if (file.name.endsWith('.db')) {
-      const dbPath = path.join(DATABASE_DIR, 'app.db')
-      const fileBuffer = Buffer.from(await file.arrayBuffer())
-      await fs.writeFile(dbPath, fileBuffer)
-      
-      return NextResponse.json({ 
-        success: true, 
-        message: '数据库导入成功' 
-      })
+    if (!file.name.endsWith('.db')) {
+      return badRequestResponse('只支持 .db 数据库文件')
     }
 
-    if (file.name.endsWith('.zip')) {
-      const tempDir = path.join(process.cwd(), 'temp-import')
-      const tempZipPath = path.join(tempDir, 'import.zip')
-      
-      await fs.mkdir(tempDir, { recursive: true })
-      
+    let backupCreated
+    if (fs.existsSync(DB_PATH)) {
+      backupCreated = createBackup('before-import')
+    }
+
+    try {
       const fileBuffer = Buffer.from(await file.arrayBuffer())
-      await fs.writeFile(tempZipPath, fileBuffer)
       
-      const unzipper = await import('unzipper')
-      const fsSync = await import('fs')
+      const shmPath = DB_PATH + '-shm'
+      const walPath = DB_PATH + '-wal'
       
-      await new Promise<void>((resolve, reject) => {
-        fsSync.createReadStream(tempZipPath)
-          .pipe(unzipper.Extract({ path: tempDir }))
-          .on('close', resolve)
-          .on('error', reject)
-      })
-      
-      const runtimeDir = path.join(tempDir, 'runtime')
-      const runtimeExists = await fs.access(runtimeDir).then(() => true).catch(() => false)
-      
-      if (runtimeExists) {
-        const tempRuntimePath = path.join(tempDir, 'runtime-temp')
-        await fs.rename(runtimeDir, tempRuntimePath)
-        
-        const originalRuntimeDir = path.join(DATABASE_DIR, 'runtime')
-        await fs.rename(tempRuntimePath, originalRuntimeDir)
-        
-        migrateFromJson(false)
-        
-        await fs.rm(originalRuntimeDir, { recursive: true, force: true })
-        
-        await fs.rm(tempDir, { recursive: true, force: true })
-        
-        return NextResponse.json({ 
-          success: true, 
-          message: '从JSON备份导入成功' 
-        })
+      if (fs.existsSync(DB_PATH)) {
+        fs.unlinkSync(DB_PATH)
+      }
+      if (fs.existsSync(shmPath)) {
+        fs.unlinkSync(shmPath)
+      }
+      if (fs.existsSync(walPath)) {
+        fs.unlinkSync(walPath)
       }
       
-      await fs.rm(tempDir, { recursive: true, force: true })
+      fs.writeFileSync(DB_PATH, fileBuffer)
       
-      return NextResponse.json({ 
-        error: 'Invalid zip file structure. Expected runtime folder.' 
-      }, { status: 400 })
+      return successResponse({
+        message: '数据库导入成功',
+        backupCreated
+      }, '数据库导入成功')
+    } catch (error) {
+      return badRequestResponse(`数据库导入失败: ${error instanceof Error ? error.message : String(error)}`)
     }
-
-    return NextResponse.json({ 
-      error: 'File must be .db or .zip file' 
-    }, { status: 400 })
-  } catch (error) {
-    console.error('Import config error:', error)
-    return NextResponse.json({ 
-      error: 'Failed to import config',
-      details: error instanceof Error ? error.message : String(error)
-    }, { status: 500 })
-  }
+  })
 }
