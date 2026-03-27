@@ -49,7 +49,7 @@ export function SystemManagement({
                   id="config-import"
                 />
                 <Button
-                  type="primary"
+                  type="secondary"
                   icon={<IconExport />}
                   onClick={() => document.getElementById('config-import')?.click()}
                 >

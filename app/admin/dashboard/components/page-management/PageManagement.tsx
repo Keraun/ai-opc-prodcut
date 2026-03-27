@@ -223,7 +223,7 @@ export function PageManagement({ onEditPage }: PageManagementProps) {
     }
   }
 
-  const systemPages = ['home', '404']
+  const systemPages = ['home', '404', 'products', 'news', 'news-detail']
   
   const columns = [
     {
@@ -245,6 +245,21 @@ export function PageManagement({ onEditPage }: PageManagementProps) {
           )}
         </div>
       ),
+    },
+    {
+      title: "Tab标签",
+      dataIndex: "tab",
+      key: "tab",
+      render: (_: any, record: PageInfo) => {
+        const tabMap: Record<string, string> = {
+          home: "首页",
+          products: "产品",
+          news: "资讯",
+          'news-detail': "资讯详情",
+          '404': "404页面"
+        }
+        return <Tag color="blue">{tabMap[record.id] || record.name}</Tag>
+      },
     },
     {
       title: "路径",

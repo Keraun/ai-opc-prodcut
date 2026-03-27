@@ -25,6 +25,7 @@ export function ProductsModule({ data }: ModuleProps) {
 
   const accentColor = themeConfig?.colors.accent || "#06b6d4" // 默认强调色
   const primaryColor = themeConfig?.colors.primary || "#1e40af" // 默认主色
+  const learnMoreText = config.learnMoreText || "了解更多"
 
   return (
     <Section
@@ -53,7 +54,7 @@ export function ProductsModule({ data }: ModuleProps) {
                 className={styles.ctaButton}
                 style={{ color: accentColor }}
               >
-                了解更多
+                {learnMoreText}
                 <span className={styles.ctaIcon}><ArrowRightIcon /></span>
               </Link>
             ) : (
@@ -61,7 +62,7 @@ export function ProductsModule({ data }: ModuleProps) {
                 className={styles.ctaButton}
                 style={{ color: accentColor }}
               >
-                了解更多
+                {learnMoreText}
                 <span className={styles.ctaIcon}><ArrowRightIcon /></span>
               </span>
             )

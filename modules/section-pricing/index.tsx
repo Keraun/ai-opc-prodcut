@@ -11,6 +11,8 @@ export function PricingModule({ data }: ModuleProps) {
   const { themeConfig } = useTheme()
 
   const primaryColor = themeConfig?.colors.primary || "#1e40af" // 默认主色
+  const secondaryColor = themeConfig?.colors.secondary || "#3b82f6" // 默认次要色
+  const accentColor = themeConfig?.colors.accent || "#06b6d4" // 默认强调色
 
   const defaultPlans: PricingFeature[] = [
     {
@@ -82,7 +84,8 @@ export function PricingModule({ data }: ModuleProps) {
                 style={{
                   backgroundColor: plan.isPopular ? primaryColor : 'transparent',
                   borderColor: primaryColor,
-                  color: plan.isPopular ? '#ffffff' : primaryColor
+                  color: plan.isPopular ? '#ffffff' : primaryColor,
+                  transition: 'all 0.3s ease'
                 }}
               >
                 {plan.buttonText}
@@ -109,16 +112,21 @@ export function PricingModule({ data }: ModuleProps) {
           return (
             <Card
               key={index}
-              variant={plan.isPopular ? "elevated" : "default"}
+              variant="default"
               padding="lg"
               hover
               className={`${styles.card} ${plan.isPopular ? styles.cardPopular : ''}`}
+              style={{
+                borderColor: plan.isPopular ? primaryColor : '#e5e7eb',
+                boxShadow: plan.isPopular ? `0 25px 50px -12px ${primaryColor}33` : 'none',
+                transform: plan.isPopular ? 'translateY(-10px)' : 'none'
+              }}
             >
               {plan.isPopular && (
                 <div 
                   className={styles.popularBadge}
                   style={{
-                    background: `linear-gradient(135deg, ${primaryColor} 0%, ${primaryColor}dd 100%)`
+                    background: `linear-gradient(135deg, ${primaryColor} 0%, ${secondaryColor} 100%)`
                   }}
                 >
                   {config.popularBadgeText || '最受欢迎'}
@@ -126,8 +134,8 @@ export function PricingModule({ data }: ModuleProps) {
               )}
 
               <div className={styles.planHeader}>
-                <h3 className={styles.planTitle}>{plan.title}</h3>
-                <div className={styles.planPrice}>
+                <h3 className={styles.planTitle} style={{ color: plan.isPopular ? primaryColor : '#111827' }}>{plan.title}</h3>
+                <div className={styles.planPrice} style={{ color: plan.isPopular ? primaryColor : '#111827' }}>
                   {plan.price}
                   <span className={styles.priceUnit}>/月</span>
                 </div>
@@ -137,7 +145,7 @@ export function PricingModule({ data }: ModuleProps) {
               <ul className={styles.features}>
                 {(plan.features || []).map((feature: string, i: number) => (
                   <li key={i} className={styles.featureItem}>
-                    <span className={styles.featureIcon}><CheckIcon /></span>
+                    <span className={styles.featureIcon} style={{ color: accentColor }}><CheckIcon /></span>
                     <span>{feature}</span>
                   </li>
                 ))}

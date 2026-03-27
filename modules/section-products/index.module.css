@@ -105,6 +105,7 @@
   display: grid;
   grid-template-columns: 1fr;
   gap: 1.25rem;
+  align-items: stretch;
 }
 
 @media (min-width: 640px) {
@@ -124,6 +125,9 @@
   border: 1px solid #f3f4f6;
   border-radius: 0.5rem;
   transition: all 0.3s ease;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
 }
 
 .card:hover {
@@ -231,7 +235,7 @@
 }
 
 .cardFooter {
-  margin-top: 1rem;
+  margin-top: auto;
   padding-top: 1rem;
   border-top: 1px solid #f3f4f6;
 }

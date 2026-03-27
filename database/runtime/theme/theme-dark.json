@@ -1,17 +1,17 @@
 {
   "id": "dark",
-  "name": "深空黑",
-  "description": "深邃的黑色背景，搭配高对比度的蓝色调，营造科技感和专业感",
+  "name": "深色模式",
+  "description": "深色背景设计，减少眼部疲劳，适合夜间使用和科技产品",
   "colors": {
-    "primary": "#06b6d4",
-    "primaryHover": "#0891b2",
-    "secondary": "#6366f1",
-    "accent": "#f43f5e",
-    "background": "#0f172a",
-    "backgroundSecondary": "#1e293b",
-    "text": "#f8fafc",
-    "textSecondary": "#cbd5e1",
-    "border": "#334155",
+    "primary": "#3b82f6",
+    "primaryHover": "#2563eb",
+    "secondary": "#8b5cf6",
+    "accent": "#ec4899",
+    "background": "#121212",
+    "backgroundSecondary": "#1e1e1e",
+    "text": "#e5e7eb",
+    "textSecondary": "#9ca3af",
+    "border": "#374151",
     "success": "#10b981",
     "warning": "#f59e0b",
     "error": "#ef4444"
@@ -29,18 +29,18 @@
   },
   "darkMode": {
     "colors": {
-      "primary": "#06b6d4",
-      "primaryHover": "#0891b2",
-      "secondary": "#6366f1",
-      "accent": "#f43f5e",
-      "background": "#0f172a",
-      "backgroundSecondary": "#1e293b",
-      "text": "#f8fafc",
-      "textSecondary": "#cbd5e1",
-      "border": "#334155",
-      "success": "#10b981",
-      "warning": "#f59e0b",
-      "error": "#ef4444"
+      "primary": "#60a5fa",
+      "primaryHover": "#3b82f6",
+      "secondary": "#a78bfa",
+      "accent": "#f472b6",
+      "background": "#0f0f0f",
+      "backgroundSecondary": "#1a1a1a",
+      "text": "#f9fafb",
+      "textSecondary": "#d1d5db",
+      "border": "#4b5563",
+      "success": "#34d399",
+      "warning": "#fbbf24",
+      "error": "#f87171"
     }
   }
 }
