@@ -2,8 +2,9 @@
 
 import { useState, useEffect } from "react"
 import { useRouter } from "next/navigation"
-import { Button, Card, Modal, Input, Table, Space, Tag, Popconfirm, Message, Radio } from "@arco-design/web-react"
+import { Button, Card, Modal, Input, Table, Space, Tag, Popconfirm, Radio } from "@arco-design/web-react"
 import { IconPlus, IconEdit, IconDelete, IconEye } from "@arco-design/web-react/icon"
+import { toast } from "sonner"
 import styles from "../../dashboard.module.css"
 
 interface PageInfo {
@@ -45,7 +46,7 @@ export function PageManagement({ onEditPage }: PageManagementProps) {
         setPages(data.pages || [])
       }
     } catch (error) {
-      Message.error("获取页面列表失败")
+      toast.error("获取页面列表失败")
     } finally {
       setLoading(false)
     }
@@ -53,27 +54,27 @@ export function PageManagement({ onEditPage }: PageManagementProps) {
 
   const handleCreatePage = async () => {
     if (!newPageName.trim()) {
-      Message.error("请输入页面名称")
+      toast.error("请输入页面名称")
       return
     }
 
     if (!newPageSlug.trim()) {
-      Message.error("请输入页面路径")
+      toast.error("请输入页面路径")
       return
     }
 
     if (!/^[a-z0-9-]+$/.test(newPageSlug)) {
-      Message.error("页面路径只能包含小写字母、数字和连字符")
+      toast.error("页面路径只能包含小写字母、数字和连字符")
       return
     }
 
     if (newPageType === 'dynamic' && !newPageDynamicParam.trim()) {
-      Message.error("请输入动态参数名称")
+      toast.error("请输入动态参数名称")
       return
     }
 
     if (newPageType === 'dynamic' && !/^[a-zA-Z_][a-zA-Z0-9_]*$/.test(newPageDynamicParam)) {
-      Message.error("动态参数名称只能包含字母、数字和下划线，且必须以字母或下划线开头")
+      toast.error("动态参数名称只能包含字母、数字和下划线，且必须以字母或下划线开头")
       return
     }
 
@@ -94,7 +95,7 @@ export function PageManagement({ onEditPage }: PageManagementProps) {
 
       if (response.ok) {
         const data = await response.json()
-        Message.success("页面创建成功")
+        toast.success("页面创建成功")
         setShowCreateModal(false)
         setNewPageName("")
         setNewPageSlug("")
@@ -107,10 +108,10 @@ export function PageManagement({ onEditPage }: PageManagementProps) {
         }
       } else {
         const error = await response.json()
-        Message.error(error.message || "创建页面失败")
+        toast.error(error.message || "创建页面失败")
       }
     } catch (error) {
-      Message.error("创建页面失败")
+      toast.error("创建页面失败")
     } finally {
       setCreating(false)
     }
@@ -123,14 +124,14 @@ export function PageManagement({ onEditPage }: PageManagementProps) {
       })
 
       if (response.ok) {
-        Message.success("页面删除成功")
+        toast.success("页面删除成功")
         fetchPages()
       } else {
         const error = await response.json()
-        Message.error(error.message || "删除页面失败")
+        toast.error(error.message || "删除页面失败")
       }
     } catch (error) {
-      Message.error("删除页面失败")
+      toast.error("删除页面失败")
     }
   }
 
@@ -144,7 +145,7 @@ export function PageManagement({ onEditPage }: PageManagementProps) {
 
   const handlePreviewPage = (slug: string, type?: string, dynamicParam?: string) => {
     if (type === 'dynamic') {
-      Message.info("动态路由页面需要在实际访问时才能预览，例如：/" + slug + "/123")
+      toast.info("动态路由页面需要在实际访问时才能预览，例如：/" + slug + "/123")
       window.open(`/${slug}/example-id`, "_blank")
     } else {
       window.open(`/${slug}`, "_blank")

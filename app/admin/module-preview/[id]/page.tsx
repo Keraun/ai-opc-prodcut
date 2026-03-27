@@ -2,7 +2,8 @@
 
 import { useEffect, useState } from "react"
 import { useParams } from "next/navigation"
-import { Spin, Message } from "@arco-design/web-react"
+import { Spin } from "@arco-design/web-react"
+import { toast } from "sonner"
 
 export default function ModulePreviewPage() {
   const params = useParams()
@@ -29,10 +30,10 @@ export default function ModulePreviewPage() {
       if (data.success) {
         setModuleInfo(data)
       } else {
-        Message.error(data.message || "加载模块信息失败")
+        toast.error(data.message || "加载模块信息失败")
       }
     } catch (error) {
-      Message.error("加载模块信息失败")
+      toast.error("加载模块信息失败")
     } finally {
       setLoading(false)
     }

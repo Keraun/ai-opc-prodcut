@@ -1,7 +1,8 @@
 "use client"
 
 import { useState, useEffect, useCallback } from "react"
-import { Button, Card, Message, Tabs, Drawer } from "@arco-design/web-react"
+import { Button, Card, Tabs, Drawer } from "@arco-design/web-react"
+import { toast } from "sonner"
 
 const TabPane = Tabs.TabPane
 import { IconSave, IconEye, IconArrowLeft } from "@arco-design/web-react/icon"
@@ -44,10 +45,10 @@ export function PageEditor({ pageId, onBack }: PageEditorProps) {
           slug: data.slug,
         })
       } else {
-        Message.error("获取页面数据失败")
+        toast.error("获取页面数据失败")
       }
     } catch (error) {
-      Message.error("获取页面数据失败")
+      toast.error("获取页面数据失败")
     } finally {
       setLoading(false)
     }
@@ -65,12 +66,12 @@ export function PageEditor({ pageId, onBack }: PageEditorProps) {
       })
 
       if (response.ok) {
-        Message.success("保存成功")
+        toast.success("保存成功")
       } else {
-        Message.error("保存失败")
+        toast.error("保存失败")
       }
     } catch (error) {
-      Message.error("保存失败")
+      toast.error("保存失败")
     } finally {
       setSaving(false)
     }

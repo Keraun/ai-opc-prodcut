@@ -1,8 +1,9 @@
 "use client"
 
 import { useState, useEffect, useCallback } from "react"
-import { Card, Button, Space, Tag, Modal, Message, Collapse } from "@arco-design/web-react"
+import { Card, Button, Space, Tag, Modal, Collapse } from "@arco-design/web-react"
 import { IconDragDotVertical, IconDelete, IconPlus, IconSettings, IconEye } from "@arco-design/web-react/icon"
+import { toast } from "sonner"
 import styles from "../../dashboard.module.css"
 import { ModuleFieldEditor } from "./ModuleFieldEditor"
 
@@ -42,7 +43,7 @@ export function ModuleDragEditor({ modules, onChange }: ModuleDragEditorProps) {
         setAvailableModules(data.modules || [])
       }
     } catch (error) {
-      Message.error("获取可用模块列表失败")
+      toast.error("获取可用模块列表失败")
     }
   }
 
@@ -55,7 +56,7 @@ export function ModuleDragEditor({ modules, onChange }: ModuleDragEditorProps) {
     }
 
     onChange([...modules, newModule])
-    Message.success("模块添加成功")
+    toast.success("模块添加成功")
   }
 
   const handleDeleteModule = (index: number) => {
@@ -98,7 +99,7 @@ export function ModuleDragEditor({ modules, onChange }: ModuleDragEditorProps) {
     
     onChange(updatedModules)
     setEditingModule(null)
-    Message.success("模块数据已更新")
+    toast.success("模块数据已更新")
   }
 
   const groupedModules = availableModules.reduce((acc, module) => {

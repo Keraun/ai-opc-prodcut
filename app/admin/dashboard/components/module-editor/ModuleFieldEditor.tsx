@@ -1,7 +1,8 @@
 "use client"
 
 import { useState, useEffect } from "react"
-import { Input, InputNumber, Switch, Select, Space, Message } from "@arco-design/web-react"
+import { Input, InputNumber, Switch, Select, Space } from "@arco-design/web-react"
+import { toast } from "sonner"
 import styles from "../../dashboard.module.css"
 
 interface SchemaProperty {
@@ -37,7 +38,7 @@ export function ModuleFieldEditor({ moduleId, data, onChange }: ModuleFieldEdito
         setSchema(schemaData.properties || {})
       }
     } catch (error) {
-      Message.error("获取模块字段定义失败")
+      toast.error("获取模块字段定义失败")
     } finally {
       setLoading(false)
     }

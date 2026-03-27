@@ -2,7 +2,8 @@
 
 import { useEffect, useState } from "react"
 import { useParams } from "next/navigation"
-import { Spin, Message } from "@arco-design/web-react"
+import { Spin } from "@arco-design/web-react"
+import { toast } from "sonner"
 import { initializeModules } from "@/modules/init"
 import { getModuleComponent } from "@/modules/registry"
 
@@ -34,7 +35,7 @@ export default function PagePreviewPage() {
       
       const pageResponse = await fetch(`/api/admin/pages/${pageId}`)
       if (!pageResponse.ok) {
-        Message.error("获取页面数据失败")
+        toast.error("获取页面数据失败")
         return
       }
       
@@ -54,10 +55,10 @@ export default function PagePreviewPage() {
         setPageName(previewData.pageName)
         setModules(previewData.modules)
       } else {
-        Message.error(previewData.message || "生成预览失败")
+        toast.error(previewData.message || "生成预览失败")
       }
     } catch (error) {
-      Message.error("加载预览失败")
+      toast.error("加载预览失败")
     } finally {
       setLoading(false)
     }
