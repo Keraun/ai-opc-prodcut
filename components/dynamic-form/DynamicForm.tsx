@@ -124,7 +124,7 @@ export function DynamicForm({
         ...values
       }
       
-      if ('tableId' in processedValues) {
+      if ('tableId' in processedValues && processedValues.tableId) {
         processedValues.tableId = extractTableId(processedValues.tableId)
       }
       
@@ -471,6 +471,7 @@ export function DynamicForm({
         layout={schema.ui?.layout || 'vertical'}
         labelAlign={schema.ui?.labelAlign || 'left'}
         autoComplete="off"
+        onSubmit={handleSubmit}
       >
         {renderFields()}
       </Form>
