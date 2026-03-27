@@ -54,7 +54,7 @@ export function ThemeSelector({ themeData, onThemeChange }: ThemeSelectorProps) 
               <div 
                 className={styles.themePreviewBar}
                 style={{
-                  background: `linear-gradient(135deg, ${theme.colors.primary} 0%, ${theme.colors.secondary} 100%)`
+                  background: `linear-gradient(135deg, ${theme.colors?.primary || '#1e40af'} 0%, ${theme.colors?.secondary || '#3b82f6'} 100%)`
                 }}
               />
             </div>
@@ -65,17 +65,17 @@ export function ThemeSelector({ themeData, onThemeChange }: ThemeSelectorProps) 
             <div className={styles.themeColors}>
               <div 
                 className={styles.themeColorDot}
-                style={{ backgroundColor: theme.colors.primary }}
+                style={{ backgroundColor: theme.colors?.primary || '#1e40af' }}
                 title="主色"
               />
               <div 
                 className={styles.themeColorDot}
-                style={{ backgroundColor: theme.colors.secondary }}
+                style={{ backgroundColor: theme.colors?.secondary || '#3b82f6' }}
                 title="辅助色"
               />
               <div 
                 className={styles.themeColorDot}
-                style={{ backgroundColor: theme.colors.accent }}
+                style={{ backgroundColor: theme.colors?.accent || '#06b6d4' }}
                 title="强调色"
               />
             </div>

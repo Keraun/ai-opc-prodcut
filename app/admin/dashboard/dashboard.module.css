@@ -980,13 +980,13 @@
   font-weight: 500;
   border-radius: 6.0px;
   color: #ffffff;
-  background-color: #374151;
+  background-color: #1e40af;
   cursor: pointer;
   transition: background-color 0.2s;
 }
 
 .importLabel:hover {
-  background-color: #1f2937;
+  background-color: #1e3a8a;
 }
 
 .importLabelIcon {

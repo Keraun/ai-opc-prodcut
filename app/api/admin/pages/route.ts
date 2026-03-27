@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import fs from 'fs'
 import path from 'path'
-import { readConfig, writeConfig, getRuntimePath } from '@/lib/config-manager'
+import { readConfig, writeConfig, getRuntimePath, getTemplatePath } from '@/lib/config-manager'
 
 interface PageInfo {
   id: string
@@ -16,20 +16,39 @@ interface PageInfo {
   publishedAt?: string
   isSystem?: boolean
   isDeletable?: boolean
+  description?: string
+  route?: string
 }
 
 function getPageList(): PageInfo[] {
   const pageListPath = getRuntimePath('page-list.json')
+  const pageListTemplatePath = getTemplatePath('page-list')
   
   try {
+    // 首先尝试读取运行时的page-list.json
     if (fs.existsSync(pageListPath)) {
       const pageListData = JSON.parse(fs.readFileSync(pageListPath, 'utf-8'))
       return pageListData.pages || []
+    }
+    
+    // 如果运行时文件不存在，尝试读取模板文件
+    if (fs.existsSync(pageListTemplatePath)) {
+      const templateData = JSON.parse(fs.readFileSync(pageListTemplatePath, 'utf-8'))
+      
+      // 复制模板到运行时目录
+      const runtimeDir = path.dirname(pageListPath)
+      if (!fs.existsSync(runtimeDir)) {
+        fs.mkdirSync(runtimeDir, { recursive: true })
+      }
+      
+      fs.writeFileSync(pageListPath, JSON.stringify(templateData, null, 2), 'utf-8')
+      return templateData.pages || []
     }
   } catch (error) {
     console.error('Error reading page-list.json:', error)
   }
   
+  // 如果都不存在，返回空数组
   return []
 }
 

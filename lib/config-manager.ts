@@ -56,6 +56,8 @@ const typeToPathMap: Record<string, PathMapping> = {
   'token': { dir: 'system', prefix: 'system-token' },
   'system-logs': { dir: 'system', prefix: 'system-logs' },
   'verification-codes': { dir: 'system', prefix: 'system-verification-codes' },
+  
+  'page-list': { dir: '', prefix: 'page-list' },
 }
 
 function getPathMapping(configType: string): PathMapping {

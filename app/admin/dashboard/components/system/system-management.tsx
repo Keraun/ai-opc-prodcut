@@ -1,6 +1,6 @@
 "use client"
 
-import { Button, Card, Switch } from "@arco-design/web-react"
+import { Button, Card } from "@arco-design/web-react"
 import { IconExport, IconSettings } from "@arco-design/web-react/icon"
 import styles from "../../dashboard.module.css"
 
@@ -9,15 +9,13 @@ interface SystemManagementProps {
   onExportConfig: () => void
   onImportConfig: (e: React.ChangeEvent<HTMLInputElement>) => void
   onResetWebsite: () => void
-  onUpdateCache: (enabled: boolean) => void
 }
 
 export function SystemManagement({
   siteConfig,
   onExportConfig,
   onImportConfig,
-  onResetWebsite,
-  onUpdateCache
+  onResetWebsite
 }: SystemManagementProps) {
   return (
     <div className={styles.systemManagement}>
@@ -30,21 +28,6 @@ export function SystemManagement({
         }
       >
         <div className={styles.spaceY6}>
-          <div className={styles.performanceSection}>
-            <h3 className={styles.sectionTitle}>性能配置</h3>
-            <div className={styles.spaceY4}>
-              <div className={styles.performanceItem}>
-                <div className={styles.performanceItemLeft}>
-                  <h4 className={styles.performanceItemTitle}>配置缓存</h4>
-                  <p className={styles.performanceItemDescription}>启用配置缓存可以提高系统性能,但可能导致配置更新延迟</p>
-                </div>
-                <Switch
-                  checked={siteConfig?.cache?.enabled ?? true}
-                  onChange={onUpdateCache}
-                />
-              </div>
-            </div>
-          </div>
 
           <div className={styles.configSection}>
             <h3 className={styles.sectionTitle}>配置管理</h3>

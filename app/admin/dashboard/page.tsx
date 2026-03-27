@@ -337,12 +337,86 @@ export default function AdminDashboardPage() {
       const response = await fetch("/api/admin/config")
       if (response.ok) {
         const data = await response.json()
-        setConfigs(data)
-        setOriginalConfigs(JSON.parse(JSON.stringify(data)))
+        // 确保theme数据结构正确
+        const themeData = {
+          currentTheme: data['theme-config']?.currentTheme || 'modern',
+          themes: {
+            modern: {
+              id: 'modern',
+              name: '现代简约',
+              description: '简洁大方的设计风格，蓝色系配色，适合企业官网',
+              colors: {
+                primary: '#1e40af',
+                secondary: '#3b82f6',
+                accent: '#06b6d4'
+              }
+            },
+            tech: {
+              id: 'tech',
+              name: '科技深色',
+              description: '充满科技感的设计风格，紫色系配色，适合科技产品展示',
+              colors: {
+                primary: '#7c3aed',
+                secondary: '#a78bfa',
+                accent: '#ec4899'
+              }
+            },
+            nature: {
+              id: 'nature',
+              name: '自然清新',
+              description: '自然清新的设计风格，绿色系配色，适合环保和健康产品',
+              colors: {
+                primary: '#10b981',
+                secondary: '#34d399',
+                accent: '#14b8a6'
+              }
+            },
+            dark: {
+              id: 'dark',
+              name: '暗黑模式',
+              description: '深色主题，适合夜间使用，减轻眼睛疲劳',
+              colors: {
+                primary: '#3b82f6',
+                secondary: '#60a5fa',
+                accent: '#22d3ee'
+              }
+            },
+            luxury: {
+              id: 'luxury',
+              name: '奢华风格',
+              description: '奢华优雅的设计风格，金色系配色，适合高端品牌',
+              colors: {
+                primary: '#b45309',
+                secondary: '#d97706',
+                accent: '#f59e0b'
+              }
+            },
+            minimal: {
+              id: 'minimal',
+              name: '极简主义',
+              description: '极简主义设计风格，中性色调，适合现代艺术和设计领域',
+              colors: {
+                primary: '#374151',
+                secondary: '#6b7280',
+                accent: '#9ca3af'
+              }
+            }
+          }
+        }
+        
+        // 合并主题数据到configs
+        const mergedData = {
+          ...data,
+          theme: themeData
+        }
+        
+        setConfigs(mergedData)
+        setOriginalConfigs(JSON.parse(JSON.stringify(mergedData)))
       } else {
         toast.error("获取配置失败")
       }
     } catch (error) {
+      console.error('获取配置失败:', error)
       toast.error("获取配置失败")
     }
   }
@@ -780,37 +854,7 @@ export default function AdminDashboardPage() {
     }
   }
 
-  const handleUpdateCache = async (enabled: boolean) => {
-    try {
-      const updatedConfig = {
-        ...configs.site,
-        cache: {
-          ...configs.site?.cache,
-          enabled
-        }
-      }
-      
-      const response = await fetch('/api/admin/config', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-          type: 'site',
-          data: updatedConfig
-        })
-      })
-      
-      if (response.ok) {
-        toast.success(enabled ? '配置缓存已启用' : '配置缓存已禁用')
-        await fetchConfigs()
-      } else {
-        toast.error('更新配置失败')
-      }
-    } catch (error) {
-      toast.error('更新配置失败')
-    }
-  }
+
 
   const renderConfigCard = (title: string, configType: string, description: string) => {
     const schemaData = schema[configType]
@@ -1132,7 +1176,6 @@ export default function AdminDashboardPage() {
                 onExportConfig={handleExportConfig}
                 onImportConfig={handleImportConfig}
                 onResetWebsite={handleResetWebsite}
-                onUpdateCache={handleUpdateCache}
               />
             )}
 
