@@ -12,7 +12,6 @@ import {
   JSONDiffViewer,
   ConfigCard,
   ThemeSelector,
-  OperationLogs,
   SystemManagement,
   Sidebar,
   Header,
@@ -172,7 +171,6 @@ export default function AdminDashboardPage() {
   const [confirmPassword, setConfirmPassword] = useState("")
   const [changePasswordLoading, setChangePasswordLoading] = useState(false)
   const [currentUser, setCurrentUser] = useState<any>(null)
-  const [operationLogs, setOperationLogs] = useState<any[]>([])
   const [viewingPreviousVersion, setViewingPreviousVersion] = useState<string | null>(null)
   const [previousVersionData, setPreviousVersionData] = useState<any>(null)
   const [previousVersionInfo, setPreviousVersionInfo] = useState<any>(null)
@@ -217,7 +215,6 @@ export default function AdminDashboardPage() {
   useEffect(() => {
     fetchConfigs()
     fetchSchema()
-    fetchOperationLogs()
     checkAuth()
   }, [])
 
@@ -333,17 +330,7 @@ export default function AdminDashboardPage() {
     }
   }
 
-  const fetchOperationLogs = async () => {
-    try {
-      const response = await fetch("/api/admin/operation-logs")
-      if (response.ok) {
-        const data = await response.json()
-        setOperationLogs(data.logs || [])
-      }
-    } catch (error) {
-      console.error("获取操作记录失败", error)
-    }
-  }
+
 
   const fetchConfigs = async () => {
     try {
@@ -428,7 +415,6 @@ export default function AdminDashboardPage() {
           [configType]: JSON.parse(JSON.stringify(configs[configType as keyof typeof configs]))
         }))
         fetchVersionInfos()
-        fetchOperationLogs()
       } else {
         toast.error("配置提交失败")
       }
@@ -567,7 +553,6 @@ export default function AdminDashboardPage() {
           setCurrentUser(data.user)
           sessionStorage.setItem('currentUser', JSON.stringify(data.user))
         }
-        fetchOperationLogs()
       } else {
         toast.error(data.message || "密码修改失败")
       }
@@ -1151,9 +1136,7 @@ export default function AdminDashboardPage() {
               />
             )}
 
-            {activeMenu === 'operationLogs' && (
-              <OperationLogs logs={operationLogs} />
-            )}
+
           </div>
         </div>
       </div>

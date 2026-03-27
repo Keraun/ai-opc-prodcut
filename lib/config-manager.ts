@@ -45,14 +45,15 @@ const typeToPathMap: Record<string, PathMapping> = {
   'product-list': { dir: 'page-data', prefix: 'data-product-list' },
   
   'theme': { dir: 'theme', prefix: 'theme-config' },
-  'theme-custom': { dir: 'theme', prefix: 'theme-custom' },
   'theme-modern': { dir: 'theme', prefix: 'theme-modern' },
   'theme-nature': { dir: 'theme', prefix: 'theme-nature' },
   'theme-tech': { dir: 'theme', prefix: 'theme-tech' },
+  'theme-minimal': { dir: 'theme', prefix: 'theme-minimal' },
+  'theme-dark': { dir: 'theme', prefix: 'theme-dark' },
+  'theme-luxury': { dir: 'theme', prefix: 'theme-luxury' },
   
   'account': { dir: 'system', prefix: 'system-account' },
   'token': { dir: 'system', prefix: 'system-token' },
-  'operation-logs': { dir: 'system', prefix: 'operation-logs' },
   'system-logs': { dir: 'system', prefix: 'system-logs' },
   'verification-codes': { dir: 'system', prefix: 'system-verification-codes' },
 }
@@ -154,7 +155,6 @@ function readAllFromDir(dir: string, typePrefix: string = ''): Record<string, an
       } else if (dir === 'system') {
         if (baseName === 'system-account') configType = 'account'
         else if (baseName === 'system-token') configType = 'token'
-        else if (baseName === 'operation-logs') configType = 'operation-logs'
         else configType = baseName
       }
       

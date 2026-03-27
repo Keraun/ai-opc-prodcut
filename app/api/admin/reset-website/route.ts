@@ -1,6 +1,5 @@
 import { NextRequest, NextResponse } from "next/server"
 import { resetAllToTemplates } from "@/lib/config-manager"
-import { logOperation } from "@/lib/operation-logger"
 
 export async function POST(request: NextRequest) {
   try {
@@ -12,13 +11,6 @@ export async function POST(request: NextRequest) {
     }
 
     resetAllToTemplates()
-
-    await logOperation(
-      username,
-      "reset_website",
-      "一键还原网站配置",
-      "将所有配置还原到模版文件状态"
-    )
 
     return NextResponse.json({ success: true, message: "网站配置已成功还原到初始状态" })
   } catch (error) {

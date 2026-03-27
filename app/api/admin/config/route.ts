@@ -1,6 +1,5 @@
 import { NextRequest, NextResponse } from "next/server"
 import { readConfig, writeConfig, readAllConfigs, readTemplate } from "@/lib/config-manager"
-import { logOperation } from "@/lib/operation-logger"
 import { cookies } from "next/headers"
 
 async function checkAdminAuth() {
@@ -97,7 +96,6 @@ export async function POST(request: NextRequest) {
       'news-detail': '新闻详情模块',
       'product-list': '产品列表模块',
       theme: '主题配置',
-      'theme-custom': '自定义主题',
       'theme-modern': '现代主题',
       'theme-nature': '自然主题',
       'theme-tech': '科技主题',
@@ -107,8 +105,7 @@ export async function POST(request: NextRequest) {
       'system-logs': '系统日志',
       'verification-codes': '验证码配置'
     }
-    const configName = configNames[type] || type
-    logOperation(username, 'update_config', `更新${configName}`, 'unknown', { configType: type })
+
 
     return NextResponse.json({
       success: true,

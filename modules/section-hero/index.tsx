@@ -1,6 +1,7 @@
 import Link from "next/link"
 import { Logo } from "@/components/common/logo"
 import { Section, Button } from "@/components/ui"
+import { useTheme } from "@/components/theme-provider"
 import type { ModuleProps } from "@/modules/types"
 import type { HeroData } from "./types"
 import styles from "./index.module.css"
@@ -32,9 +33,10 @@ const ThunderboltIcon = () => (
 
 export function HeroModule({ data }: ModuleProps) {
   const config: HeroData = (data as HeroData) || {}
+  const { themeConfig } = useTheme()
 
-  const primaryColor = "#1e40af" // 默认主色
-  const accentColor = "#06b6d4" // 默认强调色
+  const primaryColor = themeConfig?.colors.primary || "#1e40af" // 默认主色
+  const accentColor = themeConfig?.colors.accent || "#06b6d4" // 默认强调色
 
   const layoutType = config.layout || 'layout1'
 

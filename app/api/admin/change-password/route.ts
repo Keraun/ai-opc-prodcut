@@ -1,7 +1,6 @@
 import { NextRequest, NextResponse } from "next/server"
 import { cookies } from "next/headers"
 import { readConfig, writeConfig } from "@/lib/config-manager"
-import { logOperation } from "@/lib/operation-logger"
 
 export async function POST(request: NextRequest) {
   try {
@@ -63,11 +62,7 @@ export async function POST(request: NextRequest) {
 
     writeConfig('account', admins)
 
-    const currentIP = request.headers.get('x-forwarded-for') || 
-                      request.headers.get('x-real-ip') || 
-                      'unknown'
-    
-    logOperation(admin.username, 'change_password', '修改密码', currentIP)
+
 
     cookieStore.delete('adminUser')
 

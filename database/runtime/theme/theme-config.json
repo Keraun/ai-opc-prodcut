@@ -1,12 +1,11 @@
 {
   "currentTheme": "nature",
   "themes": [
-    "mordern",
+    "modern",
     "tech",
-    "nature"
-  ],
-  "customConfig": {
-    "primaryColor": "#3b82f6",
-    "secondaryColor": "#8b5cf6"
-  }
+    "nature",
+    "minimal",
+    "dark",
+    "luxury"
+  ]
 }

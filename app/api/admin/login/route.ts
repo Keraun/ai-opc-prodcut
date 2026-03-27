@@ -2,7 +2,6 @@ import { NextRequest, NextResponse } from "next/server"
 import fs from "fs"
 import path from "path"
 import { cookies } from "next/headers"
-import { logOperation } from "@/lib/operation-logger"
 import { readConfig, writeConfig } from "@/lib/config-manager"
 
 function generateSuperAdminToken(): string {
@@ -112,8 +111,6 @@ export async function POST(request: NextRequest) {
 
     // 保存时保持原有格式（数组格式）
     writeConfig('account', admins)
-
-    logOperation(admin.username, 'login', '管理员登录', currentIP)
 
     const cookieStore = await cookies()
     const userData = {

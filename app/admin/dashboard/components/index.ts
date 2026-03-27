@@ -11,8 +11,7 @@ export { Header } from './navigation/header'
 // System
 export { SystemManagement } from './system/system-management'
 
-// Logs
-export { OperationLogs } from './logs/operation-logs'
+
 
 // Page Management
 export { PageManagement } from './page-management/PageManagement'

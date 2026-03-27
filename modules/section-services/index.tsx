@@ -1,5 +1,6 @@
 import type { ModuleProps } from "@/modules/types"
 import type { ServicesData } from "./types"
+import { useTheme } from "@/components/theme-provider"
 import styles from "./index.module.css"
 
 // SVG 图标组件
@@ -53,6 +54,7 @@ const colorMap: Record<string, { iconWrapper: string; icon: string; highlightDot
 
 export function ServicesModule({ data }: ModuleProps) {
   const config: ServicesData = (data as ServicesData) || {}
+  const { themeConfig } = useTheme()
   const items = config.items || []
 
   const services = items.map((service, index) => ({
@@ -61,7 +63,7 @@ export function ServicesModule({ data }: ModuleProps) {
     title: service.title,
     description: service.description,
     highlights: service.highlights,
-    color: index === 0 ? "orange" : index === 1 ? "blue" : index === 2 ? "green" : "purple",
+    color: index === 0 ? "primary" : index === 1 ? "secondary" : index === 2 ? "accent" : "warning",
   }))
 
   return (
@@ -84,7 +86,16 @@ export function ServicesModule({ data }: ModuleProps) {
         <div className={styles.grid}>
           {services.map((service, index) => {
             const Icon = service.icon
-            const colors = colorMap[service.color]
+            const getColor = (colorType: string) => {
+              switch (colorType) {
+                case 'primary': return themeConfig?.colors.primary || '#1e40af'
+                case 'secondary': return themeConfig?.colors.secondary || '#3b82f6'
+                case 'accent': return themeConfig?.colors.accent || '#06b6d4'
+                case 'warning': return themeConfig?.colors.warning || '#f59e0b'
+                default: return themeConfig?.colors.primary || '#1e40af'
+              }
+            }
+            const color = getColor(service.color)
             return (
               <div
                 key={index}
@@ -92,12 +103,12 @@ export function ServicesModule({ data }: ModuleProps) {
               >
                 <div className={styles.cardContent}>
                   <div className={styles.cardHeader}>
-                    <div className={`${styles.iconWrapper} ${colors.iconWrapper}`}>
-                      <div className={`${styles.icon} ${colors.icon}`}>
+                    <div className={styles.iconWrapper} style={{ backgroundColor: `${color}20` }}>
+                      <div className={styles.icon} style={{ color }}>
                         {Icon}
                       </div>
                     </div>
-                    <span className={styles.number}>
+                    <span className={styles.number} style={{ color }}>
                       {service.number}
                     </span>
                   </div>
@@ -108,7 +119,7 @@ export function ServicesModule({ data }: ModuleProps) {
                   <div className={styles.highlights}>
                     {service.highlights?.map((highlight, i) => (
                       <div key={i} className={styles.highlight}>
-                        <div className={`${styles.highlightDot} ${colors.highlightDot}`} />
+                        <div className={styles.highlightDot} style={{ backgroundColor: color }} />
                         <span>{highlight}</span>
                       </div>
                     ))}
