@@ -1,5 +1,6 @@
 {
   "appId": "cli_a937c3189c78dbb5",
   "appSecret": "kDDziXTlnTLYTXIazS8cFgRlHIwO5mZi",
-  "baseLink": "MHcEb9GKxanuZismlBfceJ4AnIf"
+  "baseLink": "https://my.feishu.cn/base/MHcEb9GKxanuZismlBfceJ4AnIf?from=from_copylink",
+  "appToken": "MHcEb9GKxanuZismlBfceJ4AnIf"
 }

@@ -46,6 +46,7 @@ interface FieldUIConfig {
   max?: number
   step?: number
   options?: Array<{ label: string; value: any }>
+  readonly?: boolean
 }
 
 interface FormUIConfig {
@@ -128,9 +129,9 @@ export function DynamicForm({
         processedValues.tableId = extractTableId(processedValues.tableId)
       }
       
-      // Process baseLink field to extract app_token
+      // Process baseLink field to extract app_token and save to appToken field
       if ('baseLink' in processedValues && processedValues.baseLink) {
-        processedValues.baseLink = extractAppToken(processedValues.baseLink)
+        processedValues.appToken = extractAppToken(processedValues.baseLink)
       }
       
       const finalValues = {
@@ -154,6 +155,7 @@ export function DynamicForm({
         return (
           <Input
             placeholder={ui.placeholder}
+            disabled={ui.readonly}
             style={{ width: '100%' }}
           />
         )

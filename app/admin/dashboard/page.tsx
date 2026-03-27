@@ -91,6 +91,7 @@ export default function AdminDashboardPage() {
       appId: '',
       appSecret: '',
       baseLink: '',
+      appToken: '',
       tableId: '',
       tableLink: ''
     }
@@ -114,6 +115,7 @@ export default function AdminDashboardPage() {
       appId: '',
       appSecret: '',
       baseLink: '',
+      appToken: '',
       tableId: '',
       tableLink: ''
     }

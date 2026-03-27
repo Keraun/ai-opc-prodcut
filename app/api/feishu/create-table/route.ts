@@ -9,6 +9,25 @@ interface Field {
   }
 }
 
+function extractAppToken(baseLink: string): string {
+  if (!baseLink) return ''
+  
+  const patterns = [
+    /\/base\/([a-zA-Z0-9_-]+)/,
+    /base\/([a-zA-Z0-9_-]+)/,
+    /([a-zA-Z0-9_-]{20,})/
+  ]
+  
+  for (const pattern of patterns) {
+    const match = baseLink.match(pattern)
+    if (match && match[1]) {
+      return match[1]
+    }
+  }
+  
+  return baseLink
+}
+
 export async function POST(request: NextRequest) {
   try {
     const feishuConfig = readConfig('feishu-app')
@@ -16,6 +35,16 @@ export async function POST(request: NextRequest) {
     if (!feishuConfig.appId || !feishuConfig.appSecret || !feishuConfig.baseLink) {
       return NextResponse.json(
         { success: false, message: "飞书配置未完成，请填写App ID、App Secret和飞书多维表格链接" },
+        { status: 400 }
+      )
+    }
+
+    const appToken = extractAppToken(feishuConfig.baseLink)
+    console.log("提取的appToken:", appToken)
+    
+    if (!appToken) {
+      return NextResponse.json(
+        { success: false, message: "无法从链接中提取app_token" },
         { status: 400 }
       )
     }
@@ -65,29 +94,9 @@ export async function POST(request: NextRequest) {
         property: {}
       },
       {
-        field_name: "偏好联系方式",
-        type: 3,
-        property: {
-          options: [
-            { name: "电话" },
-            { name: "微信" },
-            { name: "邮箱" }
-          ]
-        }
-      },
-      {
         field_name: "留言内容",
         type: 1,
         property: {}
-      },
-      {
-        field_name: "提交时间",
-        type: 5,
-        property: {
-          formatter: "yyyy-MM-dd HH:mm:ss",
-          time_format: "HH:mm:ss",
-          date_format: "yyyy-MM-dd"
-        }
       }
     ]
 
@@ -98,10 +107,10 @@ export async function POST(request: NextRequest) {
       }
     }
 
-    console.log("创建表格请求URL:", `https://open.feishu.cn/open-apis/bitable/v1/apps/${feishuConfig.baseLink}/tables`)
+    console.log("创建表格请求URL:", `https://open.feishu.cn/open-apis/bitable/v1/apps/${appToken}/tables`)
     console.log("创建表格请求体:", JSON.stringify(requestBody, null, 2))
 
-    const createTableResponse = await fetch(`https://open.feishu.cn/open-apis/bitable/v1/apps/${feishuConfig.baseLink}/tables`, {
+    const createTableResponse = await fetch(`https://open.feishu.cn/open-apis/bitable/v1/apps/${appToken}/tables`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -132,9 +141,9 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    const appToken = feishuConfig.baseLink
     const tableLink = `https://example.feishu.cn/base/${appToken}/table/${tableId}`
 
+    feishuConfig.appToken = appToken
     feishuConfig.tableId = tableId
     feishuConfig.tableLink = tableLink
     writeConfig('feishu-app', feishuConfig)
