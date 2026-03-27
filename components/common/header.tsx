@@ -193,9 +193,21 @@ export function Header({
               key={item.href}
               onClick={() => handleNavClick(item.href)}
               className={styles.drawerNavItem}
+              style={{
+                '--primary-color': primaryColor,
+                '--accent-color': accentColor
+              } as React.CSSProperties}
             >
-              <div className={styles.drawerNavIcon}>
-                <span className={styles.drawerNavIconText}>
+              <div 
+                className={styles.drawerNavIcon}
+                style={{
+                  background: `linear-gradient(135deg, ${primaryColor}15 0%, ${primaryColor}30 100%)`
+                }}
+              >
+                <span 
+                  className={styles.drawerNavIconText}
+                  style={{ color: primaryColor }}
+                >
                   {item.label[0]}
                 </span>
               </div>

@@ -157,8 +157,10 @@
 .drawerContent {
   display: flex;
   flex-direction: column;
-  gap: 0.5rem;
-  padding: 1.5rem 0;
+  gap: 0.75rem;
+  padding: 2rem 1.5rem;
+  background: linear-gradient(135deg, #f8fafc 0%, #ffffff 100%);
+  min-height: 100vh;
 }
 
 .drawerNavItem {
@@ -184,50 +186,86 @@
 .drawerNavIcon {
   width: 2.5rem;
   height: 2.5rem;
-  border-radius: 0.5rem;
-  background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%);
+  border-radius: 0.75rem;
   display: flex;
   align-items: center;
   justify-content: center;
   transition: all 0.3s ease;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
 }
 
 .drawerNavItem:hover .drawerNavIcon {
-  background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+  background: linear-gradient(135deg, var(--primary-color) 0%, var(--accent-color, var(--primary-color)) 100%) !important;
+  transform: scale(1.05);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
 .drawerNavIconText {
-  color: #2563eb;
   font-weight: 600;
   font-size: 0.875rem;
   transition: color 0.3s ease;
 }
 
 .drawerNavItem:hover .drawerNavIconText {
-  color: white;
+  color: white !important;
 }
 
 .drawerNavText {
   font-size: 1rem;
   font-weight: 500;
-  transition: color 0.3s ease;
+  transition: all 0.3s ease;
 }
 
 .drawerNavItem:hover .drawerNavText {
-  color: #2563eb;
+  color: var(--primary-color) !important;
+  transform: translateX(4px);
+}
+
+.drawerNavItem {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1.25rem 1rem;
+  border-radius: 1rem;
+  text-align: left;
+  color: #374151;
+  background: linear-gradient(135deg, #f8fafc 0%, #ffffff 100%);
+  border: 1px solid #f3f4f6;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+}
+
+.drawerNavItem:hover {
+  background: linear-gradient(135deg, #ffffff 0%, #f1f5f9 100%);
+  box-shadow: 0 8px 16px -4px rgba(0, 0, 0, 0.1);
+  border-color: var(--primary-color)20;
+  transform: translateY(-1px);
 }
 
 .drawerFooter {
-  margin-top: 2rem;
+  margin-top: 3rem;
   padding-top: 2rem;
-  border-top: 1px solid #e5e7eb;
+  border-top: 1px solid #f3f4f6;
+  text-align: center;
 }
 
 .drawerHint {
   text-align: center;
-  font-size: 0.75rem;
-  color: #9ca3af;
+  font-size: 0.875rem;
+  color: #6b7280;
   margin-top: 1rem;
+  font-weight: 500;
+  opacity: 0.8;
+}
+
+.drawerFooter Button {
+  transition: all 0.3s ease;
+}
+
+.drawerFooter Button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 25px -8px rgba(0, 0, 0, 0.15) !important;
 }
 
 .dropdownContent {
