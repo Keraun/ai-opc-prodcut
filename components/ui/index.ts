@@ -7,6 +7,9 @@ export type { CardProps } from "./card"
 export { Section } from "./section"
 export type { SectionProps } from "./section"
 
+export { SectionTag } from "./section-tag"
+export type { SectionTagProps } from "./section-tag"
+
 export { Menu } from "./menu"
 export type { MenuProps, MenuItem } from "./menu"
 

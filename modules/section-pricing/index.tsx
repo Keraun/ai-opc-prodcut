@@ -19,27 +19,13 @@ export function PricingModule({ data }: ModuleProps) {
   return (
     <Section
       id="pricing"
-      title={config?.title || '选择适合你的计划'}
-      description={config?.description || '选择适合你的方案 —— 可随时取消。'}
+      title={config?.title}
+      description={config?.description}
+      badge={config?.sectionTag}
       variant="default"
       padding="lg"
       centered
     >
-      <div className={styles.header}>
-        {config?.sectionTag && (
-          <span 
-            className={styles.tag} 
-            style={{ 
-              backgroundColor: `${primaryColor}20`,
-              color: primaryColor,
-              borderColor: primaryColor
-            }}
-          >
-            {config.sectionTag}
-          </span>
-        )}
-      </div>
-      
       <div className={styles.grid}>
         {pricingPlans.map((plan: PricingFeature, index: number) => {
           const planLink = (plan as any).buttonLink || (plan as any).link

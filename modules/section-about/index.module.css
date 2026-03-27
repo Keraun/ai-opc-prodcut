@@ -79,6 +79,10 @@
   align-items: center;
 }
 
+.header {
+  margin-bottom: 1.5rem;
+}
+
 .tag {
   display: inline-block;
   padding: 0.375rem 1rem;

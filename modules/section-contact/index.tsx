@@ -1,6 +1,7 @@
 import type { ModuleProps } from "@/modules/types"
 import type { ContactData } from "./types"
 import { useTheme } from "@/components/theme-provider"
+import { SectionTag } from "@/components/ui"
 import { SendIcon } from "@/modules/icons"
 import styles from "./index.module.css"
 
@@ -19,7 +20,7 @@ export function ContactModule({ data }: ModuleProps) {
 
       <div className={styles.container}>
         <div className={styles.header}>
-          <span
+          <SectionTag
             className={styles.tag}
             style={{
               backgroundColor: `${accentColor}0D`,
@@ -28,7 +29,7 @@ export function ContactModule({ data }: ModuleProps) {
             }}
           >
             {config.sectionTag}
-          </span>
+          </SectionTag>
           <h2 className={styles.title}>
             {config.title}
           </h2>

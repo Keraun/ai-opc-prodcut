@@ -1,6 +1,7 @@
 import Image from 'next/image'
 import type { ModuleProps } from "@/modules/types"
 import type { PartnerData, PartnerItem } from "./types"
+import { SectionTag } from "@/components/ui"
 import styles from "./index.module.css"
 
 export function PartnerModule({ data }: ModuleProps) {
@@ -11,9 +12,11 @@ export function PartnerModule({ data }: ModuleProps) {
     <div id="partner" className={styles.container}>
       <div className={styles.header}>
         {config.sectionTag && (
-          <span className={styles.tag}>
+          <SectionTag
+            className={styles.tag}
+          >
             {config.sectionTag}
-          </span>
+          </SectionTag>
         )}
         <div className={styles.title}>
           {config.title}

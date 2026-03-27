@@ -1,6 +1,7 @@
 import type { ModuleProps } from "@/modules/types"
 import type { ServicesData } from "./types"
 import { useTheme } from "@/components/theme-provider"
+import { SectionTag } from "@/components/ui"
 import { BulbIcon, BookIcon, SettingsIcon, CustomerServiceIcon } from "@/modules/icons"
 import styles from "./index.module.css"
 
@@ -47,9 +48,11 @@ export function ServicesModule({ data }: ModuleProps) {
 
       <div className={styles.container}>
         <div className={styles.header}>
-          <span className={styles.tag}>
+          <SectionTag
+            className={styles.tag}
+          >
             {config.sectionTag}
-          </span>
+          </SectionTag>
           <h2 className={styles.title}>
             {config.title}
           </h2>

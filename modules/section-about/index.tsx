@@ -1,6 +1,7 @@
 import type { ModuleProps } from "@/modules/types"
 import type { AboutData } from "./types"
 import { useTheme } from "@/components/theme-provider"
+import { SectionTag } from "@/components/ui"
 import { StarIcon, CompassIcon, HeartIcon, ThunderboltIcon, UserIcon, CheckCircleIcon } from "@/modules/icons"
 import styles from "./index.module.css"
 
@@ -82,11 +83,13 @@ export function AboutModule({ data }: ModuleProps) {
       <div className={styles.container}>
         <div className={styles.grid}>
           <div className={styles.leftContent}>
-            {config?.title && (
-              <>
-                <span className={styles.tag}>
-                  {config?.sectionTag}
-                </span>
+            <div className={styles.header}>
+              <SectionTag
+                className={styles.tag}
+              >
+                {config?.sectionTag}
+              </SectionTag>
+              {config?.title && (
                 <h2 className={styles.title}>
                   {config.title?.main}
                   <br />
@@ -99,8 +102,8 @@ export function AboutModule({ data }: ModuleProps) {
                     </span>
                   )}
                 </h2>
-              </>
-            )}
+              )}
+            </div>
             {config?.description && config.description.length > 0 && (
               <div className={styles.description}>
                 {config.description.map((desc: string, index: number) => (
