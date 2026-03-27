@@ -1,11 +1,11 @@
 import { NextRequest } from 'next/server'
-import { getDatabase } from '@/lib/database'
 import { 
-  wrapApiHandler, 
   wrapAuthApiHandler,
   successResponse, 
   badRequestResponse,
-  errorResponse 
+  withDatabase,
+  validateRequired,
+  formatDateTime
 } from '@/lib/api-utils'
 
 interface PageInfo {
@@ -26,9 +26,7 @@ interface PageInfo {
 }
 
 function getPageList(): PageInfo[] {
-  const db = getDatabase()
-  
-  try {
+  return withDatabase(db => {
     const pages = db.prepare('SELECT * FROM pages').all() as any[]
     
     return pages.map(page => {
@@ -56,9 +54,7 @@ function getPageList(): PageInfo[] {
         moduleInstanceIds
       }
     })
-  } finally {
-    db.close()
-  }
+  })
 }
 
 function createPage(
@@ -67,9 +63,7 @@ function createPage(
   type: 'static' | 'dynamic' = 'static',
   dynamicParam?: string
 ): { success: boolean; pageId?: string; error?: string } {
-  const db = getDatabase()
-  
-  try {
+  return withDatabase(db => {
     const pageId = slug.toLowerCase().replace(/[^a-z0-9-]/g, '-')
     
     const existingPage = db.prepare('SELECT page_id, name FROM pages WHERE page_id = ? OR slug = ?').get(pageId, slug) as any
@@ -87,7 +81,7 @@ function createPage(
       return { success: false, error: '动态路由页面必须指定动态参数名称' }
     }
 
-    const now = new Date().toISOString()
+    const now = formatDateTime()
     const route = type === 'dynamic' ? `/${slug}/[${dynamicParam}]` : `/${slug}`
     
     db.prepare(`
@@ -110,12 +104,7 @@ function createPage(
     )
     
     return { success: true, pageId }
-  } catch (error) {
-    console.error('Error creating page:', error)
-    return { success: false, error: '创建页面失败' }
-  } finally {
-    db.close()
-  }
+  })
 }
 
 export async function GET() {
@@ -130,8 +119,9 @@ export async function POST(request: NextRequest) {
     const body = await request.json()
     const { name, slug, type = 'static', dynamicParam } = body
 
-    if (!name || !slug) {
-      return badRequestResponse('页面名称和路径不能为空')
+    const validation = validateRequired(body, ['name', 'slug'])
+    if (!validation.valid) {
+      return badRequestResponse(`缺少必填字段: ${validation.missingFields.join(', ')}`)
     }
 
     if (type === 'dynamic' && !dynamicParam) {

@@ -2,7 +2,11 @@ import { NextRequest } from 'next/server'
 import { initializeModules } from '@/modules/init'
 import { getAllModules } from '@/modules/registry'
 import { getModuleRegistryList, registerModule } from '@/lib/module-service'
-import { successResponse, errorResponse } from '@/lib/api-utils'
+import { 
+  successResponse, 
+  errorResponse, 
+  wrapApiHandler 
+} from '@/lib/api-utils'
 import type { ModuleRegistration } from '@/modules/types'
 
 initializeModules()
@@ -16,7 +20,7 @@ interface ModuleInfo {
 }
 
 export async function GET() {
-  try {
+  return wrapApiHandler(async () => {
     const registeredModules = getAllModules()
     
     const modules: ModuleInfo[] = registeredModules.map((mod: ModuleRegistration) => {
@@ -49,8 +53,5 @@ export async function GET() {
     }
 
     return successResponse(modules)
-  } catch (error) {
-    console.error('Get modules error:', error)
-    return errorResponse('获取模块列表失败')
-  }
+  })
 }

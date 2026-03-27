@@ -3,7 +3,8 @@ import { getPageResponse, readConfig } from "@/lib/config-manager"
 import { 
   successResponse, 
   badRequestResponse, 
-  wrapApiHandler 
+  wrapApiHandler,
+  parseQueryParams
 } from "@/lib/api-utils"
 
 const SAFE_CONFIG_TYPES = [
@@ -15,12 +16,11 @@ const SAFE_CONFIG_TYPES = [
 
 export async function GET(request: NextRequest) {
   return wrapApiHandler(async () => {
-    const { searchParams } = new URL(request.url)
-    const pageId = searchParams.get('page')
-    const type = searchParams.get('type')
+    const params = parseQueryParams(request)
+    const { page, type } = params
     
-    if (pageId) {
-      const pageResponse = getPageResponse(pageId)
+    if (page) {
+      const pageResponse = getPageResponse(page)
       return successResponse(pageResponse)
     }
     

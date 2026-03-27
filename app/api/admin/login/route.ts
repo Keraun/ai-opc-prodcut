@@ -3,15 +3,15 @@ import { readConfig, writeConfig } from "@/lib/config-manager"
 import {
   successResponse,
   errorResponse,
+  wrapApiHandler,
   setCookie,
-  parseJsonCookie,
   getClientIP,
   formatDateTime,
   generateRandomToken
 } from "@/lib/api-utils"
 
 export async function POST(request: NextRequest) {
-  try {
+  return wrapApiHandler(async () => {
     const body = await request.json()
     const { username, password } = body
 
@@ -91,8 +91,5 @@ export async function POST(request: NextRequest) {
       showSuperAdminToken,
       superAdminToken: showSuperAdminToken ? superAdminToken : undefined
     })
-  } catch (error) {
-    console.error('Login error:', error)
-    return errorResponse("登录失败", 500)
-  }
+  })
 }

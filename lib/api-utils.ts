@@ -1,5 +1,6 @@
-import { NextResponse } from 'next/server'
+import { NextRequest, NextResponse } from 'next/server'
 import { cookies } from 'next/headers'
+import { getDatabase } from './database'
 
 export interface ApiResponse<T = any> {
   code: number
@@ -13,6 +14,20 @@ export interface AuthResult {
   isAuthenticated: boolean
   username?: string
   userData?: any
+}
+
+export interface PaginationParams {
+  page: number
+  pageSize: number
+  offset: number
+}
+
+export interface PaginatedResponse<T> {
+  items: T[]
+  total: number
+  page: number
+  pageSize: number
+  totalPages: number
 }
 
 export async function checkAdminAuth(): Promise<AuthResult> {
@@ -70,6 +85,14 @@ export function badRequestResponse(message: string): NextResponse<ApiResponse> {
 
 export function notFoundResponse(message: string = '资源不存在'): NextResponse<ApiResponse> {
   return errorResponse(message, 404)
+}
+
+export function forbiddenResponse(message: string = '无权限访问'): NextResponse<ApiResponse> {
+  return errorResponse(message, 403)
+}
+
+export function conflictResponse(message: string): NextResponse<ApiResponse> {
+  return errorResponse(message, 409)
 }
 
 export function withAuth<T = any>(
@@ -165,4 +188,95 @@ export function wrapAuthApiHandler<T = any>(
   handler: (authResult: AuthResult) => Promise<NextResponse<ApiResponse<T>>>
 ): Promise<NextResponse<ApiResponse<T>>> {
   return wrapApiHandler(() => withAuth(handler))
+}
+
+export function parseQueryParams(request: NextRequest): Record<string, string> {
+  const { searchParams } = new URL(request.url)
+  const params: Record<string, string> = {}
+  
+  searchParams.forEach((value, key) => {
+    params[key] = value
+  })
+  
+  return params
+}
+
+export function parsePaginationParams(request: NextRequest, defaultPageSize: number = 10): PaginationParams {
+  const params = parseQueryParams(request)
+  const page = Math.max(1, parseInt(params.page || '1', 10))
+  const pageSize = Math.min(100, Math.max(1, parseInt(params.pageSize || String(defaultPageSize), 10)))
+  
+  return {
+    page,
+    pageSize,
+    offset: (page - 1) * pageSize
+  }
+}
+
+export function createPaginatedResponse<T>(
+  items: T[],
+  total: number,
+  page: number,
+  pageSize: number
+): PaginatedResponse<T> {
+  return {
+    items,
+    total,
+    page,
+    pageSize,
+    totalPages: Math.ceil(total / pageSize)
+  }
+}
+
+export function validateRequired(
+  data: Record<string, any>,
+  fields: string[]
+): { valid: boolean; missingFields: string[] } {
+  const missingFields = fields.filter(field => {
+    const value = data[field]
+    return value === undefined || value === null || value === ''
+  })
+  
+  return {
+    valid: missingFields.length === 0,
+    missingFields
+  }
+}
+
+export function withDatabase<T>(
+  handler: (db: any) => T
+): T {
+  const db = getDatabase()
+  try {
+    return handler(db)
+  } finally {
+    db.close()
+  }
+}
+
+export async function withDatabaseAsync<T>(
+  handler: (db: any) => Promise<T>
+): Promise<T> {
+  const db = getDatabase()
+  try {
+    return await handler(db)
+  } finally {
+    db.close()
+  }
+}
+
+export function parseJsonBody<T = any>(request: NextRequest): Promise<T> {
+  return request.json()
+}
+
+export function parseFormData(request: NextRequest): Promise<FormData> {
+  return request.formData()
+}
+
+export function getRouteParam(request: NextRequest, param: string): string | null {
+  const url = new URL(request.url)
+  const segments = url.pathname.split('/')
+  const params = segments.filter(s => s)
+  
+  return params[params.length - 1] || null
 }

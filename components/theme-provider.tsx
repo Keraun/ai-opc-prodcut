@@ -192,7 +192,7 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
     root.style.setProperty("--theme-warning", colors.warning)
     root.style.setProperty("--theme-error", colors.error)
 
-    const effects = themeConfig.effects
+    const effects = themeConfig.effects || {}
     const radiusMap: Record<string, string> = {
       small: "0.25rem",
       medium: "0.5rem",
