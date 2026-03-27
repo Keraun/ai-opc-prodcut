@@ -29,8 +29,8 @@ export function ProductsModule({ data }: ModuleProps) {
   return (
     <Section
       id="products"
-      title={config.title || "AI一人公司解决方案"}
-      description={config.description || "从工具到课程，从学习到实践，全方位助力个人创业者实现AI赋能"}
+      title={config.title || ""}
+      description={config.description || ""}
       badge={config.sectionTag || "产品服务"}
       variant="default"
       padding="lg"
