@@ -1,5 +1,6 @@
 {
-  "pages": [{
+  "pages": [
+    {
       "id": "home",
       "name": "首页",
       "slug": "home",
@@ -91,6 +92,24 @@
         "section-404",
         "site-footer"
       ]
+    },
+    {
+      "id": "test",
+      "name": "测试",
+      "slug": "test",
+      "modules": [
+        "site-root",
+        "site-header",
+        "site-footer"
+      ],
+      "type": "static",
+      "status": "draft",
+      "isSystem": false,
+      "isDeletable": true,
+      "createdAt": "2026-03-27T04:41:44.661Z",
+      "updatedAt": "2026-03-27T04:41:44.661Z",
+      "route": "/test",
+      "description": "新创建的静态页面"
     }
   ],
   "systemPages": [
@@ -101,6 +120,6 @@
     "new-detail"
   ],
   "dynamicRoutePattern": "[param]",
-  "createdAt": "2026-03-27T01:42:38.976Z",
-  "updatedAt": "2026-03-27T01:42:38.976Z"
+  "createdAt": "2026-03-27T04:41:44.662Z",
+  "updatedAt": "2026-03-27T04:41:44.662Z"
 }

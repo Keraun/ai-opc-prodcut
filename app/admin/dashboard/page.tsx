@@ -504,9 +504,7 @@ export default function AdminDashboardPage() {
 
   const handleMenuClick = (menu: string) => {
     setActiveMenu(menu)
-    const url = new URL(window.location.href)
-    url.searchParams.set('menu', menu)
-    window.history.pushState({}, '', url.toString())
+    router.push(`/admin/dashboard?menu=${menu}`)
   }
 
   const handleChangePassword = async () => {

@@ -564,10 +564,10 @@
 }
 
 .accountInfoCard {
-  background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%);
+  background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
   border-radius: 16px;
-  padding: 24px;
-  border: 1px solid #bfdbfe;
+  padding: 28px;
+  border: 1px solid #e2e8f0;
   transition: all 0.3s ease;
   position: relative;
   overflow: hidden;
@@ -580,30 +580,30 @@
   left: 0;
   right: 0;
   height: 4px;
-  background: linear-gradient(90deg, #3b82f6 0%, #2563eb 100%);
+  background: linear-gradient(90deg, #3b82f6 0%, #6366f1 100%);
 }
 
 .accountInfoCard:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 10px 15px -3px rgba(59, 130, 246, 0.2);
+  transform: translateY(-3px);
+  box-shadow: 0 12px 20px -4px rgba(59, 130, 246, 0.15);
 }
 
 .accountInfoCardGreen {
-  background: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%);
-  border-color: #86efac;
+  background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+  border-color: #e2e8f0;
 }
 
 .accountInfoCardGreen::before {
-  background: linear-gradient(90deg, #22c55e 0%, #16a34a 100%);
+  background: linear-gradient(90deg, #22c55e 0%, #10b981 100%);
 }
 
 .accountInfoCardPurple {
-  background: linear-gradient(135deg, #faf5ff 0%, #f3e8ff 100%);
-  border-color: #d8b4fe;
+  background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+  border-color: #e2e8f0;
 }
 
 .accountInfoCardPurple::before {
-  background: linear-gradient(90deg, #a855f7 0%, #9333ea 100%);
+  background: linear-gradient(90deg, #a855f7 0%, #8b5cf6 100%);
 }
 
 .accountInfoCardHeader {
@@ -976,7 +976,7 @@
 .systemManagementGrid {
   display: grid;
   grid-template-columns: repeat(1, minmax(0, 1fr));
-  gap: 24px;
+  gap: 32px;
 }
 
 @media (min-width: 768px) {
@@ -1641,10 +1641,10 @@
 }
 
 .accountInfoCard {
-  background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%);
+  background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
   border-radius: 16px;
-  padding: 24px;
-  border: 1px solid #bfdbfe;
+  padding: 28px;
+  border: 1px solid #e2e8f0;
   transition: all 0.3s ease;
   position: relative;
   overflow: hidden;
@@ -1657,30 +1657,30 @@
   left: 0;
   right: 0;
   height: 4px;
-  background: linear-gradient(90deg, #3b82f6 0%, #2563eb 100%);
+  background: linear-gradient(90deg, #3b82f6 0%, #6366f1 100%);
 }
 
 .accountInfoCard:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 10px 15px -3px rgba(59, 130, 246, 0.2);
+  transform: translateY(-3px);
+  box-shadow: 0 12px 20px -4px rgba(59, 130, 246, 0.15);
 }
 
 .accountInfoCardGreen {
-  background: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%);
-  border-color: #86efac;
+  background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+  border-color: #e2e8f0;
 }
 
 .accountInfoCardGreen::before {
-  background: linear-gradient(90deg, #22c55e 0%, #16a34a 100%);
+  background: linear-gradient(90deg, #22c55e 0%, #10b981 100%);
 }
 
 .accountInfoCardPurple {
-  background: linear-gradient(135deg, #faf5ff 0%, #f3e8ff 100%);
-  border-color: #d8b4fe;
+  background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+  border-color: #e2e8f0;
 }
 
 .accountInfoCardPurple::before {
-  background: linear-gradient(90deg, #a855f7 0%, #9333ea 100%);
+  background: linear-gradient(90deg, #a855f7 0%, #8b5cf6 100%);
 }
 
 .accountInfoCardHeader {
