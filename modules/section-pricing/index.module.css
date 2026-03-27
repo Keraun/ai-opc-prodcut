@@ -1,10 +1,10 @@
 .section {
-  padding: 5rem 0;
+  padding: 3rem 0;
   background: linear-gradient(to bottom, white, #f8fafc);
 }
 
 .container {
-  max-width: 80rem;
+  max-width: 72rem;
   margin: 0 auto;
   padding: 0 1rem;
 }
@@ -23,41 +23,42 @@
 
 .header {
   text-align: center;
-  margin-bottom: 4rem;
+  margin-bottom: 2rem;
 }
 
 .title {
-  font-size: 2.5rem;
+  font-size: 1.75rem;
   font-weight: 700;
   color: #111827;
-  margin-bottom: 1rem;
+  margin-bottom: 0.5rem;
   line-height: 1.2;
 }
 
 @media (min-width: 768px) {
   .title {
-    font-size: 3rem;
+    font-size: 2rem;
   }
 }
 
 .description {
-  font-size: 1.125rem;
+  font-size: 0.875rem;
   color: #6b7280;
   margin: 0 auto;
-  max-width: 42rem;
-  line-height: 1.6;
+  max-width: 36rem;
+  line-height: 1.5;
 }
 
 .grid {
   display: grid;
   grid-template-columns: 1fr;
-  gap: 1.5rem;
+  gap: 1rem;
   align-items: start;
 }
 
 @media (min-width: 768px) {
   .grid {
-    grid-template-columns: 0.85fr 1fr 0.85fr;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1rem;
   }
 }
 
@@ -72,15 +73,15 @@
   transition: all 0.3s ease;
   border: 1px solid #e5e7eb;
   background: white;
-  border-radius: 1rem;
+  border-radius: 0.75rem;
   display: flex;
   flex-direction: column;
   height: 100%;
 }
 
 .card:hover {
-  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
-  transform: translateY(-4px);
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.08);
+  transform: translateY(-2px);
 }
 
 .cardPopular {
@@ -88,14 +89,14 @@
 }
 
 .cardPopular:hover {
-  transform: translateY(-14px);
+  transform: translateY(-6px);
 }
 
 .popularBadge {
   color: white;
   text-align: center;
-  padding: 0.625rem 0;
-  font-size: 0.875rem;
+  padding: 0.375rem 0;
+  font-size: 0.75rem;
   font-weight: 600;
   letter-spacing: 0.025em;
   position: absolute;
@@ -106,7 +107,7 @@
 }
 
 .cardContent {
-  padding: 1.5rem;
+  padding: 1.25rem;
   flex: 1;
   display: flex;
   flex-direction: column;
@@ -114,52 +115,52 @@
 
 .planHeader {
   text-align: center;
-  margin-bottom: 2rem;
-  padding-top: 2rem;
+  margin-bottom: 1rem;
+  padding-top: 1.5rem;
 }
 
 .planTitle {
-  font-size: 1.5rem;
-  font-weight: 700;
-  margin-bottom: 0.75rem;
+  font-size: 1.125rem;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
   line-height: 1.3;
 }
 
 .planPrice {
-  font-size: 3rem;
+  font-size: 2rem;
   font-weight: 700;
-  margin-bottom: 0.5rem;
+  margin-bottom: 0.25rem;
   line-height: 1.1;
 }
 
 .priceUnit {
-  font-size: 1rem;
+  font-size: 0.875rem;
   font-weight: 400;
   color: #6b7280;
 }
 
 .planDescription {
   color: #6b7280;
-  font-size: 0.875rem;
-  margin-bottom: 2rem;
-  line-height: 1.6;
+  font-size: 0.75rem;
+  margin-bottom: 1rem;
+  line-height: 1.5;
 }
 
 .features {
   list-style: none;
   padding: 0;
-  margin: 0 0 2rem 0;
+  margin: 0 0 1rem 0;
   flex: 1;
 }
 
 .featureItem {
   display: flex;
   align-items: flex-start;
-  gap: 0.75rem;
-  padding: 0.625rem 0;
+  gap: 0.5rem;
+  padding: 0.375rem 0;
   color: #374151;
-  font-size: 0.875rem;
-  line-height: 1.5;
+  font-size: 0.8125rem;
+  line-height: 1.4;
   border-bottom: 1px solid #f3f4f6;
 }
 
@@ -169,8 +170,8 @@
 
 .featureIcon {
   flex-shrink: 0;
-  width: 1.25rem;
-  height: 1.25rem;
+  width: 1rem;
+  height: 1rem;
   margin-top: 0.125rem;
   display: flex;
   align-items: center;
@@ -178,8 +179,8 @@
 }
 
 .cardFooter {
-  margin-top: 2rem;
-  padding-top: 1.5rem;
+  margin-top: 1rem;
+  padding-top: 1rem;
   border-top: 1px solid #f3f4f6;
 }
 
@@ -190,33 +191,12 @@
 }
 
 .checkIcon {
-  width: 1.25rem;
-  height: 1.25rem;
-  display: block;
-}
-
-.arrowIcon {
   width: 1rem;
   height: 1rem;
   display: block;
 }
 
-.qrCodeContainer {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 1rem;
-  padding: 1.5rem;
-}
-
-.qrCodeImage {
-  width: 200px;
-  height: 200px;
-  object-fit: contain;
-}
-
-.qrCodeText {
-  font-size: 0.875rem;
-  color: #6b7280;
-  text-align: center;
+.arrowIcon {
+  width: 0.875rem;
+  height: 0.875rem;
 }

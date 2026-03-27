@@ -65,7 +65,7 @@ export function PricingModule({ data }: ModuleProps) {
     <Section
       id="pricing"
       title={config?.title || '选择适合你的计划'}
-      description={config?.description || '无论你是个人创业者还是企业用户，我们都有适合你的AI解决方案'}
+      description={config?.description || '选择适合你的方案 —— 可随时取消。'}
       variant="default"
       padding="lg"
       centered
