@@ -44,7 +44,7 @@ export function Section({
       style={style}
       {...props}
     >
-      <div className={`${styles.container} ${maxWidthClass} ${centered ? styles.centered : ""}`}>
+      <div className={`${styles.container} ${maxWidthClass} ${centered ? styles.centered : ""}`} style={{ width: '100%' }}>
         {badge && (
           <SectionTag 
             type={badgeType}

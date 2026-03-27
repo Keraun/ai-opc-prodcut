@@ -337,8 +337,15 @@ export function HeroModule({ data }: ModuleProps) {
     <Section
       id="hero"
       variant={layoutType === 'layout3' ? 'minimal' : 'gradient'}
-      padding="lg"
+      padding="none"
       maxWidth="xl"
+      style={{
+        minHeight: '100vh',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        overflow: 'hidden'
+      }}
     >
       <div className={styles.decorativeBg}>
         <div
