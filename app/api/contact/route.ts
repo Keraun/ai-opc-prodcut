@@ -1,6 +1,11 @@
 import { NextRequest, NextResponse } from "next/server"
 import { readConfig } from "@/lib/config-manager"
 import { createFeishuAPI } from "@/lib/feishu-api"
+import { 
+  successResponse, 
+  errorResponse, 
+  badRequestResponse 
+} from "@/lib/api-utils"
 
 export async function POST(request: NextRequest) {
   try {
@@ -27,19 +32,25 @@ export async function POST(request: NextRequest) {
     }
 
     if (!name || !phone || !message) {
-      return NextResponse.json(
-        { success: false, message: "请填写必填字段" },
-        { status: 400 }
-      )
+      const acceptHeader = request.headers.get('accept') || ''
+      const isFormSubmit = !acceptHeader.includes('application/json')
+      
+      if (isFormSubmit) {
+        return NextResponse.redirect(new URL('/?contact=error', request.url))
+      }
+      return badRequestResponse("请填写必填字段")
     }
 
     const feishuConfig = readConfig('feishu-app')
 
     if (!feishuConfig.appId || !feishuConfig.appSecret || !feishuConfig.appToken || !feishuConfig.tableId) {
-      return NextResponse.json(
-        { success: false, message: "飞书配置未完成" },
-        { status: 500 }
-      )
+      const acceptHeader = request.headers.get('accept') || ''
+      const isFormSubmit = !acceptHeader.includes('application/json')
+      
+      if (isFormSubmit) {
+        return NextResponse.redirect(new URL('/?contact=error', request.url))
+      }
+      return errorResponse("飞书配置未完成", 500)
     }
 
     const feishuAPI = createFeishuAPI({
@@ -72,10 +83,7 @@ export async function POST(request: NextRequest) {
       return NextResponse.redirect(new URL('/?contact=success', request.url))
     }
 
-    return NextResponse.json({
-      success: true,
-      message: "感谢您的留言，我们会尽快与您联系！"
-    })
+    return successResponse(undefined, "感谢您的留言，我们会尽快与您联系！")
   } catch (error) {
     console.error("提交留言失败:", error)
     
@@ -86,9 +94,6 @@ export async function POST(request: NextRequest) {
       return NextResponse.redirect(new URL('/?contact=error', request.url))
     }
     
-    return NextResponse.json(
-      { success: false, message: "提交留言失败，请稍后重试" },
-      { status: 500 }
-    )
+    return errorResponse("提交留言失败，请稍后重试", 500)
   }
 }

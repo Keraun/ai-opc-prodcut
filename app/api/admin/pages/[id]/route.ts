@@ -1,7 +1,14 @@
-import { NextRequest, NextResponse } from 'next/server'
+import { NextRequest } from 'next/server'
 import { getDatabase } from '@/lib/database'
 import { getSystemPages } from '@/lib/server/page-utils'
 import type { ModuleData } from '@/modules/types'
+import { 
+  successResponse, 
+  errorResponse, 
+  badRequestResponse, 
+  notFoundResponse, 
+  wrapApiHandler 
+} from '@/lib/api-utils'
 
 interface PageInfo {
   id: string
@@ -170,35 +177,23 @@ export async function GET(
   request: NextRequest,
   { params }: { params: { id: string } }
 ) {
-  try {
+  return wrapApiHandler(async () => {
     const pageId = params.id
     const page = getPageDetail(pageId)
 
     if (!page) {
-      return NextResponse.json({
-        success: false,
-        message: '页面不存在',
-      }, { status: 404 })
+      return notFoundResponse('页面不存在')
     }
 
-    return NextResponse.json({
-      success: true,
-      ...page,
-    })
-  } catch (error) {
-    console.error('Get page error:', error)
-    return NextResponse.json({
-      success: false,
-      message: '获取页面详情失败',
-    }, { status: 500 })
-  }
+    return successResponse(page)
+  })
 }
 
 export async function PUT(
   request: NextRequest,
   { params }: { params: { id: string } }
 ) {
-  try {
+  return wrapApiHandler(async () => {
     const pageId = params.id
     const body = await request.json()
     const { name, slug, modules } = body
@@ -206,58 +201,31 @@ export async function PUT(
     const success = updatePage(pageId, { name, slug, modules })
 
     if (success) {
-      return NextResponse.json({
-        success: true,
-        message: '页面更新成功',
-      })
+      return successResponse(undefined, '页面更新成功')
     } else {
-      return NextResponse.json({
-        success: false,
-        message: '页面更新失败',
-      }, { status: 500 })
+      return errorResponse('页面更新失败', 500)
     }
-  } catch (error) {
-    console.error('Update page error:', error)
-    return NextResponse.json({
-      success: false,
-      message: '更新页面失败',
-    }, { status: 500 })
-  }
+  })
 }
 
 export async function DELETE(
   request: NextRequest,
   { params }: { params: { id: string } }
 ) {
-  try {
+  return wrapApiHandler(async () => {
     const pageId = params.id
     const systemPages = getSystemPages()
     
     if (systemPages.includes(pageId)) {
-      return NextResponse.json({
-        success: false,
-        message: '系统页面不能删除',
-      }, { status: 400 })
+      return badRequestResponse('系统页面不能删除')
     }
 
     const success = deletePage(pageId)
 
     if (success) {
-      return NextResponse.json({
-        success: true,
-        message: '页面删除成功',
-      })
+      return successResponse(undefined, '页面删除成功')
     } else {
-      return NextResponse.json({
-        success: false,
-        message: '页面删除失败',
-      }, { status: 500 })
+      return errorResponse('页面删除失败', 500)
     }
-  } catch (error) {
-    console.error('Delete page error:', error)
-    return NextResponse.json({
-      success: false,
-      message: '删除页面失败',
-    }, { status: 500 })
-  }
+  })
 }

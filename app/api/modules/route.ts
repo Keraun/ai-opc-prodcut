@@ -48,7 +48,7 @@ export async function GET() {
       )
     }
 
-    return successResponse({ modules })
+    return successResponse(modules)
   } catch (error) {
     console.error('Get modules error:', error)
     return errorResponse('获取模块列表失败')

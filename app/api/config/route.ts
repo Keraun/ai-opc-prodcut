@@ -1,5 +1,10 @@
-import { NextRequest, NextResponse } from "next/server"
+import { NextRequest } from "next/server"
 import { readAllConfigs, getPageResponse, readConfig } from "@/lib/config-manager"
+import { 
+  successResponse, 
+  errorResponse, 
+  wrapApiHandler 
+} from "@/lib/api-utils"
 
 const SAFE_CONFIG_TYPES = [
   'site',
@@ -9,13 +14,13 @@ const SAFE_CONFIG_TYPES = [
 ]
 
 export async function GET(request: NextRequest) {
-  try {
+  return wrapApiHandler(async () => {
     const { searchParams } = new URL(request.url)
     const pageId = searchParams.get('page')
     
     if (pageId) {
       const pageResponse = getPageResponse(pageId)
-      return NextResponse.json(pageResponse)
+      return successResponse(pageResponse)
     }
     
     const configs = readAllConfigs()
@@ -30,12 +35,6 @@ export async function GET(request: NextRequest) {
       }
     }
     
-    return NextResponse.json(safeConfigs)
-  } catch (error) {
-    console.error("Config API error:", error)
-    return NextResponse.json({
-      success: false,
-      message: "获取配置失败"
-    }, { status: 500 })
-  }
+    return successResponse(safeConfigs)
+  })
 }

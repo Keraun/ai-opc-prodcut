@@ -1,86 +1,60 @@
-import { NextRequest, NextResponse } from 'next/server'
+import { NextRequest } from 'next/server'
 import { getPageConfig, getPageModules, updatePageModules } from '@/lib/module-service'
 import type { ModuleData } from '@/modules/types'
+import { 
+  successResponse, 
+  errorResponse, 
+  badRequestResponse, 
+  notFoundResponse, 
+  wrapApiHandler 
+} from '@/lib/api-utils'
 
 export async function GET(request: NextRequest) {
-  try {
+  return wrapApiHandler(async () => {
     const { searchParams } = new URL(request.url)
     const pageId = searchParams.get('pageId')
 
     if (!pageId) {
-      return NextResponse.json({
-        success: false,
-        message: 'pageId 参数必填'
-      }, { status: 400 })
+      return badRequestResponse('pageId 参数必填')
     }
 
     const pageConfig = getPageConfig(pageId)
     
     if (!pageConfig) {
-      return NextResponse.json({
-        success: false,
-        message: `页面 ${pageId} 不存在`
-      }, { status: 404 })
+      return notFoundResponse(`页面 ${pageId} 不存在`)
     }
 
     const modules = getPageModules(pageId)
 
-    return NextResponse.json({
-      success: true,
-      data: {
-        pageId,
-        layout: pageConfig.layout || 'default',
-        modules,
-        moduleInstanceIds: pageConfig.moduleInstanceIds,
-        config: pageConfig
-      }
+    return successResponse({
+      pageId,
+      layout: pageConfig.layout || 'default',
+      modules,
+      moduleInstanceIds: pageConfig.moduleInstanceIds,
+      config: pageConfig
     })
-  } catch (error) {
-    console.error('Page config API error:', error)
-    return NextResponse.json({
-      success: false,
-      message: '获取页面配置失败'
-    }, { status: 500 })
-  }
+  })
 }
 
 export async function POST(request: NextRequest) {
-  try {
+  return wrapApiHandler(async () => {
     const body = await request.json()
     const { pageId, modules } = body
 
     if (!pageId) {
-      return NextResponse.json({
-        success: false,
-        message: 'pageId 参数必填'
-      }, { status: 400 })
+      return badRequestResponse('pageId 参数必填')
     }
 
     if (!modules || !Array.isArray(modules)) {
-      return NextResponse.json({
-        success: false,
-        message: 'modules 参数必须是一个数组'
-      }, { status: 400 })
+      return badRequestResponse('modules 参数必须是一个数组')
     }
 
     const success = updatePageModules(pageId, modules as ModuleData[])
 
     if (success) {
-      return NextResponse.json({
-        success: true,
-        message: '页面模块更新成功'
-      })
+      return successResponse(undefined, '页面模块更新成功')
     } else {
-      return NextResponse.json({
-        success: false,
-        message: '页面模块更新失败'
-      }, { status: 500 })
+      return errorResponse('页面模块更新失败', 500)
     }
-  } catch (error) {
-    console.error('Page config update error:', error)
-    return NextResponse.json({
-      success: false,
-      message: '更新页面配置失败'
-    }, { status: 500 })
-  }
+  })
 }
