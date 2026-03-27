@@ -2594,6 +2594,99 @@
   gap: 12px;
 }
 
+/* 账号管理相关样式 */
+.accountManagementContainer {
+  padding: 0;
+}
+
+.accountManagementHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+}
+
+.accountManagementHeaderContent {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.accountManagementHeaderIcon {
+  width: 48px;
+  height: 48px;
+  background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 6px -1px rgba(59, 130, 246, 0.3);
+}
+
+.accountManagementHeaderIconSvg {
+  width: 24px;
+  height: 24px;
+  color: white;
+}
+
+.accountManagementHeaderText {
+  flex: 1;
+}
+
+.accountManagementHeaderTitle {
+  font-size: 24px;
+  font-weight: 700;
+  color: #111827;
+  margin: 0 0 4px 0;
+}
+
+.accountManagementHeaderSubtitle {
+  font-size: 14px;
+  color: #6b7280;
+  margin: 0;
+}
+
+.accountManagementAddButton {
+  background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+  border: none;
+  border-radius: 8px;
+  padding: 10px 20px;
+  font-size: 14px;
+  font-weight: 600;
+  color: white;
+  box-shadow: 0 4px 12px rgba(59, 130, 246, 0.2);
+  transition: all 0.3s ease;
+}
+
+.accountManagementAddButton:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(59, 130, 246, 0.3);
+}
+
+.accountManagementAddButton:active {
+  transform: translateY(0);
+  box-shadow: 0 4px 12px rgba(59, 130, 246, 0.2);
+}
+
+.accountManagementCard {
+  border-radius: 12px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1), 0 1px 2px rgba(0, 0, 0, 0.06);
+  transition: all 0.3s ease;
+}
+
+.accountManagementCard:hover {
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+}
+
+.accountManagementTable {
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.accountManagementModal {
+  border-radius: 12px;
+}
+
 .accountDetailItem {
   display: flex;
   justify-content: space-between;
@@ -2888,7 +2981,8 @@
   color: #667eea;
   border: none;
   font-weight: 600;
-  padding: 10px 24px;
+  box-sizing: content-box;
+  padding: 4px 12px;
   border-radius: 8px;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   transition: all 0.3s ease;

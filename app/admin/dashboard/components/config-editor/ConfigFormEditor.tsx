@@ -69,6 +69,16 @@ export function ConfigFormEditor({
     }
   }
 
+  const getButtonText = () => {
+    if (!configData || Object.keys(configData).length === 0) {
+      return '保存配置'
+    }
+    if (hasChanges) {
+      return '更新配置'
+    }
+    return '保存配置'
+  }
+
   const handlePreview = () => {
     setPreviewData(configData)
     setShowPreview(true)
@@ -109,7 +119,7 @@ export function ConfigFormEditor({
               }
             }}
           >
-            保存配置
+            {getButtonText()}
           </Button>
         </div>
       </div>

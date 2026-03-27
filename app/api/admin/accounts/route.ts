@@ -61,6 +61,11 @@ export async function DELETE(request: NextRequest) {
       return NextResponse.json({ success: false, message: '用户名不能为空' }, { status: 400 })
     }
     
+    // 检查是否为默认admin账户
+    if (username === 'admin') {
+      return NextResponse.json({ success: false, message: '默认admin账户不可删除' }, { status: 400 })
+    }
+    
     // 读取现有账号
     const accounts = readConfig('account') || []
     

@@ -345,7 +345,7 @@ export function SystemManagement({
                 icon={<IconCopy />}
                 onClick={() => {
                   navigator.clipboard.writeText(superAdminToken)
-                  Message.success("口令已复制到剪贴板")
+                  console.log("口令已复制到剪贴板")
                 }}
               >
                 复制

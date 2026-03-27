@@ -94,24 +94,22 @@ export function DynamicForm({
   const [arrayFields, setArrayFields] = useState<Record<string, any[]>>({})
 
   useEffect(() => {
-    if (Object.keys(initialValues).length > 0) {
-      form.setFieldsValue(initialValues)
-      
-      const initialTags: Record<string, string[]> = {}
-      const initialArrays: Record<string, any[]> = {}
-      
-      Object.entries(schema.properties).forEach(([key, field]) => {
-        if (field.ui?.widget === 'tags' && Array.isArray(initialValues[key])) {
-          initialTags[key] = initialValues[key]
-        }
-        if (field.type === 'array' && !field.ui?.widget && Array.isArray(initialValues[key])) {
-          initialArrays[key] = initialValues[key]
-        }
-      })
-      
-      setTags(initialTags)
-      setArrayFields(initialArrays)
-    }
+    form.setFieldsValue(initialValues)
+    
+    const initialTags: Record<string, string[]> = {}
+    const initialArrays: Record<string, any[]> = {}
+    
+    Object.entries(schema.properties).forEach(([key, field]) => {
+      if (field.ui?.widget === 'tags' && Array.isArray(initialValues[key])) {
+        initialTags[key] = initialValues[key]
+      }
+      if (field.type === 'array' && !field.ui?.widget && Array.isArray(initialValues[key])) {
+        initialArrays[key] = initialValues[key]
+      }
+    })
+    
+    setTags(initialTags)
+    setArrayFields(initialArrays)
   }, [initialValues, form, schema])
 
   const handleSubmit = async () => {
@@ -462,21 +460,6 @@ export function DynamicForm({
       >
         {renderFields()}
       </Form>
-
-      <div className={styles.formActions}>
-        {onCancel && (
-          <Button onClick={onCancel} style={{ marginRight: '12px' }}>
-            取消
-          </Button>
-        )}
-        <Button
-          type="primary"
-          loading={loading}
-          onClick={handleSubmit}
-        >
-          提交
-        </Button>
-      </div>
     </div>
   )
 }
