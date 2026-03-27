@@ -8,20 +8,6 @@ const TEMPLATES_DIR = path.join(process.cwd(), 'database', 'templates')
 export function clearCache(): void {
 }
 
-export function readTemplate(configType: string): any {
-  const templatePath = getTemplatePath(configType)
-  
-  if (!fs.existsSync(templatePath)) {
-    return {}
-  }
-  
-  return JSON.parse(fs.readFileSync(templatePath, 'utf-8'))
-}
-
-export function getTemplatePath(configType: string): string {
-  const mapping = getPathMapping(configType)
-  return path.join(TEMPLATES_DIR, mapping.dir, `${mapping.prefix}.json`)
-}
 
 export function getRuntimePath(configType: string): string {
   return path.join(process.cwd(), 'database', 'app.db')
@@ -419,20 +405,6 @@ export function readAllConfigs(): Record<string, any> {
   return configs
 }
 
-export function resetToTemplate(configType: string): void {
-  const templateData = readTemplate(configType)
-  writeConfig(configType, templateData)
-}
-
-export function resetAllToTemplates(): void {
-  console.warn('Warning: resetAllToTemplates() is deprecated and should not be used in production.')
-  
-  const configs = readAllConfigs()
-  
-  for (const configType of Object.keys(configs)) {
-    resetToTemplate(configType)
-  }
-}
 
 export function initializeDatabaseFromTemplates(): void {
   initializeDatabase()
