@@ -49,6 +49,7 @@ export function ServicesModule({ data }: ModuleProps) {
       title={config.title}
       description={config.description}
       className={styles.section}
+      badgeClassName={styles.badge}
     >
       <div className={styles.bgPattern} />
 

@@ -21,10 +21,11 @@ export function PricingModule({ data }: ModuleProps) {
       id="pricing"
       title={config?.title}
       description={config?.description}
-      badge={config?.sectionTag}
+      badge={config?.sectionTag || '价格方案'}
       variant="default"
       padding="lg"
       centered
+      badgeClassName={styles.badge}
     >
       <div className={styles.grid}>
         {pricingPlans.map((plan: PricingFeature, index: number) => {

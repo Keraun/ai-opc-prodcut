@@ -7,6 +7,8 @@ export interface SectionProps extends HTMLAttributes<HTMLElement> {
   title?: string
   description?: string
   badge?: string
+  badgeClassName?: string
+  badgeStyle?: React.CSSProperties
   variant?: "default" | "gradient" | "minimal"
   padding?: "none" | "sm" | "md" | "lg"
   maxWidth?: "sm" | "md" | "lg" | "xl" | "full"
@@ -18,6 +20,8 @@ export function Section({
   title,
   description,
   badge,
+  badgeClassName = "",
+  badgeStyle,
   variant = "default",
   padding = "lg",
   maxWidth = "xl",
@@ -41,7 +45,10 @@ export function Section({
       <div className={`${styles.container} ${maxWidthClass} ${centered ? styles.centered : ""}`}>
         <div className={styles.header}>
           {badge && (
-            <SectionTag className={styles.badge}>
+            <SectionTag
+              className={`${styles.badge} ${badgeClassName}`}
+              style={badgeStyle}
+            >
               {badge}
             </SectionTag>
           )}
@@ -54,8 +61,7 @@ export function Section({
             <p className={styles.description}>
               {description}
             </p>
-          )}
-        </div>
+          )}</div>
         {children}
       </div>
     </section>

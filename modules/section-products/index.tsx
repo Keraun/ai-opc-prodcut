@@ -33,6 +33,8 @@ export function ProductsModule({ data }: ModuleProps) {
       title={config.title}
       description={config.description}
       badge={config.sectionTag}
+      badgeClassName={styles.badge}
+
       variant="default"
       padding="lg"
       centered
@@ -82,13 +84,13 @@ export function ProductsModule({ data }: ModuleProps) {
                     </div>
                   </div>
                   {product?.tag && (
-                    <span 
-                      className={styles.tag} 
-                      style={{ 
+                    <span
+                      className={styles.tag}
+                      style={{
                         backgroundColor: product?.tagColor || `${primaryColor}20`,
                         color: product?.tagColor ? '#ffffff' : primaryColor,
-                        borderRadius: '9999px', 
-                        padding: '0.125rem 0.625rem', 
+                        borderRadius: '9999px',
+                        padding: '0.125rem 0.625rem',
                         fontSize: '0.75rem',
                         fontWeight: 500
                       }}

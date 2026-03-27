@@ -19,6 +19,12 @@ export function ContactModule({ data }: ModuleProps) {
       title={config.title}
       description={config.description}
       className={styles.section}
+      badgeStyle={{
+        backgroundColor: `${accentColor}0D`,
+        color: accentColor,
+        borderColor: `${accentColor}33`
+      }}
+
     >
       <div className={styles.bgPattern} />
       <div className={styles.decorativeOrb1} />
@@ -33,7 +39,7 @@ export function ContactModule({ data }: ModuleProps) {
                 e.preventDefault()
                 const formData = new FormData(e.currentTarget)
                 const values = Object.fromEntries(formData)
-                
+
                 try {
                   const response = await fetch('/api/contact', {
                     method: 'POST',

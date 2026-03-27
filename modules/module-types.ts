@@ -77,6 +77,7 @@ export interface PricingFeature {
 }
 
 export interface PricingData {
+  sectionTag: string | undefined
   title?: string
   description?: string
   plans?: PricingFeature[]
