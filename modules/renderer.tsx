@@ -2,52 +2,18 @@
 
 import { useEffect, useState, useMemo } from "react"
 import { getModuleComponent, registerModule } from "./registry"
+import { getModuleLoaderConfig, validateModuleId } from "./module-loader"
 import type { ModuleData } from "./types"
 
 interface ModuleRendererProps {
   modules: ModuleData[]
 }
 
-const MODULE_LOADERS: Record<string, () => Promise<any>> = {
-  'site-header': () => import('./site-header/mod'),
-  'site-footer': () => import('./site-footer/mod'),
-  'section-hero': () => import('./section-hero/mod'),
-  'section-services': () => import('./section-services/mod'),
-  'section-partner': () => import('./section-partner/mod'),
-  'section-products': () => import('./section-products/mod'),
-  'section-pricing': () => import('./section-pricing/mod'),
-  'section-about': () => import('./section-about/mod'),
-  'section-contact': () => import('./section-contact/mod'),
-  'site-root': () => import('./site-root/mod'),
-  'site-navigation': () => import('./site-navigation/mod'),
-  'news-list': () => import('./news-list/mod'),
-  'news-detail': () => import('./news-detail/mod'),
-  'section-404': () => import('./section-404/mod'),
-  'product-list': () => import('./product-list/mod'),
-}
-
-const MODULE_COMPONENT_NAMES: Record<string, string> = {
-  'site-header': 'HeaderModule',
-  'site-footer': 'FooterModule',
-  'section-hero': 'HeroModule',
-  'section-services': 'ServicesModule',
-  'section-partner': 'PartnerModule',
-  'section-products': 'ProductsModule',
-  'section-pricing': 'PricingModule',
-  'section-about': 'AboutModule',
-  'section-contact': 'ContactModule',
-  'site-root': 'SiteRootModule',
-  'site-navigation': 'NavigationModule',
-  'news-list': 'NewsListModule',
-  'news-detail': 'NewsDetailModule',
-  'section-404': 'NotFoundModule',
-  'product-list': 'ProductListModule',
-}
-
 export function ModuleRenderer({ modules }: ModuleRendererProps) {
   const [isClient, setIsClient] = useState(false)
   const [allLoaded, setAllLoaded] = useState(false)
   const moduleIds = useMemo(() => [...new Set(modules.map(m => m.moduleId))], [modules])
+  const { loaders, componentNames } = getModuleLoaderConfig()
 
   useEffect(() => {
     setIsClient(true)
@@ -59,11 +25,17 @@ export function ModuleRenderer({ modules }: ModuleRendererProps) {
           continue
         }
 
-        const loader = MODULE_LOADERS[moduleId]
+        const validation = validateModuleId(moduleId)
+        if (!validation.valid) {
+          console.warn(validation.error)
+          continue
+        }
+
+        const loader = loaders[moduleId]
         if (loader) {
           try {
             const moduleExports = await loader()
-            const componentName = MODULE_COMPONENT_NAMES[moduleId]
+            const componentName = componentNames[moduleId]
             const Component = moduleExports[componentName]
             
             if (Component) {
@@ -80,8 +52,6 @@ export function ModuleRenderer({ modules }: ModuleRendererProps) {
           } catch (error) {
             console.error(`Failed to load module "${moduleId}":`, error)
           }
-        } else {
-          console.warn(`Module "${moduleId}" loader not found`)
         }
       }
 
@@ -89,7 +59,7 @@ export function ModuleRenderer({ modules }: ModuleRendererProps) {
     }
 
     loadModules()
-  }, [moduleIds])
+  }, [moduleIds, loaders, componentNames])
 
   if (!isClient || !allLoaded) {
     return <div style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>Loading...</div>

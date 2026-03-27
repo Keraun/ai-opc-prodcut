@@ -1,46 +1,12 @@
 "use client"
 
 import { createContext, useContext, useEffect, useState, ReactNode } from "react"
-
-interface ThemeColors {
-  primary: string
-  primaryHover: string
-  secondary: string
-  accent: string
-  background: string
-  backgroundSecondary: string
-  text: string
-  textSecondary: string
-  border: string
-  success: string
-  warning: string
-  error: string
-}
-
-interface ThemeLayout {
-  headerStyle: string
-  footerStyle: string
-  cardStyle: string
-  buttonStyle: string
-}
-
-interface ThemeEffects {
-  shadow: string
-  borderRadius: string
-  animation: string
-}
-
-interface ThemeConfig {
-  id: string
-  name: string
-  description: string
-  colors: ThemeColors
-  layout: ThemeLayout
-  effects: ThemeEffects
-  darkMode: {
-    colors: ThemeColors
-  }
-}
+import { 
+  validateThemeConfig, 
+  getDefaultThemeConfig, 
+  applyThemeToElement,
+  type ThemeConfig 
+} from "@/lib/theme-utils"
 
 interface ThemeContextType {
   currentTheme: string
@@ -104,55 +70,6 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
     fetchThemeConfig()
   }, [])
 
-  function getDefaultThemeConfig(themeId?: string | null): ThemeConfig {
-    return {
-      id: themeId || "modern",
-      name: "现代简约",
-      description: "简洁大方的设计风格，蓝色系配色，适合企业官网",
-      colors: {
-        primary: "#1e40af",
-        primaryHover: "#1e3a8a",
-        secondary: "#3b82f6",
-        accent: "#06b6d4",
-        background: "#ffffff",
-        backgroundSecondary: "#f3f4f6",
-        text: "#1f2937",
-        textSecondary: "#6b7280",
-        border: "#e5e7eb",
-        success: "#10b981",
-        warning: "#f59e0b",
-        error: "#ef4444"
-      },
-      layout: {
-        headerStyle: "gradient",
-        footerStyle: "gradient",
-        cardStyle: "rounded",
-        buttonStyle: "rounded"
-      },
-      effects: {
-        shadow: "medium",
-        borderRadius: "medium",
-        animation: "smooth"
-      },
-      darkMode: {
-        colors: {
-          primary: "#60a5fa",
-          primaryHover: "#3b82f6",
-          secondary: "#93c5fd",
-          accent: "#22d3ee",
-          background: "#111827",
-          backgroundSecondary: "#1f2937",
-          text: "#f3f4f6",
-          textSecondary: "#9ca3af",
-          border: "#374151",
-          success: "#34d399",
-          warning: "#fbbf24",
-          error: "#f87171"
-        }
-      }
-    }
-  }
-
   useEffect(() => {
     if (!mounted) return
     
@@ -162,52 +79,16 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
       document.documentElement.classList.remove("dark")
     }
     localStorage.setItem("darkMode", String(isDark))
-    applyThemeColors()
+    if (themeConfig) {
+      applyThemeToElement(document.documentElement, themeConfig, isDark)
+    }
   }, [isDark, currentTheme, themeConfig, mounted])
 
   useEffect(() => {
     if (mounted && themeConfig) {
-      applyThemeColors()
+      applyThemeToElement(document.documentElement, themeConfig, isDark)
     }
-  }, [mounted, themeConfig])
-
-
-
-  const applyThemeColors = () => {
-    if (!themeConfig) return
-
-    const colors = isDark ? themeConfig.darkMode.colors : themeConfig.colors
-    
-    const root = document.documentElement
-    root.style.setProperty("--theme-primary", colors.primary)
-    root.style.setProperty("--theme-primary-hover", colors.primaryHover)
-    root.style.setProperty("--theme-secondary", colors.secondary)
-    root.style.setProperty("--theme-accent", colors.accent)
-    root.style.setProperty("--theme-background", colors.background)
-    root.style.setProperty("--theme-background-secondary", colors.backgroundSecondary)
-    root.style.setProperty("--theme-text", colors.text)
-    root.style.setProperty("--theme-text-secondary", colors.textSecondary)
-    root.style.setProperty("--theme-border", colors.border)
-    root.style.setProperty("--theme-success", colors.success)
-    root.style.setProperty("--theme-warning", colors.warning)
-    root.style.setProperty("--theme-error", colors.error)
-
-    const effects = themeConfig.effects || {}
-    const radiusMap: Record<string, string> = {
-      small: "0.25rem",
-      medium: "0.5rem",
-      large: "1rem"
-    }
-    const shadowMap: Record<string, string> = {
-      small: "0 1px 2px 0 rgba(0, 0, 0, 0.05)",
-      medium: "0 4px 6px -1px rgba(0, 0, 0, 0.1)",
-      large: "0 10px 15px -3px rgba(0, 0, 0, 0.1)",
-      soft: "0 2px 8px 0 rgba(0, 0, 0, 0.08)"
-    }
-    
-    root.style.setProperty("--theme-radius", radiusMap[effects.borderRadius] || "0.5rem")
-    root.style.setProperty("--theme-shadow", shadowMap[effects.shadow] || "0 4px 6px -1px rgba(0, 0, 0, 0.1)")
-  }
+  }, [mounted, themeConfig, isDark])
 
   const setTheme = (themeId: string) => {
     if (themes[themeId]) {
