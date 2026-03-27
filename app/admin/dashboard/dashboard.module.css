@@ -929,7 +929,7 @@
   padding: 0;
   display: flex;
   flex-direction: column;
-  gap: 24px;
+  gap: 32px;
 }
 
 .systemManagementGrid {
@@ -952,26 +952,53 @@
 
 .systemCard {
   margin-bottom: 0;
+  border-radius: 16px;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  transition: all 0.3s ease;
+  border: 1px solid rgba(229, 231, 235, 0.5);
+  overflow: hidden;
 }
 
-.systemOverview {
-  padding: 16px 0;
+.systemCard:hover {
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+  transform: translateY(-4px);
 }
 
-.securitySection {
-  padding: 16px 0;
+.sectionTitleContainer {
+  display: flex;
+  align-items: center;
+  gap: 12px;
 }
 
-.performanceSection {
-  padding: 24.0px;
-  background-color: #f9fafb;
-  border-radius: 8.0px;
+.sectionTitleIcon {
+  font-size: 20px;
+  color: #3b82f6;
 }
 
 .sectionTitle {
-  font-size: 18.0px;
+  font-size: 18px;
   font-weight: 600;
-  margin-bottom: 16.0px;
+  color: #1f2937;
+}
+
+.systemOverview {
+  padding: 20px 0;
+}
+
+.securitySection {
+  padding: 20px 0;
+}
+
+.performanceSection {
+  padding: 24px;
+  background-color: #f9fafb;
+  border-radius: 12px;
+}
+
+.sectionTitle {
+  font-size: 18px;
+  font-weight: 600;
+  margin-bottom: 16px;
 }
 
 .performanceItem {
@@ -987,28 +1014,32 @@
 .performanceItemTitle {
   font-weight: 500;
   color: #111827;
-  margin-bottom: 4.0px;
+  margin-bottom: 4px;
 }
 
 .performanceItemDescription {
-  font-size: 14.0px;
+  font-size: 14px;
   color: #4b5563;
 }
 
 .configSection {
-  padding: 24.0px;
-  background-color: #f9fafb;
-  border-radius: 8.0px;
+  padding: 24px;
+  background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
+  border-radius: 12px;
+  border: 1px solid #bae6fd;
 }
 
 .configSectionDescription {
   color: #4b5563;
-  margin-bottom: 16.0px;
+  margin-bottom: 20px;
+  font-size: 14px;
+  line-height: 1.6;
 }
 
 .configSectionActions {
   display: flex;
-  gap: 16.0px;
+  gap: 12px;
+  flex-wrap: wrap;
 }
 
 .importInput {
@@ -1019,47 +1050,53 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  padding: 8.0px 16.0px;
+  padding: 10px 20px;
   border: 1px solid transparent;
-  font-size: 14.0px;
+  font-size: 14px;
   font-weight: 500;
-  border-radius: 6.0px;
+  border-radius: 8px;
   color: #ffffff;
   background-color: #1e40af;
   cursor: pointer;
-  transition: background-color 0.2s;
+  transition: all 0.2s;
 }
 
 .importLabel:hover {
   background-color: #1e3a8a;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 6px -1px rgba(30, 64, 175, 0.3);
 }
 
 .importLabelIcon {
-  margin-right: 8.0px;
+  margin-right: 8px;
 }
 
 .dangerSection {
-  padding: 24.0px;
-  background-color: #fef2f2;
-  border-radius: 8.0px;
-  border-width: 2px;
-  border-color: #fecaca;
+  padding: 24px;
+  background: linear-gradient(135deg, #fef2f2 0%, #fee2e2 100%);
+  border-radius: 12px;
+  border: 2px solid #fecaca;
 }
 
 .dangerSectionTitle {
-  font-size: 18.0px;
+  font-size: 18px;
   font-weight: 600;
-  margin-bottom: 16.0px;
+  margin-bottom: 16px;
   color: #991b1b;
 }
 
 .dangerSectionAlert {
-  margin-bottom: 16.0px;
+  margin-bottom: 20px;
+  padding: 12px;
+  background: rgba(255, 255, 255, 0.6);
+  border-radius: 8px;
+  border-left: 4px solid #f87171;
 }
 
 .dangerSectionActions {
   display: flex;
-  gap: 16.0px;
+  gap: 12px;
+  flex-wrap: wrap;
 }
 
 .jsonViewerContainer {
