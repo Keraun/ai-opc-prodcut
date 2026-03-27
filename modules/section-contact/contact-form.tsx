@@ -99,17 +99,32 @@ export function ContactFormClient({ primaryColor, contactPreferences }: ContactF
         </div>
       </div>
 
-      <div className={styles.formItem}>
-        <label className={styles.formLabel} htmlFor="email">
-          邮箱
-        </label>
-        <input
-          id="email"
-          name="email"
-          type="email"
-          placeholder="请输入您的邮箱地址（选填）"
-          className={styles.formInput}
-        />
+      <div className={styles.formGrid}>
+        <div className={styles.formItem}>
+          <label className={styles.formLabel} htmlFor="email">
+            邮箱
+          </label>
+          <input
+            id="email"
+            name="email"
+            type="email"
+            placeholder="请输入您的邮箱地址（选填）"
+            className={styles.formInput}
+          />
+        </div>
+
+        <div className={styles.formItem}>
+          <label className={styles.formLabel} htmlFor="wechat">
+            微信
+          </label>
+          <input
+            id="wechat"
+            name="wechat"
+            type="text"
+            placeholder="请输入您的微信号（选填）"
+            className={styles.formInput}
+          />
+        </div>
       </div>
 
       <div className={styles.formItem}>

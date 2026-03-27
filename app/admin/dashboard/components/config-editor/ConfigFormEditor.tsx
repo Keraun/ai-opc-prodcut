@@ -1,7 +1,7 @@
 "use client"
 
 import { useState, useEffect } from "react"
-import { Button, Card, Modal, Message, Spin, Alert, Descriptions } from "@arco-design/web-react"
+import { Button, Card, Modal, Message, Spin, Alert } from "@arco-design/web-react"
 import { IconSave, IconEye, IconCode, IconRefresh, IconPlus } from "@arco-design/web-react/icon"
 import { toast } from "sonner"
 import { DynamicForm } from "@/components/dynamic-form"
@@ -111,8 +111,8 @@ export function ConfigFormEditor({
   }
 
   const handleCreateTable = async () => {
-    if (!configData?.appId || !configData?.appSecret) {
-      toast.error('请先配置App ID和App Secret')
+    if (!configData?.appId || !configData?.appSecret || !configData?.baseLink) {
+      toast.error('请先配置App ID、App Secret和飞书多维表格链接')
       return
     }
 
@@ -244,20 +244,27 @@ export function ConfigFormEditor({
         style={{ width: 800 }}
       >
         {tableFields.length > 0 ? (
-          <Descriptions column={1} bordered>
+          <div style={{ maxHeight: '400px', overflowY: 'auto' }}>
             {tableFields.map((field: any) => (
-              <Descriptions.Item key={field.field_id} label={field.field_name}>
-                <div>
-                  <div>类型: {field.type}</div>
-                  {field.property && Object.keys(field.property).length > 0 && (
-                    <div style={{ marginTop: '8px', fontSize: '12px', color: '#666' }}>
-                      属性: {JSON.stringify(field.property)}
-                    </div>
-                  )}
+              <div key={field.field_id} style={{ 
+                padding: '12px', 
+                borderBottom: '1px solid #e5e7eb',
+                backgroundColor: '#f9fafb'
+              }}>
+                <div style={{ fontWeight: 'bold', marginBottom: '4px' }}>
+                  {field.field_name}
                 </div>
-              </Descriptions.Item>
+                <div style={{ fontSize: '12px', color: '#666' }}>
+                  类型: {field.type}
+                </div>
+                {field.property && Object.keys(field.property).length > 0 && (
+                  <div style={{ fontSize: '12px', color: '#666', marginTop: '4px' }}>
+                    属性: {JSON.stringify(field.property)}
+                  </div>
+                )}
+              </div>
             ))}
-          </Descriptions>
+          </div>
         ) : (
           <Alert type="info" content="表格中没有字段" />
         )}

@@ -1,6 +1,7 @@
 {
   "appId": "",
   "appSecret": "",
+  "baseLink": "",
   "tableId": "",
   "viewId": ""
 }

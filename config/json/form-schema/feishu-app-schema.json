@@ -13,10 +13,15 @@
       "title": "App Secret",
       "description": "飞书应用的 App Secret"
     },
+    "baseLink": {
+      "type": "string",
+      "title": "飞书多维表格链接",
+      "description": "飞书多维表格的完整链接，例如：https://example.feishu.cn/base/{app_token}，系统会自动提取 app_token 并创建表格"
+    },
     "tableId": {
       "type": "string",
       "title": "飞书数据表 ID",
-      "description": "飞书数据表的 Table ID，可直接输入 Table ID 或粘贴飞书表格链接（系统会自动提取 Table ID）"
+      "description": "飞书数据表的 Table ID（系统自动创建后自动填充，无需手动填写）"
     },
     "viewId": {
       "type": "string",
@@ -24,5 +29,5 @@
       "description": "飞书数据表的视图 ID（可选）"
     }
   },
-  "required": ["appId", "appSecret", "tableId"]
+  "required": ["appId", "appSecret", "baseLink"]
 }

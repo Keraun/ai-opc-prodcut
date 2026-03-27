@@ -1,6 +1,36 @@
 // Feishu utility functions
 
 /**
+ * Extracts app_token from Feishu base links
+ * @param input - Either a Feishu base link or a direct app_token
+ * @returns Extracted app_token or the original input if no app_token found
+ */
+export function extractAppToken(input: string): string {
+  // If input is already a valid app_token (alphanumeric string), return it directly
+  if (/^[a-zA-Z0-9_-]+$/.test(input)) {
+    return input
+  }
+
+  // Try to extract app_token from various Feishu link formats
+  const patterns = [
+    // Base format: https://example.feishu.cn/base/{app_token}?view={viewId}
+    /\/base\/([a-zA-Z0-9_-]+)/,
+    // Other possible formats
+    /app_token=([a-zA-Z0-9_-]+)/
+  ]
+
+  for (const pattern of patterns) {
+    const match = input.match(pattern)
+    if (match && match[1]) {
+      return match[1]
+    }
+  }
+
+  // If no app_token found, return the original input
+  return input
+}
+
+/**
  * Extracts tableId from Feishu links
  * @param input - Either a Feishu link or a direct tableId
  * @returns Extracted tableId or the original input if no tableId found

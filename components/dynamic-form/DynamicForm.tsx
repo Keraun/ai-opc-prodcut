@@ -4,7 +4,7 @@ import React, { useState, useEffect } from "react"
 import { Form, Input, Select, DatePicker, Upload, Button, Tag, Space, Switch, InputNumber, Radio, Checkbox, Grid } from "@arco-design/web-react"
 import { IconPlus, IconDelete } from "@arco-design/web-react/icon"
 import { useMessage } from "@/app/components/custom-message"
-import { extractTableId } from "@/lib/feishu-utils"
+import { extractTableId, extractAppToken } from "@/lib/feishu-utils"
 import styles from "./DynamicForm.module.css"
 
 const { Row, Col } = Grid
@@ -126,6 +126,11 @@ export function DynamicForm({
       
       if ('tableId' in processedValues && processedValues.tableId) {
         processedValues.tableId = extractTableId(processedValues.tableId)
+      }
+      
+      // Process baseLink field to extract app_token
+      if ('baseLink' in processedValues && processedValues.baseLink) {
+        processedValues.baseLink = extractAppToken(processedValues.baseLink)
       }
       
       const finalValues = {

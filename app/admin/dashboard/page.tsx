@@ -117,7 +117,13 @@ export default function AdminDashboardPage() {
     'section-pricing': {},
     'section-about': {},
     'section-contact': {},
-    'feishu-app': {}
+    'feishu-app': {
+      appId: '',
+      appSecret: '',
+      baseLink: '',
+      tableId: '',
+      viewId: ''
+    }
   })
   const [originalConfigs, setOriginalConfigs] = useState<Configs>({
     site: {},
@@ -149,7 +155,13 @@ export default function AdminDashboardPage() {
     'section-pricing': {},
     'section-about': {},
     'section-contact': {},
-    'feishu-app': {}
+    'feishu-app': {
+      appId: '',
+      appSecret: '',
+      baseLink: '',
+      tableId: '',
+      viewId: ''
+    }
   })
   const [loading, setLoading] = useState(false)
   const [editingConfig, setEditingConfig] = useState<string | null>(null)
@@ -396,6 +408,10 @@ export default function AdminDashboardPage() {
 
       if (response.ok) {
         toast.success("配置提交成功")
+        setConfigs(prev => ({
+          ...prev,
+          [configType]: JSON.parse(JSON.stringify(configData))
+        }))
         setOriginalConfigs(prev => ({
           ...prev,
           [configType]: JSON.parse(JSON.stringify(configData))

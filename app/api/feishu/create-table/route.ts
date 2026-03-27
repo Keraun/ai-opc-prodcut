@@ -13,9 +13,9 @@ export async function POST(request: NextRequest) {
   try {
     const feishuConfig = readConfig('feishu-app')
 
-    if (!feishuConfig.appId || !feishuConfig.appSecret) {
+    if (!feishuConfig.appId || !feishuConfig.appSecret || !feishuConfig.baseLink) {
       return NextResponse.json(
-        { success: false, message: "飞书配置未完成" },
+        { success: false, message: "飞书配置未完成，请填写App ID、App Secret和飞书多维表格链接" },
         { status: 400 }
       )
     }
@@ -91,7 +91,7 @@ export async function POST(request: NextRequest) {
       }
     ]
 
-    const createTableResponse = await fetch(`https://open.feishu.cn/open-apis/bitable/v1/apps/${feishuConfig.appId}/tables`, {
+    const createTableResponse = await fetch(`https://open.feishu.cn/open-apis/bitable/v1/apps/${feishuConfig.baseLink}/tables`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
