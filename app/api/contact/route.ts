@@ -1,6 +1,5 @@
 import { NextRequest, NextResponse } from "next/server"
-import fs from "fs"
-import path from "path"
+import { readConfig } from "@/lib/config-manager"
 
 export async function POST(request: NextRequest) {
   try {
@@ -37,13 +36,11 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    // Read Feishu configuration from site config
-    const configDir = path.join(process.cwd(), "config/json")
-    const siteConfig = JSON.parse(fs.readFileSync(path.join(configDir, "site-config.json"), "utf-8"))
-    const feishuConfig = siteConfig.feishu || {}
+    // Read Feishu configuration
+    const feishuConfig = readConfig('feishu-app')
 
     // Check if Feishu is configured
-    if (!feishuConfig.appId || !feishuConfig.appSecret || !feishuConfig.tableId || !feishuConfig.viewId) {
+    if (!feishuConfig.appId || !feishuConfig.appSecret || !feishuConfig.tableId) {
       return NextResponse.json(
         { success: false, message: "飞书配置未完成" },
         { status: 500 }
@@ -63,14 +60,21 @@ export async function POST(request: NextRequest) {
     })
 
     if (!tokenResponse.ok) {
-      throw new Error("获取飞书访问令牌失败")
+      const tokenError = await tokenResponse.json()
+      console.error("获取飞书访问令牌失败:", tokenError)
+      throw new Error(`获取飞书访问令牌失败: ${JSON.stringify(tokenError)}`)
     }
 
     const tokenData = await tokenResponse.json()
     const accessToken = tokenData.app_access_token
 
     // Submit data to Feishu table
-    const tableResponse = await fetch(`https://open.feishu.cn/open-apis/bitable/v1/apps/${feishuConfig.appId}/tables/${feishuConfig.tableId}/records`, {
+    // 注意：飞书多维表格的app_token通常与appId不同
+    // 如果配置的appId实际上是多维表格的app_token，则直接使用
+    // 否则需要先获取多维表格的app_token
+    const appToken = feishuConfig.appId
+
+    const tableResponse = await fetch(`https://open.feishu.cn/open-apis/bitable/v1/apps/${appToken}/tables/${feishuConfig.tableId}/records`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -93,9 +97,11 @@ export async function POST(request: NextRequest) {
       })
     })
 
-    if (!tableResponse.ok) {
-      throw new Error("提交数据到飞书表格失败")
-    }
+      if (!tableResponse.ok) {
+         const errorData = await tableResponse.json()
+         console.error("飞书API错误:", errorData)
+         throw new Error(`提交数据到飞书表格失败: ${JSON.stringify(errorData)}`)
+       }
 
     // 检查是否是表单提交（非AJAX请求）
     const acceptHeader = request.headers.get('accept') || ''
