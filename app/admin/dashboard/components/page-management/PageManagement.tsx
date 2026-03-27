@@ -104,7 +104,7 @@ export function PageManagement({ onEditPage }: PageManagementProps) {
         setNewPageType('static')
         setNewPageDynamicParam("id")
         fetchPages()
-        
+
         if (onEditPage) {
           onEditPage(data.pageId)
         }
@@ -176,7 +176,7 @@ export function PageManagement({ onEditPage }: PageManagementProps) {
     }
   }
 
-   const checkPageUsage = async (pageId: string): Promise<string[]> => {
+  const checkPageUsage = async (pageId: string): Promise<string[]> => {
     try {
       const response = await fetch(`/api/admin/pages/${pageId}/usage`)
       if (response.ok) {
@@ -193,7 +193,7 @@ export function PageManagement({ onEditPage }: PageManagementProps) {
   const handleOfflinePage = async (pageId: string) => {
     // 检查页面是否被其他页面使用
     const usedBy = await checkPageUsage(pageId)
-    
+
     if (usedBy.length > 0) {
       // 显示确认对话框
       const confirm = window.confirm(`此页面被以下页面引用：\n${usedBy.join('\n')}\n\n确定要下线吗？`)
@@ -224,22 +224,23 @@ export function PageManagement({ onEditPage }: PageManagementProps) {
   }
 
   const systemPages = ['home', '404', 'products', 'news', 'news-detail']
-  
+
   const columns = [
     {
       title: "页面名称",
       dataIndex: "name",
       key: "name",
-      render: (name: string, record: PageInfo) => (
-        <div>
-          <span style={{ fontWeight: 500 }}>{name}</span>
-          {systemPages.includes(record.id) && (
-            <Tag size="small" color="orange" style={{ marginLeft: 8 }}>
-              系统页面
-            </Tag>
-          )}
-        </div>
-      ),
+    },
+    {
+      title: "页面属性",
+      dataIndex: "pageType",
+      key: "pageType",
+      render: (_: any, record: PageInfo) => {
+        const isSystemPage = systemPages.includes(record.id)
+        return <Tag color={isSystemPage ? 'orange' : 'green'}>
+          {isSystemPage ? '系统页面' : '用户页面'}
+        </Tag>
+      },
     },
     {
       title: "页面类型",
@@ -249,21 +250,6 @@ export function PageManagement({ onEditPage }: PageManagementProps) {
         return <Tag color={type === 'dynamic' ? 'purple' : 'blue'}>
           {type === 'dynamic' ? '动态路由' : '静态页面'}
         </Tag>
-      },
-    },
-    {
-      title: "Tab标签",
-      dataIndex: "tab",
-      key: "tab",
-      render: (_: any, record: PageInfo) => {
-        const tabMap: Record<string, string> = {
-          home: "首页",
-          products: "产品",
-          news: "资讯",
-          'news-detail': "资讯详情",
-          '404': "404页面"
-        }
-        return <Tag color="blue">{tabMap[record.id] || record.name}</Tag>
       },
     },
     {
@@ -438,7 +424,7 @@ export function PageManagement({ onEditPage }: PageManagementProps) {
               placeholder="例如：首页、产品列表、关于我们"
             />
           </div>
-          
+
           <div>
             <label style={{ display: "block", marginBottom: 8, fontWeight: 500 }}>
               页面类型 <span style={{ color: "#f56c6c" }}>*</span>
@@ -448,8 +434,8 @@ export function PageManagement({ onEditPage }: PageManagementProps) {
               <Radio value="dynamic">动态路由页面</Radio>
             </Radio.Group>
             <p style={{ margin: "8px 0 0", fontSize: 12, color: "#9ca3af" }}>
-              {newPageType === 'static' 
-                ? "静态页面有固定的URL路径，例如：/about" 
+              {newPageType === 'static'
+                ? "静态页面有固定的URL路径，例如：/about"
                 : "动态路由页面包含参数，例如：/news/[id]"}
             </p>
           </div>

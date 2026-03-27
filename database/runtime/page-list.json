@@ -13,7 +13,7 @@
     },
     {
       "id": "product",
-      "name": "产品页面",
+      "name": "产品列表",
       "slug": "product",
       "type": "static",
       "description": "产品列表页面",

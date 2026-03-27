@@ -65,7 +65,8 @@ export function HeroModule({ data }: ModuleProps) {
                 style={{ 
                   backgroundColor: primaryColor, 
                   borderColor: primaryColor,
-                  color: '#ffffff'
+                  color: '#ffffff',
+                  boxShadow: `0 8px 25px -8px ${primaryColor}`
                 }}
               >
                 {config.buttons.primary.text}
@@ -277,7 +278,8 @@ export function HeroModule({ data }: ModuleProps) {
                   style={{ 
                     backgroundColor: primaryColor, 
                     borderColor: primaryColor,
-                    color: '#ffffff'
+                    color: '#ffffff',
+                    boxShadow: `0 8px 25px -8px ${primaryColor}`
                   }}
                 >
                   {config.buttons.primary.text}
