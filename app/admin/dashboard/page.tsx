@@ -336,10 +336,11 @@ export default function AdminDashboardPage() {
       const response = await fetch("/api/admin/config")
       if (response.ok) {
         const data = await response.json()
-        // 确保theme数据结构正确
+        
+        // 从API返回的数据中获取主题配置，如果不存在则使用默认值
         const themeData = {
-          currentTheme: data['theme-config']?.currentTheme || 'modern',
-          themes: {
+          currentTheme: data.theme?.currentTheme || data['theme-config']?.currentTheme || 'modern',
+          themes: data.theme?.themes || {
             modern: {
               id: 'modern',
               name: '现代简约',

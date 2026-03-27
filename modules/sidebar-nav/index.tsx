@@ -1,3 +1,5 @@
+"use client"
+
 import { useState } from "react"
 import { HomeIcon, ThunderboltIcon, UserGroupIcon, PhoneIcon, GiftIcon, StarIcon } from "../icons"
 import type { ModuleProps } from "@/modules/types"

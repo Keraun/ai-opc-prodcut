@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation"
 import { Button, Card, Modal, Input, Table, Space, Tag, Popconfirm, Radio } from "@arco-design/web-react"
 import { IconPlus, IconEdit, IconDelete, IconEye } from "@arco-design/web-react/icon"
 import { toast } from "sonner"
-import { defaultSystemPages } from "@/lib/page-utils"
+
 import styles from "../../dashboard.module.css"
 
 interface PageInfo {
@@ -45,10 +45,26 @@ export function PageManagement({ onEditPage }: PageManagementProps) {
     loadData()
   }, [])
 
-  const fetchSystemPages = () => {
-    // 在客户端使用默认的系统页面列表
-    // 实际的系统页面列表应该通过API获取
-    setSystemPages(defaultSystemPages)
+  const fetchSystemPages = async () => {
+    try {
+      // 从API获取系统页面列表
+      const response = await fetch('/api/admin/pages')
+      if (response.ok) {
+        const data = await response.json()
+        // 从页面列表中提取系统页面
+        const systemPagesList = data.pages
+          .filter((page: any) => page.isSystem)
+          .map((page: any) => page.id)
+        setSystemPages(systemPagesList)
+      } else {
+        // 如果API调用失败，使用空数组作为fallback
+        setSystemPages([])
+      }
+    } catch (error) {
+      console.error('获取系统页面列表失败:', error)
+      // 发生错误时使用空数组作为fallback
+      setSystemPages([])
+    }
   }
 
   const fetchPages = async () => {
