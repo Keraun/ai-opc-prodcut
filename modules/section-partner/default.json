@@ -1,5 +1,6 @@
 {
-  "title": "合作伙伴",
+  "sectionTag": "合作伙伴",
+  "title": "来自优秀伙伴的信任",
   "description": "与行业领先的企业和机构合作，为用户提供更好的服务",
   "items": [
     {"src": "/partner/partner_01.png", "alt": "合作伙伴1"},

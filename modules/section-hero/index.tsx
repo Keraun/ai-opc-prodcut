@@ -109,7 +109,7 @@ export function HeroModule({ data }: ModuleProps) {
         </div>
 
       <div className={styles.featurePills}>
-        {(config.featurePills || ['AI工具站', 'GEO课程', '工作流定制', '一人公司']).map((item: string, index: number) => (
+        {config.featurePills?.map((item: string, index: number) => (
           <span key={index} className={styles.featurePill}>
             {item}
           </span>
@@ -208,7 +208,7 @@ export function HeroModule({ data }: ModuleProps) {
         </div>
 
         <div className={`${styles.featurePills} ${styles.featurePillsLeft}`}>
-          {(config.featurePills || ['AI工具站', 'GEO课程', '工作流定制', '一人公司']).map((item: string, index: number) => (
+          {config.featurePills?.map((item: string, index: number) => (
             <span key={index} className={styles.featurePill}>
               {item}
             </span>
@@ -322,7 +322,7 @@ export function HeroModule({ data }: ModuleProps) {
           </div>
 
           <div className={styles.featurePills}>
-            {['AI工具站', 'GEO课程', '工作流定制', '一人公司'].map((item, index) => (
+            {config.featurePills?.map((item, index) => (
               <span key={index} className={styles.featurePill}>
                 {item}
               </span>

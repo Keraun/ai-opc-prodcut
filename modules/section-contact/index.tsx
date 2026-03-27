@@ -4,12 +4,6 @@ import { useTheme } from "@/components/theme-provider"
 import { SendIcon } from "@/modules/icons"
 import styles from "./index.module.css"
 
-const contactPreferences = [
-  { label: "电话", value: "phone" },
-  { label: "微信", value: "wechat" },
-  { label: "邮箱", value: "email" },
-]
-
 export function ContactModule({ data }: ModuleProps) {
   const config: ContactData = (data as ContactData) || {}
   const { themeConfig } = useTheme()
@@ -33,13 +27,13 @@ export function ContactModule({ data }: ModuleProps) {
               borderColor: `${accentColor}33`
             }}
           >
-            {config.sectionTag || "联系我们"}
+            {config.sectionTag}
           </span>
           <h2 className={styles.title}>
-            {config.title || "准备好开启AI之旅了吗？"}
+            {config.title}
           </h2>
           <p className={styles.description}>
-            {config.description || "留下您的联系方式，我们会尽快与您取得联系"}
+            {config.description}
           </p>
         </div>
 
@@ -125,7 +119,7 @@ export function ContactModule({ data }: ModuleProps) {
               <div className={styles.formItem}>
                 <label className={styles.formLabel}>偏好联系方式</label>
                 <div className={styles.radioGroup}>
-                  {contactPreferences.map((pref) => (
+                  {config.contactPreferences?.map((pref) => (
                     <label key={pref.value} className={styles.radioLabel}>
                       <input
                         type="radio"

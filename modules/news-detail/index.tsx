@@ -4,16 +4,7 @@ import type { NewsDetailData } from './types'
 import styles from './index.module.css'
 
 export function NewsDetailModule({ data }: ModuleProps) {
-  const config: NewsDetailData = (data as NewsDetailData) || {
-    showAuthor: true,
-    showDate: true,
-    showRelated: true,
-    relatedCount: 3,
-    showShare: true,
-    showComments: false,
-    article: null,
-    relatedArticles: []
-  }
+  const config: NewsDetailData = (data as NewsDetailData) || {}
 
   const { article, relatedArticles } = config
 
@@ -92,7 +83,7 @@ export function NewsDetailModule({ data }: ModuleProps) {
           )}
         </article>
         
-        {config.showRelated && relatedArticles.length > 0 && (
+        {config.showRelated && relatedArticles && relatedArticles.length > 0 && (
           <div className={styles.relatedSection}>
             <h3 className={styles.relatedTitle}>相关文章</h3>
             <div className={styles.relatedList}>

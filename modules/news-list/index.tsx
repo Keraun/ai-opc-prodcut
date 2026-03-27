@@ -4,14 +4,7 @@ import type { NewsListData, Article } from './types'
 import styles from './index.module.css'
 
 export function NewsListModule({ data }: ModuleProps) {
-  const config: NewsListData = (data as NewsListData) || {
-    title: '资讯中心',
-    subtitle: '最新行业动态、深度分析与实战案例',
-    showDate: true,
-    showSummary: true,
-    itemsPerPage: 10,
-    articles: []
-  }
+  const config: NewsListData = (data as NewsListData) || {}
 
   const { articles = [] } = config
 

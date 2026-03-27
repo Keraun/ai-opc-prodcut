@@ -48,13 +48,13 @@ export function ServicesModule({ data }: ModuleProps) {
       <div className={styles.container}>
         <div className={styles.header}>
           <span className={styles.tag}>
-            {config.sectionTag || "服务内容"}
+            {config.sectionTag}
           </span>
           <h2 className={styles.title}>
-            {config.title || "全方位AI赋能服务"}
+            {config.title}
           </h2>
           <p className={styles.description}>
-            {config.description || "从工具到课程，从定制到咨询，为个人创业者提供一站式AI服务支持"}
+            {config.description}
           </p>
         </div>
 

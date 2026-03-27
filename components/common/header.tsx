@@ -16,19 +16,39 @@ interface HeaderProps {
   showCtaButton?: boolean
   ctaButtonText?: string
   ctaButtonLink?: string
+  config?: {
+    logo?: {
+      text?: string
+    }
+    contact?: {
+      text?: string
+      qrText?: string
+      hintText?: string
+    }
+    cta?: {
+      text?: string
+      link?: string
+      drawerText?: string
+      drawerHint?: string
+    }
+  }
 }
 
-export function Header({
-  navItems: propNavItems,
-  showContactButton = true,
-  showCtaButton = true,
-  ctaButtonText = "开始使用",
-  ctaButtonLink = "/products"
+export function Header({ 
+  navItems: propNavItems, 
+  showContactButton,
+  showCtaButton, 
+  ctaButtonText, 
+  ctaButtonLink,
+  config: propConfig
 }: HeaderProps) {
   const router = useRouter()
   const { themeConfig } = useTheme()
   const siteConfig = useConfig('site')
   const navigationConfig = useConfig('site-navigation')
+  const headerConfig = useConfig('site-header')
+  
+  const config = propConfig || headerConfig || {}
   const [isScrolled, setIsScrolled] = useState(false)
   const [drawerVisible, setDrawerVisible] = useState(false)
   const [isMobile, setIsMobile] = useState(false)
@@ -42,6 +62,17 @@ export function Header({
   const primaryColor = themeConfig?.colors?.primary || "#1e40af"
   const secondaryColor = themeConfig?.colors?.secondary || "#3b82f6"
   const accentColor = themeConfig?.colors?.accent || "#06b6d4"
+
+  const logoText = siteConfig?.name || config?.logo?.text || ""
+  const contactText = config?.contact?.text || "联系我们"
+  const qrText = config?.contact?.qrText || "客服二维码"
+  const hintText = config?.contact?.hintText || "扫码联系客服"
+  const ctaText = ctaButtonText || config?.cta?.text || "开始使用"
+  const ctaLink = ctaButtonLink || config?.cta?.link || "/products"
+  const drawerCtaText = config?.cta?.drawerText || "开始使用"
+  const drawerHintText = config?.cta?.drawerHint || "免费试用 · 无需充值"
+  const showContact = showContactButton !== undefined ? showContactButton : true
+  const showCta = showCtaButton !== undefined ? showCtaButton : true
 
   useEffect(() => {
     const handleScroll = () => {
@@ -66,17 +97,16 @@ export function Header({
     setDrawerVisible(false)
   }
 
-
   return (
     <header
       className={`${styles.header} ${isScrolled ? styles.headerScrolled : styles.headerTransparent}`}
     >
       <div className={styles.container}>
         <div className={styles.headerInner}>
-          {siteConfig?.name && (
+          {logoText && (
             <div className={styles.logoSection}>
               <Logo className={styles.logo} />
-              <span className={styles.logoText}>{siteConfig.name}</span>
+              <span className={styles.logoText}>{logoText}</span>
             </div>
           )}
           
@@ -99,18 +129,18 @@ export function Header({
           )}
           
           <div className={styles.ctaSection}>
-            {showContactButton && (
+            {showContact && (
               <Dropdown
                 droplist={
                   <div className={styles.dropdownContent}>
                     <div className={styles.dropdownQrContainer}>
                       <div className={styles.dropdownQrInner}>
                         <div className={styles.dropdownQrPlaceholder}>
-                          <span className={styles.dropdownQrText}>客服二维码</span>
+                          <span className={styles.dropdownQrText}>{qrText}</span>
                         </div>
                       </div>
                     </div>
-                    <p className={styles.dropdownHint}>扫码联系客服</p>
+                    <p className={styles.dropdownHint}>{hintText}</p>
                   </div>
                 }
                 trigger="hover"
@@ -121,12 +151,12 @@ export function Header({
                   style={{ color: accentColor, height: '2.5rem', borderRadius: '9999px', transition: 'all 0.3s ease' }}
                 >
                   <IconCustomerService style={{ marginRight: '0.375rem' }} />
-                  联系我们
+                  {contactText}
                 </Button>
               </Dropdown>
             )}
-            {showCtaButton && (
-              <Link href={ctaButtonLink}>
+            {showCta && (
+              <Link href={ctaLink}>
                 <Button
                   style={{ 
                     backgroundColor: primaryColor,
@@ -140,7 +170,7 @@ export function Header({
                     transition: 'all 0.3s ease'
                   }}
                 >
-                  {ctaButtonText}
+                  {ctaText}
                 </Button>
               </Link>
             )}
@@ -172,9 +202,9 @@ export function Header({
                 color: 'white'
               }}
             >
-              <span style={{ color: 'white', fontWeight: 700, fontSize: '1.125rem' }}>N</span>
+              <span style={{ color: 'white', fontWeight: 700, fontSize: '1.125rem' }}>{logoText.charAt(0)}</span>
             </div>
-            <span style={{ fontWeight: 700, color: '#111827', fontSize: '1.125rem' }}>NexusAI</span>
+            <span style={{ fontWeight: 700, color: '#111827', fontSize: '1.125rem' }}>{logoText}</span>
           </div>
         }
         visible={drawerVisible}
@@ -202,7 +232,7 @@ export function Header({
           ))}
 
           <div className={styles.drawerFooter}>
-            <Link href="/products" onClick={() => setDrawerVisible(false)}>
+            <Link href={ctaLink} onClick={() => setDrawerVisible(false)}>
               <Button
                 long
                 style={{ 
@@ -216,11 +246,11 @@ export function Header({
                   fontSize: '1rem'
                 }}
               >
-                立即开始使用
+                {drawerCtaText}
               </Button>
             </Link>
             <p className={styles.drawerHint}>
-              免费试用 · 无需充值
+              {drawerHintText}
             </p>
           </div>
         </div>

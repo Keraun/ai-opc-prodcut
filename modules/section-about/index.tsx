@@ -85,7 +85,7 @@ export function AboutModule({ data }: ModuleProps) {
             {config?.title && (
               <>
                 <span className={styles.tag}>
-                  {config?.sectionTag || "关于我们"}
+                  {config?.sectionTag}
                 </span>
                 <h2 className={styles.title}>
                   {config.title?.main}
