@@ -1,0 +1,146 @@
+import { NextRequest, NextResponse } from "next/server"
+import { readConfig, writeConfig } from "@/lib/config-manager"
+
+interface Field {
+  field_name: string
+  type: number
+  property: {
+    [key: string]: any
+  }
+}
+
+export async function POST(request: NextRequest) {
+  try {
+    const feishuConfig = readConfig('feishu-app')
+
+    if (!feishuConfig.appId || !feishuConfig.appSecret) {
+      return NextResponse.json(
+        { success: false, message: "飞书配置未完成" },
+        { status: 400 }
+      )
+    }
+
+    const tokenResponse = await fetch("https://open.feishu.cn/open-apis/auth/v3/app_access_token/internal", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        app_id: feishuConfig.appId,
+        app_secret: feishuConfig.appSecret
+      })
+    })
+
+    if (!tokenResponse.ok) {
+      const tokenError = await tokenResponse.json()
+      console.error("获取飞书访问令牌失败:", tokenError)
+      return NextResponse.json(
+        { success: false, message: "获取飞书访问令牌失败", error: tokenError },
+        { status: 500 }
+      )
+    }
+
+    const tokenData = await tokenResponse.json()
+    const accessToken = tokenData.app_access_token
+
+    const defaultFields: Field[] = [
+      {
+        field_name: "姓名",
+        type: 1,
+        property: {}
+      },
+      {
+        field_name: "电话",
+        type: 1,
+        property: {}
+      },
+      {
+        field_name: "微信",
+        type: 1,
+        property: {}
+      },
+      {
+        field_name: "邮箱",
+        type: 1,
+        property: {}
+      },
+      {
+        field_name: "偏好联系方式",
+        type: 3,
+        property: {
+          options: [
+            { name: "电话" },
+            { name: "微信" },
+            { name: "邮箱" }
+          ]
+        }
+      },
+      {
+        field_name: "留言内容",
+        type: 1,
+        property: {}
+      },
+      {
+        field_name: "提交时间",
+        type: 5,
+        property: {
+          formatter: "yyyy-MM-dd HH:mm:ss",
+          time_format: "HH:mm:ss",
+          date_format: "yyyy-MM-dd"
+        }
+      }
+    ]
+
+    const createTableResponse = await fetch(`https://open.feishu.cn/open-apis/bitable/v1/apps/${feishuConfig.appId}/tables`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${accessToken}`
+      },
+      body: JSON.stringify({
+        table: {
+          name: "留言表",
+          default_view_id: "",
+          fields: defaultFields
+        }
+      })
+    })
+
+    if (!createTableResponse.ok) {
+      const createError = await createTableResponse.json()
+      console.error("创建飞书表格失败:", createError)
+      return NextResponse.json(
+        { success: false, message: "创建飞书表格失败", error: createError },
+        { status: 500 }
+      )
+    }
+
+    const createTableData = await createTableResponse.json()
+    const tableId = createTableData.data?.table?.table_id
+
+    if (!tableId) {
+      return NextResponse.json(
+        { success: false, message: "创建飞书表格成功，但未返回表格ID" },
+        { status: 500 }
+      )
+    }
+
+    feishuConfig.tableId = tableId
+    writeConfig('feishu-app', feishuConfig)
+
+    return NextResponse.json({
+      success: true,
+      message: "飞书表格创建成功",
+      data: {
+        tableId: tableId,
+        table: createTableData.data?.table
+      }
+    })
+  } catch (error) {
+    console.error("创建飞书表格失败:", error)
+    return NextResponse.json(
+      { success: false, message: "创建飞书表格失败", error: String(error) },
+      { status: 500 }
+    )
+  }
+}

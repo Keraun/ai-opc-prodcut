@@ -1,8 +1,8 @@
 "use client"
 
 import { useState, useEffect } from "react"
-import { Button, Card, Modal, Message, Spin } from "@arco-design/web-react"
-import { IconSave, IconEye, IconCode } from "@arco-design/web-react/icon"
+import { Button, Card, Modal, Message, Spin, Alert, Descriptions } from "@arco-design/web-react"
+import { IconSave, IconEye, IconCode, IconRefresh, IconPlus } from "@arco-design/web-react/icon"
 import { toast } from "sonner"
 import { DynamicForm } from "@/components/dynamic-form"
 import styles from "./ConfigFormEditor.module.css"
@@ -39,6 +39,12 @@ export function ConfigFormEditor({
   const [showPreview, setShowPreview] = useState(false)
   const [previewData, setPreviewData] = useState<any>(null)
   const [submitting, setSubmitting] = useState(false)
+  const [tableFields, setTableFields] = useState<any[]>([])
+  const [showFieldsModal, setShowFieldsModal] = useState(false)
+  const [loadingFields, setLoadingFields] = useState(false)
+  const [creatingTable, setCreatingTable] = useState(false)
+
+  const isFeishuConfig = configType === 'feishu-app'
 
   useEffect(() => {
     fetchSchema()
@@ -78,6 +84,62 @@ export function ConfigFormEditor({
     setShowPreview(true)
   }
 
+  const handleFetchTableFields = async () => {
+    if (!configData?.tableId) {
+      toast.error('请先配置表格ID')
+      return
+    }
+
+    setLoadingFields(true)
+    try {
+      const response = await fetch('/api/feishu/schema')
+      const result = await response.json()
+      
+      if (result.success) {
+        setTableFields(result.data)
+        setShowFieldsModal(true)
+        toast.success('获取表格字段成功')
+      } else {
+        toast.error(result.message || '获取表格字段失败')
+      }
+    } catch (error) {
+      console.error('Failed to fetch table fields:', error)
+      toast.error('获取表格字段失败')
+    } finally {
+      setLoadingFields(false)
+    }
+  }
+
+  const handleCreateTable = async () => {
+    if (!configData?.appId || !configData?.appSecret) {
+      toast.error('请先配置App ID和App Secret')
+      return
+    }
+
+    setCreatingTable(true)
+    try {
+      const response = await fetch('/api/feishu/create-table', {
+        method: 'POST'
+      })
+      const result = await response.json()
+      
+      if (result.success) {
+        toast.success('飞书表格创建成功')
+        await onSave({
+          ...configData,
+          tableId: result.data.tableId
+        })
+      } else {
+        toast.error(result.message || '创建飞书表格失败')
+      }
+    } catch (error) {
+      console.error('Failed to create table:', error)
+      toast.error('创建飞书表格失败')
+    } finally {
+      setCreatingTable(false)
+    }
+  }
+
   if (!schema) {
     return (
       <div className={styles.loadingContainer}>
@@ -95,6 +157,24 @@ export function ConfigFormEditor({
           <p className={styles.description}>{description}</p>
         </div>
         <div className={styles.actions}>
+          {isFeishuConfig && (
+            <>
+              <Button
+                icon={<IconRefresh />}
+                loading={loadingFields}
+                onClick={handleFetchTableFields}
+              >
+                查看表格字段
+              </Button>
+              <Button
+                icon={<IconPlus />}
+                loading={creatingTable}
+                onClick={handleCreateTable}
+              >
+                自动创建表格
+              </Button>
+            </>
+          )}
           <Button
             icon={<IconCode />}
             onClick={handlePreview}
@@ -150,6 +230,37 @@ export function ConfigFormEditor({
         <pre className={styles.jsonPreview}>
           {JSON.stringify(previewData, null, 2)}
         </pre>
+      </Modal>
+
+      <Modal
+        title="飞书表格字段"
+        visible={showFieldsModal}
+        onCancel={() => setShowFieldsModal(false)}
+        footer={[
+          <Button key="close" onClick={() => setShowFieldsModal(false)}>
+            关闭
+          </Button>
+        ]}
+        style={{ width: 800 }}
+      >
+        {tableFields.length > 0 ? (
+          <Descriptions column={1} bordered>
+            {tableFields.map((field: any) => (
+              <Descriptions.Item key={field.field_id} label={field.field_name}>
+                <div>
+                  <div>类型: {field.type}</div>
+                  {field.property && Object.keys(field.property).length > 0 && (
+                    <div style={{ marginTop: '8px', fontSize: '12px', color: '#666' }}>
+                      属性: {JSON.stringify(field.property)}
+                    </div>
+                  )}
+                </div>
+              </Descriptions.Item>
+            ))}
+          </Descriptions>
+        ) : (
+          <Alert type="info" content="表格中没有字段" />
+        )}
       </Modal>
     </div>
   )

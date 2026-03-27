@@ -77,7 +77,7 @@ export function getRuntimePath(configType: string): string {
 const configCache: Record<string, any> = {}
 
 // 清除缓存
-function clearCache(configType?: string): void {
+export function clearCache(configType?: string): void {
   if (configType) {
     delete configCache[configType]
   } else {
