@@ -21,15 +21,6 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ success: false, message: '密码不能为空' }, { status: 400 })
     }
 
-    // 验证密码
-    const accountConfig = readConfig('account')
-    const admins = Array.isArray(accountConfig) ? accountConfig : accountConfig.admins || []
-    const admin = admins.find((a: any) => a.username === adminUser.username)
-
-    if (!admin || admin.password !== password) {
-      return NextResponse.json({ success: false, message: '密码错误' }, { status: 401 })
-    }
-
     // 读取超级管理员口令
     const tokenConfigPath = path.join(process.cwd(), "database/runtime/system/system-token.json")
     let tokenConfig = { superAdminToken: '' }
@@ -45,6 +36,11 @@ export async function POST(request: NextRequest) {
       }
       tokenConfig = { superAdminToken: Buffer.from(result).toString('base64') }
       fs.writeFileSync(tokenConfigPath, JSON.stringify(tokenConfig, null, 2))
+    }
+
+    // 验证超级管理员口令
+    if (password !== tokenConfig.superAdminToken) {
+      return NextResponse.json({ success: false, message: '超级管理员口令错误' }, { status: 401 })
     }
 
     return NextResponse.json({ success: true, token: tokenConfig.superAdminToken })

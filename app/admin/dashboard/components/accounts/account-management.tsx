@@ -276,20 +276,29 @@ export function AccountManagement() {
               title: '操作',
               key: 'action',
               render: (_, record) => (
-                <Popconfirm
-                  title={`确定要删除账号 ${record.username} 吗？`}
-                  onConfirm={() => openDeleteAccountModal(record)}
-                  disabled={record.username === 'admin'}
-                >
+                <div style={{ display: 'flex', gap: 8 }}>
                   <Button 
                     type="text" 
-                    status="danger" 
-                    icon={<IconDelete />}
+                    icon={<IconEdit />}
+                    onClick={() => openEditAccountModal(record)}
+                  >
+                    修改
+                  </Button>
+                  <Popconfirm
+                    title={`确定要删除账号 ${record.username} 吗？`}
+                    onConfirm={() => openDeleteAccountModal(record)}
                     disabled={record.username === 'admin'}
                   >
-                    删除
-                  </Button>
-                </Popconfirm>
+                    <Button 
+                      type="text" 
+                      status="danger" 
+                      icon={<IconDelete />}
+                      disabled={record.username === 'admin'}
+                    >
+                      删除
+                    </Button>
+                  </Popconfirm>
+                </div>
               ),
             },
           ]}
@@ -335,9 +344,12 @@ export function AccountManagement() {
                     setShowAddAccountModal(true)
                   } else if (actionType === "delete" && accountToDelete) {
                     setShowDeleteAccountModal(true)
+                  } else if (actionType === "edit" && accountToEdit) {
+                    setShowEditAccountModal(true)
                   }
                 } else {
-                  Message.error("密码错误")
+                  console.error("密码错误")
+                  alert("密码错误")
                 }
               }}
             >
@@ -369,9 +381,12 @@ export function AccountManagement() {
                   setShowAddAccountModal(true)
                 } else if (actionType === "delete" && accountToDelete) {
                   setShowDeleteAccountModal(true)
+                } else if (actionType === "edit" && accountToEdit) {
+                  setShowEditAccountModal(true)
                 }
               } else {
-                Message.error("密码错误")
+                console.error("密码错误")
+                alert("密码错误")
               }
             }}
           />
@@ -445,6 +460,80 @@ export function AccountManagement() {
                 placeholder="请输入备注（可选）"
                 value={newAccount.remark}
                 onChange={(e) => setNewAccount({ ...newAccount, remark: e })}
+              />
+            </Form.Item>
+          </Form>
+        </div>
+      </Modal>
+
+      {/* 修改账号弹窗 */}
+      <Modal
+        title="修改账号"
+        visible={showEditAccountModal}
+        onCancel={() => {
+          setShowEditAccountModal(false)
+          setAccountToEdit(null)
+          setEditedAccount({ username: "", password: "", email: "", remark: "" })
+        }}
+        footer={
+          <>
+            <Button 
+              onClick={() => {
+                setShowEditAccountModal(false)
+                setAccountToEdit(null)
+                setEditedAccount({ username: "", password: "", email: "", remark: "" })
+              }}
+            >
+              取消
+            </Button>
+            <Button
+              type="primary"
+              onClick={handleEditAccount}
+            >
+              确认修改
+            </Button>
+          </>
+        }
+        className={styles.accountManagementModal}
+      >
+        <div style={{ padding: "16px 0" }}>
+          <Form layout="vertical">
+            <Form.Item
+              label="用户名"
+              required
+            >
+              <Input
+                placeholder="请输入用户名"
+                value={editedAccount.username}
+                disabled
+              />
+            </Form.Item>
+            <Form.Item
+              label="密码"
+            >
+              <Input.Password
+                placeholder="请输入密码（留空表示不修改）"
+                value={editedAccount.password}
+                onChange={(e) => setEditedAccount({ ...editedAccount, password: e })}
+              />
+            </Form.Item>
+            <Form.Item
+              label="邮箱"
+              required
+            >
+              <Input
+                placeholder="请输入邮箱"
+                value={editedAccount.email}
+                onChange={(e) => setEditedAccount({ ...editedAccount, email: e })}
+              />
+            </Form.Item>
+            <Form.Item
+              label="备注"
+            >
+              <Input
+                placeholder="请输入备注（可选）"
+                value={editedAccount.remark}
+                onChange={(e) => setEditedAccount({ ...editedAccount, remark: e })}
               />
             </Form.Item>
           </Form>

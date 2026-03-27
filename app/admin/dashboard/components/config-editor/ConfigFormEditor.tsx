@@ -111,7 +111,7 @@ export function ConfigFormEditor({
             type="primary"
             icon={<IconSave />}
             loading={submitting || loading}
-            disabled={!hasChanges}
+            disabled={!hasChanges && Object.keys(configData).length > 0}
             onClick={() => {
               const formElement = document.querySelector('form')
               if (formElement) {
