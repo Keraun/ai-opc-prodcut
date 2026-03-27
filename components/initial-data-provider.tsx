@@ -5,23 +5,9 @@ import { createContext, useContext, ReactNode, useEffect, useMemo } from "react"
 // 全局初始数据类型
 interface InitialData {
   site: any
-  common: any
-  seo: any
-  navigation: any
-  footer: any
-  theme: any
-  homeOrder: any
-  homeBanner: any
-  homePartners: any
-  homeProducts: any
-  homeServices: any
-  homePricing: any
-  homeAbout: any
-  homeContact: any
-  products: any
-  otherPages: any
-  news: any
-  custom: any
+  'site-navigation': any
+  'site-header': any
+  'site-footer': any
 }
 
 // 从 window 对象获取初始数据

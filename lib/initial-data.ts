@@ -10,27 +10,11 @@ export function loadInitialData(): Record<string, any> {
     return initialDataCache
   }
 
-  const pageResponse = getPageResponse('home')
-  
   initialDataCache = {
     site: readConfig('site') || {},
-    common: {},
-    seo: readConfig('site-seo') || {},
-    navigation: readConfig('site-navigation') || {},
-    footer: readConfig('site-footer') || {},
-    theme: pageResponse.common.theme || {},
-    homeOrder: {},
-    homeBanner: {},
-    homePartners: {},
-    homeProducts: {},
-    homeServices: {},
-    homePricing: {},
-    homeAbout: {},
-    homeContact: {},
-    products: {},
-    otherPages: {},
-    news: {},
-    custom: {}
+    'site-navigation': readConfig('site-navigation') || {},
+    'site-header': readConfig('site-header') || {},
+    'site-footer': readConfig('site-footer') || {}
   }
 
   return initialDataCache
