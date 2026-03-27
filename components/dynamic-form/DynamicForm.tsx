@@ -4,6 +4,7 @@ import React, { useState, useEffect } from "react"
 import { Form, Input, Select, DatePicker, Upload, Button, Tag, Space, Switch, InputNumber, Radio, Checkbox, Grid } from "@arco-design/web-react"
 import { IconPlus, IconDelete } from "@arco-design/web-react/icon"
 import { useMessage } from "@/app/components/custom-message"
+import { extractTableId } from "@/lib/feishu-utils"
 import styles from "./DynamicForm.module.css"
 
 const { Row, Col } = Grid
@@ -117,11 +118,22 @@ export function DynamicForm({
   const handleSubmit = async () => {
     try {
       const values = await form.validate()
+      
+      // Process tableId field to extract from links
+      const processedValues = {
+        ...values
+      }
+      
+      if ('tableId' in processedValues) {
+        processedValues.tableId = extractTableId(processedValues.tableId)
+      }
+      
       const finalValues = {
-        ...values,
+        ...processedValues,
         ...tags,
         ...arrayFields
       }
+      
       onSubmit(finalValues)
     } catch (error) {
       message.error('请检查表单填写是否正确')

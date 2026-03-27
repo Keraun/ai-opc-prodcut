@@ -16,7 +16,7 @@
     "tableId": {
       "type": "string",
       "title": "飞书数据表 ID",
-      "description": "飞书数据表的 Table ID"
+      "description": "飞书数据表的 Table ID，可直接输入 Table ID 或粘贴飞书表格链接（系统会自动提取 Table ID）"
     },
     "viewId": {
       "type": "string",

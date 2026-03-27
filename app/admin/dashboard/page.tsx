@@ -1061,6 +1061,7 @@ export default function AdminDashboardPage() {
                 configData={configs['feishu-app'] || {}}
                 onSave={async (data) => {
                   setConfigs(prev => ({ ...prev, 'feishu-app': data }))
+                  debugger
                   await handleSave('feishu-app')
                 }}
                 hasChanges={hasConfigChanges('feishu-app')}
