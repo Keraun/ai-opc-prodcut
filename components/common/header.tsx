@@ -103,13 +103,6 @@ export function Header({
     >
       <div className={styles.container}>
         <div className={styles.headerInner}>
-          {logoText && (
-            <div className={styles.logoSection}>
-              <Logo className={styles.logo} />
-              <span className={styles.logoText}>{logoText}</span>
-            </div>
-          )}
-          
           {navItems && navItems.length > 0 && (
             <nav className={styles.nav}>
               {navItems.map((item: any) => (
@@ -187,26 +180,7 @@ export function Header({
 
       <Drawer
         width={320}
-        title={
-          <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
-            <div 
-              style={{
-                width: '2.5rem',
-                height: '2.5rem',
-                borderRadius: '0.75rem',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                boxShadow: '0 10px 15px -3px rgba(0, 0, 0, 0.1)',
-                background: `linear-gradient(135deg, ${primaryColor} 0%, ${secondaryColor} 100%)`,
-                color: 'white'
-              }}
-            >
-              <span style={{ color: 'white', fontWeight: 700, fontSize: '1.125rem' }}>{logoText.charAt(0)}</span>
-            </div>
-            <span style={{ fontWeight: 700, color: '#111827', fontSize: '1.125rem' }}>{logoText}</span>
-          </div>
-        }
+
         visible={drawerVisible}
         placement="right"
         closable
