@@ -81,6 +81,7 @@ interface Configs {
   'section-pricing': any
   'section-about': any
   'section-contact': any
+  'feishu-app': any
 }
 
 export default function AdminDashboardPage() {
@@ -115,7 +116,8 @@ export default function AdminDashboardPage() {
     'section-services': {},
     'section-pricing': {},
     'section-about': {},
-    'section-contact': {}
+    'section-contact': {},
+    'feishu-app': {}
   })
   const [originalConfigs, setOriginalConfigs] = useState<Configs>({
     site: {},
@@ -146,7 +148,8 @@ export default function AdminDashboardPage() {
     'section-services': {},
     'section-pricing': {},
     'section-about': {},
-    'section-contact': {}
+    'section-contact': {},
+    'feishu-app': {}
   })
   const [loading, setLoading] = useState(false)
   const [editingConfig, setEditingConfig] = useState<string | null>(null)
@@ -376,9 +379,10 @@ export default function AdminDashboardPage() {
     }
   }
 
-  const handleSave = async (configType: string) => {
+  const handleSave = async (configType: string, data?: any) => {
     setLoading(true)
     try {
+      const configData = data || configs[configType as keyof typeof configs]
       const response = await fetch("/api/admin/config", {
         method: "POST",
         headers: {
@@ -386,7 +390,7 @@ export default function AdminDashboardPage() {
         },
         body: JSON.stringify({
           type: configType,
-          data: configs[configType as keyof typeof configs]
+          data: configData
         }),
       })
 
@@ -394,7 +398,7 @@ export default function AdminDashboardPage() {
         toast.success("配置提交成功")
         setOriginalConfigs(prev => ({
           ...prev,
-          [configType]: JSON.parse(JSON.stringify(configs[configType as keyof typeof configs]))
+          [configType]: JSON.parse(JSON.stringify(configData))
         }))
       } else {
         toast.error("配置提交失败")
@@ -1061,8 +1065,7 @@ export default function AdminDashboardPage() {
                 configData={configs['feishu-app'] || {}}
                 onSave={async (data) => {
                   setConfigs(prev => ({ ...prev, 'feishu-app': data }))
-                  debugger
-                  await handleSave('feishu-app')
+                  await handleSave('feishu-app', data)
                 }}
                 hasChanges={hasConfigChanges('feishu-app')}
                 loading={loading}
