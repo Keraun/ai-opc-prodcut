@@ -1,7 +1,6 @@
 import { NextRequest } from 'next/server'
-import { initializeModules } from '@/modules/init'
+import { initializeAndSyncModules } from '@/lib/initialize-modules'
 import { getAllModules } from '@/modules/registry'
-import { getModuleRegistryList, registerModule } from '@/lib/module-service'
 import { 
   successResponse, 
   errorResponse, 
@@ -9,7 +8,7 @@ import {
 } from '@/lib/api-utils'
 import type { ModuleRegistration } from '@/modules/types'
 
-initializeModules()
+initializeAndSyncModules()
 
 interface ModuleInfo {
   moduleId: string
@@ -42,15 +41,6 @@ export async function GET() {
         defaultData: mod.defaultData,
       }
     })
-
-    for (const mod of registeredModules) {
-      registerModule(
-        mod.moduleId,
-        mod.moduleName,
-        mod.schema,
-        mod.defaultData
-      )
-    }
 
     return successResponse(modules)
   })
