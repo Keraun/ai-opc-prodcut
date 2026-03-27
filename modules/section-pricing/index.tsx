@@ -92,7 +92,7 @@ export function PricingModule({ data }: ModuleProps) {
               key={index}
               className={[styles.card, plan.isPopular ? styles.cardPopular : ''].join(' ')}
               style={{
-                borderColor: plan.isPopular ? primaryColor : 'transparent'
+                borderColor: plan.isPopular ? primaryColor : '#e5e7eb'
               }}
             >
               {plan.isPopular && (
