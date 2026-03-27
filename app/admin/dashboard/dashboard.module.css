@@ -2465,3 +2465,359 @@
   justify-content: space-between;
   align-items: center;
 }
+
+/* 新的系统管理页面样式 */
+.systemManagementNew {
+  padding: 0;
+}
+
+.systemHeader {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  padding: 32px;
+  border-radius: 16px;
+  margin-bottom: 24px;
+  color: #ffffff;
+}
+
+.systemHeaderContent {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.systemHeaderIcon {
+  width: 64px;
+  height: 64px;
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  backdrop-filter: blur(10px);
+}
+
+.systemHeaderIconSvg {
+  font-size: 32px;
+  color: #ffffff;
+}
+
+.systemHeaderText {
+  flex: 1;
+}
+
+.systemHeaderTitle {
+  font-size: 28px;
+  font-weight: 700;
+  margin: 0 0 8px 0;
+  color: #ffffff;
+}
+
+.systemHeaderSubtitle {
+  font-size: 16px;
+  margin: 0;
+  opacity: 0.9;
+  color: #ffffff;
+}
+
+.systemContent {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 24px;
+}
+
+@media (min-width: 1024px) {
+  .systemContent {
+    grid-template-columns: 380px 1fr;
+  }
+}
+
+.systemLeftColumn {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.systemRightColumn {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.systemCardNew {
+  background: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1), 0 1px 2px rgba(0, 0, 0, 0.06);
+  transition: all 0.3s ease;
+  overflow: hidden;
+}
+
+.systemCardNew:hover {
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+}
+
+/* 账户卡片样式 */
+.accountCardHeader {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 24px 24px 0 24px;
+}
+
+.accountCardAvatar {
+  position: relative;
+}
+
+.accountCardStatus {
+  position: absolute;
+  bottom: 2px;
+  right: 2px;
+}
+
+.accountCardInfo {
+  flex: 1;
+}
+
+.accountCardName {
+  font-size: 20px;
+  font-weight: 600;
+  color: #111827;
+  margin: 0 0 8px 0;
+}
+
+.accountCardDetails {
+  padding: 0 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.accountDetailItem {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.accountDetailLabel {
+  font-size: 14px;
+  color: #6b7280;
+}
+
+.accountDetailValue {
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.accountCardActions {
+  padding: 20px 24px 24px 24px;
+}
+
+/* 系统概览卡片样式 */
+.overviewCardHeader {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 20px 24px 0 24px;
+  margin-bottom: 16px;
+}
+
+.overviewCardIcon {
+  font-size: 24px;
+  color: #3b82f6;
+}
+
+.overviewCardTitle {
+  font-size: 18px;
+  font-weight: 600;
+  color: #111827;
+}
+
+.overviewStats {
+  padding: 0 24px 24px 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.overviewStatItem {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 0;
+  border-bottom: 1px solid #f3f4f6;
+}
+
+.overviewStatItem:last-child {
+  border-bottom: none;
+}
+
+.overviewStatLabel {
+  font-size: 14px;
+  color: #6b7280;
+}
+
+.overviewStatValue {
+  font-size: 14px;
+  font-weight: 600;
+  color: #111827;
+}
+
+/* 配置管理卡片样式 */
+.configCardHeader {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 24px 24px 0 24px;
+}
+
+.configCardIconWrapper {
+  width: 48px;
+  height: 48px;
+  background: linear-gradient(135deg, #3b82f6 0%, #6366f1 100%);
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.configCardIcon {
+  font-size: 24px;
+  color: #ffffff;
+}
+
+.configCardHeaderText {
+  flex: 1;
+}
+
+.configCardTitle {
+  font-size: 18px;
+  font-weight: 600;
+  color: #111827;
+  margin: 0 0 4px 0;
+}
+
+.configCardSubtitle {
+  font-size: 14px;
+  color: #6b7280;
+  margin: 0;
+}
+
+.configCardActions {
+  padding: 0 24px 24px 24px;
+}
+
+.configActionItem {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.configActionInfo {
+  flex: 1;
+}
+
+.configActionTitle {
+  font-size: 15px;
+  font-weight: 600;
+  color: #111827;
+  margin: 0 0 4px 0;
+}
+
+.configActionDesc {
+  font-size: 13px;
+  color: #6b7280;
+  margin: 0;
+}
+
+/* 危险操作卡片样式 */
+.dangerCard {
+  border: 1px solid #fecaca;
+}
+
+.dangerCardHeader {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 24px 24px 0 24px;
+}
+
+.dangerCardIconWrapper {
+  width: 48px;
+  height: 48px;
+  background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.dangerCardIcon {
+  font-size: 24px;
+  color: #ffffff;
+}
+
+.dangerCardHeaderText {
+  flex: 1;
+}
+
+.dangerCardTitle {
+  font-size: 18px;
+  font-weight: 600;
+  color: #111827;
+  margin: 0 0 4px 0;
+}
+
+.dangerCardSubtitle {
+  font-size: 14px;
+  color: #6b7280;
+  margin: 0;
+}
+
+.dangerCardContent {
+  padding: 0 24px 24px 24px;
+}
+
+.dangerAlert {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 16px;
+  background: #fef2f2;
+  border-radius: 8px;
+  margin-bottom: 20px;
+  border-left: 4px solid #ef4444;
+}
+
+.dangerAlertIcon {
+  font-size: 20px;
+  color: #ef4444;
+  flex-shrink: 0;
+}
+
+.dangerAlertText {
+  font-size: 14px;
+  color: #991b1b;
+  line-height: 1.5;
+}
+
+.dangerAction {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.dangerActionInfo {
+  flex: 1;
+}
+
+.dangerActionTitle {
+  font-size: 15px;
+  font-weight: 600;
+  color: #111827;
+  margin: 0 0 4px 0;
+}
+
+.dangerActionDesc {
+  font-size: 13px;
+  color: #6b7280;
+  margin: 0;
+}

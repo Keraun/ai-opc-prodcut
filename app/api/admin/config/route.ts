@@ -75,7 +75,6 @@ export async function POST(request: NextRequest) {
       'site-header': '页头模块',
       'site-footer': '页脚模块',
       'site-navigation': '导航模块',
-      'sidebar-nav': '侧边栏导航',
       'section-hero': 'Hero区块',
       'hero': 'Hero区块',
       'section-partner': '合作伙伴区块',

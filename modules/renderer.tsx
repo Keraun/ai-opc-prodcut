@@ -11,7 +11,6 @@ interface ModuleRendererProps {
 const MODULE_LOADERS: Record<string, () => Promise<any>> = {
   'site-header': () => import('./site-header/mod'),
   'site-footer': () => import('./site-footer/mod'),
-  'sidebar-nav': () => import('./sidebar-nav/mod'),
   'section-hero': () => import('./section-hero/mod'),
   'section-services': () => import('./section-services/mod'),
   'section-partner': () => import('./section-partner/mod'),
@@ -30,7 +29,6 @@ const MODULE_LOADERS: Record<string, () => Promise<any>> = {
 const MODULE_COMPONENT_NAMES: Record<string, string> = {
   'site-header': 'HeaderModule',
   'site-footer': 'FooterModule',
-  'sidebar-nav': 'SidebarNavModule',
   'section-hero': 'HeroModule',
   'section-services': 'ServicesModule',
   'section-partner': 'PartnerModule',

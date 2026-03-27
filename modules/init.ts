@@ -6,7 +6,6 @@ import { registerProductsModule } from "./section-products/register"
 import { registerPricingModule } from "./section-pricing/register"
 import { registerAboutModule } from "./section-about/register"
 import { registerContactModule } from "./section-contact/register"
-import { registerSidebarNavModule } from "./sidebar-nav/register"
 import { registerSiteHeaderModule } from "./site-header/register"
 import { registerSiteFooterModule } from "./site-footer/register"
 import { registerSiteRootModule } from "./site-root/register"
@@ -26,7 +25,6 @@ export function initializeModules() {
   registerPricingModule()
   registerAboutModule()
   registerContactModule()
-  registerSidebarNavModule()
   registerSiteFooterModule()
   registerNewsListModule()
   registerNewsDetailModule()
@@ -43,7 +41,6 @@ export { ProductsModule } from "./section-products/register"
 export { PricingModule } from "./section-pricing/register"
 export { AboutModule } from "./section-about/register"
 export { ContactModule } from "./section-contact/register"
-export { SidebarNavModule } from "./sidebar-nav/register"
 export { FooterModule } from "./site-footer/register"
 export { SiteRootModule } from "./site-root/register"
 export { NewsListModule } from "./news-list/register"

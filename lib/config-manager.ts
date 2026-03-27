@@ -16,11 +16,8 @@ const typeToPathMap: Record<string, PathMapping> = {
   'site-footer': { dir: 'page-data', prefix: 'data-site-footer' },
   'site-navigation': { dir: 'page-data', prefix: 'data-site-navigation' },
   
-
-  
   'site-root': { dir: 'page-data', prefix: 'data-site-root' },
   'site-header': { dir: 'page-data', prefix: 'data-site-header' },
-  'sidebar-nav': { dir: 'page-data', prefix: 'data-sidebar-nav' },
   'hero': { dir: 'page-data', prefix: 'data-section-hero' },
   'section-hero': { dir: 'page-data', prefix: 'data-section-hero' },
   'partners': { dir: 'page-data', prefix: 'data-section-partner' },

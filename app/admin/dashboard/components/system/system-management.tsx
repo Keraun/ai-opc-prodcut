@@ -1,7 +1,21 @@
 "use client"
 
-import { Button, Card, Divider, Typography, Space, Statistic } from "@arco-design/web-react"
-import { IconExport, IconSettings, IconStorage, IconExclamationCircle, IconUser, IconDesktop, IconLock } from "@arco-design/web-react/icon"
+import { Button, Card, Typography, Space, Statistic, Tag, Avatar, Divider, Badge, Tooltip } from "@arco-design/web-react"
+import { 
+  IconExport, 
+  IconDownload, 
+  IconExclamationCircle, 
+  IconUser, 
+  IconDesktop, 
+  IconLock, 
+  IconSettings,
+  IconSync,
+  IconCheckCircle,
+  IconCloseCircle,
+  IconInfoCircle,
+  IconSafe,
+  IconFile
+} from "@arco-design/web-react/icon"
 import { AccountInfo } from "../account/account-info"
 import styles from "../../dashboard.module.css"
 
@@ -23,150 +37,198 @@ export function SystemManagement({
   onChangePassword
 }: SystemManagementProps) {
   return (
-    <div className={styles.systemManagement}>
-      <div className={styles.systemManagementGrid}>
-        {/* 账户信息卡片 */}
-        <Card 
-          className={styles.systemCard}
-          title={
-            <div className={styles.sectionTitleContainer}>
-              <IconUser className={styles.sectionTitleIcon} />
-              <span className={styles.sectionTitle}>账户信息</span>
-            </div>
-          }
-          bordered={false}
-          hoverable
-        >
-          <AccountInfo 
-            currentUser={currentUser} 
-            onChangePassword={onChangePassword} 
-          />
-        </Card>
-
-        {/* 系统概览卡片 */}
-        <Card 
-          className={styles.systemCard}
-          title={
-            <div className={styles.sectionTitleContainer}>
-              <IconDesktop className={styles.sectionTitleIcon} />
-              <span className={styles.sectionTitle}>系统概览</span>
-            </div>
-          }
-          bordered={false}
-          hoverable
-        >
-          <div className={styles.systemOverview}>
-            <Space size={40} wrap>
-              <Statistic 
-                title="站点名称" 
-                value={siteConfig?.name || '未设置'}
-              />
-              <Statistic 
-                title="管理员" 
-                value={currentUser?.username || '未知'}
-              />
-              <Statistic 
-                title="系统版本" 
-                value="1.0.0"
-              />
-            </Space>
+    <div className={styles.systemManagementNew}>
+      {/* 页面标题 */}
+      <div className={styles.systemHeader}>
+        <div className={styles.systemHeaderContent}>
+          <div className={styles.systemHeaderIcon}>
+            <IconSettings className={styles.systemHeaderIconSvg} />
           </div>
-        </Card>
+          <div className={styles.systemHeaderText}>
+            <h1 className={styles.systemHeaderTitle}>系统管理</h1>
+            <p className={styles.systemHeaderSubtitle}>管理系统配置、账户安全和数据备份</p>
+          </div>
+        </div>
+      </div>
 
-        {/* 配置管理卡片 */}
-        <Card 
-          className={styles.systemCard}
-          title={
-            <div className={styles.sectionTitleContainer}>
-              <IconStorage className={styles.sectionTitleIcon} />
-              <span className={styles.sectionTitle}>配置管理</span>
+      {/* 主要内容区域 */}
+      <div className={styles.systemContent}>
+        {/* 左侧：账户和系统信息 */}
+        <div className={styles.systemLeftColumn}>
+          {/* 账户信息卡片 */}
+          <Card 
+            className={styles.systemCardNew}
+            bordered={false}
+          >
+            <div className={styles.accountCardHeader}>
+              <div className={styles.accountCardAvatar}>
+                <Avatar size={64} style={{ background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)' }}>
+                  <IconUser style={{ fontSize: 32 }} />
+                </Avatar>
+                <div className={styles.accountCardStatus}>
+                  <Badge status="success" />
+                </div>
+              </div>
+              <div className={styles.accountCardInfo}>
+                <h3 className={styles.accountCardName}>{currentUser?.username || 'Admin'}</h3>
+                <Tag color="arcoblue" size="small">管理员</Tag>
+              </div>
             </div>
-          }
-          bordered={false}
-          hoverable
-        >
-          <div className={styles.configSection}>
-            <Typography.Paragraph className={styles.configSectionDescription}>
-              通过以下功能可以导出或导入配置,用于备份和恢复系统配置。
-            </Typography.Paragraph>
-            <div className={styles.configSectionActions}>
-              <Button
-                type="primary"
-                icon={<IconExport />}
-                onClick={onExportConfig}
-                style={{ marginRight: '12px' }}
-              >
-                导出配置
-              </Button>
-              <input
-                type="file"
-                accept=".zip"
-                onChange={onImportConfig}
-                className={styles.importInput}
-                id="config-import"
-              />
-              <Button
-                type="secondary"
-                icon={<IconExport />}
-                onClick={() => document.getElementById('config-import')?.click()}
-              >
-                导入配置
+            
+            <Divider style={{ margin: '20px 0' }} />
+            
+            <div className={styles.accountCardDetails}>
+              <div className={styles.accountDetailItem}>
+                <span className={styles.accountDetailLabel}>账户状态</span>
+                <span className={styles.accountDetailValue}>
+                  <Tag color="green" icon={<IconCheckCircle />}>正常</Tag>
+                </span>
+              </div>
+              <div className={styles.accountDetailItem}>
+                <span className={styles.accountDetailLabel}>安全设置</span>
+                <span className={styles.accountDetailValue}>
+                  <Tag color="arcoblue" icon={<IconSafe />}>已设置密码</Tag>
+                </span>
+              </div>
+            </div>
+
+            <div className={styles.accountCardActions}>
+              <Button type="primary" long onClick={onChangePassword} icon={<IconLock />}>
+                修改密码
               </Button>
             </div>
-          </div>
-        </Card>
+          </Card>
 
-        {/* 安全设置卡片 */}
-        <Card 
-          className={styles.systemCard}
-          title={
-            <div className={styles.sectionTitleContainer}>
-              <IconLock className={styles.sectionTitleIcon} />
-              <span className={styles.sectionTitle}>安全设置</span>
+          {/* 系统概览卡片 */}
+          <Card 
+            className={styles.systemCardNew}
+            bordered={false}
+          >
+            <div className={styles.overviewCardHeader}>
+              <IconDesktop className={styles.overviewCardIcon} />
+              <span className={styles.overviewCardTitle}>系统概览</span>
             </div>
-          }
-          bordered={false}
-          hoverable
-        >
-          <div className={styles.securitySection}>
-            <Button
-              type="primary"
-              onClick={onChangePassword}
-            >
-              修改密码
-            </Button>
-          </div>
-        </Card>
+            
+            <div className={styles.overviewStats}>
+              <div className={styles.overviewStatItem}>
+                <span className={styles.overviewStatLabel}>站点名称</span>
+                <span className={styles.overviewStatValue}>{siteConfig?.name || '创客AI'}</span>
+              </div>
+              <div className={styles.overviewStatItem}>
+                <span className={styles.overviewStatLabel}>系统版本</span>
+                <Tag color="arcoblue" size="small">v1.0.0</Tag>
+              </div>
+              <div className={styles.overviewStatItem}>
+                <span className={styles.overviewStatLabel}>运行状态</span>
+                <Badge status="success" text="运行正常" />
+              </div>
+            </div>
+          </Card>
+        </div>
 
-        {/* 危险操作卡片 */}
-        <Card 
-          className={styles.systemCard}
-          title={
-          <div className={styles.sectionTitleContainer}>
-            <IconExclamationCircle className={styles.sectionTitleIcon} />
-            <span className={styles.sectionTitle}>危险操作</span>
-          </div>
-        }
-          bordered={false}
-          hoverable
-        >
-          <div className={styles.dangerSection}>
-            <div className={styles.dangerSectionAlert}>
-              <Typography.Paragraph type="warning">
-                以下操作具有不可逆性,请谨慎操作!
-              </Typography.Paragraph>
+        {/* 右侧：配置管理和操作 */}
+        <div className={styles.systemRightColumn}>
+          {/* 配置管理卡片 */}
+          <Card 
+            className={styles.systemCardNew}
+            bordered={false}
+          >
+            <div className={styles.configCardHeader}>
+              <div className={styles.configCardIconWrapper}>
+                <IconFile className={styles.configCardIcon} />
+              </div>
+              <div className={styles.configCardHeaderText}>
+                <h3 className={styles.configCardTitle}>配置管理</h3>
+                <p className={styles.configCardSubtitle}>导出或导入系统配置，用于备份和恢复</p>
+              </div>
             </div>
-            <div className={styles.dangerSectionActions}>
-              <Button
-                type="primary"
-                status="danger"
-                onClick={onResetWebsite}
-              >
-                一键还原网站配置
-              </Button>
+
+            <Divider style={{ margin: '20px 0' }} />
+
+            <div className={styles.configCardActions}>
+              <div className={styles.configActionItem}>
+                <div className={styles.configActionInfo}>
+                  <h4 className={styles.configActionTitle}>导出配置</h4>
+                  <p className={styles.configActionDesc}>将所有系统配置导出为ZIP文件，用于备份</p>
+                </div>
+                <Button 
+                  type="primary" 
+                  icon={<IconExport />}
+                  onClick={onExportConfig}
+                >
+                  导出
+                </Button>
+              </div>
+
+              <Divider style={{ margin: '16px 0' }} />
+
+              <div className={styles.configActionItem}>
+                <div className={styles.configActionInfo}>
+                  <h4 className={styles.configActionTitle}>导入配置</h4>
+                  <p className={styles.configActionDesc}>从ZIP文件导入系统配置，恢复系统状态</p>
+                </div>
+                <input
+                  type="file"
+                  accept=".zip"
+                  onChange={onImportConfig}
+                  className={styles.importInput}
+                  id="config-import"
+                />
+                <Button 
+                  type="secondary" 
+                  icon={<IconDownload />}
+                  onClick={() => document.getElementById('config-import')?.click()}
+                >
+                  导入
+                </Button>
+              </div>
             </div>
-          </div>
-        </Card>
+          </Card>
+
+          {/* 危险操作卡片 */}
+          <Card 
+            className={`${styles.systemCardNew} ${styles.dangerCard}`}
+            bordered={false}
+          >
+            <div className={styles.dangerCardHeader}>
+              <div className={styles.dangerCardIconWrapper}>
+                <IconExclamationCircle className={styles.dangerCardIcon} />
+              </div>
+              <div className={styles.dangerCardHeaderText}>
+                <h3 className={styles.dangerCardTitle}>危险操作</h3>
+                <p className={styles.dangerCardSubtitle}>以下操作不可逆，请谨慎操作</p>
+              </div>
+            </div>
+
+            <Divider style={{ margin: '20px 0' }} />
+
+            <div className={styles.dangerCardContent}>
+              <div className={styles.dangerAlert}>
+                <IconInfoCircle className={styles.dangerAlertIcon} />
+                <span className={styles.dangerAlertText}>
+                  一键还原将把所有配置恢复到初始状态，此操作不可撤销
+                </span>
+              </div>
+
+              <div className={styles.dangerAction}>
+                <div className={styles.dangerActionInfo}>
+                  <h4 className={styles.dangerActionTitle}>一键还原网站配置</h4>
+                  <p className={styles.dangerActionDesc}>将所有配置还原到模版文件状态</p>
+                </div>
+                <Tooltip content="请先导出配置备份">
+                  <Button 
+                    type="primary" 
+                    status="danger"
+                    icon={<IconSync />}
+                    onClick={onResetWebsite}
+                  >
+                    还原配置
+                  </Button>
+                </Tooltip>
+              </div>
+            </div>
+          </Card>
+        </div>
       </div>
     </div>
   )

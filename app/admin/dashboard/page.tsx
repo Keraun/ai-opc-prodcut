@@ -73,7 +73,6 @@ interface Configs {
   loginLogs: any
   theme: ThemeData
   header: any
-  'sidebar-nav': any
   'section-hero': any
   'section-partner': any
   'section-products': any
@@ -109,7 +108,6 @@ export default function AdminDashboardPage() {
       themes: {}
     },
     header: {},
-    'sidebar-nav': {},
     'section-hero': {},
     'section-partner': {},
     'section-products': {},
@@ -141,7 +139,6 @@ export default function AdminDashboardPage() {
       themes: {}
     },
     header: {},
-    'sidebar-nav': {},
     'section-hero': {},
     'section-partner': {},
     'section-products': {},
@@ -906,21 +903,6 @@ export default function AdminDashboardPage() {
                   await handleSave('header')
                 }}
                 hasChanges={hasConfigChanges('header')}
-                loading={loading}
-              />
-            )}
-
-            {activeMenu === 'sidebar-nav' && (
-              <ConfigFormEditor
-                configType="sidebar-nav"
-                title="侧边栏导航配置"
-                description="配置网站侧边栏导航"
-                configData={configs['sidebar-nav'] || {}}
-                onSave={async (data) => {
-                  setConfigs(prev => ({ ...prev, 'sidebar-nav': data }))
-                  await handleSave('sidebar-nav')
-                }}
-                hasChanges={hasConfigChanges('sidebar-nav')}
                 loading={loading}
               />
             )}
