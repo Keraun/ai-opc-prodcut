@@ -1,4 +1,5 @@
 import type { HTMLAttributes, ReactNode } from "react"
+import { SectionTag } from "./section-tag"
 import styles from "./section.module.css"
 
 export interface SectionProps extends HTMLAttributes<HTMLElement> {
@@ -38,21 +39,23 @@ export function Section({
       {...props}
     >
       <div className={`${styles.container} ${maxWidthClass} ${centered ? styles.centered : ""}`}>
-        {badge && (
-          <span className={styles.badge}>
-            {badge}
-          </span>
-        )}
-        {title && (
-          <h2 className={styles.title}>
-            {title}
-          </h2>
-        )}
-        {description && (
-          <p className={styles.description}>
-            {description}
-          </p>
-        )}
+        <div className={styles.header}>
+          {badge && (
+            <SectionTag className={styles.badge}>
+              {badge}
+            </SectionTag>
+          )}
+          {title && (
+            <h2 className={styles.title}>
+              {title}
+            </h2>
+          )}
+          {description && (
+            <p className={styles.description}>
+              {description}
+            </p>
+          )}
+        </div>
         {children}
       </div>
     </section>

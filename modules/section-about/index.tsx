@@ -1,7 +1,7 @@
 import type { ModuleProps } from "@/modules/types"
 import type { AboutData } from "./types"
 import { useTheme } from "@/components/theme-provider"
-import { SectionTag } from "@/components/ui"
+import { Section } from "@/components/ui"
 import { StarIcon, CompassIcon, HeartIcon, ThunderboltIcon, UserIcon, CheckCircleIcon } from "@/modules/icons"
 import styles from "./index.module.css"
 
@@ -75,7 +75,11 @@ export function AboutModule({ data }: ModuleProps) {
   }
 
   return (
-    <section id="about" className={styles.section}>
+    <Section
+      id="about"
+      badge={config?.sectionTag}
+      className={styles.section}
+    >
       <div className={styles.bgPattern} />
       <div className={styles.decorativeOrb1} />
       <div className={styles.decorativeOrb2} />
@@ -83,27 +87,20 @@ export function AboutModule({ data }: ModuleProps) {
       <div className={styles.container}>
         <div className={styles.grid}>
           <div className={styles.leftContent}>
-            <div className={styles.header}>
-              <SectionTag
-                className={styles.tag}
-              >
-                {config?.sectionTag}
-              </SectionTag>
-              {config?.title && (
-                <h2 className={styles.title}>
-                  {config.title?.main}
-                  <br />
-                  {config.title?.highlight && (
-                    <span 
-                      className={styles.titleHighlight}
-                      style={{ color: primaryColor }}
-                    >
-                      {config.title.highlight}
-                    </span>
-                  )}
-                </h2>
-              )}
-            </div>
+            {config?.title && (
+              <h2 className={styles.title}>
+                {config.title?.main}
+                <br />
+                {config.title?.highlight && (
+                  <span 
+                    className={styles.titleHighlight}
+                    style={{ color: primaryColor }}
+                  >
+                    {config.title.highlight}
+                  </span>
+                )}
+              </h2>
+            )}
             {config?.description && config.description.length > 0 && (
               <div className={styles.description}>
                 {config.description.map((desc: string, index: number) => (
@@ -174,6 +171,6 @@ export function AboutModule({ data }: ModuleProps) {
           </div>
         </div>
       </div>
-    </section>
+    </Section>
   )
 }

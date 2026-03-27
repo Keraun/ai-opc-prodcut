@@ -1,7 +1,7 @@
 import Image from 'next/image'
 import type { ModuleProps } from "@/modules/types"
 import type { PartnerData, PartnerItem } from "./types"
-import { SectionTag } from "@/components/ui"
+import { Section } from "@/components/ui"
 import styles from "./index.module.css"
 
 export function PartnerModule({ data }: ModuleProps) {
@@ -9,24 +9,13 @@ export function PartnerModule({ data }: ModuleProps) {
   const items: PartnerItem[] = config.items || []
 
   return (
-    <div id="partner" className={styles.container}>
-      <div className={styles.header}>
-        {config.sectionTag && (
-          <SectionTag
-            className={styles.tag}
-          >
-            {config.sectionTag}
-          </SectionTag>
-        )}
-        <div className={styles.title}>
-          {config.title}
-        </div>
-        {config.description && (
-          <p className={styles.description}>
-            {config.description}
-          </p>
-        )}
-      </div>
+    <Section
+      id="partner"
+      badge={config.sectionTag}
+      title={config.title}
+      description={config.description}
+      className={styles.container}
+    >
       <ul className={styles.partnerList}>
         {items.map((item: PartnerItem, index: number) => (
           <li className={styles.partnerItem} key={index}>
@@ -40,6 +29,6 @@ export function PartnerModule({ data }: ModuleProps) {
           </li>
         ))}
       </ul>
-    </div>
+    </Section>
   )
 }

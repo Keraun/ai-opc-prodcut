@@ -1,7 +1,7 @@
 import type { ModuleProps } from "@/modules/types"
 import type { ServicesData } from "./types"
 import { useTheme } from "@/components/theme-provider"
-import { SectionTag } from "@/components/ui"
+import { Section } from "@/components/ui"
 import { BulbIcon, BookIcon, SettingsIcon, CustomerServiceIcon } from "@/modules/icons"
 import styles from "./index.module.css"
 
@@ -43,24 +43,16 @@ export function ServicesModule({ data }: ModuleProps) {
   }))
 
   return (
-    <section id="services" className={styles.section}>
+    <Section
+      id="services"
+      badge={config.sectionTag}
+      title={config.title}
+      description={config.description}
+      className={styles.section}
+    >
       <div className={styles.bgPattern} />
 
       <div className={styles.container}>
-        <div className={styles.header}>
-          <SectionTag
-            className={styles.tag}
-          >
-            {config.sectionTag}
-          </SectionTag>
-          <h2 className={styles.title}>
-            {config.title}
-          </h2>
-          <p className={styles.description}>
-            {config.description}
-          </p>
-        </div>
-
         <div className={styles.grid}>
           {services.map((service, index) => {
             const getColor = (colorType: string) => {
@@ -107,6 +99,6 @@ export function ServicesModule({ data }: ModuleProps) {
           })}
         </div>
       </div>
-    </section>
+    </Section>
   )
 }

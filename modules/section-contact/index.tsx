@@ -1,7 +1,7 @@
 import type { ModuleProps } from "@/modules/types"
 import type { ContactData } from "./types"
 import { useTheme } from "@/components/theme-provider"
-import { SectionTag } from "@/components/ui"
+import { Section } from "@/components/ui"
 import { SendIcon } from "@/modules/icons"
 import styles from "./index.module.css"
 
@@ -13,31 +13,18 @@ export function ContactModule({ data }: ModuleProps) {
   const accentColor = themeConfig?.colors.accent || "#06b6d4" // 默认强调色
 
   return (
-    <section id="contact" className={styles.section}>
+    <Section
+      id="contact"
+      badge={config.sectionTag}
+      title={config.title}
+      description={config.description}
+      className={styles.section}
+    >
       <div className={styles.bgPattern} />
       <div className={styles.decorativeOrb1} />
       <div className={styles.decorativeOrb2} />
 
       <div className={styles.container}>
-        <div className={styles.header}>
-          <SectionTag
-            className={styles.tag}
-            style={{
-              backgroundColor: `${accentColor}0D`,
-              color: accentColor,
-              borderColor: `${accentColor}33`
-            }}
-          >
-            {config.sectionTag}
-          </SectionTag>
-          <h2 className={styles.title}>
-            {config.title}
-          </h2>
-          <p className={styles.description}>
-            {config.description}
-          </p>
-        </div>
-
         <div className={styles.card}>
           <div className={styles.cardContent}>
             <form
@@ -161,6 +148,6 @@ export function ContactModule({ data }: ModuleProps) {
           </div>
         </div>
       </div>
-    </section>
+    </Section>
   )
 }
