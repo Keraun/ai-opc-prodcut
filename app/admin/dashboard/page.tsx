@@ -122,7 +122,7 @@ export default function AdminDashboardPage() {
       appSecret: '',
       baseLink: '',
       tableId: '',
-      viewId: ''
+      tableLink: ''
     }
   })
   const [originalConfigs, setOriginalConfigs] = useState<Configs>({
@@ -160,7 +160,7 @@ export default function AdminDashboardPage() {
       appSecret: '',
       baseLink: '',
       tableId: '',
-      viewId: ''
+      tableLink: ''
     }
   })
   const [loading, setLoading] = useState(false)

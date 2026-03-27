@@ -43,6 +43,7 @@ export function ConfigFormEditor({
   const [showFieldsModal, setShowFieldsModal] = useState(false)
   const [loadingFields, setLoadingFields] = useState(false)
   const [creatingTable, setCreatingTable] = useState(false)
+  const [tableLink, setTableLink] = useState<string>('')
 
   const isFeishuConfig = configType === 'feishu-app'
 
@@ -124,17 +125,22 @@ export function ConfigFormEditor({
       const result = await response.json()
       
       if (result.success) {
-        toast.success('飞书表格创建成功')
-        await onSave({
+        toast.success('飞书数据表生成成功')
+        setTableLink(result.data.tableLink)
+        
+        const updatedConfig = {
           ...configData,
-          tableId: result.data.tableId
-        })
+          tableId: result.data.tableId,
+          tableLink: result.data.tableLink
+        }
+        
+        await onSave(updatedConfig)
       } else {
-        toast.error(result.message || '创建飞书表格失败')
+        toast.error(result.message || '生成飞书数据表失败')
       }
     } catch (error) {
       console.error('Failed to create table:', error)
-      toast.error('创建飞书表格失败')
+      toast.error('生成飞书数据表失败')
     } finally {
       setCreatingTable(false)
     }
@@ -171,7 +177,7 @@ export function ConfigFormEditor({
                 loading={creatingTable}
                 onClick={handleCreateTable}
               >
-                自动创建表格
+                生成数据表
               </Button>
             </>
           )}
@@ -205,6 +211,48 @@ export function ConfigFormEditor({
           loading={submitting}
         />
       </Card>
+
+      {isFeishuConfig && tableLink && (
+        <Card className={styles.formCard} style={{ marginTop: '16px' }}>
+          <div style={{ marginBottom: '12px' }}>
+            <h3 style={{ fontSize: '16px', fontWeight: 'bold', marginBottom: '8px' }}>
+              飞书数据表链接
+            </h3>
+            <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
+              <input
+                type="text"
+                value={tableLink}
+                readOnly
+                style={{
+                  flex: 1,
+                  padding: '8px 12px',
+                  border: '1px solid #e5e7eb',
+                  borderRadius: '4px',
+                  backgroundColor: '#f9fafb',
+                  fontSize: '14px',
+                  color: '#374151'
+                }}
+              />
+              <Button
+                type="primary"
+                onClick={() => {
+                  navigator.clipboard.writeText(tableLink)
+                  toast.success('链接已复制到剪贴板')
+                }}
+              >
+                复制链接
+              </Button>
+              <Button
+                onClick={() => {
+                  window.open(tableLink, '_blank')
+                }}
+              >
+                打开表格
+              </Button>
+            </div>
+          </div>
+        </Card>
+      )}
 
       <Modal
         title="JSON预览"

@@ -125,7 +125,11 @@ export async function POST(request: NextRequest) {
       )
     }
 
+    const appToken = feishuConfig.baseLink
+    const tableLink = `https://example.feishu.cn/base/${appToken}/table/${tableId}`
+
     feishuConfig.tableId = tableId
+    feishuConfig.tableLink = tableLink
     writeConfig('feishu-app', feishuConfig)
 
     return NextResponse.json({
@@ -133,6 +137,7 @@ export async function POST(request: NextRequest) {
       message: "飞书表格创建成功",
       data: {
         tableId: tableId,
+        tableLink: tableLink,
         table: createTableData.data?.table
       }
     })
