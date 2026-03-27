@@ -55,8 +55,8 @@ export function ConfigFormEditor({
     try {
       const response = await fetch(`/api/admin/schema?type=${configType}`)
       if (response.ok) {
-        const data = await response.json()
-        setSchema(data)
+        const result = await response.json()
+        setSchema(result.data)
       }
     } catch (error) {
       console.error('Failed to fetch schema:', error)

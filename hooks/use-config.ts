@@ -34,8 +34,8 @@ export function useConfig() {
         if (!response.ok) {
           throw new Error('获取配置失败')
         }
-        const data = await response.json()
-        setConfigs(data)
+        const result = await response.json()
+        setConfigs(result.data)
         setError(null)
       } catch (err) {
         setError(err instanceof Error ? err.message : '获取配置失败')

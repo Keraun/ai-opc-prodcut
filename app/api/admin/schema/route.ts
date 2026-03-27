@@ -1,6 +1,7 @@
-import { NextResponse } from 'next/server'
+import { NextRequest } from 'next/server'
 import fs from 'fs'
 import path from 'path'
+import { wrapApiHandler, successResponse, badRequestResponse, errorResponse } from '@/lib/api-utils'
 
 const schemaMap: Record<string, string> = {
   'article': 'article-schema.json',
@@ -23,18 +24,15 @@ const schemaMap: Record<string, string> = {
   'feishu-app': 'feishu-app-schema.json'
 }
 
-export async function GET(request: Request) {
-  const { searchParams } = new URL(request.url)
-  const type = searchParams.get('type')
+export async function GET(request: NextRequest) {
+  return wrapApiHandler(async () => {
+    const { searchParams } = new URL(request.url)
+    const type = searchParams.get('type')
 
-  if (!type || !schemaMap[type]) {
-    return NextResponse.json(
-      { error: 'Invalid schema type' },
-      { status: 400 }
-    )
-  }
+    if (!type || !schemaMap[type]) {
+      return badRequestResponse('Invalid schema type')
+    }
 
-  try {
     const schemaPath = path.join(
       process.cwd(),
       'config/json/form-schema',
@@ -44,12 +42,6 @@ export async function GET(request: Request) {
     const schemaContent = fs.readFileSync(schemaPath, 'utf-8')
     const schema = JSON.parse(schemaContent)
 
-    return NextResponse.json(schema)
-  } catch (error) {
-    console.error('Error reading schema:', error)
-    return NextResponse.json(
-      { error: 'Failed to load schema' },
-      { status: 500 }
-    )
-  }
+    return successResponse(schema)
+  })
 }

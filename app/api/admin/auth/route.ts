@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server"
 import { cookies } from "next/headers"
+import { successResponse, unauthorizedResponse } from "@/lib/api-utils"
 
 export async function GET() {
   try {
@@ -7,20 +8,16 @@ export async function GET() {
     const adminUserCookie = cookieStore.get('adminUser')
     
     if (!adminUserCookie) {
-      return NextResponse.json({
-        authenticated: false
-      }, { status: 401 })
+      return unauthorizedResponse()
     }
 
     const adminUser = JSON.parse(adminUserCookie.value)
     
-    return NextResponse.json({
+    return successResponse({
       authenticated: true,
       user: adminUser
     })
   } catch (error) {
-    return NextResponse.json({
-      authenticated: false
-    }, { status: 401 })
+    return unauthorizedResponse()
   }
 }

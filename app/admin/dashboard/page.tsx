@@ -170,7 +170,8 @@ export default function AdminDashboardPage() {
   const checkAuth = async () => {
     try {
       const response = await fetch("/api/admin/auth")
-      const data = await response.json()
+      const result = await response.json()
+      const data = result.data
 
       if (!data.authenticated) {
         router.push("/admin")
@@ -265,8 +266,8 @@ export default function AdminDashboardPage() {
     try {
       const response = await fetch("/api/admin/schema")
       if (response.ok) {
-        const data = await response.json()
-        setSchema(data)
+        const result = await response.json()
+        setSchema(result.data)
       }
     } catch (error) {
       console.error("获取配置说明失败", error)
@@ -279,7 +280,8 @@ export default function AdminDashboardPage() {
     try {
       const response = await fetch("/api/admin/config")
       if (response.ok) {
-        const data = await response.json()
+        const result = await response.json()
+        const data = result.data
         
         // 直接使用API返回的主题配置
         const mergedData = {

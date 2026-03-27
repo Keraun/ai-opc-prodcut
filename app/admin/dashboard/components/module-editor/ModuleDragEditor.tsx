@@ -41,8 +41,8 @@ export function ModuleDragEditor({ modules, onChange }: ModuleDragEditorProps) {
     try {
       const response = await fetch("/api/modules")
       if (response.ok) {
-        const data = await response.json()
-        setAvailableModules(data.modules || [])
+        const result = await response.json()
+        setAvailableModules(result.data || [])
       }
     } catch (error) {
       toast.error("获取可用模块列表失败")

@@ -75,9 +75,10 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
     // 从API获取主题配置
     async function fetchThemeConfig() {
       try {
-        const response = await fetch('/api/admin/config')
+        const response = await fetch('/api/config')
         if (response.ok) {
-          const data = await response.json()
+          const result = await response.json()
+          const data = result.data
           if (data.theme && data.theme.themes) {
             setThemes(data.theme.themes)
             const themeId = savedTheme || data.theme.currentTheme || "modern"
