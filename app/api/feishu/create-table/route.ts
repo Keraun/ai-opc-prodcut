@@ -106,9 +106,20 @@ export async function POST(request: NextRequest) {
       })
     })
 
+    console.log("创建表格请求URL:", `https://open.feishu.cn/open-apis/bitable/v1/apps/${feishuConfig.baseLink}/tables`)
+    console.log("创建表格请求体:", JSON.stringify({
+      table: {
+        name: "留言表",
+        default_view_id: "",
+        fields: defaultFields
+      }
+    }, null, 2))
+    console.log("创建表格响应状态:", createTableResponse.status)
+
     if (!createTableResponse.ok) {
       const createError = await createTableResponse.json()
       console.error("创建飞书表格失败:", createError)
+      console.error("错误详情:", JSON.stringify(createError, null, 2))
       return NextResponse.json(
         { success: false, message: "创建飞书表格失败", error: createError },
         { status: 500 }

@@ -56,10 +56,7 @@ interface ThemeData {
 
 interface Configs {
   site: any
-  navigation: any
   footer: any
-  home: any
-  homeOrder: any
   homeBanner: any
   homePartners: any
   homeProducts: any
@@ -70,8 +67,6 @@ interface Configs {
   products: any
   otherPages: any
   custom: any
-  account: any
-  loginLogs: any
   theme: ThemeData
   header: any
   'section-hero': any
@@ -89,10 +84,7 @@ export default function AdminDashboardPage() {
   const { setTheme } = useTheme()
   const [configs, setConfigs] = useState<Configs>({
     site: {},
-    navigation: {},
     footer: {},
-    home: {},
-    homeOrder: {},
     homeBanner: {},
     homePartners: {},
     homeProducts: {},
@@ -103,8 +95,6 @@ export default function AdminDashboardPage() {
     products: {},
     otherPages: {},
     custom: {},
-    account: {},
-    loginLogs: {},
     theme: {
       currentTheme: 'dark',
       themes: {}
@@ -127,10 +117,7 @@ export default function AdminDashboardPage() {
   })
   const [originalConfigs, setOriginalConfigs] = useState<Configs>({
     site: {},
-    navigation: {},
     footer: {},
-    home: {},
-    homeOrder: {},
     homeBanner: {},
     homePartners: {},
     homeProducts: {},
@@ -141,8 +128,6 @@ export default function AdminDashboardPage() {
     products: {},
     otherPages: {},
     custom: {},
-    account: {},
-    loginLogs: {},
     theme: {
       currentTheme: 'dark',
       themes: {}
