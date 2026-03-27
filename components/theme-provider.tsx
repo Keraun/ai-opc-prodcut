@@ -75,7 +75,7 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
     const themeConfigs: Record<string, ThemeConfig> = {
       tech: {
         id: "tech",
-        name: "科技深色",
+        name: "未来科技",
         description: "充满科技感的设计风格，紫色系配色，适合科技产品展示",
         colors: {
           primary: "#7c3aed",
@@ -119,204 +119,20 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
           }
         }
       },
-      nature: {
-        id: "nature",
-        name: "清新自然",
-        description: "明亮清新的设计风格，绿色系配色，适合环保、健康类产品",
+      blackgold: {
+        id: "blackgold",
+        name: "黑金主题",
+        description: "高端大气的黑金配色方案，适合奢华品牌和企业形象网站",
         colors: {
-          primary: "#059669",
-          primaryHover: "#047857",
-          secondary: "#10b981",
-          accent: "#f59e0b",
-          background: "#ffffff",
-          backgroundSecondary: "#f0fdf4",
-          text: "#1f2937",
-          textSecondary: "#6b7280",
-          border: "#d1d5db",
-          success: "#10b981",
-          warning: "#f59e0b",
-          error: "#ef4444"
-        },
-        layout: {
-          headerStyle: "floating",
-          footerStyle: "minimal",
-          cardStyle: "soft",
-          buttonStyle: "pill"
-        },
-        effects: {
-          shadow: "soft",
-          borderRadius: "large",
-          animation: "gentle"
-        },
-        darkMode: {
-          colors: {
-            primary: "#34d399",
-            primaryHover: "#10b981",
-            secondary: "#6ee7b7",
-            accent: "#fbbf24",
-            background: "#022c22",
-            backgroundSecondary: "#064e3b",
-            text: "#f0fdf4",
-            textSecondary: "#a7f3d0",
-            border: "#065f46",
-            success: "#34d399",
-            warning: "#fbbf24",
-            error: "#f87171"
-          }
-        }
-      },
-      modern: {
-        id: "modern",
-        name: "现代简约",
-        description: "简洁大方的设计风格，蓝色系配色，适合企业官网",
-        colors: {
-          primary: "#1e40af",
-          primaryHover: "#1e3a8a",
-          secondary: "#3b82f6",
-          accent: "#06b6d4",
-          background: "#ffffff",
-          backgroundSecondary: "#f8fafc",
-          text: "#1e293b",
-          textSecondary: "#64748b",
-          border: "#e2e8f0",
-          success: "#10b981",
-          warning: "#f59e0b",
-          error: "#ef4444"
-        },
-        layout: {
-          headerStyle: "default",
-          footerStyle: "default",
-          cardStyle: "rounded",
-          buttonStyle: "rounded"
-        },
-        effects: {
-          shadow: "medium",
-          borderRadius: "medium",
-          animation: "smooth"
-        },
-        darkMode: {
-          colors: {
-            primary: "#3b82f6",
-            primaryHover: "#2563eb",
-            secondary: "#60a5fa",
-            accent: "#22d3ee",
-            background: "#0f172a",
-            backgroundSecondary: "#1e293b",
-            text: "#f1f5f9",
-            textSecondary: "#94a3b8",
-            border: "#334155",
-            success: "#34d399",
-            warning: "#fbbf24",
-            error: "#f87171"
-          }
-        }
-      },
-      minimal: {
-        id: "minimal",
-        name: "极简主义",
-        description: "简洁干净的设计风格，中性配色，适合专业、商务类产品",
-        colors: {
-          primary: "#374151",
-          primaryHover: "#1f2937",
-          secondary: "#6b7280",
-          accent: "#10b981",
-          background: "#ffffff",
-          backgroundSecondary: "#f9fafb",
-          text: "#111827",
-          textSecondary: "#6b7280",
-          border: "#e5e7eb",
-          success: "#10b981",
-          warning: "#f59e0b",
-          error: "#ef4444"
-        },
-        layout: {
-          headerStyle: "fixed",
-          footerStyle: "standard",
-          cardStyle: "flat",
-          buttonStyle: "flat"
-        },
-        effects: {
-          shadow: "none",
-          borderRadius: "small",
-          animation: "subtle"
-        },
-        darkMode: {
-          colors: {
-            primary: "#9ca3af",
-            primaryHover: "#d1d5db",
-            secondary: "#6b7280",
-            accent: "#34d399",
-            background: "#111827",
-            backgroundSecondary: "#1f2937",
-            text: "#f9fafb",
-            textSecondary: "#9ca3af",
-            border: "#374151",
-            success: "#34d399",
-            warning: "#fbbf24",
-            error: "#f87171"
-          }
-        }
-      },
-      dark: {
-        id: "dark",
-        name: "深色模式",
-        description: "深色背景设计，减少眼部疲劳，适合夜间使用和科技产品",
-        colors: {
-          primary: "#3b82f6",
-          primaryHover: "#2563eb",
-          secondary: "#8b5cf6",
-          accent: "#ec4899",
-          background: "#121212",
-          backgroundSecondary: "#1e1e1e",
-          text: "#e5e7eb",
-          textSecondary: "#9ca3af",
+          primary: "#d4af37",
+          primaryHover: "#b8860b",
+          secondary: "#f4d03f",
+          accent: "#c0c0c0",
+          background: "#000000",
+          backgroundSecondary: "#1a1a1a",
+          text: "#ffffff",
+          textSecondary: "#d1d5db",
           border: "#374151",
-          success: "#10b981",
-          warning: "#f59e0b",
-          error: "#ef4444"
-        },
-        layout: {
-          headerStyle: "floating",
-          footerStyle: "standard",
-          cardStyle: "soft",
-          buttonStyle: "pill"
-        },
-        effects: {
-          shadow: "medium",
-          borderRadius: "medium",
-          animation: "smooth"
-        },
-        darkMode: {
-          colors: {
-            primary: "#60a5fa",
-            primaryHover: "#3b82f6",
-            secondary: "#a78bfa",
-            accent: "#f472b6",
-            background: "#0f0f0f",
-            backgroundSecondary: "#1a1a1a",
-            text: "#f9fafb",
-            textSecondary: "#d1d5db",
-            border: "#4b5563",
-            success: "#34d399",
-            warning: "#fbbf24",
-            error: "#f87171"
-          }
-        }
-      },
-      luxury: {
-        id: "luxury",
-        name: "奢华风格",
-        description: "高端奢华的设计风格，金色系配色，适合高端品牌和奢侈品",
-        colors: {
-          primary: "#b45309",
-          primaryHover: "#92400e",
-          secondary: "#d97706",
-          accent: "#7e22ce",
-          background: "#ffffff",
-          backgroundSecondary: "#fef3c7",
-          text: "#1f2937",
-          textSecondary: "#6b7280",
-          border: "#fcd34d",
           success: "#10b981",
           warning: "#f59e0b",
           error: "#ef4444"
@@ -329,20 +145,20 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
         },
         effects: {
           shadow: "strong",
-          borderRadius: "large",
+          borderRadius: "medium",
           animation: "elegant"
         },
         darkMode: {
           colors: {
-            primary: "#f59e0b",
-            primaryHover: "#d97706",
-            secondary: "#fbbf24",
-            accent: "#a855f7",
-            background: "#1e1b4b",
-            backgroundSecondary: "#2d3748",
-            text: "#fef3c7",
-            textSecondary: "#d1d5db",
-            border: "#b45309",
+            primary: "#f4d03f",
+            primaryHover: "#d4af37",
+            secondary: "#f9e79f",
+            accent: "#e0e0e0",
+            background: "#000000",
+            backgroundSecondary: "#121212",
+            text: "#ffffff",
+            textSecondary: "#e5e7eb",
+            border: "#4b5563",
             success: "#34d399",
             warning: "#fbbf24",
             error: "#f87171"
@@ -424,7 +240,7 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
     const themeConfigs: Record<string, ThemeConfig> = {
       tech: {
         id: "tech",
-        name: "科技深色",
+        name: "未来科技",
         description: "充满科技感的设计风格，紫色系配色，适合科技产品展示",
         colors: {
           primary: "#7c3aed",
@@ -468,204 +284,20 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
           }
         }
       },
-      nature: {
-        id: "nature",
-        name: "清新自然",
-        description: "明亮清新的设计风格，绿色系配色，适合环保、健康类产品",
+      blackgold: {
+        id: "blackgold",
+        name: "黑金主题",
+        description: "高端大气的黑金配色方案，适合奢华品牌和企业形象网站",
         colors: {
-          primary: "#059669",
-          primaryHover: "#047857",
-          secondary: "#10b981",
-          accent: "#f59e0b",
-          background: "#ffffff",
-          backgroundSecondary: "#f0fdf4",
-          text: "#1f2937",
-          textSecondary: "#6b7280",
-          border: "#d1d5db",
-          success: "#10b981",
-          warning: "#f59e0b",
-          error: "#ef4444"
-        },
-        layout: {
-          headerStyle: "floating",
-          footerStyle: "minimal",
-          cardStyle: "soft",
-          buttonStyle: "pill"
-        },
-        effects: {
-          shadow: "soft",
-          borderRadius: "large",
-          animation: "gentle"
-        },
-        darkMode: {
-          colors: {
-            primary: "#34d399",
-            primaryHover: "#10b981",
-            secondary: "#6ee7b7",
-            accent: "#fbbf24",
-            background: "#022c22",
-            backgroundSecondary: "#064e3b",
-            text: "#f0fdf4",
-            textSecondary: "#a7f3d0",
-            border: "#065f46",
-            success: "#34d399",
-            warning: "#fbbf24",
-            error: "#f87171"
-          }
-        }
-      },
-      modern: {
-        id: "modern",
-        name: "现代简约",
-        description: "简洁大方的设计风格，蓝色系配色，适合企业官网",
-        colors: {
-          primary: "#1e40af",
-          primaryHover: "#1e3a8a",
-          secondary: "#3b82f6",
-          accent: "#06b6d4",
-          background: "#ffffff",
-          backgroundSecondary: "#f8fafc",
-          text: "#1e293b",
-          textSecondary: "#64748b",
-          border: "#e2e8f0",
-          success: "#10b981",
-          warning: "#f59e0b",
-          error: "#ef4444"
-        },
-        layout: {
-          headerStyle: "default",
-          footerStyle: "default",
-          cardStyle: "rounded",
-          buttonStyle: "rounded"
-        },
-        effects: {
-          shadow: "medium",
-          borderRadius: "medium",
-          animation: "smooth"
-        },
-        darkMode: {
-          colors: {
-            primary: "#3b82f6",
-            primaryHover: "#2563eb",
-            secondary: "#60a5fa",
-            accent: "#22d3ee",
-            background: "#0f172a",
-            backgroundSecondary: "#1e293b",
-            text: "#f1f5f9",
-            textSecondary: "#94a3b8",
-            border: "#334155",
-            success: "#34d399",
-            warning: "#fbbf24",
-            error: "#f87171"
-          }
-        }
-      },
-      minimal: {
-        id: "minimal",
-        name: "极简主义",
-        description: "简洁干净的设计风格，中性配色，适合专业、商务类产品",
-        colors: {
-          primary: "#374151",
-          primaryHover: "#1f2937",
-          secondary: "#6b7280",
-          accent: "#10b981",
-          background: "#ffffff",
-          backgroundSecondary: "#f9fafb",
-          text: "#111827",
-          textSecondary: "#6b7280",
-          border: "#e5e7eb",
-          success: "#10b981",
-          warning: "#f59e0b",
-          error: "#ef4444"
-        },
-        layout: {
-          headerStyle: "fixed",
-          footerStyle: "standard",
-          cardStyle: "flat",
-          buttonStyle: "flat"
-        },
-        effects: {
-          shadow: "none",
-          borderRadius: "small",
-          animation: "subtle"
-        },
-        darkMode: {
-          colors: {
-            primary: "#9ca3af",
-            primaryHover: "#d1d5db",
-            secondary: "#6b7280",
-            accent: "#34d399",
-            background: "#111827",
-            backgroundSecondary: "#1f2937",
-            text: "#f9fafb",
-            textSecondary: "#9ca3af",
-            border: "#374151",
-            success: "#34d399",
-            warning: "#fbbf24",
-            error: "#f87171"
-          }
-        }
-      },
-      dark: {
-        id: "dark",
-        name: "深色模式",
-        description: "深色背景设计，减少眼部疲劳，适合夜间使用和科技产品",
-        colors: {
-          primary: "#3b82f6",
-          primaryHover: "#2563eb",
-          secondary: "#8b5cf6",
-          accent: "#ec4899",
-          background: "#121212",
-          backgroundSecondary: "#1e1e1e",
-          text: "#e5e7eb",
-          textSecondary: "#9ca3af",
+          primary: "#d4af37",
+          primaryHover: "#b8860b",
+          secondary: "#f4d03f",
+          accent: "#c0c0c0",
+          background: "#000000",
+          backgroundSecondary: "#1a1a1a",
+          text: "#ffffff",
+          textSecondary: "#d1d5db",
           border: "#374151",
-          success: "#10b981",
-          warning: "#f59e0b",
-          error: "#ef4444"
-        },
-        layout: {
-          headerStyle: "floating",
-          footerStyle: "standard",
-          cardStyle: "soft",
-          buttonStyle: "pill"
-        },
-        effects: {
-          shadow: "medium",
-          borderRadius: "medium",
-          animation: "smooth"
-        },
-        darkMode: {
-          colors: {
-            primary: "#60a5fa",
-            primaryHover: "#3b82f6",
-            secondary: "#a78bfa",
-            accent: "#f472b6",
-            background: "#0f0f0f",
-            backgroundSecondary: "#1a1a1a",
-            text: "#f9fafb",
-            textSecondary: "#d1d5db",
-            border: "#4b5563",
-            success: "#34d399",
-            warning: "#fbbf24",
-            error: "#f87171"
-          }
-        }
-      },
-      luxury: {
-        id: "luxury",
-        name: "奢华风格",
-        description: "高端奢华的设计风格，金色系配色，适合高端品牌和奢侈品",
-        colors: {
-          primary: "#b45309",
-          primaryHover: "#92400e",
-          secondary: "#d97706",
-          accent: "#7e22ce",
-          background: "#ffffff",
-          backgroundSecondary: "#fef3c7",
-          text: "#1f2937",
-          textSecondary: "#6b7280",
-          border: "#fcd34d",
           success: "#10b981",
           warning: "#f59e0b",
           error: "#ef4444"
@@ -678,20 +310,20 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
         },
         effects: {
           shadow: "strong",
-          borderRadius: "large",
+          borderRadius: "medium",
           animation: "elegant"
         },
         darkMode: {
           colors: {
-            primary: "#f59e0b",
-            primaryHover: "#d97706",
-            secondary: "#fbbf24",
-            accent: "#a855f7",
-            background: "#1e1b4b",
-            backgroundSecondary: "#2d3748",
-            text: "#fef3c7",
-            textSecondary: "#d1d5db",
-            border: "#b45309",
+            primary: "#f4d03f",
+            primaryHover: "#d4af37",
+            secondary: "#f9e79f",
+            accent: "#e0e0e0",
+            background: "#000000",
+            backgroundSecondary: "#121212",
+            text: "#ffffff",
+            textSecondary: "#e5e7eb",
+            border: "#4b5563",
             success: "#34d399",
             warning: "#fbbf24",
             error: "#f87171"

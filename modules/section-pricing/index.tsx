@@ -76,20 +76,24 @@ export function PricingModule({ data }: ModuleProps) {
           const cardFooter = planLink ? (
             <Link href={planLink} className={styles.buttonLink}>
               <Button
-                variant={plan.isPopular ? "primary" : "outline"}
-                size="lg"
-                fullWidth
-                icon={<ArrowRightIcon />}
-                iconPosition="right"
-                style={{
-                  backgroundColor: plan.isPopular ? primaryColor : 'transparent',
-                  borderColor: primaryColor,
-                  color: plan.isPopular ? '#ffffff' : primaryColor,
-                  transition: 'all 0.3s ease'
-                }}
-              >
-                {plan.buttonText}
-              </Button>
+                  variant={plan.isPopular ? "primary" : "outline"}
+                  size="lg"
+                  fullWidth
+                  icon={<ArrowRightIcon />}
+                  iconPosition="right"
+                  style={{
+                    backgroundColor: plan.isPopular ? primaryColor : 'transparent',
+                    borderColor: primaryColor,
+                    color: plan.isPopular ? '#ffffff' : primaryColor,
+                    transition: 'all 0.3s ease',
+                    '&:hover': {
+                      backgroundColor: plan.isPopular ? secondaryColor : `${primaryColor}10`,
+                      borderColor: secondaryColor
+                    }
+                  }}
+                >
+                  {plan.buttonText}
+                </Button>
             </Link>
           ) : (
             <Button
@@ -102,7 +106,8 @@ export function PricingModule({ data }: ModuleProps) {
               style={{
                 backgroundColor: plan.isPopular ? primaryColor : 'transparent',
                 borderColor: primaryColor,
-                color: plan.isPopular ? '#ffffff' : primaryColor
+                color: plan.isPopular ? '#ffffff' : primaryColor,
+                opacity: 0.7
               }}
             >
               {plan.buttonText}

@@ -1605,8 +1605,8 @@
 .themeCard {
   position: relative;
   border: 2px solid;
-  border-radius: 12.0px;
-  padding: 24.0px;
+  border-radius: 8.0px;
+  padding: 16.0px;
   cursor: pointer;
   transition: all 0.2s;
 }

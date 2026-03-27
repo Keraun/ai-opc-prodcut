@@ -238,13 +238,18 @@ export function PageManagement({ onEditPage }: PageManagementProps) {
               系统页面
             </Tag>
           )}
-          {record.type === 'dynamic' && (
-            <Tag size="small" color="purple" style={{ marginLeft: 8 }}>
-              动态路由
-            </Tag>
-          )}
         </div>
       ),
+    },
+    {
+      title: "页面类型",
+      dataIndex: "type",
+      key: "type",
+      render: (type: string) => {
+        return <Tag color={type === 'dynamic' ? 'purple' : 'blue'}>
+          {type === 'dynamic' ? '动态路由' : '静态页面'}
+        </Tag>
+      },
     },
     {
       title: "Tab标签",
@@ -339,6 +344,8 @@ export function PageManagement({ onEditPage }: PageManagementProps) {
                 size="small"
                 status="warning"
                 onClick={() => handleOfflinePage(record.id)}
+                disabled={systemPages.includes(record.id)}
+                style={systemPages.includes(record.id) ? { opacity: 0.5 } : {}}
               >
                 下线
               </Button>

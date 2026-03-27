@@ -161,9 +161,10 @@ export function HeroModule({ data }: ModuleProps) {
                 icon={<StarIcon />} 
                 iconPosition="left"
                 style={{ 
-                  backgroundColor: primaryColor, 
+                  background: primaryColor, 
                   borderColor: primaryColor,
-                  color: '#ffffff'
+                  color: '#ffffff',
+                  boxShadow: `0 8px 25px -8px ${primaryColor}`
                 }}
               >
                 {config.buttons.primary.text}
