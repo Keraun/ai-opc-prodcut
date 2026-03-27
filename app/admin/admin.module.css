@@ -161,6 +161,14 @@
   background: linear-gradient(135deg, rgba(99, 102, 241, 0.2), rgba(129, 140, 248, 0.2));
 }
 
+.featureIconViolet {
+  background: linear-gradient(135deg, rgba(139, 92, 246, 0.2), rgba(167, 139, 250, 0.2));
+}
+
+.featureIconPink {
+  background: linear-gradient(135deg, rgba(236, 72, 153, 0.2), rgba(244, 114, 182, 0.2));
+}
+
 .featureIcon svg {
   width: 1.5rem;
   height: 1.5rem;
@@ -176,6 +184,14 @@
 
 .featureIconIndigo svg {
   color: #818cf8;
+}
+
+.featureIconViolet svg {
+  color: #a78bfa;
+}
+
+.featureIconPink svg {
+  color: #f472b6;
 }
 
 .featureContent h3 {

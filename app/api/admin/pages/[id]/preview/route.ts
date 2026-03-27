@@ -2,8 +2,6 @@ import { NextRequest, NextResponse } from 'next/server'
 import { initializeModules } from '@/modules/init'
 import { getModuleComponent, getModuleDefaultData } from '@/modules/registry'
 import { readConfig } from '@/lib/config-manager'
-import React from 'react'
-import { renderToString } from 'react-dom/server'
 
 initializeModules()
 
@@ -30,7 +28,13 @@ export async function POST(
       }, { status: 404 })
     }
 
-    const moduleHtmlArray: string[] = []
+    const moduleDataArray: Array<{
+      moduleId: string
+      moduleName: string
+      moduleInstanceId: string
+      data: Record<string, unknown>
+      hasComponent: boolean
+    }> = []
 
     for (const moduleInfo of modules) {
       const ModuleComponent = getModuleComponent(moduleInfo.moduleId)
@@ -39,67 +43,23 @@ export async function POST(
         const defaultData = getModuleDefaultData(moduleInfo.moduleId) || {}
         const moduleData = { ...defaultData, ...moduleInfo.data }
         
-        try {
-          const moduleElement = React.createElement(ModuleComponent, {
-            data: moduleData,
-            moduleId: moduleInfo.moduleInstanceId,
-          })
-          
-          const moduleHtml = renderToString(moduleElement)
-          moduleHtmlArray.push(moduleHtml)
-        } catch (error) {
-          console.error(`Error rendering module ${moduleInfo.moduleId}:`, error)
-          moduleHtmlArray.push(`<div class="module-error">模块 ${moduleInfo.moduleName} 渲染失败</div>`)
-        }
+        moduleDataArray.push({
+          ...moduleInfo,
+          data: moduleData,
+          hasComponent: true,
+        })
       } else {
-        moduleHtmlArray.push(`<div class="module-placeholder">模块 ${moduleInfo.moduleName} (${moduleInfo.moduleId})</div>`)
+        moduleDataArray.push({
+          ...moduleInfo,
+          hasComponent: false,
+        })
       }
     }
 
-    const html = `
-<!DOCTYPE html>
-<html lang="zh-CN">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>预览 - ${pageConfig.name || params.id}</title>
-  <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
-    body {
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
-      line-height: 1.6;
-      color: #333;
-    }
-    .module-error {
-      padding: 20px;
-      background: #fee;
-      border: 1px solid #fcc;
-      color: #c00;
-      margin: 10px 0;
-    }
-    .module-placeholder {
-      padding: 40px;
-      background: #f5f5f5;
-      border: 2px dashed #ccc;
-      text-align: center;
-      color: #666;
-      margin: 10px 0;
-    }
-  </style>
-</head>
-<body>
-  ${moduleHtmlArray.join('\n')}
-</body>
-</html>
-    `
-
     return NextResponse.json({
       success: true,
-      html,
+      pageName: pageConfig.name || params.id,
+      modules: moduleDataArray,
     })
   } catch (error) {
     console.error('Generate preview error:', error)
