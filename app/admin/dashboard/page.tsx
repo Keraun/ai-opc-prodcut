@@ -173,7 +173,6 @@ export default function AdminDashboardPage() {
   const [restoringVersion, setRestoringVersion] = useState(false)
   const [showDiff, setShowDiff] = useState(false)
   const [showEditDiff, setShowEditDiff] = useState(false)
-  const [versionInfos, setVersionInfos] = useState<Record<string, any>>({})
   const [activeMenu, setActiveMenu] = useState('accountInfo')
   const [editingPageId, setEditingPageId] = useState<string | null>(null)
 
@@ -189,36 +188,11 @@ export default function AdminDashboardPage() {
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false)
   const [showSchema, setShowSchema] = useState(true)
 
-  const fetchVersionInfos = async () => {
-    const configTypes = ['homePage', 'aboutPage', 'contactPage', 'otherPages', 'newsCategory']
-    const infos: Record<string, any> = {}
-
-    for (const type of configTypes) {
-      try {
-        const response = await fetch(`/api/admin/config/version?type=${type}&action=latest`)
-        const data = await response.json()
-        if (data.success) {
-          infos[type] = data.version
-        }
-      } catch (error) {
-        console.error(`获取${type}版本信息失败:`, error)
-      }
-    }
-
-    setVersionInfos(infos)
-  }
-
   useEffect(() => {
     fetchConfigs()
     fetchSchema()
     checkAuth()
   }, [])
-
-  useEffect(() => {
-    if (Object.keys(configs).length > 0) {
-      fetchVersionInfos()
-    }
-  }, [configs])
 
   const checkAuth = async () => {
     try {
@@ -421,7 +395,6 @@ export default function AdminDashboardPage() {
           ...prev,
           [configType]: JSON.parse(JSON.stringify(configs[configType as keyof typeof configs]))
         }))
-        fetchVersionInfos()
       } else {
         toast.error("配置提交失败")
       }
@@ -488,7 +461,6 @@ export default function AdminDashboardPage() {
       if (response.ok && data.success) {
         toast.success("版本还原成功")
         await fetchConfigs()
-        fetchVersionInfos()
       } else {
         toast.error(data.message || "版本还原失败")
       }
@@ -789,7 +761,6 @@ export default function AdminDashboardPage() {
 
   const renderConfigCard = (title: string, configType: string, description: string) => {
     const schemaData = schema[configType]
-    const versionInfo = versionInfos[configType]
 
     return (
       <ConfigCard
@@ -798,7 +769,7 @@ export default function AdminDashboardPage() {
         description={description}
         configData={configs[configType as keyof typeof configs]}
         schemaData={schemaData}
-        versionInfo={versionInfo}
+        versionInfo={null}
         loading={loading}
         showSchema={showSchema}
         leftWidth={leftWidth}
