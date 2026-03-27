@@ -19,7 +19,8 @@ const schemaMap: Record<string, string> = {
   'homeOrder': 'site-schema.json',
   'otherPages': 'site-schema.json',
   'custom': 'site-schema.json',
-  'theme': 'site-schema.json'
+  'theme': 'site-schema.json',
+  'feishu-app': 'feishu-app-schema.json'
 }
 
 export async function GET(request: Request) {

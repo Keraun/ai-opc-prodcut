@@ -35,6 +35,7 @@ const basePathMap: Record<string, PathMapping> = {
   'token': { dir: 'system', prefix: 'system-token' },
   'system-logs': { dir: 'system', prefix: 'system-logs' },
   'verification-codes': { dir: 'system', prefix: 'system-verification-codes' },
+  'feishu-app': { dir: 'system', prefix: 'system-feishu-app' },
   'page-list': { dir: '', prefix: 'page-list' },
 }
 

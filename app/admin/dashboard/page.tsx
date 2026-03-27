@@ -1052,6 +1052,21 @@ export default function AdminDashboardPage() {
               />
             )}
 
+            {activeMenu === 'feishu-app' && (
+              <ConfigFormEditor
+                configType="feishu-app"
+                title="飞书配置"
+                description="配置提交留言功能的飞书数据应用"
+                configData={configs['feishu-app'] || {}}
+                onSave={async (data) => {
+                  setConfigs(prev => ({ ...prev, 'feishu-app': data }))
+                  await handleSave('feishu-app')
+                }}
+                hasChanges={hasConfigChanges('feishu-app')}
+                loading={loading}
+              />
+            )}
+
             {activeMenu === 'system' && (
               <SystemManagement
                 siteConfig={configs.site}

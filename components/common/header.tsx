@@ -34,11 +34,11 @@ interface HeaderProps {
   }
 }
 
-export function Header({ 
-  navItems: propNavItems, 
+export function Header({
+  navItems: propNavItems,
   showContactButton,
-  showCtaButton, 
-  ctaButtonText, 
+  showCtaButton,
+  ctaButtonText,
   ctaButtonLink,
   config: propConfig
 }: HeaderProps) {
@@ -47,7 +47,7 @@ export function Header({
   const siteConfig = useConfig('site')
   const navigationConfig = useConfig('site-navigation')
   const headerConfig = useConfig('site-header')
-  
+
   const config = propConfig || headerConfig || {}
   const [isScrolled, setIsScrolled] = useState(false)
   const [drawerVisible, setDrawerVisible] = useState(false)
@@ -59,9 +59,9 @@ export function Header({
     href: item.href
   })) || [])
 
-  const primaryColor = themeConfig?.colors?.primary || "#1e40af"
-  const secondaryColor = themeConfig?.colors?.secondary || "#3b82f6"
-  const accentColor = themeConfig?.colors?.accent || "#06b6d4"
+  const primaryColor = themeConfig?.colors?.primary
+  const secondaryColor = themeConfig?.colors?.secondary
+  const accentColor = themeConfig?.colors?.accent
 
   const logoText = siteConfig?.name || config?.logo?.text || ""
   const contactText = config?.contact?.text || "联系我们"
@@ -103,6 +103,12 @@ export function Header({
     >
       <div className={styles.container}>
         <div className={styles.headerInner}>
+          {logoText && (
+            <div className={styles.logoSection}>
+              <Logo className={styles.logo} />
+              <span className={styles.logoText}>{logoText}</span>
+            </div>
+          )}
           {navItems && navItems.length > 0 && (
             <nav className={styles.nav}>
               {navItems.map((item: any) => (
@@ -112,7 +118,7 @@ export function Header({
                   className={styles.navButton}
                 >
                   {item?.label}
-                  <span 
+                  <span
                     className={styles.navUnderline}
                     style={{ backgroundColor: accentColor }}
                   />
@@ -120,7 +126,7 @@ export function Header({
               ))}
             </nav>
           )}
-          
+
           <div className={styles.ctaSection}>
             {showContact && (
               <Dropdown
@@ -151,7 +157,7 @@ export function Header({
             {showCta && (
               <Link href={ctaLink}>
                 <Button
-                  style={{ 
+                  style={{
                     backgroundColor: primaryColor,
                     color: 'white',
                     borderColor: primaryColor,
@@ -169,7 +175,7 @@ export function Header({
             )}
           </div>
 
-          <button 
+          <button
             className={styles.mobileMenuButton}
             onClick={() => setDrawerVisible(true)}
           >
@@ -198,13 +204,13 @@ export function Header({
                 '--accent-color': accentColor
               } as React.CSSProperties}
             >
-              <div 
+              <div
                 className={styles.drawerNavIcon}
                 style={{
                   background: `linear-gradient(135deg, ${primaryColor}15 0%, ${primaryColor}30 100%)`
                 }}
               >
-                <span 
+                <span
                   className={styles.drawerNavIconText}
                   style={{ color: primaryColor }}
                 >
@@ -221,7 +227,7 @@ export function Header({
             <Link href={ctaLink} onClick={() => setDrawerVisible(false)}>
               <Button
                 long
-                style={{ 
+                style={{
                   backgroundColor: primaryColor,
                   color: 'white',
                   borderColor: primaryColor,

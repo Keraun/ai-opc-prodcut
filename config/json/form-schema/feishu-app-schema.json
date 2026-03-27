@@ -1,0 +1,33 @@
+{
+  "title": "飞书数据应用配置",
+  "description": "配置提交留言功能的飞书数据应用",
+  "type": "object",
+  "properties": {
+    "enabled": {
+      "type": "boolean",
+      "title": "启用飞书数据应用",
+      "default": false
+    },
+    "appId": {
+      "type": "string",
+      "title": "App ID",
+      "description": "飞书应用的 App ID"
+    },
+    "appSecret": {
+      "type": "string",
+      "title": "App Secret",
+      "description": "飞书应用的 App Secret"
+    },
+    "tableId": {
+      "type": "string",
+      "title": "飞书数据表 ID",
+      "description": "飞书数据表的 Table ID"
+    },
+    "viewId": {
+      "type": "string",
+      "title": "飞书数据表视图 ID",
+      "description": "飞书数据表的视图 ID（可选）"
+    }
+  },
+  "required": ["appId", "appSecret", "tableId"]
+}
