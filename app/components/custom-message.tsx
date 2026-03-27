@@ -1,4 +1,5 @@
-import { useState, useEffect, createContext, useContext } from 'react'
+"use client"
+import { useState,  createContext, useContext } from 'react'
 import styles from './custom-message.module.css'
 
 interface Message {

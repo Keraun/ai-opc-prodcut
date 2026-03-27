@@ -1,8 +1,9 @@
 "use client"
 
 import React, { useState, useEffect } from "react"
-import { Form, Input, Select, DatePicker, Upload, Button, Tag, Space, Switch, InputNumber, Radio, Checkbox, Message, Grid } from "@arco-design/web-react"
+import { Form, Input, Select, DatePicker, Upload, Button, Tag, Space, Switch, InputNumber, Radio, Checkbox, Grid } from "@arco-design/web-react"
 import { IconPlus, IconDelete } from "@arco-design/web-react/icon"
+import { useMessage } from "@/app/components/custom-message"
 import styles from "./DynamicForm.module.css"
 
 const { Row, Col } = Grid
@@ -89,6 +90,7 @@ export function DynamicForm({
   onCancel,
   loading = false
 }: DynamicFormProps) {
+  const message = useMessage()
   const [form] = Form.useForm()
   const [tags, setTags] = useState<Record<string, string[]>>({})
   const [arrayFields, setArrayFields] = useState<Record<string, any[]>>({})
@@ -122,7 +124,7 @@ export function DynamicForm({
       }
       onSubmit(finalValues)
     } catch (error) {
-      Message.error('请检查表单填写是否正确')
+      message.error('请检查表单填写是否正确')
     }
   }
 

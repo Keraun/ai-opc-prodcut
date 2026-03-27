@@ -70,12 +70,6 @@ export function ConfigFormEditor({
   }
 
   const getButtonText = () => {
-    if (!configData || Object.keys(configData).length === 0) {
-      return '保存配置'
-    }
-    if (hasChanges) {
-      return '更新配置'
-    }
     return '保存配置'
   }
 
@@ -111,7 +105,6 @@ export function ConfigFormEditor({
             type="primary"
             icon={<IconSave />}
             loading={submitting || loading}
-            disabled={!hasChanges && Object.keys(configData).length > 0}
             onClick={() => {
               const formElement = document.querySelector('form')
               if (formElement) {

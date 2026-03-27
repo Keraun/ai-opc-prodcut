@@ -87,6 +87,12 @@ async function fetchData(url: string) {
 - **空值合并**：提供默认值时使用空值合并操作符 `??`
 - **类型守卫**：创建可复用的类型守卫函数
 
+### 1.4 消息提示
+- **使用自定义 Message 组件**：项目中已实现自定义的 Message 组件，所有消息提示必须使用此组件
+- **导入方式**：`import { useMessage } from "@/components/custom-message"`
+- **使用方式**：在组件中初始化 `const message = useMessage()`，然后调用 `message.success()`, `message.error()`, `message.info()`, `message.warning()`
+- **禁止使用**：禁止使用 arco 的 Message 组件，必须使用自定义的 Message 组件
+
 ```typescript
 // ✅ 正确示例
 interface Config {

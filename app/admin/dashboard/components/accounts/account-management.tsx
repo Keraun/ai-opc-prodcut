@@ -1,17 +1,19 @@
 "use client"
 
 import { useState, useEffect } from "react"
-import { Button, Card, Typography, Divider, Modal, Input, Message, Table, Popconfirm, Form } from "@arco-design/web-react"
+import { Button, Card, Typography, Divider, Modal, Input, Table, Popconfirm, Form } from "@arco-design/web-react"
 import { 
   IconUser, 
   IconPlus, 
   IconDelete,
   IconEdit
 } from "@arco-design/web-react/icon"
+import { useMessage } from "@/app/components/custom-message"
 import styles from "../../dashboard.module.css"
 
 export function AccountManagement() {
   // 账号管理相关状态
+  const message = useMessage()
   const [accounts, setAccounts] = useState<any[]>([])
   const [loadingAccounts, setLoadingAccounts] = useState(false)
   const [showAddAccountModal, setShowAddAccountModal] = useState(false)
@@ -86,14 +88,14 @@ export function AccountManagement() {
       setHasValidSuperAdminToken(true)
       await action()
     } else {
-      Message.error("超级管理员密码错误")
+      message.error("超级管理员密码错误")
     }
   }
   
   // 处理添加账号
   const handleAddAccount = async () => {
     if (!newAccount.username || !newAccount.password || !newAccount.email) {
-      Message.error("请填写完整的账号信息")
+      message.error("请填写完整的账号信息")
       return
     }
     
@@ -108,16 +110,16 @@ export function AccountManagement() {
         })
         const data = await response.json()
         if (data.success) {
-          Message.success("账号添加成功")
+          message.success("账号添加成功")
           setShowAddAccountModal(false)
           setNewAccount({ username: "", password: "", email: "", remark: "" })
           loadAccounts()
         } else {
-          Message.error(data.message || "账号添加失败")
+          message.error(data.message || "账号添加失败")
         }
       } catch (error) {
         console.error("添加账号失败:", error)
-        Message.error("账号添加失败")
+        message.error("账号添加失败")
       }
     }
     
@@ -135,16 +137,16 @@ export function AccountManagement() {
         })
         const data = await response.json()
         if (data.success) {
-          Message.success("账号删除成功")
+          message.success("账号删除成功")
           setShowDeleteAccountModal(false)
           setAccountToDelete(null)
           loadAccounts()
         } else {
-          Message.error(data.message || "账号删除失败")
+          message.error(data.message || "账号删除失败")
         }
       } catch (error) {
         console.error("删除账号失败:", error)
-        Message.error("账号删除失败")
+        message.error("账号删除失败")
       }
     }
     
@@ -154,7 +156,7 @@ export function AccountManagement() {
   // 处理修改账号
   const handleEditAccount = async () => {
     if (!editedAccount.email) {
-      Message.error("请输入邮箱")
+      message.error("请输入邮箱")
       return
     }
     
@@ -169,17 +171,17 @@ export function AccountManagement() {
         })
         const data = await response.json()
         if (data.success) {
-          Message.success("账号修改成功")
+          message.success("账号修改成功")
           setShowEditAccountModal(false)
           setAccountToEdit(null)
           setEditedAccount({ username: "", password: "", email: "", remark: "" })
           loadAccounts()
         } else {
-          Message.error(data.message || "账号修改失败")
+          message.error(data.message || "账号修改失败")
         }
       } catch (error) {
         console.error("修改账号失败:", error)
-        Message.error("账号修改失败")
+        message.error("账号修改失败")
       }
     }
     

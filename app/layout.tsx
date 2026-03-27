@@ -4,6 +4,7 @@ import { Analytics } from '@vercel/analytics/next'
 import '@arco-design/web-react/dist/css/arco.css'
 import './globals.css'
 import { ClientLayout } from '@/components/client-layout'
+import { MessageProvider } from './components/custom-message'
 import { loadInitialData, generateInitialDataScript } from '@/lib/initial-data'
 import { readConfig } from '@/lib/config-manager'
 
@@ -168,9 +169,11 @@ export default function RootLayout({
         />
       </head>
       <body style={{ fontFamily: 'var(--font-sans)', WebkitFontSmoothing: 'antialiased', MozOsxFontSmoothing: 'grayscale' }}>
-        <ClientLayout>
-          {children}
-        </ClientLayout>
+        <MessageProvider>
+          <ClientLayout>
+            {children}
+          </ClientLayout>
+        </MessageProvider>
         <Analytics />
       </body>
     </html>
