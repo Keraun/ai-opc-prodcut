@@ -1,6 +1,4 @@
 import { NextRequest, NextResponse } from "next/server"
-import fs from "fs"
-import path from "path"
 import { cookies } from "next/headers"
 import { readConfig, writeConfig } from "@/lib/config-manager"
 
@@ -91,20 +89,13 @@ export async function POST(request: NextRequest) {
     let showSuperAdminToken = false
     let superAdminToken = ''
 
-    const tokenConfigPath = path.join(process.cwd(), "database/runtime/system/system-token.json")
-    let tokenConfig = { superAdminToken: '' }
-    
-    try {
-      tokenConfig = JSON.parse(fs.readFileSync(tokenConfigPath, "utf-8"))
-    } catch (error) {
-      tokenConfig = { superAdminToken: '' }
-    }
+    let tokenConfig = readConfig('token') || { superAdminToken: '' }
 
     if (!tokenConfig.superAdminToken) {
       superAdminToken = generateSuperAdminToken()
       tokenConfig.superAdminToken = superAdminToken
       showSuperAdminToken = true
-      fs.writeFileSync(tokenConfigPath, JSON.stringify(tokenConfig, null, 2))
+      writeConfig('token', tokenConfig)
     } else {
       superAdminToken = tokenConfig.superAdminToken
     }
