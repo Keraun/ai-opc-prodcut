@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation"
 import { Button, Card, Modal, Input, Table, Space, Tag, Popconfirm, Radio } from "@arco-design/web-react"
 import { IconPlus, IconEdit, IconDelete, IconEye } from "@arco-design/web-react/icon"
 import { toast } from "sonner"
+import { defaultSystemPages } from "@/lib/page-utils"
 import styles from "../../dashboard.module.css"
 
 interface PageInfo {
@@ -27,6 +28,7 @@ interface PageManagementProps {
 export function PageManagement({ onEditPage }: PageManagementProps) {
   const router = useRouter()
   const [pages, setPages] = useState<PageInfo[]>([])
+  const [systemPages, setSystemPages] = useState<string[]>([])
   const [loading, setLoading] = useState(false)
   const [showCreateModal, setShowCreateModal] = useState(false)
   const [newPageName, setNewPageName] = useState("")
@@ -36,8 +38,18 @@ export function PageManagement({ onEditPage }: PageManagementProps) {
   const [creating, setCreating] = useState(false)
 
   useEffect(() => {
-    fetchPages()
+    async function loadData() {
+      await fetchPages()
+      await fetchSystemPages()
+    }
+    loadData()
   }, [])
+
+  const fetchSystemPages = () => {
+    // 在客户端使用默认的系统页面列表
+    // 实际的系统页面列表应该通过API获取
+    setSystemPages(defaultSystemPages)
+  }
 
   const fetchPages = async () => {
     setLoading(true)
@@ -222,8 +234,6 @@ export function PageManagement({ onEditPage }: PageManagementProps) {
       toast.error("下线失败")
     }
   }
-
-  const systemPages = ['home', '404', 'products', 'news', 'news-detail']
 
   const columns = [
     {

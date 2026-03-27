@@ -55,22 +55,6 @@
       "isSystem": true,
       "isDeletable": false,
       "route": "/404"
-    },
-    {
-      "id": "test2",
-      "name": "test",
-      "slug": "test2",
-      "modules": [
-        "site-root",
-        "site-header",
-        "site-footer"
-      ],
-      "type": "static",
-      "status": "draft",
-      "isSystem": false,
-      "isDeletable": true,
-      "createdAt": "2026-03-27T01:42:38.976Z",
-      "updatedAt": "2026-03-27T01:42:38.976Z"
     }
   ],
   "systemPages": [

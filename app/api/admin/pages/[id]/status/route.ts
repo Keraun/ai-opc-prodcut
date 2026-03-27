@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { readConfig, writeConfig, getRuntimePath } from '@/lib/config-manager'
 import fs from 'fs'
+import { getSystemPages } from '@/lib/server/page-utils'
 
 interface PageListInfo {
   id: string
@@ -36,9 +37,19 @@ function updatePageList(pages: PageListInfo[]) {
   const pageListPath = getRuntimePath('page-list.json')
   
   try {
+    // 尝试读取现有的page-list.json文件，保留systemPages配置
+    let existingSystemPages: string[] = ['home', '404']
+    
+    if (fs.existsSync(pageListPath)) {
+      const existingData = JSON.parse(fs.readFileSync(pageListPath, 'utf-8'))
+      if (existingData.systemPages) {
+        existingSystemPages = existingData.systemPages
+      }
+    }
+    
     const pageListData = {
       pages,
-      systemPages: ['home', 'product', '404'],
+      systemPages: existingSystemPages,
       dynamicRoutePattern: '[param]',
       createdAt: new Date().toISOString(),
       updatedAt: new Date().toISOString(),

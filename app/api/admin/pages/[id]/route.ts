@@ -3,6 +3,7 @@ import fs from 'fs'
 import path from 'path'
 import { readConfig, writeConfig, deleteConfig, getRuntimePath } from '@/lib/config-manager'
 import type { ModuleData } from '@/modules/types'
+import { getSystemPages } from '@/lib/server/page-utils'
 
 interface PageInfo {
   id: string
@@ -164,7 +165,7 @@ export async function DELETE(
 ) {
   try {
     const pageId = params.id
-    const systemPages = ['home', 'product', 'products', '404']
+    const systemPages = getSystemPages()
     
     if (systemPages.includes(pageId)) {
       return NextResponse.json({
