@@ -1,39 +1,34 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { initializeModules } from '@/modules/init'
-import { getModuleSchema, getModuleDefaultData } from '@/modules/registry'
+import { initializeAndSyncModules } from '@/lib/initialize-modules'
+import { getModuleTemplate } from '@/lib/module-service'
 import { readConfig } from '@/lib/config-manager'
+import { 
+  successResponse, 
+  errorResponse, 
+  notFoundResponse, 
+  wrapApiHandler 
+} from '@/lib/api-utils'
 
-initializeModules()
+initializeAndSyncModules()
 
 export async function GET(
   request: NextRequest,
   { params }: { params: { id: string } }
 ) {
-  try {
+  return wrapApiHandler(async () => {
     const moduleId = params.id
-    const schema = getModuleSchema(moduleId)
-    const defaultData = getModuleDefaultData(moduleId)
+    const moduleTemplate = getModuleTemplate(moduleId)
     const currentData = readConfig(moduleId)
 
-    if (!schema) {
-      return NextResponse.json({
-        success: false,
-        message: '模块不存在',
-      }, { status: 404 })
+    if (!moduleTemplate) {
+      return notFoundResponse('模块不存在')
     }
 
-    return NextResponse.json({
-      success: true,
+    return successResponse({
       moduleId,
-      schema,
-      defaultData,
+      schema: moduleTemplate.schema,
+      defaultData: moduleTemplate.defaultData,
       currentData,
     })
-  } catch (error) {
-    console.error('Get module error:', error)
-    return NextResponse.json({
-      success: false,
-      message: '获取模块信息失败',
-    }, { status: 500 })
-  }
+  })
 }
