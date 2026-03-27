@@ -1,6 +1,7 @@
 "use client"
 
-import { Button, Card, Typography, Space, Statistic, Tag, Avatar, Divider, Badge, Tooltip } from "@arco-design/web-react"
+import { useState } from "react"
+import { Button, Card, Typography, Space, Statistic, Tag, Avatar, Divider, Badge, Tooltip, Modal, Input, Message } from "@arco-design/web-react"
 import { 
   IconExport, 
   IconDownload, 
@@ -14,7 +15,9 @@ import {
   IconCloseCircle,
   IconInfoCircle,
   IconSafe,
-  IconFile
+  IconFile,
+  IconEye,
+  IconCopy
 } from "@arco-design/web-react/icon"
 import styles from "../../dashboard.module.css"
 
@@ -35,6 +38,11 @@ export function SystemManagement({
   currentUser,
   onChangePassword
 }: SystemManagementProps) {
+  const [showSuperAdminTokenModal, setShowSuperAdminTokenModal] = useState(false)
+  const [superAdminPassword, setSuperAdminPassword] = useState("")
+  const [superAdminToken, setSuperAdminToken] = useState("")
+  const [loadingToken, setLoadingToken] = useState(false)
+  const [passwordError, setPasswordError] = useState("")
   return (
     <div className={styles.systemManagementNew}>
       {/* 页面标题 */}
@@ -91,9 +99,22 @@ export function SystemManagement({
               </div>
             </div>
 
-            <div className={styles.accountCardActions}>
-              <Button type="primary" long onClick={onChangePassword} icon={<IconLock />}>
+            <div className={styles.accountCardActions} style={{ display: 'flex', gap: 8 }}>
+              <Button type="primary" onClick={onChangePassword} icon={<IconLock />} style={{ flex: 1 }}>
                 修改密码
+              </Button>
+              <Button 
+                type="secondary" 
+                onClick={() => {
+                  setShowSuperAdminTokenModal(true)
+                  setSuperAdminPassword("")
+                  setSuperAdminToken("")
+                  setPasswordError("")
+                }} 
+                icon={<IconEye />}
+                style={{ flex: 1 }}
+              >
+                查看口令
               </Button>
             </div>
           </Card>
@@ -229,6 +250,154 @@ export function SystemManagement({
           </Card>
         </div>
       </div>
+
+      {/* 查看超级管理员口令弹窗 */}
+      <Modal
+        title="查看超级管理员口令"
+        visible={showSuperAdminTokenModal}
+        onCancel={() => {
+          setShowSuperAdminTokenModal(false)
+          setSuperAdminPassword("")
+          setSuperAdminToken("")
+          setPasswordError("")
+        }}
+        footer={
+          superAdminToken ? (
+            <Button onClick={() => setShowSuperAdminTokenModal(false)}>
+              关闭
+            </Button>
+          ) : (
+            <>
+              <Button 
+                onClick={() => {
+                  setShowSuperAdminTokenModal(false)
+                  setSuperAdminPassword("")
+                  setPasswordError("")
+                }}
+              >
+                取消
+              </Button>
+              <Button
+                type="primary"
+                loading={loadingToken}
+                onClick={async () => {
+                  if (!superAdminPassword) {
+                    setPasswordError("请输入当前账户密码")
+                    return
+                  }
+                  setLoadingToken(true)
+                  setPasswordError("")
+                  try {
+                    const response = await fetch("/api/admin/super-admin-token", {
+                      method: "POST",
+                      headers: {
+                        "Content-Type": "application/json",
+                      },
+                      body: JSON.stringify({ password: superAdminPassword }),
+                    })
+                    const data = await response.json()
+                    if (data.success) {
+                      setSuperAdminToken(data.token)
+                    } else {
+                      setPasswordError(data.message || "密码错误")
+                    }
+                  } catch (error) {
+                    setPasswordError("获取口令失败，请重试")
+                  } finally {
+                    setLoadingToken(false)
+                  }
+                }}
+              >
+                确认
+              </Button>
+            </>
+          )
+        }
+      >
+        {superAdminToken ? (
+          <div style={{ padding: "16px 0" }}>
+            <div style={{ marginBottom: 16 }}>
+              <Typography.Text type="secondary">您的超级管理员口令如下，请妥善保管：</Typography.Text>
+            </div>
+            <div
+              style={{
+                display: "flex",
+                alignItems: "center",
+                gap: 8,
+                padding: 12,
+                backgroundColor: "var(--color-fill-2)",
+                borderRadius: 4,
+                border: "1px solid var(--color-border)"
+              }}
+            >
+              <code
+                style={{
+                  flex: 1,
+                  fontSize: 16,
+                  fontFamily: "monospace",
+                  wordBreak: "break-all"
+                }}
+              >
+                {superAdminToken}
+              </code>
+              <Button
+                type="primary"
+                icon={<IconCopy />}
+                onClick={() => {
+                  navigator.clipboard.writeText(superAdminToken)
+                  Message.success("口令已复制到剪贴板")
+                }}
+              >
+                复制
+              </Button>
+            </div>
+          </div>
+        ) : (
+          <div style={{ padding: "16px 0" }}>
+            <div style={{ marginBottom: 16 }}>
+              <Typography.Text type="secondary">请输入当前账户密码以查看超级管理员口令：</Typography.Text>
+            </div>
+            <Input.Password
+              placeholder="请输入当前账户密码"
+              value={superAdminPassword}
+              onChange={setSuperAdminPassword}
+              error={!!passwordError}
+              onPressEnter={async () => {
+                if (!superAdminPassword) {
+                  setPasswordError("请输入当前账户密码")
+                  return
+                }
+                setLoadingToken(true)
+                setPasswordError("")
+                try {
+                  const response = await fetch("/api/admin/super-admin-token", {
+                    method: "POST",
+                    headers: {
+                      "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify({ password: superAdminPassword }),
+                  })
+                  const data = await response.json()
+                  if (data.success) {
+                    setSuperAdminToken(data.token)
+                  } else {
+                    setPasswordError(data.message || "密码错误")
+                  }
+                } catch (error) {
+                  setPasswordError("获取口令失败，请重试")
+                } finally {
+                  setLoadingToken(false)
+                }
+              }}
+            />
+            {passwordError && (
+              <div style={{ marginTop: 8, color: "var(--color-danger)" }}>
+                {passwordError}
+              </div>
+            )}
+          </div>
+        )}
+      </Modal>
     </div>
   )
 }
