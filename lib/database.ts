@@ -84,28 +84,33 @@ export function initializeDatabase(): void {
         is_deletable INTEGER DEFAULT 1,
         route TEXT,
         dynamic_param TEXT,
+        module_instance_ids TEXT DEFAULT '[]',
         created_at TEXT,
         updated_at TEXT,
         published_at TEXT
       );
 
+      CREATE TABLE IF NOT EXISTS module_registry (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        module_id TEXT UNIQUE NOT NULL,
+        module_name TEXT NOT NULL,
+        schema TEXT,
+        default_data TEXT,
+        created_at TEXT DEFAULT CURRENT_TIMESTAMP,
+        updated_at TEXT DEFAULT CURRENT_TIMESTAMP
+      );
+
       CREATE TABLE IF NOT EXISTS page_modules (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
+        module_instance_id TEXT UNIQUE NOT NULL,
         page_id TEXT NOT NULL,
-        module_instance_id TEXT NOT NULL,
+        module_id TEXT NOT NULL,
         module_name TEXT NOT NULL,
         module_order INTEGER NOT NULL,
         data TEXT,
-        FOREIGN KEY (page_id) REFERENCES pages(page_id) ON DELETE CASCADE,
-        UNIQUE(page_id, module_instance_id)
-      );
-
-      CREATE TABLE IF NOT EXISTS module_data (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        module_name TEXT UNIQUE NOT NULL,
-        data TEXT NOT NULL,
         created_at TEXT DEFAULT CURRENT_TIMESTAMP,
-        updated_at TEXT DEFAULT CURRENT_TIMESTAMP
+        updated_at TEXT DEFAULT CURRENT_TIMESTAMP,
+        FOREIGN KEY (page_id) REFERENCES pages(page_id) ON DELETE CASCADE
       );
 
       CREATE INDEX IF NOT EXISTS idx_accounts_username ON accounts(username);
@@ -115,9 +120,9 @@ export function initializeDatabase(): void {
       CREATE INDEX IF NOT EXISTS idx_site_config_key ON site_config(config_key);
       CREATE INDEX IF NOT EXISTS idx_pages_page_id ON pages(page_id);
       CREATE INDEX IF NOT EXISTS idx_pages_status ON pages(status);
+      CREATE INDEX IF NOT EXISTS idx_module_registry_module_id ON module_registry(module_id);
       CREATE INDEX IF NOT EXISTS idx_page_modules_page_id ON page_modules(page_id);
       CREATE INDEX IF NOT EXISTS idx_page_modules_module_instance_id ON page_modules(module_instance_id);
-      CREATE INDEX IF NOT EXISTS idx_module_data_module_name ON module_data(module_name);
     `)
     
     console.log('Database initialized successfully')
@@ -137,8 +142,8 @@ export function resetDatabase(): void {
       DROP TABLE IF EXISTS site_config;
       DROP TABLE IF EXISTS theme_config;
       DROP TABLE IF EXISTS pages;
+      DROP TABLE IF EXISTS module_registry;
       DROP TABLE IF EXISTS page_modules;
-      DROP TABLE IF EXISTS module_data;
     `)
     
     initializeDatabase()

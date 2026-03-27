@@ -86,7 +86,7 @@ CREATE TABLE theme_config (
 );
 ```
 
-#### 6. pages - 页面列表表
+#### 6. pages - 页面表
 ```sql
 CREATE TABLE pages (
   id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -100,56 +100,126 @@ CREATE TABLE pages (
   is_deletable INTEGER DEFAULT 1,
   route TEXT,
   dynamic_param TEXT,
+  module_instance_ids TEXT DEFAULT '[]',
   created_at TEXT,
   updated_at TEXT,
   published_at TEXT
 );
 ```
 
-#### 7. page_modules - 页面模块关联表
-```sql
-CREATE TABLE page_modules (
-  id INTEGER PRIMARY KEY AUTOINCREMENT,
-  page_id TEXT NOT NULL,
-  module_instance_id TEXT NOT NULL,
-  module_name TEXT NOT NULL,
-  module_order INTEGER NOT NULL,
-  data TEXT,
-  FOREIGN KEY (page_id) REFERENCES pages(page_id) ON DELETE CASCADE,
-  UNIQUE(page_id, module_instance_id)
-);
-```
-
 **字段说明**:
-- `page_id`: 关联的页面 ID（外键，关联 pages 表）
-- `module_instance_id`: 模块实例 ID，格式为 `模块名-时间戳-序号`（如：`section-hero-1774639722070-2`）
-- `module_name`: 模块名称（如：`section-hero`、`site-header`）
-- `module_order`: 模块在页面中的显示顺序
-- `data`: 模块实例的独立数据（JSON 格式，可为空）
+- `page_id`: 页面唯一标识符
+- `name`: 页面名称
+- `slug`: 页面别名
+- `type`: 页面类型（static/dynamic）
+- `status`: 页面状态（draft/published）
+- `is_system`: 是否为系统页面
+- `is_deletable`: 是否可删除
+- `route`: 页面路由
+- `dynamic_param`: 动态路由参数
+- `module_instance_ids`: **模块实例ID数组（JSON格式）**，格式为 `["模块实例ID1", "模块实例ID2", ...]`
 
-**设计说明**:
-- `module_instance_id` 支持同一模块在同一页面上多次使用
-- 每个模块实例可以有独立的数据配置
-- 如果 `data` 为空，则使用 `module_data` 表中的默认数据
+**模块实例ID规则**:
+- 格式：`模块ID-时间戳-序号`
+- 示例：`section-hero-1774641692508-0`、`site-header-1774641692508-1`
+- 同一模块可以在同一页面多次使用，每次使用生成不同的实例ID
+- **重要**：模块实例ID的前缀部分（去掉时间戳和序号）必须与 `module_registry.module_id` 匹配
 
-#### 8. module_data - 模块默认数据表
+#### 7. module_registry - 模块注册表
 ```sql
-CREATE TABLE module_data (
+CREATE TABLE module_registry (
   id INTEGER PRIMARY KEY AUTOINCREMENT,
-  module_name TEXT UNIQUE NOT NULL,
-  data TEXT NOT NULL,
+  module_id TEXT UNIQUE NOT NULL,
+  module_name TEXT NOT NULL,
+  schema TEXT,
+  default_data TEXT,
   created_at TEXT DEFAULT CURRENT_TIMESTAMP,
   updated_at TEXT DEFAULT CURRENT_TIMESTAMP
 );
 ```
 
 **字段说明**:
-- `module_name`: 模块名称（唯一）
-- `data`: 模块默认数据（JSON 格式）
+- `module_id`: 模块唯一标识符（如：`section-hero`、`site-header`）
+- `module_name`: 模块显示名称
+- `schema`: 模块配置的 Schema 定义（JSON 格式）
+- `default_data`: 模块默认数据（JSON 格式）
 
 **设计说明**:
-- 存储模块的默认配置数据
-- 当 `page_modules.data` 为空时，使用此表的默认数据
+- 前端页面注册模块时写入此表
+- 重新注册模块时会覆盖数据（使用 `INSERT OR REPLACE`）
+- 用于页面编辑时左侧面板显示可用模块列表
+- 存储模块的默认配置和 Schema 信息
+
+#### 8. page_modules - 页面模块实例表
+```sql
+CREATE TABLE page_modules (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  module_instance_id TEXT UNIQUE NOT NULL,
+  page_id TEXT NOT NULL,
+  module_id TEXT NOT NULL,
+  module_name TEXT NOT NULL,
+  module_order INTEGER NOT NULL,
+  data TEXT,
+  created_at TEXT DEFAULT CURRENT_TIMESTAMP,
+  updated_at TEXT DEFAULT CURRENT_TIMESTAMP,
+  FOREIGN KEY (page_id) REFERENCES pages(page_id) ON DELETE CASCADE
+);
+```
+
+**字段说明**:
+- `module_instance_id`: 模块实例ID（唯一），格式为 `模块ID-时间戳-序号`
+- `page_id`: 关联的页面 ID（外键，关联 pages 表）
+- `module_id`: **原始模块ID**（关联 module_registry.module_id，不带时间戳）
+- `module_name`: 原始模块名称
+- `module_order`: 模块在页面中的显示顺序
+- `data`: 模块实例的独立数据（JSON 格式，可为空）
+
+**设计说明**:
+- 存储页面上每个模块实例的具体数据
+- 如果 `data` 为空，则使用 `module_registry` 表中的默认数据
+- 支持同一模块在同一页面上多次使用（通过不同的实例ID区分）
+- 页面编辑时右侧显示的模块列表从此表获取
+- **重要**：`module_id` 字段必须存储原始模块ID（如 `section-hero`），而不是带时间戳的实例ID
+
+## 数据关系图
+
+```
+┌─────────────────────┐
+│       pages         │
+│─────────────────────│
+│ page_id (PK)        │
+│ name                │
+│ module_instance_ids │◄─────────────────────────────────────┐
+│ ...                 │                                      │
+└────────┬────────────┘                                      │
+         │                                                   │
+         │ 1:N                                               │
+         ▼                                                   │
+┌─────────────────────┐                                      │
+│   page_modules      │                                      │
+│─────────────────────│                                      │
+│ module_instance_id  │◄───── 模块实例ID存储在 pages.module_instance_ids 中
+│ page_id (FK)        │                                      │
+│ module_id           │                                      │
+│ module_name         │                                      │
+│ data                │                                      │
+└────────┬────────────┘                                      │
+         │                                                   │
+         │ N:1                                               │
+         ▼                                                   │
+┌─────────────────────┐                                      │
+│  module_registry    │◄─── 前端注册模块时写入               │
+│─────────────────────│                                      │
+│ module_id (PK)      │                                      │
+│ module_name         │                                      │
+│ schema              │                                      │
+│ default_data        │                                      │
+└─────────────────────┘                                      │
+                                                             │
+页面编辑时数据流：                                            │
+├─ 左侧面板：从 module_registry 获取可用模块列表              │
+└─ 右侧面板：从 page_modules 获取当前页面的模块实例 ──────────┘
+```
 
 ## 数据访问规则
 
@@ -158,27 +228,37 @@ CREATE TABLE module_data (
 - 使用 `server-only` 包确保模块不会被客户端代码导入
 - 客户端通过 API 路由访问数据
 
-### 2. 配置管理器使用
+### 2. 页面列表数据访问
 ```typescript
-import { readConfig, writeConfig } from '@/lib/config-manager'
+import { getPagesList } from '@/lib/config-manager'
 
-// 读取配置
-const themeData = readConfig('theme')
-const accounts = readConfig('account')
-
-// 写入配置
-writeConfig('theme', { currentTheme: 'dark' })
+// 获取页面列表（从 pages 表）
+const pages = getPagesList()
 ```
 
-### 3. 页面数据访问
+### 3. 模块注册表访问
 ```typescript
-import { getPageResponse } from '@/lib/config-manager'
+import { getModuleRegistryList, registerModule } from '@/lib/module-service'
 
-// 获取页面完整数据（包含模块和通用配置）
-const pageData = getPageResponse('home')
+// 获取所有已注册的模块（用于页面编辑左侧面板）
+const modules = getModuleRegistryList()
+
+// 注册新模块（前端调用）
+registerModule('section-hero', '英雄区块', schema, defaultData)
 ```
 
-### 4. 数据库连接管理
+### 4. 页面模块实例访问
+```typescript
+import { getPageModules, createModuleInstance } from '@/lib/module-service'
+
+// 获取页面的所有模块实例（用于页面编辑右侧面板）
+const pageModules = getPageModules('home')
+
+// 创建新的模块实例
+const instanceId = createModuleInstance('home', 'section-hero', 0, customData)
+```
+
+### 5. 数据库连接管理
 - 每次操作获取新的数据库连接
 - 操作完成后立即关闭连接
 - 使用 `try-finally` 确保连接关闭
@@ -276,8 +356,41 @@ file: config-export.zip
 | system-logs.json | system_logs | system-logs | 系统日志 |
 | site-config.json | site_config | site | 站点配置 |
 | theme-config.json | theme_config | theme | 主题配置 |
-| page-list.json | pages + page_modules | page-list | 页面列表和模块关联 |
-| data-*.json | module_data | * | 各模块数据 |
+| page-list.json | pages | page-list | 页面列表（module_instance_ids字段存储实例ID数组） |
+| page-list.json | page_modules | - | 页面模块实例数据 |
+| data-*.json | module_registry | - | 模块注册信息（schema和默认数据） |
+
+## 页面编辑数据流
+
+### 获取页面列表
+```
+前端请求 → API → pages表 → 返回页面列表
+```
+
+### 页面编辑 - 左侧面板（可用模块）
+```
+前端请求 → API → module_registry表 → 返回所有已注册模块
+```
+
+### 页面编辑 - 右侧面板（当前页面模块）
+```
+前端请求 → API → page_modules表（WHERE page_id = ?）→ 返回页面模块实例列表
+```
+
+### 添加模块到页面
+```
+1. 前端选择模块 → API
+2. 生成模块实例ID：模块名-时间戳
+3. 插入 page_modules 表
+4. 更新 pages.module_instance_ids 字段（添加实例ID）
+```
+
+### 删除页面模块
+```
+1. 前端请求删除 → API
+2. 从 page_modules 表删除记录
+3. 更新 pages.module_instance_ids 字段（移除实例ID）
+```
 
 ## 性能优化
 
@@ -290,7 +403,7 @@ file: config-export.zip
   - `site_config.config_key`
   - `pages.page_id`, `pages.status`
   - `page_modules.page_id`, `page_modules.module_instance_id`
-  - `module_data.module_name`
+  - `module_registry.module_id`
 
 ### 查询优化
 - 使用参数化查询防止 SQL 注入
@@ -501,10 +614,28 @@ Content-Type: multipart/form-data
 file: <database-file>
 ```
 
+### 模块注册接口
+
+#### POST /api/modules/register
+注册新模块
+
+```typescript
+{
+  "moduleId": "section-hero",
+  "moduleName": "英雄区块",
+  "schema": { /* 配置Schema */ },
+  "defaultData": { /* 默认数据 */ }
+}
+```
+
+#### GET /api/modules/list
+获取所有已注册模块
+
 ## 相关文件
 
 - [lib/database.ts](file:///Users/wulingyang/Documents/workspace/ai-opc-prodcut/lib/database.ts) - 数据库初始化和管理
 - [lib/config-manager.ts](file:///Users/wulingyang/Documents/workspace/ai-opc-prodcut/lib/config-manager.ts) - 配置管理器
+- [lib/module-service.ts](file:///Users/wulingyang/Documents/workspace/ai-opc-prodcut/lib/module-service.ts) - 模块服务
 - [lib/migrate.ts](file:///Users/wulingyang/Documents/workspace/ai-opc-prodcut/lib/migrate.ts) - 数据迁移工具
 - [scripts/migrate-database.ts](file:///Users/wulingyang/Documents/workspace/ai-opc-prodcut/scripts/migrate-database.ts) - 迁移脚本
 - [app/api/admin/database/route.ts](file:///Users/wulingyang/Documents/workspace/ai-opc-prodcut/app/api/admin/database/route.ts) - 数据库管理API

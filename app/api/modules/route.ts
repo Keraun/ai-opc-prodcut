@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { initializeModules } from '@/modules/init'
 import { getAllModules } from '@/modules/registry'
+import { getModuleRegistryList, registerModule } from '@/lib/module-service'
 import type { ModuleRegistration } from '@/modules/types'
 
 initializeModules()
@@ -9,6 +10,8 @@ interface ModuleInfo {
   moduleId: string
   moduleName: string
   category?: string
+  schema?: Record<string, unknown>
+  defaultData?: Record<string, unknown>
 }
 
 export async function GET() {
@@ -30,8 +33,19 @@ export async function GET() {
         moduleId: mod.moduleId,
         moduleName: mod.moduleName,
         category,
+        schema: mod.schema,
+        defaultData: mod.defaultData,
       }
     })
+
+    for (const mod of registeredModules) {
+      registerModule(
+        mod.moduleId,
+        mod.moduleName,
+        mod.schema,
+        mod.defaultData
+      )
+    }
 
     return NextResponse.json({
       success: true,

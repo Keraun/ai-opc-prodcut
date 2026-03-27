@@ -31,6 +31,7 @@ export async function GET(request: NextRequest) {
         pageId,
         layout: pageConfig.layout || 'default',
         modules,
+        moduleInstanceIds: pageConfig.moduleInstanceIds,
         config: pageConfig
       }
     })

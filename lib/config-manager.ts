@@ -138,12 +138,14 @@ export function readConfig(configType: string): any {
     
     if (configType === 'page-list') {
       const pages = db.prepare('SELECT * FROM pages').all() as any[]
-      const pageModules = db.prepare('SELECT * FROM page_modules ORDER BY module_order').all() as any[]
       
       const pagesData = pages.map(page => {
-        const modules = pageModules
-          .filter(pm => pm.page_id === page.page_id)
-          .map(pm => pm.module_name)
+        let moduleInstanceIds: string[] = []
+        try {
+          moduleInstanceIds = page.module_instance_ids ? JSON.parse(page.module_instance_ids) : []
+        } catch (e) {
+          moduleInstanceIds = []
+        }
         
         return {
           id: page.page_id,
@@ -159,7 +161,7 @@ export function readConfig(configType: string): any {
           createdAt: page.created_at,
           updatedAt: page.updated_at,
           publishedAt: page.published_at,
-          modules
+          moduleInstanceIds
         }
       })
       
@@ -174,9 +176,9 @@ export function readConfig(configType: string): any {
       }
     }
     
-    const module = db.prepare('SELECT * FROM module_data WHERE module_name = ?').get(configType) as any
+    const module = db.prepare('SELECT * FROM module_registry WHERE module_id = ?').get(configType) as any
     if (module) {
-      return JSON.parse(module.data)
+      return JSON.parse(module.default_data)
     }
     
     return {}
@@ -280,11 +282,14 @@ export function writeConfig(configType: string, data: any): void {
       return
     }
     
+    const moduleName = (data.moduleName as string) || configType
+    const schema = data.schema ? JSON.stringify(data.schema) : null
+    
     const stmt = db.prepare(`
-      INSERT OR REPLACE INTO module_data (module_name, data)
-      VALUES (?, ?)
+      INSERT OR REPLACE INTO module_registry (module_id, module_name, schema, default_data)
+      VALUES (?, ?, ?, ?)
     `)
-    stmt.run(configType, JSON.stringify(data))
+    stmt.run(configType, moduleName, schema, JSON.stringify(data))
     
   } finally {
     db.close()
@@ -297,12 +302,20 @@ export function deleteConfig(configType: string): boolean {
   try {
     if (configType.startsWith('page-')) {
       const pageId = configType.replace('page-', '')
-      db.prepare('DELETE FROM page_modules WHERE page_id = ?').run(pageId)
+      
+      const page = db.prepare('SELECT modules FROM pages WHERE page_id = ?').get(pageId) as any
+      if (page?.modules) {
+        const moduleInstanceIds = JSON.parse(page.modules)
+        for (const instanceId of moduleInstanceIds) {
+          db.prepare('DELETE FROM page_modules WHERE module_instance_id = ?').run(instanceId)
+        }
+      }
+      
       db.prepare('DELETE FROM pages WHERE page_id = ?').run(pageId)
       return true
     }
     
-    const result = db.prepare('DELETE FROM module_data WHERE module_name = ?').run(configType)
+    const result = db.prepare('DELETE FROM module_registry WHERE module_id = ?').run(configType)
     return result.changes > 0
     
   } finally {
@@ -310,23 +323,23 @@ export function deleteConfig(configType: string): boolean {
   }
 }
 
-export function readPageData(moduleName: string): any {
-  return readConfig(moduleName)
+export function readPageData(moduleId: string): any {
+  return readConfig(moduleId)
 }
 
-export function writePageData(moduleName: string, data: any): void {
-  writeConfig(moduleName, data)
+export function writePageData(moduleId: string, data: any): void {
+  writeConfig(moduleId, data)
 }
 
 export function readAllPageData(): Record<string, any> {
   const db = getDatabase()
   
   try {
-    const modules = db.prepare('SELECT * FROM module_data').all() as any[]
+    const modules = db.prepare('SELECT * FROM module_registry').all() as any[]
     const result: Record<string, any> = {}
     
     for (const module of modules) {
-      result[module.module_id] = JSON.parse(module.data)
+      result[module.module_id] = JSON.parse(module.default_data)
     }
     
     return result
@@ -394,6 +407,7 @@ export function getPageResponse(pageId: string): any {
         pageName: pageId,
         pageId: pageId,
         modules: [],
+        moduleInstanceIds: [],
         data: [],
         common: {
           site: readConfig('site'),
@@ -402,13 +416,28 @@ export function getPageResponse(pageId: string): any {
       }
     }
     
-    const pageModules = db.prepare('SELECT * FROM page_modules WHERE page_id = ? ORDER BY module_order').all(pageId) as any[]
-    const modules = pageModules.map(pm => pm.module_name)
+    let moduleInstanceIds: string[] = []
+    try {
+      moduleInstanceIds = page.module_instance_ids ? JSON.parse(page.module_instance_ids) : []
+    } catch (e) {
+      moduleInstanceIds = []
+    }
+    
+    const pageModules = db.prepare(`
+      SELECT pm.*, mr.default_data 
+      FROM page_modules pm 
+      LEFT JOIN module_registry mr ON pm.module_id = mr.module_id 
+      WHERE pm.page_id = ? 
+      ORDER BY pm.module_order
+    `).all(pageId) as any[]
+    
+    const modules = pageModules.map(pm => pm.module_id)
     
     const response = {
       pageName: page.name || pageId,
       pageId: pageId,
       modules,
+      moduleInstanceIds,
       data: [] as any[],
       common: {
         site: readConfig('site'),
@@ -417,16 +446,56 @@ export function getPageResponse(pageId: string): any {
     }
     
     for (const pm of pageModules) {
-      const moduleData = readPageData(pm.module_name)
+      const moduleData = pm.data 
+        ? JSON.parse(pm.data) 
+        : (pm.default_data ? JSON.parse(pm.default_data) : {})
+      
       response.data.push({
-        moduleId: pm.module_name,
+        moduleId: pm.module_id,
         moduleInstanceId: pm.module_instance_id,
-        data: pm.data ? JSON.parse(pm.data) : moduleData
+        moduleName: pm.module_name,
+        data: moduleData
       })
     }
     
     return response
     
+  } finally {
+    db.close()
+  }
+}
+
+export function getModuleRegistry(): any[] {
+  const db = getDatabase()
+  
+  try {
+    const modules = db.prepare('SELECT * FROM module_registry').all() as any[]
+    
+    return modules.map(m => ({
+      moduleId: m.module_id,
+      moduleName: m.module_name,
+      schema: m.schema ? JSON.parse(m.schema) : null,
+      defaultData: m.default_data ? JSON.parse(m.default_data) : null
+    }))
+  } finally {
+    db.close()
+  }
+}
+
+export function registerModule(moduleId: string, moduleName: string, schema: any, defaultData: any): void {
+  const db = getDatabase()
+  
+  try {
+    const stmt = db.prepare(`
+      INSERT OR REPLACE INTO module_registry (module_id, module_name, schema, default_data)
+      VALUES (?, ?, ?, ?)
+    `)
+    stmt.run(
+      moduleId,
+      moduleName,
+      schema ? JSON.stringify(schema) : null,
+      defaultData ? JSON.stringify(defaultData) : null
+    )
   } finally {
     db.close()
   }

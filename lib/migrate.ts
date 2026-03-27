@@ -127,21 +127,51 @@ export function migrateFromJson(useTemplates: boolean = false): void {
       console.log('Migrated theme config')
     }
     
+    const pageDataDir = path.join(baseDir, 'page-data')
+    if (fs.existsSync(pageDataDir)) {
+      const files = fs.readdirSync(pageDataDir).filter(file => file.endsWith('.json'))
+      const registryStmt = db.prepare(`
+        INSERT OR REPLACE INTO module_registry (module_id, module_name, schema, default_data)
+        VALUES (?, ?, ?, ?)
+      `)
+      
+      for (const file of files) {
+        const moduleId = file.replace('data-', '').replace('.json', '')
+        const filePath = path.join(pageDataDir, file)
+        const data = readJsonFile(filePath)
+        
+        if (data) {
+          const moduleName = (data.moduleName as string) || moduleId
+          const schema = data.schema ? JSON.stringify(data.schema) : null
+          const defaultData = JSON.stringify(data)
+          
+          registryStmt.run(moduleId, moduleName, schema, defaultData)
+        }
+      }
+      console.log(`Migrated ${files.length} module registry entries`)
+    }
+    
     const pageListPath = path.join(baseDir, 'page-list.json')
     const pageListData = readJsonFile(pageListPath)
     if (pageListData && pageListData.pages) {
       const pageStmt = db.prepare(`
         INSERT OR REPLACE INTO pages 
-        (page_id, name, slug, type, description, status, is_system, is_deletable, route, dynamic_param, created_at, updated_at, published_at)
-        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-      `)
-      
-      const moduleStmt = db.prepare(`
-        INSERT OR REPLACE INTO page_modules (page_id, module_instance_id, module_name, module_order, data)
-        VALUES (?, ?, ?, ?, ?)
+        (page_id, name, slug, type, description, status, is_system, is_deletable, route, dynamic_param, modules, created_at, updated_at, published_at)
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
       `)
       
       for (const page of pageListData.pages) {
+        const moduleInstanceIds: string[] = []
+        
+        if (page.modules && Array.isArray(page.modules)) {
+          for (let i = 0; i < page.modules.length; i++) {
+            const moduleId = page.modules[i]
+            const timestamp = Date.now()
+            const moduleInstanceId = `${moduleId}-${timestamp}`
+            moduleInstanceIds.push(moduleInstanceId)
+          }
+        }
+        
         pageStmt.run(
           page.id,
           page.name,
@@ -153,40 +183,34 @@ export function migrateFromJson(useTemplates: boolean = false): void {
           page.isDeletable ? 1 : 0,
           page.route || null,
           page.dynamicParam || null,
+          JSON.stringify(moduleInstanceIds),
           page.createdAt || null,
           page.updatedAt || null,
           page.publishedAt || null
         )
-        
+      }
+      console.log(`Migrated ${pageListData.pages.length} pages`)
+      
+      const moduleStmt = db.prepare(`
+        INSERT OR REPLACE INTO page_modules (module_instance_id, page_id, module_id, module_name, module_order, data)
+        VALUES (?, ?, ?, ?, ?, ?)
+      `)
+      
+      let moduleCount = 0
+      for (const page of pageListData.pages) {
         if (page.modules && Array.isArray(page.modules)) {
           for (let i = 0; i < page.modules.length; i++) {
-            const moduleName = page.modules[i]
-            const moduleInstanceId = `${moduleName}-${Date.now()}-${i}`
-            moduleStmt.run(page.id, moduleInstanceId, moduleName, i, null)
+            const moduleId = page.modules[i]
+            const timestamp = Date.now()
+            const moduleInstanceId = `${moduleId}-${timestamp}`
+            
+            const moduleName = moduleId
+            moduleStmt.run(moduleInstanceId, page.id, moduleId, moduleName, i, null)
+            moduleCount++
           }
         }
       }
-      console.log(`Migrated ${pageListData.pages.length} pages`)
-    }
-    
-    const pageDataDir = path.join(baseDir, 'page-data')
-    if (fs.existsSync(pageDataDir)) {
-      const files = fs.readdirSync(pageDataDir).filter(file => file.endsWith('.json'))
-      const stmt = db.prepare(`
-        INSERT OR REPLACE INTO module_data (module_name, data)
-        VALUES (?, ?)
-      `)
-      
-      for (const file of files) {
-        const moduleName = file.replace('data-', '').replace('.json', '')
-        const filePath = path.join(pageDataDir, file)
-        const data = readJsonFile(filePath)
-        
-        if (data) {
-          stmt.run(moduleName, JSON.stringify(data))
-        }
-      }
-      console.log(`Migrated ${files.length} module data files`)
+      console.log(`Migrated ${moduleCount} page modules`)
     }
     
     db.exec('COMMIT')
@@ -292,9 +316,8 @@ export function exportToJson(): void {
     const pageModules = db.prepare('SELECT * FROM page_modules ORDER BY module_order').all() as any[]
     
     const pagesData: any[] = pages.map(page => {
-      const modules = pageModules
-        .filter(pm => pm.page_id === page.page_id)
-        .map(pm => pm.module_id)
+      const pageModuleInstances = pageModules.filter(pm => pm.page_id === page.page_id)
+      const moduleInstanceIds = pageModuleInstances.map(pm => pm.module_instance_id)
       
       return {
         id: page.page_id,
@@ -310,7 +333,7 @@ export function exportToJson(): void {
         createdAt: page.created_at,
         updatedAt: page.updated_at,
         publishedAt: page.published_at,
-        modules
+        moduleInstanceIds
       }
     })
     
@@ -334,15 +357,15 @@ export function exportToJson(): void {
       fs.mkdirSync(moduleDataDir, { recursive: true })
     }
     
-    const modules = db.prepare('SELECT * FROM module_data').all() as any[]
-    for (const module of modules) {
+    const moduleRegistry = db.prepare('SELECT * FROM module_registry').all() as any[]
+    for (const module of moduleRegistry) {
       const fileName = `data-${module.module_id}.json`
       fs.writeFileSync(
         path.join(moduleDataDir, fileName),
-        module.data
+        module.default_data
       )
     }
-    console.log(`Exported ${modules.length} module data files`)
+    console.log(`Exported ${moduleRegistry.length} module data files`)
     
     console.log('Data export completed successfully!')
     console.log(`Backup saved to: ${exportDir}`)
