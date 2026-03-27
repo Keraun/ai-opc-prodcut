@@ -326,7 +326,7 @@ export function readAllPageData(): Record<string, any> {
     const result: Record<string, any> = {}
     
     for (const module of modules) {
-      result[module.module_name] = JSON.parse(module.data)
+      result[module.module_id] = JSON.parse(module.data)
     }
     
     return result

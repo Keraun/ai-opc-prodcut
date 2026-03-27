@@ -294,7 +294,7 @@ export function exportToJson(): void {
     const pagesData: any[] = pages.map(page => {
       const modules = pageModules
         .filter(pm => pm.page_id === page.page_id)
-        .map(pm => pm.module_name)
+        .map(pm => pm.module_id)
       
       return {
         id: page.page_id,
@@ -336,7 +336,7 @@ export function exportToJson(): void {
     
     const modules = db.prepare('SELECT * FROM module_data').all() as any[]
     for (const module of modules) {
-      const fileName = `data-${module.module_name}.json`
+      const fileName = `data-${module.module_id}.json`
       fs.writeFileSync(
         path.join(moduleDataDir, fileName),
         module.data
