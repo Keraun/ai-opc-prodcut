@@ -14,8 +14,10 @@ interface PageInfo {
   modules: string[]
   type?: 'static' | 'dynamic'
   dynamicParam?: string
+  status?: 'draft' | 'published' | 'offline'
   createdAt?: string
   updatedAt?: string
+  publishedAt?: string
 }
 
 interface PageManagementProps {
@@ -152,6 +154,50 @@ export function PageManagement({ onEditPage }: PageManagementProps) {
     }
   }
 
+  const handlePublishPage = async (pageId: string) => {
+    try {
+      const response = await fetch(`/api/admin/pages/${pageId}/status`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ action: 'publish' }),
+      })
+
+      if (response.ok) {
+        toast.success("页面发布成功")
+        fetchPages()
+      } else {
+        const error = await response.json()
+        toast.error(error.message || "发布失败")
+      }
+    } catch (error) {
+      toast.error("发布失败")
+    }
+  }
+
+  const handleOfflinePage = async (pageId: string) => {
+    try {
+      const response = await fetch(`/api/admin/pages/${pageId}/status`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ action: 'offline' }),
+      })
+
+      if (response.ok) {
+        toast.success("页面已下线")
+        fetchPages()
+      } else {
+        const error = await response.json()
+        toast.error(error.message || "下线失败")
+      }
+    } catch (error) {
+      toast.error("下线失败")
+    }
+  }
+
   const systemPages = ['home', 'product', 'products', '404']
   
   const columns = [
@@ -195,6 +241,20 @@ export function PageManagement({ onEditPage }: PageManagementProps) {
       ),
     },
     {
+      title: "状态",
+      dataIndex: "status",
+      key: "status",
+      render: (status: string) => {
+        const statusConfig = {
+          draft: { text: '草稿', color: 'gray' },
+          published: { text: '已上线', color: 'green' },
+          offline: { text: '已下线', color: 'red' },
+        }
+        const config = statusConfig[status as keyof typeof statusConfig] || statusConfig.draft
+        return <Tag color={config.color}>{config.text}</Tag>
+      },
+    },
+    {
       title: "更新时间",
       dataIndex: "updatedAt",
       key: "updatedAt",
@@ -223,6 +283,36 @@ export function PageManagement({ onEditPage }: PageManagementProps) {
             >
               预览
             </Button>
+            {record.status === 'draft' && (
+              <Button
+                type="text"
+                size="small"
+                status="success"
+                onClick={() => handlePublishPage(record.id)}
+              >
+                发布
+              </Button>
+            )}
+            {record.status === 'published' && (
+              <Button
+                type="text"
+                size="small"
+                status="warning"
+                onClick={() => handleOfflinePage(record.id)}
+              >
+                下线
+              </Button>
+            )}
+            {record.status === 'offline' && (
+              <Button
+                type="text"
+                size="small"
+                status="success"
+                onClick={() => handlePublishPage(record.id)}
+              >
+                发布
+              </Button>
+            )}
             {!isSystemPage ? (
               <Popconfirm
                 title="确定要删除此页面吗？"

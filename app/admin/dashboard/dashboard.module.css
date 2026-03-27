@@ -1949,33 +1949,41 @@
 }
 
 .moduleGrid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  display: flex;
+  flex-direction: column;
   gap: 12px;
 }
 
 .moduleCard {
-  cursor: pointer;
+  cursor: grab;
   transition: all 0.2s;
   border: 2px solid #e5e7eb;
+  padding: 16px;
 }
 
 .moduleCard:hover {
   border-color: #3b82f6;
   box-shadow: 0 4px 12px rgba(59, 130, 246, 0.15);
-  transform: translateY(-2px);
+  transform: translateX(4px);
+  background-color: #fafafa;
+}
+
+.moduleCard:active {
+  cursor: grabbing;
 }
 
 .moduleCardContent {
   display: flex;
-  flex-direction: column;
-  gap: 8px;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
 }
 
 .moduleCardName {
-  font-weight: 500;
+  font-weight: 600;
   color: #111827;
-  font-size: 14px;
+  font-size: 15px;
+  flex: 1;
 }
 
 .moduleItems {
@@ -2039,6 +2047,32 @@
 .emptyModuleCard {
   padding: 40px;
   text-align: center;
+  border: 2px dashed #d1d5db;
+  background: #fafafa;
+  transition: all 0.2s;
+}
+
+.emptyModuleCard:hover {
+  border-color: #3b82f6;
+  background: #eff6ff;
+}
+
+.moduleCardDragging {
+  opacity: 0.5;
+  border: 2px dashed #3b82f6;
+  background: #eff6ff;
+}
+
+.dropIndicator {
+  padding: 12px;
+  margin: 4px 0;
+  border: 2px dashed #3b82f6;
+  border-radius: 8px;
+  background: #eff6ff;
+  text-align: center;
+  color: #3b82f6;
+  font-weight: 500;
+  font-size: 14px;
 }
 
 .moduleFieldEditor {
@@ -2227,8 +2261,8 @@
 }
 
 .moduleGrid {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
+  display: flex;
+  flex-direction: column;
   gap: 12px;
 }
 

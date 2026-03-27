@@ -10,8 +10,10 @@ interface PageInfo {
   modules: string[]
   type?: 'static' | 'dynamic'
   dynamicParam?: string
+  status?: 'draft' | 'published' | 'offline'
   createdAt: string
   updatedAt: string
+  publishedAt?: string
   isSystem?: boolean
   isDeletable?: boolean
 }
@@ -81,6 +83,7 @@ function createPage(
       type,
       dynamicParam: type === 'dynamic' ? dynamicParam : undefined,
       modules: ['site-root', 'site-header', 'site-footer'],
+      status: 'draft',
       createdAt: new Date().toISOString(),
       updatedAt: new Date().toISOString(),
     }
@@ -94,6 +97,7 @@ function createPage(
       modules: ['site-root', 'site-header', 'site-footer'],
       type,
       dynamicParam: type === 'dynamic' ? dynamicParam : undefined,
+      status: 'draft',
       isSystem: false,
       isDeletable: true,
       createdAt: new Date().toISOString(),

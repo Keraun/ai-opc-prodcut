@@ -30,6 +30,8 @@ export function ModuleDragEditor({ modules, onChange }: ModuleDragEditorProps) {
   const [editingModule, setEditingModule] = useState<ModuleInfo | null>(null)
   const [previewModule, setPreviewModule] = useState<AvailableModule | null>(null)
   const [draggedIndex, setDraggedIndex] = useState<number | null>(null)
+  const [draggedModule, setDraggedModule] = useState<AvailableModule | null>(null)
+  const [dragOverIndex, setDragOverIndex] = useState<number | null>(null)
 
   useEffect(() => {
     fetchAvailableModules()
@@ -47,7 +49,7 @@ export function ModuleDragEditor({ modules, onChange }: ModuleDragEditorProps) {
     }
   }
 
-  const handleAddModule = (moduleInfo: AvailableModule) => {
+  const handleAddModule = (moduleInfo: AvailableModule, insertIndex?: number) => {
     const newModule: ModuleInfo = {
       moduleId: moduleInfo.moduleId,
       moduleName: moduleInfo.moduleName,
@@ -55,8 +57,64 @@ export function ModuleDragEditor({ modules, onChange }: ModuleDragEditorProps) {
       data: {},
     }
 
-    onChange([...modules, newModule])
+    if (insertIndex !== undefined) {
+      const updatedModules = [...modules]
+      updatedModules.splice(insertIndex, 0, newModule)
+      onChange(updatedModules)
+    } else {
+      const headerIndex = modules.findIndex(m => m.moduleId === 'site-header')
+      const footerIndex = modules.findIndex(m => m.moduleId === 'site-footer')
+      
+      let smartInsertIndex = modules.length
+      
+      if (headerIndex !== -1 && footerIndex !== -1) {
+        smartInsertIndex = footerIndex
+      } else if (headerIndex !== -1) {
+        smartInsertIndex = headerIndex + 1
+      } else if (footerIndex !== -1) {
+        smartInsertIndex = footerIndex
+      }
+      
+      const updatedModules = [...modules]
+      updatedModules.splice(smartInsertIndex, 0, newModule)
+      onChange(updatedModules)
+    }
     toast.success("模块添加成功")
+  }
+
+  const handleModuleDragStart = (e: React.DragEvent, moduleInfo: AvailableModule) => {
+    setDraggedModule(moduleInfo)
+    e.dataTransfer.effectAllowed = "copy"
+    e.dataTransfer.setData("text/plain", moduleInfo.moduleId)
+  }
+
+  const handleModuleDragEnd = () => {
+    setDraggedModule(null)
+    setDragOverIndex(null)
+  }
+
+  const handleListDragOver = (e: React.DragEvent, index: number) => {
+    e.preventDefault()
+    if (draggedModule) {
+      e.dataTransfer.dropEffect = "copy"
+      setDragOverIndex(index)
+    } else if (draggedIndex !== null && draggedIndex !== index) {
+      e.dataTransfer.dropEffect = "move"
+      const updatedModules = [...modules]
+      const [draggedMod] = updatedModules.splice(draggedIndex, 1)
+      updatedModules.splice(index, 0, draggedMod)
+      onChange(updatedModules)
+      setDraggedIndex(index)
+    }
+  }
+
+  const handleListDrop = (e: React.DragEvent, index: number) => {
+    e.preventDefault()
+    if (draggedModule) {
+      handleAddModule(draggedModule, index)
+    }
+    setDraggedModule(null)
+    setDragOverIndex(null)
   }
 
   const handleDeleteModule = (index: number) => {
@@ -117,7 +175,7 @@ export function ModuleDragEditor({ modules, onChange }: ModuleDragEditorProps) {
         <div className={styles.modulePickerHeader}>
           <h3 style={{ margin: 0 }}>可用模块</h3>
           <span style={{ fontSize: 12, color: "#9ca3af" }}>
-            点击添加到页面
+            拖拽添加到页面
           </span>
         </div>
         
@@ -129,30 +187,23 @@ export function ModuleDragEditor({ modules, onChange }: ModuleDragEditorProps) {
                 {mods.map((mod) => (
                   <Card
                     key={mod.moduleId}
-                    className={styles.moduleCard}
-                    hoverable
+                    className={`${styles.moduleCard} ${draggedModule?.moduleId === mod.moduleId ? styles.moduleCardDragging : ""}`}
+                    draggable
+                    onDragStart={(e) => handleModuleDragStart(e, mod)}
+                    onDragEnd={handleModuleDragEnd}
                   >
                     <div className={styles.moduleCardContent}>
                       <div className={styles.moduleCardName}>{mod.moduleName}</div>
                       <Tag size="small" color="arcoblue">{mod.moduleId}</Tag>
-                      <div className={styles.moduleCardActions}>
-                        <Button
-                          type="primary"
-                          size="small"
-                          onClick={() => handleAddModule(mod)}
-                        >
-                          添加
-                        </Button>
-                        <Button
-                          type="text"
-                          size="small"
-                          icon={<IconEye />}
-                          onClick={(e) => {
-                            e.stopPropagation()
-                            setPreviewModule(mod)
-                          }}
-                        />
-                      </div>
+                      <Button
+                        type="text"
+                        size="small"
+                        icon={<IconEye />}
+                        onClick={(e) => {
+                          e.stopPropagation()
+                          setPreviewModule(mod)
+                        }}
+                      />
                     </div>
                   </Card>
                 ))}
@@ -171,55 +222,79 @@ export function ModuleDragEditor({ modules, onChange }: ModuleDragEditorProps) {
         </div>
 
         {modules.length === 0 ? (
-          <Card className={styles.emptyModuleCard}>
+          <Card 
+            className={styles.emptyModuleCard}
+            onDragOver={(e) => {
+              e.preventDefault()
+              if (draggedModule) {
+                e.dataTransfer.dropEffect = "copy"
+              }
+            }}
+            onDrop={(e) => {
+              e.preventDefault()
+              if (draggedModule) {
+                handleAddModule(draggedModule, 0)
+                setDraggedModule(null)
+              }
+            }}
+          >
             <div style={{ textAlign: "center", color: "#9ca3af" }}>
-              <p>暂无模块，从左侧选择添加</p>
+              <p>拖拽左侧模块到此处添加</p>
             </div>
           </Card>
         ) : (
           <div className={styles.moduleItems}>
             {modules.map((module, index) => (
-              <Card
+              <div
                 key={module.moduleInstanceId}
-                className={`${styles.moduleItem} ${
-                  draggedIndex === index ? styles.moduleItemDragging : ""
-                }`}
-                draggable
-                onDragStart={() => handleDragStart(index)}
-                onDragOver={(e) => handleDragOver(e, index)}
-                onDragEnd={handleDragEnd}
+                onDragOver={(e) => handleListDragOver(e, index)}
+                onDrop={(e) => handleListDrop(e, index)}
               >
-                <div className={styles.moduleItemContent}>
-                  <div className={styles.moduleItemDragHandle}>
-                    <IconDragDotVertical />
+                {dragOverIndex === index && draggedModule && (
+                  <div className={styles.dropIndicator}>
+                    放置到此处
                   </div>
-                  <div className={styles.moduleItemInfo}>
-                    <div className={styles.moduleItemName}>{module.moduleName}</div>
-                    <div className={styles.moduleItemId}>
-                      <Tag size="small" color="gray">
-                        {module.moduleId}
-                      </Tag>
+                )}
+                <Card
+                  className={`${styles.moduleItem} ${
+                    draggedIndex === index ? styles.moduleItemDragging : ""
+                  }`}
+                  draggable
+                  onDragStart={() => handleDragStart(index)}
+                  onDragEnd={handleDragEnd}
+                >
+                  <div className={styles.moduleItemContent}>
+                    <div className={styles.moduleItemDragHandle}>
+                      <IconDragDotVertical />
+                    </div>
+                    <div className={styles.moduleItemInfo}>
+                      <div className={styles.moduleItemName}>{module.moduleName}</div>
+                      <div className={styles.moduleItemId}>
+                        <Tag size="small" color="gray">
+                          {module.moduleId}
+                        </Tag>
+                      </div>
+                    </div>
+                    <div className={styles.moduleItemActions}>
+                      <Button
+                        type="text"
+                        size="small"
+                        icon={<IconSettings />}
+                        onClick={() => handleEditModule(module)}
+                      >
+                        编辑
+                      </Button>
+                      <Button
+                        type="text"
+                        size="small"
+                        status="danger"
+                        icon={<IconDelete />}
+                        onClick={() => handleDeleteModule(index)}
+                      />
                     </div>
                   </div>
-                  <div className={styles.moduleItemActions}>
-                    <Button
-                      type="text"
-                      size="small"
-                      icon={<IconSettings />}
-                      onClick={() => handleEditModule(module)}
-                    >
-                      编辑
-                    </Button>
-                    <Button
-                      type="text"
-                      size="small"
-                      status="danger"
-                      icon={<IconDelete />}
-                      onClick={() => handleDeleteModule(index)}
-                    />
-                  </div>
-                </div>
-              </Card>
+                </Card>
+              </div>
             ))}
           </div>
         )}

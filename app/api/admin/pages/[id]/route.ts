@@ -9,8 +9,10 @@ interface PageInfo {
   name: string
   slug: string
   modules: ModuleData[]
+  status?: 'draft' | 'published' | 'offline'
   createdAt?: string
   updatedAt?: string
+  publishedAt?: string
 }
 
 function getPageDetail(pageId: string): PageInfo | null {
@@ -37,8 +39,10 @@ function getPageDetail(pageId: string): PageInfo | null {
     name: (pageConfig.name as string) || pageId,
     slug: (pageConfig.slug as string) || pageId,
     modules,
+    status: (pageConfig.status as 'draft' | 'published' | 'offline') || 'draft',
     createdAt: pageConfig.createdAt as string,
     updatedAt: pageConfig.updatedAt as string,
+    publishedAt: pageConfig.publishedAt as string,
   }
 }
 
