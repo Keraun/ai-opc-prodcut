@@ -66,7 +66,7 @@ export async function POST(request: NextRequest) {
     const emailHtml = generateVerificationCodeEmail(code)
     const emailSent = await sendEmail({
       to: email,
-      subject: "【创客AI】密码重置验证码",
+      subject: "【】密码重置验证码",
       html: emailHtml
     })
 

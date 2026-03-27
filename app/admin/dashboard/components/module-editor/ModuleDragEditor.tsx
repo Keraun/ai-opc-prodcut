@@ -193,12 +193,15 @@ export function ModuleDragEditor({ modules, onChange }: ModuleDragEditorProps) {
                     onDragEnd={handleModuleDragEnd}
                   >
                     <div className={styles.moduleCardContent}>
-                      <div className={styles.moduleCardName}>{mod.moduleName}</div>
-                      <Tag size="small" color="arcoblue">{mod.moduleId}</Tag>
+                      <div className={styles.moduleCardInfo}>
+                        <div className={styles.moduleCardName}>{mod.moduleName}</div>
+                        <Tag size="small" color="arcoblue" className={styles.moduleCardTag}>{mod.moduleId}</Tag>
+                      </div>
                       <Button
                         type="text"
                         size="small"
                         icon={<IconEye />}
+                        className={styles.moduleCardPreviewBtn}
                         onClick={(e) => {
                           e.stopPropagation()
                           setPreviewModule(mod)

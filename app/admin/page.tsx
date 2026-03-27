@@ -325,7 +325,7 @@ export default function AdminLoginPage() {
                 </svg>
               </div>
               <h1 className={styles.mainTitle}>
-                创客AI
+                
                 <span className={styles.subtitle}>
                   管理后台
                 </span>
@@ -659,7 +659,7 @@ export default function AdminLoginPage() {
             </div>
             
             <div className={styles.copyright}>
-              <p>© 创客AI · 配置管理系统</p>
+              <p>©  · 配置管理系统</p>
             </div>
           </div>
         </div>

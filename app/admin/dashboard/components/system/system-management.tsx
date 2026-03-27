@@ -132,7 +132,7 @@ export function SystemManagement({
             <div className={styles.overviewStats}>
               <div className={styles.overviewStatItem}>
                 <span className={styles.overviewStatLabel}>站点名称</span>
-                <span className={styles.overviewStatValue}>{siteConfig?.name || '创客AI'}</span>
+                <span className={styles.overviewStatValue}>{siteConfig?.name || ''}</span>
               </div>
               <div className={styles.overviewStatItem}>
                 <span className={styles.overviewStatLabel}>系统版本</span>

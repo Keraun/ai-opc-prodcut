@@ -64,7 +64,7 @@ export async function sendEmail({ to, subject, html }: SendEmailOptions): Promis
     const fromEmail = process.env.SMTP_FROM || config?.auth?.user
     
     await transporter.sendMail({
-      from: `"创客AI" <${fromEmail}>`,
+      from: `"" <${fromEmail}>`,
       to,
       subject,
       html
@@ -155,7 +155,7 @@ export function generateVerificationCodeEmail(code: string): string {
     <body>
       <div class="container">
         <div class="header">
-          <h1>创客AI</h1>
+          <h1></h1>
         </div>
         <div class="content">
           <p>您好，</p>
@@ -171,12 +171,12 @@ export function generateVerificationCodeEmail(code: string): string {
             <ul style="margin: 10px 0 0 0; padding-left: 20px;">
               <li>请勿将验证码透露给任何人</li>
               <li>如非本人操作，请忽略此邮件</li>
-              <li>创客AI不会主动向您索要验证码</li>
+              <li>不会主动向您索要验证码</li>
             </ul>
           </div>
         </div>
         <div class="footer">
-          <p>© 创客AI · 配置管理系统</p>
+          <p>©  · 配置管理系统</p>
           <p>此邮件由系统自动发送，请勿直接回复</p>
         </div>
       </div>

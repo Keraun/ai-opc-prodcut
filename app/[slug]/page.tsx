@@ -13,7 +13,7 @@ interface RouteConfig {
 const routeConfigMap: Record<string, RouteConfig> = {
   'home': {
     title: '首页',
-    description: '创客AI - 专注AI一人公司服务',
+    description: ' - 专注AI一人公司服务',
     pageId: 'home'
   },
   'products': {

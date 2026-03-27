@@ -45,8 +45,8 @@ const seoConfig = getSeoConfig()
 export const metadata: Metadata = {
   metadataBase: new URL(siteConfig?.url || 'https://makerai.com'),
   title: {
-    default: `${siteConfig?.name || '创客AI'} - ${siteConfig?.description || ''}`,
-    template: `%s | ${siteConfig?.name || '创客AI'}`,
+    default: `${siteConfig?.name || ''} - ${siteConfig?.description || ''}`,
+    template: `%s | ${siteConfig?.name || ''}`,
   },
   description: siteConfig?.description,
   keywords: seoConfig?.keywords,
@@ -63,13 +63,13 @@ export const metadata: Metadata = {
     locale: seoConfig?.openGraph?.locale,
     url: siteConfig?.url,
     siteName: seoConfig?.openGraph?.siteName,
-    title: `${siteConfig?.name || '创客AI'} - ${siteConfig?.description || ''}`,
+    title: `${siteConfig?.name || ''} - ${siteConfig?.description || ''}`,
     description: siteConfig?.description,
     images: seoConfig?.openGraph?.images,
   },
   twitter: {
     card: (seoConfig?.twitter?.card || 'summary_large_image') as 'summary_large_image',
-    title: `${siteConfig?.name || '创客AI'} - ${siteConfig?.description || ''}`,
+    title: `${siteConfig?.name || ''} - ${siteConfig?.description || ''}`,
     description: siteConfig?.description,
     images: seoConfig?.openGraph?.images?.map((img: any) => img.url),
     creator: seoConfig?.twitter?.creator,
