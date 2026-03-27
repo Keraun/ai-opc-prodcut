@@ -333,7 +333,7 @@ export function AccountManagement() {
               type="primary"
               onClick={async () => {
                 if (!superAdminPasswordForAction) {
-                  Message.error("请输入当前账户密码")
+                  message.error("请输入当前账户密码")
                   return
                 }
                 
@@ -351,7 +351,7 @@ export function AccountManagement() {
                   }
                 } else {
                   console.error("密码错误")
-                  alert("密码错误")
+                  message.error("密码错误")
                 }
               }}
             >
@@ -370,7 +370,7 @@ export function AccountManagement() {
             onChange={setSuperAdminPasswordForAction}
             onPressEnter={async () => {
               if (!superAdminPasswordForAction) {
-                Message.error("请输入当前账户密码")
+                message.error("请输入当前账户密码")
                 return
               }
               
@@ -388,7 +388,7 @@ export function AccountManagement() {
                 }
               } else {
                 console.error("密码错误")
-                alert("密码错误")
+                message.error("密码错误")
               }
             }}
           />
