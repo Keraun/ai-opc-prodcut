@@ -1,15 +1,14 @@
-import { NextRequest, NextResponse } from "next/server"
-import { cookies } from "next/headers"
+import { NextRequest } from "next/server"
 import { readConfig, writeConfig } from "@/lib/config-manager"
-
-function generateSuperAdminToken(): string {
-  const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789'
-  let result = ''
-  for (let i = 0; i < 12; i++) {
-    result += chars.charAt(Math.floor(Math.random() * chars.length))
-  }
-  return Buffer.from(result).toString('base64')
-}
+import {
+  successResponse,
+  errorResponse,
+  setCookie,
+  parseJsonCookie,
+  getClientIP,
+  formatDateTime,
+  generateRandomToken
+} from "@/lib/api-utils"
 
 export async function POST(request: NextRequest) {
   try {
@@ -17,70 +16,43 @@ export async function POST(request: NextRequest) {
     const { username, password } = body
 
     const accountConfig = readConfig('account')
-
-    // 兼容两种格式：数组格式和 { admins: [...] } 对象格式
     const admins = Array.isArray(accountConfig) ? accountConfig : accountConfig.admins || []
 
     const adminIndex = admins.findIndex((admin: any) => admin.username === username)
 
     if (adminIndex === -1) {
-      return NextResponse.json({
-        success: false,
-        message: "用户名不存在"
-      }, { status: 401 })
+      return errorResponse("用户名不存在", 401)
     }
 
     const admin = admins[adminIndex]
 
     if (admin.password !== password) {
-      return NextResponse.json({
-        success: false,
-        message: "密码错误"
-      }, { status: 401 })
+      return errorResponse("密码错误", 401)
     }
 
     const requireEmailSetup = !admin.email
 
     if (requireEmailSetup) {
-      const cookieStore = await cookies()
       const userData = {
         username: admin.username,
         remark: admin.remark,
         mustChangePassword: admin.mustChangePassword
       }
       
-      cookieStore.set('adminUser', JSON.stringify(userData), {
-        httpOnly: true,
-        secure: process.env.NODE_ENV === 'production',
-        sameSite: 'lax',
-        maxAge: 60 * 60 * 24 * 7
-      })
+      await setCookie('adminUser', JSON.stringify(userData))
 
-      return NextResponse.json({
-        success: true,
+      return successResponse({
         requireEmailSetup: true,
         user: userData
       })
     }
 
-    const currentIP = request.headers.get('x-forwarded-for') || 
-                      request.headers.get('x-real-ip') || 
-                      'unknown'
-    
-    const currentTime = new Date().toLocaleString('zh-CN', { 
-      timeZone: 'Asia/Shanghai',
-      year: 'numeric',
-      month: '2-digit',
-      day: '2-digit',
-      hour: '2-digit',
-      minute: '2-digit',
-      second: '2-digit'
-    })
+    const currentIP = getClientIP(request)
+    const currentTime = formatDateTime()
 
     const lastLoginTime = admin.currentLoginTime || admin.lastLoginTime || ''
     const lastLoginIP = admin.currentLoginIP || admin.lastLoginIP || ''
 
-    // 更新管理员登录信息
     admins[adminIndex].lastLoginTime = lastLoginTime
     admins[adminIndex].lastLoginIP = lastLoginIP
     admins[adminIndex].currentLoginIP = currentIP
@@ -92,7 +64,7 @@ export async function POST(request: NextRequest) {
     let tokenConfig = readConfig('token') || { superAdminToken: '' }
 
     if (!tokenConfig.superAdminToken) {
-      superAdminToken = generateSuperAdminToken()
+      superAdminToken = generateRandomToken(12)
       tokenConfig.superAdminToken = superAdminToken
       showSuperAdminToken = true
       writeConfig('token', tokenConfig)
@@ -100,10 +72,8 @@ export async function POST(request: NextRequest) {
       superAdminToken = tokenConfig.superAdminToken
     }
 
-    // 保存时保持原有格式（数组格式）
     writeConfig('account', admins)
 
-    const cookieStore = await cookies()
     const userData = {
       username: admin.username,
       remark: admin.remark,
@@ -113,24 +83,16 @@ export async function POST(request: NextRequest) {
       currentLoginIP: currentIP
     }
     
-    cookieStore.set('adminUser', JSON.stringify(userData), {
-      httpOnly: true,
-      secure: process.env.NODE_ENV === 'production',
-      sameSite: 'lax',
-      maxAge: 60 * 60 * 24 * 7
-    })
+    await setCookie('adminUser', JSON.stringify(userData))
 
-    return NextResponse.json({
-      success: true,
+    return successResponse({
       mustChangePassword: admin.mustChangePassword,
       user: userData,
       showSuperAdminToken,
       superAdminToken: showSuperAdminToken ? superAdminToken : undefined
     })
   } catch (error) {
-    return NextResponse.json({
-      success: false,
-      message: "登录失败"
-    }, { status: 500 })
+    console.error('Login error:', error)
+    return errorResponse("登录失败", 500)
   }
 }

@@ -50,9 +50,9 @@ export function PageManagement({ onEditPage }: PageManagementProps) {
       // 从API获取系统页面列表
       const response = await fetch('/api/admin/pages')
       if (response.ok) {
-        const data = await response.json()
+        const result = await response.json()
         // 从页面列表中提取系统页面
-        const systemPagesList = data.pages
+        const systemPagesList = result.data
           .filter((page: any) => page.isSystem)
           .map((page: any) => page.id)
         setSystemPages(systemPagesList)
@@ -72,8 +72,8 @@ export function PageManagement({ onEditPage }: PageManagementProps) {
     try {
       const response = await fetch("/api/admin/pages")
       if (response.ok) {
-        const data = await response.json()
-        setPages(data.pages || [])
+        const result = await response.json()
+        setPages(result.data || [])
       }
     } catch (error) {
       toast.error("获取页面列表失败")

@@ -1,12 +1,6 @@
-import { NextResponse } from "next/server"
-import { cookies } from "next/headers"
+import { successResponse, deleteCookie } from "@/lib/api-utils"
 
 export async function POST() {
-  const cookieStore = await cookies()
-  cookieStore.delete('adminUser')
-  
-  return NextResponse.json({
-    success: true,
-    message: "退出成功"
-  })
+  await deleteCookie('adminUser')
+  return successResponse(undefined, "退出成功")
 }

@@ -1,7 +1,8 @@
-import { NextRequest, NextResponse } from 'next/server'
+import { NextRequest } from 'next/server'
 import { initializeModules } from '@/modules/init'
 import { getAllModules } from '@/modules/registry'
 import { getModuleRegistryList, registerModule } from '@/lib/module-service'
+import { successResponse, errorResponse } from '@/lib/api-utils'
 import type { ModuleRegistration } from '@/modules/types'
 
 initializeModules()
@@ -47,15 +48,9 @@ export async function GET() {
       )
     }
 
-    return NextResponse.json({
-      success: true,
-      modules,
-    })
+    return successResponse({ modules })
   } catch (error) {
     console.error('Get modules error:', error)
-    return NextResponse.json({
-      success: false,
-      message: '获取模块列表失败',
-    }, { status: 500 })
+    return errorResponse('获取模块列表失败')
   }
 }

@@ -1,5 +1,12 @@
-import { NextRequest, NextResponse } from 'next/server'
+import { NextRequest } from 'next/server'
 import { getDatabase } from '@/lib/database'
+import { 
+  wrapApiHandler, 
+  wrapAuthApiHandler,
+  successResponse, 
+  badRequestResponse,
+  errorResponse 
+} from '@/lib/api-utils'
 
 interface PageInfo {
   id: string
@@ -112,60 +119,31 @@ function createPage(
 }
 
 export async function GET() {
-  try {
+  return wrapAuthApiHandler(async () => {
     const pages = getPageList()
-    
-    return NextResponse.json({
-      success: true,
-      pages,
-    })
-  } catch (error) {
-    console.error('Get pages error:', error)
-    return NextResponse.json({
-      success: false,
-      message: '获取页面列表失败',
-    }, { status: 500 })
-  }
+    return successResponse(pages)
+  })
 }
 
 export async function POST(request: NextRequest) {
-  try {
+  return wrapAuthApiHandler(async () => {
     const body = await request.json()
     const { name, slug, type = 'static', dynamicParam } = body
 
     if (!name || !slug) {
-      return NextResponse.json({
-        success: false,
-        message: '页面名称和路径不能为空',
-      }, { status: 400 })
+      return badRequestResponse('页面名称和路径不能为空')
     }
 
     if (type === 'dynamic' && !dynamicParam) {
-      return NextResponse.json({
-        success: false,
-        message: '动态路由页面必须指定动态参数名称',
-      }, { status: 400 })
+      return badRequestResponse('动态路由页面必须指定动态参数名称')
     }
 
     const result = createPage(name, slug, type, dynamicParam)
     
     if (result.success) {
-      return NextResponse.json({
-        success: true,
-        pageId: result.pageId,
-        message: '页面创建成功',
-      })
+      return successResponse({ pageId: result.pageId }, '页面创建成功')
     } else {
-      return NextResponse.json({
-        success: false,
-        message: result.error || '创建页面失败',
-      }, { status: 400 })
+      return badRequestResponse(result.error || '创建页面失败')
     }
-  } catch (error) {
-    console.error('Create page error:', error)
-    return NextResponse.json({
-      success: false,
-      message: '创建页面失败',
-    }, { status: 500 })
-  }
+  })
 }
