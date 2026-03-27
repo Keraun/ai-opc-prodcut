@@ -1,8 +1,0 @@
-{
-    "modules": [
-        "site-root",
-        "site-header",
-        "section-404",
-        "site-footer"
-    ]
-}

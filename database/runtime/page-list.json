@@ -1,6 +1,5 @@
 {
-  "pages": [
-    {
+  "pages": [{
       "id": "home",
       "name": "首页",
       "slug": "home",
@@ -9,7 +8,20 @@
       "status": "published",
       "isSystem": true,
       "isDeletable": false,
-      "route": "/"
+      "route": "/",
+      "modules": [
+        "site-root",
+        "site-header",
+        "section-hero",
+        "section-partner",
+        "section-products",
+        "section-services",
+        "section-pricing",
+        "section-about",
+        "section-contact",
+        "sidebar-nav",
+        "site-footer"
+      ]
     },
     {
       "id": "product",
@@ -20,7 +32,13 @@
       "status": "published",
       "isSystem": true,
       "isDeletable": false,
-      "route": "/product"
+      "route": "/product",
+      "modules": [
+        "site-root",
+        "site-header",
+        "product-list",
+        "site-footer"
+      ]
     },
     {
       "id": "news",
@@ -31,7 +49,13 @@
       "status": "published",
       "isSystem": false,
       "isDeletable": true,
-      "route": "/news"
+      "route": "/news",
+      "modules": [
+        "site-root",
+        "site-header",
+        "news-list",
+        "site-header"
+      ]
     },
     {
       "id": "new-detail",
@@ -43,7 +67,13 @@
       "isSystem": false,
       "isDeletable": true,
       "route": "/news/[id]",
-      "dynamicParam": "id"
+      "dynamicParam": "id",
+      "modules": [
+        "site-root",
+        "site-header",
+        "news-detail",
+        "site-footer"
+      ]
     },
     {
       "id": "404",
@@ -54,23 +84,13 @@
       "status": "published",
       "isSystem": true,
       "isDeletable": false,
-      "route": "/404"
-    },
-    {
-      "id": "test2",
-      "name": "test",
-      "slug": "test2",
+      "route": "/404",
       "modules": [
         "site-root",
         "site-header",
+        "section-404",
         "site-footer"
-      ],
-      "type": "static",
-      "status": "draft",
-      "isSystem": false,
-      "isDeletable": true,
-      "createdAt": "2026-03-27T01:42:38.976Z",
-      "updatedAt": "2026-03-27T01:42:38.976Z"
+      ]
     }
   ],
   "systemPages": [

@@ -914,7 +914,40 @@
 }
 
 .systemManagement {
-  padding: 24.0px;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.systemManagementGrid {
+  display: grid;
+  grid-template-columns: repeat(1, minmax(0, 1fr));
+  gap: 24px;
+}
+
+@media (min-width: 768px) {
+  .systemManagementGrid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (min-width: 1024px) {
+  .systemManagementGrid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+.systemCard {
+  margin-bottom: 0;
+}
+
+.systemOverview {
+  padding: 16px 0;
+}
+
+.securitySection {
+  padding: 16px 0;
 }
 
 .performanceSection {

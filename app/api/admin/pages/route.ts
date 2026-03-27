@@ -88,8 +88,6 @@ function createPage(
 ): { success: boolean; pageId?: string; error?: string } {
   try {
     const pageId = slug.toLowerCase().replace(/[^a-z0-9-]/g, '-')
-    const configKey = `page-${pageId}`
-    
     const existingPages = getPageList()
     const pageExistsInList = existingPages.find(p => p.id === pageId)
     
@@ -99,13 +97,7 @@ function createPage(
       return { success: false, error: `页面名称 "${name}" 已存在，请使用其他名称` }
     }
     
-    // 如果页面不在page-list.json中，但是配置文件存在，删除旧的配置文件
-    if (!pageExistsInList) {
-      const runtimePath = getRuntimePath(configKey)
-      if (fs.existsSync(runtimePath)) {
-        fs.unlinkSync(runtimePath)
-      }
-    } else {
+    if (pageExistsInList) {
       // 如果页面在page-list.json中存在，返回错误
       return { success: false, error: `页面路径 "/${slug}" 已被 "${pageExistsInList.name}" 占用，请使用其他路径` }
     }
@@ -114,19 +106,6 @@ function createPage(
       return { success: false, error: '动态路由页面必须指定动态参数名称' }
     }
 
-    const newPageConfig = {
-      name,
-      slug,
-      type,
-      dynamicParam: type === 'dynamic' ? dynamicParam : undefined,
-      modules: ['site-root', 'site-header', 'site-footer'],
-      status: 'draft',
-      createdAt: new Date().toISOString(),
-      updatedAt: new Date().toISOString(),
-    }
-
-    writeConfig(configKey, newPageConfig)
-    
     const newPage: PageInfo = {
       id: pageId,
       name,
@@ -139,6 +118,8 @@ function createPage(
       isDeletable: true,
       createdAt: new Date().toISOString(),
       updatedAt: new Date().toISOString(),
+      route: type === 'dynamic' ? `/${slug}/[${dynamicParam}]` : `/${slug}`,
+      description: `新创建的${type === 'dynamic' ? '动态' : '静态'}页面`,
     }
     
     const updatedPages = [...existingPages, newPage]

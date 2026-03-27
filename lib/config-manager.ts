@@ -16,11 +16,7 @@ const typeToPathMap: Record<string, PathMapping> = {
   'site-footer': { dir: 'page-data', prefix: 'data-site-footer' },
   'site-navigation': { dir: 'page-data', prefix: 'data-site-navigation' },
   
-  'page-home': { dir: 'page-module', prefix: 'page-home' },
-  'page-news': { dir: 'page-module', prefix: 'page-news' },
-  'page-product': { dir: 'page-module', prefix: 'page-product' },
-  'page-new-detail': { dir: 'page-module', prefix: 'page-new-detail' },
-  'page-404': { dir: 'page-module', prefix: 'page-404' },
+
   
   'site-root': { dir: 'page-data', prefix: 'data-site-root' },
   'site-header': { dir: 'page-data', prefix: 'data-site-header' },
@@ -148,8 +144,7 @@ function readAllFromDir(dir: string, typePrefix: string = ''): Record<string, an
       
       if (dir === 'page-data' && baseName.startsWith('data-')) {
         configType = baseName.replace('data-', '')
-      } else if (dir === 'page-module' && baseName.startsWith('page-')) {
-        configType = baseName
+
       } else if (dir === 'site-info') {
         configType = 'site'
       } else if (dir === 'theme' && baseName === 'theme-config') {
@@ -171,7 +166,6 @@ export function readAllConfigs(): Record<string, any> {
   const configs: Record<string, any> = {}
   
   Object.assign(configs, readAllFromDir('site-info'))
-  Object.assign(configs, readAllFromDir('page-module'))
   Object.assign(configs, readAllFromDir('page-data'))
   Object.assign(configs, readAllFromDir('theme'))
   Object.assign(configs, readAllFromDir('system'))
@@ -193,13 +187,19 @@ export function resetAllToTemplates(): void {
 }
 
 export function getPageResponse(pageId: string): any {
-  const pageModuleType = `page-${pageId}`
-  const pageModule = readConfig(pageModuleType)
+  // 从 page-list.json 读取页面配置
+  const pageListPath = getRuntimePath('page-list')
+  let pageConfig = null
+  
+  if (fs.existsSync(pageListPath)) {
+    const pageListData = JSON.parse(fs.readFileSync(pageListPath, 'utf-8'))
+    pageConfig = pageListData.pages.find((page: any) => page.id === pageId)
+  }
   
   const response = {
     pageName: pageId,
     pageId: pageId,
-    modules: pageModule.modules || [],
+    modules: pageConfig?.modules || [],
     data: [] as any[],
     common: {
       site: readConfig('site'),
@@ -207,8 +207,8 @@ export function getPageResponse(pageId: string): any {
     }
   }
   
-  if (pageModule.modules && Array.isArray(pageModule.modules)) {
-    for (const moduleId of pageModule.modules) {
+  if (pageConfig?.modules && Array.isArray(pageConfig.modules)) {
+    for (const moduleId of pageConfig.modules) {
       const moduleData = readConfig(moduleId)
       response.data.push({
         moduleId,
