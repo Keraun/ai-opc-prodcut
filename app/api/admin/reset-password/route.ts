@@ -65,7 +65,7 @@ export async function POST(request: NextRequest) {
       if (!tokenConfig.superAdminToken || tokenConfig.superAdminToken !== superAdminToken) {
         return NextResponse.json({
           success: false,
-          message: "超级管理员口令错误"
+          message: "输入的超级管理员口令不正确"
         }, { status: 401 })
       }
 

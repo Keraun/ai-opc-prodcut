@@ -5,7 +5,8 @@ import { Button, Card, Typography, Divider, Modal, Input, Message, Table, Popcon
 import { 
   IconUser, 
   IconPlus, 
-  IconDelete
+  IconDelete,
+  IconEdit
 } from "@arco-design/web-react/icon"
 import styles from "../../dashboard.module.css"
 
@@ -22,6 +23,14 @@ export function AccountManagement() {
   })
   const [showDeleteAccountModal, setShowDeleteAccountModal] = useState(false)
   const [accountToDelete, setAccountToDelete] = useState<any>(null)
+  const [showEditAccountModal, setShowEditAccountModal] = useState(false)
+  const [accountToEdit, setAccountToEdit] = useState<any>(null)
+  const [editedAccount, setEditedAccount] = useState({
+    username: "",
+    password: "",
+    email: "",
+    remark: ""
+  })
   const [showSuperAdminPasswordModal, setShowSuperAdminPasswordModal] = useState(false)
   const [superAdminPasswordForAction, setSuperAdminPasswordForAction] = useState("")
   const [actionType, setActionType] = useState<string | null>(null)
@@ -142,6 +151,41 @@ export function AccountManagement() {
     await handleActionWithSuperAdmin(action)
   }
   
+  // 处理修改账号
+  const handleEditAccount = async () => {
+    if (!editedAccount.email) {
+      Message.error("请输入邮箱")
+      return
+    }
+    
+    const action = async () => {
+      try {
+        const response = await fetch(`/api/admin/accounts/${editedAccount.username}`, {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(editedAccount),
+        })
+        const data = await response.json()
+        if (data.success) {
+          Message.success("账号修改成功")
+          setShowEditAccountModal(false)
+          setAccountToEdit(null)
+          setEditedAccount({ username: "", password: "", email: "", remark: "" })
+          loadAccounts()
+        } else {
+          Message.error(data.message || "账号修改失败")
+        }
+      } catch (error) {
+        console.error("修改账号失败:", error)
+        Message.error("账号修改失败")
+      }
+    }
+    
+    await handleActionWithSuperAdmin(action)
+  }
+  
   // 打开添加账号弹窗
   const openAddAccountModal = () => {
     if (hasValidSuperAdminToken) {
@@ -164,6 +208,24 @@ export function AccountManagement() {
       setSuperAdminPasswordForAction("")
     }
   }
+  
+  // 打开修改账号弹窗
+  const openEditAccountModal = (account: any) => {
+    setAccountToEdit(account)
+    setEditedAccount({
+      username: account.username,
+      password: "",
+      email: account.email,
+      remark: account.remark || ""
+    })
+    if (hasValidSuperAdminToken) {
+      setShowEditAccountModal(true)
+    } else {
+      setActionType("edit")
+      setShowSuperAdminPasswordModal(true)
+      setSuperAdminPasswordForAction("")
+    }
+  }
 
   return (
     <div className={styles.accountManagementContainer}>
@@ -178,7 +240,7 @@ export function AccountManagement() {
           </div>
         </div>
         <Button 
-          type="primary" 
+          type="default" 
           icon={<IconPlus />}
           onClick={openAddAccountModal}
           className={styles.accountManagementAddButton}
@@ -217,11 +279,13 @@ export function AccountManagement() {
                 <Popconfirm
                   title={`确定要删除账号 ${record.username} 吗？`}
                   onConfirm={() => openDeleteAccountModal(record)}
+                  disabled={record.username === 'admin'}
                 >
                   <Button 
                     type="text" 
                     status="danger" 
                     icon={<IconDelete />}
+                    disabled={record.username === 'admin'}
                   >
                     删除
                   </Button>
@@ -258,7 +322,7 @@ export function AccountManagement() {
               type="primary"
               onClick={async () => {
                 if (!superAdminPasswordForAction) {
-                  Message.error("请输入超级管理员密码")
+                  Message.error("请输入当前账户密码")
                   return
                 }
                 
@@ -273,7 +337,7 @@ export function AccountManagement() {
                     setShowDeleteAccountModal(true)
                   }
                 } else {
-                  Message.error("超级管理员密码错误")
+                  Message.error("密码错误")
                 }
               }}
             >
@@ -284,15 +348,15 @@ export function AccountManagement() {
       >
         <div style={{ padding: "16px 0" }}>
           <div style={{ marginBottom: 16 }}>
-            <Typography.Text type="secondary">请输入超级管理员密码以执行此操作：</Typography.Text>
+            <Typography.Text type="secondary">请输入当前账户密码以执行此操作：</Typography.Text>
           </div>
           <Input.Password
-            placeholder="请输入超级管理员密码"
+            placeholder="请输入当前账户密码"
             value={superAdminPasswordForAction}
             onChange={setSuperAdminPasswordForAction}
             onPressEnter={async () => {
               if (!superAdminPasswordForAction) {
-                Message.error("请输入超级管理员密码")
+                Message.error("请输入当前账户密码")
                 return
               }
               
@@ -307,7 +371,7 @@ export function AccountManagement() {
                   setShowDeleteAccountModal(true)
                 }
               } else {
-                Message.error("超级管理员密码错误")
+                Message.error("密码错误")
               }
             }}
           />
