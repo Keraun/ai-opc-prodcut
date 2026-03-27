@@ -15,7 +15,7 @@
         "降低成本",
         "提升效率"
       ],
-      "link": "/products#workflows"
+      "link": "/products"
     },
     {
       "id": "tools",
@@ -29,7 +29,7 @@
         "每周更新",
         "智能分类"
       ],
-      "link": "/products#tools"
+      "link": "/products"
     },
     {
       "id": "courses",
@@ -43,7 +43,7 @@
         "实战案例",
         "社群答疑"
       ],
-      "link": "/products#courses"
+      "link": "/products"
     },
     {
       "id": "services",
@@ -57,7 +57,7 @@
         "定制方案",
         "技术支持"
       ],
-      "link": "/products#services"
+      "link": "/products"
     }
   ]
 }

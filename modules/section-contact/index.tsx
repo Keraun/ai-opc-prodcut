@@ -3,14 +3,19 @@ import type { ContactData } from "./types"
 import { useTheme } from "@/components/theme-provider"
 import { Section } from "@/components/ui"
 import { SendIcon } from "@/modules/icons"
+import { useState } from "react"
 import styles from "./index.module.css"
 
 export function ContactModule({ data }: ModuleProps) {
   const config: ContactData = (data as ContactData) || {}
   const { themeConfig } = useTheme()
 
-  const primaryColor = themeConfig?.colors.primary || "#1e40af" // 默认主色
-  const accentColor = themeConfig?.colors.accent || "#06b6d4" // 默认强调色
+  const primaryColor = themeConfig?.colors.primary || "#1e40af"
+  const accentColor = themeConfig?.colors.accent || "#06b6d4"
+
+  const [successMessage, setSuccessMessage] = useState<string | null>(null)
+  const [errorMessage, setErrorMessage] = useState<string | null>(null)
+  const [isSubmitting, setIsSubmitting] = useState(false)
 
   return (
     <Section
@@ -33,10 +38,14 @@ export function ContactModule({ data }: ModuleProps) {
               className={styles.form}
               onSubmit={async (e) => {
                 e.preventDefault()
+                setErrorMessage(null)
+                setSuccessMessage(null)
+                
                 const formData = new FormData(e.currentTarget)
                 const values = Object.fromEntries(formData)
 
                 try {
+                  setIsSubmitting(true)
                   const response = await fetch('/api/contact', {
                     method: 'POST',
                     headers: {
@@ -47,16 +56,29 @@ export function ContactModule({ data }: ModuleProps) {
 
                   const result = await response.json()
                   if (result.success) {
-                    alert(result.message)
+                    setSuccessMessage(result.message)
                     e.currentTarget.reset()
                   } else {
-                    alert(result.message)
+                    setErrorMessage(result.message)
                   }
                 } catch (error) {
-                  alert("提交留言失败，请稍后重试")
+                  setErrorMessage("提交留言失败，请稍后重试")
+                } finally {
+                  setIsSubmitting(false)
                 }
               }}
             >
+              {errorMessage && (
+                <div className={styles.errorMessage}>
+                  {errorMessage}
+                </div>
+              )}
+              
+              {successMessage && (
+                <div className={styles.successMessage}>
+                  {successMessage}
+                </div>
+              )}
               <div className={styles.formGrid}>
                 <div className={styles.formItem}>
                   <label className={styles.formLabel} htmlFor="name">姓名 *</label>
@@ -84,14 +106,13 @@ export function ContactModule({ data }: ModuleProps) {
               </div>
 
               <div className={styles.formItem}>
-                <label className={styles.formLabel} htmlFor="email">邮箱 *</label>
+                <label className={styles.formLabel} htmlFor="email">邮箱</label>
                 <input
                   id="email"
                   name="email"
                   type="email"
-                  placeholder="请输入您的邮箱地址"
+                  placeholder="请输入您的邮箱地址（选填）"
                   className={styles.formInput}
-                  required
                 />
               </div>
 
@@ -141,9 +162,10 @@ export function ContactModule({ data }: ModuleProps) {
                   type="submit"
                   className={styles.submitButton}
                   style={{ backgroundColor: primaryColor }}
+                  disabled={isSubmitting}
                 >
                   <span style={{ marginRight: '0.5rem' }}><SendIcon /></span>
-                  提交留言
+                  {isSubmitting ? '提交中...' : '提交留言'}
                 </button>
               </div>
             </form>

@@ -110,11 +110,17 @@ export interface ContactMethod {
   label?: string
 }
 
+export interface ContactPreference {
+  value?: string
+  label?: string
+}
+
 export interface ContactData {
   title?: string
   description?: string
   sectionTag?: string
   methods?: ContactMethod[]
+  contactPreferences?: ContactPreference[]
 }
 
 export interface NavigationItem {
