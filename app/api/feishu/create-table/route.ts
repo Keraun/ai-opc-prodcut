@@ -1,13 +1,6 @@
 import { NextRequest, NextResponse } from "next/server"
 import { readConfig, writeConfig } from "@/lib/config-manager"
-
-interface Field {
-  field_name: string
-  type: number
-  property: {
-    [key: string]: any
-  }
-}
+import { createFeishuAPI, Field } from "@/lib/feishu-api"
 
 function extractAppToken(baseLink: string): string {
   if (!baseLink) return ''
@@ -49,28 +42,11 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    const tokenResponse = await fetch("https://open.feishu.cn/open-apis/auth/v3/app_access_token/internal", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({
-        app_id: feishuConfig.appId,
-        app_secret: feishuConfig.appSecret
-      })
+    const feishuAPI = createFeishuAPI({
+      appId: feishuConfig.appId,
+      appSecret: feishuConfig.appSecret,
+      appToken
     })
-
-    if (!tokenResponse.ok) {
-      const tokenError = await tokenResponse.json()
-      console.error("获取飞书访问令牌失败:", tokenError)
-      return NextResponse.json(
-        { success: false, message: "获取飞书访问令牌失败", error: tokenError },
-        { status: 500 }
-      )
-    }
-
-    const tokenData = await tokenResponse.json()
-    const accessToken = tokenData.app_access_token
 
     const defaultFields: Field[] = [
       {
@@ -100,39 +76,19 @@ export async function POST(request: NextRequest) {
       }
     ]
 
-    const requestBody = {
-      table: {
-        name: "留言表",
-        fields: defaultFields
-      }
-    }
+    console.log("创建表格字段:", JSON.stringify(defaultFields, null, 2))
 
-    console.log("创建表格请求URL:", `https://open.feishu.cn/open-apis/bitable/v1/apps/${appToken}/tables`)
-    console.log("创建表格请求体:", JSON.stringify(requestBody, null, 2))
+    const result = await feishuAPI.createTable(appToken, "留言表", defaultFields)
 
-    const createTableResponse = await fetch(`https://open.feishu.cn/open-apis/bitable/v1/apps/${appToken}/tables`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        "Authorization": `Bearer ${accessToken}`
-      },
-      body: JSON.stringify(requestBody)
-    })
-
-    console.log("创建表格响应状态:", createTableResponse.status)
-
-    if (!createTableResponse.ok) {
-      const createError = await createTableResponse.json()
-      console.error("创建飞书表格失败:", createError)
-      console.error("错误详情:", JSON.stringify(createError, null, 2))
+    if (!result.success) {
+      console.error("创建飞书表格失败:", result.error)
       return NextResponse.json(
-        { success: false, message: "创建飞书表格失败", error: createError },
+        { success: false, message: result.message || "创建飞书表格失败", error: result.error },
         { status: 500 }
       )
     }
 
-    const createTableData = await createTableResponse.json()
-    const tableId = createTableData.data?.table?.table_id
+    const tableId = result.data?.table_id
 
     if (!tableId) {
       return NextResponse.json(
@@ -154,7 +110,7 @@ export async function POST(request: NextRequest) {
       data: {
         tableId: tableId,
         tableLink: tableLink,
-        table: createTableData.data?.table
+        table: result.data
       }
     })
   } catch (error) {

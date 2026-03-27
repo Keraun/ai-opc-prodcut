@@ -1,15 +1,14 @@
 import { NextRequest, NextResponse } from "next/server"
 import { readConfig } from "@/lib/config-manager"
+import { createFeishuAPI } from "@/lib/feishu-api"
 
 export async function POST(request: NextRequest) {
   try {
-    // 支持 FormData 和 JSON 两种格式
     let name, phone, wechat, email, preference, message
     
     const contentType = request.headers.get('content-type') || ''
     
     if (contentType.includes('application/json')) {
-      // JSON 格式
       const body = await request.json()
       name = body.name
       phone = body.phone
@@ -18,7 +17,6 @@ export async function POST(request: NextRequest) {
       preference = body.preference
       message = body.message
     } else {
-      // FormData 格式
       const formData = await request.formData()
       name = formData.get('name')
       phone = formData.get('phone')
@@ -28,7 +26,6 @@ export async function POST(request: NextRequest) {
       message = formData.get('message')
     }
 
-    // Validate required fields
     if (!name || !phone || !message) {
       return NextResponse.json(
         { success: false, message: "请填写必填字段" },
@@ -36,79 +33,42 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    // Read Feishu configuration
     const feishuConfig = readConfig('feishu-app')
 
-    // Check if Feishu is configured
-    if (!feishuConfig.appId || !feishuConfig.appSecret || !feishuConfig.tableId) {
+    if (!feishuConfig.appId || !feishuConfig.appSecret || !feishuConfig.appToken || !feishuConfig.tableId) {
       return NextResponse.json(
         { success: false, message: "飞书配置未完成" },
         { status: 500 }
       )
     }
 
-    // Get Feishu access token
-    const tokenResponse = await fetch("https://open.feishu.cn/open-apis/auth/v3/app_access_token/internal", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({
-        app_id: feishuConfig.appId,
-        app_secret: feishuConfig.appSecret
-      })
+    const feishuAPI = createFeishuAPI({
+      appId: feishuConfig.appId,
+      appSecret: feishuConfig.appSecret,
+      appToken: feishuConfig.appToken
     })
 
-    if (!tokenResponse.ok) {
-      const tokenError = await tokenResponse.json()
-      console.error("获取飞书访问令牌失败:", tokenError)
-      throw new Error(`获取飞书访问令牌失败: ${JSON.stringify(tokenError)}`)
+    const result = await feishuAPI.addRecord(feishuConfig.appToken, feishuConfig.tableId, {
+      fields: {
+        "姓名": name,
+        "电话": phone,
+        "微信": wechat || "",
+        "邮箱": email || "",
+        "偏好联系方式": preference || "",
+        "留言内容": message,
+        "提交时间": new Date().toISOString()
+      }
+    })
+
+    if (!result.success) {
+      console.error("提交数据到飞书表格失败:", result.error)
+      throw new Error(`提交数据到飞书表格失败: ${result.message}`)
     }
 
-    const tokenData = await tokenResponse.json()
-    const accessToken = tokenData.app_access_token
-
-    // Submit data to Feishu table
-    // 注意：飞书多维表格的app_token通常与appId不同
-    // 如果配置的appId实际上是多维表格的app_token，则直接使用
-    // 否则需要先获取多维表格的app_token
-    const appToken = feishuConfig.appId
-
-    const tableResponse = await fetch(`https://open.feishu.cn/open-apis/bitable/v1/apps/${appToken}/tables/${feishuConfig.tableId}/records`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        "Authorization": `Bearer ${accessToken}`
-      },
-      body: JSON.stringify({
-        records: [
-          {
-            fields: {
-              "姓名": name,
-              "电话": phone,
-              "微信": wechat || "",
-              "邮箱": email || "",
-              "偏好联系方式": preference || "",
-              "留言内容": message,
-              "提交时间": new Date().toISOString()
-            }
-          }
-        ]
-      })
-    })
-
-      if (!tableResponse.ok) {
-         const errorData = await tableResponse.json()
-         console.error("飞书API错误:", errorData)
-         throw new Error(`提交数据到飞书表格失败: ${JSON.stringify(errorData)}`)
-       }
-
-    // 检查是否是表单提交（非AJAX请求）
     const acceptHeader = request.headers.get('accept') || ''
     const isFormSubmit = !acceptHeader.includes('application/json')
     
     if (isFormSubmit) {
-      // 表单提交，重定向到首页并显示成功消息
       return NextResponse.redirect(new URL('/?contact=success', request.url))
     }
 
@@ -119,12 +79,10 @@ export async function POST(request: NextRequest) {
   } catch (error) {
     console.error("提交留言失败:", error)
     
-    // 检查是否是表单提交（非AJAX请求）
     const acceptHeader = request.headers.get('accept') || ''
     const isFormSubmit = !acceptHeader.includes('application/json')
     
     if (isFormSubmit) {
-      // 表单提交，重定向到首页并显示错误消息
       return NextResponse.redirect(new URL('/?contact=error', request.url))
     }
     
