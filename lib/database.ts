@@ -1,4 +1,3 @@
-import "server-only"
 import Database from 'better-sqlite3'
 import path from 'path'
 import fs from 'fs'
@@ -93,15 +92,17 @@ export function initializeDatabase(): void {
       CREATE TABLE IF NOT EXISTS page_modules (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         page_id TEXT NOT NULL,
-        module_id TEXT NOT NULL,
+        module_instance_id TEXT NOT NULL,
+        module_name TEXT NOT NULL,
         module_order INTEGER NOT NULL,
+        data TEXT,
         FOREIGN KEY (page_id) REFERENCES pages(page_id) ON DELETE CASCADE,
-        UNIQUE(page_id, module_id)
+        UNIQUE(page_id, module_instance_id)
       );
 
       CREATE TABLE IF NOT EXISTS module_data (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
-        module_id TEXT UNIQUE NOT NULL,
+        module_name TEXT UNIQUE NOT NULL,
         data TEXT NOT NULL,
         created_at TEXT DEFAULT CURRENT_TIMESTAMP,
         updated_at TEXT DEFAULT CURRENT_TIMESTAMP
@@ -115,7 +116,8 @@ export function initializeDatabase(): void {
       CREATE INDEX IF NOT EXISTS idx_pages_page_id ON pages(page_id);
       CREATE INDEX IF NOT EXISTS idx_pages_status ON pages(status);
       CREATE INDEX IF NOT EXISTS idx_page_modules_page_id ON page_modules(page_id);
-      CREATE INDEX IF NOT EXISTS idx_module_data_module_id ON module_data(module_id);
+      CREATE INDEX IF NOT EXISTS idx_page_modules_module_instance_id ON page_modules(module_instance_id);
+      CREATE INDEX IF NOT EXISTS idx_module_data_module_name ON module_data(module_name);
     `)
     
     console.log('Database initialized successfully')

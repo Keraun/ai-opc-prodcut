@@ -143,7 +143,7 @@ export function readConfig(configType: string): any {
       const pagesData = pages.map(page => {
         const modules = pageModules
           .filter(pm => pm.page_id === page.page_id)
-          .map(pm => pm.module_id)
+          .map(pm => pm.module_name)
         
         return {
           id: page.page_id,
@@ -174,7 +174,7 @@ export function readConfig(configType: string): any {
       }
     }
     
-    const module = db.prepare('SELECT * FROM module_data WHERE module_id = ?').get(configType) as any
+    const module = db.prepare('SELECT * FROM module_data WHERE module_name = ?').get(configType) as any
     if (module) {
       return JSON.parse(module.data)
     }
@@ -281,7 +281,7 @@ export function writeConfig(configType: string, data: any): void {
     }
     
     const stmt = db.prepare(`
-      INSERT OR REPLACE INTO module_data (module_id, data)
+      INSERT OR REPLACE INTO module_data (module_name, data)
       VALUES (?, ?)
     `)
     stmt.run(configType, JSON.stringify(data))
@@ -302,7 +302,7 @@ export function deleteConfig(configType: string): boolean {
       return true
     }
     
-    const result = db.prepare('DELETE FROM module_data WHERE module_id = ?').run(configType)
+    const result = db.prepare('DELETE FROM module_data WHERE module_name = ?').run(configType)
     return result.changes > 0
     
   } finally {
@@ -326,7 +326,7 @@ export function readAllPageData(): Record<string, any> {
     const result: Record<string, any> = {}
     
     for (const module of modules) {
-      result[module.module_id] = JSON.parse(module.data)
+      result[module.module_name] = JSON.parse(module.data)
     }
     
     return result
@@ -403,7 +403,7 @@ export function getPageResponse(pageId: string): any {
     }
     
     const pageModules = db.prepare('SELECT * FROM page_modules WHERE page_id = ? ORDER BY module_order').all(pageId) as any[]
-    const modules = pageModules.map(pm => pm.module_id)
+    const modules = pageModules.map(pm => pm.module_name)
     
     const response = {
       pageName: page.name || pageId,
@@ -416,11 +416,12 @@ export function getPageResponse(pageId: string): any {
       }
     }
     
-    for (const moduleId of modules) {
-      const moduleData = readPageData(moduleId)
+    for (const pm of pageModules) {
+      const moduleData = readPageData(pm.module_name)
       response.data.push({
-        moduleId,
-        data: moduleData
+        moduleId: pm.module_name,
+        moduleInstanceId: pm.module_instance_id,
+        data: pm.data ? JSON.parse(pm.data) : moduleData
       })
     }
     

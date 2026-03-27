@@ -5,7 +5,7 @@ console.log('Starting database migration...')
 
 initializeDatabase()
 
-migrateFromJson(false)
+migrateFromJson(true)
 
 console.log('Migration completed!')
 console.log('Database file created at: database/app.db')

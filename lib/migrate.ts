@@ -1,4 +1,3 @@
-import "server-only"
 import fs from 'fs'
 import path from 'path'
 import { getDatabase, initializeDatabase } from './database'
@@ -138,8 +137,8 @@ export function migrateFromJson(useTemplates: boolean = false): void {
       `)
       
       const moduleStmt = db.prepare(`
-        INSERT OR REPLACE INTO page_modules (page_id, module_id, module_order)
-        VALUES (?, ?, ?)
+        INSERT OR REPLACE INTO page_modules (page_id, module_instance_id, module_name, module_order, data)
+        VALUES (?, ?, ?, ?, ?)
       `)
       
       for (const page of pageListData.pages) {
@@ -161,7 +160,9 @@ export function migrateFromJson(useTemplates: boolean = false): void {
         
         if (page.modules && Array.isArray(page.modules)) {
           for (let i = 0; i < page.modules.length; i++) {
-            moduleStmt.run(page.id, page.modules[i], i)
+            const moduleName = page.modules[i]
+            const moduleInstanceId = `${moduleName}-${Date.now()}-${i}`
+            moduleStmt.run(page.id, moduleInstanceId, moduleName, i, null)
           }
         }
       }
@@ -172,7 +173,7 @@ export function migrateFromJson(useTemplates: boolean = false): void {
     if (fs.existsSync(pageDataDir)) {
       const files = fs.readdirSync(pageDataDir).filter(file => file.endsWith('.json'))
       const stmt = db.prepare(`
-        INSERT OR REPLACE INTO module_data (module_id, data)
+        INSERT OR REPLACE INTO module_data (module_name, data)
         VALUES (?, ?)
       `)
       
@@ -293,7 +294,7 @@ export function exportToJson(): void {
     const pagesData: any[] = pages.map(page => {
       const modules = pageModules
         .filter(pm => pm.page_id === page.page_id)
-        .map(pm => pm.module_id)
+        .map(pm => pm.module_name)
       
       return {
         id: page.page_id,
@@ -335,7 +336,7 @@ export function exportToJson(): void {
     
     const modules = db.prepare('SELECT * FROM module_data').all() as any[]
     for (const module of modules) {
-      const fileName = `data-${module.module_id}.json`
+      const fileName = `data-${module.module_name}.json`
       fs.writeFileSync(
         path.join(moduleDataDir, fileName),
         module.data

@@ -7,7 +7,7 @@
 ### 数据库文件
 - **主数据库**: `database/app.db` - 运行时数据库文件
 - **模板文件**: `database/templates/` - 初始化模板（保留用于重置）
-- **备份目录**: `database/backup/` - 数据备份目录
+- **备份目录**: `database/backup/` - 数据备份目录（导出JSON时创建）
 
 ### 数据表结构
 
@@ -111,23 +111,45 @@ CREATE TABLE pages (
 CREATE TABLE page_modules (
   id INTEGER PRIMARY KEY AUTOINCREMENT,
   page_id TEXT NOT NULL,
-  module_id TEXT NOT NULL,
+  module_instance_id TEXT NOT NULL,
+  module_name TEXT NOT NULL,
   module_order INTEGER NOT NULL,
+  data TEXT,
   FOREIGN KEY (page_id) REFERENCES pages(page_id) ON DELETE CASCADE,
-  UNIQUE(page_id, module_id)
+  UNIQUE(page_id, module_instance_id)
 );
 ```
 
-#### 8. module_data - 模块数据表
+**字段说明**:
+- `page_id`: 关联的页面 ID（外键，关联 pages 表）
+- `module_instance_id`: 模块实例 ID，格式为 `模块名-时间戳-序号`（如：`section-hero-1774639722070-2`）
+- `module_name`: 模块名称（如：`section-hero`、`site-header`）
+- `module_order`: 模块在页面中的显示顺序
+- `data`: 模块实例的独立数据（JSON 格式，可为空）
+
+**设计说明**:
+- `module_instance_id` 支持同一模块在同一页面上多次使用
+- 每个模块实例可以有独立的数据配置
+- 如果 `data` 为空，则使用 `module_data` 表中的默认数据
+
+#### 8. module_data - 模块默认数据表
 ```sql
 CREATE TABLE module_data (
   id INTEGER PRIMARY KEY AUTOINCREMENT,
-  module_id TEXT UNIQUE NOT NULL,
+  module_name TEXT UNIQUE NOT NULL,
   data TEXT NOT NULL,
   created_at TEXT DEFAULT CURRENT_TIMESTAMP,
   updated_at TEXT DEFAULT CURRENT_TIMESTAMP
 );
 ```
+
+**字段说明**:
+- `module_name`: 模块名称（唯一）
+- `data`: 模块默认数据（JSON 格式）
+
+**设计说明**:
+- 存储模块的默认配置数据
+- 当 `page_modules.data` 为空时，使用此表的默认数据
 
 ## 数据访问规则
 
@@ -172,43 +194,76 @@ try {
 
 ## 数据迁移规则
 
-### 从 JSON 迁移到 SQLite
+### 首次部署或重置
 ```bash
-# 运行迁移脚本
+# 从模板初始化数据库
 pnpm exec tsx scripts/migrate-database.ts
 ```
 
-### 从模板初始化
+### 从旧版本 JSON 数据迁移
+如果存在旧的 JSON 备份文件（runtime 目录），可以临时恢复后迁移：
+
 ```typescript
 import { migrateFromJson } from '@/lib/migrate'
 
-// 从模板迁移
-migrateFromJson(true)
-
-// 从运行时数据迁移
+// 从 runtime 目录迁移（需要先恢复 runtime 目录）
 migrateFromJson(false)
+
+// 从模板迁移（全新初始化）
+migrateFromJson(true)
 ```
 
 ## 备份与恢复
 
 ### 备份数据库
-```bash
-# 方式1: 复制数据库文件
-cp database/app.db database/backup/app-$(date +%Y%m%d).db
 
-# 方式2: 导出为 JSON
-curl -X POST http://localhost:3000/api/admin/database \
-  -H "Content-Type: application/json" \
-  -d '{"action": "export"}'
+#### 方式1: 导出 SQLite 数据库文件（推荐）
+```bash
+# API 方式
+GET /api/admin/config/export?format=db
+
+# 或直接复制文件
+cp database/app.db database/backup/app-$(date +%Y%m%d).db
+```
+
+#### 方式2: 导出为 JSON 格式
+```bash
+# API 方式
+GET /api/admin/config/export?format=json
+
+# 或使用管理接口
+POST /api/admin/database
+Content-Type: application/json
+{
+  "action": "export"
+}
 ```
 
 ### 恢复数据库
-```bash
-# 从 .db 文件恢复
-cp database/backup/app-YYYYMMDD.db database/app.db
 
-# 从 JSON 恢复
-pnpm exec tsx scripts/migrate-database.ts
+#### 从 .db 文件恢复
+```bash
+# 方式1: API 上传
+POST /api/admin/config/import
+Content-Type: multipart/form-data
+file: app.db
+
+# 方式2: 直接替换文件
+cp database/backup/app-YYYYMMDD.db database/app.db
+```
+
+#### 从 JSON 备份恢复
+```bash
+# 上传包含 runtime 目录的 zip 文件
+POST /api/admin/config/import
+Content-Type: multipart/form-data
+file: config-export.zip
+
+# 系统会自动：
+# 1. 解压 zip 文件
+# 2. 提取 runtime 目录
+# 3. 执行 JSON 到 SQLite 的迁移
+# 4. 清理临时文件
 ```
 
 ## 数据映射关系
@@ -234,8 +289,8 @@ pnpm exec tsx scripts/migrate-database.ts
   - `system_logs.type`, `system_logs.username`
   - `site_config.config_key`
   - `pages.page_id`, `pages.status`
-  - `page_modules.page_id`
-  - `module_data.module_id`
+  - `page_modules.page_id`, `page_modules.module_instance_id`
+  - `module_data.module_name`
 
 ### 查询优化
 - 使用参数化查询防止 SQL 注入
@@ -267,15 +322,27 @@ const user = db.exec(`SELECT * FROM accounts WHERE username = '${username}'`)
 - 敏感操作需要管理员权限
 - 记录所有关键操作日志
 
-## 文件清理规则
+## 文件结构说明
 
-### 可以删除的文件
-- ✅ `database/runtime/` - 运行时 JSON 文件（已迁移到 SQLite）
-- ✅ `database/runtime/page-data/*.json` - 页面模块数据
-- ✅ `database/runtime/system/*.json` - 系统配置文件
-- ✅ `database/runtime/site-info/*.json` - 站点配置文件
-- ✅ `database/runtime/theme/*.json` - 主题配置文件
-- ✅ `database/runtime/page-list.json` - 页面列表
+### 当前数据库文件结构
+```
+database/
+├── app.db              # SQLite 数据库文件（主数据库）
+├── app.db-wal          # SQLite WAL 日志文件
+├── app.db-shm          # SQLite 共享内存文件
+├── templates/          # 模板文件（用于初始化）
+│   ├── page-data/      # 页面模块模板
+│   ├── site-info/      # 站点信息模板
+│   ├── system/         # 系统配置模板
+│   ├── theme/          # 主题配置模板
+│   └── page-list.json  # 页面列表模板
+└── backup/             # 备份目录（导出JSON时创建）
+```
+
+### 已删除的文件
+- ✅ `database/runtime/` - 运行时 JSON 文件目录（已迁移到 SQLite）
+  - 所有数据现在存储在 `database/app.db` 中
+  - 不再需要运行时 JSON 文件
 
 ### 必须保留的文件
 - ❌ `database/templates/` - 模板文件（用于初始化和重置）
@@ -382,11 +449,65 @@ chmod 755 database/
 chmod 644 database/app.db
 ```
 
+### 客户端导入错误
+如果看到 "Could not locate the bindings file" 错误：
+- 原因：`better-sqlite3` 是 Node.js 原生模块，不能在浏览器运行
+- 解决：确保所有数据库相关文件都导入了 `server-only`
+- 检查：`lib/database.ts`, `lib/config-manager.ts`, `lib/migrate.ts` 都应有 `import "server-only"`
+
+## API 接口说明
+
+### 数据库管理接口
+
+#### POST /api/admin/database
+管理数据库操作
+
+```typescript
+// 导出数据库到 JSON
+{
+  "action": "export"
+}
+
+// 从 JSON 迁移数据
+{
+  "action": "migrate",
+  "useTemplates": false  // true=从模板迁移, false=从runtime迁移
+}
+```
+
+#### GET /api/admin/database?action=export
+导出数据库到 JSON 备份文件
+
+### 配置导入导出接口
+
+#### GET /api/admin/config/export
+导出数据库
+
+```typescript
+// 导出 SQLite 数据库文件
+GET /api/admin/config/export?format=db
+
+// 导出为 JSON 格式
+GET /api/admin/config/export?format=json
+```
+
+#### POST /api/admin/config/import
+导入数据库
+
+```typescript
+// 支持 .db 文件直接导入
+// 支持 .zip 文件（包含 runtime 目录）自动迁移
+Content-Type: multipart/form-data
+file: <database-file>
+```
+
 ## 相关文件
 
 - [lib/database.ts](file:///Users/wulingyang/Documents/workspace/ai-opc-prodcut/lib/database.ts) - 数据库初始化和管理
 - [lib/config-manager.ts](file:///Users/wulingyang/Documents/workspace/ai-opc-prodcut/lib/config-manager.ts) - 配置管理器
 - [lib/migrate.ts](file:///Users/wulingyang/Documents/workspace/ai-opc-prodcut/lib/migrate.ts) - 数据迁移工具
 - [scripts/migrate-database.ts](file:///Users/wulingyang/Documents/workspace/ai-opc-prodcut/scripts/migrate-database.ts) - 迁移脚本
-- [app/api/admin/database/route.ts](file:///Users/wulingyang/Documents/workspace/ai-opc-prodcut/app/api/admin/database/route.ts) - 数据库API接口
+- [app/api/admin/database/route.ts](file:///Users/wulingyang/Documents/workspace/ai-opc-prodcut/app/api/admin/database/route.ts) - 数据库管理API
+- [app/api/admin/config/import/route.ts](file:///Users/wulingyang/Documents/workspace/ai-opc-prodcut/app/api/admin/config/import/route.ts) - 配置导入API
+- [app/api/admin/config/export/route.ts](file:///Users/wulingyang/Documents/workspace/ai-opc-prodcut/app/api/admin/config/export/route.ts) - 配置导出API
 - [docs/DATABASE.md](file:///Users/wulingyang/Documents/workspace/ai-opc-prodcut/docs/DATABASE.md) - 数据库使用文档
