@@ -262,7 +262,7 @@ export function ModuleDragEditor({ modules, onChange }: ModuleDragEditorProps) {
             </div>
             <div className={styles.modulePreviewFrame}>
               <iframe
-                src={`/api/modules/${previewModule.moduleId}/preview`}
+                src={`/admin/module-preview/${previewModule.moduleId}`}
                 className={styles.previewFrame}
                 title="模块预览"
               />

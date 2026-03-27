@@ -1,13 +1,13 @@
 /* 登录页面使用固定的专业配色，不跟随主题变化 */
 :root {
-  --login-primary: #2563eb;
-  --login-primary-hover: #1d4ed8;
-  --login-secondary: #3b82f6;
-  --login-accent: #06b6d4;
-  --login-bg-dark: #0f172a;
-  --login-bg-light: #1e293b;
+  --login-primary: #3b82f6;
+  --login-primary-hover: #2563eb;
+  --login-secondary: #60a5fa;
+  --login-accent: #22d3ee;
+  --login-bg-dark: #1e3a5f;
+  --login-bg-light: #2d5a87;
   --login-text: #f8fafc;
-  --login-text-secondary: #94a3b8;
+  --login-text-secondary: #cbd5e1;
 }
 
 .container {
@@ -15,7 +15,7 @@
   display: flex;
   position: relative;
   overflow: hidden;
-  background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #0f172a 100%);
+  background: linear-gradient(135deg, #1e3a5f 0%, #2d5a87 50%, #1e3a5f 100%);
 }
 
 .background {
@@ -30,7 +30,7 @@
   left: -25%;
   width: 800px;
   height: 800px;
-  background: linear-gradient(135deg, rgba(37, 99, 235, 0.15), rgba(59, 130, 246, 0.1));
+  background: linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(96, 165, 250, 0.15));
   border-radius: 9999px;
   filter: blur(64px);
   animation: spin-slow 20s linear infinite;
@@ -42,7 +42,7 @@
   right: -25%;
   width: 900px;
   height: 900px;
-  background: linear-gradient(135deg, rgba(6, 182, 212, 0.15), rgba(59, 130, 246, 0.1));
+  background: linear-gradient(135deg, rgba(34, 211, 238, 0.2), rgba(96, 165, 250, 0.15));
   border-radius: 9999px;
   filter: blur(64px);
   animation: spin-slow 20s linear infinite reverse;
