@@ -92,40 +92,43 @@
 .description {
   font-size: 1rem;
   color: #6b7280;
-  max-width: 36rem;
   margin: 0 auto;
 }
 
 .card {
   background-color: white;
-  border: 1px solid #f3f4f6;
+  border: 1px solid #e5e7eb;
+  border-radius: 1rem;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
   transition: all 0.3s ease;
+  overflow: hidden;
 }
 
 .card:hover {
-  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 10px 25px -3px rgba(0, 0, 0, 0.1);
+  border-color: #d1d5db;
 }
 
 .cardContent {
-  padding: 1.25rem;
+  padding: 2rem;
 }
 
 @media (min-width: 768px) {
   .cardContent {
-    padding: 1.5rem;
+    padding: 2.5rem;
   }
 }
 
 .form {
   display: flex;
   flex-direction: column;
-  gap: 1.25rem;
+  gap: 1.5rem;
 }
 
 .formGrid {
   display: grid;
   grid-template-columns: 1fr;
-  gap: 1.25rem;
+  gap: 1.5rem;
 }
 
 @media (min-width: 640px) {
@@ -134,11 +137,141 @@
   }
 }
 
-.submitButton {
+.formItem {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.formLabel {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: #374151;
+}
+
+.formInput {
   width: 100%;
   height: 2.75rem;
+  padding: 0 1rem;
+  border: 1px solid #d1d5db;
   border-radius: 0.5rem;
+  font-size: 0.9375rem;
+  color: #111827;
+  background-color: #fafafa;
+  transition: all 0.2s ease;
+}
+
+.formInput:hover {
+  border-color: #9ca3af;
+  background-color: white;
+}
+
+.formInput:focus {
+  outline: none;
+  border-color: #3b82f6;
+  background-color: white;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
+.formInput::placeholder {
+  color: #9ca3af;
+}
+
+.formTextArea {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  border: 1px solid #d1d5db;
+  border-radius: 0.5rem;
+  font-size: 0.9375rem;
+  color: #111827;
+  background-color: #fafafa;
+  transition: all 0.2s ease;
+  resize: vertical;
+  min-height: 100px;
+  font-family: inherit;
+  line-height: 1.5;
+}
+
+.formTextArea:hover {
+  border-color: #9ca3af;
+  background-color: white;
+}
+
+.formTextArea:focus {
+  outline: none;
+  border-color: #3b82f6;
+  background-color: white;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
+.formTextArea::placeholder {
+  color: #9ca3af;
+}
+
+.radioGroup {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  padding: 0.5rem 0;
+}
+
+.radioLabel {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  cursor: pointer;
+  padding: 0.5rem 1rem;
+  border: 1px solid #e5e7eb;
+  border-radius: 0.5rem;
+  transition: all 0.2s ease;
+  background-color: #fafafa;
+}
+
+.radioLabel:hover {
+  border-color: #3b82f6;
+  background-color: #eff6ff;
+}
+
+.radioInput {
+  width: 1rem;
+  height: 1rem;
+  accent-color: #3b82f6;
+  cursor: pointer;
+}
+
+.radioText {
+  font-size: 0.875rem;
+  color: #374151;
   font-weight: 500;
+}
+
+.submitButton {
+  width: 100%;
+  height: 3rem;
+  border-radius: 0.5rem;
+  font-weight: 600;
+  font-size: 0.9375rem;
   color: white;
   transition: all 0.3s ease;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.submitButton:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+.submitButton:active {
+  transform: translateY(0);
+}
+
+.svgIcon {
+  width: 1.25rem;
+  height: 1.25rem;
+  display: block;
 }

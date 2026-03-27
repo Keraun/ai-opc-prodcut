@@ -115,14 +115,14 @@ export function PricingModule({ data }: ModuleProps) {
               className={`${styles.card} ${plan.isPopular ? styles.cardPopular : ''}`}
             >
               {plan.isPopular && (
-                <div className={styles.popularBadge} style={{ backgroundColor: primaryColor }}>
+                <div className={styles.popularBadge}>
                   最受欢迎
                 </div>
               )}
 
               <div className={styles.planHeader}>
                 <h3 className={styles.planTitle}>{plan.title}</h3>
-                <div className={styles.planPrice} style={{ color: plan.isPopular ? primaryColor : '#111827' }}>
+                <div className={styles.planPrice}>
                   {plan.price}
                   <span className={styles.priceUnit}>/月</span>
                 </div>
