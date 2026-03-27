@@ -1,8 +1,8 @@
 import { NextRequest } from "next/server"
-import { readAllConfigs, getPageResponse, readConfig } from "@/lib/config-manager"
+import { getPageResponse, readConfig } from "@/lib/config-manager"
 import { 
   successResponse, 
-  errorResponse, 
+  badRequestResponse, 
   wrapApiHandler 
 } from "@/lib/api-utils"
 
@@ -17,24 +17,27 @@ export async function GET(request: NextRequest) {
   return wrapApiHandler(async () => {
     const { searchParams } = new URL(request.url)
     const pageId = searchParams.get('page')
+    const type = searchParams.get('type')
     
     if (pageId) {
       const pageResponse = getPageResponse(pageId)
       return successResponse(pageResponse)
     }
     
-    const configs = readAllConfigs()
-    const safeConfigs: Record<string, any> = {}
-    
-    for (const [key, value] of Object.entries(configs)) {
-      if (SAFE_CONFIG_TYPES.includes(key) || 
-          key.startsWith('page-') || 
-          key.startsWith('data-') ||
-          key.startsWith('section-')) {
-        safeConfigs[key] = value
-      }
+    if (!type) {
+      return badRequestResponse('缺少 type 参数')
     }
     
-    return successResponse(safeConfigs)
+    const isSafeType = SAFE_CONFIG_TYPES.includes(type) || 
+      type.startsWith('page-') || 
+      type.startsWith('data-') ||
+      type.startsWith('section-')
+    
+    if (!isSafeType) {
+      return badRequestResponse('无效的配置类型')
+    }
+    
+    const config = readConfig(type)
+    return successResponse(config)
   })
 }

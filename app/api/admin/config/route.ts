@@ -1,4 +1,4 @@
-import { NextRequest, NextResponse } from "next/server"
+import { NextRequest } from "next/server"
 import { readConfig, writeConfig, readAllConfigs } from "@/lib/config-manager"
 import { 
   wrapAuthApiHandler, 
@@ -6,8 +6,16 @@ import {
   badRequestResponse 
 } from "@/lib/api-utils"
 
-export async function GET() {
+export async function GET(request: NextRequest) {
   return wrapAuthApiHandler(async () => {
+    const { searchParams } = new URL(request.url)
+    const type = searchParams.get('type')
+    
+    if (type) {
+      const config = readConfig(type)
+      return successResponse(config)
+    }
+    
     const configs = readAllConfigs()
     return successResponse(configs)
   })

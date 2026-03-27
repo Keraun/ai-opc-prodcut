@@ -75,19 +75,19 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
     // 从API获取主题配置
     async function fetchThemeConfig() {
       try {
-        const response = await fetch('/api/config')
+        const response = await fetch('/api/config?type=theme')
         if (response.ok) {
           const result = await response.json()
-          const data = result.data
-          if (data.theme && data.theme.themes) {
-            setThemes(data.theme.themes)
-            const themeId = savedTheme || data.theme.currentTheme || "modern"
-            if (data.theme.themes[themeId]) {
+          const themeConfig = result.data
+          if (themeConfig && themeConfig.themes) {
+            setThemes(themeConfig.themes)
+            const themeId = savedTheme || themeConfig.currentTheme || "modern"
+            if (themeConfig.themes[themeId]) {
               setCurrentTheme(themeId)
-              setThemeConfig(data.theme.themes[themeId])
-            } else if (data.theme.themes["modern"]) {
+              setThemeConfig(themeConfig.themes[themeId])
+            } else if (themeConfig.themes["modern"]) {
               setCurrentTheme("modern")
-              setThemeConfig(data.theme.themes["modern"])
+              setThemeConfig(themeConfig.themes["modern"])
             }
           }
         }
