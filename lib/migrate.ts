@@ -72,7 +72,7 @@ export function migrateFromJson(useTemplates: boolean = false): void {
         INSERT OR REPLACE INTO system_config (config_key, config_value)
         VALUES (?, ?)
       `)
-      stmt.run('super_admin_token', JSON.stringify(tokenData))
+      stmt.run('super_admin_token', tokenData.superAdminToken || '')
       console.log('Migrated super_admin_token config')
     }
     
@@ -101,43 +101,38 @@ export function migrateFromJson(useTemplates: boolean = false): void {
     
     const siteConfigPath = path.join(baseDir, 'site-info', 'site-config.json')
     const siteConfigData = readJsonFile(siteConfigPath)
-    if (siteConfigData) {
-      const stmt = db.prepare(`
-        INSERT OR REPLACE INTO site_config (config_key, config_value)
-        VALUES (?, ?)
-      `)
-      
-      for (const [key, value] of Object.entries(siteConfigData)) {
-        stmt.run(key, JSON.stringify(value))
-      }
-      console.log('Migrated site config')
-    }
     
     const themeConfigPath = path.join(baseDir, 'theme', 'theme-config.json')
     const themeConfigData = readJsonFile(themeConfigPath)
-    if (themeConfigData) {
-      if (themeConfigData.currentTheme) {
-        const currentThemeStmt = db.prepare(`
-          INSERT OR REPLACE INTO site_config (config_key, config_value)
-          VALUES ('current_theme', ?)
-        `)
-        currentThemeStmt.run(themeConfigData.currentTheme)
+    
+    if (siteConfigData || themeConfigData) {
+      const mergedSiteConfig: any = { ...siteConfigData }
+      
+      if (themeConfigData?.currentTheme) {
+        mergedSiteConfig.currentTheme = themeConfigData.currentTheme
       }
       
-      if (themeConfigData.themes) {
-        const themeStmt = db.prepare(`
-          INSERT OR REPLACE INTO theme_config (theme_id, theme_name, theme_config)
-          VALUES (?, ?, ?)
-        `)
-        
-        for (const [themeId, themeData] of Object.entries(themeConfigData.themes)) {
-          const theme = themeData as any
-          themeStmt.run(
-            themeId,
-            theme.name || themeId,
-            JSON.stringify(theme)
-          )
-        }
+      const stmt = db.prepare(`
+        INSERT OR REPLACE INTO system_config (config_key, config_value)
+        VALUES (?, ?)
+      `)
+      stmt.run('site_config', JSON.stringify(mergedSiteConfig))
+      console.log('Migrated site config')
+    }
+    
+    if (themeConfigData?.themes) {
+      const themeStmt = db.prepare(`
+        INSERT OR REPLACE INTO theme_config (theme_id, theme_name, theme_config)
+        VALUES (?, ?, ?)
+      `)
+      
+      for (const [themeId, themeData] of Object.entries(themeConfigData.themes)) {
+        const theme = themeData as any
+        themeStmt.run(
+          themeId,
+          theme.name || themeId,
+          JSON.stringify(theme)
+        )
       }
       console.log('Migrated theme config')
     }
@@ -282,7 +277,7 @@ export function exportToJson(): void {
     if (tokenConfig) {
       fs.writeFileSync(
         path.join(exportDir, 'system-token.json'),
-        tokenConfig.config_value
+        JSON.stringify({ superAdminToken: tokenConfig.config_value }, null, 2)
       )
       console.log('Exported super_admin_token config')
     }
@@ -303,31 +298,35 @@ export function exportToJson(): void {
     )
     console.log(`Exported ${logs.length} system logs`)
     
-    const siteConfigs = db.prepare('SELECT * FROM site_config').all() as any[]
-    const siteConfigData: any = {}
-    for (const config of siteConfigs) {
-      siteConfigData[config.config_key] = JSON.parse(config.config_value)
+    const siteConfigRaw = db.prepare("SELECT config_value FROM system_config WHERE config_key = 'site_config'").get() as any
+    let siteConfigData: any = {}
+    let currentTheme = 'modern'
+    
+    if (siteConfigRaw) {
+      try {
+        siteConfigData = JSON.parse(siteConfigRaw.config_value)
+        currentTheme = siteConfigData.currentTheme || 'modern'
+      } catch {
+        siteConfigData = {}
+      }
     }
+    
     fs.writeFileSync(
       path.join(exportDir, 'site-config.json'),
       JSON.stringify(siteConfigData, null, 2)
     )
     console.log('Exported site config')
     
-    const currentThemeConfig = db.prepare(`
-      SELECT config_value FROM site_config WHERE config_key = 'current_theme'
-    `).get() as any
-    
     const themes = db.prepare('SELECT * FROM theme_config').all() as any[]
     
-    if (currentThemeConfig || themes.length > 0) {
+    if (themes.length > 0) {
       const themesMap: Record<string, any> = {}
       themes.forEach(theme => {
         themesMap[theme.theme_id] = JSON.parse(theme.theme_config)
       })
       
       const themeData = {
-        currentTheme: currentThemeConfig?.config_value || 'modern',
+        currentTheme,
         themes: themesMap
       }
       fs.writeFileSync(

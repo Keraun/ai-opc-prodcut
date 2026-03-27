@@ -56,14 +56,6 @@ export function initializeDatabase(): void {
         created_at TEXT DEFAULT CURRENT_TIMESTAMP
       );
 
-      CREATE TABLE IF NOT EXISTS site_config (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        config_key TEXT UNIQUE NOT NULL,
-        config_value TEXT NOT NULL,
-        created_at TEXT DEFAULT CURRENT_TIMESTAMP,
-        updated_at TEXT DEFAULT CURRENT_TIMESTAMP
-      );
-
       CREATE TABLE IF NOT EXISTS theme_config (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         theme_id TEXT UNIQUE NOT NULL,
@@ -118,7 +110,6 @@ export function initializeDatabase(): void {
       CREATE INDEX IF NOT EXISTS idx_system_config_key ON system_config(config_key);
       CREATE INDEX IF NOT EXISTS idx_system_logs_type ON system_logs(type);
       CREATE INDEX IF NOT EXISTS idx_system_logs_username ON system_logs(username);
-      CREATE INDEX IF NOT EXISTS idx_site_config_key ON site_config(config_key);
       CREATE INDEX IF NOT EXISTS idx_pages_page_id ON pages(page_id);
       CREATE INDEX IF NOT EXISTS idx_pages_status ON pages(status);
       CREATE INDEX IF NOT EXISTS idx_module_registry_module_id ON module_registry(module_id);
@@ -140,7 +131,6 @@ export function resetDatabase(): void {
       DROP TABLE IF EXISTS accounts;
       DROP TABLE IF EXISTS system_config;
       DROP TABLE IF EXISTS system_logs;
-      DROP TABLE IF EXISTS site_config;
       DROP TABLE IF EXISTS theme_config;
       DROP TABLE IF EXISTS pages;
       DROP TABLE IF EXISTS module_registry;

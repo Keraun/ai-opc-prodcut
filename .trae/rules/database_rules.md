@@ -42,7 +42,26 @@ CREATE TABLE system_config (
 
 **存储内容**:
 - `feishu_app` - 飞书应用配置
-- `super_admin_token` - 超级管理员 Token
+- `super_admin_token` - 超级管理员 Token, STRING 字符串
+- `site_config` - 站点配置（JSON 格式，包含站点基本信息、SEO配置、社交媒体链接、当前主题等）
+
+**site_config 配置结构**:
+```json
+{
+  "name": "站点名称",
+  "description": "站点描述",
+  "url": "https://example.com",
+  "ogImage": "/og-image.png",
+  "links": {"email": "...", "wechat": "..."},
+  "creator": {"name": "...", "url": "..."},
+  "contact": {"address": "...", "phone": "..."},
+  "support": {"customerServiceQRCode": "..."},
+  "icp": "浙ICP备XXXXXXXX号",
+  "features": {"enableTOC": true},
+  "seo": {"keywords": []},
+  "currentTheme": "modern"
+}
+```
 
 #### 3. system_logs - 系统日志表
 ```sql
@@ -59,24 +78,7 @@ CREATE TABLE system_logs (
 );
 ```
 
-#### 4. site_config - 站点配置表
-```sql
-CREATE TABLE site_config (
-  id INTEGER PRIMARY KEY AUTOINCREMENT,
-  config_key TEXT UNIQUE NOT NULL,
-  config_value TEXT NOT NULL,
-  created_at TEXT DEFAULT CURRENT_TIMESTAMP,
-  updated_at TEXT DEFAULT CURRENT_TIMESTAMP
-);
-```
-
-**存储内容**:
-- 站点基本信息（name, description, url 等）
-- SEO 配置
-- 社交媒体链接
-- **当前主题**（current_theme）
-
-#### 5. theme_config - 主题配置表
+#### 4. theme_config - 主题配置表
 ```sql
 CREATE TABLE theme_config (
   id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -96,9 +98,9 @@ CREATE TABLE theme_config (
 **设计说明**:
 - 每个主题存储为一条独立记录
 - 支持动态添加和删除主题
-- 当前使用的主题存储在 `site_config` 表的 `current_theme` 配置项中
+- 当前使用的主题存储在 `system_config` 表的 `site_config` 配置项中
 
-#### 6. pages - 页面表
+#### 5. pages - 页面表
 ```sql
 CREATE TABLE pages (
   id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -137,7 +139,7 @@ CREATE TABLE pages (
 - 同一模块可以在同一页面多次使用，每次使用生成不同的实例ID
 - **重要**：模块实例ID的前缀部分（去掉时间戳和序号）必须与 `module_registry.module_id` 匹配
 
-#### 7. module_registry - 模块注册表
+#### 6. module_registry - 模块注册表
 ```sql
 CREATE TABLE module_registry (
   id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -162,7 +164,7 @@ CREATE TABLE module_registry (
 - 用于页面编辑时左侧面板显示可用模块列表
 - 存储模块的默认配置和 Schema 信息
 
-#### 8. page_modules - 页面模块实例表
+#### 7. page_modules - 页面模块实例表
 ```sql
 CREATE TABLE page_modules (
   id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -305,6 +307,20 @@ pnpm exec tsx scripts/migrate-theme-config.ts
 - 将 `themes_config` JSON 拆分为多条记录
 - 每个主题存储为一条独立记录
 
+### site_config 表合并到 system_config 表迁移
+如果需要将 site_config 表的数据合并到 system_config 表：
+
+```bash
+# 执行站点配置表合并迁移
+pnpm exec tsx scripts/migrate-site-config.ts
+```
+
+**迁移内容**:
+- 将 `site_config` 表的所有配置项合并为一个 JSON 对象
+- 存储到 `system_config` 表，config_key 为 `site_config`
+- 备份旧的 `site_config` 表到 `site_config_backup`
+- 删除旧的 `site_config` 表
+
 ### 从旧版本 JSON 数据迁移
 如果存在旧的 JSON 备份文件（runtime 目录），可以临时恢复后迁移：
 
@@ -379,14 +395,15 @@ file: config-export.zip
 | system-feishu-app.json | system_config | feishu-app | 飞书配置（key='feishu_app'） |
 | system-token.json | system_config | token | Token配置（key='super_admin_token'） |
 | system-logs.json | system_logs | system-logs | 系统日志 |
-| site-config.json | site_config | site | 站点配置（包含 current_theme） |
+| site-config.json | system_config | site | 站点配置（key='site_config'，JSON格式，包含currentTheme） |
 | theme-config.json | theme_config | theme | 主题配置（每个主题一条记录） |
 | page-list.json | pages | page-list | 页面列表（module_instance_ids字段存储实例ID数组） |
 | page-list.json | page_modules | - | 页面模块实例数据 |
 | data-*.json | module_registry | - | 模块注册信息（schema和默认数据） |
 
 **注意**:
-- `theme-config.json` 中的 `currentTheme` 字段存储在 `site_config` 表中（key='current_theme'）
+- `site-config.json` 中的所有配置项合并为一个 JSON 对象，存储在 `system_config` 表中（key='site_config'）
+- `theme-config.json` 中的 `currentTheme` 字段包含在 `site_config` 配置对象中
 - `theme-config.json` 中的 `themes` 对象拆分为 `theme_config` 表中的多条记录
 
 ## 页面编辑数据流

@@ -100,7 +100,7 @@ export function readConfig(configType: string): any {
     
     if (configType === 'token') {
       const config = db.prepare("SELECT config_value FROM system_config WHERE config_key = 'super_admin_token'").get() as any
-      return config ? JSON.parse(config.config_value) : {}
+      return config ? { superAdminToken: config.config_value } : { superAdminToken: '' }
     }
     
     if (configType === 'system-logs') {
@@ -117,18 +117,28 @@ export function readConfig(configType: string): any {
     }
     
     if (configType === 'site' || configType === 'site-seo') {
-      const configs = db.prepare('SELECT * FROM site_config').all() as any[]
-      const result: any = {}
-      for (const config of configs) {
-        result[config.config_key] = JSON.parse(config.config_value)
+      const config = db.prepare("SELECT config_value FROM system_config WHERE config_key = 'site_config'").get() as any
+      if (config) {
+        try {
+          return JSON.parse(config.config_value)
+        } catch {
+          return {}
+        }
       }
-      return result
+      return {}
     }
     
     if (configType === 'theme') {
-      const currentThemeConfig = db.prepare(`
-        SELECT config_value FROM site_config WHERE config_key = 'current_theme'
-      `).get() as any
+      const siteConfigRaw = db.prepare("SELECT config_value FROM system_config WHERE config_key = 'site_config'").get() as any
+      
+      let currentTheme = 'modern'
+      if (siteConfigRaw) {
+        try {
+          const siteConfig = JSON.parse(siteConfigRaw.config_value)
+          currentTheme = siteConfig.currentTheme || 'modern'
+        } catch {
+        }
+      }
       
       const themes = db.prepare('SELECT * FROM theme_config').all() as any[]
       
@@ -138,7 +148,7 @@ export function readConfig(configType: string): any {
       })
       
       return {
-        currentTheme: currentThemeConfig?.config_value || 'modern',
+        currentTheme,
         themes: themesMap
       }
     }
@@ -238,7 +248,7 @@ export function writeConfig(configType: string, data: any): void {
         INSERT OR REPLACE INTO system_config (config_key, config_value)
         VALUES (?, ?)
       `)
-      stmt.run('super_admin_token', JSON.stringify(data))
+      stmt.run('super_admin_token', data.superAdminToken || '')
       return
     }
     
@@ -267,23 +277,31 @@ export function writeConfig(configType: string, data: any): void {
     
     if (configType === 'site' || configType === 'site-seo') {
       const stmt = db.prepare(`
-        INSERT OR REPLACE INTO site_config (config_key, config_value)
+        INSERT OR REPLACE INTO system_config (config_key, config_value)
         VALUES (?, ?)
       `)
-      
-      for (const [key, value] of Object.entries(data)) {
-        stmt.run(key, JSON.stringify(value))
-      }
+      stmt.run('site_config', JSON.stringify(data))
       return
     }
     
     if (configType === 'theme') {
       if (data.currentTheme) {
+        const siteConfigRaw = db.prepare("SELECT config_value FROM system_config WHERE config_key = 'site_config'").get() as any
+        let siteConfig: any = {}
+        if (siteConfigRaw) {
+          try {
+            siteConfig = JSON.parse(siteConfigRaw.config_value)
+          } catch {
+            siteConfig = {}
+          }
+        }
+        siteConfig.currentTheme = data.currentTheme
+        
         const stmt = db.prepare(`
-          INSERT OR REPLACE INTO site_config (config_key, config_value)
-          VALUES ('current_theme', ?)
+          INSERT OR REPLACE INTO system_config (config_key, config_value)
+          VALUES (?, ?)
         `)
-        stmt.run(data.currentTheme)
+        stmt.run('site_config', JSON.stringify(siteConfig))
       }
       
       if (data.themes) {
