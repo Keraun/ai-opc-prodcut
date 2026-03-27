@@ -191,6 +191,7 @@ export function ModuleDragEditor({ modules, onChange }: ModuleDragEditorProps) {
                     draggable
                     onDragStart={(e) => handleModuleDragStart(e, mod)}
                     onDragEnd={handleModuleDragEnd}
+                    contentClassName={styles.moduleCardContent}
                   >
                     <div className={styles.moduleCardContent}>
                       <div className={styles.moduleCardInfo}>

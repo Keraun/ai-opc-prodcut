@@ -178,6 +178,7 @@ function readAllFromDir(dir: string, typePrefix: string = ''): Record<string, an
       } else if (dir === 'system') {
         if (baseName === 'system-account') configType = 'account'
         else if (baseName === 'system-token') configType = 'token'
+        else if (baseName === 'system-feishu-app') configType = 'feishu-app'
         else configType = baseName
       }
       

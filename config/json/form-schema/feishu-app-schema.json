@@ -3,11 +3,6 @@
   "description": "配置提交留言功能的飞书数据应用",
   "type": "object",
   "properties": {
-    "enabled": {
-      "type": "boolean",
-      "title": "启用飞书数据应用",
-      "default": false
-    },
     "appId": {
       "type": "string",
       "title": "App ID",

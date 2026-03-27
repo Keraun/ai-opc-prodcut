@@ -166,93 +166,73 @@ export function AccountManagement() {
   }
 
   return (
-    <div className={styles.systemManagementNew}>
-      {/* 页面标题 */}
-      <div className={styles.systemHeader}>
-        <div className={styles.systemHeaderContent}>
-          <div className={styles.systemHeaderIcon}>
-            <IconUser className={styles.systemHeaderIconSvg} />
+    <div className={styles.accountManagementContainer}>
+      <div className={styles.accountManagementHeader}>
+        <div className={styles.accountManagementHeaderContent}>
+          <div className={styles.accountManagementHeaderIcon}>
+            <IconUser className={styles.accountManagementHeaderIconSvg} />
           </div>
-          <div className={styles.systemHeaderText}>
-            <h1 className={styles.systemHeaderTitle}>账号管理</h1>
-            <p className={styles.systemHeaderSubtitle}>管理系统账号，新增或删除账号</p>
+          <div className={styles.accountManagementHeaderText}>
+            <h1 className={styles.accountManagementHeaderTitle}>账号管理</h1>
+            <p className={styles.accountManagementHeaderSubtitle}>管理系统账号，新增或删除账号</p>
           </div>
         </div>
+        <Button 
+          type="primary" 
+          icon={<IconPlus />}
+          onClick={openAddAccountModal}
+          className={styles.accountManagementAddButton}
+        >
+          新增账号
+        </Button>
       </div>
 
-      {/* 主要内容区域 */}
-      <div className={styles.systemContent}>
-        <div className={styles.systemLeftColumn}>
-          {/* 账号管理卡片 */}
-          <Card 
-            className={styles.systemCardNew}
-            bordered={false}
-          >
-            <div className={styles.accountCardHeader}>
-              <div className={styles.accountCardIcon}>
-                <IconUser className={styles.accountCardIconSvg} />
-              </div>
-              <div className={styles.accountCardHeaderText}>
-                <h3 className={styles.accountCardTitle}>账号列表</h3>
-                <p className={styles.accountCardSubtitle}>管理系统账号，新增或删除账号</p>
-              </div>
-              <Button 
-                type="primary" 
-                icon={<IconPlus />}
-                onClick={openAddAccountModal}
-                style={{ marginLeft: 'auto' }}
-              >
-                新增账号
-              </Button>
-            </div>
-            
-            <Divider style={{ margin: '20px 0' }} />
-            
-            <div className={styles.accountList}>
-              <Table 
-                data={accounts}
-                loading={loadingAccounts}
-                columns={[
-                  {
-                    title: '用户名',
-                    dataIndex: 'username',
-                    key: 'username',
-                  },
-                  {
-                    title: '邮箱',
-                    dataIndex: 'email',
-                    key: 'email',
-                  },
-                  {
-                    title: '备注',
-                    dataIndex: 'remark',
-                    key: 'remark',
-                  },
-                  {
-                    title: '操作',
-                    key: 'action',
-                    render: (_, record) => (
-                      <Popconfirm
-                        title={`确定要删除账号 ${record.username} 吗？`}
-                        onConfirm={() => openDeleteAccountModal(record)}
-                      >
-                        <Button 
-                          type="text" 
-                          status="danger" 
-                          icon={<IconDelete />}
-                        >
-                          删除
-                        </Button>
-                      </Popconfirm>
-                    ),
-                  },
-                ]}
-                pagination={false}
-              />
-            </div>
-          </Card>
-        </div>
-      </div>
+      <Card 
+        className={styles.accountManagementCard}
+        bordered={false}
+      >
+        <Table 
+          data={accounts}
+          loading={loadingAccounts}
+          columns={[
+            {
+              title: '用户名',
+              dataIndex: 'username',
+              key: 'username',
+            },
+            {
+              title: '邮箱',
+              dataIndex: 'email',
+              key: 'email',
+            },
+            {
+              title: '备注',
+              dataIndex: 'remark',
+              key: 'remark',
+            },
+            {
+              title: '操作',
+              key: 'action',
+              render: (_, record) => (
+                <Popconfirm
+                  title={`确定要删除账号 ${record.username} 吗？`}
+                  onConfirm={() => openDeleteAccountModal(record)}
+                >
+                  <Button 
+                    type="text" 
+                    status="danger" 
+                    icon={<IconDelete />}
+                  >
+                    删除
+                  </Button>
+                </Popconfirm>
+              ),
+            },
+          ]}
+          pagination={false}
+          className={styles.accountManagementTable}
+        />
+      </Card>
 
       {/* 超级管理员密码验证弹窗 */}
       <Modal
@@ -360,6 +340,7 @@ export function AccountManagement() {
             </Button>
           </>
         }
+        className={styles.accountManagementModal}
       >
         <div style={{ padding: "16px 0" }}>
           <Form layout="vertical">
@@ -433,6 +414,7 @@ export function AccountManagement() {
             </Button>
           </>
         }
+        className={styles.accountManagementModal}
       >
         <div style={{ padding: "16px 0" }}>
           <div style={{ marginBottom: 16 }}>
