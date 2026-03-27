@@ -10,47 +10,52 @@ interface PathMapping {
   prefix: string
 }
 
-const typeToPathMap: Record<string, PathMapping> = {
+// 基础路径映射
+const basePathMap: Record<string, PathMapping> = {
   'site': { dir: 'site-info', prefix: 'site-config' },
   'site-seo': { dir: 'site-info', prefix: 'site-config' },
   'site-footer': { dir: 'page-data', prefix: 'data-site-footer' },
   'site-navigation': { dir: 'page-data', prefix: 'data-site-navigation' },
-  
   'site-root': { dir: 'page-data', prefix: 'data-site-root' },
   'site-header': { dir: 'page-data', prefix: 'data-site-header' },
-  'hero': { dir: 'page-data', prefix: 'data-section-hero' },
   'section-hero': { dir: 'page-data', prefix: 'data-section-hero' },
-  'partners': { dir: 'page-data', prefix: 'data-section-partner' },
   'section-partner': { dir: 'page-data', prefix: 'data-section-partner' },
-  'products': { dir: 'page-data', prefix: 'data-section-products' },
   'section-products': { dir: 'page-data', prefix: 'data-section-products' },
-  'services': { dir: 'page-data', prefix: 'data-section-services' },
   'section-services': { dir: 'page-data', prefix: 'data-section-services' },
-  'pricing': { dir: 'page-data', prefix: 'data-section-pricing' },
   'section-pricing': { dir: 'page-data', prefix: 'data-section-pricing' },
-  'about': { dir: 'page-data', prefix: 'data-section-about' },
   'section-about': { dir: 'page-data', prefix: 'data-section-about' },
-  'contact': { dir: 'page-data', prefix: 'data-section-contact' },
   'section-contact': { dir: 'page-data', prefix: 'data-section-contact' },
   'section-404': { dir: 'page-data', prefix: 'data-section-404' },
   'news-list': { dir: 'page-data', prefix: 'data-news-list' },
   'news-detail': { dir: 'page-data', prefix: 'data-news-detail' },
   'product-list': { dir: 'page-data', prefix: 'data-product-list' },
-  
   'theme': { dir: 'theme', prefix: 'theme-config' },
-  'theme-modern': { dir: 'theme', prefix: 'theme-modern' },
-  'theme-nature': { dir: 'theme', prefix: 'theme-nature' },
-  'theme-tech': { dir: 'theme', prefix: 'theme-tech' },
-  'theme-minimal': { dir: 'theme', prefix: 'theme-minimal' },
-  'theme-dark': { dir: 'theme', prefix: 'theme-dark' },
-  'theme-luxury': { dir: 'theme', prefix: 'theme-luxury' },
   
   'account': { dir: 'system', prefix: 'system-account' },
   'token': { dir: 'system', prefix: 'system-token' },
   'system-logs': { dir: 'system', prefix: 'system-logs' },
   'verification-codes': { dir: 'system', prefix: 'system-verification-codes' },
-  
   'page-list': { dir: '', prefix: 'page-list' },
+}
+
+// 别名映射
+const aliasMap: Record<string, string> = {
+  'hero': 'section-hero',
+  'partners': 'section-partner',
+  'products': 'section-products',
+  'services': 'section-services',
+  'pricing': 'section-pricing',
+  'about': 'section-about',
+  'contact': 'section-contact',
+}
+
+// 合并基础映射和别名映射
+const typeToPathMap: Record<string, PathMapping> = {
+  ...basePathMap,
+  // 添加别名映射
+  ...Object.fromEntries(
+    Object.entries(aliasMap).map(([alias, target]) => [alias, basePathMap[target]])
+  ),
 }
 
 function getPathMapping(configType: string): PathMapping {
@@ -67,28 +72,46 @@ export function getRuntimePath(configType: string): string {
   return path.join(RUNTIME_DIR, dir, `${prefix}.json`)
 }
 
+// 配置缓存
+const configCache: Record<string, any> = {}
+
+// 清除缓存
+function clearCache(configType?: string): void {
+  if (configType) {
+    delete configCache[configType]
+  } else {
+    Object.keys(configCache).forEach(key => delete configCache[key])
+  }
+}
+
 export function readConfig(configType: string): any {
+  // 检查缓存
+  if (configCache[configType]) {
+    return configCache[configType]
+  }
+  
   const runtimePath = getRuntimePath(configType)
   const templatePath = getTemplatePath(configType)
   
-  if (fs.existsSync(runtimePath)) {
-    return JSON.parse(fs.readFileSync(runtimePath, "utf-8"))
-  }
+  let configData: any = {}
   
-  if (fs.existsSync(templatePath)) {
-    const templateData = JSON.parse(fs.readFileSync(templatePath, "utf-8"))
+  if (fs.existsSync(runtimePath)) {
+    configData = JSON.parse(fs.readFileSync(runtimePath, "utf-8"))
+  } else if (fs.existsSync(templatePath)) {
+    configData = JSON.parse(fs.readFileSync(templatePath, "utf-8"))
     
+    // 复制到运行时目录
     const runtimeDir = path.dirname(runtimePath)
     if (!fs.existsSync(runtimeDir)) {
       fs.mkdirSync(runtimeDir, { recursive: true })
     }
     
-    fs.writeFileSync(runtimePath, JSON.stringify(templateData, null, 2), "utf-8")
-    
-    return templateData
+    fs.writeFileSync(runtimePath, JSON.stringify(configData, null, 2), "utf-8")
   }
   
-  return {}
+  // 缓存结果
+  configCache[configType] = configData
+  return configData
 }
 
 export function writeConfig(configType: string, data: any): void {
@@ -100,6 +123,9 @@ export function writeConfig(configType: string, data: any): void {
   }
   
   fs.writeFileSync(runtimePath, JSON.stringify(data, null, 2), "utf-8")
+  
+  // 清除缓存
+  clearCache(configType)
 }
 
 export function deleteConfig(configType: string): boolean {
@@ -108,6 +134,8 @@ export function deleteConfig(configType: string): boolean {
     
     if (fs.existsSync(runtimePath)) {
       fs.unlinkSync(runtimePath)
+      // 清除缓存
+      clearCache(configType)
       return true
     }
     
@@ -181,6 +209,9 @@ export function resetAllToTemplates(): void {
   for (const configType of Object.keys(configs)) {
     resetToTemplate(configType)
   }
+  
+  // 清除所有缓存
+  clearCache()
 }
 
 export function getPageResponse(pageId: string): any {

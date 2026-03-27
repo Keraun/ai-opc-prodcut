@@ -64,48 +64,6 @@ export async function POST(request: NextRequest) {
       }
     }
     
-    const configNames: Record<string, string> = {
-      site: '站点配置',
-      'page-home': '首页模块配置',
-      'page-news': '新闻页模块配置',
-      'page-product': '产品页模块配置',
-      'page-new-detail': '新闻详情页模块配置',
-      'page-404': '404页面模块配置',
-      'site-root': '站点根模块',
-      'site-header': '页头模块',
-      'site-footer': '页脚模块',
-      'site-navigation': '导航模块',
-      'section-hero': 'Hero区块',
-      'hero': 'Hero区块',
-      'section-partner': '合作伙伴区块',
-      'partners': '合作伙伴区块',
-      'section-partners': '合作伙伴区块',
-      'section-products': '产品区块',
-      'products': '产品区块',
-      'section-services': '服务区块',
-      'services': '服务区块',
-      'section-pricing': '价格区块',
-      'pricing': '价格区块',
-      'section-about': '关于我们区块',
-      'about': '关于我们区块',
-      'section-contact': '联系我们区块',
-      'contact': '联系我们区块',
-      'section-404': '404区块',
-      'news-list': '新闻列表模块',
-      'news-detail': '新闻详情模块',
-      'product-list': '产品列表模块',
-      theme: '主题配置',
-      'theme-modern': '现代主题',
-      'theme-nature': '自然主题',
-      'theme-tech': '科技主题',
-      account: '账号配置',
-      token: 'Token配置',
-      'operation-logs': '操作日志',
-      'system-logs': '系统日志',
-      'verification-codes': '验证码配置'
-    }
-
-
     return NextResponse.json({
       success: true,
       message: "配置保存成功"

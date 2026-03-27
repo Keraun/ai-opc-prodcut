@@ -6,9 +6,6 @@ const SAFE_CONFIG_TYPES = [
   'site-seo',
   'site-navigation',
   'theme',
-  'theme-modern',
-  'theme-nature',
-  'theme-tech',
 ]
 
 export async function GET(request: NextRequest) {
