@@ -20,8 +20,9 @@ interface MenuItem {
 
 const MENU_STRUCTURE: MenuItem[] = [
   { id: 'pages', label: '页面管理', icon: '📄' },
-    { id: 'feishu-app', label: '飞书配置', icon: '💬' },
+  { id: 'feishu-app', label: '飞书管理', icon: '💬' },
   { id: 'theme', label: '主题管理', icon: '🎨' },
+  { id: 'accounts', label: '账号管理', icon: '👥' },
   { id: 'system', label: '系统管理', icon: '🔧' },
 ]
 
@@ -35,7 +36,7 @@ export function Sidebar({
 }: SidebarProps) {
   const menuByCategory = useMemo(() => {
     const categories: Record<string, MenuItem[]> = {}
-    
+
     MENU_STRUCTURE.forEach(item => {
       const category = item.category || ''
       if (!categories[category]) {
@@ -43,7 +44,7 @@ export function Sidebar({
       }
       categories[category].push(item)
     })
-    
+
     return CATEGORY_ORDER
       .filter(cat => categories[cat])
       .map(cat => ({

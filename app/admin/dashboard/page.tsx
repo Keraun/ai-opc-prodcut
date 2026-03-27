@@ -18,7 +18,8 @@ import {
   ArticlesManagement,
   ConfigFormEditor,
   PageManagement,
-  PageEditor
+  PageEditor,
+  AccountManagement
 } from "./components"
 
 interface ThemeColors {
@@ -1076,6 +1077,10 @@ export default function AdminDashboardPage() {
                 currentUser={currentUser}
                 onChangePassword={() => setShowChangePassword(true)}
               />
+            )}
+
+            {activeMenu === 'accounts' && (
+              <AccountManagement />
             )}
 
 

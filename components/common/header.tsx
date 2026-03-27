@@ -103,12 +103,10 @@ export function Header({
     >
       <div className={styles.container}>
         <div className={styles.headerInner}>
-          {logoText && (
-            <div className={styles.logoSection}>
-              <Logo className={styles.logo} />
-              <span className={styles.logoText}>{logoText}</span>
-            </div>
-          )}
+          <div className={styles.logoSection}>
+            <Logo className={styles.logo} />
+            {logoText && <span className={styles.logoText}>{logoText}</span>}
+          </div>
           {navItems && navItems.length > 0 && (
             <nav className={styles.nav}>
               {navItems.map((item: any) => (

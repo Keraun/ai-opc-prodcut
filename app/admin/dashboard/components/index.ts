@@ -10,6 +10,9 @@ export { Header } from './navigation/header'
 // System
 export { SystemManagement } from './system/system-management'
 
+// Accounts
+export { AccountManagement } from './accounts/account-management'
+
 
 
 // Page Management
