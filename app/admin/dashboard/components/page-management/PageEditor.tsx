@@ -43,7 +43,8 @@ export function PageEditor({ pageId, onBack }: PageEditorProps) {
     try {
       const response = await fetch(`/api/admin/pages/${pageId}`)
       if (response.ok) {
-        const data = await response.json()
+        const result = await response.json()
+        const data = result.data
         setModules(data.modules || [])
         setPageInfo({
           name: data.name,
@@ -73,10 +74,12 @@ export function PageEditor({ pageId, onBack }: PageEditorProps) {
       })
 
       if (response.ok) {
-        toast.success("保存成功")
+        const result = await response.json()
+        toast.success(result.message || "保存成功")
         setHasChanges(false)
       } else {
-        toast.error("保存失败")
+        const result = await response.json()
+        toast.error(result.message || "保存失败")
       }
     } catch (error) {
       toast.error("保存失败")
@@ -101,11 +104,12 @@ export function PageEditor({ pageId, onBack }: PageEditorProps) {
       })
 
       if (response.ok) {
-        toast.success("页面发布成功")
+        const result = await response.json()
+        toast.success(result.message || "页面发布成功")
         fetchPageData()
       } else {
-        const error = await response.json()
-        toast.error(error.message || "发布失败")
+        const result = await response.json()
+        toast.error(result.message || "发布失败")
       }
     } catch (error) {
       toast.error("发布失败")
