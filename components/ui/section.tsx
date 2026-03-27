@@ -9,6 +9,7 @@ export interface SectionProps extends HTMLAttributes<HTMLElement> {
   badge?: string
   badgeClassName?: string
   badgeStyle?: React.CSSProperties
+  badgeType?: 'blue' | 'gray' | 'green' | 'orange' | 'red' | 'cyan' | 'purple' | 'teal'
   variant?: "default" | "gradient" | "minimal"
   padding?: "none" | "sm" | "md" | "lg"
   maxWidth?: "sm" | "md" | "lg" | "xl" | "full"
@@ -22,6 +23,7 @@ export function Section({
   badge,
   badgeClassName = "",
   badgeStyle,
+  badgeType = 'blue',
   variant = "default",
   padding = "lg",
   maxWidth = "xl",
@@ -44,24 +46,26 @@ export function Section({
     >
       <div className={`${styles.container} ${maxWidthClass} ${centered ? styles.centered : ""}`}>
         <div className={styles.header}>
-          {badge && (
-            <SectionTag
-              className={`${styles.badge} ${badgeClassName}`}
-              style={badgeStyle}
-            >
-              {badge}
-            </SectionTag>
-          )}
-          {title && (
-            <h2 className={styles.title}>
-              {title}
-            </h2>
-          )}
-          {description && (
-            <p className={styles.description}>
-              {description}
-            </p>
-          )}</div>
+        {badge && (
+          <SectionTag 
+            type={badgeType}
+            className={`${styles.badge} ${badgeClassName}`}
+            style={badgeStyle}
+          >
+            {badge}
+          </SectionTag>
+        )}
+        {title && (
+          <h2 className={styles.title}>
+            {title}
+          </h2>
+        )}
+        {description && (
+          <p className={styles.description}>
+            {description}
+          </p>
+        )}
+        </div>
         {children}
       </div>
     </section>

@@ -15,7 +15,7 @@ export function PartnerModule({ data }: ModuleProps) {
       title={config.title}
       description={config.description}
       className={styles.container}
-      badgeClassName={styles.badge}
+      badgeType="green"
     >
       <ul className={styles.partnerList}>
         {items.map((item: PartnerItem, index: number) => (

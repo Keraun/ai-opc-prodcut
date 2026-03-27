@@ -79,7 +79,7 @@ export function AboutModule({ data }: ModuleProps) {
       id="about"
       badge={config?.sectionTag}
       className={styles.section}
-      badgeClassName={styles.badge}
+      badgeType="cyan"
     >
       <div className={styles.bgPattern} />
       <div className={styles.decorativeOrb1} />
