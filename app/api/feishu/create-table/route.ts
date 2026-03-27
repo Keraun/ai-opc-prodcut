@@ -91,29 +91,25 @@ export async function POST(request: NextRequest) {
       }
     ]
 
+    const requestBody = {
+      table: {
+        name: "留言表",
+        fields: defaultFields
+      }
+    }
+
+    console.log("创建表格请求URL:", `https://open.feishu.cn/open-apis/bitable/v1/apps/${feishuConfig.baseLink}/tables`)
+    console.log("创建表格请求体:", JSON.stringify(requestBody, null, 2))
+
     const createTableResponse = await fetch(`https://open.feishu.cn/open-apis/bitable/v1/apps/${feishuConfig.baseLink}/tables`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
         "Authorization": `Bearer ${accessToken}`
       },
-      body: JSON.stringify({
-        table: {
-          name: "留言表",
-          default_view_id: "",
-          fields: defaultFields
-        }
-      })
+      body: JSON.stringify(requestBody)
     })
 
-    console.log("创建表格请求URL:", `https://open.feishu.cn/open-apis/bitable/v1/apps/${feishuConfig.baseLink}/tables`)
-    console.log("创建表格请求体:", JSON.stringify({
-      table: {
-        name: "留言表",
-        default_view_id: "",
-        fields: defaultFields
-      }
-    }, null, 2))
     console.log("创建表格响应状态:", createTableResponse.status)
 
     if (!createTableResponse.ok) {

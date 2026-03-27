@@ -57,16 +57,6 @@ interface ThemeData {
 interface Configs {
   site: any
   footer: any
-  homeBanner: any
-  homePartners: any
-  homeProducts: any
-  homeServices: any
-  homePricing: any
-  homeAbout: any
-  homeContact: any
-  products: any
-  otherPages: any
-  custom: any
   theme: ThemeData
   header: any
   'section-hero': any
@@ -85,16 +75,6 @@ export default function AdminDashboardPage() {
   const [configs, setConfigs] = useState<Configs>({
     site: {},
     footer: {},
-    homeBanner: {},
-    homePartners: {},
-    homeProducts: {},
-    homeServices: {},
-    homePricing: {},
-    homeAbout: {},
-    homeContact: {},
-    products: {},
-    otherPages: {},
-    custom: {},
     theme: {
       currentTheme: 'dark',
       themes: {}
@@ -118,16 +98,6 @@ export default function AdminDashboardPage() {
   const [originalConfigs, setOriginalConfigs] = useState<Configs>({
     site: {},
     footer: {},
-    homeBanner: {},
-    homePartners: {},
-    homeProducts: {},
-    homeServices: {},
-    homePricing: {},
-    homeAbout: {},
-    homeContact: {},
-    products: {},
-    otherPages: {},
-    custom: {},
     theme: {
       currentTheme: 'dark',
       themes: {}
@@ -889,7 +859,7 @@ export default function AdminDashboardPage() {
                 configType="section-hero"
                 title="Hero 区块配置"
                 description="配置首页 Hero 区块内容"
-                configData={configs['section-hero'] || configs.homeBanner?.hero || configs.homeBanner || {}}
+                configData={configs['section-hero'] || {}}
                 onSave={async (data) => {
                   setConfigs(prev => ({ ...prev, 'section-hero': data }))
                   await handleSave('section-hero')
@@ -904,7 +874,7 @@ export default function AdminDashboardPage() {
                 configType="section-partner"
                 title="合作伙伴区块配置"
                 description="配置首页合作伙伴区块内容"
-                configData={configs['section-partner'] || configs.homePartners?.partners || configs.homePartners || {}}
+                configData={configs['section-partner'] || {}}
                 onSave={async (data) => {
                   setConfigs(prev => ({ ...prev, 'section-partner': data }))
                   await handleSave('section-partner')
@@ -919,7 +889,7 @@ export default function AdminDashboardPage() {
                 configType="section-products"
                 title="产品展示区块配置"
                 description="配置首页产品展示区块内容"
-                configData={configs['section-products'] || configs.homeProducts?.products || configs.homeProducts || {}}
+                configData={configs['section-products'] || {}}
                 onSave={async (data) => {
                   setConfigs(prev => ({ ...prev, 'section-products': data }))
                   await handleSave('section-products')
@@ -934,7 +904,7 @@ export default function AdminDashboardPage() {
                 configType="section-services"
                 title="服务信息区块配置"
                 description="配置首页服务信息区块内容"
-                configData={configs['section-services'] || configs.homeServices?.services || configs.homeServices || {}}
+                configData={configs['section-services'] || {}}
                 onSave={async (data) => {
                   setConfigs(prev => ({ ...prev, 'section-services': data }))
                   await handleSave('section-services')
@@ -949,7 +919,7 @@ export default function AdminDashboardPage() {
                 configType="section-pricing"
                 title="价格信息区块配置"
                 description="配置首页价格信息区块内容"
-                configData={configs['section-pricing'] || configs.homePricing?.pricing || configs.homePricing || {}}
+                configData={configs['section-pricing'] || {}}
                 onSave={async (data) => {
                   setConfigs(prev => ({ ...prev, 'section-pricing': data }))
                   await handleSave('section-pricing')
@@ -964,7 +934,7 @@ export default function AdminDashboardPage() {
                 configType="section-about"
                 title="关于我们区块配置"
                 description="配置首页关于我们区块内容"
-                configData={configs['section-about'] || configs.homeAbout?.about || configs.homeAbout || {}}
+                configData={configs['section-about'] || {}}
                 onSave={async (data) => {
                   setConfigs(prev => ({ ...prev, 'section-about': data }))
                   await handleSave('section-about')
@@ -979,7 +949,7 @@ export default function AdminDashboardPage() {
                 configType="section-contact"
                 title="联系我们区块配置"
                 description="配置首页联系我们区块内容"
-                configData={configs['section-contact'] || configs.homeContact?.contact || configs.homeContact || {}}
+                configData={configs['section-contact'] || {}}
                 onSave={async (data) => {
                   setConfigs(prev => ({ ...prev, 'section-contact': data }))
                   await handleSave('section-contact')
@@ -1004,57 +974,12 @@ export default function AdminDashboardPage() {
               />
             )}
 
-            {activeMenu === 'products' && (
-              <ConfigFormEditor
-                configType="products"
-                title="产品列表配置"
-                description="包含产品分类、产品列表等产品列表配置"
-                configData={configs.products}
-                onSave={async (data) => {
-                  setConfigs(prev => ({ ...prev, products: data }))
-                  await handleSave('products')
-                }}
-                hasChanges={hasConfigChanges('products')}
-                loading={loading}
-              />
-            )}
-
             {activeMenu === 'articles' && <ArticlesManagement />}
-
-            {activeMenu === 'custom' && (
-              <ConfigFormEditor
-                configType="custom"
-                title="主题个性化配置"
-                description="包含主题、功能开关等个性化配置"
-                configData={configs.custom}
-                onSave={async (data) => {
-                  setConfigs(prev => ({ ...prev, custom: data }))
-                  await handleSave('custom')
-                }}
-                hasChanges={hasConfigChanges('custom')}
-                loading={loading}
-              />
-            )}
 
             {activeMenu === 'theme' && (
               <ThemeSelector
                 themeData={configs.theme}
                 onThemeChange={handleThemeChange}
-              />
-            )}
-
-            {activeMenu === 'otherPages' && (
-              <ConfigFormEditor
-                configType="otherPages"
-                title="自定义页面配置"
-                description="包含关于我们、服务条款、隐私政策等其他页面配置"
-                configData={configs.otherPages}
-                onSave={async (data) => {
-                  setConfigs(prev => ({ ...prev, otherPages: data }))
-                  await handleSave('otherPages')
-                }}
-                hasChanges={hasConfigChanges('otherPages')}
-                loading={loading}
               />
             )}
 
