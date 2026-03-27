@@ -1,6 +1,6 @@
 .section {
   width: 100%;
-    position: relative;
+  position: relative;
 
 }
 
@@ -48,6 +48,7 @@
   justify-content: center;
   flex-direction: column;
 }
+
 @media (min-width: 640px) {
   .container {
     padding-left: 1.5rem;
@@ -87,14 +88,10 @@
 }
 
 .badge {
-  display: inline-block;
-  padding: 0.375rem 1rem;
-  font-size: 0.875rem;
-  font-weight: 500;
-  color: #2563eb;
-  background-color: #eff6ff;
-  border-radius: 9999px;
+
   margin-bottom: 1rem;
+  position: relative;
+  z-index: 2;
 }
 
 .title {
@@ -102,6 +99,8 @@
   font-weight: 700;
   color: #111827;
   margin-bottom: 1rem;
+  position: relative;
+  z-index: 2;
 }
 
 @media (min-width: 640px) {
@@ -114,4 +113,10 @@
   font-size: 1.125rem;
   color: #4b5563;
   margin-bottom: 2rem;
+  position: relative;
+  z-index: 2;
+}
+
+.content {
+  text-align: left;
 }

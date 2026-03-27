@@ -26,7 +26,7 @@ export function PricingModule({ data }: ModuleProps) {
       padding="lg"
       centered
       badgeClassName={styles.badge}
-      badgeType="orange"
+      badgeType="pink"
     >
       <div className={styles.grid}>
         {pricingPlans.map((plan: PricingFeature, index: number) => {

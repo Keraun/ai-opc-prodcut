@@ -64,7 +64,7 @@ export function Section({
             {description}
           </p>
         )}
-        {children}
+        <div className={styles.content}>{children}</div>
       </div>
     </section>
   )
