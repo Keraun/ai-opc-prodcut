@@ -168,8 +168,8 @@ export function SystemManagement({
             <div className={styles.configCardActions}>
               <div className={styles.configActionItem}>
                 <div className={styles.configActionInfo}>
-                  <h4 className={styles.configActionTitle}>导出配置</h4>
-                  <p className={styles.configActionDesc}>将所有系统配置导出为ZIP文件，用于备份</p>
+                  <h4 className={styles.configActionTitle}>导出数据库</h4>
+                  <p className={styles.configActionDesc}>将所有系统配置数据导出为ZIP文件，用于备份</p>
                 </div>
                 <Button 
                   type="primary" 
@@ -184,7 +184,7 @@ export function SystemManagement({
 
               <div className={styles.configActionItem}>
                 <div className={styles.configActionInfo}>
-                  <h4 className={styles.configActionTitle}>导入配置</h4>
+                  <h4 className={styles.configActionTitle}>导入数据库</h4>
                   <p className={styles.configActionDesc}>从ZIP文件导入系统配置，恢复系统状态</p>
                 </div>
                 <input

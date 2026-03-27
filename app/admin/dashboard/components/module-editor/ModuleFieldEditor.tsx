@@ -21,6 +21,37 @@ interface ModuleFieldEditorProps {
   onChange: (data: Record<string, unknown>) => void
 }
 
+function setNestedValue(obj: Record<string, unknown>, path: string, value: unknown): Record<string, unknown> {
+  const result = { ...obj }
+  const keys = path.split('.')
+  let current = result
+
+  for (let i = 0; i < keys.length - 1; i++) {
+    const key = keys[i]
+    if (typeof current[key] !== 'object' || current[key] === null) {
+      current[key] = {}
+    }
+    current = current[key] as Record<string, unknown>
+  }
+
+  current[keys[keys.length - 1]] = value
+  return result
+}
+
+function getNestedValue(obj: Record<string, unknown>, path: string): unknown {
+  const keys = path.split('.')
+  let current: unknown = obj
+
+  for (const key of keys) {
+    if (typeof current !== 'object' || current === null) {
+      return undefined
+    }
+    current = (current as Record<string, unknown>)[key]
+  }
+
+  return current
+}
+
 export function ModuleFieldEditor({ moduleId, data, onChange }: ModuleFieldEditorProps) {
   const [schema, setSchema] = useState<Record<string, SchemaProperty>>({})
   const [loading, setLoading] = useState(true)
@@ -45,29 +76,25 @@ export function ModuleFieldEditor({ moduleId, data, onChange }: ModuleFieldEdito
   }
 
   const handleFieldChange = (fieldKey: string, value: unknown) => {
-    onChange({
-      ...data,
-      [fieldKey]: value,
-    })
+    const newData = setNestedValue(data, fieldKey, value)
+    onChange(newData)
   }
 
-  const renderField = (key: string, property: SchemaProperty, value: unknown): React.ReactNode => {
+  const renderField = (key: string, property: SchemaProperty, currentPath: string = ''): React.ReactNode => {
     const { type, title, description, enum: enumValues, properties: nestedProperties, items } = property
+    const fieldPath = currentPath ? `${currentPath}.${key}` : key
+    const value = getNestedValue(data, fieldPath)
 
     if (type === "object" && nestedProperties) {
       return (
-        <div key={key} className={styles.fieldGroup}>
+        <div key={fieldPath} className={styles.fieldGroup}>
           <div className={styles.fieldGroupTitle}>
             <h4 style={{ margin: 0 }}>{title}</h4>
             {description && <p style={{ margin: "4px 0", fontSize: 12, color: "#6b7280" }}>{description}</p>}
           </div>
           <div className={styles.fieldGroupContent}>
             {Object.entries(nestedProperties).map(([nestedKey, nestedProp]) =>
-              renderField(
-                `${key}.${nestedKey}`,
-                nestedProp,
-                (value as Record<string, unknown>)?.[nestedKey]
-              )
+              renderField(nestedKey, nestedProp, fieldPath)
             )}
           </div>
         </div>
@@ -77,7 +104,7 @@ export function ModuleFieldEditor({ moduleId, data, onChange }: ModuleFieldEdito
     if (type === "array") {
       const arrayValue = Array.isArray(value) ? value : []
       return (
-        <div key={key} className={styles.fieldItem}>
+        <div key={fieldPath} className={styles.fieldItem}>
           <label className={styles.fieldLabel}>{title}</label>
           {description && <p className={styles.fieldDescription}>{description}</p>}
           <div className={styles.arrayField}>
@@ -89,7 +116,7 @@ export function ModuleFieldEditor({ moduleId, data, onChange }: ModuleFieldEdito
                     onChange={(val) => {
                       const newArray = [...arrayValue]
                       newArray[index] = val
-                      handleFieldChange(key, newArray)
+                      handleFieldChange(fieldPath, newArray)
                     }}
                     placeholder={`项目 ${index + 1}`}
                   />
@@ -98,7 +125,7 @@ export function ModuleFieldEditor({ moduleId, data, onChange }: ModuleFieldEdito
                   className={styles.arrayItemDelete}
                   onClick={() => {
                     const newArray = arrayValue.filter((_, i) => i !== index)
-                    handleFieldChange(key, newArray)
+                    handleFieldChange(fieldPath, newArray)
                   }}
                 >
                   删除
@@ -109,7 +136,7 @@ export function ModuleFieldEditor({ moduleId, data, onChange }: ModuleFieldEdito
               className={styles.arrayAddButton}
               onClick={() => {
                 const newArray = [...arrayValue, items?.type === "string" ? "" : {}]
-                handleFieldChange(key, newArray)
+                handleFieldChange(fieldPath, newArray)
               }}
             >
               + 添加项目
@@ -121,12 +148,12 @@ export function ModuleFieldEditor({ moduleId, data, onChange }: ModuleFieldEdito
 
     if (enumValues && enumValues.length > 0) {
       return (
-        <div key={key} className={styles.fieldItem}>
+        <div key={fieldPath} className={styles.fieldItem}>
           <label className={styles.fieldLabel}>{title}</label>
           {description && <p className={styles.fieldDescription}>{description}</p>}
           <Select
             value={value as string}
-            onChange={(val) => handleFieldChange(key, val)}
+            onChange={(val) => handleFieldChange(fieldPath, val)}
             style={{ width: "100%" }}
           >
             {enumValues.map((enumValue) => (
@@ -142,12 +169,12 @@ export function ModuleFieldEditor({ moduleId, data, onChange }: ModuleFieldEdito
     switch (type) {
       case "string":
         return (
-          <div key={key} className={styles.fieldItem}>
+          <div key={fieldPath} className={styles.fieldItem}>
             <label className={styles.fieldLabel}>{title}</label>
             {description && <p className={styles.fieldDescription}>{description}</p>}
             <Input
               value={value as string}
-              onChange={(val) => handleFieldChange(key, val)}
+              onChange={(val) => handleFieldChange(fieldPath, val)}
               placeholder={`请输入${title}`}
             />
           </div>
@@ -155,12 +182,12 @@ export function ModuleFieldEditor({ moduleId, data, onChange }: ModuleFieldEdito
 
       case "number":
         return (
-          <div key={key} className={styles.fieldItem}>
+          <div key={fieldPath} className={styles.fieldItem}>
             <label className={styles.fieldLabel}>{title}</label>
             {description && <p className={styles.fieldDescription}>{description}</p>}
             <InputNumber
               value={value as number}
-              onChange={(val) => handleFieldChange(key, val)}
+              onChange={(val) => handleFieldChange(fieldPath, val)}
               style={{ width: "100%" }}
             />
           </div>
@@ -168,12 +195,12 @@ export function ModuleFieldEditor({ moduleId, data, onChange }: ModuleFieldEdito
 
       case "boolean":
         return (
-          <div key={key} className={styles.fieldItem}>
+          <div key={fieldPath} className={styles.fieldItem}>
             <label className={styles.fieldLabel}>{title}</label>
             {description && <p className={styles.fieldDescription}>{description}</p>}
             <Switch
               checked={value as boolean}
-              onChange={(val) => handleFieldChange(key, val)}
+              onChange={(val) => handleFieldChange(fieldPath, val)}
             />
           </div>
         )
@@ -198,7 +225,7 @@ export function ModuleFieldEditor({ moduleId, data, onChange }: ModuleFieldEdito
   return (
     <div className={styles.moduleFieldEditor}>
       {Object.entries(schema).map(([key, property]) =>
-        renderField(key, property, data[key])
+        renderField(key, property)
       )}
     </div>
   )

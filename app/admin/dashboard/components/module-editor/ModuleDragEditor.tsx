@@ -143,7 +143,10 @@ export function ModuleDragEditor({ modules, onChange }: ModuleDragEditorProps) {
   }
 
   const handleEditModule = (module: ModuleInfo) => {
-    setEditingModule(module)
+    setEditingModule({
+      ...module,
+      data: JSON.parse(JSON.stringify(module.data))
+    })
   }
 
   const handleSaveModuleData = (data: Record<string, unknown>) => {
@@ -151,7 +154,7 @@ export function ModuleDragEditor({ modules, onChange }: ModuleDragEditorProps) {
 
     const updatedModules = modules.map((m) =>
       m.moduleInstanceId === editingModule.moduleInstanceId
-        ? { ...m, data }
+        ? { ...m, data: JSON.parse(JSON.stringify(data)) }
         : m
     )
     
@@ -321,7 +324,10 @@ export function ModuleDragEditor({ modules, onChange }: ModuleDragEditorProps) {
           <ModuleFieldEditor
             moduleId={editingModule.moduleId}
             data={editingModule.data}
-            onChange={(data) => setEditingModule({ ...editingModule, data })}
+            onChange={(data) => setEditingModule({ 
+              ...editingModule, 
+              data: JSON.parse(JSON.stringify(data)),
+            })}
           />
         )}
       </Modal>
