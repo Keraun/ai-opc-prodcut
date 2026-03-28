@@ -88,10 +88,123 @@ async function fetchData(url: string) {
 - **类型守卫**：创建可复用的类型守卫函数
 
 ### 1.4 消息提示
-- **使用自定义 Message 组件**：项目中已实现自定义的 Message 组件，所有消息提示必须使用此组件
-- **导入方式**：`import { useMessage } from "@/components/custom-message"`
-- **使用方式**：在组件中初始化 `const message = useMessage()`，然后调用 `message.success()`, `message.error()`, `message.info()`, `message.warning()`
-- **禁止使用**：禁止使用 arco 的 Message 组件，必须使用自定义的 Message 组件
+- **使用 sonner**：项目中使用 `sonner` 库作为 Toast 提示组件
+- **导入方式**：`import { toast } from 'sonner'`
+- **使用方式**：直接调用 `toast.success()`, `toast.error()`, `toast.info()`, `toast.warning()`
+- **禁止使用**：禁止使用自定义 Message 组件或 Arco Design 的 Message 组件
+
+```typescript
+// ✅ 正确示例
+import { toast } from 'sonner'
+
+// 成功提示
+toast.success('操作成功')
+
+// 错误提示
+toast.error('操作失败')
+
+// 信息提示
+toast.info('这是一条信息')
+
+// 警告提示
+toast.warning('请注意')
+
+// 带描述的提示
+toast.success('保存成功', {
+  description: '您的更改已保存到数据库'
+})
+
+// 自定义持续时间
+toast.error('发生错误', {
+  duration: 5000
+})
+```
+
+### 1.5 图标使用规范
+- **优先使用 lucide-react**：项目中优先使用 `lucide-react` 提供的图标
+- **其次使用自定义图标**：当 lucide-react 没有合适的图标时，使用项目自定义图标
+- **禁止使用 Arco Design 图标**：禁止使用 `@arco-design/web-react` 的 Icon 组件
+- **导入方式**：必须使用 `as` 关键字添加 `Icon` 前缀别名，格式为 `import { IconName as IconIconName } from 'lucide-react'`
+- **命名规范**：所有图标组件在使用时必须以 `Icon` 开头，保持命名一致性
+
+```typescript
+// ✅ 正确示例 - 使用 lucide-react 并添加 Icon 前缀别名
+import { 
+  Home as IconHome, 
+  User as IconUser, 
+  Settings as IconSettings, 
+  Search as IconSearch, 
+  Plus as IconPlus, 
+  Trash2 as IconTrash2,
+  Edit as IconEdit,
+  ChevronLeft as IconChevronLeft,
+  Check as IconCheck,
+  Info as IconInfo,
+  Undo as IconUndo,
+  History as IconHistory
+} from 'lucide-react'
+
+function Navigation() {
+  return (
+    <nav>
+      <a href="/"><IconHome className="w-5 h-5" /></a>
+      <a href="/users"><IconUser className="w-5 h-5" /></a>
+      <a href="/settings"><IconSettings className="w-5 h-5" /></a>
+      <button><IconSearch className="w-5 h-5" /></button>
+      <button><IconPlus className="w-5 h-5" /></button>
+      <button><IconTrash2 className="w-5 h-5" /></button>
+    </nav>
+  )
+}
+
+// ✅ 正确示例 - 使用自定义图标（当 lucide-react 没有合适的图标时）
+import { CustomLogo } from '@/components/icons'
+
+function Header() {
+  return (
+    <header>
+      <CustomLogo className="w-10 h-10" />
+    </header>
+  )
+}
+
+// ❌ 错误示例 - 使用 Arco Design 图标
+import { IconHome, IconUser, IconSettings } from '@arco-design/web-react/icon'
+
+function Navigation() {
+  return (
+    <nav>
+      <IconHome />
+      <IconUser />
+      <IconSettings />
+    </nav>
+  )
+}
+```
+
+**常用图标映射**：
+
+| 功能 | lucide-react 图标 | Arco Design 图标（已弃用） |
+|------|------------------|---------------------------|
+| 首页 | `Home` | `IconHome` |
+| 用户 | `User` | `IconUser` |
+| 设置 | `Settings` | `IconSettings` |
+| 搜索 | `Search` | `IconSearch` |
+| 添加 | `Plus` | `IconPlus` |
+| 删除 | `Trash2` | `IconDelete` |
+| 编辑 | `Edit` | `IconEdit` |
+| 保存 | `Save` | `IconSave` |
+| 关闭 | `X` | `IconClose` |
+| 菜单 | `Menu` | `IconMenu` |
+| 刷新 | `RefreshCw` | `IconRefresh` |
+| 下载 | `Download` | `IconDownload` |
+| 上传 | `Upload` | `IconUpload` |
+| 更多 | `MoreHorizontal` | `IconMore` |
+| 复制 | `Copy` | `IconCopy` |
+| 检查 | `Check` | `IconCheck` |
+| 警告 | `AlertTriangle` | `IconExclamation` |
+| 信息 | `Info` | `IconInfo` |
+| 错误 | `XCircle` | `IconCloseCircle` |
 
 ```typescript
 // ✅ 正确示例
@@ -383,8 +496,9 @@ project/
 │   ├── ui/               # 基础 UI 组件
 │   └── features/         # 功能组件
 ├── lib/                   # 工具库
-│   ├── api.ts            # API 客户端
-│   ├── db.ts             # 数据库客户端
+│   ├── api-client.ts     # API 客户端
+│   ├── json-database.ts  # JSON 数据库客户端
+│   ├── config-manager.ts # 配置管理器
 │   └── utils.ts          # 工具函数
 ├── hooks/                 # 自定义 Hooks
 ├── types/                 # 类型定义
@@ -451,6 +565,116 @@ export function PricingModule({ data }: ModuleProps) {
   
   // 实现...
 }
+```
+
+#### 5.4 JSON 数据库使用规范
+
+本项目使用 JSON 文件作为数据存储，所有数据存放在 `database/runtime/` 目录下。
+
+##### 5.4.1 数据存储位置
+
+```
+database/
+├── runtime/                    # 运行时数据目录
+│   ├── accounts.json          # 账号数据
+│   ├── system_config.json     # 系统配置
+│   ├── system_logs.json       # 系统日志
+│   ├── theme_config.json      # 主题配置
+│   ├── pages.json             # 页面配置
+│   ├── module_registry.json   # 模块注册表
+│   └── page_modules.json      # 页面模块关联
+└── templates/                  # 模板数据（初始化用）
+```
+
+##### 5.4.2 使用 JsonDatabase 类
+
+```typescript
+import { jsonDb } from '@/lib/json-database'
+
+// 插入数据
+const newAccount = jsonDb.insert('accounts', {
+  username: 'admin',
+  password: 'hashed_password',
+  email: 'admin@example.com'
+})
+
+// 查询数据
+const accounts = jsonDb.getAll('accounts')
+const account = jsonDb.findOne('accounts', { username: 'admin' })
+const filtered = jsonDb.find('accounts', { status: 'active' })
+
+// 更新数据
+jsonDb.update('accounts', accountId, { email: 'new@example.com' })
+
+// 删除数据
+jsonDb.delete('accounts', { username: 'test' })
+
+// 清空表
+jsonDb.clearTable('system_logs')
+
+// 批量插入
+jsonDb.insertBatch('theme_config', themes)
+```
+
+##### 5.4.3 使用 ConfigManager
+
+对于配置相关的操作，推荐使用 `lib/config-manager.ts` 提供的高级 API：
+
+```typescript
+import { readConfig, writeConfig, deleteConfig } from '@/lib/config-manager'
+
+// 读取配置
+const siteConfig = readConfig('site')
+const themeConfig = readConfig('theme')
+const accounts = readConfig('account')
+
+// 写入配置
+writeConfig('site', { name: 'My Site', url: 'https://example.com' })
+writeConfig('theme', { currentTheme: 'modern', themes: {...} })
+
+// 删除配置
+deleteConfig('page-home')
+```
+
+##### 5.4.4 支持的配置类型
+
+| 配置类型 | 说明 | 存储表 |
+|---------|------|--------|
+| `site` | 站点配置 | system_config |
+| `site-seo` | SEO 配置 | system_config |
+| `theme` | 主题配置 | theme_config |
+| `account` | 账号管理 | accounts |
+| `token` | 令牌配置 | system_config |
+| `feishu-app` | 飞书应用配置 | system_config |
+| `system-logs` | 系统日志 | system_logs |
+| `page-list` | 页面列表 | pages |
+| 模块ID | 模块配置 | module_registry |
+
+##### 5.4.5 禁止事项
+
+- **禁止直接读写 JSON 文件**：必须通过 `jsonDb` 或 `config-manager` 操作
+- **禁止在客户端使用**：JSON 数据库只能在服务端使用（需要 `server-only`）
+- **禁止并发写入**：JSON 文件不支持并发写入，需要自行处理并发问题
+
+```typescript
+// ❌ 错误示例 - 直接读写文件
+import fs from 'fs'
+const data = JSON.parse(fs.readFileSync('database/runtime/accounts.json'))
+
+// ✅ 正确示例 - 使用 jsonDb
+import { jsonDb } from '@/lib/json-database'
+const data = jsonDb.getAll('accounts')
+```
+
+##### 5.4.6 数据迁移
+
+如果需要从其他数据源迁移数据，使用 `importData` 方法：
+
+```typescript
+import { jsonDb } from '@/lib/json-database'
+
+// 导入数据（会覆盖现有数据）
+jsonDb.importData('accounts', migratedAccounts)
 ```
 
 ### 6. 测试规范

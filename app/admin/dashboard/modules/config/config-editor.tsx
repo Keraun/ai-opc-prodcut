@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
 import { Modal, Input, Button } from '@arco-design/web-react'
 import { toast } from 'sonner'
-import { IconCheck, IconInfoCircle, IconUndo, IconHistory } from '@arco-design/web-react/icon'
+import { Check as IconCheck, Info as IconInfo, Undo as IconUndo, History as IconHistory } from 'lucide-react'
 import { useConfig } from '../../common/hooks/useConfig'
 import { useVersion } from '../../common/hooks/useVersion'
 import { validateJson, formatJson, stringifyJson, parseJson } from '../../common/utils/json-utils'
@@ -148,7 +148,7 @@ export function ConfigEditor({ configType, title, description }: ConfigEditorPro
     return (
       <div className={styles.schemaCard}>
         <div className={styles.schemaCardTitle}>
-          <IconInfoCircle className={styles.schemaCardTitleIcon} />
+          <IconInfo className={styles.schemaCardTitleIcon} />
           <span className={styles.schemaCardTitleText}>字段说明</span>
         </div>
         <div className={styles.schemaContent}>

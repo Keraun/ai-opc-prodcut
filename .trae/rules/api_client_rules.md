@@ -44,7 +44,7 @@ lib/
     ├── accounts.ts        # 账号管理 API
     ├── articles.ts        # 文章相关 API
     ├── feishu.ts          # 飞书相关 API
-    ├── database.ts        # 数据库相关 API
+    ├── database.ts        # 数据导入导出 API
     └── contact.ts         # 联系表单 API
 ```
 
@@ -146,10 +146,12 @@ const deleteResult = await deleteArticle('1')
 
 | 函数名 | 说明 | 参数 | 返回值 |
 |--------|------|------|--------|
-| `importDatabase(file)` | 导入数据库 | `file: File` | `{ success, message?, backupCreated? }` |
+| `importDatabase(file)` | 导入配置数据 | `file: File` | `{ success, message?, backupCreated? }` |
 | `resetWebsite(username)` | 一键恢复网站 | `username: string` | `{ success, message?, backupCreated?, tables? }` |
-| `checkDefaultDb()` | 检查默认数据库 | 无 | `{ success, exists?, message? }` |
-| `validateDatabase()` | 验证数据库 | 无 | `{ success, valid?, tables?, message? }` |
+| `checkDefaultDb()` | 检查默认配置 | 无 | `{ success, exists?, message? }` |
+| `validateDatabase()` | 验证配置完整性 | 无 | `{ success, valid?, tables?, message? }` |
+
+> **注意**：本项目使用 JSON 文件存储数据（`database/runtime/` 目录），而非传统数据库。上述函数主要用于配置导入导出和网站恢复功能。
 
 ## 添加新的 API 函数
 
@@ -165,7 +167,7 @@ const deleteResult = await deleteArticle('1')
 - 账号管理 → `lib/api/accounts.ts`
 - 文章相关 → `lib/api/articles.ts`
 - 飞书相关 → `lib/api/feishu.ts`
-- 数据库相关 → `lib/api/database.ts`
+- 数据导入导出 → `lib/api/database.ts`
 - 联系表单 → `lib/api/contact.ts`
 
 ### 2. 添加函数

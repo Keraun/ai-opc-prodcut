@@ -2,8 +2,8 @@
 
 import React, { useState, useEffect } from "react"
 import { Form, Input, Select, DatePicker, Upload, Button, Tag, Space, Switch, InputNumber, Radio, Checkbox, Grid } from "@arco-design/web-react"
-import { IconPlus, IconDelete } from "@arco-design/web-react/icon"
-import { useMessage } from "@/app/components/custom-message"
+import { Plus as IconPlus, Trash2 as IconTrash2 } from "lucide-react"
+import { toast } from "sonner"
 import { extractTableId, extractAppToken } from "@/lib/feishu-utils"
 import styles from "./DynamicForm.module.css"
 
@@ -92,7 +92,6 @@ export function DynamicForm({
   onCancel,
   loading = false
 }: DynamicFormProps) {
-  const message = useMessage()
   const [form] = Form.useForm()
   const [tags, setTags] = useState<Record<string, string[]>>({})
   const [arrayFields, setArrayFields] = useState<Record<string, any[]>>({})
@@ -142,7 +141,7 @@ export function DynamicForm({
       
       onSubmit(finalValues)
     } catch (error) {
-      message.error('请检查表单填写是否正确')
+      toast.error('请检查表单填写是否正确')
     }
   }
 
@@ -367,7 +366,7 @@ export function DynamicForm({
               />
             )}
             <Button
-              icon={<IconDelete />}
+              icon={<IconTrash2 />}
               status="danger"
               onClick={() => removeItem(index)}
               className={styles.arrayItemDelete}

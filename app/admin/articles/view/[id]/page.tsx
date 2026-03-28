@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react"
 import { useRouter, useParams } from "next/navigation"
 import { Button, Card, Spin } from "@arco-design/web-react"
-import { IconLeft, IconEdit } from "@arco-design/web-react/icon"
+import { ChevronLeft as IconChevronLeft, Edit as IconEdit } from "lucide-react"
 import { toast } from "sonner"
 import { getArticleById } from "@/lib/api-client"
 import styles from "../../articles.module.css"
@@ -80,7 +80,7 @@ export default function ViewArticlePage() {
           <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
             <Button
               type="text"
-              icon={<IconLeft />}
+              icon={<IconChevronLeft />}
               onClick={handleBack}
             >
               返回文章列表

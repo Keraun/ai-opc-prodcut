@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react"
 import { useRouter } from "next/navigation"
 import { Button, Card, Message } from "@arco-design/web-react"
-import { IconLeft } from "@arco-design/web-react/icon"
+import { ChevronLeft as IconChevronLeft } from "lucide-react"
 import { toast } from "sonner"
 import { DynamicForm } from "@/components/dynamic-form"
 import { getSchema, createArticle } from "@/lib/api-client"
@@ -67,7 +67,7 @@ export default function NewArticlePage() {
           <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
             <Button
               type="text"
-              icon={<IconLeft />}
+              icon={<IconChevronLeft />}
               onClick={handleCancel}
             >
               返回文章列表

@@ -2,13 +2,8 @@
 
 import { useState, useEffect } from "react"
 import { Button, Card, Typography, Divider, Modal, Input, Table, Popconfirm, Form } from "@arco-design/web-react"
-import { 
-  IconUser, 
-  IconPlus, 
-  IconDelete,
-  IconEdit
-} from "@arco-design/web-react/icon"
-import { useMessage } from "@/app/components/custom-message"
+import { User as IconUser, Plus as IconPlus, Trash2 as IconTrash2, Edit as IconEdit } from "lucide-react"
+import { toast } from "sonner"
 import { 
   getAccounts, 
   addAccount, 
@@ -20,7 +15,6 @@ import styles from "../../dashboard.module.css"
 
 export function AccountManagement() {
   // 账号管理相关状态
-  const message = useMessage()
   const [accounts, setAccounts] = useState<any[]>([])
   const [loadingAccounts, setLoadingAccounts] = useState(false)
   const [showAddAccountModal, setShowAddAccountModal] = useState(false)
@@ -81,13 +75,13 @@ export function AccountManagement() {
       setHasValidSuperAdminToken(true)
       await action()
     } else {
-      message.error("超级管理员密码错误")
+      toast.error("超级管理员密码错误")
     }
   }
   
   const handleAddAccount = async () => {
     if (!newAccount.username || !newAccount.password || !newAccount.email) {
-      message.error("请填写完整的账号信息")
+      toast.error("请填写完整的账号信息")
       return
     }
     
@@ -95,16 +89,16 @@ export function AccountManagement() {
       try {
         const result = await addAccount(newAccount)
         if (result.success) {
-          message.success("账号添加成功")
+          toast.success("账号添加成功")
           setShowAddAccountModal(false)
           setNewAccount({ username: "", password: "", email: "", remark: "" })
           loadAccounts()
         } else {
-          message.error(result.message || "账号添加失败")
+          toast.error(result.message || "账号添加失败")
         }
       } catch (error) {
         console.error("添加账号失败:", error)
-        message.error("账号添加失败")
+        toast.error("账号添加失败")
       }
     }
     
@@ -118,16 +112,16 @@ export function AccountManagement() {
       try {
         const result = await deleteAccount(accountToDelete.username)
         if (result.success) {
-          message.success("账号删除成功")
+          toast.success("账号删除成功")
           setShowDeleteAccountModal(false)
           setAccountToDelete(null)
           loadAccounts()
         } else {
-          message.error(result.message || "账号删除失败")
+          toast.error(result.message || "账号删除失败")
         }
       } catch (error) {
         console.error("删除账号失败:", error)
-        message.error("账号删除失败")
+        toast.error("账号删除失败")
       }
     }
     
@@ -136,7 +130,7 @@ export function AccountManagement() {
   
   const handleEditAccount = async () => {
     if (!editedAccount.email) {
-      message.error("请输入邮箱")
+      toast.error("请输入邮箱")
       return
     }
     
@@ -144,17 +138,17 @@ export function AccountManagement() {
       try {
         const result = await updateAccount(editedAccount.username, editedAccount)
         if (result.success) {
-          message.success("账号修改成功")
+          toast.success("账号修改成功")
           setShowEditAccountModal(false)
           setAccountToEdit(null)
           setEditedAccount({ username: "", password: "", email: "", remark: "" })
           loadAccounts()
         } else {
-          message.error(result.message || "账号修改失败")
+          toast.error(result.message || "账号修改失败")
         }
       } catch (error) {
         console.error("修改账号失败:", error)
-        message.error("账号修改失败")
+        toast.error("账号修改失败")
       }
     }
     
@@ -267,7 +261,7 @@ export function AccountManagement() {
                     <Button 
                       type="text" 
                       status="danger" 
-                      icon={<IconDelete />}
+                      icon={<IconTrash2 />}
                       disabled={record.username === 'admin'}
                     >
                       删除
@@ -306,7 +300,7 @@ export function AccountManagement() {
               type="primary"
               onClick={async () => {
                 if (!superAdminPasswordForAction) {
-                  message.error("请输入当前账户密码")
+                  toast.error("请输入当前账户密码")
                   return
                 }
                 
@@ -324,7 +318,7 @@ export function AccountManagement() {
                   }
                 } else {
                   console.error("密码错误")
-                  message.error("密码错误")
+                  toast.error("密码错误")
                 }
               }}
             >
@@ -343,7 +337,7 @@ export function AccountManagement() {
             onChange={setSuperAdminPasswordForAction}
             onPressEnter={async () => {
               if (!superAdminPasswordForAction) {
-                message.error("请输入当前账户密码")
+                toast.error("请输入当前账户密码")
                 return
               }
               
@@ -361,7 +355,7 @@ export function AccountManagement() {
                 }
               } else {
                 console.error("密码错误")
-                message.error("密码错误")
+                toast.error("密码错误")
               }
             }}
           />
