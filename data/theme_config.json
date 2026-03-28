@@ -3,7 +3,7 @@
     "id": 145,
     "theme_id": "modern",
     "theme_name": "modern",
-    "theme_config": "{\"themeId\":\"modern\",\"isCurrent\":true}",
+    "theme_config": "{\"themeId\":\"modern\"}",
     "created_at": "2026-03-28 06:14:25",
     "updated_at": "2026-03-28 06:14:25",
     "is_current": 0
@@ -12,7 +12,7 @@
     "id": 146,
     "theme_id": "tech",
     "theme_name": "tech",
-    "theme_config": "{\"themeId\":\"tech\",\"isCurrent\":true}",
+    "theme_config": "{\"themeId\":\"tech\"}",
     "created_at": "2026-03-28 06:14:25",
     "updated_at": "2026-03-28 06:14:25",
     "is_current": 0
