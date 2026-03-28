@@ -379,15 +379,15 @@ export function ModuleDragEditor({ modules, onChange }: ModuleDragEditorProps) {
       <Drawer
         title={
           <div className={styles.drawerTitleWrapper}>
-            <div className={styles.drawerTitleIcon} style={{ background: 'linear-gradient(135deg, #10b981 0%, #059669 100%)', boxShadow: '0 4px 12px rgba(16, 185, 129, 0.3)' }}>
-              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" strokeLinecap="round" strokeLinejoin="round"/>
-                <circle cx="12" cy="12" r="3" strokeLinecap="round" strokeLinejoin="round"/>
-              </svg>
-            </div>
-            <div>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
               <span className={styles.drawerTitle}>模块预览</span>
-              <Tag className={styles.drawerModuleTag} color="green" size="small">{previewingModule?.moduleName || ""}</Tag>
+              {previewingModule && (
+                <>
+                  <Tag size="small" color="arcoblue">{previewingModule.moduleId}</Tag>
+                  <Tag size="small" color="green">{previewingModule.moduleName}</Tag>
+                  <Tag size="small" color="gray">{previewingModule.category || "未分类"}</Tag>
+                </>
+              )}
             </div>
           </div>
         }
@@ -416,11 +416,6 @@ export function ModuleDragEditor({ modules, onChange }: ModuleDragEditorProps) {
         }
       >
         <div className={styles.modulePreviewContent}>
-          <div className={styles.modulePreviewInfo}>
-            <p><strong>模块ID：</strong> {previewingModule?.moduleId}</p>
-            <p><strong>模块名称：</strong> {previewingModule?.moduleName}</p>
-            <p><strong>分类：</strong> {previewingModule?.category || "未分类"}</p>
-          </div>
           <div className={styles.modulePreviewFrame}>
             {previewingModule && (
               <iframe
@@ -428,6 +423,7 @@ export function ModuleDragEditor({ modules, onChange }: ModuleDragEditorProps) {
                 className={styles.previewFrame}
                 title={`${previewingModule.moduleName} 预览`}
                 sandbox="allow-scripts allow-same-origin"
+                style={{ width: '100%', height: '600px', border: 'none' }}
               />
             )}
           </div>

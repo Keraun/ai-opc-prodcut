@@ -64,16 +64,6 @@ export default function PagePreviewPage() {
 
   return (
     <div style={{ minHeight: "100vh", background: "#fff" }}>
-      <div style={{
-        background: "#f5f5f5",
-        padding: "16px 24px",
-        borderBottom: "1px solid #e5e7eb",
-      }}>
-        <h1 style={{ margin: 0, fontSize: "20px", fontWeight: 600 }}>
-          页面预览: {pageName}
-        </h1>
-      </div>
-      
       <div style={{ padding: "0" }}>
         {modules.length === 0 ? (
           <div style={{
