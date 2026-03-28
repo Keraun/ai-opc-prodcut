@@ -63,7 +63,10 @@ async function handleCreateTheme(body: any) {
   let currentTheme = existingThemes.find(t => t.isCurrent)?.themeId || 'modern'
   
   existingThemes.forEach(theme => {
-    themesMap[theme.themeId] = theme.themeConfig
+    themesMap[theme.themeId] = {
+      ...theme.themeConfig,
+      themeName: theme.themeName
+    }
   })
   
   themesMap[themeId] = body
@@ -88,7 +91,10 @@ async function handleUpdateTheme(body: any) {
   let currentTheme = existingThemes.find(t => t.isCurrent)?.themeId || 'modern'
   
   existingThemes.forEach(theme => {
-    themesMap[theme.themeId] = theme.themeConfig
+    themesMap[theme.themeId] = {
+      ...theme.themeConfig,
+      themeName: theme.themeName
+    }
   })
   
   themesMap[themeId] = body
@@ -118,7 +124,10 @@ async function handleDeleteTheme(body: any) {
   
   existingThemes.forEach(theme => {
     if (theme.themeId !== themeId) {
-      themesMap[theme.themeId] = theme.themeConfig
+      themesMap[theme.themeId] = {
+        ...theme.themeConfig,
+        themeName: theme.themeName
+      }
     }
   })
   
@@ -145,7 +154,10 @@ async function handleSetCurrentTheme(body: any) {
   const themesMap: Record<string, any> = {}
   
   existingThemes.forEach(theme => {
-    themesMap[theme.themeId] = theme.themeConfig
+    themesMap[theme.themeId] = {
+      ...theme.themeConfig,
+      themeName: theme.themeName
+    }
   })
   
   if (!themesMap[themeId]) {

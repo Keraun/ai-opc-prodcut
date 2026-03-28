@@ -298,7 +298,7 @@ export function writeConfig(configType: string, data: any): void {
           const theme = themeData as any
           jsonDb.insert('theme_config', {
             theme_id: themeId,
-            theme_name: theme.name || themeId,
+            theme_name: theme.theme_Name || theme.name || themeId,
             theme_config: JSON.stringify(theme),
             is_current: themeId === currentThemeId ? 1 : 0,
             created_at: new Date().toISOString(),

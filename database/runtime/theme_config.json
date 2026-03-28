@@ -3,18 +3,18 @@
     "theme_id": "modern",
     "theme_name": "现代简约",
     "theme_config": "{\"colors\":{\"primary\":\"#1e40af\",\"secondary\":\"#3b82f6\",\"accent\":\"#06b6d4\"}}",
-    "is_current": 1,
-    "created_at": "2026-03-28T18:18:24.720Z",
-    "updated_at": "2026-03-28T18:18:24.720Z",
+    "is_current": 0,
+    "created_at": "2026-03-28T18:26:34.442Z",
+    "updated_at": "2026-03-28T18:26:34.442Z",
     "id": 1
   },
   {
     "theme_id": "tech",
-    "theme_name": "科技蓝紫",
+    "theme_name": "科技动感",
     "theme_config": "{\"colors\":{\"primary\":\"#7c3aed\",\"secondary\":\"#a78bfa\",\"accent\":\"#ec4899\"}}",
-    "is_current": 0,
-    "created_at": "2026-03-28T18:18:24.720Z",
-    "updated_at": "2026-03-28T18:18:24.720Z",
+    "is_current": 1,
+    "created_at": "2026-03-28T18:26:34.442Z",
+    "updated_at": "2026-03-28T18:26:34.442Z",
     "id": 2
   },
   {
@@ -22,35 +22,35 @@
     "theme_name": "自然清新",
     "theme_config": "{\"colors\":{\"primary\":\"#10b981\",\"secondary\":\"#34d399\",\"accent\":\"#14b8a6\"}}",
     "is_current": 0,
-    "created_at": "2026-03-28T18:18:24.721Z",
-    "updated_at": "2026-03-28T18:18:24.721Z",
+    "created_at": "2026-03-28T18:26:34.442Z",
+    "updated_at": "2026-03-28T18:26:34.442Z",
     "id": 3
   },
   {
     "theme_id": "dark",
-    "theme_name": "深邃暗夜",
+    "theme_name": "深色模式",
     "theme_config": "{\"colors\":{\"primary\":\"#3b82f6\",\"secondary\":\"#60a5fa\",\"accent\":\"#22d3ee\"}}",
     "is_current": 0,
-    "created_at": "2026-03-28T18:18:24.721Z",
-    "updated_at": "2026-03-28T18:18:24.721Z",
+    "created_at": "2026-03-28T18:26:34.443Z",
+    "updated_at": "2026-03-28T18:26:34.443Z",
     "id": 4
   },
   {
     "theme_id": "luxury",
-    "theme_name": "奢华金棕",
+    "theme_name": "奢华金色",
     "theme_config": "{\"colors\":{\"primary\":\"#b45309\",\"secondary\":\"#d97706\",\"accent\":\"#f59e0b\"}}",
     "is_current": 0,
-    "created_at": "2026-03-28T18:18:24.721Z",
-    "updated_at": "2026-03-28T18:18:24.721Z",
+    "created_at": "2026-03-28T18:26:34.443Z",
+    "updated_at": "2026-03-28T18:26:34.443Z",
     "id": 5
   },
   {
     "theme_id": "minimal",
-    "theme_name": "极简灰调",
+    "theme_name": "极简灰色",
     "theme_config": "{\"colors\":{\"primary\":\"#374151\",\"secondary\":\"#6b7280\",\"accent\":\"#9ca3af\"}}",
     "is_current": 0,
-    "created_at": "2026-03-28T18:18:24.721Z",
-    "updated_at": "2026-03-28T18:18:24.721Z",
+    "created_at": "2026-03-28T18:26:34.443Z",
+    "updated_at": "2026-03-28T18:26:34.443Z",
     "id": 6
   }
 ]
