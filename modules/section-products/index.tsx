@@ -107,18 +107,20 @@ export function ProductsModule({ data }: ModuleProps) {
                   <p className={styles.cardDescription}>{product.description}</p>
                 )}
 
-                {product?.features && product.features.length > 0 && (
-                  <div className={styles.features}>
-                    {product.features.map((feature: string, i: number) => (
-                      <span key={i} className={styles.feature}>
-                        {feature}
-                      </span>
-                    ))}
-                  </div>
-                )}
+                <div className={styles.cardBottom}>
+                  {product?.features && product.features.length > 0 && (
+                    <div className={styles.features}>
+                      {product.features.map((feature: string, i: number) => (
+                        <span key={i} className={styles.feature}>
+                          {feature}
+                        </span>
+                      ))}
+                    </div>
+                  )}
 
-                <div className={styles.cardFooter}>
-                  {cardFooter}
+                  <div className={styles.cardFooter}>
+                    {cardFooter}
+                  </div>
                 </div>
               </Card>
             )
