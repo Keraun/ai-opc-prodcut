@@ -41,6 +41,7 @@ export function ModuleDragEditor({ modules, onChange }: ModuleDragEditorProps) {
   const [draggedModule, setDraggedModule] = useState<AvailableModule | null>(null)
   const [dragOverIndex, setDragOverIndex] = useState<number | null>(null)
   const [gridColumns, setGridColumns] = useState<1 | 2>(2)
+  const [previewDevice, setPreviewDevice] = useState<'web' | 'mobile' | 'ipad'>('web')
 
   useEffect(() => {
     loadAvailableModules()
@@ -396,6 +397,29 @@ export function ModuleDragEditor({ modules, onChange }: ModuleDragEditorProps) {
                   <Tag color="gray">{previewingModule.category || "未分类"}</Tag>
                 </>
               )}
+              <div style={{ display: 'flex', gap: '8px', marginLeft: '16px' }}>
+                <Button 
+                  type={previewDevice === 'web' ? 'primary' : 'secondary'} 
+                  size="small"
+                  onClick={() => setPreviewDevice('web')}
+                >
+                  Web
+                </Button>
+                <Button 
+                  type={previewDevice === 'mobile' ? 'primary' : 'secondary'} 
+                  size="small"
+                  onClick={() => setPreviewDevice('mobile')}
+                >
+                  Mobile
+                </Button>
+                <Button 
+                  type={previewDevice === 'ipad' ? 'primary' : 'secondary'} 
+                  size="small"
+                  onClick={() => setPreviewDevice('ipad')}
+                >
+                  iPad
+                </Button>
+              </div>
             </div>
             <div style={{ display: 'flex', gap: '8px' }}>
               <Button onClick={() => setPreviewingModule(null)}>关闭</Button>
@@ -414,13 +438,28 @@ export function ModuleDragEditor({ modules, onChange }: ModuleDragEditorProps) {
           </div>
         }
       >
-        <div style={{ width: '100%', height: 'calc(100vh - 80px)' }}>
-          <iframe
-            src={`/admin/module-preview/${previewingModule?.moduleId}`}
-            style={{ width: '100%', height: '100%', border: 'none' }}
-            title={`${previewingModule?.moduleName} 预览`}
-            sandbox="allow-scripts allow-same-origin"
-          />
+        <div style={{ 
+          width: '100%', 
+          height: 'calc(100vh - 80px)',
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'flex-start',
+          background: '#f0f2f5',
+          padding: '20px'
+        }}>
+          <div style={{
+            width: previewDevice === 'web' ? '100%' : previewDevice === 'mobile' ? '375px' : '768px',
+            height: '100%',
+            boxShadow: '0 4px 12px rgba(0, 0, 0, 0.1)',
+            background: '#fff'
+          }}>
+            <iframe
+              src={`/admin/module-preview/${previewingModule?.moduleId}`}
+              style={{ width: '100%', height: '100%', border: 'none' }}
+              title={`${previewingModule?.moduleName} 预览`}
+              sandbox="allow-scripts allow-same-origin"
+            />
+          </div>
         </div>
       </Drawer>
     </div>
