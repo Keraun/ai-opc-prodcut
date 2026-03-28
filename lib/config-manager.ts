@@ -1,5 +1,5 @@
 import "server-only"
-import { getDatabase, initializeDatabase } from './database'
+import { jsonDb } from './json-database'
 import fs from 'fs'
 import path from 'path'
 
@@ -10,7 +10,7 @@ export function clearCache(): void {
 
 
 export function getRuntimePath(configType: string): string {
-  return path.join(process.cwd(), 'database', 'app.db')
+  return path.join(process.cwd(), 'data', configType + '.json')
 }
 
 interface PathMapping {
@@ -61,12 +61,10 @@ function getPathMapping(configType: string): PathMapping {
 }
 
 export function readConfig(configType: string): any {
-  const db = getDatabase()
-  
   try {
     if (configType === 'account') {
-      const accounts = db.prepare('SELECT * FROM accounts').all() as any[]
-      return accounts.map(acc => ({
+      const accounts = jsonDb.getAll('accounts')
+      return accounts.map((acc: any) => ({
         username: acc.username,
         password: acc.password,
         email: acc.email,
@@ -80,30 +78,32 @@ export function readConfig(configType: string): any {
     }
     
     if (configType === 'feishu-app') {
-      const config = db.prepare("SELECT config_value FROM system_config WHERE config_key = 'feishu_app'").get() as any
+      const config = jsonDb.findOne('system_config', { config_key: 'feishu_app' })
       return config ? JSON.parse(config.config_value) : {}
     }
     
     if (configType === 'token') {
-      const config = db.prepare("SELECT config_value FROM system_config WHERE config_key = 'super_admin_token'").get() as any
+      const config = jsonDb.findOne('system_config', { config_key: 'super_admin_token' })
       return config ? { superAdminToken: config.config_value } : { superAdminToken: '' }
     }
     
     if (configType === 'system-logs') {
-      const logs = db.prepare('SELECT * FROM system_logs ORDER BY id DESC').all() as any[]
-      return logs.map(log => ({
-        id: log.log_id,
-        username: log.username,
-        type: log.type,
-        description: log.description,
-        ip: log.ip,
-        timestamp: log.timestamp,
-        details: log.details ? JSON.parse(log.details) : null
-      }))
+      const logs = jsonDb.getAll('system_logs')
+      return logs
+        .sort((a: any, b: any) => b.id - a.id)
+        .map((log: any) => ({
+          id: log.log_id,
+          username: log.username,
+          type: log.type,
+          description: log.description,
+          ip: log.ip,
+          timestamp: log.timestamp,
+          details: log.details ? JSON.parse(log.details) : null
+        }))
     }
     
     if (configType === 'site' || configType === 'site-seo') {
-      const config = db.prepare("SELECT config_value FROM system_config WHERE config_key = 'site_config'").get() as any
+      const config = jsonDb.findOne('system_config', { config_key: 'site_config' })
       if (config) {
         try {
           return JSON.parse(config.config_value)
@@ -115,12 +115,12 @@ export function readConfig(configType: string): any {
     }
     
     if (configType === 'theme') {
-      const themes = db.prepare('SELECT * FROM theme_config').all() as any[]
+      const themes = jsonDb.getAll('theme_config')
       
       let currentTheme = 'modern'
       const themesMap: Record<string, any> = {}
       
-      themes.forEach(theme => {
+      themes.forEach((theme: any) => {
         themesMap[theme.theme_id] = JSON.parse(theme.theme_config)
         if (theme.is_current === 1) {
           currentTheme = theme.theme_id
@@ -134,9 +134,9 @@ export function readConfig(configType: string): any {
     }
     
     if (configType === 'page-list') {
-      const pages = db.prepare('SELECT * FROM pages').all() as any[]
+      const pages = jsonDb.getAll('pages')
       
-      const pagesData = pages.map(page => {
+      const pagesData = pages.map((page: any) => {
         let moduleInstanceIds: string[] = []
         try {
           moduleInstanceIds = page.module_instance_ids ? JSON.parse(page.module_instance_ids) : []
@@ -162,7 +162,7 @@ export function readConfig(configType: string): any {
         }
       })
       
-      const systemPages = pages.filter(p => p.is_system === 1).map(p => p.page_id)
+      const systemPages = pages.filter((p: any) => p.is_system === 1).map((p: any) => p.page_id)
       
       return {
         pages: pagesData,
@@ -173,123 +173,137 @@ export function readConfig(configType: string): any {
       }
     }
     
-    const module = db.prepare('SELECT * FROM module_registry WHERE module_id = ?').get(configType) as any
+    const module = jsonDb.findOne('module_registry', { module_id: configType })
     if (module) {
       return JSON.parse(module.default_data)
     }
     
     return {}
     
-  } finally {
-    db.close()
+  } catch (error) {
+    console.error('Error reading config:', error)
+    return {}
   }
 }
 
 export function writeConfig(configType: string, data: any): void {
-  const db = getDatabase()
-  
   try {
     if (configType === 'account') {
-      db.exec('DELETE FROM accounts')
-      
-      const stmt = db.prepare(`
-        INSERT INTO accounts 
-        (username, password, email, remark, must_change_password, last_login_time, last_login_ip, current_login_ip, current_login_time)
-        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
-      `)
+      jsonDb.clearTable('accounts')
       
       for (const account of data) {
-        stmt.run(
-          account.username,
-          account.password,
-          account.email || null,
-          account.remark || null,
-          account.mustChangePassword ? 1 : 0,
-          account.lastLoginTime || null,
-          account.lastLoginIP || null,
-          account.currentLoginIP || null,
-          account.currentLoginTime || null
-        )
+        jsonDb.insert('accounts', {
+          username: account.username,
+          password: account.password,
+          email: account.email || null,
+          remark: account.remark || null,
+          must_change_password: account.mustChangePassword ? 1 : 0,
+          last_login_time: account.lastLoginTime || null,
+          last_login_ip: account.lastLoginIP || null,
+          current_login_ip: account.currentLoginIP || null,
+          current_login_time: account.currentLoginTime || null,
+          created_at: new Date().toISOString(),
+          updated_at: new Date().toISOString()
+        })
       }
       return
     }
     
     if (configType === 'feishu-app') {
-      const stmt = db.prepare(`
-        INSERT OR REPLACE INTO system_config (config_key, config_value)
-        VALUES (?, ?)
-      `)
-      stmt.run('feishu_app', JSON.stringify(data))
+      const existing = jsonDb.findOne('system_config', { config_key: 'feishu_app' })
+      if (existing) {
+        jsonDb.update('system_config', existing.id, {
+          config_value: JSON.stringify(data),
+          updated_at: new Date().toISOString()
+        })
+      } else {
+        jsonDb.insert('system_config', {
+          config_key: 'feishu_app',
+          config_value: JSON.stringify(data),
+          created_at: new Date().toISOString(),
+          updated_at: new Date().toISOString()
+        })
+      }
       return
     }
     
     if (configType === 'token') {
-      const stmt = db.prepare(`
-        INSERT OR REPLACE INTO system_config (config_key, config_value)
-        VALUES (?, ?)
-      `)
-      stmt.run('super_admin_token', data.superAdminToken || '')
+      const existing = jsonDb.findOne('system_config', { config_key: 'super_admin_token' })
+      if (existing) {
+        jsonDb.update('system_config', existing.id, {
+          config_value: data.superAdminToken || '',
+          updated_at: new Date().toISOString()
+        })
+      } else {
+        jsonDb.insert('system_config', {
+          config_key: 'super_admin_token',
+          config_value: data.superAdminToken || '',
+          created_at: new Date().toISOString(),
+          updated_at: new Date().toISOString()
+        })
+      }
       return
     }
     
     if (configType === 'system-logs') {
-      db.exec('DELETE FROM system_logs')
-      
-      const stmt = db.prepare(`
-        INSERT INTO system_logs 
-        (log_id, username, type, description, ip, timestamp, details)
-        VALUES (?, ?, ?, ?, ?, ?, ?)
-      `)
+      jsonDb.clearTable('system_logs')
       
       for (const log of data) {
-        stmt.run(
-          log.id,
-          log.username || null,
-          log.type,
-          log.description || null,
-          log.ip || null,
-          log.timestamp || null,
-          log.details ? JSON.stringify(log.details) : null
-        )
+        jsonDb.insert('system_logs', {
+          log_id: log.id,
+          username: log.username || null,
+          type: log.type,
+          description: log.description || null,
+          ip: log.ip || null,
+          timestamp: log.timestamp || null,
+          details: log.details ? JSON.stringify(log.details) : null,
+          created_at: new Date().toISOString()
+        })
       }
       return
     }
     
     if (configType === 'site' || configType === 'site-seo') {
-      const stmt = db.prepare(`
-        INSERT OR REPLACE INTO system_config (config_key, config_value)
-        VALUES (?, ?)
-      `)
-      stmt.run('site_config', JSON.stringify(data))
+      const existing = jsonDb.findOne('system_config', { config_key: 'site_config' })
+      if (existing) {
+        jsonDb.update('system_config', existing.id, {
+          config_value: JSON.stringify(data),
+          updated_at: new Date().toISOString()
+        })
+      } else {
+        jsonDb.insert('system_config', {
+          config_key: 'site_config',
+          config_value: JSON.stringify(data),
+          created_at: new Date().toISOString(),
+          updated_at: new Date().toISOString()
+        })
+      }
       return
     }
     
     if (configType === 'theme') {
       if (data.currentTheme) {
-        db.exec('UPDATE theme_config SET is_current = 0')
-        db.prepare('UPDATE theme_config SET is_current = 1 WHERE theme_id = ?').run(data.currentTheme)
+        const themes = jsonDb.getAll('theme_config')
+        themes.forEach((theme: any) => {
+          jsonDb.update('theme_config', theme.id, { is_current: theme.theme_id === data.currentTheme ? 1 : 0 })
+        })
       }
       
       if (data.themes) {
-        const deleteStmt = db.prepare('DELETE FROM theme_config')
-        deleteStmt.run()
+        jsonDb.clearTable('theme_config')
         
         const currentThemeId = data.currentTheme
         
-        const insertStmt = db.prepare(`
-          INSERT INTO theme_config (theme_id, theme_name, theme_config, is_current)
-          VALUES (?, ?, ?, ?)
-        `)
-        
         for (const [themeId, themeData] of Object.entries(data.themes)) {
           const theme = themeData as any
-          const isCurrent = themeId === currentThemeId ? 1 : 0
-          insertStmt.run(
-            themeId,
-            theme.name || themeId,
-            JSON.stringify(theme),
-            isCurrent
-          )
+          jsonDb.insert('theme_config', {
+            theme_id: themeId,
+            theme_name: theme.name || themeId,
+            theme_config: JSON.stringify(theme),
+            is_current: themeId === currentThemeId ? 1 : 0,
+            created_at: new Date().toISOString(),
+            updated_at: new Date().toISOString()
+          })
         }
       }
       return
@@ -298,41 +312,58 @@ export function writeConfig(configType: string, data: any): void {
     const moduleName = (data.moduleName as string) || configType
     const schema = data.schema ? JSON.stringify(data.schema) : null
     
-    const stmt = db.prepare(`
-      INSERT OR REPLACE INTO module_registry (module_id, module_name, schema, default_data)
-      VALUES (?, ?, ?, ?)
-    `)
-    stmt.run(configType, moduleName, schema, JSON.stringify(data))
+    const existing = jsonDb.findOne('module_registry', { module_id: configType })
+    if (existing) {
+      jsonDb.update('module_registry', existing.id, {
+        module_name: moduleName,
+        schema: schema,
+        default_data: JSON.stringify(data),
+        updated_at: new Date().toISOString()
+      })
+    } else {
+      jsonDb.insert('module_registry', {
+        module_id: configType,
+        module_name: moduleName,
+        schema: schema,
+        default_data: JSON.stringify(data),
+        created_at: new Date().toISOString(),
+        updated_at: new Date().toISOString()
+      })
+    }
     
-  } finally {
-    db.close()
+  } catch (error) {
+    console.error('Error writing config:', error)
   }
 }
 
 export function deleteConfig(configType: string): boolean {
-  const db = getDatabase()
-  
   try {
     if (configType.startsWith('page-')) {
       const pageId = configType.replace('page-', '')
       
-      const page = db.prepare('SELECT modules FROM pages WHERE page_id = ?').get(pageId) as any
-      if (page?.modules) {
-        const moduleInstanceIds = JSON.parse(page.modules)
+      const page = jsonDb.findOne('pages', { page_id: pageId })
+      if (page?.module_instance_ids) {
+        const moduleInstanceIds = JSON.parse(page.module_instance_ids)
         for (const instanceId of moduleInstanceIds) {
-          db.prepare('DELETE FROM page_modules WHERE module_instance_id = ?').run(instanceId)
+          jsonDb.delete('page_modules', { module_instance_id: instanceId })
         }
       }
       
-      db.prepare('DELETE FROM pages WHERE page_id = ?').run(pageId)
+      jsonDb.delete('pages', { page_id: pageId })
       return true
     }
     
-    const result = db.prepare('DELETE FROM module_registry WHERE module_id = ?').run(configType)
-    return result.changes > 0
+    const existing = jsonDb.findOne('module_registry', { module_id: configType })
+    if (existing) {
+      jsonDb.delete('module_registry', existing.id)
+      return true
+    }
     
-  } finally {
-    db.close()
+    return false
+    
+  } catch (error) {
+    console.error('Error deleting config:', error)
+    return false
   }
 }
 
@@ -345,10 +376,8 @@ export function writePageData(moduleId: string, data: any): void {
 }
 
 export function readAllPageData(): Record<string, any> {
-  const db = getDatabase()
-  
   try {
-    const modules = db.prepare('SELECT * FROM module_registry').all() as any[]
+    const modules = jsonDb.getAll('module_registry')
     const result: Record<string, any> = {}
     
     for (const module of modules) {
@@ -357,8 +386,9 @@ export function readAllPageData(): Record<string, any> {
     
     return result
     
-  } finally {
-    db.close()
+  } catch (error) {
+    console.error('Error reading all page data:', error)
+    return {}
   }
 }
 
@@ -367,19 +397,14 @@ export function readSystemConfig(configName: string): any {
 }
 
 export function getThemeList(onlyCurrent: boolean = false): any[] {
-  const db = getDatabase()
-  
   try {
-    let query = 'SELECT * FROM theme_config'
-    const params: any[] = []
+    let themes = jsonDb.getAll('theme_config')
     
     if (onlyCurrent) {
-      query += ' WHERE is_current = 1'
+      themes = themes.filter((theme: any) => theme.is_current === 1)
     }
     
-    const themes = db.prepare(query).all(...params) as any[]
-    
-    return themes.map(theme => ({
+    return themes.map((theme: any) => ({
       id: theme.id,
       themeId: theme.theme_id,
       themeName: theme.theme_name,
@@ -388,8 +413,9 @@ export function getThemeList(onlyCurrent: boolean = false): any[] {
       createdAt: theme.created_at,
       updatedAt: theme.updated_at
     }))
-  } finally {
-    db.close()
+  } catch (error) {
+    console.error('Error getting theme list:', error)
+    return []
   }
 }
 
@@ -418,15 +444,12 @@ export function readAllConfigs(): Record<string, any> {
 
 
 export function initializeDatabaseFromTemplates(): void {
-  initializeDatabase()
   console.log('Database initialized from templates')
 }
 
 export function getPageResponse(pageId: string): any {
-  const db = getDatabase()
-  
   try {
-    const page = db.prepare('SELECT * FROM pages WHERE page_id = ?').get(pageId) as any
+    const page = jsonDb.findOne('pages', { page_id: pageId })
     
     if (!page) {
       return {
@@ -449,15 +472,10 @@ export function getPageResponse(pageId: string): any {
       moduleInstanceIds = []
     }
     
-    const pageModules = db.prepare(`
-      SELECT pm.*, mr.default_data 
-      FROM page_modules pm 
-      LEFT JOIN module_registry mr ON pm.module_id = mr.module_id 
-      WHERE pm.page_id = ? 
-      ORDER BY pm.module_order
-    `).all(pageId) as any[]
+    const pageModules = jsonDb.find('page_modules', { page_id: pageId })
+      .sort((a: any, b: any) => a.module_order - b.module_order)
     
-    const modules = pageModules.map(pm => pm.module_id)
+    const modules = pageModules.map((pm: any) => pm.module_id)
     
     const response = {
       pageName: page.name || pageId,
@@ -472,9 +490,10 @@ export function getPageResponse(pageId: string): any {
     }
     
     for (const pm of pageModules) {
+      const module = jsonDb.findOne('module_registry', { module_id: pm.module_id })
       const moduleData = pm.data 
         ? JSON.parse(pm.data) 
-        : (pm.default_data ? JSON.parse(pm.default_data) : {})
+        : (module?.default_data ? JSON.parse(module.default_data) : {})
       
       response.data.push({
         moduleId: pm.module_id,
@@ -486,43 +505,59 @@ export function getPageResponse(pageId: string): any {
     
     return response
     
-  } finally {
-    db.close()
+  } catch (error) {
+    console.error('Error getting page response:', error)
+    return {
+      pageName: pageId,
+      pageId: pageId,
+      modules: [],
+      moduleInstanceIds: [],
+      data: [],
+      common: {
+        site: {},
+        theme: {}
+      }
+    }
   }
 }
 
 export function getModuleRegistry(): any[] {
-  const db = getDatabase()
-  
   try {
-    const modules = db.prepare('SELECT * FROM module_registry').all() as any[]
+    const modules = jsonDb.getAll('module_registry')
     
-    return modules.map(m => ({
+    return modules.map((m: any) => ({
       moduleId: m.module_id,
       moduleName: m.module_name,
       schema: m.schema ? JSON.parse(m.schema) : null,
       defaultData: m.default_data ? JSON.parse(m.default_data) : null
     }))
-  } finally {
-    db.close()
+  } catch (error) {
+    console.error('Error getting module registry:', error)
+    return []
   }
 }
 
 export function registerModule(moduleId: string, moduleName: string, schema: any, defaultData: any): void {
-  const db = getDatabase()
-  
   try {
-    const stmt = db.prepare(`
-      INSERT OR REPLACE INTO module_registry (module_id, module_name, schema, default_data)
-      VALUES (?, ?, ?, ?)
-    `)
-    stmt.run(
-      moduleId,
-      moduleName,
-      schema ? JSON.stringify(schema) : null,
-      defaultData ? JSON.stringify(defaultData) : null
-    )
-  } finally {
-    db.close()
+    const existing = jsonDb.findOne('module_registry', { module_id: moduleId })
+    if (existing) {
+      jsonDb.update('module_registry', existing.id, {
+        module_name: moduleName,
+        schema: schema ? JSON.stringify(schema) : null,
+        default_data: defaultData ? JSON.stringify(defaultData) : null,
+        updated_at: new Date().toISOString()
+      })
+    } else {
+      jsonDb.insert('module_registry', {
+        module_id: moduleId,
+        module_name: moduleName,
+        schema: schema ? JSON.stringify(schema) : null,
+        default_data: defaultData ? JSON.stringify(defaultData) : null,
+        created_at: new Date().toISOString(),
+        updated_at: new Date().toISOString()
+      })
+    }
+  } catch (error) {
+    console.error('Error registering module:', error)
   }
 }

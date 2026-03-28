@@ -37,10 +37,18 @@ export function ThemeManager() {
       if (result.success) {
         toast.success("主题切换成功")
         setTheme(themeId)
-        setThemeData(prev => ({
-          ...prev,
-          currentTheme: themeId
-        }))
+        
+        // 重新获取主题数据，确保 isCurrent 字段更新
+        const updatedThemeData = await getThemeConfig()
+        if (updatedThemeData) {
+          setThemeData(updatedThemeData)
+        } else {
+          // 如果获取失败，至少更新 currentTheme
+          setThemeData(prev => ({
+            ...prev,
+            currentTheme: themeId
+          }))
+        }
       } else {
         toast.error("主题切换失败")
       }
