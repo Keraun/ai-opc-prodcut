@@ -27,7 +27,26 @@ setArticles(data)
 
 ## API 客户端位置
 
-所有 API 请求函数统一封装在 `lib/api-client.ts` 文件中。
+所有 API 请求函数统一封装在 `lib/api/` 目录下，并通过 `lib/api-client.ts` 统一导出。
+
+### 文件结构
+
+```
+lib/
+├── api-client.ts          # 统一入口，导出所有 API 函数
+└── api/
+    ├── types.ts           # 类型定义
+    ├── request.ts         # 基础请求函数
+    ├── modules.ts         # 模块相关 API
+    ├── pages.ts           # 页面相关 API
+    ├── config.ts          # 配置相关 API
+    ├── auth.ts            # 认证相关 API
+    ├── accounts.ts        # 账号管理 API
+    ├── articles.ts        # 文章相关 API
+    ├── feishu.ts          # 飞书相关 API
+    ├── database.ts        # 数据库相关 API
+    └── contact.ts         # 联系表单 API
+```
 
 ## 使用方式
 
@@ -134,7 +153,24 @@ const deleteResult = await deleteArticle('1')
 
 ## 添加新的 API 函数
 
-当需要添加新的 API 函数时，请在 `lib/api-client.ts` 中按照以下模式添加：
+当需要添加新的 API 函数时，请根据功能分类在 `lib/api/` 目录下对应的文件中添加：
+
+### 1. 确定文件位置
+
+根据 API 功能选择对应文件：
+- 模块相关 → `lib/api/modules.ts`
+- 页面相关 → `lib/api/pages.ts`
+- 配置相关 → `lib/api/config.ts`
+- 认证相关 → `lib/api/auth.ts`
+- 账号管理 → `lib/api/accounts.ts`
+- 文章相关 → `lib/api/articles.ts`
+- 飞书相关 → `lib/api/feishu.ts`
+- 数据库相关 → `lib/api/database.ts`
+- 联系表单 → `lib/api/contact.ts`
+
+### 2. 添加函数
+
+在对应文件中按照以下模式添加：
 
 ```typescript
 export async function newApiFunction(param: string): Promise<ReturnType> {
@@ -146,6 +182,17 @@ export async function newApiFunction(param: string): Promise<ReturnType> {
     return defaultValue
   }
 }
+```
+
+### 3. 导出函数
+
+在 `lib/api-client.ts` 中添加导出：
+
+```typescript
+export {
+  // ... 其他导出
+  newApiFunction
+} from './api/对应文件'
 ```
 
 ### 返回值规范
@@ -175,10 +222,10 @@ if (result.success) {
 
 ### 2. 文件上传
 
-文件上传需要在 `lib/api-client.ts` 中添加专门的 API 函数：
+文件上传需要在 `lib/api/` 目录下对应的文件中添加专门的 API 函数：
 
 ```typescript
-// 在 lib/api-client.ts 中添加
+// 在 lib/api/config.ts 或其他对应文件中添加
 export async function uploadFile(file: File): Promise<{ success: boolean; url?: string; message?: string }> {
   try {
     const formData = new FormData()
@@ -200,7 +247,7 @@ export async function uploadFile(file: File): Promise<{ success: boolean; url?: 
 }
 ```
 
-然后在组件中使用：
+然后在 `lib/api-client.ts` 中导出，并在组件中使用：
 
 ```typescript
 import { uploadFile } from '@/lib/api-client'
