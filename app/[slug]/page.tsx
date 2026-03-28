@@ -2,36 +2,39 @@ import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 import { GenericPage } from '@/components/common/GenericPage'
 import { readConfig } from '@/lib/config-manager'
+import { jsonDb } from '@/lib/json-database'
 
-interface RouteConfig {
-  title: string
-  description?: string
+interface PageInfo {
   pageId: string
-  orderConfigKey?: string
+  name: string
+  slug: string
+  route: string
+  description?: string
+  status: string
 }
 
-const routeConfigMap: Record<string, RouteConfig> = {
-  'home': {
-    title: '首页',
-    description: ' - 专注AI一人公司服务',
-    pageId: 'home'
-  },
-  'products': {
-    title: '产品服务',
-    pageId: 'product'
-  },
-  'news': {
-    title: '新闻资讯',
-    pageId: 'news'
+function getAllPages(): PageInfo[] {
+  try {
+    const pages = jsonDb.getAll('pages')
+    return pages
+      .filter((page: any) => page.status === 'published')
+      .map((page: any) => ({
+        pageId: page.page_id,
+        name: page.name,
+        slug: page.slug,
+        route: page.route,
+        description: page.description,
+        status: page.status
+      }))
+  } catch (error) {
+    console.error('Failed to get pages:', error)
+    return []
   }
 }
 
-function getRouteConfig(slug: string): RouteConfig | undefined {
-  return routeConfigMap[slug]
-}
-
-function getAllSlugs(): string[] {
-  return Object.keys(routeConfigMap)
+function getPageBySlug(slug: string): PageInfo | undefined {
+  const pages = getAllPages()
+  return pages.find(page => page.slug === slug)
 }
 
 function getSiteConfig() {
@@ -45,9 +48,11 @@ function getSiteConfig() {
 
 function pageModuleExists(pageId: string): boolean {
   try {
-    const pageModuleType = `page-${pageId}`
-    const pageModule = readConfig(pageModuleType)
-    return pageModule && pageModule.modules && Array.isArray(pageModule.modules)
+    const page = jsonDb.findOne('pages', { page_id: pageId })
+    if (!page) return false
+    
+    const pageModules = jsonDb.find('page_modules', { page_id: pageId })
+    return pageModules && pageModules.length > 0
   } catch {
     return false
   }
@@ -58,23 +63,26 @@ interface PageProps {
 }
 
 export async function generateStaticParams() {
-  return getAllSlugs().map((slug) => ({
-    slug,
-  }))
+  const pages = getAllPages()
+  return pages
+    .filter(page => page.slug !== 'home')
+    .map((page) => ({
+      slug: page.slug,
+    }))
 }
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const { slug } = await params
-  const routeConfig = getRouteConfig(slug)
+  const page = getPageBySlug(slug)
   const siteConfig = getSiteConfig()
   const baseUrl = siteConfig?.url || 'http://localhost:3000'
   
   return {
-    title: `${routeConfig?.title || slug} | ${siteConfig?.name || ''}`,
-    description: routeConfig?.description || siteConfig?.description || '',
+    title: `${page?.name || slug} | ${siteConfig?.name || ''}`,
+    description: page?.description || siteConfig?.description || '',
     openGraph: {
-      title: `${routeConfig?.title || slug} | ${siteConfig?.name || ''}`,
-      description: routeConfig?.description || siteConfig?.description || '',
+      title: `${page?.name || slug} | ${siteConfig?.name || ''}`,
+      description: page?.description || siteConfig?.description || '',
       url: `${baseUrl}/${slug}`,
     },
   }
@@ -82,28 +90,18 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 
 export default async function DynamicPage({ params }: PageProps) {
   const { slug } = await params
-  const routeConfig = getRouteConfig(slug)
+  const page = getPageBySlug(slug)
   
-  let pageId: string
-  let orderConfigKey: string | undefined
-  
-  if (routeConfig) {
-    pageId = routeConfig.pageId
-    orderConfigKey = routeConfig.orderConfigKey
-  } else {
-    pageId = slug
-    orderConfigKey = `${slug}Order`
+  if (!page) {
+    return <GenericPage pageId="404" />
   }
   
-  if (!pageModuleExists(pageId)) {
+  if (!pageModuleExists(page.pageId)) {
     return <GenericPage pageId="404" />
   }
   
   try {
-    return <GenericPage 
-      pageId={pageId} 
-      orderConfigKey={orderConfigKey} 
-    />
+    return <GenericPage pageId={page.pageId} />
   } catch (error) {
     console.error(`Error loading page ${slug}:`, error)
     return <GenericPage pageId="404" />
