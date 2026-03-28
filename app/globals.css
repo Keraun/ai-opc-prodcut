@@ -101,6 +101,16 @@ button {
   font-family: inherit;
 }
 
+.arco-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.arco-modal-footer .arco-btn {
+  display: inline-flex;
+}
+
 img {
   max-width: 100%;
   height: auto;
