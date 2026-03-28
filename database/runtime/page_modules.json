@@ -286,36 +286,36 @@
     "updated_at": "2026-03-27T20:18:12.903Z"
   },
   {
-    "page_id": "test",
+    "page_id": "666",
     "module_id": "site-root",
-    "module_instance_id": "site-root-1774733505220-0",
+    "module_instance_id": "site-root-1774739871306-0",
     "module_name": "站点容器",
     "module_order": 0,
     "data": "{\"name\":\"\",\"description\":\"专注AI一人公司服务\",\"url\":\"https://makerai.com\",\"ogImage\":\"/og-image.png\",\"links\":{\"email\":\"wuly93@163.com\",\"wechat\":\"makerai_official\",\"github\":\"https://github.com/makerai\",\"twitter\":\"https://twitter.com/makerai\"},\"creator\":{\"name\":\"\",\"url\":\"https://makerai.com\"},\"contact\":{\"address\":\"浙江省杭州市西湖区三墩镇西园八路3号浙大森林\",\"phone\":\"400-888-4889\",\"email\":\"wuly93@163.com\"},\"support\":{\"customerServiceQRCode\":\"/images/customer-service-qr.png\",\"helpDocUrl\":\"https://help.makerai.com\"},\"icp\":\"浙ICP备XXXXXXXX号\",\"features\":{\"enableTOC\":true,\"enableReadingProgress\":true,\"enableSearch\":true},\"seo\":{\"keywords\":[\"AI一人公司\",\"AI工具\",\"AI课程\",\"AI工作流\",\"AI赋能\",\"个人创业\",\"一人公司\",\"AI GEO课程\",\"AI解决方案\",\"创业者服务\"],\"robots\":{\"index\":true,\"follow\":true,\"googleBot\":{\"index\":true,\"follow\":true,\"maxVideoPreview\":-1,\"maxImagePreview\":\"large\",\"maxSnippet\":-1}}},\"currentTheme\":\"minimal\"}",
-    "created_at": "2026/03/29 05:31:45",
-    "updated_at": "2026/03/29 05:31:45",
+    "created_at": "2026/03/29 07:17:51",
+    "updated_at": "2026/03/29 07:17:51",
     "id": 27
   },
   {
-    "page_id": "test",
+    "page_id": "666",
     "module_id": "site-header",
-    "module_instance_id": "site-header-1774733505220-1",
+    "module_instance_id": "site-header-1774739871307-1",
     "module_name": "站点头部",
     "module_order": 1,
-    "data": "{\"navItems\":[{\"label\":\"首页\",\"href\":\"/\"},{\"label\":\"产品\",\"href\":\"/product\"}],\"showContactButton\":true,\"showCtaButton\":true,\"ctaButtonText\":\"开始使用\",\"ctaButtonLink\":\"/product\"}",
-    "created_at": "2026/03/29 05:31:45",
-    "updated_at": "2026/03/29 05:31:45",
+    "data": "{\"navItems\":[{\"label\":\"首页\",\"href\":\"/\"},{\"label\":\"产品\",\"href\":\"/product\"},{\"label\":\"资讯\",\"href\":\"/news\"}],\"showContactButton\":true,\"showCtaButton\":true,\"ctaButtonText\":\"开始使用\",\"ctaButtonLink\":\"/product\"}",
+    "created_at": "2026/03/29 07:17:51",
+    "updated_at": "2026/03/29 07:17:51",
     "id": 28
   },
   {
-    "page_id": "test",
+    "page_id": "666",
     "module_id": "site-footer",
-    "module_instance_id": "site-footer-1774733505220-2",
+    "module_instance_id": "site-footer-1774739871307-2",
     "module_name": "站点底部",
     "module_order": 2,
     "data": "{\"description\":\"专注AI一人公司服务，为企业提供智能化解决方案\",\"address\":\"北京市朝阳区某某大厦\",\"phone\":\"400-123-4567\",\"email\":\"contact@example.com\",\"wechatQrCode\":\"\",\"officialAccountQrCode\":\"\",\"showAdminLink\":true}",
-    "created_at": "2026/03/29 05:31:45",
-    "updated_at": "2026/03/29 05:31:45",
+    "created_at": "2026/03/29 07:17:51",
+    "updated_at": "2026/03/29 07:17:51",
     "id": 29
   }
 ]

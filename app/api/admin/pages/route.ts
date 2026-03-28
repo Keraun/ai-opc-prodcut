@@ -10,6 +10,7 @@ import { jsonDb } from '@/lib/json-database'
 
 interface PageInfo {
   id: string
+  dbId: number
   name: string
   slug: string
   moduleInstanceIds: string[]
@@ -40,6 +41,7 @@ function getPageList(): PageInfo[] {
     
     return {
       id: page.page_id,
+      dbId: page.id,
       name: page.name,
       slug: page.slug,
       type: page.type,
@@ -88,7 +90,7 @@ function createPage(
   const now = formatDateTime()
   const route = type === 'dynamic' ? `/${slug}/[${dynamicParam}]` : `/${slug}`
   
-  const newPage = {
+  const insertedPage = jsonDb.insert('pages', {
     page_id: pageId,
     name: name,
     slug: slug,
@@ -103,9 +105,7 @@ function createPage(
     created_at: now,
     updated_at: now,
     published_at: null
-  }
-  
-  jsonDb.insert('pages', newPage)
+  })
   
   const defaultModules = [
     { moduleId: 'site-root', moduleName: '站点容器' },
@@ -133,7 +133,7 @@ function createPage(
     })
   })
   
-  jsonDb.update('pages', newPage.id, {
+  jsonDb.update('pages', insertedPage.id, {
     module_instance_ids: JSON.stringify(moduleInstanceIds),
     updated_at: now
   })

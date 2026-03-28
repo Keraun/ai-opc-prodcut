@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react"
 import { useRouter } from "next/navigation"
 import { Button, Card, Table, Message } from "@arco-design/web-react"
-import { IconPlus, IconDelete, IconEdit, IconEye } from "@arco-design/web-react/icon"
+import { IconPlus } from "@arco-design/web-react/icon"
 import { toast } from "sonner"
 import { getArticles, deleteArticle } from "@/lib/api-client"
 import styles from "./articles.module.css"
@@ -118,29 +118,27 @@ export default function ArticlesListPage() {
     {
       title: '操作',
       key: 'action',
-      width: 200,
+      width: 160,
       render: (_: any, record: Article) => (
         <div className={styles.actionButtons}>
           <Button
             type="text"
             size="small"
-            icon={<IconEye />}
             onClick={() => handleViewArticle(record)}
           >
             查看
           </Button>
           <Button
-            type="primary"
+            type="text"
             size="small"
-            icon={<IconEdit />}
             onClick={() => handleEditArticle(record)}
           >
             编辑
           </Button>
           <Button
-            status="danger"
+            type="text"
             size="small"
-            icon={<IconDelete />}
+            status="danger"
             onClick={() => handleDeleteArticle(record)}
           >
             删除

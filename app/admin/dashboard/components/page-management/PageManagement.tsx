@@ -17,6 +17,7 @@ import styles from "../../dashboard.module.css"
 
 interface PageInfo {
   id: string
+  dbId: number
   name: string
   slug: string
   modules: any[]
@@ -188,6 +189,12 @@ export function PageManagement({ onEditPage }: PageManagementProps) {
   }
 
   const columns = [
+    {
+      title: "序号",
+      dataIndex: "dbId",
+      key: "dbId",
+      width: 80,
+    },
     {
       title: "页面名称",
       dataIndex: "name",

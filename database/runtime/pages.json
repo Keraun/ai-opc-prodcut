@@ -85,19 +85,19 @@
     "published_at": null
   },
   {
-    "page_id": "test",
-    "name": "test",
-    "slug": "test",
+    "page_id": "666",
+    "name": "666",
+    "slug": "666",
     "type": "static",
     "description": "新创建的静态页面",
     "status": "draft",
     "is_system": 0,
     "is_deletable": 1,
-    "route": "/test",
+    "route": "/666",
     "dynamic_param": null,
-    "module_instance_ids": "[]",
-    "created_at": "2026/03/29 05:31:45",
-    "updated_at": "2026/03/29 05:31:45",
+    "module_instance_ids": "[\"site-root-1774739871306-0\",\"site-header-1774739871307-1\",\"site-footer-1774739871307-2\"]",
+    "created_at": "2026/03/29 07:17:51",
+    "updated_at": "2026/03/29 07:17:51",
     "published_at": null,
     "id": 6
   }

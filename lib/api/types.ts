@@ -17,6 +17,7 @@ export interface ModuleInfo {
 
 export interface PageInfo {
   id: string
+  dbId: number
   name: string
   slug: string
   moduleInstanceIds: string[]

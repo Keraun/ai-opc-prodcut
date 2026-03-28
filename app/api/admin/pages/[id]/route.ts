@@ -168,11 +168,9 @@ export async function DELETE(
       return successResponse(null, '系统页面不能删除')
     }
     
-    if (page.module_instance_ids) {
-      const moduleInstanceIds = JSON.parse(page.module_instance_ids)
-      for (const instanceId of moduleInstanceIds) {
-        jsonDb.delete('page_modules', { module_instance_id: instanceId })
-      }
+    const pageModules = jsonDb.find('page_modules', { page_id: pageId })
+    for (const pm of pageModules) {
+      jsonDb.delete('page_modules', { module_instance_id: pm.module_instance_id })
     }
     
     jsonDb.delete('pages', { page_id: pageId })
