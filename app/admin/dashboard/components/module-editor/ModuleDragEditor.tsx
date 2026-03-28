@@ -1,8 +1,8 @@
 "use client"
 
 import { useState, useEffect, useCallback } from "react"
-import { Card, Button, Space, Tag, Drawer, Collapse } from "@arco-design/web-react"
-import { IconDragDotVertical, IconDelete, IconPlus, IconSettings, IconEye, IconClose } from "@arco-design/web-react/icon"
+import { Card, Button, Space, Tag, Modal, Collapse } from "@arco-design/web-react"
+import { IconDragDotVertical, IconDelete, IconPlus, IconSettings, IconEye } from "@arco-design/web-react/icon"
 import { toast } from "sonner"
 import styles from "../../dashboard.module.css"
 import { ModuleFieldEditor } from "./ModuleFieldEditor"
@@ -171,41 +171,45 @@ export function ModuleDragEditor({ modules, onChange }: ModuleDragEditorProps) {
   }, {} as Record<string, AvailableModule[]>)
 
   return (
-    <div className={styles.moduleEditorLayoutV2}>
-      <div className={styles.modulePickerPanelV2}>
-        <div className={styles.modulePickerHeaderV2}>
-          <h3>可用模块</h3>
-          <span>拖拽添加到页面</span>
+    <div className={styles.moduleEditorLayout}>
+      <div className={styles.modulePickerPanel}>
+        <div className={styles.modulePickerHeader}>
+          <h3 style={{ margin: 0 }}>可用模块</h3>
+          <span style={{ fontSize: 12, color: "#9ca3af" }}>
+            拖拽添加到页面
+          </span>
         </div>
         
-        <div className={styles.modulePickerContentV2}>
+        <div className={styles.modulePickerContent}>
           {Object.entries(groupedModules).map(([category, mods]) => (
-            <div key={category} className={styles.moduleCategoryV2}>
-              <div className={styles.moduleCategoryTitleV2}>{category}</div>
-              <div className={styles.moduleGridV2}>
+            <div key={category} className={styles.moduleCategory}>
+              <div className={styles.moduleCategoryTitle}>{category}</div>
+              <div className={styles.moduleGrid}>
                 {mods.map((mod) => (
-                  <div
+                  <Card
                     key={mod.moduleId}
-                    className={`${styles.moduleCardV2} ${draggedModule?.moduleId === mod.moduleId ? styles.moduleCardDraggingV2 : ""}`}
+                    className={`${styles.moduleCard} ${draggedModule?.moduleId === mod.moduleId ? styles.moduleCardDragging : ""}`}
                     draggable
                     onDragStart={(e) => handleModuleDragStart(e, mod)}
                     onDragEnd={handleModuleDragEnd}
                   >
-                    <div className={styles.moduleCardInfoV2}>
-                      <div className={styles.moduleCardNameV2}>{mod.moduleName}</div>
-                      <Tag size="small" color="arcoblue" className={styles.moduleCardTagV2}>{mod.moduleId}</Tag>
+                    <div className={styles.moduleCardContent}>
+                      <div className={styles.moduleCardInfo}>
+                        <div className={styles.moduleCardName}>{mod.moduleName}</div>
+                        <Tag size="small" color="arcoblue" className={styles.moduleCardTag}>{mod.moduleId}</Tag>
+                      </div>
+                      <Button
+                        type="text"
+                        size="small"
+                        icon={<IconEye />}
+                        className={styles.moduleCardPreviewBtn}
+                        onClick={(e) => {
+                          e.stopPropagation()
+                          setPreviewModule(mod)
+                        }}
+                      />
                     </div>
-                    <Button
-                      type="text"
-                      size="mini"
-                      icon={<IconEye />}
-                      className={styles.moduleCardPreviewBtnV2}
-                      onClick={(e) => {
-                        e.stopPropagation()
-                        setPreviewModule(mod)
-                      }}
-                    />
-                  </div>
+                  </Card>
                 ))}
               </div>
             </div>
@@ -213,15 +217,17 @@ export function ModuleDragEditor({ modules, onChange }: ModuleDragEditorProps) {
         </div>
       </div>
 
-      <div className={styles.moduleListPanelV2}>
-        <div className={styles.moduleListHeaderV2}>
-          <h3>页面模块</h3>
-          <span>拖拽调整顺序</span>
+      <div className={styles.moduleListPanel}>
+        <div className={styles.moduleListHeader}>
+          <h3 style={{ margin: 0 }}>页面模块</h3>
+          <span style={{ fontSize: 12, color: "#9ca3af" }}>
+            拖拽调整顺序
+          </span>
         </div>
 
         {modules.length === 0 ? (
-          <div 
-            className={styles.emptyModuleCardV2}
+          <Card 
+            className={styles.emptyModuleCard}
             onDragOver={(e) => {
               e.preventDefault()
               if (draggedModule) {
@@ -236,15 +242,12 @@ export function ModuleDragEditor({ modules, onChange }: ModuleDragEditorProps) {
               }
             }}
           >
-            <div className={styles.emptyModuleIcon}>
-              <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
-                <path d="M12 6v6m0 0v6m0-6h6m-6 0H6" strokeLinecap="round" strokeLinejoin="round"/>
-              </svg>
+            <div style={{ textAlign: "center", color: "#9ca3af" }}>
+              <p>拖拽左侧模块到此处添加</p>
             </div>
-            <p className={styles.emptyModuleText}>拖拽左侧模块到此处添加</p>
-          </div>
+          </Card>
         ) : (
-          <div className={styles.moduleItemsV2}>
+          <div className={styles.moduleItems}>
             {modules.map((module, index) => (
               <div
                 key={module.moduleInstanceId}
@@ -252,33 +255,33 @@ export function ModuleDragEditor({ modules, onChange }: ModuleDragEditorProps) {
                 onDrop={(e) => handleListDrop(e, index)}
               >
                 {dragOverIndex === index && draggedModule && (
-                  <div className={styles.dropIndicatorV2}>
+                  <div className={styles.dropIndicator}>
                     放置到此处
                   </div>
                 )}
-                <div
-                  className={`${styles.moduleItemV2} ${
-                    draggedIndex === index ? styles.moduleItemDraggingV2 : ""
+                <Card
+                  className={`${styles.moduleItem} ${
+                    draggedIndex === index ? styles.moduleItemDragging : ""
                   }`}
                   draggable
                   onDragStart={() => handleDragStart(index)}
                   onDragEnd={handleDragEnd}
                 >
-                  <div className={styles.moduleItemContentV2}>
-                    <div className={styles.moduleItemDragHandleV2}>
+                  <div className={styles.moduleItemContent}>
+                    <div className={styles.moduleItemDragHandle}>
                       <IconDragDotVertical />
                     </div>
-                    <div className={styles.moduleItemInfoV2}>
-                      <div className={styles.moduleItemNameV2}>{module.moduleName}</div>
-                      <div className={styles.moduleItemIdV2}>
+                    <div className={styles.moduleItemInfo}>
+                      <div className={styles.moduleItemName}>{module.moduleName}</div>
+                      <div className={styles.moduleItemId}>
                         <Tag size="small" color="gray">
                           {module.moduleId}
                         </Tag>
                       </div>
                     </div>
-                    <div className={styles.moduleItemActionsV2}>
+                    <div className={styles.moduleItemActions}>
                       <Button
-                        type="primary"
+                        type="text"
                         size="small"
                         icon={<IconSettings />}
                         onClick={() => handleEditModule(module)}
@@ -294,42 +297,25 @@ export function ModuleDragEditor({ modules, onChange }: ModuleDragEditorProps) {
                       />
                     </div>
                   </div>
-                </div>
+                </Card>
               </div>
             ))}
           </div>
         )}
       </div>
 
-      <Drawer
-        title={
-          <div className={styles.drawerHeader}>
-            <div>
-              <div className={styles.drawerTitle}>编辑模块</div>
-              <div className={styles.drawerSubtitle}>{editingModule?.moduleName || ""}</div>
-            </div>
-          </div>
-        }
+      <Modal
+        title={`编辑模块：${editingModule?.moduleName || ""}`}
         visible={!!editingModule}
-        placement="right"
-        width={680}
-        closable={true}
-        autoFocus={false}
-        footer={
-          <div className={styles.drawerFooter}>
-            <Button onClick={() => setEditingModule(null)}>取消</Button>
-            <Button 
-              type="primary" 
-              onClick={() => {
-                if (editingModule) {
-                  handleSaveModuleData(editingModule.data)
-                }
-              }}
-            >
-              保存更改
-            </Button>
-          </div>
-        }
+        onCancel={() => setEditingModule(null)}
+        onOk={() => {
+          if (editingModule) {
+            handleSaveModuleData(editingModule.data)
+          }
+        }}
+        okText="保存"
+        cancelText="取消"
+        style={{ width: 800 }}
       >
         {editingModule && (
           <ModuleFieldEditor
@@ -341,21 +327,14 @@ export function ModuleDragEditor({ modules, onChange }: ModuleDragEditorProps) {
             })}
           />
         )}
-      </Drawer>
+      </Modal>
 
-      <Drawer
-        title={
-          <div className={styles.drawerHeader}>
-            <div>
-              <div className={styles.drawerTitle}>模块预览</div>
-              <div className={styles.drawerSubtitle}>{previewModule?.moduleName || ""}</div>
-            </div>
-          </div>
-        }
+      <Modal
+        title={`模块预览：${previewModule?.moduleName || ""}`}
         visible={!!previewModule}
-        placement="right"
-        width={800}
         onCancel={() => setPreviewModule(null)}
+        footer={null}
+        style={{ width: 800 }}
       >
         {previewModule && (
           <div className={styles.modulePreviewContent}>
@@ -373,7 +352,7 @@ export function ModuleDragEditor({ modules, onChange }: ModuleDragEditorProps) {
             </div>
           </div>
         )}
-      </Drawer>
+      </Modal>
     </div>
   )
 }

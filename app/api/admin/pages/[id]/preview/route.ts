@@ -15,14 +15,13 @@ interface ModuleInfo {
 
 export async function POST(
   request: NextRequest,
-  { params }: { params: Promise<{ id: string }> }
+  { params }: { params: { id: string } }
 ) {
   try {
-    const { id: pageId } = await params
     const body = await request.json()
     const { modules } = body as { modules: ModuleInfo[] }
 
-    const pageConfig = readConfig(`page-${pageId}`)
+    const pageConfig = readConfig(`page-${params.id}`)
     if (!pageConfig) {
       return notFoundResponse('页面不存在')
     }
@@ -56,7 +55,7 @@ export async function POST(
     }
 
     return successResponse({
-      pageName: pageConfig.name || pageId,
+      pageName: pageConfig.name || params.id,
       modules: moduleDataArray,
     })
   } catch (error) {

@@ -62,10 +62,10 @@ function updatePageList(pages: PageListInfo[]) {
 
 export async function POST(
   request: NextRequest,
-  { params }: { params: Promise<{ id: string }> }
+  { params }: { params: { id: string } }
 ) {
   try {
-    const { id: pageId } = await params
+    const pageId = params.id
     const body = await request.json()
     const { action } = body
 

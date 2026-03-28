@@ -7,10 +7,10 @@ initializeModules()
 
 export async function GET(
   request: NextRequest,
-  { params }: { params: Promise<{ id: string }> }
+  { params }: { params: { id: string } }
 ) {
   try {
-    const { id: moduleId } = await params
+    const moduleId = params.id
     
     const ModuleComponent = getModuleComponent(moduleId)
     

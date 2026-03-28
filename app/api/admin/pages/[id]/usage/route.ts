@@ -35,10 +35,10 @@ function getPageList(): PageInfo[] {
 
 export async function GET(
   request: NextRequest,
-  { params }: { params: Promise<{ id: string }> }
+  { params }: { params: { id: string } }
 ) {
   try {
-    const { id: pageId } = await params
+    const pageId = params.id
     const pages = getPageList()
     const page = pages.find(p => p.id === pageId)
     

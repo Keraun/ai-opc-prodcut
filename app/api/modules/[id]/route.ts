@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { initializeAndSyncModules } from '@/lib/initialize-modules'
-import { getModule, getModuleDefaultData, getModuleSchema } from '@/modules/registry'
+import { getModuleTemplate } from '@/lib/module-service'
 import { readConfig } from '@/lib/config-manager'
 import { 
   successResponse, 
@@ -13,11 +13,11 @@ initializeAndSyncModules()
 
 export async function GET(
   request: NextRequest,
-  { params }: { params: Promise<{ id: string }> }
+  { params }: { params: { id: string } }
 ) {
   return wrapApiHandler(async () => {
-    const { id: moduleId } = await params
-    const moduleTemplate = getModule(moduleId)
+    const moduleId = params.id
+    const moduleTemplate = getModuleTemplate(moduleId)
     const currentData = readConfig(moduleId)
 
     if (!moduleTemplate) {
@@ -26,8 +26,8 @@ export async function GET(
 
     return successResponse({
       moduleId,
-      schema: getModuleSchema(moduleId),
-      defaultData: getModuleDefaultData(moduleId),
+      schema: moduleTemplate.schema,
+      defaultData: moduleTemplate.defaultData,
       currentData,
     })
   })
