@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useEffect, useCallback } from "react"
+import { useState, useEffect, useCallback, useRef } from "react"
 import { Button, Drawer, Tag } from "@arco-design/web-react"
 import { toast } from "sonner"
 import { getPageDetail, updatePage, publishPage } from "@/lib/api-client"
@@ -29,17 +29,49 @@ export function PageEditor({ pageId, onBack }: PageEditorProps) {
   const [loading, setLoading] = useState(false)
   const [saving, setSaving] = useState(false)
   const [showPreview, setShowPreview] = useState(false)
-  const [pageInfo, setPageInfo] = useState<{ 
+  const [pageInfo, setPageInfo] = useState<{
     name: string
     slug: string
     status?: 'draft' | 'published' | 'offline'
   } | null>(null)
   const [hasChanges, setHasChanges] = useState(false)
   const [previewDevice, setPreviewDevice] = useState<'web' | 'mobile' | 'ipad'>('web')
+  const previewIframeRef = useRef<HTMLIFrameElement>(null)
 
   useEffect(() => {
     loadPageData()
   }, [pageId])
+
+  // 当预览打开时，发送当前模块数据到 iframe
+  useEffect(() => {
+    if (showPreview && previewIframeRef.current) {
+      const iframe = previewIframeRef.current
+      // 等待 iframe 加载完成后再发送数据
+      const sendModulesData = () => {
+        iframe.contentWindow?.postMessage(
+          {
+            type: 'PREVIEW_MODULES_DATA',
+            modules: modules,
+            pageInfo: pageInfo,
+          },
+          '*'
+        )
+      }
+
+      // 如果 iframe 已经加载完成，直接发送
+      if (iframe.contentWindow) {
+        // 延迟一点确保 iframe 已经准备好接收消息
+        setTimeout(sendModulesData, 100)
+      }
+
+      // 监听 iframe 加载完成事件
+      iframe.onload = sendModulesData
+
+      return () => {
+        iframe.onload = null
+      }
+    }
+  }, [showPreview, modules, pageInfo])
 
   const loadPageData = async () => {
     setLoading(true)
@@ -239,6 +271,7 @@ export function PageEditor({ pageId, onBack }: PageEditorProps) {
             background: '#fff'
           }}>
             <iframe
+              ref={previewIframeRef}
               src={`/admin/page-preview/${pageId}`}
               style={{ width: '100%', height: '100%', border: 'none' }}
               title="页面预览"

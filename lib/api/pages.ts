@@ -270,23 +270,32 @@ export async function publishPageApi(pageId: string): Promise<{ success: boolean
 /**
  * 获取页面预览数据
  * @param pageId - 页面 ID
+ * @param modules - 可选，当前编辑的模块列表。如果不传，则使用已保存的模块数据
  * @returns 预览结果，包含 success、pageName、modules 和 message
  */
-export async function getPagePreview(pageId: string): Promise<{
+export async function getPagePreview(
+  pageId: string,
+  modules?: any[]
+): Promise<{
   success: boolean
   pageName?: string
   modules?: any[]
   message?: string
 }> {
   try {
-    const pageResult = await request<any>(`/api/admin/pages/${pageId}`)
-    if (!pageResult.success || !pageResult.data) {
-      return { success: false, message: '获取页面数据失败' }
+    // 如果没有传入 modules，则从服务器获取已保存的数据
+    let modulesToPreview = modules
+    if (!modulesToPreview) {
+      const pageResult = await request<any>(`/api/admin/pages/${pageId}`)
+      if (!pageResult.success || !pageResult.data) {
+        return { success: false, message: '获取页面数据失败' }
+      }
+      modulesToPreview = pageResult.data.modules || []
     }
 
     const previewResult = await request<{ pageName: string; modules: any[] }>(`/api/admin/pages/${pageId}/preview`, {
       method: 'POST',
-      body: JSON.stringify({ modules: pageResult.data.modules || [] }),
+      body: JSON.stringify({ modules: modulesToPreview }),
     })
 
     return {

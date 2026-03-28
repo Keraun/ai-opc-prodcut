@@ -5,7 +5,7 @@ import { useParams } from "next/navigation"
 import { Spin } from "@arco-design/web-react"
 import { toast } from "sonner"
 import { initializeModules } from "@/modules/init"
-import { getModuleComponent } from "@/modules/registry"
+import { getModuleComponent, getModuleDefaultData } from "@/modules/registry"
 import { getPagePreview } from "@/lib/api-client"
 
 initializeModules()
@@ -21,21 +21,69 @@ interface ModuleInfo {
 export default function PagePreviewPage() {
   const params = useParams()
   const pageId = params.id as string
-  
+
   const [loading, setLoading] = useState(true)
   const [pageName, setPageName] = useState("")
   const [modules, setModules] = useState<ModuleInfo[]>([])
+  const [receivedRealtimeData, setReceivedRealtimeData] = useState(false)
 
+  // 初始加载：获取已保存的数据作为 fallback
   useEffect(() => {
     fetchPreviewData()
   }, [pageId])
 
+  // 监听来自父窗口的实时模块数据
+  useEffect(() => {
+    const handleMessage = (event: MessageEvent) => {
+      // 检查消息类型
+      if (event.data && event.data.type === 'PREVIEW_MODULES_DATA') {
+        const { modules: realtimeModules, pageInfo } = event.data
+
+        if (realtimeModules && Array.isArray(realtimeModules)) {
+          // 处理模块数据，添加 hasComponent 标记
+          const processedModules = realtimeModules.map((module: ModuleInfo) => {
+            const ModuleComponent = getModuleComponent(module.moduleId)
+            const defaultData = getModuleDefaultData(module.moduleId) || {}
+
+            return {
+              ...module,
+              data: { ...defaultData, ...module.data },
+              hasComponent: !!ModuleComponent,
+            }
+          })
+
+          setModules(processedModules)
+          if (pageInfo?.name) {
+            setPageName(pageInfo.name)
+          }
+          setReceivedRealtimeData(true)
+          setLoading(false)
+        }
+      }
+    }
+
+    window.addEventListener('message', handleMessage)
+
+    // 设置超时：如果 3 秒内没有收到实时数据，则使用已保存的数据
+    const timeout = setTimeout(() => {
+      if (!receivedRealtimeData) {
+        // 继续使用已加载的数据（由 fetchPreviewData 设置）
+        console.log('No realtime data received, using saved data')
+      }
+    }, 3000)
+
+    return () => {
+      window.removeEventListener('message', handleMessage)
+      clearTimeout(timeout)
+    }
+  }, [pageId, receivedRealtimeData])
+
   const fetchPreviewData = async () => {
     try {
       setLoading(true)
-      
+
       const result = await getPagePreview(pageId)
-      
+
       if (result.success) {
         setPageName(result.pageName || "")
         setModules(result.modules || [])
