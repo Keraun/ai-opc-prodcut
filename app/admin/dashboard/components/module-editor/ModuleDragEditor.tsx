@@ -6,6 +6,7 @@ import { IconDragDotVertical, IconDelete, IconPlus, IconSettings, IconEye } from
 import { toast } from "sonner"
 import styles from "../../dashboard.module.css"
 import { ModuleFieldEditor } from "./ModuleFieldEditor"
+import { getAvailableModules } from "@/lib/api-client"
 
 interface ModuleInfo {
   moduleId: string
@@ -34,17 +35,14 @@ export function ModuleDragEditor({ modules, onChange }: ModuleDragEditorProps) {
   const [dragOverIndex, setDragOverIndex] = useState<number | null>(null)
 
   useEffect(() => {
-    fetchAvailableModules()
+    loadAvailableModules()
   }, [])
 
-  const fetchAvailableModules = async () => {
-    try {
-      const response = await fetch("/api/modules")
-      if (response.ok) {
-        const result = await response.json()
-        setAvailableModules(result.data || [])
-      }
-    } catch (error) {
+  const loadAvailableModules = async () => {
+    const modules = await getAvailableModules()
+    if (modules.length > 0) {
+      setAvailableModules(modules)
+    } else {
       toast.error("获取可用模块列表失败")
     }
   }

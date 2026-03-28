@@ -4,6 +4,7 @@ import { useState, useEffect } from "react"
 import { Input, InputNumber, Switch, Select, Space } from "@arco-design/web-react"
 import { toast } from "sonner"
 import styles from "../../dashboard.module.css"
+import { getModuleSchema } from "@/lib/api-client"
 
 interface SchemaProperty {
   type: string
@@ -57,22 +58,18 @@ export function ModuleFieldEditor({ moduleId, data, onChange }: ModuleFieldEdito
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
-    fetchSchema()
+    loadSchema()
   }, [moduleId])
 
-  const fetchSchema = async () => {
+  const loadSchema = async () => {
     setLoading(true)
-    try {
-      const response = await fetch(`/api/modules/${moduleId}/schema`)
-      if (response.ok) {
-        const schemaData = await response.json()
-        setSchema(schemaData.properties || {})
-      }
-    } catch (error) {
+    const schemaData = await getModuleSchema(moduleId)
+    if (schemaData && typeof schemaData === 'object' && 'properties' in schemaData) {
+      setSchema((schemaData as any).properties || {})
+    } else {
       toast.error("获取模块字段定义失败")
-    } finally {
-      setLoading(false)
     }
+    setLoading(false)
   }
 
   const handleFieldChange = (fieldKey: string, value: unknown) => {

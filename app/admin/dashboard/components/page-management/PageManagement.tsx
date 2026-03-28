@@ -5,20 +5,21 @@ import { useRouter } from "next/navigation"
 import { Button, Card, Modal, Input, Table, Space, Tag, Popconfirm, Radio } from "@arco-design/web-react"
 import { IconPlus, IconEdit, IconDelete, IconEye } from "@arco-design/web-react/icon"
 import { toast } from "sonner"
-
+import { getPageList, createPage, deletePage, publishPage, offlinePage } from "@/lib/api-client"
 import styles from "../../dashboard.module.css"
 
 interface PageInfo {
   id: string
   name: string
   slug: string
-  modules: string[]
+  modules: any[]
   type?: 'static' | 'dynamic'
   dynamicParam?: string
   status?: 'draft' | 'published' | 'offline'
   createdAt?: string
   updatedAt?: string
   publishedAt?: string
+  isSystem?: boolean
 }
 
 interface PageManagementProps {
@@ -39,47 +40,27 @@ export function PageManagement({ onEditPage }: PageManagementProps) {
 
   useEffect(() => {
     async function loadData() {
-      await fetchPages()
-      await fetchSystemPages()
+      await loadPages()
+      await loadSystemPages()
     }
     loadData()
   }, [])
 
-  const fetchSystemPages = async () => {
-    try {
-      // 从API获取系统页面列表
-      const response = await fetch('/api/admin/pages')
-      if (response.ok) {
-        const result = await response.json()
-        // 从页面列表中提取系统页面
-        const systemPagesList = result.data
-          .filter((page: any) => page.isSystem)
-          .map((page: any) => page.id)
-        setSystemPages(systemPagesList)
-      } else {
-        // 如果API调用失败，使用空数组作为fallback
-        setSystemPages([])
-      }
-    } catch (error) {
-      console.error('获取系统页面列表失败:', error)
-      // 发生错误时使用空数组作为fallback
-      setSystemPages([])
-    }
+  const loadSystemPages = async () => {
+    const pages = await getPageList()
+    const systemPagesList = pages.filter((page: any) => page.isSystem).map((page: any) => page.id)
+    setSystemPages(systemPagesList)
   }
 
-  const fetchPages = async () => {
+  const loadPages = async () => {
     setLoading(true)
-    try {
-      const response = await fetch("/api/admin/pages")
-      if (response.ok) {
-        const result = await response.json()
-        setPages(result.data || [])
-      }
-    } catch (error) {
+    const pages = await getPageList()
+    if (pages.length > 0 || pages !== null) {
+      setPages(pages || [])
+    } else {
       toast.error("获取页面列表失败")
-    } finally {
-      setLoading(false)
     }
+    setLoading(false)
   }
 
   const handleCreatePage = async () => {
@@ -131,7 +112,7 @@ export function PageManagement({ onEditPage }: PageManagementProps) {
         setNewPageSlug("")
         setNewPageType('static')
         setNewPageDynamicParam("id")
-        fetchPages()
+        loadPages()
 
         if (onEditPage) {
           onEditPage(data.pageId)
@@ -148,19 +129,11 @@ export function PageManagement({ onEditPage }: PageManagementProps) {
   }
 
   const handleDeletePage = async (pageId: string) => {
-    try {
-      const response = await fetch(`/api/admin/pages/${pageId}`, {
-        method: "DELETE",
-      })
-
-      if (response.ok) {
-        toast.success("页面删除成功")
-        fetchPages()
-      } else {
-        const error = await response.json()
-        toast.error(error.message || "删除页面失败")
-      }
-    } catch (error) {
+    const success = await deletePage(pageId)
+    if (success) {
+      toast.success("页面删除成功")
+      loadPages()
+    } else {
       toast.error("删除页面失败")
     }
   }
@@ -183,23 +156,11 @@ export function PageManagement({ onEditPage }: PageManagementProps) {
   }
 
   const handlePublishPage = async (pageId: string) => {
-    try {
-      const response = await fetch(`/api/admin/pages/${pageId}/status`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ action: 'publish' }),
-      })
-
-      if (response.ok) {
-        toast.success("页面发布成功")
-        fetchPages()
-      } else {
-        const error = await response.json()
-        toast.error(error.message || "发布失败")
-      }
-    } catch (error) {
+    const success = await publishPage(pageId)
+    if (success) {
+      toast.success("页面发布成功")
+      loadPages()
+    } else {
       toast.error("发布失败")
     }
   }
@@ -219,34 +180,20 @@ export function PageManagement({ onEditPage }: PageManagementProps) {
   }
 
   const handleOfflinePage = async (pageId: string) => {
-    // 检查页面是否被其他页面使用
     const usedBy = await checkPageUsage(pageId)
 
     if (usedBy.length > 0) {
-      // 显示确认对话框
       const confirm = window.confirm(`此页面被以下页面引用：\n${usedBy.join('\n')}\n\n确定要下线吗？`)
       if (!confirm) {
         return
       }
     }
 
-    try {
-      const response = await fetch(`/api/admin/pages/${pageId}/status`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ action: 'offline' }),
-      })
-
-      if (response.ok) {
-        toast.success("页面已下线")
-        fetchPages()
-      } else {
-        const error = await response.json()
-        toast.error(error.message || "下线失败")
-      }
-    } catch (error) {
+    const success = await offlinePage(pageId)
+    if (success) {
+      toast.success("页面已下线")
+      loadPages()
+    } else {
       toast.error("下线失败")
     }
   }

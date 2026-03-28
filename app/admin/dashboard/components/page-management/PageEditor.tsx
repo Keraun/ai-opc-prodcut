@@ -3,6 +3,7 @@
 import { useState, useEffect, useCallback } from "react"
 import { Button, Card, Tabs, Drawer, Tag } from "@arco-design/web-react"
 import { toast } from "sonner"
+import { getPageDetail, updatePage, publishPage } from "@/lib/api-client"
 
 const TabPane = Tabs.TabPane
 import { IconSave, IconEye, IconArrowLeft, IconCheck } from "@arco-design/web-react/icon"
@@ -35,57 +36,36 @@ export function PageEditor({ pageId, onBack }: PageEditorProps) {
   const [hasChanges, setHasChanges] = useState(false)
 
   useEffect(() => {
-    fetchPageData()
+    loadPageData()
   }, [pageId])
 
-  const fetchPageData = async () => {
+  const loadPageData = async () => {
     setLoading(true)
-    try {
-      const response = await fetch(`/api/admin/pages/${pageId}`)
-      if (response.ok) {
-        const result = await response.json()
-        const data = result.data
-        setModules(data.modules || [])
-        setPageInfo({
-          name: data.name,
-          slug: data.slug,
-          status: data.status,
-        })
-        setHasChanges(false)
-      } else {
-        toast.error("获取页面数据失败")
-      }
-    } catch (error) {
+    const data = await getPageDetail(pageId)
+    if (data) {
+      setModules(data.modules || [])
+      setPageInfo({
+        name: data.name,
+        slug: data.slug,
+        status: data.status,
+      })
+      setHasChanges(false)
+    } else {
       toast.error("获取页面数据失败")
-    } finally {
-      setLoading(false)
     }
+    setLoading(false)
   }
 
   const handleSave = async () => {
     setSaving(true)
-    try {
-      const response = await fetch(`/api/admin/pages/${pageId}`, {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ modules }),
-      })
-
-      if (response.ok) {
-        const result = await response.json()
-        toast.success(result.message || "保存成功")
-        setHasChanges(false)
-      } else {
-        const result = await response.json()
-        toast.error(result.message || "保存失败")
-      }
-    } catch (error) {
+    const success = await updatePage(pageId, { modules })
+    if (success) {
+      toast.success("保存成功")
+      setHasChanges(false)
+    } else {
       toast.error("保存失败")
-    } finally {
-      setSaving(false)
     }
+    setSaving(false)
   }
 
   const handlePublish = async () => {
@@ -94,24 +74,11 @@ export function PageEditor({ pageId, onBack }: PageEditorProps) {
       return
     }
 
-    try {
-      const response = await fetch(`/api/admin/pages/${pageId}/status`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ action: 'publish' }),
-      })
-
-      if (response.ok) {
-        const result = await response.json()
-        toast.success(result.message || "页面发布成功")
-        fetchPageData()
-      } else {
-        const result = await response.json()
-        toast.error(result.message || "发布失败")
-      }
-    } catch (error) {
+    const success = await publishPage(pageId)
+    if (success) {
+      toast.success("页面发布成功")
+      loadPageData()
+    } else {
       toast.error("发布失败")
     }
   }
