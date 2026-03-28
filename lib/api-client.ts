@@ -38,16 +38,29 @@ async function request<T>(
   url: string,
   options: RequestInit = {}
 ): Promise<ApiResponse<T>> {
+  const isFormData = options.body instanceof FormData
+  const headers: Record<string, string> = { ...options.headers as Record<string, string> }
+  
+  if (!isFormData) {
+    headers['Content-Type'] = 'application/json'
+  }
+  
   const response = await fetch(url, {
-    headers: {
-      'Content-Type': 'application/json',
-      ...options.headers,
-    },
+    headers,
     ...options,
   })
   
-  const result = await response.json()
-  return result as ApiResponse<T>
+  const contentType = response.headers.get('content-type')
+  if (contentType && contentType.includes('application/json')) {
+    const result = await response.json()
+    return result as ApiResponse<T>
+  }
+  
+  return {
+    code: response.status,
+    success: response.ok,
+    message: response.ok ? '操作成功' : '操作失败',
+  } as ApiResponse<T>
 }
 
 export async function getAvailableModules(): Promise<ModuleInfo[]> {
@@ -255,12 +268,11 @@ export async function importConfig(file: File): Promise<boolean> {
     const formData = new FormData()
     formData.append('file', file)
     
-    const response = await fetch('/api/admin/config/import', {
+    const result = await request<void>('/api/admin/config/import', {
       method: 'POST',
       body: formData,
     })
     
-    const result = await response.json()
     return result.success
   } catch (error) {
     console.error('Error importing config:', error)
@@ -508,15 +520,11 @@ export async function updatePageModules(
 
 export async function submitContactForm(formData: FormData): Promise<{ success: boolean; message: string }> {
   try {
-    const response = await fetch('/api/contact', {
+    const result = await request<void>('/api/contact', {
       method: 'POST',
-      headers: {
-        'Accept': 'application/json'
-      },
       body: formData
     })
     
-    const result = await response.json()
     return {
       success: result.success,
       message: result.message || (result.success ? '提交成功' : '提交失败')

@@ -32,6 +32,8 @@ export interface FeishuAPIResponse<T = any> {
   error?: any
 }
 
+const FEISHU_BASE_URL = "https://open.feishu.cn/open-apis"
+
 export class FeishuAPI {
   private appId: string
   private appSecret: string
@@ -44,76 +46,158 @@ export class FeishuAPI {
     this.appToken = config.appToken
   }
 
-  async getAccessToken(): Promise<string> {
-    if (this.accessToken) {
-      return this.accessToken
-    }
-
-    const response = await fetch("https://open.feishu.cn/open-apis/auth/v3/app_access_token/internal", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({
-        app_id: this.appId,
-        app_secret: this.appSecret
-      })
-    })
-
-    if (!response.ok) {
-      const error = await response.json()
-      throw new Error(`获取飞书访问令牌失败: ${JSON.stringify(error)}`)
-    }
-
-    const data = await response.json()
-    if (!data.app_access_token) {
-      throw new Error('获取飞书访问令牌失败: 未返回 access_token')
-    }
-    this.accessToken = data.app_access_token
-    return this.accessToken!
+  private buildUrl(path: string): string {
+    return `${FEISHU_BASE_URL}${path}`
   }
 
-  async createBase(name: string): Promise<FeishuAPIResponse<{ app_token: string; app: any }>> {
+  private async request<T>(
+    url: string,
+    options: RequestInit = {}
+  ): Promise<FeishuAPIResponse<T>> {
     try {
-      const accessToken = await this.getAccessToken()
+      const isFormData = options.body instanceof FormData
+      const headers: Record<string, string> = { ...options.headers as Record<string, string> }
+      
+      if (!isFormData) {
+        headers['Content-Type'] = 'application/json'
+      }
 
-      const response = await fetch("https://open.feishu.cn/open-apis/bitable/v1/apps", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          "Authorization": `Bearer ${accessToken}`
-        },
-        body: JSON.stringify({ name })
+      const response = await fetch(url, {
+        headers,
+        ...options,
       })
 
-      if (!response.ok) {
-        const error = await response.json()
+      const contentType = response.headers.get('content-type')
+      if (!contentType || !contentType.includes('application/json')) {
         return {
-          success: false,
-          message: "创建多维表格失败",
-          error
+          success: response.ok,
+          message: response.ok ? '操作成功' : `请求失败: ${response.status}`,
         }
       }
 
       const data = await response.json()
+      
+      if (!response.ok) {
+        return {
+          success: false,
+          message: `请求失败: ${response.status}`,
+          error: data
+        }
+      }
+
       return {
         success: true,
-        data: {
-          app_token: data.data?.app?.app_token,
-          app: data.data?.app
-        }
+        data
       }
     } catch (error) {
       return {
         success: false,
-        message: "创建多维表格失败",
+        message: '网络请求失败',
         error: String(error)
       }
     }
   }
 
-  async getBaseInfo(appToken?: string): Promise<FeishuAPIResponse<any>> {
+  private async authenticatedRequest<T>(
+    path: string,
+    options: RequestInit = {}
+  ): Promise<FeishuAPIResponse<T>> {
+    const accessToken = await this.getAccessToken()
+    const url = this.buildUrl(path)
+    
+    const headers: Record<string, string> = {
+      ...options.headers as Record<string, string>,
+      "Authorization": `Bearer ${accessToken}`
+    }
+
+    return this.request<T>(url, {
+      ...options,
+      headers
+    })
+  }
+
+  private handleFeishuResponse<T>(
+    response: FeishuAPIResponse<any>,
+    dataPath: (data: any) => T,
+    errorMessage: string
+  ): FeishuAPIResponse<T> {
+    if (!response.success) {
+      return {
+        success: false,
+        message: errorMessage,
+        error: response.error
+      }
+    }
+
     try {
+      return {
+        success: true,
+        data: dataPath(response.data)
+      }
+    } catch (error) {
+      return {
+        success: false,
+        message: errorMessage,
+        error: error
+      }
+    }
+  }
+
+  private wrapError<T>(
+    fn: () => Promise<FeishuAPIResponse<T>>,
+    errorMessage: string
+  ): Promise<FeishuAPIResponse<T>> {
+    return fn().catch(error => ({
+      success: false,
+      message: errorMessage,
+      error: String(error)
+    }))
+  }
+
+  async getAccessToken(): Promise<string> {
+    if (this.accessToken) {
+      return this.accessToken
+    }
+
+    const result = await this.request<{ app_access_token: string }>(
+      this.buildUrl("/auth/v3/app_access_token/internal"),
+      {
+        method: "POST",
+        body: JSON.stringify({
+          app_id: this.appId,
+          app_secret: this.appSecret
+        })
+      }
+    )
+
+    if (!result.success || !result.data?.app_access_token) {
+      throw new Error(`获取飞书访问令牌失败: ${result.message || JSON.stringify(result.error)}`)
+    }
+
+    this.accessToken = result.data.app_access_token
+    return this.accessToken!
+  }
+
+  async createBase(name: string): Promise<FeishuAPIResponse<{ app_token: string; app: any }>> {
+    return this.wrapError(async () => {
+      const result = await this.authenticatedRequest<any>("/bitable/v1/apps", {
+        method: "POST",
+        body: JSON.stringify({ name })
+      })
+
+      return this.handleFeishuResponse(
+        result,
+        (data) => ({
+          app_token: data?.data?.app?.app_token,
+          app: data?.data?.app
+        }),
+        "创建多维表格失败"
+      )
+    }, "创建多维表格失败")
+  }
+
+  async getBaseInfo(appToken?: string): Promise<FeishuAPIResponse<any>> {
+    return this.wrapError(async () => {
       const token = appToken || this.appToken
       if (!token) {
         return {
@@ -122,36 +206,14 @@ export class FeishuAPI {
         }
       }
 
-      const accessToken = await this.getAccessToken()
+      const result = await this.authenticatedRequest<any>(`/bitable/v1/apps/${token}`)
 
-      const response = await fetch(`https://open.feishu.cn/open-apis/bitable/v1/apps/${token}`, {
-        method: "GET",
-        headers: {
-          "Authorization": `Bearer ${accessToken}`
-        }
-      })
-
-      if (!response.ok) {
-        const error = await response.json()
-        return {
-          success: false,
-          message: "获取多维表格信息失败",
-          error
-        }
-      }
-
-      const data = await response.json()
-      return {
-        success: true,
-        data: data.data?.app
-      }
-    } catch (error) {
-      return {
-        success: false,
-        message: "获取多维表格信息失败",
-        error: String(error)
-      }
-    }
+      return this.handleFeishuResponse(
+        result,
+        (data) => data?.data?.app,
+        "获取多维表格信息失败"
+      )
+    }, "获取多维表格信息失败")
   }
 
   async createTable(
@@ -159,15 +221,9 @@ export class FeishuAPI {
     tableName: string,
     fields: Field[]
   ): Promise<FeishuAPIResponse<TableInfo>> {
-    try {
-      const accessToken = await this.getAccessToken()
-
-      const response = await fetch(`https://open.feishu.cn/open-apis/bitable/v1/apps/${appToken}/tables`, {
+    return this.wrapError(async () => {
+      const result = await this.authenticatedRequest<any>(`/bitable/v1/apps/${appToken}/tables`, {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          "Authorization": `Bearer ${accessToken}`
-        },
         body: JSON.stringify({
           table: {
             name: tableName,
@@ -176,31 +232,16 @@ export class FeishuAPI {
         })
       })
 
-      if (!response.ok) {
-        const error = await response.json()
-        return {
-          success: false,
-          message: "创建表格失败",
-          error
-        }
-      }
-
-      const data = await response.json()
-      return {
-        success: true,
-        data: data.data?.table
-      }
-    } catch (error) {
-      return {
-        success: false,
-        message: "创建表格失败",
-        error: String(error)
-      }
-    }
+      return this.handleFeishuResponse(
+        result,
+        (data) => data?.data?.table,
+        "创建表格失败"
+      )
+    }, "创建表格失败")
   }
 
   async getTables(appToken?: string): Promise<FeishuAPIResponse<TableInfo[]>> {
-    try {
+    return this.wrapError(async () => {
       const token = appToken || this.appToken
       if (!token) {
         return {
@@ -209,70 +250,26 @@ export class FeishuAPI {
         }
       }
 
-      const accessToken = await this.getAccessToken()
+      const result = await this.authenticatedRequest<any>(`/bitable/v1/apps/${token}/tables`)
 
-      const response = await fetch(`https://open.feishu.cn/open-apis/bitable/v1/apps/${token}/tables`, {
-        method: "GET",
-        headers: {
-          "Authorization": `Bearer ${accessToken}`
-        }
-      })
-
-      if (!response.ok) {
-        const error = await response.json()
-        return {
-          success: false,
-          message: "获取表格列表失败",
-          error
-        }
-      }
-
-      const data = await response.json()
-      return {
-        success: true,
-        data: data.data?.items || []
-      }
-    } catch (error) {
-      return {
-        success: false,
-        message: "获取表格列表失败",
-        error: String(error)
-      }
-    }
+      return this.handleFeishuResponse(
+        result,
+        (data) => data?.data?.items || [],
+        "获取表格列表失败"
+      )
+    }, "获取表格列表失败")
   }
 
   async getTableFields(appToken: string, tableId: string): Promise<FeishuAPIResponse<Field[]>> {
-    try {
-      const accessToken = await this.getAccessToken()
+    return this.wrapError(async () => {
+      const result = await this.authenticatedRequest<any>(`/bitable/v1/apps/${appToken}/tables/${tableId}/fields`)
 
-      const response = await fetch(`https://open.feishu.cn/open-apis/bitable/v1/apps/${appToken}/tables/${tableId}/fields`, {
-        method: "GET",
-        headers: {
-          "Authorization": `Bearer ${accessToken}`
-        }
-      })
-
-      if (!response.ok) {
-        const error = await response.json()
-        return {
-          success: false,
-          message: "获取表格字段失败",
-          error
-        }
-      }
-
-      const data = await response.json()
-      return {
-        success: true,
-        data: data.data?.items || []
-      }
-    } catch (error) {
-      return {
-        success: false,
-        message: "获取表格字段失败",
-        error: String(error)
-      }
-    }
+      return this.handleFeishuResponse(
+        result,
+        (data) => data?.data?.items || [],
+        "获取表格字段失败"
+      )
+    }, "获取表格字段失败")
   }
 
   async addRecord(
@@ -280,39 +277,18 @@ export class FeishuAPI {
     tableId: string,
     recordData: RecordData
   ): Promise<FeishuAPIResponse<any>> {
-    try {
-      const accessToken = await this.getAccessToken()
-
-      const response = await fetch(`https://open.feishu.cn/open-apis/bitable/v1/apps/${appToken}/tables/${tableId}/records`, {
+    return this.wrapError(async () => {
+      const result = await this.authenticatedRequest<any>(`/bitable/v1/apps/${appToken}/tables/${tableId}/records`, {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          "Authorization": `Bearer ${accessToken}`
-        },
         body: JSON.stringify(recordData)
       })
 
-      if (!response.ok) {
-        const error = await response.json()
-        return {
-          success: false,
-          message: "添加记录失败",
-          error
-        }
-      }
-
-      const data = await response.json()
-      return {
-        success: true,
-        data: data.data?.record
-      }
-    } catch (error) {
-      return {
-        success: false,
-        message: "添加记录失败",
-        error: String(error)
-      }
-    }
+      return this.handleFeishuResponse(
+        result,
+        (data) => data?.data?.record,
+        "添加记录失败"
+      )
+    }, "添加记录失败")
   }
 
   async getRecords(
@@ -327,9 +303,7 @@ export class FeishuAPI {
       pageSize?: number
     }
   ): Promise<FeishuAPIResponse<{ records: any[]; hasMore: boolean; pageToken?: string }>> {
-    try {
-      const accessToken = await this.getAccessToken()
-
+    return this.wrapError(async () => {
       const params = new URLSearchParams()
       if (options?.viewId) params.append('view_id', options.viewId)
       if (options?.fieldNames) params.append('field_names', JSON.stringify(options.fieldNames))
@@ -338,40 +312,19 @@ export class FeishuAPI {
       if (options?.pageToken) params.append('page_token', options.pageToken)
       if (options?.pageSize) params.append('page_size', String(options.pageSize))
 
-      const url = `https://open.feishu.cn/open-apis/bitable/v1/apps/${appToken}/tables/${tableId}/records?${params.toString()}`
+      const path = `/bitable/v1/apps/${appToken}/tables/${tableId}/records?${params.toString()}`
+      const result = await this.authenticatedRequest<any>(path)
 
-      const response = await fetch(url, {
-        method: "GET",
-        headers: {
-          "Authorization": `Bearer ${accessToken}`
-        }
-      })
-
-      if (!response.ok) {
-        const error = await response.json()
-        return {
-          success: false,
-          message: "获取记录失败",
-          error
-        }
-      }
-
-      const data = await response.json()
-      return {
-        success: true,
-        data: {
-          records: data.data?.items || [],
-          hasMore: data.data?.has_more || false,
-          pageToken: data.data?.page_token
-        }
-      }
-    } catch (error) {
-      return {
-        success: false,
-        message: "获取记录失败",
-        error: String(error)
-      }
-    }
+      return this.handleFeishuResponse(
+        result,
+        (data) => ({
+          records: data?.data?.items || [],
+          hasMore: data?.data?.has_more || false,
+          pageToken: data?.data?.page_token
+        }),
+        "获取记录失败"
+      )
+    }, "获取记录失败")
   }
 
   async updateRecord(
@@ -380,39 +333,18 @@ export class FeishuAPI {
     recordId: string,
     recordData: RecordData
   ): Promise<FeishuAPIResponse<any>> {
-    try {
-      const accessToken = await this.getAccessToken()
-
-      const response = await fetch(`https://open.feishu.cn/open-apis/bitable/v1/apps/${appToken}/tables/${tableId}/records/${recordId}`, {
+    return this.wrapError(async () => {
+      const result = await this.authenticatedRequest<any>(`/bitable/v1/apps/${appToken}/tables/${tableId}/records/${recordId}`, {
         method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-          "Authorization": `Bearer ${accessToken}`
-        },
         body: JSON.stringify(recordData)
       })
 
-      if (!response.ok) {
-        const error = await response.json()
-        return {
-          success: false,
-          message: "更新记录失败",
-          error
-        }
-      }
-
-      const data = await response.json()
-      return {
-        success: true,
-        data: data.data?.record
-      }
-    } catch (error) {
-      return {
-        success: false,
-        message: "更新记录失败",
-        error: String(error)
-      }
-    }
+      return this.handleFeishuResponse(
+        result,
+        (data) => data?.data?.record,
+        "更新记录失败"
+      )
+    }, "更新记录失败")
   }
 
   async deleteRecord(
@@ -420,35 +352,23 @@ export class FeishuAPI {
     tableId: string,
     recordId: string
   ): Promise<FeishuAPIResponse<void>> {
-    try {
-      const accessToken = await this.getAccessToken()
-
-      const response = await fetch(`https://open.feishu.cn/open-apis/bitable/v1/apps/${appToken}/tables/${tableId}/records/${recordId}`, {
-        method: "DELETE",
-        headers: {
-          "Authorization": `Bearer ${accessToken}`
-        }
+    return this.wrapError(async () => {
+      const result = await this.authenticatedRequest<void>(`/bitable/v1/apps/${appToken}/tables/${tableId}/records/${recordId}`, {
+        method: "DELETE"
       })
 
-      if (!response.ok) {
-        const error = await response.json()
+      if (!result.success) {
         return {
           success: false,
           message: "删除记录失败",
-          error
+          error: result.error
         }
       }
 
       return {
         success: true
       }
-    } catch (error) {
-      return {
-        success: false,
-        message: "删除记录失败",
-        error: String(error)
-      }
-    }
+    }, "删除记录失败")
   }
 }
 
