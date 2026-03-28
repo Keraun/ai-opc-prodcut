@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useEffect } from "react"
+import { useState, useEffect, useRef, useCallback } from "react"
 import { Button, Tag, Drawer, Tooltip } from "@arco-design/web-react"
 import { toast } from "sonner"
 import styles from "../../dashboard.module.css"
@@ -12,7 +12,9 @@ import {
   IconSettings, 
   IconApps, 
   IconUnorderedList, 
-  IconEye 
+  IconEye,
+  IconDesktop,
+  IconMobile
 } from "@/components/icons"
 
 interface ModuleInfo {
@@ -42,6 +44,8 @@ export function ModuleDragEditor({ modules, onChange }: ModuleDragEditorProps) {
   const [dragOverIndex, setDragOverIndex] = useState<number | null>(null)
   const [gridColumns, setGridColumns] = useState<1 | 2>(2)
   const [previewDevice, setPreviewDevice] = useState<'web' | 'mobile' | 'ipad'>('web')
+  const [editPreviewDevice, setEditPreviewDevice] = useState<'web' | 'mobile' | 'ipad'>('web')
+  const editPreviewIframeRef = useRef<HTMLIFrameElement>(null)
 
   useEffect(() => {
     loadAvailableModules()
@@ -130,13 +134,6 @@ export function ModuleDragEditor({ modules, onChange }: ModuleDragEditorProps) {
     setDraggedIndex(null)
   }
 
-  const handleEditModule = (module: ModuleInfo) => {
-    setEditingModule({
-      ...module,
-      data: JSON.parse(JSON.stringify(module.data))
-    })
-  }
-
   const handleSaveModuleData = (data: Record<string, unknown>) => {
     if (!editingModule) return
 
@@ -150,6 +147,47 @@ export function ModuleDragEditor({ modules, onChange }: ModuleDragEditorProps) {
     setEditingModule(null)
     toast.success("模块数据已更新")
   }
+
+  const sendPreviewData = useCallback((data: Record<string, unknown>) => {
+    if (editPreviewIframeRef.current && editPreviewIframeRef.current.contentWindow) {
+      editPreviewIframeRef.current.contentWindow.postMessage({
+        type: 'MODULE_PREVIEW_DATA',
+        data: data
+      }, '*')
+    }
+  }, [])
+
+  const handleEditModuleChange = useCallback((data: Record<string, unknown>) => {
+    if (editingModule) {
+      setEditingModule({ 
+        ...editingModule, 
+        data: JSON.parse(JSON.stringify(data)),
+      })
+      sendPreviewData(data)
+    }
+  }, [editingModule, sendPreviewData])
+
+  const handleEditModule = (module: ModuleInfo) => {
+    setEditingModule({
+      ...module,
+      data: JSON.parse(JSON.stringify(module.data))
+    })
+  }
+
+  const handleEditPreviewMessage = useCallback((event: MessageEvent) => {
+    if (event.data && event.data.type === 'MODULE_PREVIEW_READY') {
+      if (editingModule) {
+        sendPreviewData(editingModule.data)
+      }
+    }
+  }, [editingModule, sendPreviewData])
+
+  useEffect(() => {
+    window.addEventListener('message', handleEditPreviewMessage)
+    return () => {
+      window.removeEventListener('message', handleEditPreviewMessage)
+    }
+  }, [handleEditPreviewMessage])
 
   const groupedModules = availableModules.reduce((acc, module) => {
     const category = module.category || "其他"
@@ -344,7 +382,7 @@ export function ModuleDragEditor({ modules, onChange }: ModuleDragEditorProps) {
         }
         visible={!!editingModule}
         placement="right"
-        width={720}
+        width={1200}
         closable={true}
         autoFocus={false}
         maskClosable={true}
@@ -366,14 +404,68 @@ export function ModuleDragEditor({ modules, onChange }: ModuleDragEditorProps) {
         }
       >
         {editingModule && (
-          <ModuleFieldEditor
-            moduleId={editingModule.moduleId}
-            data={editingModule.data}
-            onChange={(data) => setEditingModule({ 
-              ...editingModule, 
-              data: JSON.parse(JSON.stringify(data)),
-            })}
-          />
+          <div className={styles.editModuleSplitLayout}>
+            <div className={styles.editModuleFormPanel}>
+              <div className={styles.editModuleFormHeader}>
+                <h4>模块配置</h4>
+                <span>修改后实时预览</span>
+              </div>
+              <div className={styles.editModuleFormContent}>
+                <ModuleFieldEditor
+                  moduleId={editingModule.moduleId}
+                  data={editingModule.data}
+                  onChange={handleEditModuleChange}
+                />
+              </div>
+            </div>
+            <div className={styles.editModulePreviewPanel}>
+              <div className={styles.editModulePreviewHeader}>
+                <h4>实时预览</h4>
+                <div className={styles.editModulePreviewDevices}>
+                  <Tooltip content="桌面端">
+                    <Button 
+                      size="mini" 
+                      type={editPreviewDevice === 'web' ? "primary" : "text"}
+                      icon={<IconDesktop />}
+                      onClick={() => setEditPreviewDevice('web')}
+                    />
+                  </Tooltip>
+                  <Tooltip content="平板端">
+                    <Button 
+                      size="mini" 
+                      type={editPreviewDevice === 'ipad' ? "primary" : "text"}
+                      icon={<IconApps />}
+                      onClick={() => setEditPreviewDevice('ipad')}
+                    />
+                  </Tooltip>
+                  <Tooltip content="移动端">
+                    <Button 
+                      size="mini" 
+                      type={editPreviewDevice === 'mobile' ? "primary" : "text"}
+                      icon={<IconMobile />}
+                      onClick={() => setEditPreviewDevice('mobile')}
+                    />
+                  </Tooltip>
+                </div>
+              </div>
+              <div className={styles.editModulePreviewContent}>
+                <div 
+                  className={styles.editModulePreviewFrame}
+                  style={{
+                    width: editPreviewDevice === 'web' ? '100%' : editPreviewDevice === 'mobile' ? '375px' : '768px'
+                  }}
+                >
+                  <iframe
+                    ref={editPreviewIframeRef}
+                    src={`/admin/module-preview/${editingModule.moduleId}`}
+                    className={styles.editModulePreviewIframe}
+                    title={`${editingModule.moduleName} 预览`}
+                    sandbox="allow-scripts allow-same-origin"
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
         )}
       </Drawer>
 

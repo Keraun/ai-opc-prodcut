@@ -1,6 +1,6 @@
 "use client"
 
-import { useEffect, useState } from "react"
+import { useEffect, useState, useCallback } from "react"
 import { useParams } from "next/navigation"
 import { Spin } from "@arco-design/web-react"
 import { toast } from "sonner"
@@ -21,6 +21,7 @@ export default function ModulePreviewPage() {
     moduleName?: string
     defaultData?: Record<string, unknown>
   } | null>(null)
+  const [previewData, setPreviewData] = useState<Record<string, unknown> | null>(null)
 
   useEffect(() => {
     fetchModuleInfo()
@@ -31,12 +32,34 @@ export default function ModulePreviewPage() {
       setLoading(true)
       const data = await getModulePreview(moduleId)
       setModuleInfo(data)
+      if (data.defaultData) {
+        setPreviewData(data.defaultData)
+      }
     } catch (error) {
       toast.error("加载模块信息失败")
     } finally {
       setLoading(false)
     }
   }
+
+  const handleMessage = useCallback((event: MessageEvent) => {
+    if (event.data && event.data.type === 'MODULE_PREVIEW_DATA') {
+      setPreviewData(event.data.data)
+    }
+  }, [])
+
+  useEffect(() => {
+    window.addEventListener('message', handleMessage)
+    return () => {
+      window.removeEventListener('message', handleMessage)
+    }
+  }, [handleMessage])
+
+  useEffect(() => {
+    if (moduleInfo?.success) {
+      window.parent.postMessage({ type: 'MODULE_PREVIEW_READY' }, '*')
+    }
+  }, [moduleInfo?.success])
 
   if (loading) {
     return (
@@ -69,7 +92,7 @@ export default function ModulePreviewPage() {
   }
 
   const ModuleComponent = getModuleComponent(moduleId)
-  const defaultData = moduleInfo.defaultData || {}
+  const displayData = previewData || moduleInfo.defaultData || {}
 
   return (
     <div style={{ minHeight: "100vh", background: "#fff" }}>
@@ -79,7 +102,7 @@ export default function ModulePreviewPage() {
             moduleName={moduleInfo.moduleName || ""}
             moduleId={moduleId}
             moduleInstanceId={`${moduleId}-preview`}
-            data={defaultData}
+            data={displayData}
           />
         ) : (
           <div style={{
