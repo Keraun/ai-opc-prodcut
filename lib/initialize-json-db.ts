@@ -22,97 +22,30 @@ function initializeThemeData() {
   if (themes.length === 0) {
     console.log('Initializing theme data...')
     
-    const themeConfigPath = path.join(process.cwd(), 'database', 'templates', 'theme', 'theme-config.json')
+    const themeConfigPath = path.join(process.cwd(), 'database', 'tpl', 'theme_config.json')
     
     if (fs.existsSync(themeConfigPath)) {
       try {
-        const themeConfigData = JSON.parse(fs.readFileSync(themeConfigPath, 'utf-8'))
+        const themeList = JSON.parse(fs.readFileSync(themeConfigPath, 'utf-8'))
         
-        if (themeConfigData?.themes) {
-          const currentThemeId = themeConfigData.currentTheme || 'modern'
-          
-          for (const [themeId, themeData] of Object.entries(themeConfigData.themes)) {
-            const theme = themeData as any
+        if (Array.isArray(themeList)) {
+          for (const theme of themeList) {
             jsonDb.insert('theme_config', {
-              theme_id: themeId,
-              theme_name: theme.name || themeId,
-              theme_config: JSON.stringify(theme),
-              is_current: themeId === currentThemeId ? 1 : 0,
-              created_at: new Date().toISOString(),
-              updated_at: new Date().toISOString()
+              theme_id: theme.theme_id,
+              theme_name: theme.theme_name,
+              theme_setting: theme.theme_setting,
+              is_current: theme.is_current,
+              created_at: theme.created_at,
+              updated_at: theme.updated_at
             })
           }
-          console.log(`Initialized ${Object.keys(themeConfigData.themes).length} themes`)
+          console.log(`Initialized ${themeList.length} themes from template`)
         }
       } catch (error) {
         console.error('Error initializing theme data:', error)
       }
     } else {
-      console.log('Theme template file not found, creating default themes...')
-      
-      const defaultThemes = {
-        modern: {
-          name: '现代简约',
-          colors: {
-            primary: '#1e40af',
-            secondary: '#3b82f6',
-            accent: '#06b6d4'
-          }
-        },
-        tech: {
-          name: '科技蓝紫',
-          colors: {
-            primary: '#7c3aed',
-            secondary: '#a78bfa',
-            accent: '#ec4899'
-          }
-        },
-        nature: {
-          name: '自然清新',
-          colors: {
-            primary: '#10b981',
-            secondary: '#34d399',
-            accent: '#14b8a6'
-          }
-        },
-        dark: {
-          name: '深邃暗夜',
-          colors: {
-            primary: '#3b82f6',
-            secondary: '#60a5fa',
-            accent: '#22d3ee'
-          }
-        },
-        luxury: {
-          name: '奢华金棕',
-          colors: {
-            primary: '#b45309',
-            secondary: '#d97706',
-            accent: '#f59e0b'
-          }
-        },
-        minimal: {
-          name: '极简灰调',
-          colors: {
-            primary: '#374151',
-            secondary: '#6b7280',
-            accent: '#9ca3af'
-          }
-        }
-      }
-      
-      for (const [themeId, themeData] of Object.entries(defaultThemes)) {
-        const theme = themeData as any
-        jsonDb.insert('theme_config', {
-          theme_id: themeId,
-          theme_name: theme.name || themeId,
-          theme_config: JSON.stringify(theme),
-          is_current: themeId === 'modern' ? 1 : 0,
-          created_at: new Date().toISOString(),
-          updated_at: new Date().toISOString()
-        })
-      }
-      console.log('Created default theme')
+      console.error('Theme template file not found at:', themeConfigPath)
     }
   }
 }

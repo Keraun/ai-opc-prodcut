@@ -52,5 +52,59 @@
     "created_at": "2026-03-28T18:26:34.443Z",
     "updated_at": "2026-03-28T18:58:08.648Z",
     "id": 6
+  },
+  {
+    "theme_id": "sunset",
+    "theme_name": "日落橙红",
+    "theme_setting": "{\"colors\":{\"primary\":\"#dc2626\",\"secondary\":\"#f97316\",\"accent\":\"#f59e0b\"}}",
+    "is_current": 0,
+    "created_at": "2026-03-29T00:00:00.000Z",
+    "updated_at": "2026-03-29T00:00:00.000Z",
+    "id": 7
+  },
+  {
+    "theme_id": "ocean",
+    "theme_name": "海洋蓝调",
+    "theme_setting": "{\"colors\":{\"primary\":\"#0369a1\",\"secondary\":\"#0ea5e9\",\"accent\":\"#06b6d4\"}}",
+    "is_current": 0,
+    "created_at": "2026-03-29T00:00:00.000Z",
+    "updated_at": "2026-03-29T00:00:00.000Z",
+    "id": 8
+  },
+  {
+    "theme_id": "forest",
+    "theme_name": "森林绿意",
+    "theme_setting": "{\"colors\":{\"primary\":\"#166534\",\"secondary\":\"#22c55e\",\"accent\":\"#84cc16\"}}",
+    "is_current": 0,
+    "created_at": "2026-03-29T00:00:00.000Z",
+    "updated_at": "2026-03-29T00:00:00.000Z",
+    "id": 9
+  },
+  {
+    "theme_id": "lavender",
+    "theme_name": "薰衣草紫",
+    "theme_setting": "{\"colors\":{\"primary\":\"#7c3aed\",\"secondary\":\"#a855f7\",\"accent\":\"#d946ef\"}}",
+    "is_current": 0,
+    "created_at": "2026-03-29T00:00:00.000Z",
+    "updated_at": "2026-03-29T00:00:00.000Z",
+    "id": 10
+  },
+  {
+    "theme_id": "coral",
+    "theme_name": "珊瑚粉色",
+    "theme_setting": "{\"colors\":{\"primary\":\"#be185d\",\"secondary\":\"#ec4899\",\"accent\":\"#f472b6\"}}",
+    "is_current": 0,
+    "created_at": "2026-03-29T00:00:00.000Z",
+    "updated_at": "2026-03-29T00:00:00.000Z",
+    "id": 11
+  },
+  {
+    "theme_id": "midnight",
+    "theme_name": "午夜墨绿",
+    "theme_setting": "{\"colors\":{\"primary\":\"#0f172a\",\"secondary\":\"#1e293b\",\"accent\":\"#334155\"}}",
+    "is_current": 0,
+    "created_at": "2026-03-29T00:00:00.000Z",
+    "updated_at": "2026-03-29T00:00:00.000Z",
+    "id": 12
   }
 ]
