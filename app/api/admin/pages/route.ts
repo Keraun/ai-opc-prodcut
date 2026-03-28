@@ -36,6 +36,8 @@ function getPageList(): PageInfo[] {
       moduleInstanceIds = []
     }
     
+    const pageModules = jsonDb.find('page_modules', { page_id: page.page_id })
+    
     return {
       id: page.page_id,
       name: page.name,
@@ -50,7 +52,8 @@ function getPageList(): PageInfo[] {
       createdAt: page.created_at,
       updatedAt: page.updated_at,
       publishedAt: page.published_at,
-      moduleInstanceIds
+      moduleInstanceIds,
+      modules: pageModules
     }
   })
 }

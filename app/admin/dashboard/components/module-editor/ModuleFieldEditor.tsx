@@ -1,7 +1,8 @@
 "use client"
 
 import { useState, useEffect } from "react"
-import { Input, InputNumber, Switch, Select, Space, InputTag } from "@arco-design/web-react"
+import { Input, InputNumber, Switch, Select, InputTag, Table, Button, Space, Popconfirm, Input as AInput } from "@arco-design/web-react"
+import { IconPlus, IconDelete } from "@arco-design/web-react/icon"
 import { toast } from "sonner"
 import styles from "../../dashboard.module.css"
 import { getModuleSchema } from "@/lib/api-client"
@@ -112,6 +113,187 @@ function groupFieldsByRow(items: FieldLayoutItem[]): FieldLayoutItem[][] {
   return rows
 }
 
+function getDefaultItemForArray(itemSchema: SchemaProperty): Record<string, unknown> {
+  const result: Record<string, unknown> = {}
+  
+  if (itemSchema.type === "object" && itemSchema.properties) {
+    Object.entries(itemSchema.properties).forEach(([key, prop]) => {
+      result[key] = prop.default ?? (prop.type === "string" ? "" : prop.type === "number" ? 0 : prop.type === "boolean" ? false : prop.type === "array" ? [] : null)
+    })
+  } else if (itemSchema.type === "string") {
+    return ""
+  } else if (itemSchema.type === "number") {
+    return 0
+  } else if (itemSchema.type === "boolean") {
+    return false
+  }
+  
+  return result
+}
+
+function renderTableFieldCell(
+  value: unknown,
+  schema: SchemaProperty,
+  onChange: (newValue: unknown) => void
+): React.ReactNode {
+  switch (schema.type) {
+    case "string":
+      if (schema.enum && schema.enum.length > 0) {
+        return (
+          <Select
+            value={value as string}
+            onChange={onChange}
+            style={{ width: "100%" }}
+          >
+            {schema.enum.map((v) => (
+              <Select.Option key={v} value={v}>{v}</Select.Option>
+            ))}
+          </Select>
+        )
+      }
+      return (
+        <Input
+          value={value as string}
+          onChange={onChange}
+        />
+      )
+    case "number":
+      return (
+        <InputNumber
+          value={value as number}
+          onChange={onChange}
+          style={{ width: "100%" }}
+        />
+      )
+    case "boolean":
+      return (
+        <Switch
+          checked={value as boolean}
+          onChange={onChange}
+        />
+      )
+    default:
+      return <span>{String(value)}</span>
+  }
+}
+
+function renderTableField(
+  item: FieldLayoutItem,
+  data: Record<string, unknown>,
+  onChange: (data: Record<string, unknown>) => void
+): React.ReactNode {
+  const { property, path, colSpan } = item
+  const { title, description, items } = property
+  const value = getNestedValue(data, path)
+  const listValue = Array.isArray(value) ? value : []
+  
+  const fieldStyle = {
+    gridColumn: `span ${colSpan} / span ${colSpan}`
+  }
+
+  const itemSchema = items || { type: "string" }
+  
+  let columns: any[] = []
+  
+  if (itemSchema.type === "object" && itemSchema.properties) {
+    columns = Object.entries(itemSchema.properties).map(([key, prop]) => ({
+      title: prop.title || key,
+      dataIndex: key,
+      render: (_: unknown, record: any, index: number) => {
+        const cellValue = record[key]
+        return renderTableFieldCell(
+          cellValue,
+          prop,
+          (newVal) => {
+            const newList = [...listValue]
+            newList[index] = { ...newList[index], [key]: newVal }
+            const newData = setNestedValue(data, path, newList)
+            onChange(newData)
+          }
+        )
+      }
+    }))
+  } else {
+    columns = [
+      {
+        title: title,
+        dataIndex: 'value',
+        render: (_: unknown, record: any, index: number) => {
+          return renderTableFieldCell(
+            record.value,
+            itemSchema,
+            (newVal) => {
+              const newList = [...listValue]
+              newList[index] = { value: newVal }
+              const newData = setNestedValue(data, path, newList)
+              onChange(newData)
+            }
+          )
+        }
+      }
+    ]
+  }
+
+  columns.push({
+    title: '操作',
+    dataIndex: 'actions',
+    width: 100,
+    render: (_: unknown, __: any, index: number) => (
+      <Popconfirm
+        title="确定要删除这一项吗？"
+        onOk={() => {
+          const newList = listValue.filter((_, i) => i !== index)
+          const newData = setNestedValue(data, path, newList)
+          onChange(newData)
+        }}
+      >
+        <Button type="text" status="danger" size="small" icon={<IconDelete />}>
+          删除
+        </Button>
+      </Popconfirm>
+    )
+  })
+
+  const tableData = listValue.map((item, index) => {
+    if (itemSchema.type === "object" && itemSchema.properties) {
+      return { key: index, ...(item as Record<string, unknown>) }
+    }
+    return { key: index, value: item }
+  })
+
+  return (
+    <div key={path} className={styles.formField} style={fieldStyle}>
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '8px' }}>
+        <div>
+          <label className={styles.formLabel}>{title}</label>
+          {description && <span className={styles.formHint}>{description}</span>}
+        </div>
+        <Button
+          type="primary"
+          size="small"
+          icon={<IconPlus />}
+          onClick={() => {
+            const newItem = getDefaultItemForArray(itemSchema)
+            const newList = [...listValue, newItem]
+            const newData = setNestedValue(data, path, newList)
+            onChange(newData)
+          }}
+        >
+          添加
+        </Button>
+      </div>
+      <Table
+        columns={columns}
+        data={tableData}
+        pagination={false}
+        size="small"
+        border
+        stripe
+      />
+    </div>
+  )
+}
+
 export function ModuleFieldEditor({ moduleId, data, onChange }: ModuleFieldEditorProps) {
   const [schema, setSchema] = useState<Record<string, SchemaProperty>>({})
   const [loading, setLoading] = useState(true)
@@ -145,6 +327,10 @@ export function ModuleFieldEditor({ moduleId, data, onChange }: ModuleFieldEdito
       gridColumn: `span ${colSpan} / span ${colSpan}`
     }
 
+    if (type === "array" && property.items) {
+      return renderTableField(item, data, onChange)
+    }
+
     if (enumValues && enumValues.length > 0) {
       return (
         <div key={path} className={styles.formField} style={fieldStyle}>
@@ -166,7 +352,7 @@ export function ModuleFieldEditor({ moduleId, data, onChange }: ModuleFieldEdito
       )
     }
 
-    if (component === "tags" || type === "array") {
+    if (component === "tags" || (type === "array" && !property.items)) {
       const arrayValue = Array.isArray(value) ? value : []
       return (
         <div key={path} className={styles.formField} style={fieldStyle}>

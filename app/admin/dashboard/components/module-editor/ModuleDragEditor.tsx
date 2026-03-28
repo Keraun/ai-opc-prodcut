@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react"
 import { Button, Tag, Drawer, Tooltip } from "@arco-design/web-react"
-import { IconDragDotVertical, IconDelete, IconSettings, IconEye, IconApps, IconUnorderedList } from "@arco-design/web-react/icon"
+import { IconDragDotVertical, IconDelete, IconSettings, IconApps, IconUnorderedList } from "@arco-design/web-react/icon"
 import { toast } from "sonner"
 import styles from "../../dashboard.module.css"
 import { ModuleFieldEditor } from "./ModuleFieldEditor"
@@ -29,7 +29,6 @@ interface ModuleDragEditorProps {
 export function ModuleDragEditor({ modules, onChange }: ModuleDragEditorProps) {
   const [availableModules, setAvailableModules] = useState<AvailableModule[]>([])
   const [editingModule, setEditingModule] = useState<ModuleInfo | null>(null)
-  const [previewModule, setPreviewModule] = useState<AvailableModule | null>(null)
   const [draggedIndex, setDraggedIndex] = useState<number | null>(null)
   const [draggedModule, setDraggedModule] = useState<AvailableModule | null>(null)
   const [dragOverIndex, setDragOverIndex] = useState<number | null>(null)
@@ -97,13 +96,6 @@ export function ModuleDragEditor({ modules, onChange }: ModuleDragEditorProps) {
     if (draggedModule) {
       e.dataTransfer.dropEffect = "copy"
       setDragOverIndex(index)
-    } else if (draggedIndex !== null && draggedIndex !== index) {
-      e.dataTransfer.dropEffect = "move"
-      const updatedModules = [...modules]
-      const [draggedMod] = updatedModules.splice(draggedIndex, 1)
-      updatedModules.splice(index, 0, draggedMod)
-      onChange(updatedModules)
-      setDraggedIndex(index)
     }
   }
 
@@ -203,21 +195,12 @@ export function ModuleDragEditor({ modules, onChange }: ModuleDragEditorProps) {
                     draggable
                     onDragStart={(e) => handleModuleDragStart(e, mod)}
                     onDragEnd={handleModuleDragEnd}
+                    onClick={() => handleAddModule(mod)}
                   >
                     <div className={styles.moduleCardInfoV2}>
                       <div className={styles.moduleCardNameV2}>{mod.moduleName}</div>
                       <Tag size="small" color="arcoblue" className={styles.moduleCardTagV2}>{mod.moduleId}</Tag>
                     </div>
-                    <Button
-                      type="text"
-                      size="mini"
-                      icon={<IconEye />}
-                      className={styles.moduleCardPreviewBtnV2}
-                      onClick={(e) => {
-                        e.stopPropagation()
-                        setPreviewModule(mod)
-                      }}
-                    />
                   </div>
                 ))}
               </div>
@@ -325,7 +308,7 @@ export function ModuleDragEditor({ modules, onChange }: ModuleDragEditorProps) {
         }
         visible={!!editingModule}
         placement="right"
-        width={680}
+        width={720}
         closable={true}
         autoFocus={false}
         maskClosable={true}
@@ -355,40 +338,6 @@ export function ModuleDragEditor({ modules, onChange }: ModuleDragEditorProps) {
               data: JSON.parse(JSON.stringify(data)),
             })}
           />
-        )}
-      </Drawer>
-
-      <Drawer
-        title={
-          <div className={styles.drawerHeader}>
-            <div>
-              <div className={styles.drawerTitle}>模块预览</div>
-              <div className={styles.drawerSubtitle}>{previewModule?.moduleName || ""}</div>
-            </div>
-          </div>
-        }
-        visible={!!previewModule}
-        placement="right"
-        width={800}
-        closable={true}
-        maskClosable={true}
-        onCancel={() => setPreviewModule(null)}
-      >
-        {previewModule && (
-          <div className={styles.modulePreviewContent}>
-            <div className={styles.modulePreviewInfo}>
-              <p><strong>模块ID：</strong>{previewModule.moduleId}</p>
-              <p><strong>模块名称：</strong>{previewModule.moduleName}</p>
-              <p><strong>分类：</strong>{previewModule.category || "其他"}</p>
-            </div>
-            <div className={styles.modulePreviewFrame}>
-              <iframe
-                src={`/admin/module-preview/${previewModule.moduleId}`}
-                className={styles.previewFrame}
-                title="模块预览"
-              />
-            </div>
-          </div>
         )}
       </Drawer>
     </div>
