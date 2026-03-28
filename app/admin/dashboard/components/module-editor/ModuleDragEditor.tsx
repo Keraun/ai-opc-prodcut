@@ -1,8 +1,8 @@
 "use client"
 
 import { useState, useEffect, useCallback } from "react"
-import { Card, Button, Space, Tag, Modal, Collapse } from "@arco-design/web-react"
-import { IconDragDotVertical, IconDelete, IconPlus, IconSettings, IconEye } from "@arco-design/web-react/icon"
+import { Card, Button, Space, Tag, Drawer, Collapse } from "@arco-design/web-react"
+import { IconDragDotVertical, IconDelete, IconPlus, IconSettings, IconEye, IconClose } from "@arco-design/web-react/icon"
 import { toast } from "sonner"
 import styles from "../../dashboard.module.css"
 import { ModuleFieldEditor } from "./ModuleFieldEditor"
@@ -304,18 +304,31 @@ export function ModuleDragEditor({ modules, onChange }: ModuleDragEditorProps) {
         )}
       </div>
 
-      <Modal
-        title={`编辑模块：${editingModule?.moduleName || ""}`}
+      <Drawer
+        title={
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', paddingRight: 32 }}>
+            <span>编辑模块：{editingModule?.moduleName || ""}</span>
+          </div>
+        }
         visible={!!editingModule}
-        onCancel={() => setEditingModule(null)}
-        onOk={() => {
-          if (editingModule) {
-            handleSaveModuleData(editingModule.data)
-          }
-        }}
-        okText="保存"
-        cancelText="取消"
-        style={{ width: 800 }}
+        placement="right"
+        width={600}
+        closable={false}
+        footer={
+          <div style={{ display: 'flex', justifyContent: 'flex-end', gap: 12 }}>
+            <Button onClick={() => setEditingModule(null)}>取消</Button>
+            <Button 
+              type="primary" 
+              onClick={() => {
+                if (editingModule) {
+                  handleSaveModuleData(editingModule.data)
+                }
+              }}
+            >
+              保存
+            </Button>
+          </div>
+        }
       >
         {editingModule && (
           <ModuleFieldEditor
@@ -327,14 +340,14 @@ export function ModuleDragEditor({ modules, onChange }: ModuleDragEditorProps) {
             })}
           />
         )}
-      </Modal>
+      </Drawer>
 
-      <Modal
+      <Drawer
         title={`模块预览：${previewModule?.moduleName || ""}`}
         visible={!!previewModule}
+        placement="right"
+        width={800}
         onCancel={() => setPreviewModule(null)}
-        footer={null}
-        style={{ width: 800 }}
       >
         {previewModule && (
           <div className={styles.modulePreviewContent}>
@@ -352,7 +365,7 @@ export function ModuleDragEditor({ modules, onChange }: ModuleDragEditorProps) {
             </div>
           </div>
         )}
-      </Modal>
+      </Drawer>
     </div>
   )
 }
