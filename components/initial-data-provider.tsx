@@ -1,10 +1,10 @@
 "use client"
 
 import { createContext, useContext, ReactNode, useEffect, useMemo } from "react"
+import type { SiteRootData } from "@/modules/site-root/types"
 
-// 全局初始数据类型
 interface InitialData {
-  site: any
+  site: SiteRootData
   'site-navigation': any
   'site-header': any
   'site-footer': any

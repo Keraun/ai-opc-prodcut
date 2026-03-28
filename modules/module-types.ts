@@ -155,3 +155,66 @@ export interface FooterData {
   officialAccountQrCode?: string
   showAdminLink?: boolean
 }
+
+export interface SiteLinks {
+  email?: string
+  wechat?: string
+  github?: string
+  twitter?: string
+}
+
+export interface SiteCreator {
+  name?: string
+  url?: string
+}
+
+export interface SiteContact {
+  address?: string
+  phone?: string
+  email?: string
+}
+
+export interface SiteSupport {
+  customerServiceQRCode?: string
+  helpDocUrl?: string
+}
+
+export interface SiteFeatures {
+  enableTOC?: boolean
+  enableReadingProgress?: boolean
+  enableSearch?: boolean
+}
+
+export interface SiteGoogleBot {
+  index?: boolean
+  follow?: boolean
+  maxVideoPreview?: number
+  maxImagePreview?: 'none' | 'standard' | 'large'
+  maxSnippet?: number
+}
+
+export interface SiteRobots {
+  index?: boolean
+  follow?: boolean
+  googleBot?: SiteGoogleBot
+}
+
+export interface SiteSeo {
+  keywords?: string[]
+  robots?: SiteRobots
+}
+
+export interface SiteRootData {
+  name?: string
+  description?: string
+  url?: string
+  ogImage?: string
+  links?: SiteLinks
+  creator?: SiteCreator
+  contact?: SiteContact
+  support?: SiteSupport
+  icp?: string
+  features?: SiteFeatures
+  seo?: SiteSeo
+  currentTheme?: string
+}
