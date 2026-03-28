@@ -1,6 +1,5 @@
 import { registerHeroModule } from "./section-hero/register"
 import { registerServicesModule } from "./section-services/register"
-import { registerNavigationModule } from "./site-navigation/register"
 import { registerPartnerModule } from "./section-partner/register"
 import { registerProductsModule } from "./section-products/register"
 import { registerPricingModule } from "./section-pricing/register"
@@ -19,7 +18,6 @@ export function initializeModules() {
   registerSiteHeaderModule()
   registerHeroModule()
   registerServicesModule()
-  registerNavigationModule()
   registerPartnerModule()
   registerProductsModule()
   registerPricingModule()
@@ -35,7 +33,6 @@ export function initializeModules() {
 export { HeaderModule } from "./site-header/register"
 export { HeroModule } from "./section-hero/register"
 export { ServicesModule } from "./section-services/register"
-export { NavigationModule } from "./site-navigation/register"
 export { PartnerModule } from "./section-partner/register"
 export { ProductsModule } from "./section-products/register"
 export { PricingModule } from "./section-pricing/register"

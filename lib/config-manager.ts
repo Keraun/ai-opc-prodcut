@@ -23,7 +23,6 @@ function getPathMapping(configType: string): PathMapping {
     'site': { dir: 'site-info', prefix: 'site-config' },
     'site-seo': { dir: 'site-info', prefix: 'site-config' },
     'site-footer': { dir: 'page-data', prefix: 'data-site-footer' },
-    'site-navigation': { dir: 'page-data', prefix: 'data-site-navigation' },
     'site-root': { dir: 'page-data', prefix: 'data-site-root' },
     'site-header': { dir: 'page-data', prefix: 'data-site-header' },
     'section-hero': { dir: 'page-data', prefix: 'data-section-hero' },

@@ -2,7 +2,6 @@ import { HomeIcon, ProductsIcon, ServicesIcon, AboutIcon, ContactIcon } from "..
 import type { ModuleProps } from "@/modules/types"
 import { Header } from "@/components/common/header"
 import type { HeaderData } from "./types"
-import { useConfig } from "@/components/initial-data-provider"
 
 // 默认导航项
 const defaultNavItems = [
@@ -12,9 +11,8 @@ const defaultNavItems = [
 
 export function HeaderModule({ data }: ModuleProps) {
   const config: HeaderData = (data as HeaderData) || {}
-  const siteNavigation = useConfig('site-navigation') || {}
 
-  const navItems = config?.navItems || siteNavigation?.main || defaultNavItems
+  const navItems = config?.navItems || defaultNavItems
 
   // 转换为Menu组件需要的格式
   const menuItems = navItems.map((item) => ({

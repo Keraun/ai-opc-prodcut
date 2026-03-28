@@ -107,6 +107,37 @@ function createPage(
   
   jsonDb.insert('pages', newPage)
   
+  const defaultModules = [
+    { moduleId: 'site-root', moduleName: '站点容器' },
+    { moduleId: 'site-header', moduleName: '站点头部' },
+    { moduleId: 'site-footer', moduleName: '站点底部' }
+  ]
+  
+  const moduleInstanceIds: string[] = []
+  
+  defaultModules.forEach((module, index) => {
+    const moduleRegistry = jsonDb.findOne('module_registry', { module_id: module.moduleId })
+    const moduleInstanceId = `${module.moduleId}-${Date.now()}-${index}`
+    
+    moduleInstanceIds.push(moduleInstanceId)
+    
+    jsonDb.insert('page_modules', {
+      page_id: pageId,
+      module_id: module.moduleId,
+      module_instance_id: moduleInstanceId,
+      module_name: module.moduleName || moduleRegistry?.module_name || module.moduleId,
+      module_order: index,
+      data: moduleRegistry?.default_data || '{}',
+      created_at: now,
+      updated_at: now
+    })
+  })
+  
+  jsonDb.update('pages', newPage.id, {
+    module_instance_ids: JSON.stringify(moduleInstanceIds),
+    updated_at: now
+  })
+  
   return { success: true, pageId }
 }
 

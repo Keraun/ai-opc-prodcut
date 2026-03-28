@@ -12,7 +12,6 @@ export function loadInitialData(): Record<string, any> {
 
   initialDataCache = {
     site: readConfig('site') || {},
-    'site-navigation': readConfig('site-navigation') || {},
     'site-header': readConfig('site-header') || {},
     'site-footer': readConfig('site-footer') || {}
   }

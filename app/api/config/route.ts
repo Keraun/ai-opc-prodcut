@@ -10,7 +10,6 @@ import {
 const SAFE_CONFIG_TYPES = [
   'site',
   'site-seo',
-  'site-navigation',
   'theme',
 ]
 

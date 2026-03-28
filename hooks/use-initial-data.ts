@@ -5,7 +5,6 @@ import { useState, useEffect } from "react"
 // 全局初始数据类型
 interface InitialData {
   site: any
-  'site-navigation': any
   'site-header': any
   'site-footer': any
 }

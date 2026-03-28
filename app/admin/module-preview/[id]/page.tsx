@@ -5,6 +5,10 @@ import { useParams } from "next/navigation"
 import { Spin } from "@arco-design/web-react"
 import { toast } from "sonner"
 import { getModulePreview } from "@/lib/api-client"
+import { initializeModules } from "@/modules/init"
+import { getModuleComponent } from "@/modules/registry"
+
+initializeModules()
 
 export default function ModulePreviewPage() {
   const params = useParams()
@@ -64,34 +68,45 @@ export default function ModulePreviewPage() {
     )
   }
 
+  const ModuleComponent = getModuleComponent(moduleId)
+  const defaultData = moduleInfo.defaultData || {}
+
   return (
     <div style={{
       padding: "40px",
-      maxWidth: "1200px",
+      maxWidth: "100%",
       margin: "0 auto",
     }}>
       
       <div style={{
         background: "#fff",
-        padding: "40px",
         borderRadius: "8px",
         boxShadow: "0 2px 8px rgba(0,0,0,0.1)",
         minHeight: "400px",
+        overflow: "hidden",
       }}>
-        <div style={{
-          padding: "20px",
-          background: "#fafafa",
-          borderRadius: "4px",
-          textAlign: "center",
-          color: "#999",
-        }}>
-          <p style={{ margin: "0 0 12px 0", fontSize: "16px" }}>
-            模块预览区域
-          </p>
-          <p style={{ margin: 0, fontSize: "14px" }}>
-            实际渲染效果将在页面编辑器中显示
-          </p>
-        </div>
+        {ModuleComponent ? (
+          <ModuleComponent
+            moduleName={moduleInfo.moduleName || ""}
+            moduleId={moduleId}
+            moduleInstanceId={`${moduleId}-preview`}
+            data={defaultData}
+          />
+        ) : (
+          <div style={{
+            padding: "80px 40px",
+            background: "#fafafa",
+            textAlign: "center",
+            color: "#999",
+          }}>
+            <p style={{ margin: "0 0 12px 0", fontSize: "16px" }}>
+              模块组件未找到
+            </p>
+            <p style={{ margin: 0, fontSize: "14px" }}>
+              请检查模块 {moduleId} 是否已正确注册
+            </p>
+          </div>
+        )}
       </div>
     </div>
   )

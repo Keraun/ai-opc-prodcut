@@ -2329,6 +2329,7 @@
   justify-content: space-between;
   min-height: 80px;
   box-sizing: border-box;
+  width: 100%;
 }
 
 .moduleCardV2:hover {

@@ -45,7 +45,6 @@ export function Header({
   const router = useRouter()
   const { themeConfig } = useTheme()
   const siteConfig = useConfig('site')
-  const navigationConfig = useConfig('site-navigation')
   const headerConfig = useConfig('site-header')
 
   const config = propConfig || headerConfig || {}
@@ -53,7 +52,7 @@ export function Header({
   const [drawerVisible, setDrawerVisible] = useState(false)
   const [isMobile, setIsMobile] = useState(false)
 
-  const navItems = propNavItems || (navigationConfig?.main?.map((item: any) => ({
+  const navItems = propNavItems || (config?.navItems?.map((item: any) => ({
     id: item.href,
     label: item.label,
     href: item.href
