@@ -1,13 +1,20 @@
 import "server-only"
 import type { ModuleData } from "@/modules/types"
 import { readConfig, getPageResponse } from "./config-manager"
+import { jsonDb } from "./json-database"
 
 let initialDataCache: Record<string, any> | null = null
 let pageDataCache: Record<string, Record<string, any>> = {}
 
+const isDev = process.env.NODE_ENV === 'development'
+
 export function loadInitialData(): Record<string, any> {
-  if (initialDataCache) {
+  if (!isDev && initialDataCache) {
     return initialDataCache
+  }
+
+  if (isDev) {
+    jsonDb.reload()
   }
 
   initialDataCache = {
@@ -26,8 +33,13 @@ export function loadPageData(
 ): Record<string, any> {
   const cacheKey = `${pageId}-${orderConfigKey || 'default'}`
   
-  if (pageDataCache[cacheKey]) {
+  if (!isDev && pageDataCache[cacheKey]) {
     return pageDataCache[cacheKey]
+  }
+
+  if (isDev) {
+    jsonDb.reload()
+    clearInitialDataCache()
   }
 
   const pageResponse = getPageResponse(pageId)

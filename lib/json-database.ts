@@ -49,6 +49,22 @@ class JsonDatabase {
     }
   }
 
+  reload() {
+    this.loadAllData()
+  }
+
+  reloadTable(table: string) {
+    const filePath = path.join(DATA_DIR, this.fileMap[table])
+    if (fs.existsSync(filePath)) {
+      try {
+        const content = fs.readFileSync(filePath, 'utf-8')
+        this.data[table] = JSON.parse(content)
+      } catch (error) {
+        console.error(`Error reloading ${table} data:`, error)
+      }
+    }
+  }
+
   private saveTable(table: string) {
     const filePath = path.join(DATA_DIR, this.fileMap[table])
     const content = this.options.pretty 

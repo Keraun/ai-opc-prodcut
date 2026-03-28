@@ -4,8 +4,12 @@ import fs from 'fs'
 import path from 'path'
 
 const TEMPLATES_DIR = path.join(process.cwd(), 'database', 'templates')
+const isDev = process.env.NODE_ENV === 'development'
 
 export function clearCache(): void {
+  if (isDev) {
+    jsonDb.reload()
+  }
 }
 
 
@@ -60,6 +64,10 @@ function getPathMapping(configType: string): PathMapping {
 }
 
 export function readConfig(configType: string): any {
+  if (isDev) {
+    jsonDb.reload()
+  }
+  
   try {
     if (configType === 'account') {
       const accounts = jsonDb.getAll('accounts')
@@ -465,6 +473,10 @@ export function initializeDatabaseFromTemplates(): void {
 }
 
 export function getPageResponse(pageId: string): any {
+  if (isDev) {
+    jsonDb.reload()
+  }
+  
   try {
     const page = jsonDb.findOne('pages', { page_id: pageId })
     
