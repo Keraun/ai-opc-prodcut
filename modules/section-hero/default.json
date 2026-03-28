@@ -9,7 +9,7 @@
   "buttons": {
     "primary": {
       "text": "开始探索",
-      "href": "/products"
+      "href": "/product"
     },
     "secondary": {
       "text": "了解更多",

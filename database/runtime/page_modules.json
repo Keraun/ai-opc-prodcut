@@ -302,7 +302,7 @@
     "module_instance_id": "site-header-1774733505220-1",
     "module_name": "站点头部",
     "module_order": 1,
-    "data": "{\"navItems\":[{\"label\":\"首页\",\"href\":\"/\"},{\"label\":\"产品\",\"href\":\"/products\"}],\"showContactButton\":true,\"showCtaButton\":true,\"ctaButtonText\":\"开始使用\",\"ctaButtonLink\":\"/products\"}",
+    "data": "{\"navItems\":[{\"label\":\"首页\",\"href\":\"/\"},{\"label\":\"产品\",\"href\":\"/product\"}],\"showContactButton\":true,\"showCtaButton\":true,\"ctaButtonText\":\"开始使用\",\"ctaButtonLink\":\"/product\"}",
     "created_at": "2026/03/29 05:31:45",
     "updated_at": "2026/03/29 05:31:45",
     "id": 28

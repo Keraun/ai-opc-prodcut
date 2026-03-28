@@ -67,7 +67,7 @@ export function Header({
   const qrText = config?.contact?.qrText || "客服二维码"
   const hintText = config?.contact?.hintText || "扫码联系客服"
   const ctaText = ctaButtonText || config?.cta?.text || "开始使用"
-  const ctaLink = ctaButtonLink || config?.cta?.link || "/products"
+  const ctaLink = ctaButtonLink || config?.cta?.link || "/product"
   const drawerCtaText = config?.cta?.drawerText || "开始使用"
   const drawerHintText = config?.cta?.drawerHint || "免费试用 · 无需充值"
   const showContact = showContactButton !== undefined ? showContactButton : true

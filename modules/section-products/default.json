@@ -11,7 +11,7 @@
       "tag": "热门",
       "tagColor": "blue",
       "features": ["自动化流程", "降低成本", "提升效率"],
-      "link": "/products"
+      "link": "/product"
     },
     {
       "id": "tools",
@@ -21,7 +21,7 @@
       "tag": "免费",
       "tagColor": "green",
       "features": ["1000+ 工具", "每周更新", "智能分类"],
-      "link": "/products"
+      "link": "/product"
     },
     {
       "id": "courses",
@@ -31,7 +31,7 @@
       "tag": "新课",
       "tagColor": "orange",
       "features": ["零基础入门", "实战案例", "社群答疑"],
-      "link": "/products"
+      "link": "/product"
     },
     {
       "id": "services",
@@ -41,7 +41,7 @@
       "tag": "定制",
       "tagColor": "purple",
       "features": ["专家咨询", "定制方案", "技术支持"],
-      "link": "/products"
+      "link": "/product"
     }
   ]
 }

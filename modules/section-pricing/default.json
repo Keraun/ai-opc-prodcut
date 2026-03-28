@@ -14,7 +14,7 @@
         "每月100次API调用"
       ],
       "buttonText": "开始免费使用",
-      "buttonLink": "/products"
+      "buttonLink": "/product"
     },
     {
       "title": "专业版",
@@ -28,7 +28,7 @@
         "AI GEO课程访问"
       ],
       "buttonText": "升级专业版",
-      "buttonLink": "/products",
+      "buttonLink": "/product",
       "isPopular": true
     },
     {

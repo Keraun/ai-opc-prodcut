@@ -92,7 +92,7 @@ import { Menu } from "@/components/ui"
 <Menu
   items={[
     { id: '1', label: '首页', href: '/', icon: <HomeIcon /> },
-    { id: '2', label: '产品', href: '/products', badge: '新' },
+    { id: '2', label: '产品', href: '/product', badge: '新' },
     { id: '3', label: '关于', href: '/about', disabled: true }
   ]}
   variant="pills"

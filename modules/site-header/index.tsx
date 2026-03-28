@@ -6,7 +6,7 @@ import type { HeaderData } from "./types"
 // 默认导航项
 const defaultNavItems = [
   { label: '首页', href: '/' },
-  { label: '产品', href: '/products' },
+  { label: '产品', href: '/product' },
 ]
 
 export function HeaderModule({ data }: ModuleProps) {

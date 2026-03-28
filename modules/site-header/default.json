@@ -5,11 +5,11 @@
     },
     {
       "label": "产品",
-      "href": "/products"
+      "href": "/product"
     }
   ],
   "showContactButton": true,
   "showCtaButton": true,
   "ctaButtonText": "开始使用",
-  "ctaButtonLink": "/products"
+  "ctaButtonLink": "/product"
 }
