@@ -1,15 +1,18 @@
 import "server-only"
 import type { ModuleRegistration } from '@/modules/types'
-import { registerModule as registerModuleToDb } from './module-service'
+import { ModuleRegistryRepository } from './repositories/ModuleRegistryRepository'
+
+const moduleRegistryRepo = new ModuleRegistryRepository()
 
 export function syncModuleToDatabase(module: ModuleRegistration): boolean {
   try {
-    return registerModuleToDb(
+    moduleRegistryRepo.registerModule(
       module.moduleId,
       module.moduleName,
       module.schema || null,
       module.defaultData || {}
     )
+    return true
   } catch (error) {
     console.error('Failed to sync module to database:', error)
     return false

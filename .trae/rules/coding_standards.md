@@ -256,8 +256,148 @@ function getUserCity(user: User | undefined): string {
 #### 2.1 组件设计原则
 - **单一职责**：每个组件只负责一个功能
 - **组件拆分**：超过 150 行的组件必须拆分为子组件
+- **大文件拆分**：单个 TSX 文件超过 1000 行时，必须拆分为更细颗粒度的组件
 - **Props 类型**：所有组件必须定义 Props 接口
 - **默认值**：可选 props 必须提供默认值
+
+#### 2.2 视图与逻辑分离
+- **强制分离**：所有 TSX 文件必须将视图（JSX）与业务逻辑（Hooks）分离
+- **Hook 文件位置**：Hook 文件必须放在同级目录下，命名为 `use[ComponentName]Hook.ts`
+- **TSX 职责**：TSX 文件只负责视图渲染和布局，不包含复杂业务逻辑
+- **Hook 职责**：Hook 文件负责所有业务逻辑、状态管理、副作用处理
+
+**目录结构示例**：
+```
+components/
+├── UserProfile/
+│   ├── index.tsx                    # 视图组件
+│   ├── useUserProfileHook.ts        # 业务逻辑 Hook
+│   ├── UserProfile.module.css
+│   └── types.ts                     # 类型定义（可选）
+```
+
+**分离示例**：
+
+```typescript
+// ✅ 正确示例 - useUserProfileHook.ts (Hook 文件)
+import { useState, useEffect } from 'react'
+import { fetchUserProfile, updateUserProfile } from '@/lib/api-client'
+import type { UserProfile as UserProfileType } from './types'
+
+export function useUserProfile(userId: string) {
+  const [profile, setProfile] = useState<UserProfileType | null>(null)
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState<Error | null>(null)
+
+  useEffect(() => {
+    let cancelled = false
+
+    async function loadProfile() {
+      try {
+        setLoading(true)
+        const data = await fetchUserProfile(userId)
+        if (!cancelled) {
+          setProfile(data)
+        }
+      } catch (err) {
+        if (!cancelled) {
+          setError(err instanceof Error ? err : new Error('Unknown error'))
+        }
+      } finally {
+        if (!cancelled) {
+          setLoading(false)
+        }
+      }
+    }
+
+    loadProfile()
+
+    return () => {
+      cancelled = true
+    }
+  }, [userId])
+
+  const handleUpdate = async (updates: Partial<UserProfileType>) => {
+    if (!profile) return
+    
+    try {
+      const updated = await updateUserProfile(userId, updates)
+      setProfile(updated)
+      return true
+    } catch (err) {
+      setError(err instanceof Error ? err : new Error('Update failed'))
+      return false
+    }
+  }
+
+  return {
+    profile,
+    loading,
+    error,
+    handleUpdate
+  }
+}
+
+// ✅ 正确示例 - index.tsx (视图文件)
+import { useUserProfile } from './useUserProfile'
+import type { UserProfileProps } from './types'
+
+export function UserProfile({ userId }: UserProfileProps) {
+  const { profile, loading, error, handleUpdate } = useUserProfile(userId)
+
+  if (loading) return <div>Loading...</div>
+  if (error) return <div>Error: {error.message}</div>
+  if (!profile) return null
+
+  return (
+    <div className="user-profile">
+      <h1>{profile.name}</h1>
+      <p>{profile.email}</p>
+      <button onClick={() => handleUpdate({ name: 'New Name' })}>
+        Update
+      </button>
+    </div>
+  )
+}
+
+// ❌ 错误示例 - 所有逻辑都在 TSX 文件中
+export function UserProfile({ userId }: UserProfileProps) {
+  const [profile, setProfile] = useState<UserProfileType | null>(null)
+  const [loading, setLoading] = useState(true)
+  // ... 大量业务逻辑混在视图中
+}
+```
+
+#### 2.3 大文件拆分规范
+- **行数限制**：单个 TSX 文件超过 1000 行必须拆分
+- **拆分策略**：
+  1. 提取子组件到独立文件
+  2. 将复杂逻辑提取到 Hook 文件
+  3. 将工具函数提取到 utils 文件
+  4. 将类型定义提取到 types 文件
+- **组件粒度**：每个子组件不超过 300 行
+
+**拆分示例**：
+```
+// 拆分前（1200行）
+components/
+└── Dashboard/
+    └── index.tsx              # 1200 行，包含所有逻辑和子组件
+
+// 拆分后
+components/
+└── Dashboard/
+    ├── index.tsx                 # 主组件，100 行
+    ├── useDashboardHook.ts       # 业务逻辑 Hook，200 行
+    ├── types.ts                  # 类型定义，50 行
+    ├── components/               # 子组件目录
+    │   ├── Header.tsx            # 头部组件，80 行
+    │   ├── Sidebar.tsx           # 侧边栏组件，150 行
+    │   ├── Content.tsx           # 内容组件，200 行
+    │   └── Footer.tsx            # 底部组件，50 行
+    └── utils/                    # 工具函数
+        └── helpers.ts            # 辅助函数，100 行
+```
 
 ```typescript
 // ✅ 正确示例
@@ -290,7 +430,7 @@ const Button: React.FC<ButtonProps> = ({
 }
 ```
 
-#### 2.2 Hooks 使用规范
+#### 2.4 Hooks 使用规范
 - **自定义 Hook**：可复用的逻辑必须提取为自定义 Hook
 - **依赖数组**：useEffect 和 useMemo 必须正确声明依赖
 - **性能优化**：大列表使用虚拟化，昂贵计算使用 useMemo
