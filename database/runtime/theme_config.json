@@ -3,7 +3,7 @@
     "id": 145,
     "theme_id": "modern",
     "theme_name": "modern",
-    "theme_config": "{\"themeId\":\"modern\"}",
+    "theme_config": "{\"colors\":{\"primary\":\"#1e40af\",\"secondary\":\"#3b82f6\",\"accent\":\"#06b6d4\"}}",
     "created_at": "2026-03-28 06:14:25",
     "updated_at": "2026-03-28 06:14:25",
     "is_current": 0
@@ -12,7 +12,7 @@
     "id": 146,
     "theme_id": "tech",
     "theme_name": "tech",
-    "theme_config": "{\"themeId\":\"tech\"}",
+    "theme_config": "{\"colors\":{\"primary\":\"#7c3aed\",\"secondary\":\"#a78bfa\",\"accent\":\"#ec4899\"}}",
     "created_at": "2026-03-28 06:14:25",
     "updated_at": "2026-03-28 06:14:25",
     "is_current": 0
@@ -21,7 +21,7 @@
     "id": 147,
     "theme_id": "nature",
     "theme_name": "nature",
-    "theme_config": "{\"themeId\":\"nature\",\"isCurrent\":true}",
+    "theme_config": "{\"colors\":{\"primary\":\"#10b981\",\"secondary\":\"#34d399\",\"accent\":\"#14b8a6\"}}",
     "created_at": "2026-03-28 06:14:25",
     "updated_at": "2026-03-28 06:14:25",
     "is_current": 0
@@ -30,7 +30,7 @@
     "id": 148,
     "theme_id": "dark",
     "theme_name": "dark",
-    "theme_config": "{\"themeId\":\"dark\",\"isCurrent\":true}",
+    "theme_config": "{\"colors\":{\"primary\":\"#3b82f6\",\"secondary\":\"#60a5fa\",\"accent\":\"#22d3ee\"}}",
     "created_at": "2026-03-28 06:14:25",
     "updated_at": "2026-03-28 06:14:25",
     "is_current": 0
@@ -39,7 +39,7 @@
     "id": 149,
     "theme_id": "luxury",
     "theme_name": "奢华风格",
-    "theme_config": "{\"id\":\"luxury\",\"name\":\"奢华风格\",\"description\":\"奢华优雅的设计风格，金色系配色，适合高端品牌\",\"colors\":{\"primary\":\"#b45309\",\"secondary\":\"#d97706\",\"accent\":\"#f59e0b\"}}",
+    "theme_config": "{\"colors\":{\"primary\":\"#b45309\",\"secondary\":\"#d97706\",\"accent\":\"#f59e0b\"}}",
     "created_at": "2026-03-28 06:14:25",
     "updated_at": "2026-03-28 06:14:25",
     "is_current": 1
@@ -48,7 +48,7 @@
     "id": 150,
     "theme_id": "minimal",
     "theme_name": "极简主义",
-    "theme_config": "{\"id\":\"minimal\",\"name\":\"极简主义\",\"description\":\"极简主义设计风格，中性色调，适合现代艺术和设计领域\",\"colors\":{\"primary\":\"#374151\",\"secondary\":\"#6b7280\",\"accent\":\"#9ca3af\"}}",
+    "theme_config": "{\"colors\":{\"primary\":\"#374151\",\"secondary\":\"#6b7280\",\"accent\":\"#9ca3af\"}}",
     "created_at": "2026-03-28 06:14:25",
     "updated_at": "2026-03-28 06:14:25",
     "is_current": 0
