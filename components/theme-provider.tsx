@@ -7,6 +7,7 @@ import {
   applyThemeToElement,
   type ThemeConfig 
 } from "@/lib/theme-utils"
+import { getThemeConfig } from "@/lib/api-client"
 
 interface ThemeContextType {
   currentTheme: string
@@ -38,28 +39,22 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
       setIsDark(window.matchMedia("(prefers-color-scheme: dark)").matches)
     }
     
-    // 从API获取主题配置
     async function fetchThemeConfig() {
       try {
-        const response = await fetch('/api/config?type=theme')
-        if (response.ok) {
-          const result = await response.json()
-          const themeConfig = result.data
-          if (themeConfig && themeConfig.themes) {
-            setThemes(themeConfig.themes)
-            const themeId = savedTheme || themeConfig.currentTheme || "modern"
-            if (themeConfig.themes[themeId]) {
-              setCurrentTheme(themeId)
-              setThemeConfig(themeConfig.themes[themeId])
-            } else if (themeConfig.themes["modern"]) {
-              setCurrentTheme("modern")
-              setThemeConfig(themeConfig.themes["modern"])
-            }
+        const themeConfig = await getThemeConfig()
+        if (themeConfig && themeConfig.themes) {
+          setThemes(themeConfig.themes)
+          const themeId = savedTheme || themeConfig.currentTheme || "modern"
+          if (themeConfig.themes[themeId]) {
+            setCurrentTheme(themeId)
+            setThemeConfig(themeConfig.themes[themeId])
+          } else if (themeConfig.themes["modern"]) {
+            setCurrentTheme("modern")
+            setThemeConfig(themeConfig.themes["modern"])
           }
         }
       } catch (error) {
         console.error('Failed to fetch theme config:', error)
-        // 降级到默认主题
         const defaultTheme = getDefaultThemeConfig(savedTheme)
         setThemes({ [defaultTheme.id]: defaultTheme })
         setCurrentTheme(defaultTheme.id)
