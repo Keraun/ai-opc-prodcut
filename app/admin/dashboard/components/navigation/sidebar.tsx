@@ -2,7 +2,6 @@
 
 import { useMemo } from "react"
 import styles from "../../dashboard.module.css"
-import { getAllModules } from "@/modules/registry"
 
 interface SidebarProps {
   collapsed: boolean

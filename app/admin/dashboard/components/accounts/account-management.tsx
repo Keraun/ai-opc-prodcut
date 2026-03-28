@@ -215,7 +215,7 @@ export function AccountManagement() {
           </div>
         </div>
         <Button 
-          type="default" 
+          type="primary" 
           icon={<IconPlus />}
           onClick={openAddAccountModal}
           className={styles.accountManagementAddButton}

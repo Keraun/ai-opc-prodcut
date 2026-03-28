@@ -1,0 +1,270 @@
+.configEditor {
+  min-height: calc(100vh - 180px);
+}
+
+.editConfigContainer {
+  display: flex;
+  gap: 0;
+  position: relative;
+  max-height: 65vh;
+}
+
+.editConfigLeft {
+  flex-shrink: 0;
+  overflow: auto;
+}
+
+.editConfigHeader {
+  margin-bottom: 16px;
+}
+
+.editConfigHeaderTop {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 8px;
+}
+
+.editConfigHeaderLeft {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.editConfigHint {
+  font-size: 14px;
+  color: #6b7280;
+}
+
+.editConfigHeaderRight {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.editConfigActionsBottom {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  margin-top: 12px;
+  padding-top: 12px;
+  position: absolute;
+  bottom: -70px;
+  left: 10px;
+}
+
+.jsonTextarea {
+  font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+  font-size: 13px;
+  line-height: 1.6;
+}
+
+.jsonError {
+  color: #dc2626;
+  font-size: 12px;
+  margin-top: 8px;
+}
+
+.editConfigRight {
+  flex-shrink: 0;
+  overflow: auto;
+}
+
+.viewConfigHeader {
+  margin-bottom: 16px;
+}
+
+.viewConfigHeaderTop {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 8px;
+}
+
+.viewConfigTitle {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.configResizer {
+  flex-shrink: 0;
+  width: 4px;
+  background-color: #e5e7eb;
+  cursor: col-resize;
+  transition: background-color 0.2s;
+  position: relative;
+  margin: 0 8px;
+}
+
+.configResizer:hover {
+  background-color: #60a5fa;
+}
+
+.configResizerDragging {
+  background-color: #3b82f6;
+}
+
+.configResizerHandle {
+  position: absolute;
+  inset-y: 0;
+  left: -4px;
+  right: -4px;
+}
+
+.configResizerVisual {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 4px;
+  height: 48px;
+  background-color: #d1d5db;
+  border-radius: 9999px;
+  transition: background-color 0.2s;
+}
+
+.configResizer:hover .configResizerVisual,
+.configResizerDragging .configResizerVisual {
+  background-color: #3b82f6;
+}
+
+.versionInfo {
+  padding: 16px;
+  background-color: #f9fafb;
+  border-radius: 8px;
+  margin-bottom: 16px;
+}
+
+.versionInfo p {
+  margin: 4px 0;
+  font-size: 14px;
+  color: #374151;
+}
+
+.diffToggle {
+  margin-bottom: 16px;
+}
+
+.diffContainer {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+}
+
+.diffTitle {
+  margin-bottom: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  color: #374151;
+}
+
+.versionActions {
+  display: flex;
+  gap: 8px;
+  margin-top: 16px;
+  justify-content: flex-end;
+}
+
+.schemaCard {
+  background: #fff;
+  border-radius: 8px;
+  padding: 20px;
+  margin-bottom: 16px;
+}
+
+.schemaCardTitle {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 16px;
+}
+
+.schemaCardTitleIcon {
+  color: #2563eb;
+}
+
+.schemaCardTitleText {
+  font-size: 18px;
+  font-weight: 600;
+}
+
+.schemaContent {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  max-height: 500px;
+  overflow: auto;
+}
+
+.schemaItem {
+  border-bottom-width: 1px;
+  border-color: #f3f4f6;
+  padding-bottom: 12px;
+}
+
+.schemaItem:last-child {
+  border-bottom-width: 0;
+  padding-bottom: 0;
+}
+
+.schemaItemHeader {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 4px;
+}
+
+.schemaItemName {
+  font-size: 14px;
+  font-weight: 600;
+  color: #111827;
+}
+
+.schemaItemBadge {
+  padding: 2px 6px;
+  font-size: 12px;
+  border-radius: 4px;
+}
+
+.schemaItemBadgeRequired {
+  background-color: #fef2f2;
+  color: #dc2626;
+}
+
+.schemaItemBadgeType {
+  background-color: #eff6ff;
+  color: #2563eb;
+}
+
+.schemaItemDescription {
+  font-size: 12px;
+  color: #4b5563;
+  margin-bottom: 4px;
+}
+
+.schemaItemFields {
+  margin-left: 8px;
+  margin-top: 4px;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.schemaField {
+  display: flex;
+  align-items: flex-start;
+  gap: 4px;
+  font-size: 12px;
+}
+
+.schemaFieldName {
+  font-weight: 500;
+  color: #374151;
+  min-width: 80px;
+}
+
+.schemaFieldDescription {
+  color: #4b5563;
+}
