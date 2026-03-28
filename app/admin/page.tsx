@@ -4,7 +4,7 @@ import { useState, useEffect } from "react"
 import { useRouter } from "next/navigation"
 import { Button, Input, Modal, Dropdown, Tabs } from "@arco-design/web-react"
 import { IconCustomerService, IconEye, IconEyeInvisible } from "@arco-design/web-react/icon"
-import { toast, Toaster } from "sonner"
+import { toast } from "sonner"
 import { checkAuthStatus, loginWithResponse, setupEmail as setupEmailApi, sendResetCode, resetPassword } from "@/lib/api-client"
 import styles from "./admin.module.css"
 
@@ -221,8 +221,6 @@ export default function AdminLoginPage() {
 
   return (
     <>
-      <Toaster position="top-center" richColors />
-      
       <div className={styles.container}>
         <div className={styles.background}>
           <div className={styles.bgCircle1}></div>

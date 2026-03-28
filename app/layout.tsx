@@ -4,7 +4,7 @@ import { Analytics } from '@vercel/analytics/next'
 import '@arco-design/web-react/dist/css/arco.css'
 import './globals.css'
 import { ClientLayout } from '@/components/client-layout'
-import { Toaster } from 'sonner'
+import { ToasterProvider } from '@/components/toaster-provider'
 import { loadInitialData, generateInitialDataScript } from '@/lib/initial-data'
 import { readConfig } from '@/lib/config-manager'
 
@@ -169,7 +169,7 @@ export default function RootLayout({
         />
       </head>
       <body style={{ fontFamily: 'var(--font-sans)', WebkitFontSmoothing: 'antialiased', MozOsxFontSmoothing: 'grayscale' }}>
-        <Toaster />
+        <ToasterProvider />
         <ClientLayout>
           {children}
         </ClientLayout>

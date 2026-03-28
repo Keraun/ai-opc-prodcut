@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react"
 import { useRouter } from "next/navigation"
-import { toast, Toaster } from "sonner"
+import { toast } from "sonner"
 import { useAuth } from "./common/hooks/useAuth"
 import { useConfig } from "./common/hooks/useConfig"
 import { Sidebar, Header } from "./components"
@@ -102,8 +102,6 @@ export default function AdminDashboardPage() {
 
   return (
     <div className={styles.mainContainer}>
-      <Toaster position="top-center" />
-
       {mustChangePassword && (
         <PasswordBanner onChangePassword={handleChangePassword} />
       )}
