@@ -6,6 +6,10 @@
     {
       "label": "产品",
       "href": "/product"
+    },
+    {
+      "label": "资讯",
+      "href": "/newss"
     }
   ],
   "showContactButton": true,
