@@ -83,5 +83,22 @@
     "created_at": null,
     "updated_at": null,
     "published_at": null
+  },
+  {
+    "page_id": "test",
+    "name": "test",
+    "slug": "test",
+    "type": "static",
+    "description": "新创建的静态页面",
+    "status": "draft",
+    "is_system": 0,
+    "is_deletable": 1,
+    "route": "/test",
+    "dynamic_param": null,
+    "module_instance_ids": "[]",
+    "created_at": "2026/03/29 05:31:45",
+    "updated_at": "2026/03/29 05:31:45",
+    "published_at": null,
+    "id": 6
   }
 ]

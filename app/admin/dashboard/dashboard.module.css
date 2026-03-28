@@ -2312,7 +2312,7 @@
 
 @media (min-width: 1024px) {
   .moduleGridV2 {
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: repeat(2, 145px);
   }
 }
 
@@ -2329,7 +2329,7 @@
   justify-content: space-between;
   min-height: 80px;
   box-sizing: border-box;
-  width: 100%;
+  width: 145px;
 }
 
 .moduleCardV2:hover {
@@ -2665,11 +2665,27 @@
 }
 
 .moduleCardPreviewBtnV2 {
+  position: absolute;
+  top: 8px;
+  right: 8px;
   opacity: 0;
   transition: all 0.2s ease;
+  z-index: 10;
 }
 
 .moduleCardV2:hover .moduleCardPreviewBtnV2 {
   opacity: 1;
+}
+
+.previewDrawer :global(.arco-drawer-header) {
+  display: none !important;
+}
+
+.previewDrawer :global(.arco-drawer-body) {
+  padding: 0 !important;
+}
+
+.previewDrawer :global(.arco-drawer-content) {
+  padding: 0 !important;
 }
 

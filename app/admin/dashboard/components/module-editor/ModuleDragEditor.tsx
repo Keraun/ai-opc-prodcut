@@ -377,6 +377,7 @@ export function ModuleDragEditor({ modules, onChange }: ModuleDragEditorProps) {
       </Drawer>
 
       <Drawer
+        className={styles.previewDrawer}
         visible={!!previewingModule}
         placement="right"
         width={1200}
@@ -413,7 +414,7 @@ export function ModuleDragEditor({ modules, onChange }: ModuleDragEditorProps) {
           </div>
         }
       >
-        <div style={{ width: '100%', height: 'calc(100vh - 120px)' }}>
+        <div style={{ width: '100%', height: 'calc(100vh - 80px)' }}>
           <iframe
             src={`/admin/module-preview/${previewingModule?.moduleId}`}
             style={{ width: '100%', height: '100%', border: 'none' }}

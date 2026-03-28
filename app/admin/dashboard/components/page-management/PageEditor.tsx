@@ -170,6 +170,7 @@ export function PageEditor({ pageId, onBack }: PageEditorProps) {
       </div>
 
       <Drawer
+        className={styles.previewDrawer}
         visible={showPreview}
         placement="right"
         width={1200}
@@ -198,7 +199,7 @@ export function PageEditor({ pageId, onBack }: PageEditorProps) {
           </div>
         }
       >
-        <div style={{ width: '100%', height: 'calc(100vh - 120px)' }}>
+        <div style={{ width: '100%', height: 'calc(100vh - 80px)' }}>
           <iframe
             src={`/admin/page-preview/${pageId}`}
             style={{ width: '100%', height: '100%', border: 'none' }}
