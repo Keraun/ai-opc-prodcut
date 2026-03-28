@@ -113,3 +113,17 @@
   box-shadow: 0 4px 8px rgba(6, 182, 212, 0.4);
   transform: translateY(-1px);
 }
+
+/* 主题色 */
+.color_theme {
+  background: var(--theme-primary, #3b82f6);
+  color: white;
+  border-color: var(--theme-primary, #3b82f6);
+}
+
+.color_theme:hover {
+  background: var(--theme-primary-hover, #2563eb);
+  border-color: var(--theme-primary-hover, #2563eb);
+  box-shadow: 0 4px 8px rgba(59, 130, 246, 0.4);
+  transform: translateY(-1px);
+}

@@ -10,6 +10,7 @@ export interface SectionProps extends HTMLAttributes<HTMLElement> {
   badgeClassName?: string
   badgeStyle?: React.CSSProperties
   badgeType?: 'blue' | 'red' | 'green' | 'orange' | 'purple' | 'pink' | 'yellow' | 'cyan'
+  useThemeBadgeColor?: boolean
   variant?: "default" | "gradient" | "minimal"
   padding?: "none" | "sm" | "md" | "lg"
   maxWidth?: "sm" | "md" | "lg" | "xl" | "full"
@@ -24,6 +25,7 @@ export function Section({
   badgeClassName = "",
   badgeStyle,
   badgeType = 'blue',
+  useThemeBadgeColor = false,
   variant = "default",
   padding = "lg",
   maxWidth = "xl",
@@ -48,6 +50,7 @@ export function Section({
         {badge && (
           <SectionTag 
             type={badgeType}
+            useThemeColor={useThemeBadgeColor}
             className={`${styles.badge} ${badgeClassName}`}
             style={badgeStyle}
           >

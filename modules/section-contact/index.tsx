@@ -7,9 +7,6 @@ import { ContactFormClient } from "./contact-form"
 export function ContactModule({ data }: ModuleProps) {
   const config: ContactData = (data as ContactData) || {}
 
-  // 从 data 中获取主题颜色，如果没有则使用默认颜色
-  const primaryColor = (data as any)?.themeColor || "#1e40af"
-
   return (
     <Section
       id="contact"
@@ -17,7 +14,7 @@ export function ContactModule({ data }: ModuleProps) {
       title={config.title}
       description={config.description}
       className={styles.section}
-      badgeType="yellow"
+      useThemeBadgeColor
       centered
     >
       <div className={styles.bgPattern} />
@@ -28,7 +25,6 @@ export function ContactModule({ data }: ModuleProps) {
         <div className={styles.card}>
           <div className={styles.cardContent}>
             <ContactFormClient
-              primaryColor={primaryColor}
               contactPreferences={config.contactPreferences}
             />
           </div>

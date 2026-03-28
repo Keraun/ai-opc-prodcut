@@ -34,11 +34,10 @@ export function ProductsModule({ data }: ModuleProps) {
       description={config.description}
       badge={config.sectionTag}
       badgeClassName={styles.badge}
-
+      useThemeBadgeColor
       variant="default"
       padding="lg"
       centered
-      badgeType="purple"
     >
       <div className={styles.bgElements}>
         <div className={styles.bgCircle1} />

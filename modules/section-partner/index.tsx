@@ -15,7 +15,7 @@ export function PartnerModule({ data }: ModuleProps) {
       title={config.title}
       description={config.description}
       className={styles.container}
-      badgeType="blue"
+      useThemeBadgeColor
       centered
     >
       <ul className={styles.partnerList}>

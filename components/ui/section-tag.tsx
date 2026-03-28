@@ -6,14 +6,27 @@ export interface SectionTagProps {
   className?: string
   style?: React.CSSProperties
   type?: 'blue' | 'red' | 'green' | 'orange' | 'purple' | 'pink' | 'yellow' | 'cyan'
+  useThemeColor?: boolean
 }
 
 export function SectionTag({
   children,
   className = '',
   style = {},
-  type = 'blue'
+  type = 'blue',
+  useThemeColor = false
 }: SectionTagProps) {
+  if (useThemeColor) {
+    return (
+      <span 
+        className={`${styles.sectionTag} ${styles.color_theme} ${className}`}
+        style={style}
+      >
+        {children}
+      </span>
+    )
+  }
+
   return (
     <span 
       className={`${styles.sectionTag} ${styles[`color_${type}`]} ${className}`}

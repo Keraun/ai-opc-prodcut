@@ -4,17 +4,18 @@ import { useState, useEffect } from 'react'
 import { useSearchParams } from 'next/navigation'
 import { SendIcon } from '@/modules/icons'
 import { submitContactForm } from '@/lib/api-client'
+import { useModuleTheme } from '@/hooks/use-module-theme'
 import styles from './index.module.css'
 
 interface ContactFormProps {
-  primaryColor: string
   contactPreferences?: Array<{ value?: string; label?: string }>
 }
 
-export function ContactFormClient({ primaryColor, contactPreferences }: ContactFormProps) {
+export function ContactFormClient({ contactPreferences }: ContactFormProps) {
   const searchParams = useSearchParams()
   const [message, setMessage] = useState<{ type: 'success' | 'error'; text: string } | null>(null)
   const [isSubmitting, setIsSubmitting] = useState(false)
+  const { primaryColor } = useModuleTheme()
 
   useEffect(() => {
     const contact = searchParams.get('contact')
