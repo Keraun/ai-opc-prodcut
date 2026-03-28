@@ -1,5 +1,6 @@
 {
   "type": "object",
-  "properties": {},
-  "required": []
+  "title": "404 Section Configuration",
+  "description": "配置404错误页面的内容",
+  "properties": {}
 }

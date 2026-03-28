@@ -1,26 +1,32 @@
 {
   "type": "object",
   "title": "News List Configuration",
+  "description": "配置新闻列表页面的外观和功能",
   "properties": {
     "title": {
       "type": "string",
-      "title": "页面标题"
+      "title": "页面标题",
+      "description": "新闻列表页面的主标题"
     },
     "subtitle": {
       "type": "string",
-      "title": "页面副标题"
+      "title": "页面副标题",
+      "description": "在标题下方的说明文字"
     },
     "showDate": {
       "type": "boolean",
-      "title": "显示日期"
+      "title": "显示日期",
+      "description": "是否在新闻卡片中显示发布日期"
     },
     "showSummary": {
       "type": "boolean",
-      "title": "显示摘要"
+      "title": "显示摘要",
+      "description": "是否在新闻卡片中显示文章摘要"
     },
     "itemsPerPage": {
       "type": "number",
-      "title": "每页显示数量"
+      "title": "每页显示数量",
+      "description": "每页显示的新闻文章数量"
     }
   }
 }

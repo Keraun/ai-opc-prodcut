@@ -1,28 +1,35 @@
 {
   "type": "object",
   "title": "About Section Configuration",
+  "description": "配置关于我们区块的内容和样式",
   "properties": {
     "sectionTag": {
       "type": "string",
-      "title": "区块标签"
+      "title": "区块标签",
+      "description": "显示在标题上方的小标签"
     },
     "title": {
       "type": "object",
       "title": "标题配置",
+      "description": "设置关于我们区块的标题内容",
       "properties": {
         "main": {
           "type": "string",
-          "title": "主标题"
+          "title": "主标题",
+          "description": "关于我们区块的主要标题"
         },
         "highlight": {
           "type": "string",
-          "title": "高亮文本"
+          "title": "高亮文本",
+          "description": "标题中需要高亮显示的文本"
         }
       }
     },
     "description": {
       "type": "array",
       "title": "描述列表",
+      "description": "关于我们的详细描述（支持多行）",
+      "x-component": "tags",
       "items": {
         "type": "string"
       }
@@ -30,58 +37,71 @@
     "mission": {
       "type": "object",
       "title": "使命",
+      "description": "配置公司使命的内容",
       "properties": {
         "title": {
           "type": "string",
-          "title": "标题"
+          "title": "使命标题",
+          "description": "使命部分的标题"
         },
         "description": {
           "type": "string",
-          "title": "描述"
+          "title": "使命描述",
+          "description": "使命的详细说明"
         }
       }
     },
     "vision": {
       "type": "object",
       "title": "愿景",
+      "description": "配置公司愿景的内容",
       "properties": {
         "title": {
           "type": "string",
-          "title": "标题"
+          "title": "愿景标题",
+          "description": "愿景部分的标题"
         },
         "description": {
           "type": "string",
-          "title": "描述"
+          "title": "愿景描述",
+          "description": "愿景的详细说明"
         }
       }
     },
     "values": {
       "type": "object",
       "title": "价值观",
+      "description": "配置公司价值观的内容",
       "properties": {
         "title": {
           "type": "string",
-          "title": "标题"
+          "title": "价值观标题",
+          "description": "价值观部分的标题"
         },
         "description": {
           "type": "string",
-          "title": "描述"
+          "title": "价值观描述",
+          "description": "价值观的详细说明"
         }
       }
     },
     "stats": {
       "type": "array",
       "title": "统计数据",
+      "description": "添加和管理展示的统计数据",
       "items": {
         "type": "object",
+        "title": "统计项",
         "properties": {
           "value": {
             "type": "string",
-            "title": "数值"
+            "title": "数值",
+            "description": "统计的具体数值（如 100+、50K 等）"
           },
           "label": {
             "type": "string",
-            "title": "标签"
+            "title": "标签",
+            "description": "数值对应的标签（如 项目完成、客户满意度等）"
           }
         }
       }

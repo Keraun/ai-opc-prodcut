@@ -1,39 +1,48 @@
 {
   "type": "object",
   "title": "Header Configuration",
+  "description": "配置网站顶部导航栏的内容",
   "properties": {
     "navItems": {
       "type": "array",
       "title": "导航项列表",
+      "description": "添加和管理导航菜单",
       "items": {
         "type": "object",
+        "title": "导航项",
         "properties": {
           "label": {
             "type": "string",
-            "title": "标签"
+            "title": "标签",
+            "description": "导航菜单显示的文字"
           },
           "href": {
             "type": "string",
-            "title": "链接地址"
+            "title": "链接地址",
+            "description": "点击导航项后跳转的URL"
           }
         }
       }
     },
     "showContactButton": {
       "type": "boolean",
-      "title": "显示联系按钮"
+      "title": "显示联系按钮",
+      "description": "在导航栏显示联系按钮"
     },
     "showCtaButton": {
       "type": "boolean",
-      "title": "显示CTA按钮"
+      "title": "显示CTA按钮",
+      "description": "在导航栏显示行动召唤按钮"
     },
     "ctaButtonText": {
       "type": "string",
-      "title": "CTA按钮文本"
+      "title": "CTA按钮文本",
+      "description": "行动召唤按钮上的文字"
     },
     "ctaButtonLink": {
       "type": "string",
-      "title": "CTA按钮链接"
+      "title": "CTA按钮链接",
+      "description": "点击CTA按钮后跳转的URL"
     }
   }
 }

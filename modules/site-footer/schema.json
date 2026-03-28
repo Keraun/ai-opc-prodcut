@@ -1,34 +1,42 @@
 {
   "type": "object",
   "title": "Footer Configuration",
+  "description": "配置网站底部页脚的内容",
   "properties": {
     "description": {
       "type": "string",
-      "title": "描述"
+      "title": "描述",
+      "description": "页脚显示的简短介绍文本"
     },
     "address": {
       "type": "string",
-      "title": "地址"
+      "title": "地址",
+      "description": "公司或办公地址"
     },
     "phone": {
       "type": "string",
-      "title": "电话"
+      "title": "电话",
+      "description": "联系电话号码"
     },
     "email": {
       "type": "string",
-      "title": "邮箱"
+      "title": "邮箱",
+      "description": "联系邮箱地址"
     },
     "wechatQrCode": {
       "type": "string",
-      "title": "微信二维码路径"
+      "title": "微信二维码路径",
+      "description": "微信二维码图片路径"
     },
     "officialAccountQrCode": {
       "type": "string",
-      "title": "公众号二维码路径"
+      "title": "公众号二维码路径",
+      "description": "微信公众号二维码图片路径"
     },
     "showAdminLink": {
       "type": "boolean",
-      "title": "显示管理后台链接"
+      "title": "显示管理后台链接",
+      "description": "在页脚显示管理后台入口链接"
     }
   }
 }

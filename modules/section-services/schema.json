@@ -1,36 +1,46 @@
 {
   "type": "object",
   "title": "Services Section Configuration",
+  "description": "配置服务展示区块的内容和样式",
   "properties": {
+    "sectionTag": {
+      "type": "string",
+      "title": "区块标签",
+      "description": "显示在标题上方的小标签"
+    },
     "title": {
       "type": "string",
-      "title": "标题"
+      "title": "区块标题",
+      "description": "服务区块的主标题"
     },
     "description": {
       "type": "string",
-      "title": "描述"
-    },
-    "sectionTag": {
-      "type": "string",
-      "title": "区块标签"
+      "title": "区块描述",
+      "description": "在标题下方的详细描述"
     },
     "items": {
       "type": "array",
       "title": "服务列表",
+      "description": "添加和管理提供的各项服务",
       "items": {
         "type": "object",
+        "title": "服务项",
         "properties": {
           "title": {
             "type": "string",
-            "title": "标题"
+            "title": "服务标题",
+            "description": "服务的名称或标题"
           },
           "description": {
             "type": "string",
-            "title": "描述"
+            "title": "服务描述",
+            "description": "服务的详细说明"
           },
           "highlights": {
             "type": "array",
             "title": "特性列表",
+            "description": "该服务的主要特性点",
+            "x-component": "tags",
             "items": {
               "type": "string"
             }

@@ -1,30 +1,37 @@
 {
   "type": "object",
   "title": "News Detail Configuration",
+  "description": "配置新闻详情页面的外观和功能",
   "properties": {
     "showAuthor": {
       "type": "boolean",
-      "title": "显示作者"
+      "title": "显示作者",
+      "description": "是否显示文章作者信息"
     },
     "showDate": {
       "type": "boolean",
-      "title": "显示日期"
+      "title": "显示日期",
+      "description": "是否显示文章发布日期"
     },
     "showRelated": {
       "type": "boolean",
-      "title": "显示相关文章"
+      "title": "显示相关文章",
+      "description": "是否在页面底部显示相关文章推荐"
     },
     "relatedCount": {
       "type": "number",
-      "title": "相关文章数量"
+      "title": "相关文章数量",
+      "description": "显示的相关文章数量"
     },
     "showShare": {
       "type": "boolean",
-      "title": "显示分享按钮"
+      "title": "显示分享按钮",
+      "description": "是否显示社交分享按钮"
     },
     "showComments": {
       "type": "boolean",
-      "title": "显示评论"
+      "title": "显示评论",
+      "description": "是否显示评论区域"
     }
   }
 }

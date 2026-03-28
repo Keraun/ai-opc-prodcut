@@ -1,55 +1,69 @@
 {
   "type": "object",
   "title": "Pricing Section Configuration",
+  "description": "配置价格方案展示区块的内容",
   "properties": {
     "sectionTag": {
       "type": "string",
-      "title": "标签"
+      "title": "区块标签",
+      "description": "显示在标题上方的小标签"
     },
     "title": {
       "type": "string",
-      "title": "标题"
+      "title": "区块标题",
+      "description": "价格方案区块的主标题"
     },
     "description": {
       "type": "string",
-      "title": "描述"
+      "title": "区块描述",
+      "description": "在标题下方的详细描述"
     },
     "plans": {
       "type": "array",
       "title": "价格计划列表",
+      "description": "添加和管理不同的价格方案",
       "items": {
         "type": "object",
+        "title": "价格方案",
         "properties": {
           "title": {
             "type": "string",
-            "title": "计划标题"
+            "title": "计划标题",
+            "description": "价格方案的名称"
           },
           "price": {
             "type": "string",
-            "title": "价格"
+            "title": "价格",
+            "description": "方案的价格（如 ¥99/月、免费等）"
           },
           "description": {
             "type": "string",
-            "title": "计划描述"
+            "title": "计划描述",
+            "description": "价格方案的简短说明"
           },
           "features": {
             "type": "array",
             "title": "功能列表",
+            "description": "该方案包含的功能特性",
+            "x-component": "tags",
             "items": {
               "type": "string"
             }
           },
           "buttonText": {
             "type": "string",
-            "title": "按钮文本"
+            "title": "按钮文本",
+            "description": "操作按钮上的文字"
           },
           "buttonLink": {
             "type": "string",
-            "title": "按钮链接"
+            "title": "按钮链接",
+            "description": "点击按钮后跳转的URL"
           },
           "isPopular": {
             "type": "boolean",
-            "title": "是否热门"
+            "title": "是否热门",
+            "description": "标记该方案为推荐/热门方案"
           }
         }
       }

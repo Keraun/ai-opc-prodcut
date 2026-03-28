@@ -1,37 +1,46 @@
 {
   "type": "object",
   "title": "Contact Section Configuration",
+  "description": "配置联系我们区块的内容",
   "properties": {
+    "sectionTag": {
+      "type": "string",
+      "title": "区块标签",
+      "description": "显示在标题上方的小标签"
+    },
     "title": {
       "type": "string",
-      "title": "标题"
+      "title": "区块标题",
+      "description": "联系我们区块的主标题"
     },
     "description": {
       "type": "string",
-      "title": "描述"
-    },
-    "sectionTag": {
-      "type": "string",
-      "title": "区块标签"
+      "title": "区块描述",
+      "description": "在标题下方的详细描述"
     },
     "methods": {
       "type": "array",
       "title": "联系方式列表",
+      "description": "添加和管理联系信息",
       "items": {
         "type": "object",
+        "title": "联系方式",
         "properties": {
           "type": {
             "type": "string",
             "title": "联系方式类型",
+            "description": "联系方式的类型",
             "enum": ["email", "phone", "address", "wechat", "other"]
           },
           "value": {
             "type": "string",
-            "title": "联系方式值"
+            "title": "联系方式值",
+            "description": "具体的联系方式内容"
           },
           "label": {
             "type": "string",
-            "title": "标签"
+            "title": "标签",
+            "description": "联系方式的显示标签"
           }
         }
       }

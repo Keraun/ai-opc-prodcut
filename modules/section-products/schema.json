@@ -1,60 +1,75 @@
 {
   "type": "object",
   "title": "Products Section Configuration",
+  "description": "配置产品展示区块的内容",
   "properties": {
+    "sectionTag": {
+      "type": "string",
+      "title": "区块标签",
+      "description": "显示在标题上方的小标签"
+    },
     "title": {
       "type": "string",
-      "title": "标题"
+      "title": "区块标题",
+      "description": "产品区块的主标题"
     },
     "description": {
       "type": "string",
-      "title": "描述"
-    },
-    "sectionTag": {
-      "type": "string",
-      "title": "区块标签"
+      "title": "区块描述",
+      "description": "在标题下方的详细描述"
     },
     "items": {
       "type": "array",
       "title": "产品列表",
+      "description": "添加和管理展示的产品",
       "items": {
         "type": "object",
+        "title": "产品项",
         "properties": {
           "id": {
             "type": "string",
-            "title": "产品ID"
+            "title": "产品ID",
+            "description": "产品的唯一标识符"
           },
           "name": {
             "type": "string",
-            "title": "产品名称"
+            "title": "产品名称",
+            "description": "产品的名称"
           },
           "description": {
             "type": "string",
-            "title": "产品描述"
+            "title": "产品描述",
+            "description": "产品的简短介绍"
           },
           "icon": {
             "type": "string",
-            "title": "图标名称"
+            "title": "图标名称",
+            "description": "产品的图标标识"
           },
           "tag": {
             "type": "string",
-            "title": "标签"
+            "title": "标签",
+            "description": "产品标签文字（如 新品、热门等）"
           },
           "tagColor": {
             "type": "string",
             "title": "标签颜色",
+            "description": "标签的颜色主题",
             "enum": ["blue", "green", "orange", "purple", "red", "cyan"]
           },
           "features": {
             "type": "array",
             "title": "特性列表",
+            "description": "产品的主要特性",
+            "x-component": "tags",
             "items": {
               "type": "string"
             }
           },
           "link": {
             "type": "string",
-            "title": "链接地址"
+            "title": "链接地址",
+            "description": "产品详情页的URL"
           }
         }
       }

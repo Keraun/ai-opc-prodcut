@@ -1,28 +1,35 @@
 {
   "type": "object",
   "title": "Partner Section Configuration",
+  "description": "配置合作伙伴展示区块的内容",
   "properties": {
     "title": {
       "type": "string",
-      "title": "标题"
+      "title": "区块标题",
+      "description": "合作伙伴区块的主标题"
     },
     "description": {
       "type": "string",
-      "title": "描述"
+      "title": "区块描述",
+      "description": "在标题下方的详细描述"
     },
     "items": {
       "type": "array",
       "title": "合作伙伴列表",
+      "description": "添加和管理合作伙伴Logo",
       "items": {
         "type": "object",
+        "title": "合作伙伴",
         "properties": {
           "src": {
             "type": "string",
-            "title": "图片路径"
+            "title": "图片路径",
+            "description": "合作伙伴Logo的图片路径"
           },
           "alt": {
             "type": "string",
-            "title": "图片描述"
+            "title": "图片描述",
+            "description": "图片的替代文本，用于无障碍访问"
           }
         }
       }

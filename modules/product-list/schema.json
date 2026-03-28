@@ -1,22 +1,27 @@
 {
   "type": "object",
   "title": "Product List Configuration",
+  "description": "配置产品列表页面的外观和功能",
   "properties": {
     "title": {
       "type": "string",
-      "title": "页面标题"
+      "title": "页面标题",
+      "description": "产品列表页面的主标题"
     },
     "subtitle": {
       "type": "string",
-      "title": "页面副标题"
+      "title": "页面副标题",
+      "description": "在标题下方的说明文字"
     },
     "showPrice": {
       "type": "boolean",
-      "title": "显示价格"
+      "title": "显示价格",
+      "description": "是否在产品卡片中显示价格"
     },
     "showTags": {
       "type": "boolean",
-      "title": "显示标签"
+      "title": "显示标签",
+      "description": "是否在产品卡片中显示标签"
     }
   }
 }
