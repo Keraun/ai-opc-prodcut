@@ -70,19 +70,6 @@ export default function ModulePreviewPage() {
       maxWidth: "1200px",
       margin: "0 auto",
     }}>
-      <div style={{
-        background: "#f5f5f5",
-        padding: "16px",
-        borderRadius: "8px",
-        marginBottom: "24px",
-      }}>
-        <h1 style={{ margin: "0 0 8px 0", fontSize: "24px" }}>
-          模块预览: {moduleInfo.moduleName}
-        </h1>
-        <p style={{ margin: 0, color: "#666", fontSize: "14px" }}>
-          模块ID: {moduleInfo.moduleId}
-        </p>
-      </div>
       
       <div style={{
         background: "#fff",

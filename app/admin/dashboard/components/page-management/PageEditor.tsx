@@ -137,7 +137,7 @@ export function PageEditor({ pageId, onBack }: PageEditorProps) {
             onClick={() => setShowPreview(true)}
             style={{ marginRight: 8 }}
           >
-            预览
+            实时预览
           </Button>
           <Button
             type="primary"
