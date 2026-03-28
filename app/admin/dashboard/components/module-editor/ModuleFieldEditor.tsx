@@ -1,7 +1,7 @@
 "use client"
 
 import { useState, useEffect } from "react"
-import { Input, InputNumber, Switch, Select, Space } from "@arco-design/web-react"
+import { Input, InputNumber, Switch, Select, Space, InputTag } from "@arco-design/web-react"
 import { toast } from "sonner"
 import styles from "../../dashboard.module.css"
 import { getModuleSchema } from "@/lib/api-client"
@@ -14,6 +14,8 @@ interface SchemaProperty {
   properties?: Record<string, SchemaProperty>
   items?: SchemaProperty
   default?: any
+  "x-col-span"?: number
+  "x-component"?: string
 }
 
 interface ModuleFieldEditorProps {
@@ -53,6 +55,63 @@ function getNestedValue(obj: Record<string, unknown>, path: string): unknown {
   return current
 }
 
+interface FieldLayoutItem {
+  key: string
+  property: SchemaProperty
+  colSpan: number
+  path: string
+}
+
+function calculateFieldLayout(
+  properties: Record<string, SchemaProperty>,
+  currentPath: string = ''
+): FieldLayoutItem[] {
+  const items: FieldLayoutItem[] = []
+  const columns = 3
+
+  Object.entries(properties).forEach(([key, property]) => {
+    const path = currentPath ? `${currentPath}.${key}` : key
+    if (property.type !== "object") {
+      items.push({
+        key,
+        property,
+        colSpan: Math.min(property["x-col-span"] || 1, columns),
+        path
+      })
+    }
+  })
+
+  return items
+}
+
+function groupFieldsByRow(items: FieldLayoutItem[]): FieldLayoutItem[][] {
+  const rows: FieldLayoutItem[][] = []
+  const columns = 3
+  let currentRow: FieldLayoutItem[] = []
+  let currentCol = 0
+
+  items.forEach((item) => {
+    const neededCols = item.colSpan
+    
+    if (currentCol + neededCols > columns) {
+      if (currentRow.length > 0) {
+        rows.push(currentRow)
+      }
+      currentRow = [item]
+      currentCol = neededCols
+    } else {
+      currentRow.push(item)
+      currentCol += neededCols
+    }
+  })
+
+  if (currentRow.length > 0) {
+    rows.push(currentRow)
+  }
+
+  return rows
+}
+
 export function ModuleFieldEditor({ moduleId, data, onChange }: ModuleFieldEditorProps) {
   const [schema, setSchema] = useState<Record<string, SchemaProperty>>({})
   const [loading, setLoading] = useState(true)
@@ -77,81 +136,25 @@ export function ModuleFieldEditor({ moduleId, data, onChange }: ModuleFieldEdito
     onChange(newData)
   }
 
-  const renderField = (key: string, property: SchemaProperty, currentPath: string = ''): React.ReactNode => {
-    const { type, title, description, enum: enumValues, properties: nestedProperties, items } = property
-    const fieldPath = currentPath ? `${currentPath}.${key}` : key
-    const value = getNestedValue(data, fieldPath)
+  const renderSimpleField = (item: FieldLayoutItem): React.ReactNode => {
+    const { property, path, colSpan } = item
+    const { type, title, description, enum: enumValues, "x-component": component } = property
+    const value = getNestedValue(data, path)
 
-    if (type === "object" && nestedProperties) {
-      return (
-        <div key={fieldPath} className={styles.fieldGroup}>
-          <div className={styles.fieldGroupTitle}>
-            <h4 style={{ margin: 0 }}>{title}</h4>
-            {description && <p style={{ margin: "4px 0", fontSize: 12, color: "#6b7280" }}>{description}</p>}
-          </div>
-          <div className={styles.fieldGroupContent}>
-            {Object.entries(nestedProperties).map(([nestedKey, nestedProp]) =>
-              renderField(nestedKey, nestedProp, fieldPath)
-            )}
-          </div>
-        </div>
-      )
-    }
-
-    if (type === "array") {
-      const arrayValue = Array.isArray(value) ? value : []
-      return (
-        <div key={fieldPath} className={styles.fieldItem}>
-          <label className={styles.fieldLabel}>{title}</label>
-          {description && <p className={styles.fieldDescription}>{description}</p>}
-          <div className={styles.arrayField}>
-            {arrayValue.map((item, index) => (
-              <div key={index} className={styles.arrayItem}>
-                {items?.type === "string" && (
-                  <Input
-                    value={item as string}
-                    onChange={(val) => {
-                      const newArray = [...arrayValue]
-                      newArray[index] = val
-                      handleFieldChange(fieldPath, newArray)
-                    }}
-                    placeholder={`项目 ${index + 1}`}
-                  />
-                )}
-                <button
-                  className={styles.arrayItemDelete}
-                  onClick={() => {
-                    const newArray = arrayValue.filter((_, i) => i !== index)
-                    handleFieldChange(fieldPath, newArray)
-                  }}
-                >
-                  删除
-                </button>
-              </div>
-            ))}
-            <button
-              className={styles.arrayAddButton}
-              onClick={() => {
-                const newArray = [...arrayValue, items?.type === "string" ? "" : {}]
-                handleFieldChange(fieldPath, newArray)
-              }}
-            >
-              + 添加项目
-            </button>
-          </div>
-        </div>
-      )
+    const fieldStyle = {
+      gridColumn: `span ${colSpan} / span ${colSpan}`
     }
 
     if (enumValues && enumValues.length > 0) {
       return (
-        <div key={fieldPath} className={styles.fieldItem}>
-          <label className={styles.fieldLabel}>{title}</label>
-          {description && <p className={styles.fieldDescription}>{description}</p>}
+        <div key={path} className={styles.formField} style={fieldStyle}>
+          <label className={styles.formLabel}>{title}</label>
+          {description && <span className={styles.formHint}>{description}</span>}
           <Select
             value={value as string}
-            onChange={(val) => handleFieldChange(fieldPath, val)}
+            onChange={(val) => handleFieldChange(path, val)}
             style={{ width: "100%" }}
+            placeholder={`请选择${title}`}
           >
             {enumValues.map((enumValue) => (
               <Select.Option key={enumValue} value={enumValue}>
@@ -163,15 +166,31 @@ export function ModuleFieldEditor({ moduleId, data, onChange }: ModuleFieldEdito
       )
     }
 
+    if (component === "tags" || type === "array") {
+      const arrayValue = Array.isArray(value) ? value : []
+      return (
+        <div key={path} className={styles.formField} style={fieldStyle}>
+          <label className={styles.formLabel}>{title}</label>
+          {description && <span className={styles.formHint}>{description}</span>}
+          <InputTag
+            value={arrayValue.map(String)}
+            onChange={(vals) => handleFieldChange(path, vals)}
+            placeholder="输入后按回车添加"
+            style={{ width: "100%" }}
+          />
+        </div>
+      )
+    }
+
     switch (type) {
       case "string":
         return (
-          <div key={fieldPath} className={styles.fieldItem}>
-            <label className={styles.fieldLabel}>{title}</label>
-            {description && <p className={styles.fieldDescription}>{description}</p>}
+          <div key={path} className={styles.formField} style={fieldStyle}>
+            <label className={styles.formLabel}>{title}</label>
+            {description && <span className={styles.formHint}>{description}</span>}
             <Input
               value={value as string}
-              onChange={(val) => handleFieldChange(fieldPath, val)}
+              onChange={(val) => handleFieldChange(path, val)}
               placeholder={`请输入${title}`}
             />
           </div>
@@ -179,26 +198,31 @@ export function ModuleFieldEditor({ moduleId, data, onChange }: ModuleFieldEdito
 
       case "number":
         return (
-          <div key={fieldPath} className={styles.fieldItem}>
-            <label className={styles.fieldLabel}>{title}</label>
-            {description && <p className={styles.fieldDescription}>{description}</p>}
+          <div key={path} className={styles.formField} style={fieldStyle}>
+            <label className={styles.formLabel}>{title}</label>
+            {description && <span className={styles.formHint}>{description}</span>}
             <InputNumber
               value={value as number}
-              onChange={(val) => handleFieldChange(fieldPath, val)}
+              onChange={(val) => handleFieldChange(path, val)}
               style={{ width: "100%" }}
+              placeholder={`请输入${title}`}
             />
           </div>
         )
 
       case "boolean":
         return (
-          <div key={fieldPath} className={styles.fieldItem}>
-            <label className={styles.fieldLabel}>{title}</label>
-            {description && <p className={styles.fieldDescription}>{description}</p>}
-            <Switch
-              checked={value as boolean}
-              onChange={(val) => handleFieldChange(fieldPath, val)}
-            />
+          <div key={path} className={styles.formField} style={fieldStyle}>
+            <div className={styles.formSwitchField}>
+              <div>
+                <label className={styles.formLabel}>{title}</label>
+                {description && <span className={styles.formHint}>{description}</span>}
+              </div>
+              <Switch
+                checked={value as boolean}
+                onChange={(val) => handleFieldChange(path, val)}
+              />
+            </div>
           </div>
         )
 
@@ -207,22 +231,69 @@ export function ModuleFieldEditor({ moduleId, data, onChange }: ModuleFieldEdito
     }
   }
 
+  const renderObjectField = (key: string, property: SchemaProperty, currentPath: string = ''): React.ReactNode => {
+    const { title, description, properties: nestedProperties } = property
+    const fieldPath = currentPath ? `${currentPath}.${key}` : key
+
+    if (!nestedProperties) return null
+
+    const layoutItems = calculateFieldLayout(nestedProperties, fieldPath)
+    const rows = groupFieldsByRow(layoutItems)
+
+    return (
+      <div key={fieldPath} className={styles.formSection}>
+        <div className={styles.formSectionHeader}>
+          <h4 className={styles.formSectionTitle}>{title}</h4>
+          {description && <p className={styles.formSectionDesc}>{description}</p>}
+        </div>
+        <div className={styles.formGrid}>
+          {rows.map((row, rowIndex) => (
+            <div key={rowIndex} className={styles.formRow}>
+              {row.map((item) => renderSimpleField(item))}
+            </div>
+          ))}
+        </div>
+      </div>
+    )
+  }
+
   if (loading) {
     return <div className={styles.loading}>加载字段定义...</div>
   }
 
   if (Object.keys(schema).length === 0) {
     return (
-      <div style={{ textAlign: "center", color: "#9ca3af", padding: 20 }}>
-        该模块没有可编辑的字段
+      <div className={styles.emptyForm}>
+        <div className={styles.emptyFormIcon}>
+          <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
+            <path d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+          </svg>
+        </div>
+        <p>该模块没有可编辑的字段</p>
       </div>
     )
   }
 
+  const topLevelObjectFields = Object.entries(schema).filter(([_, prop]) => prop.type === "object" && prop.properties)
+  const topLevelSimpleFields = Object.entries(schema).filter(([_, prop]) => prop.type !== "object")
+
   return (
-    <div className={styles.moduleFieldEditor}>
-      {Object.entries(schema).map(([key, property]) =>
-        renderField(key, property)
+    <div className={styles.formEditor}>
+      {topLevelObjectFields.map(([key, property]) => renderObjectField(key, property))}
+      
+      {topLevelSimpleFields.length > 0 && (
+        <div className={styles.formSection}>
+          <div className={styles.formSectionHeader}>
+            <h4 className={styles.formSectionTitle}>基本设置</h4>
+          </div>
+          <div className={styles.formGrid}>
+            {groupFieldsByRow(calculateFieldLayout(Object.fromEntries(topLevelSimpleFields))).map((row, rowIndex) => (
+              <div key={rowIndex} className={styles.formRow}>
+                {row.map((item) => renderSimpleField(item))}
+              </div>
+            ))}
+          </div>
+        </div>
       )}
     </div>
   )

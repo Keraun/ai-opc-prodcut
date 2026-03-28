@@ -1,10 +1,9 @@
-import { NextRequest, NextResponse } from 'next/server'
+import { NextRequest } from 'next/server'
 import { initializeAndSyncModules } from '@/lib/initialize-modules'
 import { getModuleTemplate } from '@/lib/module-service'
 import { readConfig } from '@/lib/config-manager'
 import { 
   successResponse, 
-  errorResponse, 
   notFoundResponse, 
   wrapApiHandler 
 } from '@/lib/api-utils'
@@ -13,10 +12,10 @@ initializeAndSyncModules()
 
 export async function GET(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   return wrapApiHandler(async () => {
-    const moduleId = params.id
+    const { id: moduleId } = await params
     const moduleTemplate = getModuleTemplate(moduleId)
     const currentData = readConfig(moduleId)
 

@@ -1,3 +1,216 @@
 {
-    "test": 1
+  "type": "object",
+  "title": "站点根配置",
+  "description": "网站全局配置，包括基本信息、联系方式、SEO设置等",
+  "properties": {
+    "name": {
+      "type": "string",
+      "title": "站点名称",
+      "description": "网站的名称，显示在浏览器标签页和页头",
+      "default": ""
+    },
+    "description": {
+      "type": "string",
+      "title": "站点描述",
+      "description": "网站的简短描述，用于SEO和社交分享",
+      "default": ""
+    },
+    "url": {
+      "type": "string",
+      "title": "站点URL",
+      "description": "网站的完整URL地址",
+      "default": "",
+      "x-col-span": 2
+    },
+    "ogImage": {
+      "type": "string",
+      "title": "OG图片",
+      "description": "社交分享时显示的图片路径",
+      "default": "/og-image.png"
+    },
+    "icp": {
+      "type": "string",
+      "title": "ICP备案号",
+      "description": "网站ICP备案号",
+      "default": ""
+    },
+    "currentTheme": {
+      "type": "string",
+      "title": "当前主题",
+      "description": "网站使用的主题",
+      "default": "minimal",
+      "enum": ["minimal", "modern", "classic"]
+    },
+    "links": {
+      "type": "object",
+      "title": "社交链接",
+      "properties": {
+        "email": {
+          "type": "string",
+          "title": "邮箱",
+          "default": ""
+        },
+        "wechat": {
+          "type": "string",
+          "title": "微信公众号",
+          "default": ""
+        },
+        "github": {
+          "type": "string",
+          "title": "GitHub",
+          "default": "",
+          "x-col-span": 2
+        },
+        "twitter": {
+          "type": "string",
+          "title": "Twitter",
+          "default": "",
+          "x-col-span": 2
+        }
+      }
+    },
+    "creator": {
+      "type": "object",
+      "title": "创建者信息",
+      "properties": {
+        "name": {
+          "type": "string",
+          "title": "创建者名称",
+          "default": ""
+        },
+        "url": {
+          "type": "string",
+          "title": "创建者链接",
+          "default": "",
+          "x-col-span": 2
+        }
+      }
+    },
+    "contact": {
+      "type": "object",
+      "title": "联系方式",
+      "properties": {
+        "address": {
+          "type": "string",
+          "title": "地址",
+          "default": "",
+          "x-col-span": 3
+        },
+        "phone": {
+          "type": "string",
+          "title": "电话",
+          "default": ""
+        },
+        "email": {
+          "type": "string",
+          "title": "邮箱",
+          "default": ""
+        }
+      }
+    },
+    "support": {
+      "type": "object",
+      "title": "客服支持",
+      "properties": {
+        "customerServiceQRCode": {
+          "type": "string",
+          "title": "客服二维码",
+          "description": "客服微信二维码图片路径",
+          "default": "/images/customer-service-qr.png",
+          "x-col-span": 2
+        },
+        "helpDocUrl": {
+          "type": "string",
+          "title": "帮助文档链接",
+          "default": "",
+          "x-col-span": 2
+        }
+      }
+    },
+    "features": {
+      "type": "object",
+      "title": "功能开关",
+      "properties": {
+        "enableTOC": {
+          "type": "boolean",
+          "title": "启用目录",
+          "default": true
+        },
+        "enableReadingProgress": {
+          "type": "boolean",
+          "title": "启用阅读进度条",
+          "default": true
+        },
+        "enableSearch": {
+          "type": "boolean",
+          "title": "启用搜索",
+          "default": true
+        }
+      }
+    },
+    "seo": {
+      "type": "object",
+      "title": "SEO设置",
+      "properties": {
+        "keywords": {
+          "type": "array",
+          "title": "关键词",
+          "description": "网站SEO关键词",
+          "items": {
+            "type": "string"
+          },
+          "x-component": "tags",
+          "x-col-span": 3
+        },
+        "robots": {
+          "type": "object",
+          "title": "爬虫设置",
+          "properties": {
+            "index": {
+              "type": "boolean",
+              "title": "允许索引",
+              "default": true
+            },
+            "follow": {
+              "type": "boolean",
+              "title": "允许跟踪链接",
+              "default": true
+            },
+            "googleBot": {
+              "type": "object",
+              "title": "Google爬虫设置",
+              "properties": {
+                "index": {
+                  "type": "boolean",
+                  "title": "允许索引",
+                  "default": true
+                },
+                "follow": {
+                  "type": "boolean",
+                  "title": "允许跟踪链接",
+                  "default": true
+                },
+                "maxVideoPreview": {
+                  "type": "number",
+                  "title": "最大视频预览数",
+                  "default": -1
+                },
+                "maxImagePreview": {
+                  "type": "string",
+                  "title": "最大图片预览",
+                  "default": "large",
+                  "enum": ["none", "standard", "large"]
+                },
+                "maxSnippet": {
+                  "type": "number",
+                  "title": "最大摘要长度",
+                  "default": -1
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
 }
