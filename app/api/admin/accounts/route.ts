@@ -5,10 +5,18 @@ import { readConfig, writeConfig } from '@/lib/config-manager'
 export async function GET() {
   try {
     const accounts = readConfig('account') || []
-    return NextResponse.json({ success: true, accounts })
+    return NextResponse.json({ 
+      code: 200, 
+      success: true, 
+      data: accounts 
+    })
   } catch (error) {
     console.error('获取账号列表失败:', error)
-    return NextResponse.json({ success: false, message: '获取账号列表失败' }, { status: 500 })
+    return NextResponse.json({ 
+      code: 500, 
+      success: false, 
+      message: '获取账号列表失败' 
+    }, { status: 500 })
   }
 }
 
@@ -19,7 +27,11 @@ export async function POST(request: NextRequest) {
     
     // 验证参数
     if (!newAccount.username || !newAccount.password || !newAccount.email) {
-      return NextResponse.json({ success: false, message: '用户名、密码和邮箱不能为空' }, { status: 400 })
+      return NextResponse.json({ 
+        code: 400, 
+        success: false, 
+        message: '用户名、密码和邮箱不能为空' 
+      }, { status: 400 })
     }
     
     // 读取现有账号
@@ -28,7 +40,11 @@ export async function POST(request: NextRequest) {
     // 检查用户名是否已存在
     const existingAccount = accounts.find((account: any) => account.username === newAccount.username)
     if (existingAccount) {
-      return NextResponse.json({ success: false, message: '用户名已存在' }, { status: 400 })
+      return NextResponse.json({ 
+        code: 400, 
+        success: false, 
+        message: '用户名已存在' 
+      }, { status: 400 })
     }
     
     // 添加新账号
@@ -44,10 +60,18 @@ export async function POST(request: NextRequest) {
     accounts.push(account)
     writeConfig('account', accounts)
     
-    return NextResponse.json({ success: true, message: '账号添加成功' })
+    return NextResponse.json({ 
+      code: 201, 
+      success: true, 
+      message: '账号添加成功' 
+    })
   } catch (error) {
     console.error('新增账号失败:', error)
-    return NextResponse.json({ success: false, message: '新增账号失败' }, { status: 500 })
+    return NextResponse.json({ 
+      code: 500, 
+      success: false, 
+      message: '新增账号失败' 
+    }, { status: 500 })
   }
 }
 
@@ -58,12 +82,20 @@ export async function DELETE(request: NextRequest) {
     const username = pathname.split('/').pop()
     
     if (!username) {
-      return NextResponse.json({ success: false, message: '用户名不能为空' }, { status: 400 })
+      return NextResponse.json({ 
+        code: 400, 
+        success: false, 
+        message: '用户名不能为空' 
+      }, { status: 400 })
     }
     
     // 检查是否为默认admin账户
     if (username === 'admin') {
-      return NextResponse.json({ success: false, message: '默认admin账户不可删除' }, { status: 400 })
+      return NextResponse.json({ 
+        code: 400, 
+        success: false, 
+        message: '默认admin账户不可删除' 
+      }, { status: 400 })
     }
     
     // 读取现有账号
@@ -72,22 +104,38 @@ export async function DELETE(request: NextRequest) {
     // 检查账号是否存在
     const accountIndex = accounts.findIndex((account: any) => account.username === username)
     if (accountIndex === -1) {
-      return NextResponse.json({ success: false, message: '账号不存在' }, { status: 404 })
+      return NextResponse.json({ 
+        code: 404, 
+        success: false, 
+        message: '账号不存在' 
+      }, { status: 404 })
     }
     
     // 检查是否为最后一个账号
     if (accounts.length === 1) {
-      return NextResponse.json({ success: false, message: '至少需要保留一个账号' }, { status: 400 })
+      return NextResponse.json({ 
+        code: 400, 
+        success: false, 
+        message: '至少需要保留一个账号' 
+      }, { status: 400 })
     }
     
     // 删除账号
     accounts.splice(accountIndex, 1)
     writeConfig('account', accounts)
     
-    return NextResponse.json({ success: true, message: '账号删除成功' })
+    return NextResponse.json({ 
+      code: 200, 
+      success: true, 
+      message: '账号删除成功' 
+    })
   } catch (error) {
     console.error('删除账号失败:', error)
-    return NextResponse.json({ success: false, message: '删除账号失败' }, { status: 500 })
+    return NextResponse.json({ 
+      code: 500, 
+      success: false, 
+      message: '删除账号失败' 
+    }, { status: 500 })
   }
 }
 
@@ -98,14 +146,22 @@ export async function PUT(request: NextRequest) {
     const username = pathname.split('/').pop()
     
     if (!username) {
-      return NextResponse.json({ success: false, message: '用户名不能为空' }, { status: 400 })
+      return NextResponse.json({ 
+        code: 400, 
+        success: false, 
+        message: '用户名不能为空' 
+      }, { status: 400 })
     }
     
     const updatedAccount = await request.json()
     
     // 验证参数
     if (!updatedAccount.email) {
-      return NextResponse.json({ success: false, message: '邮箱不能为空' }, { status: 400 })
+      return NextResponse.json({ 
+        code: 400, 
+        success: false, 
+        message: '邮箱不能为空' 
+      }, { status: 400 })
     }
     
     // 读取现有账号
@@ -114,7 +170,11 @@ export async function PUT(request: NextRequest) {
     // 检查账号是否存在
     const accountIndex = accounts.findIndex((account: any) => account.username === username)
     if (accountIndex === -1) {
-      return NextResponse.json({ success: false, message: '账号不存在' }, { status: 404 })
+      return NextResponse.json({ 
+        code: 404, 
+        success: false, 
+        message: '账号不存在' 
+      }, { status: 404 })
     }
     
     // 更新账号信息
@@ -132,9 +192,17 @@ export async function PUT(request: NextRequest) {
     
     writeConfig('account', accounts)
     
-    return NextResponse.json({ success: true, message: '账号修改成功' })
+    return NextResponse.json({ 
+      code: 200, 
+      success: true, 
+      message: '账号修改成功' 
+    })
   } catch (error) {
     console.error('修改账号失败:', error)
-    return NextResponse.json({ success: false, message: '修改账号失败' }, { status: 500 })
+    return NextResponse.json({ 
+      code: 500, 
+      success: false, 
+      message: '修改账号失败' 
+    }, { status: 500 })
   }
 }

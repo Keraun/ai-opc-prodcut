@@ -59,7 +59,6 @@ CREATE TABLE system_config (
   "icp": "浙ICP备XXXXXXXX号",
   "features": {"enableTOC": true},
   "seo": {"keywords": []},
-  "currentTheme": "modern"
 }
 ```
 
