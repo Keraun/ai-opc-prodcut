@@ -11,14 +11,6 @@ export function useConfig() {
       currentTheme: 'dark',
       themes: {}
     },
-    header: {},
-    'section-hero': {},
-    'section-partner': {},
-    'section-products': {},
-    'section-services': {},
-    'section-pricing': {},
-    'section-about': {},
-    'section-contact': {},
     'feishu-app': {
       appId: '',
       appSecret: '',
@@ -61,9 +53,9 @@ export function useConfig() {
       
       const mergedData = {
         ...data,
-        theme: data.theme || {
-          currentTheme: 'modern',
-          themes: {}
+        theme: {
+          currentTheme: data.theme?.currentTheme || 'modern',
+          themes: data.theme?.themes || {}
         }
       }
       
