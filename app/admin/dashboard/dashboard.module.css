@@ -515,20 +515,7 @@
 }
 
 .themeGrid>* {
-  flex: 1 1 100%;
-  min-width: 200px;
-}
-
-@media (min-width: 768px) {
-  .themeGrid>* {
-    flex: 1 1 calc(33.333% - 11px);
-  }
-}
-
-@media (min-width: 1024px) {
-  .themeGrid>* {
-    flex: 1 1 calc(25% - 12px);
-  }
+  flex: 0 0 auto;
 }
 
 .themeCard {
@@ -538,6 +525,8 @@
   padding: 12px;
   cursor: pointer;
   transition: all 0.2s;
+  width: 240px;
+  flex-shrink: 0;
 }
 
 .themeCard:hover {
