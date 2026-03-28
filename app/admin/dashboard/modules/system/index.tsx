@@ -4,10 +4,11 @@ import { useAuth } from '../../common/hooks/useAuth'
 import { useConfig } from '../../common/hooks/useConfig'
 import { handleExportConfig, handleImportConfig, handleResetWebsite } from '../../common/utils/config-utils'
 import { SystemManagement } from '../../components'
+import { ChangePasswordModal } from '../auth'
 import styles from './system.module.css'
 
 export function SystemManager() {
-  const { currentUser } = useAuth()
+  const { currentUser, updateCurrentUser } = useAuth()
   const { configs } = useConfig()
   const [importing, setImporting] = useState(false)
   const [showChangePassword, setShowChangePassword] = useState(false)
@@ -48,29 +49,18 @@ export function SystemManager() {
   return (
     <div className={styles.systemManager}>
       <SystemManagement
-        siteConfig={configs.site}
+        siteConfig={configs.site_config}
         onExportConfig={handleExport}
         onImportConfig={handleImport}
         onResetWebsite={handleReset}
         currentUser={currentUser}
         onChangePassword={handleChangePassword}
       />
-      {showChangePassword && (
-        <div className={styles.modalOverlay}>
-          <div className={styles.modal}>
-            <div className={styles.modalHeader}>
-              <h3 className={styles.modalTitle}>修改密码</h3>
-              <button onClick={() => setShowChangePassword(false)} className={styles.closeButton}>×</button>
-            </div>
-            <div className={styles.modalBody}>
-              <p>密码修改功能已集成到认证模块中</p>
-            </div>
-            <div className={styles.modalFooter}>
-              <button onClick={() => setShowChangePassword(false)} className={styles.closeButton}>关闭</button>
-            </div>
-          </div>
-        </div>
-      )}
+      <ChangePasswordModal
+        visible={showChangePassword}
+        onClose={() => setShowChangePassword(false)}
+        mustChange={false}
+      />
     </div>
   )
 }
