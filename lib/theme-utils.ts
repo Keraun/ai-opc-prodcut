@@ -137,18 +137,33 @@ export function applyThemeToElement(
   const colors = isDark ? themeConfig.darkMode.colors : themeConfig.colors
   const effects = themeConfig.effects || {}
   
-  element.style.setProperty("--theme-primary", colors.primary)
-  element.style.setProperty("--theme-primary-hover", colors.primaryHover)
-  element.style.setProperty("--theme-secondary", colors.secondary)
-  element.style.setProperty("--theme-accent", colors.accent)
-  element.style.setProperty("--theme-background", colors.background)
-  element.style.setProperty("--theme-background-secondary", colors.backgroundSecondary)
-  element.style.setProperty("--theme-text", colors.text)
-  element.style.setProperty("--theme-text-secondary", colors.textSecondary)
-  element.style.setProperty("--theme-border", colors.border)
-  element.style.setProperty("--theme-success", colors.success)
-  element.style.setProperty("--theme-warning", colors.warning)
-  element.style.setProperty("--theme-error", colors.error)
+  const safeColors = {
+    primary: colors?.primary || DEFAULT_THEME_COLORS.primary,
+    primaryHover: colors?.primaryHover || DEFAULT_THEME_COLORS.primaryHover,
+    secondary: colors?.secondary || DEFAULT_THEME_COLORS.secondary,
+    accent: colors?.accent || DEFAULT_THEME_COLORS.accent,
+    background: colors?.background || DEFAULT_THEME_COLORS.background,
+    backgroundSecondary: colors?.backgroundSecondary || DEFAULT_THEME_COLORS.backgroundSecondary,
+    text: colors?.text || DEFAULT_THEME_COLORS.text,
+    textSecondary: colors?.textSecondary || DEFAULT_THEME_COLORS.textSecondary,
+    border: colors?.border || DEFAULT_THEME_COLORS.border,
+    success: colors?.success || DEFAULT_THEME_COLORS.success,
+    warning: colors?.warning || DEFAULT_THEME_COLORS.warning,
+    error: colors?.error || DEFAULT_THEME_COLORS.error
+  }
+  
+  element.style.setProperty("--theme-primary", safeColors.primary)
+  element.style.setProperty("--theme-primary-hover", safeColors.primaryHover)
+  element.style.setProperty("--theme-secondary", safeColors.secondary)
+  element.style.setProperty("--theme-accent", safeColors.accent)
+  element.style.setProperty("--theme-background", safeColors.background)
+  element.style.setProperty("--theme-background-secondary", safeColors.backgroundSecondary)
+  element.style.setProperty("--theme-text", safeColors.text)
+  element.style.setProperty("--theme-text-secondary", safeColors.textSecondary)
+  element.style.setProperty("--theme-border", safeColors.border)
+  element.style.setProperty("--theme-success", safeColors.success)
+  element.style.setProperty("--theme-warning", safeColors.warning)
+  element.style.setProperty("--theme-error", safeColors.error)
   element.style.setProperty("--theme-radius", getRadiusValue(effects))
   element.style.setProperty("--theme-shadow", getShadowValue(effects))
 }

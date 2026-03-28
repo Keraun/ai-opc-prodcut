@@ -28,110 +28,134 @@ export async function GET(request: NextRequest) {
 export async function POST(request: NextRequest) {
   return wrapAuthApiHandler(async () => {
     try {
-      const body = await request.json()
-      const { themeId } = body
-      
-      if (!themeId) {
-        return badRequestResponse('缺少主题ID')
-      }
-      
-      const existingThemes = getThemeList()
-      const themesMap: Record<string, any> = {}
-      let currentTheme = existingThemes.find(t => t.isCurrent)?.themeId || 'modern'
-      
-      existingThemes.forEach(theme => {
-        themesMap[theme.themeId] = theme.themeConfig
-      })
-      
-      themesMap[themeId] = body
-      
-      writeConfig('theme', {
-        currentTheme,
-        themes: themesMap
-      })
-      
-      return successResponse({ themeId }, '主题创建成功', 201)
-    } catch (error) {
-      console.error('创建主题失败:', error)
-      return errorResponse('创建主题失败')
-    }
-  })
-}
-
-export async function PUT(request: NextRequest) {
-  return wrapAuthApiHandler(async () => {
-    try {
-      const body = await request.json()
-      const { themeId } = body
-      
-      if (!themeId) {
-        return badRequestResponse('缺少主题ID')
-      }
-      
-      const existingThemes = getThemeList()
-      const themesMap: Record<string, any> = {}
-      let currentTheme = existingThemes.find(t => t.isCurrent)?.themeId || 'modern'
-      
-      existingThemes.forEach(theme => {
-        themesMap[theme.themeId] = theme.themeConfig
-      })
-      
-      themesMap[themeId] = body
-      
-      if (body.isCurrent) {
-        currentTheme = themeId
-      }
-      
-      writeConfig('theme', {
-        currentTheme,
-        themes: themesMap
-      })
-      
-      return successResponse({ themeId }, '主题更新成功')
-    } catch (error) {
-      console.error('更新主题失败:', error)
-      return errorResponse('更新主题失败')
-    }
-  })
-}
-
-export async function DELETE(request: NextRequest) {
-  return wrapAuthApiHandler(async () => {
-    try {
       const { searchParams } = new URL(request.url)
-      const themeId = searchParams.get('themeId')
+      const action = searchParams.get('action') || 'create'
+      const body = await request.json()
       
-      if (!themeId) {
-        return badRequestResponse('缺少主题ID')
+      switch (action) {
+        case 'create':
+          return handleCreateTheme(body)
+        case 'update':
+          return handleUpdateTheme(body)
+        case 'delete':
+          return handleDeleteTheme(body)
+        case 'setCurrent':
+          return handleSetCurrentTheme(body)
+        default:
+          return badRequestResponse('无效的操作类型')
       }
-      
-      // 获取现有主题列表
-      const existingThemes = getThemeList()
-      const themesMap: Record<string, any> = {}
-      let currentTheme = existingThemes.find(t => t.isCurrent)?.themeId || 'modern'
-      
-      // 构建主题映射，排除要删除的主题
-      existingThemes.forEach(theme => {
-        if (theme.themeId !== themeId) {
-          themesMap[theme.themeId] = theme.themeConfig
-        }
-      })
-      
-      // 如果删除的是当前主题，设置第一个主题为当前主题
-      if (currentTheme === themeId && Object.keys(themesMap).length > 0) {
-        currentTheme = Object.keys(themesMap)[0]
-      }
-      
-      // 保存主题配置
-      writeConfig('theme', {
-        currentTheme,
-        themes: themesMap
-      })
-      
-      return successResponse({ themeId }, '主题删除成功')
     } catch (error) {
-      console.error('删除主题失败:', error)
-      return errorResponse('删除主题失败')
+      console.error('主题操作失败:', error)
+      return errorResponse('主题操作失败')
     }
   })
+}
+
+async function handleCreateTheme(body: any) {
+  const { themeId } = body
+  
+  if (!themeId) {
+    return badRequestResponse('缺少主题ID')
+  }
+  
+  const existingThemes = getThemeList()
+  const themesMap: Record<string, any> = {}
+  let currentTheme = existingThemes.find(t => t.isCurrent)?.themeId || 'modern'
+  
+  existingThemes.forEach(theme => {
+    themesMap[theme.themeId] = theme.themeConfig
+  })
+  
+  themesMap[themeId] = body
+  
+  writeConfig('theme', {
+    currentTheme,
+    themes: themesMap
+  })
+  
+  return successResponse({ themeId }, '主题创建成功', 201)
+}
+
+async function handleUpdateTheme(body: any) {
+  const { themeId } = body
+  
+  if (!themeId) {
+    return badRequestResponse('缺少主题ID')
+  }
+  
+  const existingThemes = getThemeList()
+  const themesMap: Record<string, any> = {}
+  let currentTheme = existingThemes.find(t => t.isCurrent)?.themeId || 'modern'
+  
+  existingThemes.forEach(theme => {
+    themesMap[theme.themeId] = theme.themeConfig
+  })
+  
+  themesMap[themeId] = body
+  
+  if (body.isCurrent) {
+    currentTheme = themeId
+  }
+  
+  writeConfig('theme', {
+    currentTheme,
+    themes: themesMap
+  })
+  
+  return successResponse({ themeId }, '主题更新成功')
+}
+
+async function handleDeleteTheme(body: any) {
+  const { themeId } = body
+  
+  if (!themeId) {
+    return badRequestResponse('缺少主题ID')
+  }
+  
+  const existingThemes = getThemeList()
+  const themesMap: Record<string, any> = {}
+  let currentTheme = existingThemes.find(t => t.isCurrent)?.themeId || 'modern'
+  
+  existingThemes.forEach(theme => {
+    if (theme.themeId !== themeId) {
+      themesMap[theme.themeId] = theme.themeConfig
+    }
+  })
+  
+  if (currentTheme === themeId && Object.keys(themesMap).length > 0) {
+    currentTheme = Object.keys(themesMap)[0]
+  }
+  
+  writeConfig('theme', {
+    currentTheme,
+    themes: themesMap
+  })
+  
+  return successResponse({ themeId }, '主题删除成功')
+}
+
+async function handleSetCurrentTheme(body: any) {
+  const { themeId } = body
+  
+  if (!themeId) {
+    return badRequestResponse('缺少主题ID')
+  }
+  
+  const existingThemes = getThemeList()
+  const themesMap: Record<string, any> = {}
+  
+  existingThemes.forEach(theme => {
+    themesMap[theme.themeId] = theme.themeConfig
+  })
+  
+  if (!themesMap[themeId]) {
+    return badRequestResponse('主题不存在')
+  }
+  
+  writeConfig('theme', {
+    currentTheme: themeId,
+    themes: themesMap
+  })
+  
+  return successResponse({ themeId }, '主题设置成功')
 }

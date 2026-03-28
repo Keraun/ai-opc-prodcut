@@ -241,7 +241,7 @@ export async function getThemes(onlyCurrent: boolean = false): Promise<any[]> {
  */
 export async function createTheme(themeData: any): Promise<{ success: boolean; message?: string; themeId?: string }> {
   try {
-    const result = await request<{ themeId: string }>('/api/admin/themes', {
+    const result = await request<{ themeId: string }>('/api/admin/themes?action=create', {
       method: 'POST',
       body: JSON.stringify(themeData)
     })
@@ -263,8 +263,8 @@ export async function createTheme(themeData: any): Promise<{ success: boolean; m
  */
 export async function updateTheme(themeData: any): Promise<{ success: boolean; message?: string }> {
   try {
-    const result = await request('/api/admin/themes', {
-      method: 'PUT',
+    const result = await request('/api/admin/themes?action=update', {
+      method: 'POST',
       body: JSON.stringify(themeData)
     })
     return {
@@ -284,8 +284,9 @@ export async function updateTheme(themeData: any): Promise<{ success: boolean; m
  */
 export async function deleteTheme(themeId: string): Promise<{ success: boolean; message?: string }> {
   try {
-    const result = await request(`/api/admin/themes?themeId=${themeId}`, {
-      method: 'DELETE'
+    const result = await request('/api/admin/themes?action=delete', {
+      method: 'POST',
+      body: JSON.stringify({ themeId })
     })
     return {
       success: result.success,
@@ -304,9 +305,9 @@ export async function deleteTheme(themeId: string): Promise<{ success: boolean; 
  */
 export async function setCurrentTheme(themeId: string): Promise<{ success: boolean; message?: string }> {
   try {
-    const result = await request('/api/admin/themes', {
-      method: 'PUT',
-      body: JSON.stringify({ themeId, isCurrent: true })
+    const result = await request('/api/admin/themes?action=setCurrent', {
+      method: 'POST',
+      body: JSON.stringify({ themeId })
     })
     return {
       success: result.success,

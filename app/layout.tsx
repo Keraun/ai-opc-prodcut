@@ -14,7 +14,7 @@ const _geistMono = Geist_Mono({ subsets: ["latin"] });
 function getThemeConfig() {
   try {
     const themeConfig = readConfig('theme')
-    const currentTheme = themeConfig.themes[themeConfig.currentTheme]
+    const currentTheme = themeConfig.themes[d.currentTheme]
     return currentTheme
   } catch (error) {
     console.error('Failed to read theme config:', error)
