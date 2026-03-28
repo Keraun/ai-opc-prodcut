@@ -1,69 +1,44 @@
 import { useState, useCallback } from 'react'
 import { toast } from 'sonner'
-import { getAdminConfig, saveAdminConfigApi, getSchema } from '@/lib/api-client'
-import { Configs } from '../types'
+import { 
+  getAdminConfig, 
+  saveAdminConfigApi, 
+  getSchema,
+  getThemeConfig
+} from '@/lib/api-client'
+
+export interface Configs {
+  site_config: any
+  feishu_app: any
+  super_admin_token: string
+}
 
 export function useConfig() {
   const [configs, setConfigs] = useState<Configs>({
-    site: {},
-    footer: {},
-    theme: {
-      currentTheme: 'dark',
-      themes: {}
-    },
-    'feishu-app': {
-      appId: '',
-      appSecret: '',
-      baseLink: '',
-      appToken: '',
-      tableId: '',
-      tableLink: ''
-    }
+    site_config: {},
+    feishu_app: {},
+    super_admin_token: ''
   })
   const [originalConfigs, setOriginalConfigs] = useState<Configs>({
-    site: {},
-    footer: {},
-    theme: {
-      currentTheme: 'dark',
-      themes: {}
-    },
-    header: {},
-    'section-hero': {},
-    'section-partner': {},
-    'section-products': {},
-    'section-services': {},
-    'section-pricing': {},
-    'section-about': {},
-    'section-contact': {},
-    'feishu-app': {
-      appId: '',
-      appSecret: '',
-      baseLink: '',
-      appToken: '',
-      tableId: '',
-      tableLink: ''
-    }
+    site_config: {},
+    feishu_app: {},
+    super_admin_token: ''
   })
-  const [schema, setSchema] = useState<any>({})
   const [loading, setLoading] = useState(false)
+  const [schema, setSchema] = useState<any>({})
 
   const fetchConfigs = useCallback(async () => {
+    setLoading(true)
     try {
-      const data = await getAdminConfig() as unknown as Configs
+      const adminConfig = await getAdminConfig() as unknown as Configs
       
-      const mergedData = {
-        ...data,
-        theme: {
-          currentTheme: data.theme?.currentTheme || 'modern',
-          themes: data.theme?.themes || {}
-        }
-      }
-      
-      setConfigs(mergedData)
-      setOriginalConfigs(JSON.parse(JSON.stringify(mergedData)))
+      setConfigs(adminConfig)
+      setOriginalConfigs(adminConfig)
     } catch (error) {
       console.error('获取配置失败:', error)
       toast.error("获取配置失败")
+    } finally {
+      setLoading(false)
     }
   }, [])
 
@@ -79,26 +54,27 @@ export function useConfig() {
   const saveConfig = useCallback(async (configType: string, data?: any) => {
     setLoading(true)
     try {
-      const configData = data || configs[configType as keyof typeof configs]
+      const configData = data || configs[configType as keyof Configs]
       const result = await saveAdminConfigApi(configType, configData)
 
       if (result.success) {
-        toast.success("配置提交成功")
+        toast.success("配置保存成功")
         setConfigs(prev => ({
           ...prev,
-          [configType]: JSON.parse(JSON.stringify(configData))
+          [configType]: { ...configData }
         }))
         setOriginalConfigs(prev => ({
           ...prev,
-          [configType]: JSON.parse(JSON.stringify(configData))
+          [configType]: { ...configData }
         }))
         return true
       } else {
-        toast.error("配置提交失败")
+        toast.error("配置保存失败")
         return false
       }
     } catch (error) {
-      toast.error("配置提交失败")
+      console.error('保存配置失败:', error)
+      toast.error("配置保存失败")
       return false
     } finally {
       setLoading(false)
@@ -113,15 +89,14 @@ export function useConfig() {
   }, [])
 
   const hasChanges = useCallback((configType: string) => {
-    return JSON.stringify(configs[configType as keyof typeof configs]) !==
-      JSON.stringify(originalConfigs[configType as keyof typeof originalConfigs])
+    return JSON.stringify(configs[configType as keyof Configs]) !==
+      JSON.stringify(originalConfigs[configType as keyof Configs])
   }, [configs, originalConfigs])
 
   return {
     configs,
-    originalConfigs,
-    schema,
     loading,
+    schema,
     fetchConfigs,
     fetchSchema,
     saveConfig,

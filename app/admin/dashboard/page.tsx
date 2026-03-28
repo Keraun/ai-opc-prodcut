@@ -81,11 +81,11 @@ export default function AdminDashboardPage() {
               configType="feishu-app"
               title="飞书应用配置"
               description="配置飞书应用集成"
-              configData={configs['feishu-app']}
+              configData={configs.feishu_app}
               onSave={async (data) => {
                 await saveConfig('feishu-app', data)
               }}
-              hasChanges={hasChanges('feishu-app')}
+              hasChanges={hasChanges('feishu_app')}
               loading={configLoading}
             />
           )

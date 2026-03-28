@@ -55,7 +55,12 @@ export {
   getConfigVersion,
   restoreConfigVersion,
   saveAdminConfigApi,
-  getThemeConfig
+  getThemeConfig,
+  getThemes,
+  createTheme,
+  updateTheme,
+  deleteTheme,
+  setCurrentTheme
 } from './api/config'
 
 export {

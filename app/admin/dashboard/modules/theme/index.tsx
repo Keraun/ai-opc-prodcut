@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
 import { toast } from 'sonner'
 import { useTheme } from '@/components/theme-provider'
-import { getThemeConfig, saveAdminConfigApi } from '@/lib/api-client'
+import { getThemeConfig, setCurrentTheme } from '@/lib/api-client'
 import { ThemeSelector } from '../../components'
 import styles from './theme.module.css'
 
@@ -30,23 +30,22 @@ export function ThemeManager() {
   }, [])
 
   const handleThemeChange = async (themeId: string) => {
-    const updatedTheme = {
-      ...themeData,
-      currentTheme: themeId
-    }
-    
     setLoading(true)
     try {
-      const result = await saveAdminConfigApi("theme", updatedTheme)
+      const result = await setCurrentTheme(themeId)
 
       if (result.success) {
         toast.success("主题切换成功")
         setTheme(themeId)
-        setThemeData(updatedTheme)
+        setThemeData(prev => ({
+          ...prev,
+          currentTheme: themeId
+        }))
       } else {
         toast.error("主题切换失败")
       }
     } catch (error) {
+      console.error('主题切换失败:', error)
       toast.error("主题切换失败")
     } finally {
       setLoading(false)

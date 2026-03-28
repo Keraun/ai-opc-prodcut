@@ -192,7 +192,7 @@ export async function getThemeConfig(): Promise<{
   themes?: Record<string, any>
 } | null> {
   try {
-    const result = await request<any[]>('/api/config?type=theme')
+    const result = await request<any[]>('/api/admin/themes')
     if (!result.success || !result.data) {
       return null
     }
@@ -215,5 +215,105 @@ export async function getThemeConfig(): Promise<{
   } catch (error) {
     console.error('Error fetching theme config:', error)
     return null
+  }
+}
+
+/**
+ * 获取主题列表
+ * @param onlyCurrent - 是否只获取当前主题
+ * @returns 主题列表，失败时返回空数组
+ */
+export async function getThemes(onlyCurrent: boolean = false): Promise<any[]> {
+  try {
+    const url = onlyCurrent ? '/api/admin/themes?onlyCurrent=true' : '/api/admin/themes'
+    const result = await request<any[]>(url)
+    return result.success && result.data ? result.data : []
+  } catch (error) {
+    console.error('Error fetching themes:', error)
+    return []
+  }
+}
+
+/**
+ * 创建主题
+ * @param themeData - 主题数据
+ * @returns 创建结果，包含 success 和 message
+ */
+export async function createTheme(themeData: any): Promise<{ success: boolean; message?: string; themeId?: string }> {
+  try {
+    const result = await request<{ themeId: string }>('/api/admin/themes', {
+      method: 'POST',
+      body: JSON.stringify(themeData)
+    })
+    return {
+      success: result.success,
+      message: result.message,
+      themeId: result.data?.themeId
+    }
+  } catch (error) {
+    console.error('Error creating theme:', error)
+    return { success: false, message: '创建主题失败' }
+  }
+}
+
+/**
+ * 更新主题
+ * @param themeData - 主题数据
+ * @returns 更新结果，包含 success 和 message
+ */
+export async function updateTheme(themeData: any): Promise<{ success: boolean; message?: string }> {
+  try {
+    const result = await request('/api/admin/themes', {
+      method: 'PUT',
+      body: JSON.stringify(themeData)
+    })
+    return {
+      success: result.success,
+      message: result.message
+    }
+  } catch (error) {
+    console.error('Error updating theme:', error)
+    return { success: false, message: '更新主题失败' }
+  }
+}
+
+/**
+ * 删除主题
+ * @param themeId - 主题ID
+ * @returns 删除结果，包含 success 和 message
+ */
+export async function deleteTheme(themeId: string): Promise<{ success: boolean; message?: string }> {
+  try {
+    const result = await request(`/api/admin/themes?themeId=${themeId}`, {
+      method: 'DELETE'
+    })
+    return {
+      success: result.success,
+      message: result.message
+    }
+  } catch (error) {
+    console.error('Error deleting theme:', error)
+    return { success: false, message: '删除主题失败' }
+  }
+}
+
+/**
+ * 设置当前主题
+ * @param themeId - 主题ID
+ * @returns 设置结果，包含 success 和 message
+ */
+export async function setCurrentTheme(themeId: string): Promise<{ success: boolean; message?: string }> {
+  try {
+    const result = await request('/api/admin/themes', {
+      method: 'PUT',
+      body: JSON.stringify({ themeId, isCurrent: true })
+    })
+    return {
+      success: result.success,
+      message: result.message
+    }
+  } catch (error) {
+    console.error('Error setting current theme:', error)
+    return { success: false, message: '设置主题失败' }
   }
 }
