@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { initializeAndSyncModules } from '@/lib/initialize-modules'
-import { getModuleTemplate } from '@/lib/module-service'
+import { getModule, getModuleSchema } from '@/modules/registry'
 import { 
   successResponse, 
   errorResponse, 
@@ -12,16 +12,17 @@ initializeAndSyncModules()
 
 export async function GET(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   return wrapApiHandler(async () => {
-    const moduleId = params.id
-    const moduleTemplate = getModuleTemplate(moduleId)
+    const { id: moduleId } = await params
+    const moduleTemplate = getModule(moduleId)
+    const schema = getModuleSchema(moduleId)
 
-    if (!moduleTemplate || !moduleTemplate.schema) {
+    if (!moduleTemplate || !schema) {
       return notFoundResponse('模块schema不存在')
     }
 
-    return successResponse(moduleTemplate.schema)
+    return successResponse(schema)
   })
 }

@@ -34,10 +34,10 @@ interface PageInfo {
 
 export async function GET(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   return wrapAuthApiHandler(async () => {
-    const pageId = params.id
+    const { id: pageId } = await params
     
     const page = jsonDb.findOne('pages', { page_id: pageId })
     
@@ -93,10 +93,10 @@ export async function GET(
 
 export async function PUT(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   return wrapAuthApiHandler(async () => {
-    const pageId = params.id
+    const { id: pageId } = await params
     const body = await request.json()
     const { name, slug, modules } = body
     
@@ -153,10 +153,10 @@ export async function PUT(
 
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   return wrapAuthApiHandler(async () => {
-    const pageId = params.id
+    const { id: pageId } = await params
     
     const page = jsonDb.findOne('pages', { page_id: pageId })
     
