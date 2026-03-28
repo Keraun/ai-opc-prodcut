@@ -44,7 +44,7 @@ export function ModuleDragEditor({ modules, onChange }: ModuleDragEditorProps) {
   const [dragOverIndex, setDragOverIndex] = useState<number | null>(null)
   const [gridColumns, setGridColumns] = useState<1 | 2>(2)
   const [previewDevice, setPreviewDevice] = useState<'web' | 'mobile' | 'ipad'>('web')
-  const [editPreviewDevice, setEditPreviewDevice] = useState<'web' | 'mobile' | 'ipad'>('web')
+  const [editPreviewDevice, setEditPreviewDevice] = useState<'web' | 'mobile' | 'ipad'>('ipad')
   const editPreviewIframeRef = useRef<HTMLIFrameElement>(null)
 
   useEffect(() => {
@@ -382,7 +382,7 @@ export function ModuleDragEditor({ modules, onChange }: ModuleDragEditorProps) {
         }
         visible={!!editingModule}
         placement="right"
-        width={1200}
+        width="95%"
         closable={true}
         autoFocus={false}
         maskClosable={true}
@@ -405,19 +405,6 @@ export function ModuleDragEditor({ modules, onChange }: ModuleDragEditorProps) {
       >
         {editingModule && (
           <div className={styles.editModuleSplitLayout}>
-            <div className={styles.editModuleFormPanel}>
-              <div className={styles.editModuleFormHeader}>
-                <h4>模块配置</h4>
-                <span>修改后实时预览</span>
-              </div>
-              <div className={styles.editModuleFormContent}>
-                <ModuleFieldEditor
-                  moduleId={editingModule.moduleId}
-                  data={editingModule.data}
-                  onChange={handleEditModuleChange}
-                />
-              </div>
-            </div>
             <div className={styles.editModulePreviewPanel}>
               <div className={styles.editModulePreviewHeader}>
                 <h4>实时预览</h4>
@@ -463,6 +450,19 @@ export function ModuleDragEditor({ modules, onChange }: ModuleDragEditorProps) {
                     sandbox="allow-scripts allow-same-origin"
                   />
                 </div>
+              </div>
+            </div>
+            <div className={styles.editModuleFormPanel}>
+              <div className={styles.editModuleFormHeader}>
+                <h4>模块配置</h4>
+                <span>修改后实时预览</span>
+              </div>
+              <div className={styles.editModuleFormContent}>
+                <ModuleFieldEditor
+                  moduleId={editingModule.moduleId}
+                  data={editingModule.data}
+                  onChange={handleEditModuleChange}
+                />
               </div>
             </div>
           </div>
