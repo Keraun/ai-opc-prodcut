@@ -366,12 +366,39 @@ export function readSystemConfig(configName: string): any {
   return readConfig(configName)
 }
 
+export function getThemeList(onlyCurrent: boolean = false): any[] {
+  const db = getDatabase()
+  
+  try {
+    let query = 'SELECT * FROM theme_config'
+    const params: any[] = []
+    
+    if (onlyCurrent) {
+      query += ' WHERE is_current = 1'
+    }
+    
+    const themes = db.prepare(query).all(...params) as any[]
+    
+    return themes.map(theme => ({
+      id: theme.id,
+      themeId: theme.theme_id,
+      themeName: theme.theme_name,
+      themeConfig: JSON.parse(theme.theme_config),
+      isCurrent: theme.is_current === 1,
+      createdAt: theme.created_at,
+      updatedAt: theme.updated_at
+    }))
+  } finally {
+    db.close()
+  }
+}
+
 export function writeSystemConfig(configName: string, data: any): void {
   writeConfig(configName, data)
 }
 
 export function listSystemConfigs(): string[] {
-  return ['account', 'token', 'feishu-app', 'system-logs']
+  return ['account', 'token', 'feishu-app', 'system-logs', 'theme']
 }
 
 export function readAllConfigs(): Record<string, any> {

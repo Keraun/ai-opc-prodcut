@@ -1,5 +1,5 @@
 import { NextRequest } from "next/server"
-import { getPageResponse, readConfig } from "@/lib/config-manager"
+import { getPageResponse, readConfig, getThemeList } from "@/lib/config-manager"
 import { 
   successResponse, 
   badRequestResponse, 
@@ -17,7 +17,7 @@ const SAFE_CONFIG_TYPES = [
 export async function GET(request: NextRequest) {
   return wrapApiHandler(async () => {
     const params = parseQueryParams(request)
-    const { page, type } = params
+    const { page, type, is_current } = params
     
     if (page) {
       const pageResponse = getPageResponse(page)
@@ -35,6 +35,12 @@ export async function GET(request: NextRequest) {
     
     if (!isSafeType) {
       return badRequestResponse('无效的配置类型')
+    }
+    
+    if (type === 'theme') {
+      const onlyCurrent = is_current === 'true' || is_current === '1'
+      const themeList = getThemeList(onlyCurrent)
+      return successResponse(themeList)
     }
     
     const config = readConfig(type)

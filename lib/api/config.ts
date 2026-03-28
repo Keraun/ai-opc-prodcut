@@ -192,8 +192,26 @@ export async function getThemeConfig(): Promise<{
   themes?: Record<string, any>
 } | null> {
   try {
-    const result = await request<{ currentTheme: string; themes: Record<string, any> }>('/api/config?type=theme')
-    return result.success && result.data ? result.data : null
+    const result = await request<any[]>('/api/config?type=theme')
+    if (!result.success || !result.data) {
+      return null
+    }
+    
+    const themeList = result.data
+    const themes: Record<string, any> = {}
+    let currentTheme = 'modern'
+    
+    themeList.forEach((theme: any) => {
+      themes[theme.themeId] = theme.themeConfig
+      if (theme.isCurrent) {
+        currentTheme = theme.themeId
+      }
+    })
+    
+    return {
+      currentTheme,
+      themes
+    }
   } catch (error) {
     console.error('Error fetching theme config:', error)
     return null

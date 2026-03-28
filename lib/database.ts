@@ -121,8 +121,49 @@ export function initializeDatabase(): void {
     console.log('Database initialized successfully')
     
     migrateThemeConfigTable(db)
+    initializeThemeData(db)
   } finally {
     db.close()
+  }
+}
+
+function initializeThemeData(db: Database.Database): void {
+  try {
+    const existingThemes = db.prepare('SELECT COUNT(*) as count FROM theme_config').get() as any
+    
+    if (existingThemes.count === 0) {
+      console.log('Initializing theme data from template...')
+      
+      const themeConfigPath = path.join(process.cwd(), 'database', 'templates', 'theme', 'theme-config.json')
+      
+      if (fs.existsSync(themeConfigPath)) {
+        const themeConfigData = JSON.parse(fs.readFileSync(themeConfigPath, 'utf-8'))
+        
+        if (themeConfigData?.themes) {
+          const currentThemeId = themeConfigData.currentTheme
+          const insertStmt = db.prepare(`
+            INSERT INTO theme_config (theme_id, theme_name, theme_config, is_current)
+            VALUES (?, ?, ?, ?)
+          `)
+          
+          for (const [themeId, themeData] of Object.entries(themeConfigData.themes)) {
+            const theme = themeData as any
+            const isCurrent = themeId === currentThemeId ? 1 : 0
+            insertStmt.run(
+              themeId,
+              theme.name || themeId,
+              JSON.stringify(theme),
+              isCurrent
+            )
+          }
+          console.log(`Initialized ${Object.keys(themeConfigData.themes).length} themes`)
+        }
+      } else {
+        console.log('Theme template file not found, skipping theme initialization')
+      }
+    }
+  } catch (error) {
+    console.log('Theme initialization skipped:', error)
   }
 }
 
