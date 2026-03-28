@@ -335,14 +335,8 @@ export function ModuleDragEditor({ modules, onChange }: ModuleDragEditorProps) {
       <Drawer
         title={
           <div className={styles.drawerTitleWrapper}>
-            <div className={styles.drawerTitleIcon}>
-              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                <path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7" strokeLinecap="round" strokeLinejoin="round"/>
-                <path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z" strokeLinecap="round" strokeLinejoin="round"/>
-              </svg>
-            </div>
             <div>
-              <div className={styles.drawerTitle}>编辑模块</div>
+              <span className={styles.drawerTitle}>编辑模块</span>
               <Tag className={styles.drawerModuleTag} color="arcoblue" size="small">{editingModule?.moduleName || ""}</Tag>
             </div>
           </div>
@@ -392,14 +386,14 @@ export function ModuleDragEditor({ modules, onChange }: ModuleDragEditorProps) {
               </svg>
             </div>
             <div>
-              <div className={styles.drawerTitle}>模块预览</div>
+              <span className={styles.drawerTitle}>模块预览</span>
               <Tag className={styles.drawerModuleTag} color="green" size="small">{previewingModule?.moduleName || ""}</Tag>
             </div>
           </div>
         }
         visible={!!previewingModule}
         placement="right"
-        width={800}
+        width={900}
         closable={true}
         autoFocus={false}
         maskClosable={true}
@@ -428,21 +422,14 @@ export function ModuleDragEditor({ modules, onChange }: ModuleDragEditorProps) {
             <p><strong>分类：</strong> {previewingModule?.category || "未分类"}</p>
           </div>
           <div className={styles.modulePreviewFrame}>
-            <div style={{ 
-              display: 'flex', 
-              flexDirection: 'column', 
-              alignItems: 'center', 
-              justifyContent: 'center', 
-              height: '400px', 
-              background: 'linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%)',
-              color: '#6b7280'
-            }}>
-              <svg width="80" height="80" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" style={{ marginBottom: '16px', opacity: 0.5 }}>
-                <path d="M4 5a1 1 0 011-1h14a1 1 0 011 1v2a1 1 0 01-1 1H5a1 1 0 01-1-1V5zM4 13a1 1 0 011-1h6a1 1 0 011 1v6a1 1 0 01-1 1H5a1 1 0 01-1-1v-6zM16 13a1 1 0 011-1h2a1 1 0 011 1v6a1 1 0 01-1 1h-2a1 1 0 01-1-1v-6z" strokeLinecap="round" strokeLinejoin="round"/>
-              </svg>
-              <p style={{ fontSize: '16px', fontWeight: '500' }}>模块预览</p>
-              <p style={{ fontSize: '14px', opacity: 0.7 }}>点击"添加此模块"将模块添加到页面</p>
-            </div>
+            {previewingModule && (
+              <iframe
+                src={`/admin/module-preview/${previewingModule.moduleId}`}
+                className={styles.previewFrame}
+                title={`${previewingModule.moduleName} 预览`}
+                sandbox="allow-scripts allow-same-origin"
+              />
+            )}
           </div>
         </div>
       </Drawer>
