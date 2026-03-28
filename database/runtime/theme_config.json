@@ -3,9 +3,9 @@
     "theme_id": "modern",
     "theme_name": "modern",
     "theme_config": "{\"colors\":{\"primary\":\"#1e40af\",\"secondary\":\"#3b82f6\",\"accent\":\"#06b6d4\"}}",
-    "is_current": 0,
-    "created_at": "2026-03-28T17:59:16.316Z",
-    "updated_at": "2026-03-28T17:59:16.316Z",
+    "is_current": 1,
+    "created_at": "2026-03-28T18:13:31.623Z",
+    "updated_at": "2026-03-28T18:13:31.623Z",
     "id": 1
   },
   {
@@ -13,8 +13,8 @@
     "theme_name": "tech",
     "theme_config": "{\"colors\":{\"primary\":\"#7c3aed\",\"secondary\":\"#a78bfa\",\"accent\":\"#ec4899\"}}",
     "is_current": 0,
-    "created_at": "2026-03-28T17:59:16.316Z",
-    "updated_at": "2026-03-28T17:59:16.316Z",
+    "created_at": "2026-03-28T18:13:31.623Z",
+    "updated_at": "2026-03-28T18:13:31.623Z",
     "id": 2
   },
   {
@@ -22,8 +22,8 @@
     "theme_name": "nature",
     "theme_config": "{\"colors\":{\"primary\":\"#10b981\",\"secondary\":\"#34d399\",\"accent\":\"#14b8a6\"}}",
     "is_current": 0,
-    "created_at": "2026-03-28T17:59:16.316Z",
-    "updated_at": "2026-03-28T17:59:16.316Z",
+    "created_at": "2026-03-28T18:13:31.623Z",
+    "updated_at": "2026-03-28T18:13:31.623Z",
     "id": 3
   },
   {
@@ -31,17 +31,17 @@
     "theme_name": "dark",
     "theme_config": "{\"colors\":{\"primary\":\"#3b82f6\",\"secondary\":\"#60a5fa\",\"accent\":\"#22d3ee\"}}",
     "is_current": 0,
-    "created_at": "2026-03-28T17:59:16.316Z",
-    "updated_at": "2026-03-28T17:59:16.316Z",
+    "created_at": "2026-03-28T18:13:31.623Z",
+    "updated_at": "2026-03-28T18:13:31.623Z",
     "id": 4
   },
   {
     "theme_id": "luxury",
     "theme_name": "luxury",
     "theme_config": "{\"colors\":{\"primary\":\"#b45309\",\"secondary\":\"#d97706\",\"accent\":\"#f59e0b\"}}",
-    "is_current": 1,
-    "created_at": "2026-03-28T17:59:16.317Z",
-    "updated_at": "2026-03-28T17:59:16.317Z",
+    "is_current": 0,
+    "created_at": "2026-03-28T18:13:31.624Z",
+    "updated_at": "2026-03-28T18:13:31.624Z",
     "id": 5
   },
   {
@@ -49,8 +49,8 @@
     "theme_name": "minimal",
     "theme_config": "{\"colors\":{\"primary\":\"#374151\",\"secondary\":\"#6b7280\",\"accent\":\"#9ca3af\"}}",
     "is_current": 0,
-    "created_at": "2026-03-28T17:59:16.317Z",
-    "updated_at": "2026-03-28T17:59:16.317Z",
+    "created_at": "2026-03-28T18:13:31.624Z",
+    "updated_at": "2026-03-28T18:13:31.624Z",
     "id": 6
   }
 ]
