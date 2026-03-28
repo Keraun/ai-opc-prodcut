@@ -6,6 +6,7 @@ import { Spin } from "@arco-design/web-react"
 import { toast } from "sonner"
 import { initializeModules } from "@/modules/init"
 import { getModuleComponent } from "@/modules/registry"
+import { getPagePreview } from "@/lib/api-client"
 
 initializeModules()
 
@@ -33,29 +34,13 @@ export default function PagePreviewPage() {
     try {
       setLoading(true)
       
-      const pageResponse = await fetch(`/api/admin/pages/${pageId}`)
-      if (!pageResponse.ok) {
-        toast.error("获取页面数据失败")
-        return
-      }
+      const result = await getPagePreview(pageId)
       
-      const pageData = await pageResponse.json()
-      
-      const previewResponse = await fetch(`/api/admin/pages/${pageId}/preview`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ modules: pageData.modules || [] }),
-      })
-      
-      const previewData = await previewResponse.json()
-      
-      if (previewData.success) {
-        setPageName(previewData.pageName)
-        setModules(previewData.modules)
+      if (result.success) {
+        setPageName(result.pageName || "")
+        setModules(result.modules || [])
       } else {
-        toast.error(previewData.message || "生成预览失败")
+        toast.error(result.message || "生成预览失败")
       }
     } catch (error) {
       toast.error("加载预览失败")

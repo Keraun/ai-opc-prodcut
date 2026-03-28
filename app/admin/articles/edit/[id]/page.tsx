@@ -6,6 +6,7 @@ import { Button, Card, Spin } from "@arco-design/web-react"
 import { IconLeft } from "@arco-design/web-react/icon"
 import { toast } from "sonner"
 import { DynamicForm } from "@/components/dynamic-form"
+import { getSchema, getArticleById, updateArticle } from "@/lib/api-client"
 import styles from "../../articles.module.css"
 
 interface FormSchema {
@@ -48,11 +49,8 @@ export default function EditArticlePage() {
 
   const fetchSchema = async () => {
     try {
-      const response = await fetch('/api/admin/schema?type=article')
-      if (response.ok) {
-        const data = await response.json()
-        setSchema(data)
-      }
+      const schemaData = await getSchema('article')
+      setSchema(schemaData as unknown as FormSchema)
     } catch (error) {
       console.error('Failed to fetch schema:', error)
       toast.error('加载表单配置失败')
@@ -62,9 +60,8 @@ export default function EditArticlePage() {
   const fetchArticle = async () => {
     try {
       setLoading(true)
-      const response = await fetch(`/api/articles?id=${articleId}`)
-      if (response.ok) {
-        const data = await response.json()
+      const data = await getArticleById(articleId)
+      if (data) {
         setArticle(data)
       } else {
         toast.error('文章不存在')
@@ -82,18 +79,12 @@ export default function EditArticlePage() {
   const handleSubmit = async (values: Record<string, any>) => {
     setSubmitting(true)
     try {
-      const response = await fetch('/api/articles', {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-          ...values,
-          id: articleId
-        })
+      const result = await updateArticle({
+        ...values,
+        id: articleId
       })
       
-      if (response.ok) {
+      if (result.success) {
         toast.success('文章更新成功')
         router.push('/admin/articles')
       } else {

@@ -818,3 +818,68 @@ export async function saveAdminConfigApi(type: string, data: any): Promise<{ suc
     return { success: false, message: '配置保存失败' }
   }
 }
+
+export async function getArticleById(id: string): Promise<any | null> {
+  try {
+    const result = await request<any>(`/api/articles?id=${id}`)
+    return result.success && result.data ? result.data : null
+  } catch (error) {
+    console.error('Error fetching article:', error)
+    return null
+  }
+}
+
+export async function getPagePreview(pageId: string): Promise<{
+  success: boolean
+  pageName?: string
+  modules?: any[]
+  message?: string
+}> {
+  try {
+    const pageResult = await request<any>(`/api/admin/pages/${pageId}`)
+    if (!pageResult.success || !pageResult.data) {
+      return { success: false, message: '获取页面数据失败' }
+    }
+
+    const previewResult = await request<{ pageName: string; modules: any[] }>(`/api/admin/pages/${pageId}/preview`, {
+      method: 'POST',
+      body: JSON.stringify({ modules: pageResult.data.modules || [] }),
+    })
+
+    return {
+      success: previewResult.success,
+      pageName: previewResult.data?.pageName,
+      modules: previewResult.data?.modules,
+      message: previewResult.message,
+    }
+  } catch (error) {
+    console.error('Error fetching page preview:', error)
+    return { success: false, message: '加载预览失败' }
+  }
+}
+
+export async function getModulePreview(moduleId: string): Promise<{
+  success: boolean
+  moduleId?: string
+  moduleName?: string
+  defaultData?: Record<string, unknown>
+  message?: string
+}> {
+  try {
+    const result = await request<{
+      moduleId: string
+      moduleName: string
+      defaultData: Record<string, unknown>
+    }>(`/api/modules/${moduleId}/preview`)
+    return {
+      success: result.success,
+      moduleId: result.data?.moduleId,
+      moduleName: result.data?.moduleName,
+      defaultData: result.data?.defaultData,
+      message: result.message,
+    }
+  } catch (error) {
+    console.error('Error fetching module preview:', error)
+    return { success: false, message: '加载模块信息失败' }
+  }
+}

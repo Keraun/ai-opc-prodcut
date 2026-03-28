@@ -4,6 +4,7 @@ import { useEffect, useState } from "react"
 import { useParams } from "next/navigation"
 import { Spin } from "@arco-design/web-react"
 import { toast } from "sonner"
+import { getModulePreview } from "@/lib/api-client"
 
 export default function ModulePreviewPage() {
   const params = useParams()
@@ -12,9 +13,9 @@ export default function ModulePreviewPage() {
   const [loading, setLoading] = useState(true)
   const [moduleInfo, setModuleInfo] = useState<{
     success: boolean
-    moduleId: string
-    moduleName: string
-    defaultData: Record<string, unknown>
+    moduleId?: string
+    moduleName?: string
+    defaultData?: Record<string, unknown>
   } | null>(null)
 
   useEffect(() => {
@@ -24,14 +25,8 @@ export default function ModulePreviewPage() {
   const fetchModuleInfo = async () => {
     try {
       setLoading(true)
-      const response = await fetch(`/api/modules/${moduleId}/preview`)
-      const data = await response.json()
-      
-      if (data.success) {
-        setModuleInfo(data)
-      } else {
-        toast.error(data.message || "加载模块信息失败")
-      }
+      const data = await getModulePreview(moduleId)
+      setModuleInfo(data)
     } catch (error) {
       toast.error("加载模块信息失败")
     } finally {

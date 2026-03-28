@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation"
 import { Button, Card, Table, Message } from "@arco-design/web-react"
 import { IconPlus, IconDelete, IconEdit, IconEye } from "@arco-design/web-react/icon"
 import { toast } from "sonner"
+import { getArticles, deleteArticle } from "@/lib/api-client"
 import styles from "./articles.module.css"
 
 interface Article {
@@ -33,11 +34,8 @@ export default function ArticlesListPage() {
   const fetchArticles = async () => {
     try {
       setLoading(true)
-      const response = await fetch('/api/articles')
-      if (response.ok) {
-        const data = await response.json()
-        setArticles(data)
-      }
+      const data = await getArticles()
+      setArticles(data)
     } catch (error) {
       console.error('Failed to fetch articles:', error)
       toast.error('获取文章列表失败')
@@ -61,11 +59,9 @@ export default function ArticlesListPage() {
   const handleDeleteArticle = async (article: Article) => {
     if (confirm(`确定要删除文章 "${article.title}" 吗？`)) {
       try {
-        const response = await fetch(`/api/articles?id=${article.id}`, {
-          method: 'DELETE'
-        })
+        const result = await deleteArticle(article.id)
         
-        if (response.ok) {
+        if (result.success) {
           setArticles(articles.filter(a => a.id !== article.id))
           toast.success('文章删除成功')
         } else {

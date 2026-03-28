@@ -5,6 +5,7 @@ import { useRouter, useParams } from "next/navigation"
 import { Button, Card, Spin } from "@arco-design/web-react"
 import { IconLeft, IconEdit } from "@arco-design/web-react/icon"
 import { toast } from "sonner"
+import { getArticleById } from "@/lib/api-client"
 import styles from "../../articles.module.css"
 
 interface Article {
@@ -36,9 +37,8 @@ export default function ViewArticlePage() {
   const fetchArticle = async () => {
     try {
       setLoading(true)
-      const response = await fetch(`/api/articles?id=${articleId}`)
-      if (response.ok) {
-        const data = await response.json()
+      const data = await getArticleById(articleId)
+      if (data) {
         setArticle(data)
       } else {
         toast.error('文章不存在')
