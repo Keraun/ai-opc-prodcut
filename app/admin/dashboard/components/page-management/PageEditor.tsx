@@ -170,28 +170,35 @@ export function PageEditor({ pageId, onBack }: PageEditorProps) {
       </div>
 
       <Drawer
-        title={
-          <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-            <span>页面预览</span>
-            {pageInfo && (
-              <Tag size="small" color="arcoblue">{pageInfo.name}</Tag>
-            )}
-          </div>
-        }
         visible={showPreview}
         placement="right"
         width={1200}
-        closable={true}
+        closable={false}
         autoFocus={false}
         maskClosable={true}
         onCancel={() => setShowPreview(false)}
         footer={
-          <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+              <span style={{ fontSize: '16px', fontWeight: 600, color: '#1f2937' }}>页面预览</span>
+              {pageInfo && (
+                <>
+                  <Tag color="arcoblue">{pageInfo.name}</Tag>
+                  <span style={{ color: '#6b7280', fontSize: '14px' }}>/{pageInfo.slug}</span>
+                  <Tag 
+                    size="small"
+                    color={pageInfo.status === 'published' ? 'green' : pageInfo.status === 'offline' ? 'red' : 'gray'}
+                  >
+                    {pageInfo.status === 'published' ? '已上线' : pageInfo.status === 'offline' ? '已下线' : '草稿'}
+                  </Tag>
+                </>
+              )}
+            </div>
             <Button onClick={() => setShowPreview(false)}>关闭</Button>
           </div>
         }
       >
-        <div style={{ width: '100%', height: 'calc(100vh - 180px)' }}>
+        <div style={{ width: '100%', height: 'calc(100vh - 120px)' }}>
           <iframe
             src={`/admin/page-preview/${pageId}`}
             style={{ width: '100%', height: '100%', border: 'none' }}

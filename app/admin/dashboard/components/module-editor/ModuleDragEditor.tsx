@@ -169,7 +169,7 @@ export function ModuleDragEditor({ modules, onChange }: ModuleDragEditorProps) {
         <div className={styles.modulePickerHeaderV2}>
           <div>
             <h3>可用模块</h3>
-            <span>拖拽添加到页面</span>
+            <span>点击/拖拽添加到页面</span>
           </div>
           <div className={styles.layoutToggle}>
             <Tooltip content="一排一个">
@@ -377,56 +377,49 @@ export function ModuleDragEditor({ modules, onChange }: ModuleDragEditorProps) {
       </Drawer>
 
       <Drawer
-        title={
-          <div className={styles.drawerTitleWrapper}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-              <span className={styles.drawerTitle}>模块预览</span>
-              {previewingModule && (
-                <>
-                  <Tag size="small" color="arcoblue">{previewingModule.moduleId}</Tag>
-                  <Tag size="small" color="green">{previewingModule.moduleName}</Tag>
-                  <Tag size="small" color="gray">{previewingModule.category || "未分类"}</Tag>
-                </>
-              )}
-            </div>
-          </div>
-        }
         visible={!!previewingModule}
         placement="right"
-        width={900}
-        closable={true}
+        width={1200}
+        closable={false}
         autoFocus={false}
         maskClosable={true}
         onCancel={() => setPreviewingModule(null)}
         footer={
-          <div className={styles.drawerFooter}>
-            <Button onClick={() => setPreviewingModule(null)}>关闭</Button>
-            <Button 
-              type="primary" 
-              onClick={() => {
-                if (previewingModule) {
-                  handleAddModule(previewingModule)
-                  setPreviewingModule(null)
-                }
-              }}
-            >
-              添加此模块
-            </Button>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+              <span style={{ fontSize: '16px', fontWeight: 600, color: '#1f2937' }}>模块预览</span>
+              {previewingModule && (
+                <>
+                  <Tag color="arcoblue">{previewingModule.moduleId}</Tag>
+                  <Tag color="green">{previewingModule.moduleName}</Tag>
+                  <Tag color="gray">{previewingModule.category || "未分类"}</Tag>
+                </>
+              )}
+            </div>
+            <div style={{ display: 'flex', gap: '8px' }}>
+              <Button onClick={() => setPreviewingModule(null)}>关闭</Button>
+              <Button 
+                type="primary" 
+                onClick={() => {
+                  if (previewingModule) {
+                    handleAddModule(previewingModule)
+                    setPreviewingModule(null)
+                  }
+                }}
+              >
+                添加此模块
+              </Button>
+            </div>
           </div>
         }
       >
-        <div className={styles.modulePreviewContent}>
-          <div className={styles.modulePreviewFrame}>
-            {previewingModule && (
-              <iframe
-                src={`/admin/module-preview/${previewingModule.moduleId}`}
-                className={styles.previewFrame}
-                title={`${previewingModule.moduleName} 预览`}
-                sandbox="allow-scripts allow-same-origin"
-                style={{ width: '100%', height: '600px', border: 'none' }}
-              />
-            )}
-          </div>
+        <div style={{ width: '100%', height: 'calc(100vh - 120px)' }}>
+          <iframe
+            src={`/admin/module-preview/${previewingModule?.moduleId}`}
+            style={{ width: '100%', height: '100%', border: 'none' }}
+            title={`${previewingModule?.moduleName} 预览`}
+            sandbox="allow-scripts allow-same-origin"
+          />
         </div>
       </Drawer>
     </div>

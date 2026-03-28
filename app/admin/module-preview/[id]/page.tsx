@@ -72,19 +72,8 @@ export default function ModulePreviewPage() {
   const defaultData = moduleInfo.defaultData || {}
 
   return (
-    <div style={{
-      padding: "40px",
-      maxWidth: "100%",
-      margin: "0 auto",
-    }}>
-      
-      <div style={{
-        background: "#fff",
-        borderRadius: "8px",
-        boxShadow: "0 2px 8px rgba(0,0,0,0.1)",
-        minHeight: "400px",
-        overflow: "hidden",
-      }}>
+    <div style={{ minHeight: "100vh", background: "#fff" }}>
+      <div style={{ padding: "0" }}>
         {ModuleComponent ? (
           <ModuleComponent
             moduleName={moduleInfo.moduleName || ""}
@@ -95,14 +84,13 @@ export default function ModulePreviewPage() {
         ) : (
           <div style={{
             padding: "80px 40px",
-            background: "#fafafa",
             textAlign: "center",
             color: "#999",
           }}>
-            <p style={{ margin: "0 0 12px 0", fontSize: "16px" }}>
+            <p style={{ fontSize: "16px", marginBottom: "8px" }}>
               模块组件未找到
             </p>
-            <p style={{ margin: 0, fontSize: "14px" }}>
+            <p style={{ fontSize: "14px" }}>
               请检查模块 {moduleId} 是否已正确注册
             </p>
           </div>
