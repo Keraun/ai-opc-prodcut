@@ -62,9 +62,14 @@
 }
 
 .productGrid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
   gap: 2rem;
+}
+
+.productGrid > * {
+  flex: 1 1 300px;
 }
 
 .productCard {
@@ -188,6 +193,9 @@
   }
 
   .productGrid {
-    grid-template-columns: 1fr;
+    flex-direction: column;
+  }
+  .productGrid > * {
+    flex: 1 1 auto;
   }
 }

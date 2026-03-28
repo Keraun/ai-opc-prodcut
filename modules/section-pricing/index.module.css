@@ -49,22 +49,33 @@
 }
 
 .grid {
-  display: grid;
-  grid-template-columns: 1fr;
+  display: flex;
+  flex-direction: column;
   gap: 1rem;
-  align-items: start;
+  align-items: stretch;
+}
+
+.grid > * {
+  flex: 1 1 100%;
+  min-width: 260px;
 }
 
 @media (min-width: 768px) {
   .grid {
-    grid-template-columns: repeat(3, 1fr);
-    gap: 1rem;
+    flex-direction: row;
+    flex-wrap: wrap;
+  }
+  .grid > * {
+    flex: 1 1 calc(33.333% - 0.666rem);
   }
 }
 
 @media (min-width: 1024px) {
   .grid {
     gap: 1.25rem;
+  }
+  .grid > * {
+    flex: 1 1 calc(33.333% - 0.833rem);
   }
 }
 

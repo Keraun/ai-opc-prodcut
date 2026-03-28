@@ -254,15 +254,18 @@
 }
 
 .layout2Grid {
-  display: grid;
-  grid-template-columns: 1fr;
+  display: flex;
+  flex-direction: column;
   gap: 3rem;
   align-items: center;
 }
 
 @media (min-width: 1024px) {
   .layout2Grid {
-    grid-template-columns: repeat(2, 1fr);
+    flex-direction: row;
+  }
+  .layout2Grid > * {
+    flex: 1;
   }
 }
 

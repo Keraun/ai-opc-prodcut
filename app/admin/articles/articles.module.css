@@ -104,10 +104,16 @@
 }
 
 .viewRow {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
   gap: 2rem;
   margin-bottom: 1.5rem;
+}
+
+.viewRow > * {
+  flex: 1 1 calc(33.333% - 1.333rem);
+  min-width: 200px;
 }
 
 .viewLabel {

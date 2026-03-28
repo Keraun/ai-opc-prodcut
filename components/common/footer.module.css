@@ -22,15 +22,24 @@
 }
 
 .grid {
-  display: grid;
-  grid-template-columns: 1fr;
+  display: flex;
+  flex-direction: column;
   gap: 2rem;
   margin-bottom: 2rem;
 }
 
+.grid > * {
+  flex: 1 1 100%;
+  min-width: 200px;
+}
+
 @media (min-width: 768px) {
   .grid {
-    grid-template-columns: repeat(3, 1fr);
+    flex-direction: row;
+    flex-wrap: wrap;
+  }
+  .grid > * {
+    flex: 1 1 calc(33.333% - 1.333rem);
   }
 }
 

@@ -84,20 +84,29 @@
 }
 
 .grid {
-  display: grid;
-  grid-template-columns: 1fr;
+  display: flex;
+  flex-direction: column;
   gap: 1.5rem;
+}
+
+.grid > * {
+  flex: 1 1 100%;
+  min-width: 240px;
 }
 
 @media (min-width: 640px) {
   .grid {
-    grid-template-columns: repeat(2, 1fr);
+    flex-direction: row;
+    flex-wrap: wrap;
+  }
+  .grid > * {
+    flex: 1 1 calc(50% - 0.75rem);
   }
 }
 
 @media (min-width: 1024px) {
-  .grid {
-    grid-template-columns: repeat(4, 1fr);
+  .grid > * {
+    flex: 1 1 calc(25% - 1.125rem);
   }
 }
 

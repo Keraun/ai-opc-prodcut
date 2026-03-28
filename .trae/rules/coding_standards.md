@@ -430,7 +430,39 @@ const Button: React.FC<ButtonProps> = ({
 }
 ```
 
-#### 2.4 Hooks 使用规范
+#### 2.4 布局规范
+- **禁止使用 Grid 布局**：由于浏览器兼容性问题，禁止使用 CSS Grid 布局（`display: grid`、`grid-template-columns`、`grid-template-rows` 等）
+- **必须使用 Flex 布局**：所有布局需求必须使用 Flex 布局实现（`display: flex`）
+- **Flex 最佳实践**：
+  - 使用 `flex-direction` 控制方向（row/column）
+  - 使用 `justify-content` 控制主轴对齐
+  - 使用 `align-items` 控制交叉轴对齐
+  - 使用 `flex-wrap` 控制换行
+  - 使用 `flex` 简写属性（`flex: 1`）代替单独的 `flex-grow`、`flex-shrink`、`flex-basis`
+
+```css
+/* ✅ 正确示例 - 使用 Flex 布局 */
+.formRow {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+
+.formField {
+  flex: 1;
+  min-width: 250px;
+}
+
+/* ❌ 错误示例 - 使用 Grid 布局 */
+.formRow {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+}
+```
+
+#### 2.5 Hooks 使用规范
 - **自定义 Hook**：可复用的逻辑必须提取为自定义 Hook
 - **依赖数组**：useEffect 和 useMemo 必须正确声明依赖
 - **性能优化**：大列表使用虚拟化，昂贵计算使用 useMemo
