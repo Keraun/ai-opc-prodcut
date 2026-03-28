@@ -1,7 +1,7 @@
-import { NextRequest, NextResponse } from 'next/server'
+import { NextRequest } from 'next/server'
 import { readConfig, writeConfig, getRuntimePath } from '@/lib/config-manager'
 import fs from 'fs'
-import { getSystemPages } from '@/lib/server/page-utils'
+import { successResponse, errorResponse, badRequestResponse, notFoundResponse } from '@/lib/api-utils'
 
 interface PageListInfo {
   id: string
@@ -37,7 +37,6 @@ function updatePageList(pages: PageListInfo[]) {
   const pageListPath = getRuntimePath('page-list.json')
   
   try {
-    // 尝试读取现有的page-list.json文件，保留systemPages配置
     let existingSystemPages: string[] = ['home', '404']
     
     if (fs.existsSync(pageListPath)) {
@@ -71,20 +70,14 @@ export async function POST(
     const { action } = body
 
     if (!['publish', 'offline'].includes(action)) {
-      return NextResponse.json({
-        success: false,
-        message: '无效的操作',
-      }, { status: 400 })
+      return badRequestResponse('无效的操作')
     }
 
     const configKey = `page-${pageId}`
     const existingConfig = readConfig(configKey)
     
     if (!existingConfig || Object.keys(existingConfig).length === 0) {
-      return NextResponse.json({
-        success: false,
-        message: '页面不存在',
-      }, { status: 404 })
+      return notFoundResponse('页面不存在')
     }
 
     const now = new Date().toISOString()
@@ -112,16 +105,9 @@ export async function POST(
       updatePageList(pages)
     }
 
-    return NextResponse.json({
-      success: true,
-      message: action === 'publish' ? '页面发布成功' : '页面已下线',
-      status: newStatus,
-    })
+    return successResponse({ status: newStatus }, action === 'publish' ? '页面发布成功' : '页面已下线')
   } catch (error) {
     console.error('Update page status error:', error)
-    return NextResponse.json({
-      success: false,
-      message: '更新页面状态失败',
-    }, { status: 500 })
+    return errorResponse('更新页面状态失败')
   }
 }

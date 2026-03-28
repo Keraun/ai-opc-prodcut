@@ -1,6 +1,7 @@
-import { NextRequest, NextResponse } from "next/server"
+import { NextRequest } from "next/server"
 import { cookies } from "next/headers"
 import { readConfig, writeConfig } from "@/lib/config-manager"
+import { successResponse, errorResponse, badRequestResponse, unauthorizedResponse, notFoundResponse } from "@/lib/api-utils"
 
 export async function POST(request: NextRequest) {
   try {
@@ -8,10 +9,7 @@ export async function POST(request: NextRequest) {
     const adminUserCookie = cookieStore.get('adminUser')
     
     if (!adminUserCookie) {
-      return NextResponse.json({
-        success: false,
-        message: '未登录'
-      }, { status: 401 })
+      return unauthorizedResponse()
     }
 
     const adminUser = JSON.parse(adminUserCookie.value)
@@ -19,22 +17,15 @@ export async function POST(request: NextRequest) {
     const { oldPassword, newPassword } = body
 
     if (!oldPassword || !newPassword) {
-      return NextResponse.json({
-        success: false,
-        message: '参数错误'
-      }, { status: 400 })
+      return badRequestResponse('参数错误')
     }
 
     if (newPassword.length < 6) {
-      return NextResponse.json({
-        success: false,
-        message: '新密码长度不能少于6位'
-      }, { status: 400 })
+      return badRequestResponse('新密码长度不能少于6位')
     }
 
     const accountConfig = readConfig('account')
 
-    // 兼容两种格式：数组格式和 { admins: [...] } 对象格式
     const admins = Array.isArray(accountConfig) ? accountConfig : accountConfig.admins || []
 
     const adminIndex = admins.findIndex(
@@ -42,19 +33,13 @@ export async function POST(request: NextRequest) {
     )
 
     if (adminIndex === -1) {
-      return NextResponse.json({
-        success: false,
-        message: '用户不存在'
-      }, { status: 404 })
+      return notFoundResponse('用户不存在')
     }
 
     const admin = admins[adminIndex]
 
     if (admin.password !== oldPassword) {
-      return NextResponse.json({
-        success: false,
-        message: '旧密码错误'
-      }, { status: 401 })
+      return unauthorizedResponse('旧密码错误')
     }
 
     admins[adminIndex].password = newPassword
@@ -62,18 +47,11 @@ export async function POST(request: NextRequest) {
 
     writeConfig('account', admins)
 
-
-
     cookieStore.delete('adminUser')
 
-    return NextResponse.json({
-      success: true,
-      message: '密码修改成功'
-    })
+    return successResponse(null, '密码修改成功')
   } catch (error) {
-    return NextResponse.json({
-      success: false,
-      message: '修改密码失败'
-    }, { status: 500 })
+    console.error('修改密码失败:', error)
+    return errorResponse('修改密码失败')
   }
 }

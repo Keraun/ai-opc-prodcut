@@ -1,6 +1,7 @@
-import { NextRequest, NextResponse } from "next/server"
+import { NextRequest } from "next/server"
 import fs from "fs"
 import path from "path"
+import { successResponse, errorResponse, badRequestResponse, unauthorizedResponse, notFoundResponse } from "@/lib/api-utils"
 
 function getVerificationCodesPath(): string {
   return path.join(process.cwd(), "config/json/system-verification-codes.json")
@@ -30,103 +31,69 @@ export async function POST(request: NextRequest) {
     const { method, superAdminToken, username, email, verificationCode, newPassword } = body
 
     if (!newPassword) {
-      return NextResponse.json({
-        success: false,
-        message: "请输入新密码"
-      }, { status: 400 })
+      return badRequestResponse("请输入新密码")
     }
 
     if (newPassword.length < 8) {
-      return NextResponse.json({
-        success: false,
-        message: "密码长度至少为8位"
-      }, { status: 400 })
+      return badRequestResponse("密码长度至少为8位")
     }
 
     const accountConfigPath = path.join(process.cwd(), "config/json/runtime/account.json")
     const accountConfig = JSON.parse(fs.readFileSync(accountConfigPath, "utf-8"))
 
-    // 兼容两种格式：数组格式和 { admins: [...] } 对象格式
     const admins = Array.isArray(accountConfig) ? accountConfig : accountConfig.admins || []
 
     let adminIndex = -1
 
     if (method === "token") {
       if (!superAdminToken || !username) {
-        return NextResponse.json({
-          success: false,
-          message: "缺少必要参数"
-        }, { status: 400 })
+        return badRequestResponse("缺少必要参数")
       }
 
       const tokenConfigPath = path.join(process.cwd(), "config/json/system-token.json")
       const tokenConfig = JSON.parse(fs.readFileSync(tokenConfigPath, "utf-8"))
 
       if (!tokenConfig.superAdminToken || tokenConfig.superAdminToken !== superAdminToken) {
-        return NextResponse.json({
-          success: false,
-          message: "输入的超级管理员口令不正确"
-        }, { status: 401 })
+        return unauthorizedResponse("输入的超级管理员口令不正确")
       }
 
       adminIndex = admins.findIndex((admin: any) => admin.username === username)
 
       if (adminIndex === -1) {
-        return NextResponse.json({
-          success: false,
-          message: "用户不存在"
-        }, { status: 404 })
+        return notFoundResponse("用户不存在")
       }
     } else if (method === "email") {
       if (!email || !verificationCode) {
-        return NextResponse.json({
-          success: false,
-          message: "缺少必要参数"
-        }, { status: 400 })
+        return badRequestResponse("缺少必要参数")
       }
 
       const verificationCodes = loadVerificationCodes()
       const storedData = verificationCodes[email]
       
       if (!storedData) {
-        return NextResponse.json({
-          success: false,
-          message: "验证码已过期，请重新获取"
-        }, { status: 401 })
+        return unauthorizedResponse("验证码已过期，请重新获取")
       }
 
       if (Date.now() > storedData.expiresAt) {
         delete verificationCodes[email]
         saveVerificationCodes(verificationCodes)
-        return NextResponse.json({
-          success: false,
-          message: "验证码已过期，请重新获取"
-        }, { status: 401 })
+        return unauthorizedResponse("验证码已过期，请重新获取")
       }
 
       if (storedData.code !== verificationCode) {
-        return NextResponse.json({
-          success: false,
-          message: "验证码错误"
-        }, { status: 401 })
+        return unauthorizedResponse("验证码错误")
       }
 
       adminIndex = admins.findIndex((admin: any) => admin.email === email)
 
       if (adminIndex === -1) {
-        return NextResponse.json({
-          success: false,
-          message: "该邮箱未绑定任何管理员账号"
-        }, { status: 404 })
+        return notFoundResponse("该邮箱未绑定任何管理员账号")
       }
 
       delete verificationCodes[email]
       saveVerificationCodes(verificationCodes)
     } else {
-      return NextResponse.json({
-        success: false,
-        message: "无效的重置方式"
-      }, { status: 400 })
+      return badRequestResponse("无效的重置方式")
     }
 
     admins[adminIndex].password = newPassword
@@ -134,21 +101,13 @@ export async function POST(request: NextRequest) {
 
     fs.writeFileSync(accountConfigPath, JSON.stringify(admins, null, 2))
 
-    const response: any = {
-      success: true,
-      message: "密码修改成功"
+    const responseData: any = {
+      username: method === "email" ? admins[adminIndex].username : undefined
     }
 
-    if (method === "email") {
-      response.username = admins[adminIndex].username
-    }
-
-    return NextResponse.json(response)
+    return successResponse(responseData, "密码修改成功")
   } catch (error) {
     console.error("Reset password error:", error)
-    return NextResponse.json({
-      success: false,
-      message: "密码修改失败"
-    }, { status: 500 })
+    return errorResponse("密码修改失败")
   }
 }

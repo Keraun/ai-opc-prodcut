@@ -25,7 +25,8 @@
 {
   "code": 400,
   "success": false,
-  "message": "参数不完整"
+  "message": "参数不完整",
+  "data": null
 }
 ```
 
@@ -35,8 +36,8 @@
 |------|------|------|------|
 | `code` | number | 是 | HTTP 状态码 |
 | `success` | boolean | 是 | 是否成功 |
-| `message` | string | 否 | 提示信息 |
-| `data` | any | 否 | 响应数据 |
+| `message` | string | 是 | 提示信息（成功时返回空字符串，失败时返回错误信息） |
+| `data` | any | 是 | 响应数据（成功时返回数据，失败时返回 null） |
 
 ## HTTP 状态码规范
 
@@ -172,6 +173,7 @@ export async function GET() {
 {
   "code": 200,
   "success": true,
+  "message": "",
   "data": {
     "name": "站点名称",
     "description": "站点描述",
@@ -201,7 +203,8 @@ export async function GET() {
 {
   "code": 400,
   "success": false,
-  "message": "页面名称和路径不能为空"
+  "message": "页面名称和路径不能为空",
+  "data": null
 }
 ```
 
@@ -211,7 +214,8 @@ export async function GET() {
 {
   "code": 401,
   "success": false,
-  "message": "未登录"
+  "message": "未登录",
+  "data": null
 }
 ```
 
@@ -221,7 +225,8 @@ export async function GET() {
 {
   "code": 404,
   "success": false,
-  "message": "页面不存在"
+  "message": "页面不存在",
+  "data": null
 }
 ```
 
@@ -231,7 +236,8 @@ export async function GET() {
 {
   "code": 500,
   "success": false,
-  "message": "服务器内部错误"
+  "message": "服务器内部错误",
+  "data": null
 }
 ```
 
@@ -271,6 +277,12 @@ catch (error) {
   return errorResponse('服务器内部错误')
 }
 ```
+
+### 6. 字段完整性
+
+- **成功响应**：必须包含 `code`、`success`、`message`（空字符串）和 `data` 字段
+- **失败响应**：必须包含 `code`、`success`、`message`（错误信息）和 `data`（null）字段
+- 所有字段都不能为空或缺失
 
 ## 迁移指南
 

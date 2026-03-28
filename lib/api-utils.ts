@@ -51,12 +51,12 @@ export async function checkAdminAuth(): Promise<AuthResult> {
   }
 }
 
-export function successResponse<T>(data?: T, message?: string, code: number = 200): NextResponse<ApiResponse<T>> {
+export function successResponse<T>(data?: T, message: string = '', code: number = 200): NextResponse<ApiResponse<T>> {
   const response: ApiResponse<T> = {
     code,
     success: true,
-    ...(message && { message }),
-    ...(data !== undefined && { data })
+    message: message || '',
+    data: data !== undefined ? data : null
   }
   return NextResponse.json(response)
 }
@@ -69,7 +69,8 @@ export function errorResponse(
     {
       code,
       success: false,
-      message
+      message,
+      data: null
     },
     { status: code }
   )

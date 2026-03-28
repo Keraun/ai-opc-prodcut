@@ -1,6 +1,7 @@
-import { NextRequest, NextResponse } from "next/server"
+import { NextRequest } from "next/server"
 import { cookies } from "next/headers"
 import { readConfig } from "@/lib/config-manager"
+import { successResponse, errorResponse, badRequestResponse, unauthorizedResponse } from "@/lib/api-utils"
 
 export async function POST(request: NextRequest) {
   try {
@@ -8,7 +9,7 @@ export async function POST(request: NextRequest) {
     const adminUserCookie = cookieStore.get('adminUser')
     
     if (!adminUserCookie) {
-      return NextResponse.json({ success: false, message: '未登录' }, { status: 401 })
+      return unauthorizedResponse()
     }
 
     const adminUser = JSON.parse(adminUserCookie.value)
@@ -16,7 +17,7 @@ export async function POST(request: NextRequest) {
     const { password } = body
 
     if (!password) {
-      return NextResponse.json({ success: false, message: '密码不能为空' }, { status: 400 })
+      return badRequestResponse('密码不能为空')
     }
 
     let tokenConfig = readConfig('token') || { superAdminToken: '' }
@@ -31,12 +32,12 @@ export async function POST(request: NextRequest) {
     }
 
     if (password !== tokenConfig.superAdminToken) {
-      return NextResponse.json({ success: false, message: '超级管理员口令错误' }, { status: 401 })
+      return unauthorizedResponse('超级管理员口令错误')
     }
 
-    return NextResponse.json({ success: true, token: tokenConfig.superAdminToken })
+    return successResponse({ token: tokenConfig.superAdminToken })
   } catch (error) {
     console.error("获取超级管理员口令失败:", error)
-    return NextResponse.json({ success: false, message: '获取超级管理员口令失败' }, { status: 500 })
+    return errorResponse('获取超级管理员口令失败')
   }
 }

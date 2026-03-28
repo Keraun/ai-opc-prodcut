@@ -402,7 +402,7 @@ file: config-export.zip
 
 **注意**:
 - `site-config.json` 中的所有配置项合并为一个 JSON 对象，存储在 `system_config` 表中（key='site_config'）
-- `theme-config.json` 中的 `currentTheme` 字段包含在 `site_config` 配置对象中
+- `currentTheme` 从 `theme_config` 表的 `is_current` 字段获取，不再存储在 `site_config` 配置对象中
 - `theme-config.json` 中的 `themes` 对象拆分为 `theme_config` 表中的多条记录
 
 ## 页面编辑数据流

@@ -1,7 +1,8 @@
-import { NextRequest, NextResponse } from "next/server"
+import { NextRequest } from "next/server"
 import fs from "fs"
 import path from "path"
 import { cookies } from "next/headers"
+import { successResponse, errorResponse, badRequestResponse, unauthorizedResponse, notFoundResponse } from "@/lib/api-utils"
 
 function generateSuperAdminToken(): string {
   const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789'
@@ -18,10 +19,7 @@ export async function POST(request: NextRequest) {
     const userCookie = cookieStore.get('adminUser')
     
     if (!userCookie) {
-      return NextResponse.json({
-        success: false,
-        message: "未授权"
-      }, { status: 401 })
+      return unauthorizedResponse()
     }
 
     const userData = JSON.parse(userCookie.value)
@@ -29,25 +27,18 @@ export async function POST(request: NextRequest) {
     const { email } = body
 
     if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-      return NextResponse.json({
-        success: false,
-        message: "请输入有效的邮箱地址"
-      }, { status: 400 })
+      return badRequestResponse("请输入有效的邮箱地址")
     }
 
     const accountConfigPath = path.join(process.cwd(), "config/json/runtime/account.json")
     const accountConfig = JSON.parse(fs.readFileSync(accountConfigPath, "utf-8"))
 
-    // 兼容两种格式：数组格式和 { admins: [...] } 对象格式
     const admins = Array.isArray(accountConfig) ? accountConfig : accountConfig.admins || []
 
     const adminIndex = admins.findIndex((admin: any) => admin.username === userData.username)
 
     if (adminIndex === -1) {
-      return NextResponse.json({
-        success: false,
-        message: "用户不存在"
-      }, { status: 404 })
+      return notFoundResponse("用户不存在")
     }
 
     admins[adminIndex].email = email
@@ -124,15 +115,12 @@ export async function POST(request: NextRequest) {
       maxAge: 60 * 60 * 24 * 7
     })
 
-    return NextResponse.json({
-      success: true,
+    return successResponse({
       showSuperAdminToken,
       superAdminToken: showSuperAdminToken ? superAdminToken : undefined
     })
   } catch (error) {
-    return NextResponse.json({
-      success: false,
-      message: "邮箱设置失败"
-    }, { status: 500 })
+    console.error('邮箱设置失败:', error)
+    return errorResponse("邮箱设置失败")
   }
 }

@@ -1,6 +1,7 @@
-import { NextRequest, NextResponse } from 'next/server'
+import { NextRequest } from 'next/server'
 import { initializeModules } from '@/modules/init'
 import { getModuleComponent, getModuleDefaultData } from '@/modules/registry'
+import { successResponse, errorResponse, notFoundResponse } from '@/lib/api-utils'
 
 initializeModules()
 
@@ -14,25 +15,18 @@ export async function GET(
     const ModuleComponent = getModuleComponent(moduleId)
     
     if (!ModuleComponent) {
-      return NextResponse.json({
-        success: false,
-        message: '模块不存在',
-      }, { status: 404 })
+      return notFoundResponse('模块不存在')
     }
 
     const defaultData = getModuleDefaultData(moduleId) || {}
     
-    return NextResponse.json({
-      success: true,
+    return successResponse({
       moduleId,
       moduleName: moduleId,
       defaultData,
     })
   } catch (error) {
     console.error('Module preview error:', error)
-    return NextResponse.json({
-      success: false,
-      message: '获取模块信息失败',
-    }, { status: 500 })
+    return errorResponse('获取模块信息失败')
   }
 }

@@ -1,6 +1,7 @@
-import { NextRequest, NextResponse } from 'next/server'
+import { NextRequest } from 'next/server'
 import fs from 'fs/promises'
 import path from 'path'
+import { successResponse, errorResponse, badRequestResponse, notFoundResponse } from '@/lib/api-utils'
 
 interface Article {
   id: string
@@ -121,19 +122,23 @@ export async function GET(request: NextRequest) {
   if (slug) {
     const article = await getArticle(slug)
     if (article) {
-      return NextResponse.json(article)
+      return successResponse(article)
     } else {
-      return NextResponse.json({ error: 'Article not found' }, { status: 404 })
+      return notFoundResponse('文章不存在')
     }
   } else {
     const articles = await getArticles()
-    return NextResponse.json(articles)
+    return successResponse(articles)
   }
 }
 
 export async function POST(request: NextRequest) {
   try {
     const data = await request.json()
+    
+    if (!data.title || !data.content) {
+      return badRequestResponse('标题和内容不能为空')
+    }
     
     const article: Article = {
       id: data.id || generateId(),
@@ -150,10 +155,10 @@ export async function POST(request: NextRequest) {
     }
     
     const savedArticle = await saveArticle(article)
-    return NextResponse.json(savedArticle)
+    return successResponse(savedArticle, '文章创建成功', 201)
   } catch (error) {
     console.error('Error creating article:', error)
-    return NextResponse.json({ error: 'Failed to create article' }, { status: 500 })
+    return errorResponse('创建文章失败')
   }
 }
 
@@ -162,7 +167,11 @@ export async function PUT(request: NextRequest) {
     const data = await request.json()
     
     if (!data.id) {
-      return NextResponse.json({ error: 'Article ID is required' }, { status: 400 })
+      return badRequestResponse('文章ID不能为空')
+    }
+    
+    if (!data.title || !data.content) {
+      return badRequestResponse('标题和内容不能为空')
     }
     
     const article: Article = {
@@ -180,10 +189,10 @@ export async function PUT(request: NextRequest) {
     }
     
     const savedArticle = await saveArticle(article)
-    return NextResponse.json(savedArticle)
+    return successResponse(savedArticle, '文章更新成功')
   } catch (error) {
     console.error('Error updating article:', error)
-    return NextResponse.json({ error: 'Failed to update article' }, { status: 500 })
+    return errorResponse('更新文章失败')
   }
 }
 
@@ -192,13 +201,13 @@ export async function DELETE(request: NextRequest) {
   const id = searchParams.get('id')
   
   if (!id) {
-    return NextResponse.json({ error: 'Article ID is required' }, { status: 400 })
+    return badRequestResponse('文章ID不能为空')
   }
   
   const success = await deleteArticle(id)
   if (success) {
-    return NextResponse.json({ message: 'Article deleted successfully' })
+    return successResponse(null, '文章删除成功')
   } else {
-    return NextResponse.json({ error: 'Failed to delete article' }, { status: 500 })
+    return errorResponse('删除文章失败')
   }
 }

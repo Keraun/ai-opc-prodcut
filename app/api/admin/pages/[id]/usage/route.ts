@@ -1,6 +1,7 @@
-import { NextRequest, NextResponse } from 'next/server'
+import { NextRequest } from 'next/server'
 import { readConfig, getRuntimePath } from '@/lib/config-manager'
 import fs from 'fs'
+import { successResponse, errorResponse, notFoundResponse } from '@/lib/api-utils'
 
 interface PageInfo {
   id: string
@@ -42,24 +43,18 @@ export async function GET(
     const page = pages.find(p => p.id === pageId)
     
     if (!page) {
-      return NextResponse.json({
-        success: false,
-        message: '页面不存在',
-      }, { status: 404 })
+      return notFoundResponse('页面不存在')
     }
     
-    // 检查其他页面是否引用了此页面
     const usedBy: string[] = []
     
     for (const otherPage of pages) {
       if (otherPage.id === pageId) continue
       
-      // 读取其他页面的配置
       const configKey = `page-${otherPage.id}`
       const pageConfig = readConfig(configKey)
       
       if (pageConfig) {
-        // 检查页面配置中是否包含对目标页面的引用
         const configString = JSON.stringify(pageConfig)
         if (configString.includes(page.slug) || configString.includes(page.id)) {
           usedBy.push(`${otherPage.name} (/${otherPage.slug})`)
@@ -67,8 +62,7 @@ export async function GET(
       }
     }
     
-    return NextResponse.json({
-      success: true,
+    return successResponse({
       pageId,
       pageName: page.name,
       usedBy,
@@ -76,9 +70,6 @@ export async function GET(
     })
   } catch (error) {
     console.error('Check page usage error:', error)
-    return NextResponse.json({
-      success: false,
-      message: '检查页面使用情况失败',
-    }, { status: 500 })
+    return errorResponse('检查页面使用情况失败')
   }
 }

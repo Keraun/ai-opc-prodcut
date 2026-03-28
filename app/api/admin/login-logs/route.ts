@@ -1,17 +1,15 @@
-import { NextResponse } from "next/server"
 import fs from "fs"
 import path from "path"
+import { successResponse, errorResponse } from "@/lib/api-utils"
 
 export async function GET() {
   try {
     const loginLogsPath = path.join(process.cwd(), "config/json/system-login-logs.json")
     const loginLogs = JSON.parse(fs.readFileSync(loginLogsPath, "utf-8"))
     
-    return NextResponse.json(loginLogs)
+    return successResponse(loginLogs)
   } catch (error) {
-    return NextResponse.json({
-      success: false,
-      message: "获取登入记录失败"
-    }, { status: 500 })
+    console.error('获取登入记录失败:', error)
+    return errorResponse("获取登入记录失败")
   }
 }

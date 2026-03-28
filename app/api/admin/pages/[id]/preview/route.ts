@@ -1,7 +1,8 @@
-import { NextRequest, NextResponse } from 'next/server'
+import { NextRequest } from 'next/server'
 import { initializeModules } from '@/modules/init'
 import { getModuleComponent, getModuleDefaultData } from '@/modules/registry'
 import { readConfig } from '@/lib/config-manager'
+import { successResponse, errorResponse, notFoundResponse } from '@/lib/api-utils'
 
 initializeModules()
 
@@ -22,10 +23,7 @@ export async function POST(
 
     const pageConfig = readConfig(`page-${params.id}`)
     if (!pageConfig) {
-      return NextResponse.json({
-        success: false,
-        message: '页面不存在',
-      }, { status: 404 })
+      return notFoundResponse('页面不存在')
     }
 
     const moduleDataArray: Array<{
@@ -56,16 +54,12 @@ export async function POST(
       }
     }
 
-    return NextResponse.json({
-      success: true,
+    return successResponse({
       pageName: pageConfig.name || params.id,
       modules: moduleDataArray,
     })
   } catch (error) {
     console.error('Generate preview error:', error)
-    return NextResponse.json({
-      success: false,
-      message: '生成预览失败',
-    }, { status: 500 })
+    return errorResponse('生成预览失败')
   }
 }

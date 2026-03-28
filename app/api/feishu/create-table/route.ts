@@ -1,6 +1,6 @@
-import { NextRequest, NextResponse } from "next/server"
 import { readConfig, writeConfig } from "@/lib/config-manager"
 import { createFeishuAPI, Field } from "@/lib/feishu-api"
+import { successResponse, errorResponse, badRequestResponse } from "@/lib/api-utils"
 
 function extractAppToken(baseLink: string): string {
   if (!baseLink) return ''
@@ -21,25 +21,19 @@ function extractAppToken(baseLink: string): string {
   return baseLink
 }
 
-export async function POST(request: NextRequest) {
+export async function POST() {
   try {
     const feishuConfig = readConfig('feishu-app')
 
     if (!feishuConfig.appId || !feishuConfig.appSecret || !feishuConfig.baseLink) {
-      return NextResponse.json(
-        { success: false, message: "飞书配置未完成，请填写App ID、App Secret和飞书多维表格链接" },
-        { status: 400 }
-      )
+      return badRequestResponse("飞书配置未完成，请填写App ID、App Secret和飞书多维表格链接")
     }
 
     const appToken = extractAppToken(feishuConfig.baseLink)
     console.log("提取的appToken:", appToken)
     
     if (!appToken) {
-      return NextResponse.json(
-        { success: false, message: "无法从链接中提取app_token" },
-        { status: 400 }
-      )
+      return badRequestResponse("无法从链接中提取app_token")
     }
 
     const feishuAPI = createFeishuAPI({
@@ -82,19 +76,13 @@ export async function POST(request: NextRequest) {
 
     if (!result.success) {
       console.error("创建飞书表格失败:", result.error)
-      return NextResponse.json(
-        { success: false, message: result.message || "创建飞书表格失败", error: result.error },
-        { status: 500 }
-      )
+      return errorResponse(result.message || "创建飞书表格失败")
     }
 
     const tableId = result.data?.table_id
 
     if (!tableId) {
-      return NextResponse.json(
-        { success: false, message: "创建飞书表格成功，但未返回表格ID" },
-        { status: 500 }
-      )
+      return errorResponse("创建飞书表格成功，但未返回表格ID")
     }
 
     const tableLink = `https://example.feishu.cn/base/${appToken}/table/${tableId}`
@@ -104,20 +92,13 @@ export async function POST(request: NextRequest) {
     feishuConfig.tableLink = tableLink
     writeConfig('feishu-app', feishuConfig)
 
-    return NextResponse.json({
-      success: true,
-      message: "飞书表格创建成功",
-      data: {
-        tableId: tableId,
-        tableLink: tableLink,
-        table: result.data
-      }
-    })
+    return successResponse({
+      tableId: tableId,
+      tableLink: tableLink,
+      table: result.data
+    }, "飞书表格创建成功")
   } catch (error) {
     console.error("创建飞书表格失败:", error)
-    return NextResponse.json(
-      { success: false, message: "创建飞书表格失败", error: String(error) },
-      { status: 500 }
-    )
+    return errorResponse("创建飞书表格失败")
   }
 }
