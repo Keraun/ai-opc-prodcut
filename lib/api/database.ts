@@ -1,6 +1,11 @@
 import type { BackupInfo } from './types'
 import { request } from './request'
 
+/**
+ * 导入数据库文件
+ * @param file - 数据库文件
+ * @returns 导入结果，包含 success、message 和 backupCreated（备份信息）
+ */
 export async function importDatabase(file: File): Promise<{
   success: boolean
   message?: string
@@ -28,6 +33,11 @@ export async function importDatabase(file: File): Promise<{
   }
 }
 
+/**
+ * 一键恢复网站到默认状态
+ * @param username - 操作用户名
+ * @returns 恢复结果，包含 success、message、backupCreated 和 tables
+ */
 export async function resetWebsite(username: string): Promise<{
   success: boolean
   message?: string
@@ -55,6 +65,10 @@ export async function resetWebsite(username: string): Promise<{
   }
 }
 
+/**
+ * 检查默认数据库是否存在
+ * @returns 检查结果，包含 success、exists 和 message
+ */
 export async function checkDefaultDb(): Promise<{
   success: boolean
   exists?: boolean
@@ -73,6 +87,10 @@ export async function checkDefaultDb(): Promise<{
   }
 }
 
+/**
+ * 验证数据库完整性
+ * @returns 验证结果，包含 success、valid、tables 和 message
+ */
 export async function validateDatabase(): Promise<{
   success: boolean
   valid?: boolean

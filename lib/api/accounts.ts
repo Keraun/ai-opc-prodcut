@@ -1,6 +1,10 @@
 import type { Account } from './types'
 import { request } from './request'
 
+/**
+ * 获取所有账号列表
+ * @returns 账号列表结果，包含 success 和 accounts
+ */
 export async function getAccounts(): Promise<{ success: boolean; accounts?: any[] }> {
   try {
     const result = await request<any[]>('/api/admin/accounts')
@@ -11,6 +15,15 @@ export async function getAccounts(): Promise<{ success: boolean; accounts?: any[
   }
 }
 
+/**
+ * 添加新账号
+ * @param account - 账号信息
+ * @param account.username - 用户名
+ * @param account.password - 密码
+ * @param account.email - 邮箱地址
+ * @param account.remark - 备注（可选）
+ * @returns 添加结果，包含 success 和 message
+ */
 export async function addAccount(account: Account): Promise<{ success: boolean; message?: string }> {
   try {
     const result = await request<void>('/api/admin/accounts', {
@@ -24,6 +37,11 @@ export async function addAccount(account: Account): Promise<{ success: boolean; 
   }
 }
 
+/**
+ * 删除账号
+ * @param username - 要删除的用户名
+ * @returns 删除结果，包含 success 和 message
+ */
 export async function deleteAccount(username: string): Promise<{ success: boolean; message?: string }> {
   try {
     const result = await request<void>(`/api/admin/accounts/${username}`, {
@@ -36,6 +54,15 @@ export async function deleteAccount(username: string): Promise<{ success: boolea
   }
 }
 
+/**
+ * 更新账号信息
+ * @param username - 要更新的用户名
+ * @param data - 更新数据
+ * @param data.password - 新密码（可选）
+ * @param data.email - 邮箱地址
+ * @param data.remark - 备注（可选）
+ * @returns 更新结果，包含 success 和 message
+ */
 export async function updateAccount(username: string, data: {
   password?: string
   email: string

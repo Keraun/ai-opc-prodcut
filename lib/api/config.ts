@@ -1,5 +1,10 @@
 import { request } from './request'
 
+/**
+ * 根据路径获取配置值
+ * @param path - 配置路径
+ * @returns 配置值对象，失败时返回空对象
+ */
 export async function getConfig(path: string): Promise<Record<string, unknown>> {
   try {
     const result = await request<Record<string, unknown>>(`/api/config?path=${encodeURIComponent(path)}`)
@@ -10,6 +15,12 @@ export async function getConfig(path: string): Promise<Record<string, unknown>> 
   }
 }
 
+/**
+ * 设置配置值
+ * @param path - 配置路径
+ * @param value - 配置值
+ * @returns 设置是否成功
+ */
 export async function setConfig(path: string, value: unknown): Promise<boolean> {
   try {
     const result = await request<void>('/api/config', {
@@ -23,6 +34,10 @@ export async function setConfig(path: string, value: unknown): Promise<boolean> 
   }
 }
 
+/**
+ * 获取管理后台配置
+ * @returns 管理后台配置对象，失败时返回空对象
+ */
 export async function getAdminConfig(): Promise<Record<string, unknown>> {
   try {
     const result = await request<Record<string, unknown>>('/api/admin/config')
@@ -33,6 +48,11 @@ export async function getAdminConfig(): Promise<Record<string, unknown>> {
   }
 }
 
+/**
+ * 更新管理后台配置
+ * @param config - 配置对象
+ * @returns 更新是否成功
+ */
 export async function updateAdminConfig(config: Record<string, unknown>): Promise<boolean> {
   try {
     const result = await request<void>('/api/admin/config', {
@@ -46,6 +66,10 @@ export async function updateAdminConfig(config: Record<string, unknown>): Promis
   }
 }
 
+/**
+ * 导出配置文件
+ * @returns 配置文件 Blob 对象，失败时返回 null
+ */
 export async function exportConfig(): Promise<Blob | null> {
   try {
     const response = await fetch('/api/admin/config/export')
@@ -59,6 +83,11 @@ export async function exportConfig(): Promise<Blob | null> {
   }
 }
 
+/**
+ * 导入配置文件
+ * @param file - 配置文件
+ * @returns 导入是否成功
+ */
 export async function importConfig(file: File): Promise<boolean> {
   try {
     const formData = new FormData()
@@ -76,6 +105,11 @@ export async function importConfig(file: File): Promise<boolean> {
   }
 }
 
+/**
+ * 获取表单 Schema
+ * @param type - Schema 类型（可选）
+ * @returns Schema 对象，失败时返回空对象
+ */
 export async function getSchema(type?: string): Promise<Record<string, any>> {
   try {
     const url = type ? `/api/admin/schema?type=${type}` : '/api/admin/schema'
@@ -87,6 +121,11 @@ export async function getSchema(type?: string): Promise<Record<string, any>> {
   }
 }
 
+/**
+ * 获取配置的历史版本
+ * @param type - 配置类型
+ * @returns 版本信息，包含 success、data、version 和 message
+ */
 export async function getConfigVersion(type: string): Promise<{
   success: boolean
   data?: any
@@ -107,6 +146,11 @@ export async function getConfigVersion(type: string): Promise<{
   }
 }
 
+/**
+ * 还原配置到上一个版本
+ * @param type - 配置类型
+ * @returns 还原结果，包含 success 和 message
+ */
 export async function restoreConfigVersion(type: string): Promise<{ success: boolean; message?: string }> {
   try {
     const result = await request<void>('/api/admin/config/restore', {
@@ -120,6 +164,12 @@ export async function restoreConfigVersion(type: string): Promise<{ success: boo
   }
 }
 
+/**
+ * 保存管理后台配置（带类型）
+ * @param type - 配置类型
+ * @param data - 配置数据
+ * @returns 保存结果，包含 success 和 message
+ */
 export async function saveAdminConfigApi(type: string, data: any): Promise<{ success: boolean; message?: string }> {
   try {
     const result = await request<void>('/api/admin/config', {
@@ -133,6 +183,10 @@ export async function saveAdminConfigApi(type: string, data: any): Promise<{ suc
   }
 }
 
+/**
+ * 获取主题配置
+ * @returns 主题配置对象，包含 currentTheme 和 themes，失败时返回 null
+ */
 export async function getThemeConfig(): Promise<{
   currentTheme?: string
   themes?: Record<string, any>

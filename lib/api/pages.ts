@@ -1,6 +1,11 @@
 import type { PageInfo, ModuleData, PageConfig } from './types'
 import { request } from './request'
 
+/**
+ * 获取页面详情
+ * @param pageId - 页面 ID
+ * @returns 页面信息对象，失败时返回 null
+ */
 export async function getPageDetail(pageId: string): Promise<PageInfo | null> {
   try {
     const result = await request<PageInfo>(`/api/admin/pages/${pageId}`)
@@ -11,6 +16,10 @@ export async function getPageDetail(pageId: string): Promise<PageInfo | null> {
   }
 }
 
+/**
+ * 获取所有页面列表
+ * @returns 页面信息数组，失败时返回空数组
+ */
 export async function getPageList(): Promise<PageInfo[]> {
   try {
     const result = await request<PageInfo[]>('/api/admin/pages')
@@ -21,6 +30,15 @@ export async function getPageList(): Promise<PageInfo[]> {
   }
 }
 
+/**
+ * 创建新页面
+ * @param data - 页面创建参数
+ * @param data.name - 页面名称
+ * @param data.slug - 页面路径标识
+ * @param data.type - 页面类型：'static' 或 'dynamic'
+ * @param data.dynamicParam - 动态页面参数名
+ * @returns 创建结果，包含 success 和 pageId
+ */
 export async function createPage(data: {
   name: string
   slug: string
@@ -39,6 +57,15 @@ export async function createPage(data: {
   }
 }
 
+/**
+ * 更新页面信息
+ * @param pageId - 页面 ID
+ * @param data - 更新数据
+ * @param data.name - 页面名称
+ * @param data.slug - 页面路径标识
+ * @param data.modules - 页面模块数组
+ * @returns 更新是否成功
+ */
 export async function updatePage(pageId: string, data: {
   name?: string
   slug?: string
@@ -56,6 +83,11 @@ export async function updatePage(pageId: string, data: {
   }
 }
 
+/**
+ * 发布页面
+ * @param pageId - 页面 ID
+ * @returns 发布是否成功
+ */
 export async function publishPage(pageId: string): Promise<boolean> {
   try {
     const result = await request<void>(`/api/admin/pages/${pageId}/status`, {
@@ -69,6 +101,11 @@ export async function publishPage(pageId: string): Promise<boolean> {
   }
 }
 
+/**
+ * 将页面下线
+ * @param pageId - 页面 ID
+ * @returns 下线是否成功
+ */
 export async function offlinePage(pageId: string): Promise<boolean> {
   try {
     const result = await request<void>(`/api/admin/pages/${pageId}/status`, {
@@ -82,6 +119,11 @@ export async function offlinePage(pageId: string): Promise<boolean> {
   }
 }
 
+/**
+ * 删除页面
+ * @param pageId - 页面 ID
+ * @returns 删除是否成功
+ */
 export async function deletePage(pageId: string): Promise<boolean> {
   try {
     const result = await request<void>(`/api/admin/pages/${pageId}`, {
@@ -94,6 +136,11 @@ export async function deletePage(pageId: string): Promise<boolean> {
   }
 }
 
+/**
+ * 获取页面配置
+ * @param pageId - 页面 ID
+ * @returns 页面配置对象，包含 pageId、layout、modules、config，失败时返回 null
+ */
 export async function getPageConfig(pageId: string): Promise<PageConfig | null> {
   try {
     const result = await request<PageConfig>(`/api/page-config?pageId=${pageId}`)
@@ -104,6 +151,11 @@ export async function getPageConfig(pageId: string): Promise<PageConfig | null> 
   }
 }
 
+/**
+ * 获取页面的模块列表
+ * @param pageId - 页面 ID
+ * @returns 模块数据数组，失败时返回空数组
+ */
 export async function getPageModules(pageId: string): Promise<ModuleData[]> {
   try {
     const pageConfig = await getPageConfig(pageId)
@@ -114,6 +166,12 @@ export async function getPageModules(pageId: string): Promise<ModuleData[]> {
   }
 }
 
+/**
+ * 更新页面的模块配置
+ * @param pageId - 页面 ID
+ * @param modules - 模块数据数组
+ * @returns 更新是否成功
+ */
 export async function updatePageModules(
   pageId: string, 
   modules: ModuleData[]
@@ -130,6 +188,15 @@ export async function updatePageModules(
   }
 }
 
+/**
+ * 创建页面并返回详细响应
+ * @param data - 页面创建参数
+ * @param data.name - 页面名称
+ * @param data.slug - 页面路径标识
+ * @param data.type - 页面类型
+ * @param data.dynamicParam - 动态页面参数名
+ * @returns 创建结果，包含 success、pageId 和 message
+ */
 export async function createPageWithResponse(data: {
   name: string
   slug: string
@@ -148,6 +215,11 @@ export async function createPageWithResponse(data: {
   }
 }
 
+/**
+ * 获取页面的使用情况
+ * @param pageId - 页面 ID
+ * @returns 引用该页面的页面 ID 列表
+ */
 export async function getPageUsage(pageId: string): Promise<string[]> {
   try {
     const result = await request<{ usedBy: string[] }>(`/api/admin/pages/${pageId}/usage`)
@@ -158,6 +230,12 @@ export async function getPageUsage(pageId: string): Promise<string[]> {
   }
 }
 
+/**
+ * 更新页面模块（带消息返回）
+ * @param pageId - 页面 ID
+ * @param modules - 模块数据数组
+ * @returns 更新结果，包含 success 和 message
+ */
 export async function updatePageModulesApi(pageId: string, modules: any[]): Promise<{ success: boolean; message?: string }> {
   try {
     const result = await request<void>(`/api/admin/pages/${pageId}`, {
@@ -171,6 +249,11 @@ export async function updatePageModulesApi(pageId: string, modules: any[]): Prom
   }
 }
 
+/**
+ * 发布页面（带消息返回）
+ * @param pageId - 页面 ID
+ * @returns 发布结果，包含 success 和 message
+ */
 export async function publishPageApi(pageId: string): Promise<{ success: boolean; message?: string }> {
   try {
     const result = await request<void>(`/api/admin/pages/${pageId}/status`, {
@@ -184,6 +267,11 @@ export async function publishPageApi(pageId: string): Promise<{ success: boolean
   }
 }
 
+/**
+ * 获取页面预览数据
+ * @param pageId - 页面 ID
+ * @returns 预览结果，包含 success、pageName、modules 和 message
+ */
 export async function getPagePreview(pageId: string): Promise<{
   success: boolean
   pageName?: string

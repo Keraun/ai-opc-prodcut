@@ -1,5 +1,10 @@
 import { request } from './request'
 
+/**
+ * 提交联系表单
+ * @param formData - 表单数据（包含姓名、邮箱、消息等字段）
+ * @returns 提交结果，包含 success 和 message
+ */
 export async function submitContactForm(formData: FormData): Promise<{ success: boolean; message: string }> {
   try {
     const result = await request<void>('/api/contact', {
