@@ -1,6 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { cookies } from 'next/headers'
-import { getDatabase } from './database'
 
 export interface ApiResponse<T = any> {
   code: number
@@ -244,27 +243,7 @@ export function validateRequired(
   }
 }
 
-export function withDatabase<T>(
-  handler: (db: any) => T
-): T {
-  const db = getDatabase()
-  try {
-    return handler(db)
-  } finally {
-    db.close()
-  }
-}
 
-export async function withDatabaseAsync<T>(
-  handler: (db: any) => Promise<T>
-): Promise<T> {
-  const db = getDatabase()
-  try {
-    return await handler(db)
-  } finally {
-    db.close()
-  }
-}
 
 export function parseJsonBody<T = any>(request: NextRequest): Promise<T> {
   return request.json()
