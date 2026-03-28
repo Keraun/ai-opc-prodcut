@@ -2277,7 +2277,7 @@
 }
 
 .formFieldLabel {
-  flex: 0 0 150px;
+  flex: 0 0 200px;
   display: flex;
   flex-direction: column;
   gap: 6px;
