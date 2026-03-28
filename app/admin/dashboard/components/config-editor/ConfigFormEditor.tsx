@@ -5,6 +5,7 @@ import { Button, Card, Modal, Message, Spin, Alert } from "@arco-design/web-reac
 import { IconSave, IconEye, IconCode, IconRefresh, IconPlus } from "@arco-design/web-react/icon"
 import { toast } from "sonner"
 import { DynamicForm } from "@/components/dynamic-form"
+import { getSchema, getFeishuSchema, createFeishuTable } from "@/lib/api-client"
 import styles from "./ConfigFormEditor.module.css"
 
 interface FormSchema {
@@ -53,11 +54,8 @@ export function ConfigFormEditor({
 
   const fetchSchema = async () => {
     try {
-      const response = await fetch(`/api/admin/schema?type=${configType}`)
-      if (response.ok) {
-        const result = await response.json()
-        setSchema(result.data)
-      }
+      const schemaData = await getSchema(configType)
+      setSchema(schemaData as unknown as FormSchema)
     } catch (error) {
       console.error('Failed to fetch schema:', error)
     }
@@ -93,10 +91,9 @@ export function ConfigFormEditor({
 
     setLoadingFields(true)
     try {
-      const response = await fetch('/api/feishu/schema')
-      const result = await response.json()
+      const result = await getFeishuSchema()
       
-      if (result.success) {
+      if (result.success && result.data) {
         setTableFields(result.data)
         setShowFieldsModal(true)
         toast.success('获取表格字段成功')
@@ -119,12 +116,9 @@ export function ConfigFormEditor({
 
     setCreatingTable(true)
     try {
-      const response = await fetch('/api/feishu/create-table', {
-        method: 'POST'
-      })
-      const result = await response.json()
+      const result = await createFeishuTable()
       
-      if (result.success) {
+      if (result.success && result.data) {
         toast.success('飞书数据表生成成功')
         setTableLink(result.data.tableLink)
         

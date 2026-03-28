@@ -9,6 +9,11 @@ import { IconSave, IconEye, IconArrowLeft, IconCheck } from "@arco-design/web-re
 import styles from "../../dashboard.module.css"
 import { ModuleDragEditor } from "../module-editor/ModuleDragEditor"
 import { PagePreview } from "./PagePreview"
+import { 
+  getPageDetail, 
+  updatePageModulesApi, 
+  publishPageApi 
+} from "@/lib/api-client"
 
 interface ModuleInfo {
   moduleId: string
@@ -42,23 +47,20 @@ export function PageEditor({ pageId, onBack }: PageEditorProps) {
   const fetchPageData = async () => {
     setLoading(true)
     try {
-      const response = await fetch(`/api/admin/pages/${pageId}`)
-      if (response.ok) {
-        const result = await response.json()
-        console.log('=== API 响应 ===')
-        console.log('完整响应:', result)
-        console.log('result.data:', result.data)
-        console.log('result.data.modules:', result.data?.modules)
-        console.log('modules 类型:', Array.isArray(result.data?.modules))
-        console.log('modules 长度:', result.data?.modules?.length)
-        
-        if (result.data?.modules && result.data.modules.length > 0) {
-          console.log('第一个模块数据:', result.data.modules[0])
-          console.log('第一个模块的 data:', result.data.modules[0].data)
-          console.log('第一个模块的 data 类型:', typeof result.data.modules[0].data)
-        }
-        
-        const data = result.data
+      const data = await getPageDetail(pageId)
+      console.log('=== API 响应 ===')
+      console.log('完整响应:', data)
+      console.log('data.modules:', data?.modules)
+      console.log('modules 类型:', Array.isArray(data?.modules))
+      console.log('modules 长度:', data?.modules?.length)
+      
+      if (data?.modules && data.modules.length > 0) {
+        console.log('第一个模块数据:', data.modules[0])
+        console.log('第一个模块的 data:', data.modules[0].data)
+        console.log('第一个模块的 data 类型:', typeof data.modules[0].data)
+      }
+      
+      if (data) {
         setModules(data.modules || [])
         setPageInfo({
           name: data.name,
@@ -92,20 +94,12 @@ export function PageEditor({ pageId, onBack }: PageEditorProps) {
       console.log('=== 保存数据 ===')
       console.log('即将保存的 modules:', modules)
       
-      const response = await fetch(`/api/admin/pages/${pageId}`, {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ modules }),
-      })
+      const result = await updatePageModulesApi(pageId, modules)
 
-      if (response.ok) {
-        const result = await response.json()
+      if (result.success) {
         toast.success(result.message || "保存成功")
         setHasChanges(false)
       } else {
-        const result = await response.json()
         toast.error(result.message || "保存失败")
       }
     } catch (error) {
@@ -122,20 +116,12 @@ export function PageEditor({ pageId, onBack }: PageEditorProps) {
     }
 
     try {
-      const response = await fetch(`/api/admin/pages/${pageId}/status`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ action: 'publish' }),
-      })
+      const result = await publishPageApi(pageId)
 
-      if (response.ok) {
-        const result = await response.json()
+      if (result.success) {
         toast.success(result.message || "页面发布成功")
         fetchPageData()
       } else {
-        const result = await response.json()
         toast.error(result.message || "发布失败")
       }
     } catch (error) {

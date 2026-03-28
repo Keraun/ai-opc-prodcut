@@ -5,6 +5,13 @@ import { Button, Card, Table, Spin } from "@arco-design/web-react"
 import { IconPlus, IconDelete, IconEdit, IconEye, IconLeft } from "@arco-design/web-react/icon"
 import { toast } from "sonner"
 import { DynamicForm } from "@/components/dynamic-form"
+import { 
+  getArticles, 
+  createArticle, 
+  updateArticle, 
+  deleteArticle,
+  getSchema 
+} from "@/lib/api-client"
 import styles from "./ArticlesManagement.module.css"
 
 interface Article {
@@ -47,11 +54,8 @@ export function ArticlesManagement() {
 
   const fetchSchema = async () => {
     try {
-      const response = await fetch('/api/admin/schema?type=article')
-      if (response.ok) {
-        const data = await response.json()
-        setSchema(data)
-      }
+      const schemaData = await getSchema('article')
+      setSchema(schemaData as unknown as FormSchema)
     } catch (error) {
       console.error('Failed to fetch schema:', error)
     }
@@ -60,11 +64,8 @@ export function ArticlesManagement() {
   const fetchArticles = async () => {
     try {
       setLoading(true)
-      const response = await fetch('/api/articles')
-      if (response.ok) {
-        const data = await response.json()
-        setArticles(data)
-      }
+      const data = await getArticles()
+      setArticles(data)
     } catch (error) {
       console.error('Failed to fetch articles:', error)
       toast.error('获取文章列表失败')
@@ -91,11 +92,9 @@ export function ArticlesManagement() {
   const handleDeleteArticle = async (article: Article) => {
     if (confirm(`确定要删除文章 "${article.title}" 吗？`)) {
       try {
-        const response = await fetch(`/api/articles?id=${article.id}`, {
-          method: 'DELETE'
-        })
+        const result = await deleteArticle(article.id)
         
-        if (response.ok) {
+        if (result.success) {
           setArticles(articles.filter(a => a.id !== article.id))
           toast.success('文章删除成功')
         } else {
@@ -111,37 +110,26 @@ export function ArticlesManagement() {
   const handleSubmit = async (values: Record<string, any>) => {
     setSubmitting(true)
     try {
-      let response
+      let result
       if (currentArticle) {
-        response = await fetch('/api/articles', {
-          method: 'PUT',
-          headers: {
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify({
-            ...values,
-            id: currentArticle.id
-          })
+        result = await updateArticle({
+          ...values,
+          id: currentArticle.id
         })
       } else {
-        response = await fetch('/api/articles', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify(values)
-        })
+        result = await createArticle(values)
       }
       
-      if (response.ok) {
-        const savedArticle = await response.json()
+      if (result.success) {
         if (currentArticle) {
           setArticles(articles.map(article => 
-            article.id === currentArticle.id ? savedArticle : article
+            article.id === currentArticle.id ? result.article : article
           ))
           toast.success('文章更新成功')
         } else {
-          setArticles([...articles, savedArticle])
+          if (result.article) {
+            setArticles([...articles, result.article])
+          }
           toast.success('文章创建成功')
         }
         setViewMode('list')

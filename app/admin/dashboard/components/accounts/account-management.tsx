@@ -9,6 +9,13 @@ import {
   IconEdit
 } from "@arco-design/web-react/icon"
 import { useMessage } from "@/app/components/custom-message"
+import { 
+  getAccounts, 
+  addAccount, 
+  deleteAccount, 
+  updateAccount,
+  getSuperAdminToken 
+} from "@/lib/api-client"
 import styles from "../../dashboard.module.css"
 
 export function AccountManagement() {
@@ -46,10 +53,9 @@ export function AccountManagement() {
   const loadAccounts = async () => {
     try {
       setLoadingAccounts(true)
-      const response = await fetch("/api/admin/accounts")
-      const data = await response.json()
-      if (data.success) {
-        setAccounts(data.accounts)
+      const result = await getAccounts()
+      if (result.success && result.accounts) {
+        setAccounts(result.accounts)
       }
     } catch (error) {
       console.error("加载账号失败:", error)
@@ -58,22 +64,9 @@ export function AccountManagement() {
     }
   }
   
-  // 验证超级管理员密码
   const verifySuperAdminPassword = async (password: string) => {
-    try {
-      const response = await fetch("/api/admin/super-admin-token", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ password }),
-      })
-      const data = await response.json()
-      return data.success
-    } catch (error) {
-      console.error("验证超级管理员密码失败:", error)
-      return false
-    }
+    const result = await getSuperAdminToken(password)
+    return result.success
   }
   
   // 处理需要超级管理员权限的操作
@@ -92,7 +85,6 @@ export function AccountManagement() {
     }
   }
   
-  // 处理添加账号
   const handleAddAccount = async () => {
     if (!newAccount.username || !newAccount.password || !newAccount.email) {
       message.error("请填写完整的账号信息")
@@ -101,21 +93,14 @@ export function AccountManagement() {
     
     const action = async () => {
       try {
-        const response = await fetch("/api/admin/accounts", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(newAccount),
-        })
-        const data = await response.json()
-        if (data.success) {
+        const result = await addAccount(newAccount)
+        if (result.success) {
           message.success("账号添加成功")
           setShowAddAccountModal(false)
           setNewAccount({ username: "", password: "", email: "", remark: "" })
           loadAccounts()
         } else {
-          message.error(data.message || "账号添加失败")
+          message.error(result.message || "账号添加失败")
         }
       } catch (error) {
         console.error("添加账号失败:", error)
@@ -126,23 +111,19 @@ export function AccountManagement() {
     await handleActionWithSuperAdmin(action)
   }
   
-  // 处理删除账号
   const handleDeleteAccount = async () => {
     if (!accountToDelete) return
     
     const action = async () => {
       try {
-        const response = await fetch(`/api/admin/accounts/${accountToDelete.username}`, {
-          method: "DELETE",
-        })
-        const data = await response.json()
-        if (data.success) {
+        const result = await deleteAccount(accountToDelete.username)
+        if (result.success) {
           message.success("账号删除成功")
           setShowDeleteAccountModal(false)
           setAccountToDelete(null)
           loadAccounts()
         } else {
-          message.error(data.message || "账号删除失败")
+          message.error(result.message || "账号删除失败")
         }
       } catch (error) {
         console.error("删除账号失败:", error)
@@ -153,7 +134,6 @@ export function AccountManagement() {
     await handleActionWithSuperAdmin(action)
   }
   
-  // 处理修改账号
   const handleEditAccount = async () => {
     if (!editedAccount.email) {
       message.error("请输入邮箱")
@@ -162,22 +142,15 @@ export function AccountManagement() {
     
     const action = async () => {
       try {
-        const response = await fetch(`/api/admin/accounts/${editedAccount.username}`, {
-          method: "PUT",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(editedAccount),
-        })
-        const data = await response.json()
-        if (data.success) {
+        const result = await updateAccount(editedAccount.username, editedAccount)
+        if (result.success) {
           message.success("账号修改成功")
           setShowEditAccountModal(false)
           setAccountToEdit(null)
           setEditedAccount({ username: "", password: "", email: "", remark: "" })
           loadAccounts()
         } else {
-          message.error(data.message || "账号修改失败")
+          message.error(result.message || "账号修改失败")
         }
       } catch (error) {
         console.error("修改账号失败:", error)

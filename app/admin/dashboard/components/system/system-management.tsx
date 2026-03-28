@@ -19,6 +19,7 @@ import {
   IconEye,
   IconCopy
 } from "@arco-design/web-react/icon"
+import { getSuperAdminToken } from "@/lib/api-client"
 import styles from "../../dashboard.module.css"
 
 interface SystemManagementProps {
@@ -288,18 +289,11 @@ export function SystemManagement({
                   setLoadingToken(true)
                   setPasswordError("")
                   try {
-                    const response = await fetch("/api/admin/super-admin-token", {
-                      method: "POST",
-                      headers: {
-                        "Content-Type": "application/json",
-                      },
-                      body: JSON.stringify({ password: superAdminPassword }),
-                    })
-                    const data = await response.json()
-                    if (data.success) {
-                      setSuperAdminToken(data.token)
+                    const result = await getSuperAdminToken(superAdminPassword)
+                    if (result.success && result.token) {
+                      setSuperAdminToken(result.token)
                     } else {
-                      setPasswordError(data.message || "密码错误")
+                      setPasswordError(result.message || "密码错误")
                     }
                   } catch (error) {
                     setPasswordError("获取口令失败，请重试")
@@ -370,18 +364,11 @@ export function SystemManagement({
                 setLoadingToken(true)
                 setPasswordError("")
                 try {
-                  const response = await fetch("/api/admin/super-admin-token", {
-                    method: "POST",
-                    headers: {
-                      "Content-Type": "application/json",
-                    },
-                    body: JSON.stringify({ password: superAdminPassword }),
-                  })
-                  const data = await response.json()
-                  if (data.success) {
-                    setSuperAdminToken(data.token)
+                  const result = await getSuperAdminToken(superAdminPassword)
+                  if (result.success && result.token) {
+                    setSuperAdminToken(result.token)
                   } else {
-                    setPasswordError(data.message || "密码错误")
+                    setPasswordError(result.message || "密码错误")
                   }
                 } catch (error) {
                   setPasswordError("获取口令失败，请重试")

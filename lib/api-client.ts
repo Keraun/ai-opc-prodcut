@@ -534,3 +534,287 @@ export async function submitContactForm(formData: FormData): Promise<{ success: 
     return { success: false, message: '提交失败，请稍后重试' }
   }
 }
+
+export async function changePassword(data: {
+  username: string
+  oldPassword: string
+  newPassword: string
+}): Promise<{ success: boolean; user?: any; message?: string }> {
+  try {
+    const result = await request<{ user: any }>('/api/admin/change-password', {
+      method: 'POST',
+      body: JSON.stringify(data),
+    })
+    return {
+      success: result.success,
+      user: result.data?.user,
+      message: result.message,
+    }
+  } catch (error) {
+    console.error('Error changing password:', error)
+    return { success: false, message: '修改密码失败' }
+  }
+}
+
+export async function getSchema(type?: string): Promise<Record<string, any>> {
+  try {
+    const url = type ? `/api/admin/schema?type=${type}` : '/api/admin/schema'
+    const result = await request<Record<string, any>>(url)
+    return result.success && result.data ? result.data : {}
+  } catch (error) {
+    console.error('Error fetching schema:', error)
+    return {}
+  }
+}
+
+export async function getConfigVersion(type: string): Promise<{
+  success: boolean
+  data?: any
+  version?: any
+  message?: string
+}> {
+  try {
+    const result = await request<any>(`/api/admin/config/version?type=${type}&action=previous`)
+    return {
+      success: result.success,
+      data: result.data,
+      version: (result as any).version,
+      message: result.message,
+    }
+  } catch (error) {
+    console.error('Error fetching config version:', error)
+    return { success: false, message: '获取版本失败' }
+  }
+}
+
+export async function restoreConfigVersion(type: string): Promise<{ success: boolean; message?: string }> {
+  try {
+    const result = await request<void>('/api/admin/config/restore', {
+      method: 'POST',
+      body: JSON.stringify({ type }),
+    })
+    return { success: result.success, message: result.message }
+  } catch (error) {
+    console.error('Error restoring config version:', error)
+    return { success: false, message: '还原版本失败' }
+  }
+}
+
+export async function getSuperAdminToken(password: string): Promise<{
+  success: boolean
+  token?: string
+  message?: string
+}> {
+  try {
+    const result = await request<{ token: string }>('/api/admin/super-admin-token', {
+      method: 'POST',
+      body: JSON.stringify({ password }),
+    })
+    return {
+      success: result.success,
+      token: result.data?.token,
+      message: result.message,
+    }
+  } catch (error) {
+    console.error('Error getting super admin token:', error)
+    return { success: false, message: '获取口令失败' }
+  }
+}
+
+export async function createPageWithResponse(data: {
+  name: string
+  slug: string
+  type?: 'static' | 'dynamic'
+  dynamicParam?: string
+}): Promise<{ success: boolean; pageId?: string; message?: string }> {
+  try {
+    const result = await request<{ pageId: string }>('/api/admin/pages', {
+      method: 'POST',
+      body: JSON.stringify(data),
+    })
+    return { success: result.success, pageId: result.data?.pageId, message: result.message }
+  } catch (error) {
+    console.error('Error creating page:', error)
+    return { success: false, message: '创建页面失败' }
+  }
+}
+
+export async function getPageUsage(pageId: string): Promise<string[]> {
+  try {
+    const result = await request<{ usedBy: string[] }>(`/api/admin/pages/${pageId}/usage`)
+    return result.success && result.data ? result.data.usedBy : []
+  } catch (error) {
+    console.error('Error fetching page usage:', error)
+    return []
+  }
+}
+
+export async function getFeishuSchema(): Promise<{ success: boolean; data?: any[]; message?: string }> {
+  try {
+    const result = await request<any[]>('/api/feishu/schema')
+    return { success: result.success, data: result.data, message: result.message }
+  } catch (error) {
+    console.error('Error fetching feishu schema:', error)
+    return { success: false, message: '获取表格字段失败' }
+  }
+}
+
+export async function createFeishuTable(): Promise<{
+  success: boolean
+  data?: { tableId: string; tableLink: string }
+  message?: string
+}> {
+  try {
+    const result = await request<{ tableId: string; tableLink: string }>('/api/feishu/create-table', {
+      method: 'POST',
+    })
+    return { success: result.success, data: result.data, message: result.message }
+  } catch (error) {
+    console.error('Error creating feishu table:', error)
+    return { success: false, message: '生成飞书数据表失败' }
+  }
+}
+
+export async function getAccounts(): Promise<{ success: boolean; accounts?: any[] }> {
+  try {
+    const result = await request<any[]>('/api/admin/accounts')
+    return { success: result.success, accounts: result.data }
+  } catch (error) {
+    console.error('Error fetching accounts:', error)
+    return { success: false }
+  }
+}
+
+export async function addAccount(account: {
+  username: string
+  password: string
+  email: string
+  remark?: string
+}): Promise<{ success: boolean; message?: string }> {
+  try {
+    const result = await request<void>('/api/admin/accounts', {
+      method: 'POST',
+      body: JSON.stringify(account),
+    })
+    return { success: result.success, message: result.message }
+  } catch (error) {
+    console.error('Error adding account:', error)
+    return { success: false, message: '添加账号失败' }
+  }
+}
+
+export async function deleteAccount(username: string): Promise<{ success: boolean; message?: string }> {
+  try {
+    const result = await request<void>(`/api/admin/accounts/${username}`, {
+      method: 'DELETE',
+    })
+    return { success: result.success, message: result.message }
+  } catch (error) {
+    console.error('Error deleting account:', error)
+    return { success: false, message: '删除账号失败' }
+  }
+}
+
+export async function updateAccount(username: string, data: {
+  password?: string
+  email: string
+  remark?: string
+}): Promise<{ success: boolean; message?: string }> {
+  try {
+    const result = await request<void>(`/api/admin/accounts/${username}`, {
+      method: 'PUT',
+      body: JSON.stringify(data),
+    })
+    return { success: result.success, message: result.message }
+  } catch (error) {
+    console.error('Error updating account:', error)
+    return { success: false, message: '修改账号失败' }
+  }
+}
+
+export async function getArticles(): Promise<any[]> {
+  try {
+    const result = await request<any[]>('/api/articles')
+    return result.success && result.data ? result.data : []
+  } catch (error) {
+    console.error('Error fetching articles:', error)
+    return []
+  }
+}
+
+export async function createArticle(data: any): Promise<{ success: boolean; article?: any; message?: string }> {
+  try {
+    const result = await request<any>('/api/articles', {
+      method: 'POST',
+      body: JSON.stringify(data),
+    })
+    return { success: result.success, article: result.data, message: result.message }
+  } catch (error) {
+    console.error('Error creating article:', error)
+    return { success: false, message: '创建文章失败' }
+  }
+}
+
+export async function updateArticle(data: any): Promise<{ success: boolean; article?: any; message?: string }> {
+  try {
+    const result = await request<any>('/api/articles', {
+      method: 'PUT',
+      body: JSON.stringify(data),
+    })
+    return { success: result.success, article: result.data, message: result.message }
+  } catch (error) {
+    console.error('Error updating article:', error)
+    return { success: false, message: '更新文章失败' }
+  }
+}
+
+export async function deleteArticle(id: string): Promise<{ success: boolean; message?: string }> {
+  try {
+    const result = await request<void>(`/api/articles?id=${id}`, {
+      method: 'DELETE',
+    })
+    return { success: result.success, message: result.message }
+  } catch (error) {
+    console.error('Error deleting article:', error)
+    return { success: false, message: '删除文章失败' }
+  }
+}
+
+export async function updatePageModulesApi(pageId: string, modules: any[]): Promise<{ success: boolean; message?: string }> {
+  try {
+    const result = await request<void>(`/api/admin/pages/${pageId}`, {
+      method: 'PUT',
+      body: JSON.stringify({ modules }),
+    })
+    return { success: result.success, message: result.message }
+  } catch (error) {
+    console.error('Error updating page modules:', error)
+    return { success: false, message: '保存失败' }
+  }
+}
+
+export async function publishPageApi(pageId: string): Promise<{ success: boolean; message?: string }> {
+  try {
+    const result = await request<void>(`/api/admin/pages/${pageId}/status`, {
+      method: 'POST',
+      body: JSON.stringify({ action: 'publish' }),
+    })
+    return { success: result.success, message: result.message }
+  } catch (error) {
+    console.error('Error publishing page:', error)
+    return { success: false, message: '发布失败' }
+  }
+}
+
+export async function saveAdminConfigApi(type: string, data: any): Promise<{ success: boolean; message?: string }> {
+  try {
+    const result = await request<void>('/api/admin/config', {
+      method: 'POST',
+      body: JSON.stringify({ type, data }),
+    })
+    return { success: result.success, message: result.message }
+  } catch (error) {
+    console.error('Error saving admin config:', error)
+    return { success: false, message: '配置保存失败' }
+  }
+}

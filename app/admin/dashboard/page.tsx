@@ -8,6 +8,19 @@ import { toast, Toaster } from "sonner"
 import { useTheme } from "@/components/theme-provider"
 import styles from "./dashboard.module.css"
 import {
+  checkAuthStatus,
+  logout,
+  getAdminConfig,
+  saveAdminConfigApi,
+  getSchema,
+  getConfigVersion,
+  restoreConfigVersion,
+  changePassword,
+  exportConfig,
+  importConfig,
+  resetWebsite
+} from "@/lib/api-client"
+import {
   JSONViewerWithLineNumbers,
   JSONDiffViewer,
   ConfigCard,
@@ -169,19 +182,17 @@ export default function AdminDashboardPage() {
 
   const checkAuth = async () => {
     try {
-      const response = await fetch("/api/admin/auth")
-      const result = await response.json()
-      const data = result.data
+      const authResult = await checkAuthStatus()
 
-      if (!data.authenticated) {
+      if (!authResult.authenticated) {
         router.push("/admin")
         return
       }
 
-      setCurrentUser(data.user)
-      sessionStorage.setItem('currentUser', JSON.stringify(data.user))
+      setCurrentUser(authResult.user)
+      sessionStorage.setItem('currentUser', JSON.stringify(authResult.user))
 
-      if (data.user.mustChangePassword) {
+      if ((authResult.user as any)?.mustChangePassword) {
         setMustChangePassword(true)
       }
     } catch (error) {
@@ -264,11 +275,8 @@ export default function AdminDashboardPage() {
 
   const fetchSchema = async () => {
     try {
-      const response = await fetch("/api/admin/schema")
-      if (response.ok) {
-        const result = await response.json()
-        setSchema(result.data)
-      }
+      const schemaData = await getSchema()
+      setSchema(schemaData)
     } catch (error) {
       console.error("获取配置说明失败", error)
     }
@@ -278,25 +286,18 @@ export default function AdminDashboardPage() {
 
   const fetchConfigs = async () => {
     try {
-      const response = await fetch("/api/admin/config")
-      if (response.ok) {
-        const result = await response.json()
-        const data = result.data
-        
-        // 直接使用API返回的主题配置
-        const mergedData = {
-          ...data,
-          theme: data.theme || {
-            currentTheme: 'modern',
-            themes: {}
-          }
+      const data = await getAdminConfig() as unknown as Configs
+      
+      const mergedData = {
+        ...data,
+        theme: data.theme || {
+          currentTheme: 'modern',
+          themes: {}
         }
-        
-        setConfigs(mergedData)
-        setOriginalConfigs(JSON.parse(JSON.stringify(mergedData)))
-      } else {
-        toast.error("获取配置失败")
       }
+      
+      setConfigs(mergedData)
+      setOriginalConfigs(JSON.parse(JSON.stringify(mergedData)))
     } catch (error) {
       console.error('获取配置失败:', error)
       toast.error("获取配置失败")
@@ -323,18 +324,9 @@ export default function AdminDashboardPage() {
     
     setLoading(true)
     try {
-      const response = await fetch("/api/admin/config", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          type: "theme",
-          data: updatedTheme
-        }),
-      })
+      const result = await saveAdminConfigApi("theme", updatedTheme)
 
-      if (response.ok) {
+      if (result.success) {
         toast.success("主题切换成功")
         setOriginalConfigs(prev => ({
           ...prev,
@@ -354,18 +346,9 @@ export default function AdminDashboardPage() {
     setLoading(true)
     try {
       const configData = data || configs[configType as keyof typeof configs]
-      const response = await fetch("/api/admin/config", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          type: configType,
-          data: configData
-        }),
-      })
+      const result = await saveAdminConfigApi(configType, configData)
 
-      if (response.ok) {
+      if (result.success) {
         toast.success("配置提交成功")
         setConfigs(prev => ({
           ...prev,
@@ -387,11 +370,9 @@ export default function AdminDashboardPage() {
 
   const handleLogout = async () => {
     try {
-      const response = await fetch("/api/admin/logout", {
-        method: "POST",
-      })
+      const success = await logout()
 
-      if (response.ok) {
+      if (success) {
         toast.success("退出成功")
         router.push("/admin")
       }
@@ -402,12 +383,11 @@ export default function AdminDashboardPage() {
 
   const handleViewPreviousVersion = async (configType: string) => {
     try {
-      const response = await fetch(`/api/admin/config/version?type=${configType}&action=previous`)
-      const data = await response.json()
+      const result = await getConfigVersion(configType)
 
-      if (response.ok && data.success) {
-        setPreviousVersionData(data.data)
-        setPreviousVersionInfo(data.version)
+      if (result.success) {
+        setPreviousVersionData(result.data)
+        setPreviousVersionInfo(result.version)
         setViewingPreviousVersion(configType)
       } else {
         toast.info("当前配置项还没有历史版本记录,提交配置后将创建第一个版本。")
@@ -426,23 +406,13 @@ export default function AdminDashboardPage() {
 
     setRestoringVersion(true)
     try {
-      const response = await fetch("/api/admin/config/restore", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          type: configType
-        }),
-      })
+      const result = await restoreConfigVersion(configType)
 
-      const data = await response.json()
-
-      if (response.ok && data.success) {
+      if (result.success) {
         toast.success("版本还原成功")
         await fetchConfigs()
       } else {
-        toast.error(data.message || "版本还原失败")
+        toast.error(result.message || "版本还原失败")
       }
     } catch (error) {
       toast.error("版本还原失败")
@@ -484,21 +454,13 @@ export default function AdminDashboardPage() {
     setChangePasswordLoading(true)
 
     try {
-      const response = await fetch("/api/admin/change-password", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          username: currentUser.username,
-          oldPassword,
-          newPassword
-        }),
+      const result = await changePassword({
+        username: currentUser.username,
+        oldPassword,
+        newPassword
       })
 
-      const data = await response.json()
-
-      if (response.ok) {
+      if (result.success) {
         toast.success("密码修改成功")
         setShowChangePassword(false)
         setMustChangePassword(false)
@@ -506,12 +468,12 @@ export default function AdminDashboardPage() {
         setNewPassword("")
         setConfirmPassword("")
 
-        if (data.user) {
-          setCurrentUser(data.user)
-          sessionStorage.setItem('currentUser', JSON.stringify(data.user))
+        if (result.user) {
+          setCurrentUser(result.user)
+          sessionStorage.setItem('currentUser', JSON.stringify(result.user))
         }
       } else {
-        toast.error(data.message || "密码修改失败")
+        toast.error(result.message || "密码修改失败")
       }
     } catch (error) {
       toast.error("密码修改失败,请重试")
@@ -625,9 +587,8 @@ export default function AdminDashboardPage() {
 
   const handleExportConfig = async () => {
     try {
-      const response = await fetch('/api/admin/config/export')
-      if (response.ok) {
-        const blob = await response.blob()
+      const blob = await exportConfig()
+      if (blob) {
         const url = window.URL.createObjectURL(blob)
         const a = document.createElement('a')
         a.href = url
@@ -649,17 +610,11 @@ export default function AdminDashboardPage() {
     const file = e.target.files?.[0]
     if (!file) return
 
-    const formData = new FormData()
-    formData.append('file', file)
-
     const uploadConfig = async () => {
       try {
-        const response = await fetch('/api/admin/config/import', {
-          method: 'POST',
-          body: formData
-        })
+        const success = await importConfig(file)
 
-        if (response.ok) {
+        if (success) {
           toast.success('配置导入成功,正在刷新页面...')
           setTimeout(() => {
             window.location.reload()
@@ -710,25 +665,15 @@ export default function AdminDashboardPage() {
 
     setLoading(true)
     try {
-      const response = await fetch("/api/admin/reset-website", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          username: currentUser.username
-        }),
-      })
+      const success = await resetWebsite(currentUser.username)
 
-      const data = await response.json()
-
-      if (response.ok && data.success) {
+      if (success) {
         toast.success("网站配置已成功还原到初始状态")
         setTimeout(() => {
           window.location.reload()
         }, 1500)
       } else {
-        toast.error(data.message || "还原失败")
+        toast.error("还原失败")
       }
     } catch (error) {
       toast.error("还原失败,请重试")

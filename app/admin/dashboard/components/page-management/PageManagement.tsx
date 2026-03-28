@@ -5,7 +5,14 @@ import { useRouter } from "next/navigation"
 import { Button, Card, Modal, Input, Table, Space, Tag, Popconfirm, Radio } from "@arco-design/web-react"
 import { IconPlus, IconEdit, IconDelete, IconEye } from "@arco-design/web-react/icon"
 import { toast } from "sonner"
-import { getPageList, createPage, deletePage, publishPage, offlinePage } from "@/lib/api-client"
+import { 
+  getPageList, 
+  createPageWithResponse, 
+  deletePage, 
+  publishPage, 
+  offlinePage,
+  getPageUsage 
+} from "@/lib/api-client"
 import styles from "../../dashboard.module.css"
 
 interface PageInfo {
@@ -91,21 +98,14 @@ export function PageManagement({ onEditPage }: PageManagementProps) {
 
     setCreating(true)
     try {
-      const response = await fetch("/api/admin/pages", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          name: newPageName,
-          slug: newPageSlug,
-          type: newPageType,
-          dynamicParam: newPageType === 'dynamic' ? newPageDynamicParam : undefined,
-        }),
+      const result = await createPageWithResponse({
+        name: newPageName,
+        slug: newPageSlug,
+        type: newPageType,
+        dynamicParam: newPageType === 'dynamic' ? newPageDynamicParam : undefined,
       })
 
-      if (response.ok) {
-        const data = await response.json()
+      if (result.success) {
         toast.success("页面创建成功")
         setShowCreateModal(false)
         setNewPageName("")
@@ -114,12 +114,11 @@ export function PageManagement({ onEditPage }: PageManagementProps) {
         setNewPageDynamicParam("id")
         loadPages()
 
-        if (onEditPage) {
-          onEditPage(data.pageId)
+        if (onEditPage && result.pageId) {
+          onEditPage(result.pageId)
         }
       } else {
-        const error = await response.json()
-        toast.error(error.message || "创建页面失败")
+        toast.error(result.message || "创建页面失败")
       }
     } catch (error) {
       toast.error("创建页面失败")
@@ -166,17 +165,7 @@ export function PageManagement({ onEditPage }: PageManagementProps) {
   }
 
   const checkPageUsage = async (pageId: string): Promise<string[]> => {
-    try {
-      const response = await fetch(`/api/admin/pages/${pageId}/usage`)
-      if (response.ok) {
-        const data = await response.json()
-        return data.usedBy || []
-      }
-      return []
-    } catch (error) {
-      console.error('检查页面使用情况失败:', error)
-      return []
-    }
+    return await getPageUsage(pageId)
   }
 
   const handleOfflinePage = async (pageId: string) => {
