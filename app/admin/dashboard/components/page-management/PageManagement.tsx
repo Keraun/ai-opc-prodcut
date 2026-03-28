@@ -3,7 +3,6 @@
 import { useState, useEffect } from "react"
 import { useRouter } from "next/navigation"
 import { Button, Card, Modal, Input, Table, Space, Tag, Popconfirm, Radio } from "@arco-design/web-react"
-import { IconPlus, IconEdit, IconDelete, IconEye } from "@arco-design/web-react/icon"
 import { toast } from "sonner"
 import { 
   getPageList, 
@@ -13,6 +12,7 @@ import {
   offlinePage,
   getPageUsage 
 } from "@/lib/api-client"
+import { IconPlus, IconEdit, IconDelete, IconEye } from "@/components/icons"
 import styles from "../../dashboard.module.css"
 
 interface PageInfo {
@@ -192,11 +192,13 @@ export function PageManagement({ onEditPage }: PageManagementProps) {
       title: "页面名称",
       dataIndex: "name",
       key: "name",
+      width: 140,
     },
     {
       title: "页面属性",
       dataIndex: "pageType",
       key: "pageType",
+      width: 110,
       render: (_: any, record: PageInfo) => {
         const isSystemPage = systemPages.includes(record.id)
         return <Tag color={isSystemPage ? 'orange' : 'green'}>
@@ -208,6 +210,7 @@ export function PageManagement({ onEditPage }: PageManagementProps) {
       title: "页面类型",
       dataIndex: "type",
       key: "type",
+      width: 110,
       render: (type: string) => {
         return <Tag color={type === 'dynamic' ? 'purple' : 'blue'}>
           {type === 'dynamic' ? '动态路由' : '静态页面'}
@@ -218,6 +221,7 @@ export function PageManagement({ onEditPage }: PageManagementProps) {
       title: "路径",
       dataIndex: "slug",
       key: "slug",
+      width: 180,
       render: (slug: string, record: PageInfo) => {
         if (record.type === 'dynamic') {
           return <Tag color="purple">/{slug}/[{record.dynamicParam || 'id'}]</Tag>
@@ -229,6 +233,7 @@ export function PageManagement({ onEditPage }: PageManagementProps) {
       title: "模块数量",
       dataIndex: "modules",
       key: "modules",
+      width: 100,
       render: (modules: string[]) => (
         <Tag color="green">{modules?.length || 0} 个模块</Tag>
       ),
@@ -237,6 +242,7 @@ export function PageManagement({ onEditPage }: PageManagementProps) {
       title: "状态",
       dataIndex: "status",
       key: "status",
+      width: 90,
       render: (status: string) => {
         const statusConfig = {
           draft: { text: '草稿', color: 'gray' },
@@ -248,14 +254,10 @@ export function PageManagement({ onEditPage }: PageManagementProps) {
       },
     },
     {
-      title: "更新时间",
-      dataIndex: "updatedAt",
-      key: "updatedAt",
-      render: (date: string) => (date ? new Date(date).toLocaleString("zh-CN") : "-"),
-    },
-    {
       title: "操作",
       key: "actions",
+      width: 320,
+      fixed: 'right' as const,
       render: (_: any, record: PageInfo) => {
         const isSystemPage = systemPages.includes(record.id)
         return (
@@ -347,12 +349,13 @@ export function PageManagement({ onEditPage }: PageManagementProps) {
         </Button>
       </div>
 
-      <Card>
+      <Card className={styles.pageManagementCard}>
         <Table
           columns={columns}
           data={pages}
           loading={loading}
           rowKey="id"
+          scroll={{ x: 1050 }}
           pagination={{
             pageSize: 10,
           }}

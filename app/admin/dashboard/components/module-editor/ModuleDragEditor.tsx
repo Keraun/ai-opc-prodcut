@@ -2,11 +2,18 @@
 
 import { useState, useEffect } from "react"
 import { Button, Tag, Drawer, Tooltip } from "@arco-design/web-react"
-import { IconDragDotVertical, IconDelete, IconSettings, IconApps, IconUnorderedList } from "@arco-design/web-react/icon"
 import { toast } from "sonner"
 import styles from "../../dashboard.module.css"
 import { ModuleFieldEditor } from "./ModuleFieldEditor"
 import { getAvailableModules } from "@/lib/api-client"
+import { 
+  IconDragDotVertical, 
+  IconDelete, 
+  IconSettings, 
+  IconApps, 
+  IconUnorderedList, 
+  IconEye 
+} from "@/components/icons"
 
 interface ModuleInfo {
   moduleId: string
@@ -29,6 +36,7 @@ interface ModuleDragEditorProps {
 export function ModuleDragEditor({ modules, onChange }: ModuleDragEditorProps) {
   const [availableModules, setAvailableModules] = useState<AvailableModule[]>([])
   const [editingModule, setEditingModule] = useState<ModuleInfo | null>(null)
+  const [previewingModule, setPreviewingModule] = useState<AvailableModule | null>(null)
   const [draggedIndex, setDraggedIndex] = useState<number | null>(null)
   const [draggedModule, setDraggedModule] = useState<AvailableModule | null>(null)
   const [dragOverIndex, setDragOverIndex] = useState<number | null>(null)
@@ -201,6 +209,18 @@ export function ModuleDragEditor({ modules, onChange }: ModuleDragEditorProps) {
                       <div className={styles.moduleCardNameV2}>{mod.moduleName}</div>
                       <Tag size="small" color="arcoblue" className={styles.moduleCardTagV2}>{mod.moduleId}</Tag>
                     </div>
+                    <Tooltip content="预览模块">
+                      <Button
+                        type="text"
+                        size="mini"
+                        icon={<IconEye />}
+                        className={styles.moduleCardPreviewBtnV2}
+                        onClick={(e) => {
+                          e.stopPropagation()
+                          setPreviewingModule(mod)
+                        }}
+                      />
+                    </Tooltip>
                   </div>
                 ))}
               </div>
@@ -240,7 +260,22 @@ export function ModuleDragEditor({ modules, onChange }: ModuleDragEditorProps) {
             <p className={styles.emptyModuleText}>拖拽左侧模块到此处添加</p>
           </div>
         ) : (
-          <div className={styles.moduleItemsV2}>
+          <div 
+            className={styles.moduleItemsV2}
+            onDragOver={(e) => {
+              e.preventDefault()
+              if (draggedModule) {
+                e.dataTransfer.dropEffect = "copy"
+              }
+            }}
+            onDrop={(e) => {
+              e.preventDefault()
+              if (draggedModule) {
+                handleAddModule(draggedModule, modules.length)
+                setDraggedModule(null)
+              }
+            }}
+          >
             {modules.map((module, index) => (
               <div
                 key={module.moduleInstanceId}
@@ -299,10 +334,16 @@ export function ModuleDragEditor({ modules, onChange }: ModuleDragEditorProps) {
 
       <Drawer
         title={
-          <div className={styles.drawerHeader}>
+          <div className={styles.drawerTitleWrapper}>
+            <div className={styles.drawerTitleIcon}>
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                <path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7" strokeLinecap="round" strokeLinejoin="round"/>
+                <path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z" strokeLinecap="round" strokeLinejoin="round"/>
+              </svg>
+            </div>
             <div>
               <div className={styles.drawerTitle}>编辑模块</div>
-              <div className={styles.drawerSubtitle}>{editingModule?.moduleName || ""}</div>
+              <Tag className={styles.drawerModuleTag} color="arcoblue" size="small">{editingModule?.moduleName || ""}</Tag>
             </div>
           </div>
         }
@@ -339,6 +380,71 @@ export function ModuleDragEditor({ modules, onChange }: ModuleDragEditorProps) {
             })}
           />
         )}
+      </Drawer>
+
+      <Drawer
+        title={
+          <div className={styles.drawerTitleWrapper}>
+            <div className={styles.drawerTitleIcon} style={{ background: 'linear-gradient(135deg, #10b981 0%, #059669 100%)', boxShadow: '0 4px 12px rgba(16, 185, 129, 0.3)' }}>
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" strokeLinecap="round" strokeLinejoin="round"/>
+                <circle cx="12" cy="12" r="3" strokeLinecap="round" strokeLinejoin="round"/>
+              </svg>
+            </div>
+            <div>
+              <div className={styles.drawerTitle}>模块预览</div>
+              <Tag className={styles.drawerModuleTag} color="green" size="small">{previewingModule?.moduleName || ""}</Tag>
+            </div>
+          </div>
+        }
+        visible={!!previewingModule}
+        placement="right"
+        width={800}
+        closable={true}
+        autoFocus={false}
+        maskClosable={true}
+        onCancel={() => setPreviewingModule(null)}
+        footer={
+          <div className={styles.drawerFooter}>
+            <Button onClick={() => setPreviewingModule(null)}>关闭</Button>
+            <Button 
+              type="primary" 
+              onClick={() => {
+                if (previewingModule) {
+                  handleAddModule(previewingModule)
+                  setPreviewingModule(null)
+                }
+              }}
+            >
+              添加此模块
+            </Button>
+          </div>
+        }
+      >
+        <div className={styles.modulePreviewContent}>
+          <div className={styles.modulePreviewInfo}>
+            <p><strong>模块ID：</strong> {previewingModule?.moduleId}</p>
+            <p><strong>模块名称：</strong> {previewingModule?.moduleName}</p>
+            <p><strong>分类：</strong> {previewingModule?.category || "未分类"}</p>
+          </div>
+          <div className={styles.modulePreviewFrame}>
+            <div style={{ 
+              display: 'flex', 
+              flexDirection: 'column', 
+              alignItems: 'center', 
+              justifyContent: 'center', 
+              height: '400px', 
+              background: 'linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%)',
+              color: '#6b7280'
+            }}>
+              <svg width="80" height="80" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" style={{ marginBottom: '16px', opacity: 0.5 }}>
+                <path d="M4 5a1 1 0 011-1h14a1 1 0 011 1v2a1 1 0 01-1 1H5a1 1 0 01-1-1V5zM4 13a1 1 0 011-1h6a1 1 0 011 1v6a1 1 0 01-1 1H5a1 1 0 01-1-1v-6zM16 13a1 1 0 011-1h2a1 1 0 011 1v6a1 1 0 01-1 1h-2a1 1 0 01-1-1v-6z" strokeLinecap="round" strokeLinejoin="round"/>
+              </svg>
+              <p style={{ fontSize: '16px', fontWeight: '500' }}>模块预览</p>
+              <p style={{ fontSize: '14px', opacity: 0.7 }}>点击"添加此模块"将模块添加到页面</p>
+            </div>
+          </div>
+        </div>
       </Drawer>
     </div>
   )

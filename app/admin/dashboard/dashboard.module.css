@@ -924,6 +924,12 @@
   padding: 0;
 }
 
+.pageManagementCard {
+  border-radius: 12px;
+  border: 1px solid #e5e7eb;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+}
+
 .pageManagementHeader {
   display: flex;
   justify-content: space-between;
@@ -956,6 +962,81 @@
 
 .pageEditorContent {
   min-height: calc(100vh - 200px);
+}
+
+.pageEditorTabs {
+  margin-top: 0;
+}
+
+.tabTitle {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.pageEditorPreview {
+  min-height: calc(100vh - 300px);
+  background: #f8fafc;
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.pageEditorPreviewHeader {
+  background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+  padding: 20px 24px;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.pageEditorPreviewHeader h3 {
+  margin: 0;
+  font-size: 18px;
+  font-weight: 700;
+  color: #1f2937;
+  background: linear-gradient(135deg, #1f2937 0%, #374151 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.pageEditorPreviewHeader p {
+  margin: 6px 0 0;
+  font-size: 13px;
+  color: #6b7280;
+}
+
+.pageEditorPreviewContent {
+  background: #ffffff;
+  min-height: 400px;
+}
+
+.pageEditorPreviewEmpty {
+  padding: 80px 40px;
+  text-align: center;
+  color: #9ca3af;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.pageEditorPreviewModulePlaceholder {
+  padding: 60px 40px;
+  background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+  border: 2px dashed #d1d5db;
+  border-radius: 8px;
+  text-align: center;
+  color: #6b7280;
+  margin: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.pageEditorPreviewModule {
+  margin: 0;
 }
 
 .moduleDragEditor {
@@ -2203,7 +2284,8 @@
 
 .moduleGridV2 {
   display: grid;
-  gap: 10px;
+  gap: 12px;
+  grid-template-columns: repeat(2, 1fr);
 }
 
 .moduleCardV2 {
@@ -2211,13 +2293,15 @@
   background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
   border: 2px solid #e5e7eb;
   border-radius: 12px;
-  padding: 16px;
+  padding: 14px 16px;
   cursor: grab;
   transition: all 0.3s ease;
   display: flex;
-  align-items: flex-start;
+  align-items: center;
   justify-content: space-between;
-  min-height: 80px;
+  min-height: 72px;
+  height: 72px;
+  box-sizing: border-box;
 }
 
 .moduleCardV2:hover {
@@ -2434,3 +2518,109 @@
   height: 500px;
   border: none;
 }
+
+.drawerTitleWrapper {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.drawerTitleIcon {
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+  background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #ffffff;
+  box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+  flex-shrink: 0;
+}
+
+.drawerModuleTag {
+  margin-top: 4px;
+  font-weight: 500;
+}
+
+.pagePreviewDrawerHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 20px;
+  background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.pagePreviewDrawerTitle {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.pagePreviewDrawerTitleIcon {
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #ffffff;
+  box-shadow: 0 2px 8px rgba(16, 185, 129, 0.25);
+}
+
+.pagePreviewDrawerTitleText {
+  font-size: 18px;
+  font-weight: 700;
+  background: linear-gradient(135deg, #1f2937 0%, #374151 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.pagePreviewDrawerSubtitle {
+  font-size: 13px;
+  color: #6b7280;
+  margin-top: 2px;
+  padding: 3px 10px;
+  background: #e5e7eb;
+  border-radius: 6px;
+  display: inline-block;
+  font-weight: 500;
+}
+
+.pagePreview {
+  width: 100%;
+  height: calc(100vh - 200px);
+  display: flex;
+  flex-direction: column;
+  background: linear-gradient(135deg, #f3f4f6 0%, #e5e7eb 100%);
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.previewContainer {
+  flex: 1;
+  position: relative;
+  background: #ffffff;
+  border-radius: 0;
+  overflow: hidden;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+}
+
+.previewFrame {
+  width: 100%;
+  height: 100%;
+  border: none;
+}
+
+.moduleCardPreviewBtnV2 {
+  opacity: 0;
+  transition: all 0.2s ease;
+}
+
+.moduleCardV2:hover .moduleCardPreviewBtnV2 {
+  opacity: 1;
+}
+
