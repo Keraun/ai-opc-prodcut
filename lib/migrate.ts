@@ -102,36 +102,33 @@ export function migrateFromJson(useTemplates: boolean = false): void {
     const siteConfigPath = path.join(baseDir, 'site-info', 'site-config.json')
     const siteConfigData = readJsonFile(siteConfigPath)
     
-    const themeConfigPath = path.join(baseDir, 'theme', 'theme-config.json')
-    const themeConfigData = readJsonFile(themeConfigPath)
-    
-    if (siteConfigData || themeConfigData) {
-      const mergedSiteConfig: any = { ...siteConfigData }
-      
-      if (themeConfigData?.currentTheme) {
-        mergedSiteConfig.currentTheme = themeConfigData.currentTheme
-      }
-      
+    if (siteConfigData) {
       const stmt = db.prepare(`
         INSERT OR REPLACE INTO system_config (config_key, config_value)
         VALUES (?, ?)
       `)
-      stmt.run('site_config', JSON.stringify(mergedSiteConfig))
+      stmt.run('site_config', JSON.stringify(siteConfigData))
       console.log('Migrated site config')
     }
     
+    const themeConfigPath = path.join(baseDir, 'theme', 'theme-config.json')
+    const themeConfigData = readJsonFile(themeConfigPath)
+    
     if (themeConfigData?.themes) {
+      const currentThemeId = themeConfigData.currentTheme
       const themeStmt = db.prepare(`
-        INSERT OR REPLACE INTO theme_config (theme_id, theme_name, theme_config)
-        VALUES (?, ?, ?)
+        INSERT OR REPLACE INTO theme_config (theme_id, theme_name, theme_config, is_current)
+        VALUES (?, ?, ?, ?)
       `)
       
       for (const [themeId, themeData] of Object.entries(themeConfigData.themes)) {
         const theme = themeData as any
+        const isCurrent = themeId === currentThemeId ? 1 : 0
         themeStmt.run(
           themeId,
           theme.name || themeId,
-          JSON.stringify(theme)
+          JSON.stringify(theme),
+          isCurrent
         )
       }
       console.log('Migrated theme config')
@@ -300,12 +297,10 @@ export function exportToJson(): void {
     
     const siteConfigRaw = db.prepare("SELECT config_value FROM system_config WHERE config_key = 'site_config'").get() as any
     let siteConfigData: any = {}
-    let currentTheme = 'modern'
     
     if (siteConfigRaw) {
       try {
         siteConfigData = JSON.parse(siteConfigRaw.config_value)
-        currentTheme = siteConfigData.currentTheme || 'modern'
       } catch {
         siteConfigData = {}
       }
@@ -320,9 +315,13 @@ export function exportToJson(): void {
     const themes = db.prepare('SELECT * FROM theme_config').all() as any[]
     
     if (themes.length > 0) {
+      let currentTheme = 'modern'
       const themesMap: Record<string, any> = {}
       themes.forEach(theme => {
         themesMap[theme.theme_id] = JSON.parse(theme.theme_config)
+        if (theme.is_current === 1) {
+          currentTheme = theme.theme_id
+        }
       })
       
       const themeData = {

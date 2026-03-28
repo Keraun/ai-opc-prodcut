@@ -25,8 +25,7 @@ try {
     try {
       const siteConfig = JSON.parse(siteConfigRaw.config_value)
       console.log('   ✓ 成功解析 site_config')
-      console.log('   - currentTheme:', siteConfig.currentTheme)
-      console.log('   - 其他 keys:', Object.keys(siteConfig).filter(k => k !== 'currentTheme'))
+      console.log('   - 配置项:', Object.keys(siteConfig))
     } catch (e) {
       console.log('   ❌ 解析失败:', e)
     }
@@ -47,9 +46,19 @@ try {
   }
   
   console.log('\n5. 检查 theme_config 数据...')
-  const themes = db.prepare('SELECT * FROM theme_config').all() as any[]
+  const themes = db.prepare('SELECT theme_id, theme_name, is_current FROM theme_config').all() as any[]
   console.log(`   主题数量: ${themes.length}`)
-  themes.forEach(t => console.log(`   - ${t.theme_id}: ${t.theme_name}`))
+  const currentTheme = themes.find(t => t.is_current === 1)
+  themes.forEach(t => {
+    const currentMark = t.is_current === 1 ? ' (当前主题)' : ''
+    console.log(`   - ${t.theme_id}: ${t.theme_name}${currentMark}`)
+  })
+  
+  if (currentTheme) {
+    console.log(`\n   ✓ 当前主题: ${currentTheme.theme_id}`)
+  } else {
+    console.log('\n   ⚠️  没有设置当前主题')
+  }
   
   console.log('\n=== 验证完成 ===')
   console.log('✅ 迁移成功！')

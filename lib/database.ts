@@ -61,6 +61,7 @@ export function initializeDatabase(): void {
         theme_id TEXT UNIQUE NOT NULL,
         theme_name TEXT NOT NULL,
         theme_config TEXT NOT NULL,
+        is_current INTEGER DEFAULT 0,
         created_at TEXT DEFAULT CURRENT_TIMESTAMP,
         updated_at TEXT DEFAULT CURRENT_TIMESTAMP
       );
@@ -118,8 +119,48 @@ export function initializeDatabase(): void {
     `)
     
     console.log('Database initialized successfully')
+    
+    migrateThemeConfigTable(db)
   } finally {
     db.close()
+  }
+}
+
+function migrateThemeConfigTable(db: Database.Database): void {
+  try {
+    const tableInfo = db.prepare("PRAGMA table_info(theme_config)").all() as any[]
+    const hasIsCurrent = tableInfo.some(col => col.name === 'is_current')
+    
+    if (!hasIsCurrent) {
+      console.log('Migrating theme_config table: adding is_current column...')
+      db.exec('ALTER TABLE theme_config ADD COLUMN is_current INTEGER DEFAULT 0')
+      
+      const siteConfigRaw = db.prepare("SELECT config_value FROM system_config WHERE config_key = 'site_config'").get() as any
+      if (siteConfigRaw) {
+        try {
+          const siteConfig = JSON.parse(siteConfigRaw.config_value)
+          const currentTheme = siteConfig.currentTheme
+          if (currentTheme) {
+            db.prepare('UPDATE theme_config SET is_current = 1 WHERE theme_id = ?').run(currentTheme)
+            console.log(`Set current theme to: ${currentTheme}`)
+          }
+        } catch {
+          const themes = db.prepare('SELECT theme_id FROM theme_config LIMIT 1').get() as any
+          if (themes) {
+            db.prepare('UPDATE theme_config SET is_current = 1 WHERE theme_id = ?').run(themes.theme_id)
+          }
+        }
+      } else {
+        const themes = db.prepare('SELECT theme_id FROM theme_config LIMIT 1').get() as any
+        if (themes) {
+          db.prepare('UPDATE theme_config SET is_current = 1 WHERE theme_id = ?').run(themes.theme_id)
+        }
+      }
+      
+      console.log('Migration completed successfully')
+    }
+  } catch (error) {
+    console.log('Migration check skipped (table may not exist yet)')
   }
 }
 

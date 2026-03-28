@@ -115,22 +115,16 @@ export function readConfig(configType: string): any {
     }
     
     if (configType === 'theme') {
-      const siteConfigRaw = db.prepare("SELECT config_value FROM system_config WHERE config_key = 'site_config'").get() as any
-      
-      let currentTheme = 'modern'
-      if (siteConfigRaw) {
-        try {
-          const siteConfig = JSON.parse(siteConfigRaw.config_value)
-          currentTheme = siteConfig.currentTheme || 'modern'
-        } catch {
-        }
-      }
-      
       const themes = db.prepare('SELECT * FROM theme_config').all() as any[]
       
+      let currentTheme = 'modern'
       const themesMap: Record<string, any> = {}
+      
       themes.forEach(theme => {
         themesMap[theme.theme_id] = JSON.parse(theme.theme_config)
+        if (theme.is_current === 1) {
+          currentTheme = theme.theme_id
+        }
       })
       
       return {
@@ -272,39 +266,29 @@ export function writeConfig(configType: string, data: any): void {
     
     if (configType === 'theme') {
       if (data.currentTheme) {
-        const siteConfigRaw = db.prepare("SELECT config_value FROM system_config WHERE config_key = 'site_config'").get() as any
-        let siteConfig: any = {}
-        if (siteConfigRaw) {
-          try {
-            siteConfig = JSON.parse(siteConfigRaw.config_value)
-          } catch {
-            siteConfig = {}
-          }
-        }
-        siteConfig.currentTheme = data.currentTheme
-        
-        const stmt = db.prepare(`
-          INSERT OR REPLACE INTO system_config (config_key, config_value)
-          VALUES (?, ?)
-        `)
-        stmt.run('site_config', JSON.stringify(siteConfig))
+        db.exec('UPDATE theme_config SET is_current = 0')
+        db.prepare('UPDATE theme_config SET is_current = 1 WHERE theme_id = ?').run(data.currentTheme)
       }
       
       if (data.themes) {
         const deleteStmt = db.prepare('DELETE FROM theme_config')
         deleteStmt.run()
         
+        const currentThemeId = data.currentTheme
+        
         const insertStmt = db.prepare(`
-          INSERT INTO theme_config (theme_id, theme_name, theme_config)
-          VALUES (?, ?, ?)
+          INSERT INTO theme_config (theme_id, theme_name, theme_config, is_current)
+          VALUES (?, ?, ?, ?)
         `)
         
         for (const [themeId, themeData] of Object.entries(data.themes)) {
           const theme = themeData as any
+          const isCurrent = themeId === currentThemeId ? 1 : 0
           insertStmt.run(
             themeId,
             theme.name || themeId,
-            JSON.stringify(theme)
+            JSON.stringify(theme),
+            isCurrent
           )
         }
       }
