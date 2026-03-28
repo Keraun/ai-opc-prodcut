@@ -68,7 +68,7 @@ function calculateFieldLayout(
   currentPath: string = ''
 ): FieldLayoutItem[] {
   const items: FieldLayoutItem[] = []
-  const columns = 3
+  const columns = 1
 
   Object.entries(properties).forEach(([key, property]) => {
     const path = currentPath ? `${currentPath}.${key}` : key
@@ -76,7 +76,7 @@ function calculateFieldLayout(
       items.push({
         key,
         property,
-        colSpan: Math.min(property["x-col-span"] || 1, columns),
+        colSpan: 1,
         path
       })
     }
@@ -87,29 +87,9 @@ function calculateFieldLayout(
 
 function groupFieldsByRow(items: FieldLayoutItem[]): FieldLayoutItem[][] {
   const rows: FieldLayoutItem[][] = []
-  const columns = 3
-  let currentRow: FieldLayoutItem[] = []
-  let currentCol = 0
-
   items.forEach((item) => {
-    const neededCols = item.colSpan
-    
-    if (currentCol + neededCols > columns) {
-      if (currentRow.length > 0) {
-        rows.push(currentRow)
-      }
-      currentRow = [item]
-      currentCol = neededCols
-    } else {
-      currentRow.push(item)
-      currentCol += neededCols
-    }
+    rows.push([item])
   })
-
-  if (currentRow.length > 0) {
-    rows.push(currentRow)
-  }
-
   return rows
 }
 
@@ -263,24 +243,26 @@ function renderTableField(
 
   return (
     <div key={path} className={styles.formField} style={fieldStyle}>
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '8px' }}>
-        <div>
+      <div className={`${styles.formFieldRow} ${styles.formTableFieldRow}`}>
+        <div className={styles.formFieldLabel}>
           <label className={styles.formLabel}>{title}</label>
           {description && <span className={styles.formHint}>{description}</span>}
         </div>
-        <Button
-          type="primary"
-          size="small"
-          icon={<IconPlus />}
-          onClick={() => {
-            const newItem = getDefaultItemForArray(itemSchema)
-            const newList = [...listValue, newItem]
-            const newData = setNestedValue(data, path, newList)
-            onChange(newData)
-          }}
-        >
-          添加
-        </Button>
+        <div className={styles.formFieldControl}>
+          <Button
+            type="primary"
+            size="small"
+            icon={<IconPlus />}
+            onClick={() => {
+              const newItem = getDefaultItemForArray(itemSchema)
+              const newList = [...listValue, newItem]
+              const newData = setNestedValue(data, path, newList)
+              onChange(newData)
+            }}
+          >
+            添加
+          </Button>
+        </div>
       </div>
       <Table
         columns={columns}
@@ -334,20 +316,26 @@ export function ModuleFieldEditor({ moduleId, data, onChange }: ModuleFieldEdito
     if (enumValues && enumValues.length > 0) {
       return (
         <div key={path} className={styles.formField} style={fieldStyle}>
-          <label className={styles.formLabel}>{title}</label>
-          {description && <span className={styles.formHint}>{description}</span>}
-          <Select
-            value={value as string}
-            onChange={(val) => handleFieldChange(path, val)}
-            style={{ width: "100%" }}
-            placeholder={`请选择${title}`}
-          >
-            {enumValues.map((enumValue) => (
-              <Select.Option key={enumValue} value={enumValue}>
-                {enumValue}
-              </Select.Option>
-            ))}
-          </Select>
+          <div className={styles.formFieldRow}>
+            <div className={styles.formFieldLabel}>
+              <label className={styles.formLabel}>{title}</label>
+              {description && <span className={styles.formHint}>{description}</span>}
+            </div>
+            <div className={styles.formFieldControl}>
+              <Select
+                value={value as string}
+                onChange={(val) => handleFieldChange(path, val)}
+                style={{ width: "100%" }}
+                placeholder={`请选择${title}`}
+              >
+                {enumValues.map((enumValue) => (
+                  <Select.Option key={enumValue} value={enumValue}>
+                    {enumValue}
+                  </Select.Option>
+                ))}
+              </Select>
+            </div>
+          </div>
         </div>
       )
     }
@@ -356,14 +344,20 @@ export function ModuleFieldEditor({ moduleId, data, onChange }: ModuleFieldEdito
       const arrayValue = Array.isArray(value) ? value : []
       return (
         <div key={path} className={styles.formField} style={fieldStyle}>
-          <label className={styles.formLabel}>{title}</label>
-          {description && <span className={styles.formHint}>{description}</span>}
-          <InputTag
-            value={arrayValue.map(String)}
-            onChange={(vals) => handleFieldChange(path, vals)}
-            placeholder="输入后按回车添加"
-            style={{ width: "100%" }}
-          />
+          <div className={styles.formFieldRow}>
+            <div className={styles.formFieldLabel}>
+              <label className={styles.formLabel}>{title}</label>
+              {description && <span className={styles.formHint}>{description}</span>}
+            </div>
+            <div className={styles.formFieldControl}>
+              <InputTag
+                value={arrayValue.map(String)}
+                onChange={(vals) => handleFieldChange(path, vals)}
+                placeholder="输入后按回车添加"
+                style={{ width: "100%" }}
+              />
+            </div>
+          </div>
         </div>
       )
     }
@@ -372,42 +366,56 @@ export function ModuleFieldEditor({ moduleId, data, onChange }: ModuleFieldEdito
       case "string":
         return (
           <div key={path} className={styles.formField} style={fieldStyle}>
-            <label className={styles.formLabel}>{title}</label>
-            {description && <span className={styles.formHint}>{description}</span>}
-            <Input
-              value={value as string}
-              onChange={(val) => handleFieldChange(path, val)}
-              placeholder={`请输入${title}`}
-            />
+            <div className={styles.formFieldRow}>
+              <div className={styles.formFieldLabel}>
+                <label className={styles.formLabel}>{title}</label>
+                {description && <span className={styles.formHint}>{description}</span>}
+              </div>
+              <div className={styles.formFieldControl}>
+                <Input
+                  value={value as string}
+                  onChange={(val) => handleFieldChange(path, val)}
+                  placeholder={`请输入${title}`}
+                />
+              </div>
+            </div>
           </div>
         )
 
       case "number":
         return (
           <div key={path} className={styles.formField} style={fieldStyle}>
-            <label className={styles.formLabel}>{title}</label>
-            {description && <span className={styles.formHint}>{description}</span>}
-            <InputNumber
-              value={value as number}
-              onChange={(val) => handleFieldChange(path, val)}
-              style={{ width: "100%" }}
-              placeholder={`请输入${title}`}
-            />
+            <div className={styles.formFieldRow}>
+              <div className={styles.formFieldLabel}>
+                <label className={styles.formLabel}>{title}</label>
+                {description && <span className={styles.formHint}>{description}</span>}
+              </div>
+              <div className={styles.formFieldControl}>
+                <InputNumber
+                  value={value as number}
+                  onChange={(val) => handleFieldChange(path, val)}
+                  style={{ width: "100%" }}
+                  placeholder={`请输入${title}`}
+                />
+              </div>
+            </div>
           </div>
         )
 
       case "boolean":
         return (
           <div key={path} className={styles.formField} style={fieldStyle}>
-            <div className={styles.formSwitchField}>
-              <div>
+            <div className={styles.formFieldRow}>
+              <div className={styles.formFieldLabel}>
                 <label className={styles.formLabel}>{title}</label>
                 {description && <span className={styles.formHint}>{description}</span>}
               </div>
-              <Switch
-                checked={value as boolean}
-                onChange={(val) => handleFieldChange(path, val)}
-              />
+              <div className={styles.formFieldControl}>
+                <Switch
+                  checked={value as boolean}
+                  onChange={(val) => handleFieldChange(path, val)}
+                />
+              </div>
             </div>
           </div>
         )
