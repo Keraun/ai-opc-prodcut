@@ -72,6 +72,10 @@ export function PageManagement({ onEditPage }: PageManagementProps) {
   }
 
   const handleCreatePage = async () => {
+    if (creating) {
+      return
+    }
+
     if (!newPageName.trim()) {
       toast.error("请输入页面名称")
       return
