@@ -5,25 +5,10 @@ import { useRouter } from "next/navigation"
 import { Button, Input, Modal, Dropdown, Tabs } from "@arco-design/web-react"
 import { IconCustomerService, IconEye, IconEyeInvisible } from "@arco-design/web-react/icon"
 import { toast, Toaster } from "sonner"
+import { checkAuthStatus, loginWithResponse, setupEmail as setupEmailApi, sendResetCode, resetPassword } from "@/lib/api-client"
 import styles from "./admin.module.css"
 
 const TabPane = Tabs.TabPane
-
-interface LoginResponse {
-  user?: {
-    username: string
-    role: string
-  }
-  requireEmailSetup?: boolean
-  showSuperAdminToken?: boolean
-  superAdminToken?: string
-  message?: string
-}
-
-interface ResetPasswordResponse {
-  username?: string
-  message?: string
-}
 
 export default function AdminLoginPage() {
   const router = useRouter()
@@ -52,19 +37,12 @@ export default function AdminLoginPage() {
   // 检查是否有有效的cookie会话
   useEffect(() => {
     const checkAuth = async () => {
-      try {
-        const response = await fetch("/api/admin/auth")
-        const data = await response.json()
-
-        if (data.authenticated) {
-          // 如果有有效的会话，直接跳转到后台页面管理
-          router.push("/admin/dashboard?menu=pages")
-        }
-      } catch (error) {
-        console.error("检查认证状态失败:", error)
-      } finally {
-        setCheckingAuth(false)
+      const data = await checkAuthStatus()
+      if (data.authenticated) {
+        // 如果有有效的会话，直接跳转到后台页面管理
+        router.push("/admin/dashboard?menu=pages")
       }
+      setCheckingAuth(false)
     }
 
     checkAuth()
@@ -78,39 +56,27 @@ export default function AdminLoginPage() {
 
     setLoading(true)
     
-    try {
-      const response = await fetch("/api/admin/login", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ username, password }),
-      })
+    const data = await loginWithResponse(username, password)
 
-      const data: LoginResponse = await response.json()
-
-      if (response.ok) {
-        if (data.user) {
-          sessionStorage.setItem('currentUser', JSON.stringify(data.user))
-        }
-        
-        if (data.requireEmailSetup) {
-          setShowEmailSetup(true)
-        } else if (data.showSuperAdminToken && data.superAdminToken) {
-          setGeneratedToken(data.superAdminToken)
-          setShowTokenModal(true)
-        } else {
-          toast.success("登录成功")
-          router.push("/admin/dashboard?menu=pages")
-        }
-      } else {
-        toast.error(data.message || "登录失败")
+    if (data.success) {
+      if (data.user) {
+        sessionStorage.setItem('currentUser', JSON.stringify(data.user))
       }
-    } catch (error) {
-      toast.error("登录失败，请重试")
-    } finally {
-      setLoading(false)
+      
+      if (data.requireEmailSetup) {
+        setShowEmailSetup(true)
+      } else if (data.showSuperAdminToken && data.superAdminToken) {
+        setGeneratedToken(data.superAdminToken)
+        setShowTokenModal(true)
+      } else {
+        toast.success("登录成功")
+        router.push("/admin/dashboard?menu=pages")
+      }
+    } else {
+      toast.error(data.message || "登录失败")
     }
+    
+    setLoading(false)
   }
 
   const handleEmailSetup = async (): Promise<void> => {
@@ -125,35 +91,18 @@ export default function AdminLoginPage() {
 
     setLoading(true)
     
-    try {
-      const response = await fetch("/api/admin/setup-email", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ email: setupEmail }),
-      })
+    const data = await setupEmailApi(setupEmail)
 
-      const data: LoginResponse = await response.json()
-
-      if (response.ok) {
-        toast.success("邮箱设置成功")
-        setShowEmailSetup(false)
-        if (data.showSuperAdminToken && data.superAdminToken) {
-          setGeneratedToken(data.superAdminToken)
-          setShowTokenModal(true)
-        } else {
-          toast.success("登录成功")
-          router.push("/admin/dashboard?menu=pages")
-        }
-      } else {
-        toast.error(data.message || "邮箱设置失败")
-      }
-    } catch (error) {
-      toast.error("邮箱设置失败，请重试")
-    } finally {
-      setLoading(false)
+    if (data.success) {
+      toast.success("邮箱设置成功")
+      setShowEmailSetup(false)
+      toast.success("登录成功")
+      router.push("/admin/dashboard?menu=pages")
+    } else {
+      toast.error(data.message || "邮箱设置失败")
     }
+    
+    setLoading(false)
   }
 
   const handleTokenModalClose = (): void => {
@@ -177,34 +126,22 @@ export default function AdminLoginPage() {
       return
     }
 
-    try {
-      const response = await fetch("/api/admin/send-reset-code", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ email }),
-      })
+    const data = await sendResetCode(email)
 
-      const data = await response.json()
-
-      if (response.ok) {
-        toast.success(data.message || "验证码已发送到您的邮箱")
-        setCountdown(60)
-        const timer = setInterval(() => {
-          setCountdown((prev) => {
-            if (prev <= 1) {
-              clearInterval(timer)
-              return 0
-            }
-            return prev - 1
-          })
-        }, 1000)
-      } else {
-        toast.error(data.message || "验证码发送失败")
-      }
-    } catch (error) {
-      toast.error("验证码发送失败，请重试")
+    if (data.success) {
+      toast.success(data.message || "验证码已发送到您的邮箱")
+      setCountdown(60)
+      const timer = setInterval(() => {
+        setCountdown((prev) => {
+          if (prev <= 1) {
+            clearInterval(timer)
+            return 0
+          }
+          return prev - 1
+        })
+      }, 1000)
+    } else {
+      toast.error(data.message || "验证码发送失败")
     }
   }
 
@@ -244,65 +181,42 @@ export default function AdminLoginPage() {
 
     setLoading(true)
     
-    try {
-      const response = await fetch("/api/admin/reset-password", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ 
-          method: resetMethod,
-          superAdminToken: resetMethod === "token" ? superAdminToken : undefined,
-          username: resetMethod === "token" ? newUsername : undefined,
-          email: resetMethod === "email" ? email : undefined,
-          verificationCode: resetMethod === "email" ? verificationCode : undefined,
-          newPassword 
-        }),
-      })
+    const data = await resetPassword({
+      method: resetMethod,
+      token: resetMethod === "token" ? superAdminToken : undefined,
+      username: resetMethod === "token" ? newUsername : undefined,
+      email: resetMethod === "email" ? email : undefined,
+      code: resetMethod === "email" ? verificationCode : undefined,
+      newPassword 
+    })
 
-      const data: ResetPasswordResponse = await response.json()
+    if (data.success) {
+      toast.success("密码修改成功，正在登录...")
+      
+      const loginUsername = resetMethod === "token" ? newUsername : data.username
+      const loginPassword = newPassword
+      
+      const loginData = await loginWithResponse(loginUsername!, loginPassword)
 
-      if (response.ok) {
-        toast.success("密码修改成功，正在登录...")
-        
-        const loginUsername = resetMethod === "token" ? newUsername : data.username
-        const loginPassword = newPassword
-        
-        const loginResponse = await fetch("/api/admin/login", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({ 
-            username: loginUsername, 
-            password: loginPassword 
-          }),
-        })
-
-        const loginData: LoginResponse = await loginResponse.json()
-
-        if (loginResponse.ok) {
-          if (loginData.user) {
-            sessionStorage.setItem('currentUser', JSON.stringify(loginData.user))
-          }
-          toast.success("登录成功，3秒后自动跳转到管理后台...")
-
-          setTimeout(() => {
-            router.push("/admin/dashboard?menu=pages")
-          }, 3000)
-        } else {
-          setShowForgotPassword(false)
-          setUsername(loginUsername ?? "")
-          toast.info("密码已重置，请使用新密码登录")
+      if (loginData.success) {
+        if (loginData.user) {
+          sessionStorage.setItem('currentUser', JSON.stringify(loginData.user))
         }
+        toast.success("登录成功，3秒后自动跳转到管理后台...")
+
+        setTimeout(() => {
+          router.push("/admin/dashboard?menu=pages")
+        }, 3000)
       } else {
-        toast.error(data.message || "密码修改失败")
+        setShowForgotPassword(false)
+        setUsername(loginUsername ?? "")
+        toast.info("密码已重置，请使用新密码登录")
       }
-    } catch (error) {
-      toast.error("密码修改失败，请重试")
-    } finally {
-      setLoading(false)
+    } else {
+      toast.error(data.message || "密码修改失败")
     }
+    
+    setLoading(false)
   }
 
   return (

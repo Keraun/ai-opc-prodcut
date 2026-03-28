@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react'
 import { useSearchParams } from 'next/navigation'
 import { SendIcon } from '@/modules/icons'
+import { submitContactForm } from '@/lib/api-client'
 import styles from './index.module.css'
 
 interface ContactFormProps {
@@ -35,28 +36,16 @@ export function ContactFormClient({ primaryColor, contactPreferences }: ContactF
     const form = e.currentTarget
     const formData = new FormData(form)
 
-    try {
-      const response = await fetch('/api/contact', {
-        method: 'POST',
-        headers: {
-          'Accept': 'application/json'
-        },
-        body: formData
-      })
-
-      const result = await response.json()
-      
-      if (result.success) {
-        setMessage({ type: 'success', text: result.message })
-        form.reset()
-      } else {
-        setMessage({ type: 'error', text: result.message })
-      }
-    } catch (error) {
-      setMessage({ type: 'error', text: '提交留言失败，请稍后重试' })
-    } finally {
-      setIsSubmitting(false)
+    const result = await submitContactForm(formData)
+    
+    if (result.success) {
+      setMessage({ type: 'success', text: result.message })
+      form.reset()
+    } else {
+      setMessage({ type: 'error', text: result.message })
     }
+    
+    setIsSubmitting(false)
   }
 
   return (

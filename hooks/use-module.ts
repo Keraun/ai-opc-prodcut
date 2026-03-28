@@ -5,13 +5,13 @@ import type { ModuleData, ModuleRegistration } from '@/modules/types'
 import { 
   getModuleInstanceData, 
   getModule, 
-  getAvailableModules,
+  getAvailableModuleIds,
   getModuleTemplate,
   updateModuleInstance,
   getPageConfig,
   getPageModules,
   updatePageModules
-} from '@/lib/module-api'
+} from '@/lib/api-client'
 
 export function useModuleInstance(moduleInstanceId: string | null) {
   const [data, setData] = useState<Record<string, unknown> | null>(null)
@@ -95,11 +95,11 @@ export function useAvailableModules() {
     setLoading(true)
     setError(null)
 
-    getAvailableModules()
-      .then(data => {
+    getAvailableModuleIds()
+      .then((data: string[]) => {
         setModules(data)
       })
-      .catch(err => {
+      .catch((err: unknown) => {
         setError(err instanceof Error ? err : new Error('Unknown error'))
       })
       .finally(() => {
