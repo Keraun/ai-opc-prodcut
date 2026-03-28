@@ -121,7 +121,10 @@ export function readConfig(configType: string): any {
       const themesMap: Record<string, any> = {}
       
       themes.forEach((theme: any) => {
-        themesMap[theme.theme_id] = JSON.parse(theme.theme_config)
+        themesMap[theme.theme_id] = {
+          ...JSON.parse(theme.theme_setting),
+          themeName: theme.theme_name
+        }
         if (theme.is_current === 1) {
           currentTheme = theme.theme_id
         }
@@ -285,25 +288,40 @@ export function writeConfig(configType: string, data: any): void {
       if (data.currentTheme) {
         const themes = jsonDb.getAll('theme_config')
         themes.forEach((theme: any) => {
-          jsonDb.update('theme_config', theme.id, { is_current: theme.theme_id === data.currentTheme ? 1 : 0 })
+          jsonDb.update('theme_config', theme.id, { 
+            is_current: theme.theme_id === data.currentTheme ? 1 : 0,
+            updated_at: new Date().toISOString()
+          })
         })
       }
       
       if (data.themes) {
-        jsonDb.clearTable('theme_config')
-        
         const currentThemeId = data.currentTheme
         
         for (const [themeId, themeData] of Object.entries(data.themes)) {
           const theme = themeData as any
-          jsonDb.insert('theme_config', {
-            theme_id: themeId,
-            theme_name: theme.theme_Name || theme.name || themeId,
-            theme_config: JSON.stringify(theme),
-            is_current: themeId === currentThemeId ? 1 : 0,
-            created_at: new Date().toISOString(),
-            updated_at: new Date().toISOString()
-          })
+          const existingTheme = jsonDb.findOne('theme_config', { theme_id: themeId })
+          
+          const themeName = theme.themeName || theme.name || themeId
+          const { themeName: _, name: __, ...settingData } = theme
+          
+          if (existingTheme) {
+            jsonDb.update('theme_config', existingTheme.id, {
+              theme_name: themeName,
+              theme_setting: JSON.stringify(settingData),
+              is_current: themeId === currentThemeId ? 1 : 0,
+              updated_at: new Date().toISOString()
+            })
+          } else {
+            jsonDb.insert('theme_config', {
+              theme_id: themeId,
+              theme_name: themeName,
+              theme_setting: JSON.stringify(settingData),
+              is_current: themeId === currentThemeId ? 1 : 0,
+              created_at: new Date().toISOString(),
+              updated_at: new Date().toISOString()
+            })
+          }
         }
       }
       return
@@ -408,7 +426,7 @@ export function getThemeList(onlyCurrent: boolean = false): any[] {
       id: theme.id,
       themeId: theme.theme_id,
       themeName: theme.theme_name,
-      themeConfig: JSON.parse(theme.theme_config),
+      themeConfig: JSON.parse(theme.theme_setting),
       isCurrent: theme.is_current === 1,
       createdAt: theme.created_at,
       updatedAt: theme.updated_at

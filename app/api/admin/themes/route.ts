@@ -52,13 +52,18 @@ export async function POST(request: NextRequest) {
 }
 
 async function handleCreateTheme(body: any) {
-  const { themeId } = body
+  const { themeId, themeName, ...configData } = body
   
   if (!themeId) {
     return badRequestResponse('缺少主题ID')
   }
   
   const existingThemes = getThemeList()
+  
+  if (existingThemes.find(t => t.themeId === themeId)) {
+    return badRequestResponse('主题ID已存在')
+  }
+  
   const themesMap: Record<string, any> = {}
   let currentTheme = existingThemes.find(t => t.isCurrent)?.themeId || 'modern'
   
@@ -69,7 +74,10 @@ async function handleCreateTheme(body: any) {
     }
   })
   
-  themesMap[themeId] = body
+  themesMap[themeId] = {
+    ...configData,
+    themeName: themeName || themeId
+  }
   
   writeConfig('theme', {
     currentTheme,
@@ -80,26 +88,37 @@ async function handleCreateTheme(body: any) {
 }
 
 async function handleUpdateTheme(body: any) {
-  const { themeId } = body
+  const { themeId, themeName, isCurrent, ...configData } = body
   
   if (!themeId) {
     return badRequestResponse('缺少主题ID')
   }
   
   const existingThemes = getThemeList()
+  const existingTheme = existingThemes.find(t => t.themeId === themeId)
+  
+  if (!existingTheme) {
+    return badRequestResponse('主题不存在')
+  }
+  
   const themesMap: Record<string, any> = {}
   let currentTheme = existingThemes.find(t => t.isCurrent)?.themeId || 'modern'
   
   existingThemes.forEach(theme => {
-    themesMap[theme.themeId] = {
-      ...theme.themeConfig,
-      themeName: theme.themeName
+    if (theme.themeId === themeId) {
+      themesMap[theme.themeId] = {
+        ...configData,
+        themeName: themeName || theme.themeName
+      }
+    } else {
+      themesMap[theme.themeId] = {
+        ...theme.themeConfig,
+        themeName: theme.themeName
+      }
     }
   })
   
-  themesMap[themeId] = body
-  
-  if (body.isCurrent) {
+  if (isCurrent) {
     currentTheme = themeId
   }
   
@@ -119,6 +138,12 @@ async function handleDeleteTheme(body: any) {
   }
   
   const existingThemes = getThemeList()
+  const existingTheme = existingThemes.find(t => t.themeId === themeId)
+  
+  if (!existingTheme) {
+    return badRequestResponse('主题不存在')
+  }
+  
   const themesMap: Record<string, any> = {}
   let currentTheme = existingThemes.find(t => t.isCurrent)?.themeId || 'modern'
   
