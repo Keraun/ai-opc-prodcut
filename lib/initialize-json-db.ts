@@ -48,17 +48,55 @@ function initializeThemeData() {
         console.error('Error initializing theme data:', error)
       }
     } else {
-      console.log('Theme template file not found, creating default theme...')
+      console.log('Theme template file not found, creating default themes...')
       
-      // 创建默认主题
       const defaultThemes = {
         modern: {
-          name: '现代主题',
+          name: '现代简约',
           colors: {
-            primary: '#007bff',
-            secondary: '#6c757d',
-            background: '#ffffff',
-            text: '#333333'
+            primary: '#1e40af',
+            secondary: '#3b82f6',
+            accent: '#06b6d4'
+          }
+        },
+        tech: {
+          name: '科技蓝紫',
+          colors: {
+            primary: '#7c3aed',
+            secondary: '#a78bfa',
+            accent: '#ec4899'
+          }
+        },
+        nature: {
+          name: '自然清新',
+          colors: {
+            primary: '#10b981',
+            secondary: '#34d399',
+            accent: '#14b8a6'
+          }
+        },
+        dark: {
+          name: '深邃暗夜',
+          colors: {
+            primary: '#3b82f6',
+            secondary: '#60a5fa',
+            accent: '#22d3ee'
+          }
+        },
+        luxury: {
+          name: '奢华金棕',
+          colors: {
+            primary: '#b45309',
+            secondary: '#d97706',
+            accent: '#f59e0b'
+          }
+        },
+        minimal: {
+          name: '极简灰调',
+          colors: {
+            primary: '#374151',
+            secondary: '#6b7280',
+            accent: '#9ca3af'
           }
         }
       }

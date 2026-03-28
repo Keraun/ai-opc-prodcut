@@ -202,7 +202,10 @@ export async function getThemeConfig(): Promise<{
     let currentTheme = 'modern'
     
     themeList.forEach((theme: any) => {
-      themes[theme.themeId] = theme.themeConfig
+      themes[theme.themeId] = {
+        ...theme.themeConfig,
+        themeName: theme.themeName
+      }
       if (theme.isCurrent) {
         currentTheme = theme.themeId
       }

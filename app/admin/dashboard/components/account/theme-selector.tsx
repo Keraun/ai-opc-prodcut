@@ -59,25 +59,25 @@ export function ThemeSelector({ themeData, onThemeChange }: ThemeSelectorProps) 
               />
             </div>
             
-            <h3 className={styles.themeName}>{theme.name}</h3>
-            <p className={styles.themeDescriptionText}>{theme.description}</p>
-            
-            <div className={styles.themeColors}>
-              <div 
-                className={styles.themeColorDot}
-                style={{ backgroundColor: theme.colors?.primary || '#1e40af' }}
-                title="主色"
-              />
-              <div 
-                className={styles.themeColorDot}
-                style={{ backgroundColor: theme.colors?.secondary || '#3b82f6' }}
-                title="辅助色"
-              />
-              <div 
-                className={styles.themeColorDot}
-                style={{ backgroundColor: theme.colors?.accent || '#06b6d4' }}
-                title="强调色"
-              />
+            <div className={styles.themeInfo}>
+              <h3 className={styles.themeName}>{theme.themeName || theme.name || key}</h3>
+              <div className={styles.themeColors}>
+                <div 
+                  className={styles.themeColorDot}
+                  style={{ backgroundColor: theme.colors?.primary || '#1e40af' }}
+                  title="主色"
+                />
+                <div 
+                  className={styles.themeColorDot}
+                  style={{ backgroundColor: theme.colors?.secondary || '#3b82f6' }}
+                  title="辅助色"
+                />
+                <div 
+                  className={styles.themeColorDot}
+                  style={{ backgroundColor: theme.colors?.accent || '#06b6d4' }}
+                  title="强调色"
+                />
+              </div>
             </div>
           </div>
         ))}
