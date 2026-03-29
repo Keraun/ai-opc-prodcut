@@ -646,9 +646,20 @@ export function getPageResponse(pageId: string): any {
     
     for (const pm of pageModules) {
       const module = jsonDb.findOne('module_registry', { module_id: pm.module_id })
-      const moduleData = pm.data 
-        ? JSON.parse(pm.data) 
-        : (module?.default_data ? JSON.parse(module.default_data) : {})
+      
+      let moduleData = {}
+      
+      if (pm.module_id === 'site-root') {
+        const siteConfig = jsonDb.findOne('system_config', { config_key: 'site_config' })
+        moduleData = siteConfig ? JSON.parse(siteConfig.config_value) : {}
+      } else if (pm.module_id === 'site-footer') {
+        const footerConfig = jsonDb.findOne('system_config', { config_key: 'site_footer_config' })
+        moduleData = footerConfig ? JSON.parse(footerConfig.config_value) : {}
+      } else {
+        moduleData = pm.data 
+          ? JSON.parse(pm.data) 
+          : (module?.default_data ? JSON.parse(module.default_data) : {})
+      }
       
       response.data.push({
         moduleId: pm.module_id,

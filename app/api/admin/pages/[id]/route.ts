@@ -61,9 +61,20 @@ export async function GET(
     
     const modules: ModuleInfo[] = pageModules.map((pm: any) => {
       const module = jsonDb.findOne('module_registry', { module_id: pm.module_id })
-      const moduleData = pm.data 
-        ? JSON.parse(pm.data) 
-        : (module?.default_data ? JSON.parse(module.default_data) : {})
+      
+      let moduleData = {}
+      
+      if (pm.module_id === 'site-root') {
+        const siteConfig = jsonDb.findOne('system_config', { config_key: 'site_config' })
+        moduleData = siteConfig ? JSON.parse(siteConfig.config_value) : {}
+      } else if (pm.module_id === 'site-footer') {
+        const footerConfig = jsonDb.findOne('system_config', { config_key: 'site_footer_config' })
+        moduleData = footerConfig ? JSON.parse(footerConfig.config_value) : {}
+      } else {
+        moduleData = pm.data 
+          ? JSON.parse(pm.data) 
+          : (module?.default_data ? JSON.parse(module.default_data) : {})
+      }
       
       return {
         moduleId: pm.module_id,
@@ -135,13 +146,15 @@ export async function PUT(
       modules.forEach((module: ModuleInfo, index: number) => {
         const moduleRegistry = jsonDb.findOne('module_registry', { module_id: module.moduleId })
         
+        const isGlobalModule = module.moduleId === 'site-root' || module.moduleId === 'site-footer'
+        
         jsonDb.insert('page_modules', {
           page_id: pageId,
           module_id: module.moduleId,
           module_instance_id: module.moduleInstanceId,
           module_name: module.moduleName || moduleRegistry?.module_name || module.moduleId,
           module_order: index,
-          data: JSON.stringify(module.data),
+          data: isGlobalModule ? null : JSON.stringify(module.data),
           created_at: now,
           updated_at: now
         })

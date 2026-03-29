@@ -382,7 +382,7 @@ export function ModuleDragEditor({ modules, onChange }: ModuleDragEditorProps) {
                   className={`${styles.moduleItemV2} ${
                     draggedIndex === index ? styles.moduleItemDraggingV2 : ""
                   }`}
-                  draggable
+                  draggable={module.moduleId !== 'site-root' && module.moduleId !== 'site-footer'}
                   onDragStart={() => handleDragStart(index)}
                   onDragEnd={handleDragEnd}
                 >
@@ -399,21 +399,41 @@ export function ModuleDragEditor({ modules, onChange }: ModuleDragEditorProps) {
                       </div>
                     </div>
                     <div className={styles.moduleItemActionsV2}>
-                      <Button
-                        type="primary"
-                        size="small"
-                        icon={<IconSettings />}
-                        onClick={() => handleEditModule(module)}
-                      >
-                        编辑
-                      </Button>
-                      <Button
-                        type="text"
-                        size="small"
-                        status="danger"
-                        icon={<IconDelete />}
-                        onClick={() => handleDeleteModule(index)}
-                      />
+                      {module.moduleId !== 'site-root' && module.moduleId !== 'site-footer' && (
+                        <Button
+                          type="primary"
+                          size="small"
+                          icon={<IconSettings />}
+                          onClick={() => handleEditModule(module)}
+                        >
+                          编辑
+                        </Button>
+                      )}
+                      {module.moduleId !== 'site-root' && module.moduleId !== 'site-footer' && (
+                        <Button
+                          type="text"
+                          size="small"
+                          status="danger"
+                          icon={<IconDelete />}
+                          onClick={() => handleDeleteModule(index)}
+                        />
+                      )}
+                      {(module.moduleId === 'site-root' || module.moduleId === 'site-footer') && (
+                        <>
+                          <Button
+                            type="text"
+                            size="small"
+                            icon={<IconEye />}
+                            onClick={() => setPreviewingModule({ 
+                              moduleId: module.moduleId, 
+                              moduleName: module.moduleName 
+                            })}
+                          >
+                            预览
+                          </Button>
+                          <Tag color="orange" size="small">全局配置</Tag>
+                        </>
+                      )}
                     </div>
                   </div>
                 </div>

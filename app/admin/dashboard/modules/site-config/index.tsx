@@ -1,13 +1,12 @@
 import { useState, useEffect } from 'react'
-import { Button, Card, Modal, Tabs, Checkbox } from '@arco-design/web-react'
-import { IconSave, IconSync, IconInfoCircle } from '@arco-design/web-react/icon'
+import { Button, Tabs } from '@arco-design/web-react'
+import { IconSave } from '@arco-design/web-react/icon'
 import { toast } from 'sonner'
 import {
   getSiteRootConfig,
   saveSiteRootConfig,
   getSiteFooterConfig,
-  saveSiteFooterConfig,
-  syncGlobalConfig
+  saveSiteFooterConfig
 } from '@/lib/api-client'
 import { ManagementHeader } from '../../components/ManagementHeader'
 import { ModuleFieldEditor } from '../../components/module-editor/ModuleFieldEditor'
@@ -23,14 +22,8 @@ export function SiteConfigManager() {
   const [siteFooterData, setSiteFooterData] = useState<Record<string, unknown>>({})
   const [loading, setLoading] = useState(false)
   const [saving, setSaving] = useState(false)
-  const [syncing, setSyncing] = useState(false)
   const [hasSiteRootChanges, setHasSiteRootChanges] = useState(false)
   const [hasSiteFooterChanges, setHasSiteFooterChanges] = useState(false)
-  const [showSyncModal, setShowSyncModal] = useState(false)
-  const [syncOptions, setSyncOptions] = useState({
-    siteRoot: true,
-    siteFooter: true
-  })
 
   useEffect(() => {
     fetchData()
@@ -89,18 +82,7 @@ export function SiteConfigManager() {
         const savedItems = []
         if (hasSiteRootChanges) savedItems.push('站点配置')
         if (hasSiteFooterChanges) savedItems.push('页脚配置')
-        
-        const syncResult = await syncGlobalConfig({
-          siteRootData: hasSiteRootChanges ? siteRootData : undefined,
-          siteFooterData: hasSiteFooterChanges ? siteFooterData : undefined
-        })
-        
-        if (syncResult.success) {
-          toast.success(`${savedItems.join('、')}保存并同步成功`)
-        } else {
-          toast.warning(`${savedItems.join('、')}保存成功，但同步失败：${syncResult.message}`)
-        }
-        
+        toast.success(`${savedItems.join('、')}保存成功`)
         setHasSiteRootChanges(false)
         setHasSiteFooterChanges(false)
       } else {
@@ -115,57 +97,18 @@ export function SiteConfigManager() {
     }
   }
 
-  const handleSync = async () => {
-    if (!syncOptions.siteRoot && !syncOptions.siteFooter) {
-      toast.error('请至少选择一项配置进行同步')
-      return
-    }
-
-    setSyncing(true)
-    try {
-      const result = await syncGlobalConfig({
-        siteRootData: syncOptions.siteRoot ? siteRootData : undefined,
-        siteFooterData: syncOptions.siteFooter ? siteFooterData : undefined
-      })
-
-      if (result.success) {
-        toast.success(result.message || '同步成功')
-      } else {
-        toast.error(result.message || '同步失败')
-      }
-    } catch (error) {
-      console.error('同步配置失败:', error)
-      toast.error('同步失败')
-    } finally {
-      setSyncing(false)
-      setShowSyncModal(false)
-    }
-  }
-
   const hasChanges = hasSiteRootChanges || hasSiteFooterChanges
 
   const renderActions = () => (
-    <>
-      <Button
-        icon={<IconSync />}
-        onClick={() => {
-          setSyncOptions({ siteRoot: true, siteFooter: true })
-          setShowSyncModal(true)
-        }}
-        loading={syncing}
-      >
-        同步到所有页面
-      </Button>
-      <Button
-        type="primary"
-        icon={<IconSave />}
-        loading={saving}
-        disabled={!hasChanges}
-        onClick={handleSave}
-      >
-        保存并同步
-      </Button>
-    </>
+    <Button
+      type="primary"
+      icon={<IconSave />}
+      loading={saving}
+      disabled={!hasChanges}
+      onClick={handleSave}
+    >
+      保存配置
+    </Button>
   )
 
   if (loading) {
@@ -181,7 +124,7 @@ export function SiteConfigManager() {
     <div className={styles.container}>
       <ManagementHeader
         title="全局配置"
-        description="管理网站的全局配置，包括站点配置和页脚配置。保存时会自动将配置同步到所有页面。"
+        description="管理网站的全局配置，包括站点配置和页脚配置。配置保存后将全局生效，所有页面自动使用最新配置。"
         actions={renderActions()}
       />
 
@@ -209,48 +152,6 @@ export function SiteConfigManager() {
           </div>
         </TabPane>
       </Tabs>
-
-      <Modal
-        title={
-          <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-            <IconInfoCircle style={{ color: '#ff7d00' }} />
-            <span>同步配置到所有页面</span>
-          </div>
-        }
-        visible={showSyncModal}
-        onCancel={() => setShowSyncModal(false)}
-        onOk={handleSync}
-        confirmLoading={syncing}
-        okText="确认同步"
-        cancelText="取消"
-      >
-        <div style={{ lineHeight: 1.8 }}>
-          <p style={{ marginBottom: 16 }}>请选择要同步的配置项：</p>
-          <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
-            <Checkbox
-              checked={syncOptions.siteRoot}
-              onChange={(checked) => setSyncOptions(prev => ({ ...prev, siteRoot: checked }))}
-            >
-              <span style={{ fontWeight: 500 }}>站点配置</span>
-              <span style={{ color: '#86909c', fontSize: 12, marginLeft: 8 }}>
-                同步到所有页面的站点容器模块
-              </span>
-            </Checkbox>
-            <Checkbox
-              checked={syncOptions.siteFooter}
-              onChange={(checked) => setSyncOptions(prev => ({ ...prev, siteFooter: checked }))}
-            >
-              <span style={{ fontWeight: 500 }}>页脚配置</span>
-              <span style={{ color: '#86909c', fontSize: 12, marginLeft: 8 }}>
-                同步到所有页面的页脚模块
-              </span>
-            </Checkbox>
-          </div>
-          <p style={{ color: '#86909c', fontSize: 13, marginTop: 16 }}>
-            这将覆盖所有页面中对应模块的 data 数据，确保所有页面使用统一的配置。
-          </p>
-        </div>
-      </Modal>
     </div>
   )
 }
