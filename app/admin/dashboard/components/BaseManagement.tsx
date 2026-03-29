@@ -27,12 +27,13 @@ import styles from "./BaseManagement.module.css"
 export interface FieldConfig {
   name: string
   label: string
-  type: 'text' | 'textarea' | 'select' | 'richtext' | 'tags'
+  type: 'text' | 'textarea' | 'select' | 'richtext' | 'tags' | 'status-button'
   required?: boolean
   placeholder?: string
   options?: { value: string; label: string }[]
   rows?: number
   icon?: React.ReactNode
+  inlineGroup?: string
 }
 
 export interface ColumnConfig {
@@ -150,11 +151,13 @@ function FormField({
   }
 
   return (
-    <div className={styles.formGroup}>
-      <label className={styles.label}>
-        {field.icon}
-        {field.label} {field.required && '*'}
-      </label>
+    <div className={`${styles.formGroup} ${field.type === 'richtext' ? styles.formGroupRichtext : ''} ${field.inlineGroup ? styles.formGroupInline : ''}`}>
+      {!field.inlineGroup && (
+        <label className={styles.label}>
+          {field.icon}
+          {field.label} {field.required && '*'}
+        </label>
+      )}
       
       {field.type === 'text' && (
         <input
@@ -191,15 +194,17 @@ function FormField({
       )}
       
       {field.type === 'richtext' && (
-        <RichTextEditor
-          value={value || ''}
-          onChange={onChange}
-          placeholder={field.placeholder}
-        />
+        <div className={styles.richtextContainer}>
+          <RichTextEditor
+            value={value || ''}
+            onChange={onChange}
+            placeholder={field.placeholder}
+          />
+        </div>
       )}
       
       {field.type === 'tags' && (
-        <>
+        <div className={styles.tagsContainer}>
           <div className={styles.tagInput}>
             <input
               type="text"
@@ -225,7 +230,22 @@ function FormField({
               ))}
             </div>
           )}
-        </>
+        </div>
+      )}
+      
+      {field.type === 'status-button' && (
+        <div className={styles.statusButtons}>
+          {field.options?.map(option => (
+            <button
+              key={option.value}
+              type="button"
+              className={`${styles.statusButton} ${value === option.value ? styles.statusButtonActive : ''}`}
+              onClick={() => onChange(option.value)}
+            >
+              {option.label}
+            </button>
+          ))}
+        </div>
       )}
     </div>
   )
@@ -274,12 +294,29 @@ function ItemForm({
     setFormData({ ...formData, [fieldName]: value })
   }
 
-  const halfWidthFields = config.fields.filter(f => 
-    f.type === 'text' && !f.name.includes('description') && !f.name.includes('summary')
-  )
+  const fieldsByGroup = config.fields.reduce((groups, field) => {
+    if (field.inlineGroup) {
+      if (!groups[field.inlineGroup]) {
+        groups[field.inlineGroup] = [];
+      }
+      groups[field.inlineGroup].push(field);
+    } else {
+      if (!groups['default']) {
+        groups['default'] = [];
+      }
+      groups['default'].push(field);
+    }
+    return groups;
+  }, {} as Record<string, FieldConfig[]>);
+
+  const threeColumnFields = config.fields.filter(f => 
+    f.type !== 'richtext' && 
+    f.type !== 'textarea' && 
+    !f.inlineGroup
+  );
   const fullWidthFields = config.fields.filter(f => 
-    f.type !== 'text' || f.name.includes('description') || f.name.includes('summary')
-  )
+    f.type === 'richtext' || f.type === 'textarea'
+  );
 
   return (
     <form onSubmit={handleSubmit} className={styles.form}>
@@ -290,18 +327,49 @@ function ItemForm({
       </div>
 
       <div className={styles.formBody}>
-        {halfWidthFields.length > 0 && (
-          <div className={styles.formRow}>
-            {halfWidthFields.map(field => (
-              <FormField
-                key={field.name}
-                field={field}
-                value={formData[field.name]}
-                onChange={(value) => updateField(field.name, value)}
-              />
-            ))}
-          </div>
+        {threeColumnFields.length > 0 && (
+          <>
+            {Array.from({ length: Math.ceil(threeColumnFields.length / 3) }).map((_, index) => {
+              const start = index * 3;
+              const rowFields = threeColumnFields.slice(start, start + 3);
+              return (
+                <div key={index} className={styles.formRowThree}>
+                  {rowFields.map(field => (
+                    <FormField
+                      key={field.name}
+                      field={field}
+                      value={formData[field.name]}
+                      onChange={(value) => updateField(field.name, value)}
+                    />
+                  ))}
+                </div>
+              );
+            })}
+          </>
         )}
+
+        {Object.entries(fieldsByGroup).map(([groupName, groupFields]) => {
+          if (groupName !== 'default' && groupFields.length > 0) {
+            return (
+              <div key={groupName} className={styles.formRow}>
+                <label className={styles.label}>{groupName}</label>
+                <div className={styles.inlineGroup}>
+                  {groupFields.map(field => (
+                    <div key={field.name} className={styles.inlineField}>
+                      <label className={styles.inlineLabel}>{field.label}</label>
+                      <FormField
+                        field={field}
+                        value={formData[field.name]}
+                        onChange={(value) => updateField(field.name, value)}
+                      />
+                    </div>
+                  ))}
+                </div>
+              </div>
+            );
+          }
+          return null;
+        })}
 
         {fullWidthFields.map(field => (
           <FormField

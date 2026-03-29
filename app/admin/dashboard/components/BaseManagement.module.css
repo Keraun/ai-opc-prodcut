@@ -168,15 +168,15 @@
 }
 
 .form {
-  max-width: 800px;
-  margin: 0 auto;
   background: white;
   border-radius: 8px;
   border: 1px solid #e5e7eb;
+  width: 100%;
+  max-width: none;
 }
 
 .formHeader {
-  padding: 24px;
+  padding: 20px 24px;
   border-bottom: 1px solid #e5e7eb;
 }
 
@@ -192,14 +192,36 @@
 }
 
 .formRow {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.formRowThree {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-  gap: 24px;
-  margin-bottom: 24px;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 16px;
+  margin-bottom: 20px;
 }
 
 .formGroup {
-  margin-bottom: 24px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.formGroupRichtext {
+  flex-direction: column;
+  align-items: flex-start;
+  align-items: stretch;
+}
+
+.formGroupInline {
+  display: flex;
+  align-items: center;
+  gap: 8px;
 }
 
 .label {
@@ -209,7 +231,55 @@
   font-size: 14px;
   font-weight: 500;
   color: #4b5563;
-  margin-bottom: 8px;
+  min-width: 100px;
+  flex-shrink: 0;
+  margin-bottom: 0;
+}
+
+.inlineGroup {
+  flex: 1;
+  display: flex;
+  gap: 16px;
+}
+
+.inlineField {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.inlineLabel {
+  font-size: 12px;
+  font-weight: 500;
+  color: #4b5563;
+}
+
+.statusButtons {
+  display: flex;
+  gap: 8px;
+}
+
+.statusButton {
+  padding: 6px 12px;
+  border: 1px solid #e5e7eb;
+  border-radius: 4px;
+  font-size: 14px;
+  color: #4b5563;
+  background: white;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.statusButton:hover {
+  border-color: #165dff;
+  color: #165dff;
+}
+
+.statusButtonActive {
+  background: #165dff;
+  color: white;
+  border-color: #165dff;
 }
 
 .label svg {
@@ -217,8 +287,9 @@
 }
 
 .input {
+  flex: 1;
   width: 100%;
-  padding: 10px 12px;
+  padding: 8px 12px;
   border: 1px solid #e5e7eb;
   border-radius: 4px;
   font-size: 14px;
@@ -237,8 +308,9 @@
 }
 
 .textarea {
+  flex: 1;
   width: 100%;
-  padding: 10px 12px;
+  padding: 8px 12px;
   border: 1px solid #e5e7eb;
   border-radius: 4px;
   font-size: 14px;
@@ -259,12 +331,14 @@
 }
 
 .tagInput {
+  flex: 1;
   display: flex;
   gap: 0.5rem;
+  width: 100%;
 }
 
 .addButton {
-  padding: 10px 16px;
+  padding: 8px 16px;
   background: #f7f8fa;
   border: 1px solid #e5e7eb;
   border-radius: 4px;
@@ -282,7 +356,23 @@
   display: flex;
   flex-wrap: wrap;
   gap: 8px;
-  margin-top: 12px;
+  margin-top: 8px;
+}
+
+.formGroupRichtext {
+  flex-direction: column;
+  align-items: flex-start;
+  align-items: stretch;
+}
+
+.richtextContainer {
+  width: 100%;
+  margin-top: 8px;
+}
+
+.tagsContainer {
+  flex: 1;
+  width: 100%;
 }
 
 .tag {
@@ -360,8 +450,8 @@
 
 .editorContent {
   padding: 16px;
-  min-height: 200px;
-  max-height: 400px;
+  min-height: 400px;
+  max-height: 600px;
   overflow-y: auto;
 }
 
@@ -385,13 +475,13 @@
   display: flex;
   justify-content: flex-end;
   gap: 12px;
-  padding: 24px;
+  padding: 20px 24px;
   background: #f7f8fa;
   border-top: 1px solid #e5e7eb;
 }
 
 .cancelButton {
-  padding: 10px 24px;
+  padding: 8px 20px;
   background: white;
   border: 1px solid #e5e7eb;
   border-radius: 4px;
@@ -410,7 +500,7 @@
   display: inline-flex;
   align-items: center;
   gap: 0.5rem;
-  padding: 10px 24px;
+  padding: 8px 20px;
   background: #165dff;
   color: white;
   border: none;

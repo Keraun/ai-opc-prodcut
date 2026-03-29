@@ -44,10 +44,10 @@ export function ArticlesManagement() {
       {
         name: "status",
         label: "状态",
-        type: "select",
+        type: "status-button",
         options: [
-          { value: "draft", label: "草稿" },
-          { value: "published", label: "已发布" }
+          { value: "draft", label: "保存草稿" },
+          { value: "published", label: "发布" }
         ],
         icon: <Tag size={16} />
       },

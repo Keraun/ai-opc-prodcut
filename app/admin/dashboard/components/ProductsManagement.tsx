@@ -21,8 +21,14 @@ export function ProductsManagement() {
       {
         name: "categoryName",
         label: "产品分类",
-        type: "text",
-        placeholder: "请输入产品分类",
+        type: "select",
+        options: [
+          { value: "ai-tools", label: "AI工具" },
+          { value: "courses", label: "课程" },
+          { value: "services", label: "服务" },
+          { value: "other", label: "其他" }
+        ],
+        placeholder: "请选择产品分类",
         icon: <Package size={16} />
       },
       {
@@ -39,19 +45,21 @@ export function ProductsManagement() {
         label: "价格",
         type: "text",
         placeholder: "请输入价格",
-        icon: <Package size={16} />
+        icon: <Package size={16} />,
+        inlineGroup: "价格设置"
       },
       {
         name: "originalPrice",
         label: "原价",
         type: "text",
         placeholder: "请输入原价",
-        icon: <Package size={16} />
+        icon: <Package size={16} />,
+        inlineGroup: "价格设置"
       },
       {
         name: "status",
         label: "状态",
-        type: "select",
+        type: "status-button",
         options: [
           { value: "active", label: "上架" },
           { value: "inactive", label: "下架" }
