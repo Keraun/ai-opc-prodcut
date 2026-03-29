@@ -23,6 +23,7 @@ export async function GET(request: NextRequest) {
   const { searchParams } = new URL(request.url)
   const slug = searchParams.get('slug')
   const id = searchParams.get('id')
+  const admin = searchParams.get('admin')
   
   jsonDb.reload()
   
@@ -44,9 +45,15 @@ export async function GET(request: NextRequest) {
     }
   }
   
-  const articles = jsonDb.getAll('articles')
-    .filter((article: Article) => article.status === 'published')
-    .sort((a: Article, b: Article) => new Date(b.date).getTime() - new Date(a.date).getTime())
+  let articles = jsonDb.getAll('articles')
+  
+  if (admin !== 'true') {
+    articles = articles.filter((article: Article) => article.status === 'published')
+  }
+  
+  articles = articles.sort((a: Article, b: Article) => 
+    new Date(b.date).getTime() - new Date(a.date).getTime()
+  )
   
   return successResponse(articles)
 }
@@ -101,7 +108,7 @@ export async function PUT(request: NextRequest) {
       title: data.title || existing.title,
       slug: data.slug || existing.slug,
       summary: data.summary || existing.summary,
-      content: data.content || existing.content,
+      content: data.content !== undefined ? data.content : existing.content,
       date: data.date || existing.date,
       author: data.author || existing.author,
       category: data.category || existing.category,

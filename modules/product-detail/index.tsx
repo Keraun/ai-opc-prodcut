@@ -5,22 +5,40 @@ import type { ModuleProps } from '@/modules/types'
 import type { ProductDetailData, Product } from './types'
 import styles from './index.module.css'
 
-const DEFAULT_PRODUCT_IMAGE = `data:image/svg+xml,${encodeURIComponent(`
-<svg width="600" height="400" viewBox="0 0 600 400" fill="none" xmlns="http://www.w3.org/2000/svg">
-  <rect width="600" height="400" fill="url(#gradient)"/>
-  <defs>
-    <linearGradient id="gradient" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" style="stop-color:#667eea;stop-opacity:1" />
-      <stop offset="100%" style="stop-color:#764ba2;stop-opacity:1" />
-    </linearGradient>
-  </defs>
-  <g transform="translate(225, 125)">
-    <path d="M75 0L150 37.5V112.5L75 150L0 112.5V37.5L75 0Z" fill="rgba(255,255,255,0.2)" stroke="rgba(255,255,255,0.4)" stroke-width="2"/>
-    <path d="M75 37.5L112.5 56.25V93.75L75 112.5L37.5 93.75V56.25L75 37.5Z" fill="rgba(255,255,255,0.3)"/>
-  </g>
-  <text x="300" y="300" text-anchor="middle" fill="rgba(255,255,255,0.8)" font-family="system-ui, sans-serif" font-size="24" font-weight="500">AI 产品</text>
-</svg>
-`)}`
+function ProductDetailImage({ product }: { product: Product | null }) {
+  const [hasError, setHasError] = useState(false)
+
+  if (!product?.image || hasError) {
+    return (
+      <div className={styles.fallbackImage}>
+        <div className={styles.fallbackIconWrapper}>
+          <svg viewBox="0 0 100 100" className={styles.fallbackIcon}>
+            <path 
+              d="M50 0L100 25V75L50 100L0 75V25L50 0Z" 
+              fill="currentColor" 
+              opacity="0.3"
+            />
+            <path 
+              d="M50 25L75 37.5V62.5L50 75L25 62.5V37.5L50 25Z" 
+              fill="currentColor" 
+              opacity="0.5"
+            />
+          </svg>
+        </div>
+        <span className={styles.fallbackLabel}>AI 产品</span>
+      </div>
+    )
+  }
+
+  return (
+    <img 
+      src={product.image} 
+      alt={product.title}
+      className={styles.productImage}
+      onError={() => setHasError(true)}
+    />
+  )
+}
 
 export function ProductDetailModule({ data }: ModuleProps) {
   const config: ProductDetailData = (data as unknown as ProductDetailData) || {
@@ -35,7 +53,6 @@ export function ProductDetailModule({ data }: ModuleProps) {
   const [product, setProduct] = useState<Product | null>(null)
   const [relatedProducts, setRelatedProducts] = useState<Product[]>([])
   const [loading, setLoading] = useState(true)
-  const [imageError, setImageError] = useState(false)
 
   useEffect(() => {
     const fetchProduct = async () => {
@@ -68,13 +85,6 @@ export function ProductDetailModule({ data }: ModuleProps) {
     }
     fetchProduct()
   }, [config.showRelated, config.relatedCount])
-
-  const getProductImage = () => {
-    if (!product?.image || imageError) {
-      return DEFAULT_PRODUCT_IMAGE
-    }
-    return product.image
-  }
 
   const formatPrice = (price: number) => {
     if (price === 0) return '免费'
@@ -110,12 +120,7 @@ export function ProductDetailModule({ data }: ModuleProps) {
       <div className={styles.container}>
         <div className={styles.productMain}>
           <div className={styles.imageSection}>
-            <img 
-              src={getProductImage()} 
-              alt={product.title}
-              className={styles.productImage}
-              onError={() => setImageError(true)}
-            />
+            <ProductDetailImage product={product} />
             {product.tags && product.tags.length > 0 && (
               <div className={styles.tags}>
                 {product.tags.map((tag, index) => (
@@ -204,7 +209,7 @@ export function ProductDetailModule({ data }: ModuleProps) {
                 >
                   <div className={styles.relatedImageWrapper}>
                     <img 
-                      src={related.image || DEFAULT_PRODUCT_IMAGE} 
+                      src={related.image || ''} 
                       alt={related.title}
                       className={styles.relatedImage}
                     />

@@ -19,6 +19,8 @@ interface MenuItem {
 
 const MENU_STRUCTURE: MenuItem[] = [
   { id: 'pages', label: '页面管理', icon: '📄' },
+  { id: 'articles', label: '资讯管理', icon: '📝' },
+  { id: 'products', label: '产品管理', icon: '📦' },
   { id: 'feishu-app', label: '飞书管理', icon: '💬' },
   { id: 'theme', label: '主题管理', icon: '🎨' },
   { id: 'accounts', label: '账号管理', icon: '👥' },

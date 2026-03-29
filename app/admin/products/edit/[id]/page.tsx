@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useRef, useCallback } from "react"
 import { useRouter, useParams } from "next/navigation"
-import { Button, Card, Input, Select, Spin } from "@arco-design/web-react"
+import { Button, Card, Input, Select, InputNumber, Spin } from "@arco-design/web-react"
 import { 
   IconBold, 
   IconItalic, 
@@ -14,22 +14,26 @@ import {
 } from "@arco-design/web-react/icon"
 import { ChevronLeft as IconChevronLeft } from "lucide-react"
 import { toast } from "sonner"
-import styles from "../../articles.module.css"
+import styles from "../../products.module.css"
 
 const TextArea = Input.TextArea
 const Option = Select.Option
 
-interface Article {
-  id: string
+interface Product {
+  id: number
   title: string
-  slug: string
-  summary: string
+  description: string
   content: string
-  date: string
-  author?: string
-  category?: string
-  tags?: string[]
+  price: number
+  originalPrice?: number
   image?: string
+  tags?: string[]
+  category?: string
+  categoryName?: string
+  link?: string
+  features?: string[]
+  salesCount?: number
+  rating?: number
   status: string
   created_at: string
   updated_at: string
@@ -133,33 +137,36 @@ function RichTextEditor({
   )
 }
 
-function ArticleForm({ 
+function ProductForm({ 
   initialData, 
   onSubmit, 
   onCancel, 
   loading,
   mode
 }: { 
-  initialData?: Article
-  onSubmit: (data: Partial<Article>) => void
+  initialData?: Product
+  onSubmit: (data: Partial<Product>) => void
   onCancel: () => void
   loading: boolean
   mode: 'new' | 'edit'
 }) {
-  const [formData, setFormData] = useState<Partial<Article>>({
+  const [formData, setFormData] = useState<Partial<Product>>({
     title: '',
-    slug: '',
-    summary: '',
+    description: '',
     content: '',
-    date: new Date().toISOString().split('T')[0],
-    author: '',
-    category: '',
-    tags: [],
+    price: 0,
+    originalPrice: undefined,
     image: '',
-    status: 'published',
+    tags: [],
+    category: '',
+    categoryName: '',
+    link: '',
+    features: [],
+    status: 'active',
     ...initialData
   })
   const [tagInput, setTagInput] = useState('')
+  const [featureInput, setFeatureInput] = useState('')
 
   useEffect(() => {
     if (initialData) {
@@ -171,15 +178,14 @@ function ArticleForm({
 
   const handleSubmit = () => {
     if (!formData.title?.trim()) {
-      toast.error('请输入文章标题')
+      toast.error('请输入产品名称')
       return
     }
-    if (!formData.summary?.trim()) {
-      toast.error('请输入文章摘要')
+    if (!formData.description?.trim()) {
+      toast.error('请输入产品描述')
       return
     }
-    const slug = formData.slug || formData.title.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '')
-    onSubmit({ ...formData, slug })
+    onSubmit(formData)
   }
 
   const addTag = () => {
@@ -199,6 +205,23 @@ function ArticleForm({
     })
   }
 
+  const addFeature = () => {
+    if (featureInput.trim() && !formData.features?.includes(featureInput.trim())) {
+      setFormData({
+        ...formData,
+        features: [...(formData.features || []), featureInput.trim()]
+      })
+      setFeatureInput('')
+    }
+  }
+
+  const removeFeature = (feature: string) => {
+    setFormData({
+      ...formData,
+      features: formData.features?.filter(f => f !== feature)
+    })
+  }
+
   return (
     <div className={styles.formContainer}>
       <div className={styles.formSection}>
@@ -206,106 +229,120 @@ function ArticleForm({
         <div className={styles.formRow}>
           <div className={styles.formField}>
             <label className={styles.fieldLabel}>
-              文章标题 <span className={styles.required}>*</span>
+              产品名称 <span className={styles.required}>*</span>
             </label>
             <Input
               value={formData.title}
               onChange={(value) => setFormData({ ...formData, title: value })}
-              placeholder="请输入文章标题"
+              placeholder="请输入产品名称"
             />
           </div>
           <div className={styles.formField}>
-            <label className={styles.fieldLabel}>URL别名</label>
-            <Input
-              value={formData.slug}
-              onChange={(value) => setFormData({ ...formData, slug: value })}
-              placeholder="留空将自动生成"
-            />
-          </div>
-        </div>
-
-        <div className={styles.formRow}>
-          <div className={styles.formField}>
-            <label className={styles.fieldLabel}>文章分类</label>
+            <label className={styles.fieldLabel}>产品分类</label>
             <Select
               value={formData.category}
-              onChange={(value) => setFormData({ ...formData, category: value })}
+              onChange={(value) => setFormData({ 
+                ...formData, 
+                category: value,
+                categoryName: value === 'ai-tools' ? 'AI工具' : 
+                             value === 'ai-services' ? 'AI服务' : 
+                             value === 'ai-models' ? 'AI模型' : ''
+              })}
               placeholder="请选择分类"
               allowClear
             >
-              <Option value="industry">行业资讯</Option>
-              <Option value="technology">技术动态</Option>
-              <Option value="product">产品更新</Option>
-              <Option value="tutorial">教程指南</Option>
+              <Option value="ai-tools">AI工具</Option>
+              <Option value="ai-services">AI服务</Option>
+              <Option value="ai-models">AI模型</Option>
             </Select>
-          </div>
-          <div className={styles.formField}>
-            <label className={styles.fieldLabel}>作者</label>
-            <Input
-              value={formData.author}
-              onChange={(value) => setFormData({ ...formData, author: value })}
-              placeholder="请输入作者名称"
-            />
-          </div>
-          <div className={styles.formField}>
-            <label className={styles.fieldLabel}>发布日期</label>
-            <Input
-              type="date"
-              value={formData.date}
-              onChange={(value) => setFormData({ ...formData, date: value })}
-            />
           </div>
         </div>
 
         <div className={styles.formField}>
           <label className={styles.fieldLabel}>
-            文章摘要 <span className={styles.required}>*</span>
+            产品描述 <span className={styles.required}>*</span>
           </label>
           <TextArea
-            value={formData.summary}
-            onChange={(value) => setFormData({ ...formData, summary: value })}
-            placeholder="请输入文章摘要"
+            value={formData.description}
+            onChange={(value) => setFormData({ ...formData, description: value })}
+            placeholder="请输入产品描述"
             autoSize={{ minRows: 2, maxRows: 4 }}
           />
         </div>
 
         <div className={styles.formField}>
-          <label className={styles.fieldLabel}>文章内容</label>
+          <label className={styles.fieldLabel}>产品详情</label>
           <RichTextEditor
             value={formData.content || ''}
             onChange={(value) => setFormData({ ...formData, content: value })}
-            placeholder="请输入文章内容..."
+            placeholder="请输入产品详情内容..."
           />
         </div>
       </div>
 
       <div className={styles.formSection}>
-        <h3 className={styles.sectionTitle}>媒体与设置</h3>
-        <div className={styles.formField}>
-          <label className={styles.fieldLabel}>封面图片</label>
-          <Input
-            value={formData.image}
-            onChange={(value) => setFormData({ ...formData, image: value })}
-            placeholder="请输入封面图片URL"
-          />
-        </div>
-
+        <h3 className={styles.sectionTitle}>价格与状态</h3>
         <div className={styles.formRow}>
           <div className={styles.formField}>
-            <label className={styles.fieldLabel}>发布状态</label>
+            <label className={styles.fieldLabel}>售价</label>
+            <InputNumber
+              value={formData.price}
+              onChange={(value) => setFormData({ ...formData, price: value || 0 })}
+              placeholder="请输入售价"
+              min={0}
+              prefix="¥"
+              style={{ width: '100%' }}
+            />
+          </div>
+          <div className={styles.formField}>
+            <label className={styles.fieldLabel}>原价</label>
+            <InputNumber
+              value={formData.originalPrice}
+              onChange={(value) => setFormData({ ...formData, originalPrice: value || undefined })}
+              placeholder="请输入原价"
+              min={0}
+              prefix="¥"
+              style={{ width: '100%' }}
+            />
+          </div>
+          <div className={styles.formField}>
+            <label className={styles.fieldLabel}>状态</label>
             <Select
               value={formData.status}
               onChange={(value) => setFormData({ ...formData, status: value })}
               style={{ width: '100%' }}
             >
-              <Option value="published">已发布</Option>
-              <Option value="draft">草稿</Option>
+              <Option value="active">上架</Option>
+              <Option value="inactive">下架</Option>
             </Select>
           </div>
         </div>
+      </div>
 
+      <div className={styles.formSection}>
+        <h3 className={styles.sectionTitle}>媒体与链接</h3>
         <div className={styles.formField}>
-          <label className={styles.fieldLabel}>文章标签</label>
+          <label className={styles.fieldLabel}>产品图片</label>
+          <Input
+            value={formData.image}
+            onChange={(value) => setFormData({ ...formData, image: value })}
+            placeholder="请输入产品图片URL"
+          />
+        </div>
+        <div className={styles.formField}>
+          <label className={styles.fieldLabel}>产品链接</label>
+          <Input
+            value={formData.link}
+            onChange={(value) => setFormData({ ...formData, link: value })}
+            placeholder="请输入产品链接"
+          />
+        </div>
+      </div>
+
+      <div className={styles.formSection}>
+        <h3 className={styles.sectionTitle}>标签与特性</h3>
+        <div className={styles.formField}>
+          <label className={styles.fieldLabel}>产品标签</label>
           <div className={styles.tagInput}>
             <Input
               value={tagInput}
@@ -333,82 +370,112 @@ function ArticleForm({
             </div>
           )}
         </div>
+
+        <div className={styles.formField}>
+          <label className={styles.fieldLabel}>产品特性</label>
+          <div className={styles.tagInput}>
+            <Input
+              value={featureInput}
+              onChange={setFeatureInput}
+              placeholder="输入特性后按回车添加"
+              onPressEnter={addFeature}
+              style={{ flex: 1 }}
+            />
+            <Button type="primary" onClick={addFeature}>添加</Button>
+          </div>
+          {formData.features && formData.features.length > 0 && (
+            <div className={styles.featuresList}>
+              {formData.features.map((feature, index) => (
+                <div key={index} className={styles.featureItem}>
+                  <span>{feature}</span>
+                  <button 
+                    type="button" 
+                    className={styles.featureRemove}
+                    onClick={() => removeFeature(feature)}
+                  >
+                    ×
+                  </button>
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
       </div>
 
       <div className={styles.formActions}>
         <Button onClick={onCancel}>取消</Button>
         <Button type="primary" loading={loading} onClick={handleSubmit}>
-          {mode === 'new' ? '发布文章' : '保存修改'}
+          {mode === 'new' ? '创建产品' : '保存修改'}
         </Button>
       </div>
     </div>
   )
 }
 
-export default function EditArticlePage() {
+export default function EditProductPage() {
   const router = useRouter()
   const params = useParams()
-  const articleId = params.id as string
+  const productId = params.id as string
   
-  const [article, setArticle] = useState<Article | null>(null)
+  const [product, setProduct] = useState<Product | null>(null)
   const [loading, setLoading] = useState(true)
   const [submitting, setSubmitting] = useState(false)
 
   useEffect(() => {
-    fetchArticle()
-  }, [articleId])
+    fetchProduct()
+  }, [productId])
 
-  const fetchArticle = async () => {
+  const fetchProduct = async () => {
     try {
       setLoading(true)
-      const response = await fetch(`/api/articles?id=${articleId}`)
+      const response = await fetch(`/api/products?id=${productId}`)
       const result = await response.json()
       if (result.success && result.data) {
-        setArticle(result.data)
+        setProduct(result.data)
       } else {
-        toast.error('文章不存在')
-        router.push('/admin/articles')
+        toast.error('产品不存在')
+        router.push('/admin/products')
       }
     } catch (error) {
-      console.error('Failed to fetch article:', error)
-      toast.error('加载文章失败')
-      router.push('/admin/articles')
+      console.error('Failed to fetch product:', error)
+      toast.error('加载产品失败')
+      router.push('/admin/products')
     } finally {
       setLoading(false)
     }
   }
 
-  const handleSubmit = async (data: Partial<Article>) => {
+  const handleSubmit = async (data: Partial<Product>) => {
     setSubmitting(true)
     try {
-      const response = await fetch('/api/articles', {
+      const response = await fetch('/api/products', {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json'
         },
         body: JSON.stringify({
           ...data,
-          id: articleId
+          id: productId
         })
       })
       const result = await response.json()
       
       if (result.success) {
-        toast.success('文章更新成功')
-        router.push('/admin/articles')
+        toast.success('产品更新成功')
+        router.push('/admin/products')
       } else {
-        toast.error(result.message || '保存文章失败')
+        toast.error(result.message || '保存产品失败')
       }
     } catch (error) {
-      console.error('Failed to save article:', error)
-      toast.error('保存文章失败')
+      console.error('Failed to save product:', error)
+      toast.error('保存产品失败')
     } finally {
       setSubmitting(false)
     }
   }
 
   const handleCancel = () => {
-    router.push('/admin/articles')
+    router.push('/admin/products')
   }
 
   if (loading) {
@@ -430,18 +497,18 @@ export default function EditArticlePage() {
               onClick={handleCancel}
               style={{ color: 'white' }}
             >
-              返回文章列表
+              返回产品列表
             </Button>
-            <h1 className={styles.headerTitle}>编辑文章</h1>
+            <h1 className={styles.headerTitle}>编辑产品</h1>
           </div>
         </div>
       </div>
 
       <div className={styles.content}>
         <Card className={styles.formCard}>
-          <ArticleForm
+          <ProductForm
             mode="edit"
-            initialData={article || undefined}
+            initialData={product || undefined}
             onSubmit={handleSubmit}
             onCancel={handleCancel}
             loading={submitting}

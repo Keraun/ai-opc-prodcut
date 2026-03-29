@@ -6,22 +6,43 @@ import type { ModuleProps } from '@/modules/types'
 import type { ProductListData, Product } from './types'
 import styles from './index.module.css'
 
-const DEFAULT_PRODUCT_IMAGE = `data:image/svg+xml,${encodeURIComponent(`
-<svg width="400" height="300" viewBox="0 0 400 300" fill="none" xmlns="http://www.w3.org/2000/svg">
-  <rect width="400" height="300" fill="url(#gradient)"/>
-  <defs>
-    <linearGradient id="gradient" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" style="stop-color:#667eea;stop-opacity:1" />
-      <stop offset="100%" style="stop-color:#764ba2;stop-opacity:1" />
-    </linearGradient>
-  </defs>
-  <g transform="translate(150, 100)">
-    <path d="M50 0L100 25V75L50 100L0 75V25L50 0Z" fill="rgba(255,255,255,0.2)" stroke="rgba(255,255,255,0.4)" stroke-width="2"/>
-    <path d="M50 25L75 37.5V62.5L50 75L25 62.5V37.5L50 25Z" fill="rgba(255,255,255,0.3)"/>
-  </g>
-  <text x="200" y="220" text-anchor="middle" fill="rgba(255,255,255,0.8)" font-family="system-ui, sans-serif" font-size="18" font-weight="500">AI 产品</text>
-</svg>
-`)}`
+function ProductImage({ product, onImageError }: { product: Product; onImageError: (id: number) => void }) {
+  const [hasError, setHasError] = useState(false)
+
+  if (hasError || !product.image) {
+    return (
+      <div className={styles.fallbackImage}>
+        <div className={styles.fallbackIconWrapper}>
+          <svg viewBox="0 0 100 100" className={styles.fallbackIcon}>
+            <path 
+              d="M50 0L100 25V75L50 100L0 75V25L50 0Z" 
+              fill="currentColor" 
+              opacity="0.3"
+            />
+            <path 
+              d="M50 25L75 37.5V62.5L50 75L25 62.5V37.5L50 25Z" 
+              fill="currentColor" 
+              opacity="0.5"
+            />
+          </svg>
+        </div>
+        <span className={styles.fallbackLabel}>AI 产品</span>
+      </div>
+    )
+  }
+
+  return (
+    <img
+      src={product.image}
+      alt={product.title}
+      className={styles.productImage}
+      onError={() => {
+        setHasError(true)
+        onImageError(product.id)
+      }}
+    />
+  )
+}
 
 export function ProductListModule({ data }: ModuleProps) {
   const config: ProductListData = (data as unknown as ProductListData) || {
@@ -56,13 +77,6 @@ export function ProductListModule({ data }: ModuleProps) {
 
   const handleImageError = (productId: number) => {
     setImageErrors(prev => new Set(prev).add(productId))
-  }
-
-  const getProductImage = (product: Product) => {
-    if (!product.image || imageErrors.has(product.id)) {
-      return DEFAULT_PRODUCT_IMAGE
-    }
-    return product.image
   }
 
   const filteredProducts = selectedCategory === 'all'
@@ -111,12 +125,7 @@ export function ProductListModule({ data }: ModuleProps) {
             {filteredProducts.map((product) => (
               <div key={product.id} className={styles.productCard}>
                 <div className={styles.cardHeader}>
-                  <img
-                    src={getProductImage(product)}
-                    alt={product.title}
-                    className={styles.productImage}
-                    onError={() => handleImageError(product.id)}
-                  />
+                  <ProductImage product={product} onImageError={handleImageError} />
                   {product.tags && product.tags.length > 0 && (
                     <div className={styles.cardTags}>
                       {product.tags.slice(0, 2).map((tag, index) => (

@@ -5,7 +5,7 @@
     "theme_setting": "{\"colors\":{\"primary\":\"#1e40af\",\"secondary\":\"#3b82f6\",\"accent\":\"#06b6d4\"}}",
     "is_current": 0,
     "created_at": "2026-03-28T18:26:34.442Z",
-    "updated_at": "2026-03-29T00:03:56.892Z",
+    "updated_at": "2026-03-29T00:21:29.831Z",
     "id": 1
   },
   {
@@ -14,7 +14,7 @@
     "theme_setting": "{\"colors\":{\"primary\":\"#7c3aed\",\"secondary\":\"#a78bfa\",\"accent\":\"#ec4899\"}}",
     "is_current": 0,
     "created_at": "2026-03-28T18:26:34.442Z",
-    "updated_at": "2026-03-29T00:03:56.892Z",
+    "updated_at": "2026-03-29T00:21:29.832Z",
     "id": 2
   },
   {
@@ -23,7 +23,7 @@
     "theme_setting": "{\"colors\":{\"primary\":\"#10b981\",\"secondary\":\"#34d399\",\"accent\":\"#14b8a6\"}}",
     "is_current": 0,
     "created_at": "2026-03-28T18:26:34.442Z",
-    "updated_at": "2026-03-29T00:03:56.893Z",
+    "updated_at": "2026-03-29T00:21:29.832Z",
     "id": 3
   },
   {
@@ -32,16 +32,16 @@
     "theme_setting": "{\"colors\":{\"primary\":\"#3b82f6\",\"secondary\":\"#60a5fa\",\"accent\":\"#22d3ee\"}}",
     "is_current": 0,
     "created_at": "2026-03-28T18:26:34.443Z",
-    "updated_at": "2026-03-29T00:03:56.894Z",
+    "updated_at": "2026-03-29T00:21:29.832Z",
     "id": 4
   },
   {
     "theme_id": "luxury",
     "theme_name": "奢华金色",
     "theme_setting": "{\"colors\":{\"primary\":\"#b45309\",\"secondary\":\"#d97706\",\"accent\":\"#f59e0b\"}}",
-    "is_current": 0,
+    "is_current": 1,
     "created_at": "2026-03-28T18:26:34.443Z",
-    "updated_at": "2026-03-29T00:03:56.894Z",
+    "updated_at": "2026-03-29T00:21:29.832Z",
     "id": 5
   },
   {
@@ -50,7 +50,7 @@
     "theme_setting": "{\"colors\":{\"primary\":\"#374151\",\"secondary\":\"#6b7280\",\"accent\":\"#9ca3af\"}}",
     "is_current": 0,
     "created_at": "2026-03-28T18:26:34.443Z",
-    "updated_at": "2026-03-29T00:03:56.894Z",
+    "updated_at": "2026-03-29T00:21:29.832Z",
     "id": 6
   },
   {
@@ -59,16 +59,16 @@
     "theme_setting": "{\"colors\":{\"primary\":\"#dc2626\",\"secondary\":\"#f97316\",\"accent\":\"#f59e0b\"}}",
     "is_current": 0,
     "created_at": "2026-03-29T00:00:00.000Z",
-    "updated_at": "2026-03-29T00:03:56.894Z",
+    "updated_at": "2026-03-29T00:21:29.833Z",
     "id": 7
   },
   {
     "theme_id": "ocean",
     "theme_name": "海洋蓝调",
     "theme_setting": "{\"colors\":{\"primary\":\"#0369a1\",\"secondary\":\"#0ea5e9\",\"accent\":\"#06b6d4\"}}",
-    "is_current": 1,
+    "is_current": 0,
     "created_at": "2026-03-29T00:00:00.000Z",
-    "updated_at": "2026-03-29T00:03:56.894Z",
+    "updated_at": "2026-03-29T00:21:29.833Z",
     "id": 8
   },
   {
@@ -77,7 +77,7 @@
     "theme_setting": "{\"colors\":{\"primary\":\"#166534\",\"secondary\":\"#22c55e\",\"accent\":\"#84cc16\"}}",
     "is_current": 0,
     "created_at": "2026-03-29T00:00:00.000Z",
-    "updated_at": "2026-03-29T00:03:56.895Z",
+    "updated_at": "2026-03-29T00:21:29.833Z",
     "id": 9
   },
   {
@@ -86,7 +86,7 @@
     "theme_setting": "{\"colors\":{\"primary\":\"#7c3aed\",\"secondary\":\"#a855f7\",\"accent\":\"#d946ef\"}}",
     "is_current": 0,
     "created_at": "2026-03-29T00:00:00.000Z",
-    "updated_at": "2026-03-29T00:03:56.895Z",
+    "updated_at": "2026-03-29T00:21:29.833Z",
     "id": 10
   },
   {
@@ -95,7 +95,7 @@
     "theme_setting": "{\"colors\":{\"primary\":\"#be185d\",\"secondary\":\"#ec4899\",\"accent\":\"#f472b6\"}}",
     "is_current": 0,
     "created_at": "2026-03-29T00:00:00.000Z",
-    "updated_at": "2026-03-29T00:03:56.896Z",
+    "updated_at": "2026-03-29T00:21:29.833Z",
     "id": 11
   },
   {
@@ -104,7 +104,7 @@
     "theme_setting": "{\"colors\":{\"primary\":\"#0f172a\",\"secondary\":\"#1e293b\",\"accent\":\"#334155\"}}",
     "is_current": 0,
     "created_at": "2026-03-29T00:00:00.000Z",
-    "updated_at": "2026-03-29T00:03:56.896Z",
+    "updated_at": "2026-03-29T00:21:29.834Z",
     "id": 12
   }
 ]

@@ -6,6 +6,7 @@ interface Product {
   id: number
   title: string
   description: string
+  content?: string
   price: number
   originalPrice?: number
   image?: string
@@ -25,6 +26,7 @@ export async function GET(request: NextRequest) {
   const { searchParams } = new URL(request.url)
   const id = searchParams.get('id')
   const category = searchParams.get('category')
+  const admin = searchParams.get('admin')
   
   jsonDb.reload()
   
@@ -38,11 +40,18 @@ export async function GET(request: NextRequest) {
   }
   
   let products = jsonDb.getAll('products')
-    .filter((product: Product) => product.status === 'active')
+  
+  if (admin !== 'true') {
+    products = products.filter((product: Product) => product.status === 'active')
+  }
   
   if (category) {
     products = products.filter((product: Product) => product.category === category)
   }
+  
+  products = products.sort((a: Product, b: Product) => 
+    new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
+  )
   
   return successResponse(products)
 }
@@ -58,6 +67,7 @@ export async function POST(request: NextRequest) {
     const product = {
       title: data.title,
       description: data.description,
+      content: data.content || '',
       price: data.price || 0,
       originalPrice: data.originalPrice || null,
       image: data.image || '',
@@ -66,8 +76,8 @@ export async function POST(request: NextRequest) {
       categoryName: data.categoryName || '',
       link: data.link || '',
       features: data.features || [],
-      salesCount: 0,
-      rating: 5.0,
+      salesCount: data.salesCount || 0,
+      rating: data.rating || 5.0,
       status: data.status || 'active',
       created_at: new Date().toISOString(),
       updated_at: new Date().toISOString()
@@ -98,6 +108,7 @@ export async function PUT(request: NextRequest) {
       ...existing,
       title: data.title || existing.title,
       description: data.description || existing.description,
+      content: data.content !== undefined ? data.content : existing.content,
       price: data.price !== undefined ? data.price : existing.price,
       originalPrice: data.originalPrice !== undefined ? data.originalPrice : existing.originalPrice,
       image: data.image || existing.image,

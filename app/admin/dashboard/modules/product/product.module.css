@@ -1,0 +1,81 @@
+.listContainer {
+  padding: 0;
+}
+
+.listHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 1.5rem;
+}
+
+.listTitle {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: #1d2129;
+  margin: 0 0 0.5rem 0;
+}
+
+.listDescription {
+  font-size: 0.875rem;
+  color: #86909c;
+  margin: 0;
+}
+
+.tableCard {
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+}
+
+.titleCell {
+  font-weight: 500;
+  color: #1d2129;
+}
+
+.descriptionCell {
+  color: #86909c;
+  max-width: 300px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.priceCell {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.currentPrice {
+  font-weight: 600;
+  color: #f53f3f;
+}
+
+.originalPrice {
+  font-size: 0.75rem;
+  color: #c9cdd4;
+  text-decoration: line-through;
+}
+
+.statusBadge {
+  display: inline-block;
+  padding: 2px 8px;
+  border-radius: 4px;
+  font-size: 0.75rem;
+  font-weight: 500;
+}
+
+.statusActive {
+  background: #e8ffea;
+  color: #00b42a;
+}
+
+.statusInactive {
+  background: #fff7e8;
+  color: #ff7d00;
+}
+
+.actionButtons {
+  display: flex;
+  gap: 8px;
+}

@@ -6,23 +6,35 @@ import type { ModuleProps } from '@/modules/types'
 import type { NewsListData, Article } from './types'
 import styles from './index.module.css'
 
-const DEFAULT_ARTICLE_IMAGE = `data:image/svg+xml,${encodeURIComponent(`
-<svg width="400" height="200" viewBox="0 0 400 200" fill="none" xmlns="http://www.w3.org/2000/svg">
-  <rect width="400" height="200" fill="url(#gradient)"/>
-  <defs>
-    <linearGradient id="gradient" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" style="stop-color:#f093fb;stop-opacity:1" />
-      <stop offset="100%" style="stop-color:#f5576c;stop-opacity:1" />
-    </linearGradient>
-  </defs>
-  <g transform="translate(160, 50)">
-    <rect x="0" y="0" width="80" height="60" rx="4" fill="rgba(255,255,255,0.2)"/>
-    <rect x="10" y="70" width="60" height="8" rx="2" fill="rgba(255,255,255,0.3)"/>
-    <rect x="10" y="84" width="40" height="6" rx="2" fill="rgba(255,255,255,0.2)"/>
-  </g>
-  <text x="200" y="170" text-anchor="middle" fill="rgba(255,255,255,0.8)" font-family="system-ui, sans-serif" font-size="16" font-weight="500">资讯文章</text>
-</svg>
-`)}`
+function ArticleImage({ article, onImageError }: { article: Article; onImageError: (id: number) => void }) {
+  const [hasError, setHasError] = useState(false)
+
+  if (hasError || !article.image) {
+    return (
+      <div className={styles.fallbackImage}>
+        <div className={styles.fallbackIconWrapper}>
+          <svg viewBox="0 0 100 100" className={styles.fallbackIcon}>
+            <rect x="10" y="10" width="80" height="50" rx="4" fill="currentColor" opacity="0.3"/>
+            <rect x="20" y="70" width="60" height="6" rx="2" fill="currentColor" opacity="0.4"/>
+            <rect x="20" y="80" width="40" height="4" rx="2" fill="currentColor" opacity="0.3"/>
+          </svg>
+        </div>
+        <span className={styles.fallbackLabel}>资讯文章</span>
+      </div>
+    )
+  }
+
+  return (
+    <img 
+      src={article.image} 
+      alt={article.title}
+      onError={() => {
+        setHasError(true)
+        onImageError(article.id)
+      }}
+    />
+  )
+}
 
 export function NewsListModule({ data }: ModuleProps) {
   const config: NewsListData = (data as unknown as NewsListData) || {
@@ -56,13 +68,6 @@ export function NewsListModule({ data }: ModuleProps) {
 
   const handleImageError = (articleId: number) => {
     setImageErrors(prev => new Set(prev).add(articleId))
-  }
-
-  const getArticleImage = (article: Article) => {
-    if (!article.image || imageErrors.has(article.id)) {
-      return DEFAULT_ARTICLE_IMAGE
-    }
-    return article.image
   }
 
   const formatDate = (dateStr: string) => {
@@ -101,11 +106,7 @@ export function NewsListModule({ data }: ModuleProps) {
                   style={{ animationDelay: `${index * 0.1}s` }}
                 >
                   <div className={styles.cardImage}>
-                    <img 
-                      src={getArticleImage(article)} 
-                      alt={article.title}
-                      onError={() => handleImageError(article.id)}
-                    />
+                    <ArticleImage article={article} onImageError={handleImageError} />
                     <div className={styles.cardOverlay}></div>
                   </div>
                   

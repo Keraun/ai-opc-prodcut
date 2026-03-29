@@ -15,7 +15,8 @@ import {
   SystemManager,
   AccountManager,
   PageManager,
-  ArticleManager
+  ArticleManager,
+  ProductManager
 } from "./modules"
 import styles from "./dashboard.module.css"
 
@@ -24,7 +25,7 @@ export default function AdminDashboardPage() {
   const { currentUser, checkAuth, logout } = useAuth()
   const { fetchConfigs, fetchSchema, configs, saveConfig, hasChanges, loading: configLoading } = useConfig()
   
-  const [activeMenu, setActiveMenu] = useState('accountInfo')
+  const [activeMenu, setActiveMenu] = useState('pages')
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false)
   const [showChangePassword, setShowChangePassword] = useState(false)
   const [mustChangePassword, setMustChangePassword] = useState(false)
@@ -33,7 +34,7 @@ export default function AdminDashboardPage() {
   useEffect(() => {
     if (typeof window !== 'undefined') {
       const urlParams = new URLSearchParams(window.location.search)
-      const menu = urlParams.get('menu') || 'accountInfo'
+      const menu = urlParams.get('menu') || 'pages'
       if (menu !== activeMenu) {
         setActiveMenu(menu)
       }
@@ -75,6 +76,10 @@ export default function AdminDashboardPage() {
     switch (activeMenu) {
       case 'pages':
         return <PageManager />
+      case 'articles':
+        return <ArticleManager />
+      case 'products':
+        return <ProductManager />
       case 'feishu-app':
           return (
             <ConfigFormEditor
