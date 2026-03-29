@@ -102,37 +102,20 @@
     "published_at": null
   },
   {
-    "page_id": "666",
-    "name": "666",
-    "slug": "666",
+    "page_id": "my",
+    "name": "my",
+    "slug": "my",
     "type": "static",
     "description": "新创建的静态页面",
     "status": "draft",
     "is_system": 0,
     "is_deletable": 1,
-    "route": "/666",
+    "route": "/my",
     "dynamic_param": null,
-    "module_instance_ids": "[\"site-root-1774739871306-0\",\"site-header-1774739871307-1\",\"site-footer-1774739871307-2\"]",
-    "created_at": "2026/03/29 07:17:51",
-    "updated_at": "2026/03/29 07:17:51",
+    "module_instance_ids": "[\"site-root-1774805399358-0-o51pwkwg3\",\"site-header-1774805399358-1-sl761pw2g\",\"site-footer-1774805399358-2-xzoezyeel\"]",
+    "created_at": "2026/03/30 01:29:59",
+    "updated_at": "2026/03/30 01:29:59",
     "published_at": null,
-    "id": 6
-  },
-  {
-    "page_id": "test",
-    "name": "test",
-    "slug": "test",
-    "type": "static",
-    "description": "新创建的静态页面",
-    "status": "draft",
-    "is_system": 0,
-    "is_deletable": 1,
-    "route": "/test",
-    "dynamic_param": null,
-    "module_instance_ids": "[\"site-root-1774740284399-0-wzx7j5yi0\",\"site-header-1774740284399-1-oeqww4ry6\",\"site-footer-1774740284399-2-kdv7vsh7r\"]",
-    "created_at": "2026/03/29 07:24:44",
-    "updated_at": "2026/03/29 07:24:44",
-    "published_at": null,
-    "id": 7
+    "id": 9
   }
 ]
