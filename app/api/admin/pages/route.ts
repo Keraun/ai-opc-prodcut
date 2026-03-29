@@ -29,6 +29,9 @@ interface PageInfo {
 }
 
 function getPageList(): PageInfo[] {
+  jsonDb.reloadTable('pages')
+  jsonDb.reloadTable('page_modules')
+  
   const pages = jsonDb.getAll('pages') as any[]
   
   return pages.map(page => {

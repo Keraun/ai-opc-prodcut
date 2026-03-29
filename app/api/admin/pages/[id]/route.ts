@@ -39,6 +39,10 @@ export async function GET(
   return wrapAuthApiHandler(async () => {
     const { id: pageId } = await params
     
+    jsonDb.reloadTable('pages')
+    jsonDb.reloadTable('page_modules')
+    jsonDb.reloadTable('module_registry')
+    
     const page = jsonDb.findOne('pages', { page_id: pageId })
     
     if (!page) {
@@ -100,6 +104,9 @@ export async function PUT(
     const body = await request.json()
     const { name, slug, modules } = body
     
+    jsonDb.reloadTable('pages')
+    jsonDb.reloadTable('page_modules')
+    
     const page = jsonDb.findOne('pages', { page_id: pageId })
     
     if (!page) {
@@ -157,6 +164,9 @@ export async function DELETE(
 ) {
   return wrapAuthApiHandler(async () => {
     const { id: pageId } = await params
+    
+    jsonDb.reloadTable('pages')
+    jsonDb.reloadTable('page_modules')
     
     const page = jsonDb.findOne('pages', { page_id: pageId })
     
