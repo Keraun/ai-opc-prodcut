@@ -6,6 +6,7 @@ import { IconSave, IconEye, IconCode, IconRefresh, IconPlus } from "@arco-design
 import { toast } from "sonner"
 import { DynamicForm } from "@/components/dynamic-form"
 import { getSchema, getFeishuSchema, createFeishuTable } from "@/lib/api-client"
+import { ManagementHeader } from "../ManagementHeader"
 import styles from "./ConfigFormEditor.module.css"
 
 interface FormSchema {
@@ -140,62 +141,55 @@ export function ConfigFormEditor({
     }
   }
 
-  if (!schema) {
-    return (
-      <div className={styles.loadingContainer}>
-        <Spin size={40} />
-        <p className={styles.loadingText}>加载表单配置中...</p>
-      </div>
-    )
-  }
+  const renderActions = () => (
+    <>
+      {isFeishuConfig && (
+        <>
+          <Button
+            icon={<IconRefresh />}
+            loading={loadingFields}
+            onClick={handleFetchTableFields}
+          >
+            查看表格字段
+          </Button>
+          <Button
+            icon={<IconPlus />}
+            loading={creatingTable}
+            onClick={handleCreateTable}
+          >
+            生成数据表
+          </Button>
+        </>
+      )}
+      <Button
+        icon={<IconCode />}
+        onClick={handlePreview}
+      >
+        查看JSON
+      </Button>
+      <Button
+        type="primary"
+        icon={<IconSave />}
+        loading={submitting || loading}
+        onClick={() => {
+          const formElement = document.querySelector('form')
+          if (formElement) {
+            formElement.dispatchEvent(new Event('submit', { cancelable: true, bubbles: true }))
+          }
+        }}
+      >
+        {getButtonText()}
+      </Button>
+    </>
+  )
 
   return (
     <div className={styles.container}>
-      <div className={styles.header}>
-        <div>
-          <h2 className={styles.title}>{title}</h2>
-          <p className={styles.description}>{description}</p>
-        </div>
-        <div className={styles.actions}>
-          {isFeishuConfig && (
-            <>
-              <Button
-                icon={<IconRefresh />}
-                loading={loadingFields}
-                onClick={handleFetchTableFields}
-              >
-                查看表格字段
-              </Button>
-              <Button
-                icon={<IconPlus />}
-                loading={creatingTable}
-                onClick={handleCreateTable}
-              >
-                生成数据表
-              </Button>
-            </>
-          )}
-          <Button
-            icon={<IconCode />}
-            onClick={handlePreview}
-          >
-            查看JSON
-          </Button>
-          <Button
-            type="primary"
-            icon={<IconSave />}
-            loading={submitting || loading}
-            onClick={() => {
-              const formElement = document.querySelector('form')
-              if (formElement) {
-                formElement.dispatchEvent(new Event('submit', { cancelable: true, bubbles: true }))
-              }
-            }}
-          >
-            {getButtonText()}
-          </Button>
-        </div>
-      </div>
+      <ManagementHeader
+        title={title}
+        description={description}
+        actions={renderActions()}
+      />
 
       <Card className={styles.formCard}>
         <DynamicForm
@@ -296,19 +290,16 @@ export function ConfigFormEditor({
                 <div style={{ fontWeight: 'bold', marginBottom: '4px' }}>
                   {field.field_name}
                 </div>
-                <div style={{ fontSize: '12px', color: '#666' }}>
-                  类型: {field.type}
+                <div style={{ fontSize: '12px', color: '#6b7280' }}>
+                  字段ID: {field.field_id} | 类型: {field.field_type}
                 </div>
-                {field.property && Object.keys(field.property).length > 0 && (
-                  <div style={{ fontSize: '12px', color: '#666', marginTop: '4px' }}>
-                    属性: {JSON.stringify(field.property)}
-                  </div>
-                )}
               </div>
             ))}
           </div>
         ) : (
-          <Alert type="info" content="表格中没有字段" />
+          <div style={{ padding: '24px', textAlign: 'center', color: '#6b7280' }}>
+            暂无字段数据
+          </div>
         )}
       </Modal>
     </div>

@@ -19,6 +19,7 @@ import {
   FileText
 } from "lucide-react"
 import { toast } from "sonner"
+import { ManagementHeader } from './ManagementHeader'
 import styles from "./BaseManagement.module.css"
 
 function Tooltip({ children, content }: { children: React.ReactNode; content: string }) {
@@ -515,18 +516,13 @@ export function BaseManagement({ config }: BaseManagementProps) {
 
   return (
     <div className={styles.container}>
-      <div className={styles.header}>
-        <div className={styles.headerLeft}>
-          <h1 className={styles.title}>{config.title}管理</h1>
-          {config.description && (
-            <p className={styles.description}>{config.description}</p>
-          )}
-        </div>
-        <button onClick={() => setViewMode('new')} className={styles.primaryButton}>
-          <Plus size={20} />
-          新建{config.title}
-        </button>
-      </div>
+      <ManagementHeader
+        title={`${config.title}管理`}
+        description={config.description || ''}
+        buttonText={`新建${config.title}`}
+        buttonIcon={<Plus size={20} />}
+        onButtonClick={() => setViewMode('new')}
+      />
 
       <div className={styles.table}>
         <div className={styles.tableHeader}>

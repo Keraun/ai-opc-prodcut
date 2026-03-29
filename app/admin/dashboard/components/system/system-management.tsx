@@ -20,6 +20,7 @@ import {
   IconCopy
 } from "@arco-design/web-react/icon"
 import { getSuperAdminToken } from "@/lib/api-client"
+import { ManagementHeader } from "../ManagementHeader"
 import styles from "../../dashboard.module.css"
 
 interface SystemManagementProps {
@@ -46,18 +47,10 @@ export function SystemManagement({
   const [passwordError, setPasswordError] = useState("")
   return (
     <div className={styles.systemManagementNew}>
-      {/* 页面标题 */}
-      <div className={styles.systemHeader}>
-        <div className={styles.systemHeaderContent}>
-          <div className={styles.systemHeaderIcon}>
-            <IconSettings className={styles.systemHeaderIconSvg} />
-          </div>
-          <div className={styles.systemHeaderText}>
-            <h1 className={styles.systemHeaderTitle}>系统管理</h1>
-            <p className={styles.systemHeaderSubtitle}>管理系统配置、账户安全和数据备份</p>
-          </div>
-        </div>
-      </div>
+      <ManagementHeader
+        title="系统管理"
+        description="管理系统配置、账户安全和数据备份"
+      />
 
       {/* 主要内容区域 */}
       <div className={styles.systemContent}>
@@ -296,7 +289,7 @@ export function SystemManagement({
                       setPasswordError(result.message || "密码错误")
                     }
                   } catch (error) {
-                    setPasswordError("获取口令失败，请重试")
+                    setPasswordError("获取口令失败")
                   } finally {
                     setLoadingToken(false)
                   }
@@ -309,78 +302,47 @@ export function SystemManagement({
         }
       >
         {superAdminToken ? (
-          <div style={{ padding: "16px 0" }}>
-            <div style={{ marginBottom: 16 }}>
-              <Typography.Text type="secondary">您的超级管理员口令如下，请妥善保管：</Typography.Text>
+          <div style={{ textAlign: 'center', padding: '20px 0' }}>
+            <div style={{ 
+              background: '#f5f5f5', 
+              padding: '16px', 
+              borderRadius: '8px',
+              marginBottom: '16px',
+              fontFamily: 'monospace',
+              fontSize: '14px',
+              wordBreak: 'break-all'
+            }}>
+              {superAdminToken}
             </div>
-            <div
-              style={{
-                display: "flex",
-                alignItems: "center",
-                gap: 8,
-                padding: 12,
-                backgroundColor: "var(--color-fill-2)",
-                borderRadius: 4,
-                border: "1px solid var(--color-border)"
+            <Button 
+              type="primary" 
+              icon={<IconCopy />}
+              onClick={() => {
+                navigator.clipboard.writeText(superAdminToken)
+                Message.success('口令已复制到剪贴板')
               }}
             >
-              <code
-                style={{
-                  flex: 1,
-                  fontSize: 16,
-                  fontFamily: "monospace",
-                  wordBreak: "break-all"
-                }}
-              >
-                {superAdminToken}
-              </code>
-              <Button
-                type="primary"
-                icon={<IconCopy />}
-                onClick={() => {
-                  navigator.clipboard.writeText(superAdminToken)
-                  console.log("口令已复制到剪贴板")
-                }}
-              >
-                复制
-              </Button>
-            </div>
+              复制口令
+            </Button>
           </div>
         ) : (
-          <div style={{ padding: "16px 0" }}>
-            <div style={{ marginBottom: 16 }}>
-              <Typography.Text type="secondary">请输入当前账户密码以查看超级管理员口令：</Typography.Text>
-            </div>
+          <div style={{ padding: '20px 0' }}>
+            <Typography.Paragraph style={{ marginBottom: '16px' }}>
+              请输入当前账户密码以查看超级管理员口令
+            </Typography.Paragraph>
             <Input.Password
               placeholder="请输入当前账户密码"
               value={superAdminPassword}
-              onChange={setSuperAdminPassword}
-              error={!!passwordError}
-              onPressEnter={async () => {
-                if (!superAdminPassword) {
-                  setPasswordError("请输入当前账户密码")
-                  return
-                }
-                setLoadingToken(true)
+              onChange={(value) => {
+                setSuperAdminPassword(value)
                 setPasswordError("")
-                try {
-                  const result = await getSuperAdminToken(superAdminPassword)
-                  if (result.success && result.token) {
-                    setSuperAdminToken(result.token)
-                  } else {
-                    setPasswordError(result.message || "密码错误")
-                  }
-                } catch (error) {
-                  setPasswordError("获取口令失败，请重试")
-                } finally {
-                  setLoadingToken(false)
-                }
               }}
+              error={!!passwordError}
             />
             {passwordError && (
-              <div style={{ marginTop: 8, color: "var(--color-danger)" }}>
+              <Typography.Text type="error" style={{ display: 'block', marginTop: '8px' }}>
                 {passwordError}
-              </div>
+              </Typography.Text>
             )}
           </div>
         )}

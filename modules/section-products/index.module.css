@@ -228,6 +228,10 @@
   transition: all 0.3s ease;
 }
 
+.ctaButton:hover {
+  color: var(--theme-secondary, #3b82f6);
+}
+
 .ctaIcon {
   margin-left: 0.25rem;
   font-size: 0.875rem;

@@ -3,6 +3,7 @@ import { toast } from 'sonner'
 import { useTheme } from '@/components/theme-provider'
 import { getThemeConfig, setCurrentTheme } from '@/lib/api-client'
 import { ThemeSelector } from '../../components'
+import { ManagementHeader } from '../../components/ManagementHeader'
 import styles from './theme.module.css'
 
 export function ThemeManager() {
@@ -62,6 +63,10 @@ export function ThemeManager() {
 
   return (
     <div className={styles.themeManager}>
+      <ManagementHeader
+        title="主题管理"
+        description="选择和管理网站的主题皮肤，不同主题有不同的配色方案和布局风格"
+      />
       <ThemeSelector
         themeData={themeData}
         onThemeChange={handleThemeChange}

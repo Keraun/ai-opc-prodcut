@@ -13,6 +13,7 @@ import {
   getPageUsage 
 } from "@/lib/api-client"
 import { IconPlus, IconEdit, IconDelete, IconEye } from "@/components/icons"
+import { ManagementHeader } from '../ManagementHeader'
 import styles from "../../dashboard.module.css"
 
 interface PageInfo {
@@ -344,21 +345,13 @@ export function PageManagement({ onEditPage }: PageManagementProps) {
 
   return (
     <div className={styles.pageManagement}>
-      <div className={styles.pageManagementHeader}>
-        <div>
-          <h2 style={{ margin: 0, marginBottom: 8 }}>页面管理</h2>
-          <p style={{ margin: 0, color: "#6b7280", fontSize: 14 }}>
-            管理网站的所有页面，包括创建、编辑和删除页面
-          </p>
-        </div>
-        <Button
-          type="primary"
-          icon={<IconPlus />}
-          onClick={() => setShowCreateModal(true)}
-        >
-          新建页面
-        </Button>
-      </div>
+      <ManagementHeader
+        title="页面管理"
+        description="管理网站的所有页面，包括创建、编辑和删除页面"
+        buttonText="新建页面"
+        buttonIcon={<IconPlus />}
+        onButtonClick={() => setShowCreateModal(true)}
+      />
 
       <Card className={styles.pageManagementCard}>
         <Table
