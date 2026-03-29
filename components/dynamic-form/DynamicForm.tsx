@@ -44,7 +44,7 @@ export function DynamicForm({
   }
 
   const renderFields = () => {
-    const { properties, required = [], ui: formUI = {} } = schema
+    const { properties = {}, required = [], ui: formUI = {} } = schema
     const groups = formUI.groups || []
 
     if (groups.length > 0) {

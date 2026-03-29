@@ -29,3 +29,6 @@ export { ConfigFormEditor } from './config-editor/ConfigFormEditor'
 
 // Articles
 export { ArticlesManagement } from './ArticlesManagement'
+
+// Products
+export { ProductsManagement } from './ProductsManagement'
