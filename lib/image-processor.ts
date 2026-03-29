@@ -137,6 +137,31 @@ export class ImageProcessor {
     }
   }
 
+  async deleteImages(imagePaths: string[]): Promise<{ success: boolean; deletedCount: number; failedPaths: string[] }> {
+    const failedPaths: string[] = []
+    let deletedCount = 0
+
+    for (const imagePath of imagePaths) {
+      try {
+        const success = await this.deleteImage(imagePath)
+        if (success) {
+          deletedCount++
+        } else {
+          failedPaths.push(imagePath)
+        }
+      } catch (error) {
+        console.error('Error deleting image:', imagePath, error)
+        failedPaths.push(imagePath)
+      }
+    }
+
+    return {
+      success: failedPaths.length === 0,
+      deletedCount,
+      failedPaths
+    }
+  }
+
   async getImageList(directory?: string): Promise<Array<{
     name: string
     path: string

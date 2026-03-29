@@ -7,6 +7,7 @@ import { toast } from "sonner"
 import styles from "../../dashboard.module.css"
 import { getModuleSchema } from "@/lib/api-client"
 import { uploadImage } from "@/lib/api/images"
+import { RichTextEditor } from "@/components/RichTextEditor"
 
 interface SchemaProperty {
   type: string
@@ -565,6 +566,27 @@ export function ModuleFieldEditor({ moduleId, data, onChange }: ModuleFieldEdito
                 title={title}
               />
             </div>
+          </div>
+        </div>
+      )
+    }
+
+    // 处理富文本编辑字段
+    if (ui?.widget === "richText" || ui?.widget === "richtext" || component === "richText" || component === "richtext") {
+      return (
+        <div key={path} className={styles.formField} style={fieldStyle}>
+          <div className={styles.formFieldRow}>
+            <div className={styles.formFieldLabel}>
+              <label className={styles.formLabel}>{title}</label>
+              {description && <span className={styles.formHint}>{description}</span>}
+            </div>
+          </div>
+          <div className={styles.formFieldControl}>
+            <RichTextEditor
+              value={value as string}
+              onChange={(val) => handleFieldChange(path, val)}
+              placeholder={ui?.placeholder || `请输入${title}`}
+            />
           </div>
         </div>
       )

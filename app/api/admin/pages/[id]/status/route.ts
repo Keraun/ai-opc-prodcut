@@ -1,62 +1,46 @@
 import { NextRequest } from 'next/server'
-import { readConfig, writeConfig, getRuntimePath } from '@/lib/config-manager'
+import { 
+  wrapAuthApiHandler,
+  successResponse, 
+  badRequestResponse, 
+  notFoundResponse,
+  formatDateTime
+} from '@/lib/api-utils'
+import { jsonDb } from '@/lib/json-database'
 import fs from 'fs'
-import { successResponse, errorResponse, badRequestResponse, notFoundResponse } from '@/lib/api-utils'
+import path from 'path'
 
-interface PageListInfo {
-  id: string
-  name: string
-  slug: string
-  modules: string[]
-  type?: 'static' | 'dynamic'
-  dynamicParam?: string
-  status?: 'draft' | 'published' | 'offline'
-  createdAt: string
-  updatedAt: string
-  publishedAt?: string
-  isSystem?: boolean
-  isDeletable?: boolean
-}
-
-function getPageList(): PageListInfo[] {
-  const pageListPath = getRuntimePath('page-list.json')
-  
+function syncPageListJson() {
   try {
-    if (fs.existsSync(pageListPath)) {
-      const pageListData = JSON.parse(fs.readFileSync(pageListPath, 'utf-8'))
-      return pageListData.pages || []
-    }
-  } catch (error) {
-    console.error('Error reading page-list.json:', error)
-  }
-  
-  return []
-}
-
-function updatePageList(pages: PageListInfo[]) {
-  const pageListPath = getRuntimePath('page-list.json')
-  
-  try {
-    let existingSystemPages: string[] = ['home', '404']
-    
-    if (fs.existsSync(pageListPath)) {
-      const existingData = JSON.parse(fs.readFileSync(pageListPath, 'utf-8'))
-      if (existingData.systemPages) {
-        existingSystemPages = existingData.systemPages
-      }
-    }
+    jsonDb.reloadTable('pages')
+    const pages = jsonDb.getAll('pages') as any[]
     
     const pageListData = {
-      pages,
-      systemPages: existingSystemPages,
+      pages: pages.map(page => ({
+        id: page.page_id,
+        name: page.name,
+        slug: page.slug,
+        type: page.type,
+        status: page.status,
+        isSystem: page.is_system === 1,
+        isDeletable: page.is_deletable === 1,
+        route: page.route,
+        dynamicParam: page.dynamic_param,
+        createdAt: page.created_at,
+        updatedAt: page.updated_at,
+        publishedAt: page.published_at,
+        modules: []
+      })),
+      systemPages: ['home', '404'],
       dynamicRoutePattern: '[param]',
       createdAt: new Date().toISOString(),
-      updatedAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString()
     }
     
+    const pageListPath = path.join(process.cwd(), 'database', 'runtime', 'page-list.json')
     fs.writeFileSync(pageListPath, JSON.stringify(pageListData, null, 2), 'utf-8')
   } catch (error) {
-    console.error('Error updating page-list.json:', error)
+    console.error('Error syncing page-list.json:', error)
   }
 }
 
@@ -64,7 +48,7 @@ export async function POST(
   request: NextRequest,
   { params }: { params: Promise<{ id: string }> }
 ) {
-  try {
+  return wrapAuthApiHandler(async () => {
     const { id: pageId } = await params
     const body = await request.json()
     const { action } = body
@@ -73,41 +57,30 @@ export async function POST(
       return badRequestResponse('无效的操作')
     }
 
-    const configKey = `page-${pageId}`
-    const existingConfig = readConfig(configKey)
+    jsonDb.reloadTable('pages')
     
-    if (!existingConfig || Object.keys(existingConfig).length === 0) {
+    const page = jsonDb.findOne('pages', { page_id: pageId })
+    
+    if (!page) {
       return notFoundResponse('页面不存在')
     }
 
-    const now = new Date().toISOString()
+    const now = formatDateTime()
     const newStatus = action === 'publish' ? 'published' : 'offline'
     
-    const updatedConfig = {
-      ...existingConfig,
+    const updateData: any = {
       status: newStatus,
-      updatedAt: now,
-      publishedAt: action === 'publish' ? now : existingConfig.publishedAt,
+      updated_at: now,
     }
-
-    writeConfig(configKey, updatedConfig)
-
-    const pages = getPageList()
-    const pageIndex = pages.findIndex(p => p.id === pageId)
     
-    if (pageIndex !== -1) {
-      pages[pageIndex] = {
-        ...pages[pageIndex],
-        status: newStatus,
-        updatedAt: now,
-        publishedAt: action === 'publish' ? now : pages[pageIndex].publishedAt,
-      }
-      updatePageList(pages)
+    if (action === 'publish') {
+      updateData.published_at = now
     }
+
+    jsonDb.update('pages', page.id, updateData)
+    
+    syncPageListJson()
 
     return successResponse({ status: newStatus }, action === 'publish' ? '页面发布成功' : '页面已下线')
-  } catch (error) {
-    console.error('Update page status error:', error)
-    return errorResponse('更新页面状态失败')
-  }
+  })
 }

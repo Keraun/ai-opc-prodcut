@@ -1,0 +1,92 @@
+.editorWrapper {
+  border: 1px solid #e5e6eb;
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  padding: 8px 12px;
+  border-bottom: 1px solid #e5e6eb;
+  background: #f7f8fa;
+}
+
+.divider {
+  width: 1px;
+  background: #e5e6eb;
+  margin: 0 4px;
+}
+
+.activeBtn {
+  background: #165dff !important;
+  color: #fff !important;
+}
+
+.editorContent {
+  padding: 16px;
+  min-height: 200px;
+  background: #fff;
+}
+
+.editorContent :global(.ProseMirror) {
+  outline: none;
+  width: 100%;
+}
+
+.editorContent :global(.ProseMirror > *) {
+  width: 100%;
+}
+
+.editorContent :global(.ProseMirror p.is-editor-empty:first-child::before) {
+  content: attr(data-placeholder);
+  float: left;
+  color: #c9cdd4;
+  pointer-events: none;
+  height: 0;
+}
+
+.editorContent :global(.ProseMirror p) {
+  margin: 0.5em 0;
+}
+
+.editorContent :global(.ProseMirror ul) {
+  padding-left: 1.5em;
+  list-style-type: disc;
+}
+
+.editorContent :global(.ProseMirror ol) {
+  padding-left: 1.5em;
+  list-style-type: decimal;
+}
+
+.editorContent :global(.ProseMirror li) {
+  margin: 0.25em 0;
+}
+
+.editorContent :global(.ProseMirror blockquote) {
+  border-left: 3px solid #d0d5dd;
+  padding-left: 1em;
+  margin: 0.5em 0;
+  color: #667085;
+}
+
+.editorContent :global(.ProseMirror a) {
+  color: #165dff;
+  text-decoration: underline;
+}
+
+.editorContent :global(.ProseMirror img) {
+  max-width: 100%;
+  height: auto;
+  border-radius: 4px;
+}
+
+.editorContent :global(.ProseMirror code) {
+  background: #f2f3f5;
+  padding: 0.2em 0.4em;
+  border-radius: 4px;
+  font-family: 'SF Mono', Monaco, 'Cascadia Code', monospace;
+  font-size: 0.9em;
+}

@@ -4,6 +4,7 @@ import { Plus as IconPlus, Trash2 as IconTrash2 } from "lucide-react"
 import type { FieldSchema } from "./useDynamicFormHook"
 import { getDefaultWidget } from "./useDynamicFormHook"
 import { ImageUploadInput } from "./ImageUploadInput"
+import { RichTextEditor } from "@/components/RichTextEditor"
 import styles from "./DynamicForm.module.css"
 
 export function renderField(
@@ -32,6 +33,14 @@ export function renderField(
           placeholder={ui.placeholder}
           rows={ui.rows || 4}
           style={{ width: '100%' }}
+        />
+      )
+
+    case 'richText':
+    case 'richtext':
+      return (
+        <RichTextEditor
+          placeholder={ui.placeholder}
         />
       )
 

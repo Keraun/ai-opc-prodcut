@@ -36,13 +36,30 @@ export async function GET(request: NextRequest) {
 export async function DELETE(request: NextRequest) {
   try {
     const body = await request.json()
-    const { imagePath } = body
+    const { imagePath, imagePaths } = body
 
-    if (!imagePath) {
+    if (!imagePath && (!imagePaths || !Array.isArray(imagePaths) || imagePaths.length === 0)) {
       return NextResponse.json({ 
         success: false, 
         message: '缺少图片路径' 
       }, { status: 400 })
+    }
+
+    if (imagePaths && Array.isArray(imagePaths) && imagePaths.length > 0) {
+      const fullPaths = imagePaths.map(path => 
+        path.startsWith('/') ? `public${path}` : `public/${path}`
+      )
+      
+      const result = await imageProcessor.deleteImages(fullPaths)
+      
+      return NextResponse.json({
+        success: result.success,
+        message: result.success 
+          ? `成功删除 ${result.deletedCount} 张图片` 
+          : `删除 ${result.deletedCount} 张图片成功，${result.failedPaths.length} 张失败`,
+        deletedCount: result.deletedCount,
+        failedPaths: result.failedPaths
+      })
     }
 
     const fullPath = imagePath.startsWith('/') 

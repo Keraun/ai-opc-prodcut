@@ -88,6 +88,32 @@ export const deleteImage = async (imagePath: string): Promise<{
   }
 }
 
+export const deleteImages = async (imagePaths: string[]): Promise<{
+  success: boolean
+  message?: string
+  deletedCount?: number
+  failedPaths?: string[]
+}> => {
+  try {
+    const response = await fetch('/api/images', {
+      method: 'DELETE',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ imagePaths }),
+    })
+
+    const result = await response.json()
+    return result
+  } catch (error) {
+    console.error('Delete images error:', error)
+    return {
+      success: false,
+      message: '删除图片失败',
+    }
+  }
+}
+
 export const getImageStats = async (): Promise<{
   success: boolean
   stats?: {

@@ -6,6 +6,42 @@ import {
   formatDateTime
 } from '@/lib/api-utils'
 import { jsonDb } from '@/lib/json-database'
+import fs from 'fs'
+import path from 'path'
+
+function syncPageListJson() {
+  try {
+    jsonDb.reloadTable('pages')
+    const pages = jsonDb.getAll('pages') as any[]
+    
+    const pageListData = {
+      pages: pages.map(page => ({
+        id: page.page_id,
+        name: page.name,
+        slug: page.slug,
+        type: page.type,
+        status: page.status,
+        isSystem: page.is_system === 1,
+        isDeletable: page.is_deletable === 1,
+        route: page.route,
+        dynamicParam: page.dynamic_param,
+        createdAt: page.created_at,
+        updatedAt: page.updated_at,
+        publishedAt: page.published_at,
+        modules: []
+      })),
+      systemPages: ['home', '404'],
+      dynamicRoutePattern: '[param]',
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString()
+    }
+    
+    const pageListPath = path.join(process.cwd(), 'database', 'runtime', 'page-list.json')
+    fs.writeFileSync(pageListPath, JSON.stringify(pageListData, null, 2), 'utf-8')
+  } catch (error) {
+    console.error('Error syncing page-list.json:', error)
+  }
+}
 
 interface ModuleInfo {
   moduleId: string
@@ -167,6 +203,7 @@ export async function PUT(
       })
     }
     
+    syncPageListJson()
     return successResponse(null, '页面更新成功')
   })
 }
@@ -198,6 +235,7 @@ export async function DELETE(
     
     jsonDb.delete('pages', { page_id: pageId })
     
+    syncPageListJson()
     return successResponse(null, '页面删除成功')
   })
 }

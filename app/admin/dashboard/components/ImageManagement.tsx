@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useEffect, useRef } from 'react'
-import { Modal, Button, Card, Statistic, Grid, Spin, Empty, Popconfirm, Message } from '@arco-design/web-react'
+import { Modal, Button, Card, Statistic, Grid, Spin, Empty, Popconfirm, Message, Checkbox } from '@arco-design/web-react'
 import { 
   Image as ImageIcon, 
   Trash2, 
@@ -12,7 +12,10 @@ import {
   FileImage,
   TrendingUp,
   Link2,
-  Copy
+  Copy,
+  CheckSquare,
+  Square,
+  Trash
 } from 'lucide-react'
 import { ManagementHeader } from './ManagementHeader'
 import styles from './ImageManagement.module.css'
@@ -47,6 +50,7 @@ export function ImageManagement() {
   const [uploading, setUploading] = useState(false)
   const [previewVisible, setPreviewVisible] = useState(false)
   const [previewImage, setPreviewImage] = useState<ImageInfo | null>(null)
+  const [selectedImages, setSelectedImages] = useState<Set<string>>(new Set())
   const fileInputRef = useRef<HTMLInputElement>(null)
 
   useEffect(() => {
@@ -120,6 +124,24 @@ export function ImageManagement() {
     }
   }
 
+  const toggleSelectImage = (imageUrl: string) => {
+    const newSelected = new Set(selectedImages)
+    if (newSelected.has(imageUrl)) {
+      newSelected.delete(imageUrl)
+    } else {
+      newSelected.add(imageUrl)
+    }
+    setSelectedImages(newSelected)
+  }
+
+  const toggleSelectAll = () => {
+    if (selectedImages.size === images.length) {
+      setSelectedImages(new Set())
+    } else {
+      setSelectedImages(new Set(images.map(image => image.url)))
+    }
+  }
+
   const handleDelete = async (image: ImageInfo) => {
     try {
       const response = await fetch('/api/images', {
@@ -142,6 +164,37 @@ export function ImageManagement() {
     } catch (error) {
       console.error('Delete error:', error)
       Message.error('删除失败')
+    }
+  }
+
+  const handleBatchDelete = async () => {
+    if (selectedImages.size === 0) {
+      Message.warning('请先选择要删除的图片')
+      return
+    }
+
+    try {
+      const response = await fetch('/api/images', {
+        method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ imagePaths: Array.from(selectedImages) }),
+      })
+
+      const result = await response.json()
+
+      if (result.success) {
+        Message.success(result.message || '批量删除成功')
+      } else {
+        Message.warning(result.message || '部分删除失败')
+      }
+      setSelectedImages(new Set())
+      loadImages()
+      loadStats()
+    } catch (error) {
+      console.error('Batch delete error:', error)
+      Message.error('批量删除失败')
     }
   }
 
@@ -254,6 +307,46 @@ export function ImageManagement() {
       )}
 
       <Card className={styles.imageListCard}>
+        {images.length > 0 && (
+          <div className={styles.toolbar}>
+            <div className={styles.toolbarLeft}>
+              <Button 
+                type="text" 
+                onClick={toggleSelectAll}
+                className={styles.selectAllBtn}
+              >
+                {selectedImages.size === images.length ? (
+                  <CheckSquare size={16} style={{ marginRight: 4 }} />
+                ) : (
+                  <Square size={16} style={{ marginRight: 4 }} />
+                )}
+                {selectedImages.size === images.length ? '取消全选' : '全选'}
+              </Button>
+              {selectedImages.size > 0 && (
+                <span className={styles.selectedCount}>
+                  已选择 {selectedImages.size} 张图片
+                </span>
+              )}
+            </div>
+            {selectedImages.size > 0 && (
+              <div className={styles.toolbarRight}>
+                <Popconfirm
+                  title={`确定要删除选中的 ${selectedImages.size} 张图片吗？`}
+                  onOk={handleBatchDelete}
+                  okText="确定"
+                  cancelText="取消"
+                >
+                  <Button 
+                    type="danger" 
+                    icon={<Trash size={16} />}
+                  >
+                    批量删除
+                  </Button>
+                </Popconfirm>
+              </div>
+            )}
+          </div>
+        )}
         {loading ? (
           <div className={styles.loading}>
             <Spin size={32} />
@@ -267,7 +360,16 @@ export function ImageManagement() {
         ) : (
           <div className={styles.imageGrid}>
             {images.map((image) => (
-              <div key={image.path} className={styles.imageItem}>
+              <div key={image.path} className={`${styles.imageItem} ${selectedImages.has(image.url) ? styles.selected : ''}`}>
+                <div 
+                  className={styles.checkbox}
+                  onClick={() => toggleSelectImage(image.url)}
+                >
+                  <Checkbox 
+                    checked={selectedImages.has(image.url)}
+                    uncheckable={false}
+                  />
+                </div>
                 <div className={styles.imagePreview}>
                   <img 
                     src={image.webpUrl} 
