@@ -9,7 +9,7 @@
   {
     "id": 3,
     "config_key": "site_config",
-    "config_value": "{\"name\":\"\",\"description\":\"\",\"url\":\"\",\"ogImage\":\"\",\"links\":{\"email\":\"\",\"wechat\":\"\",\"github\":\"\",\"twitter\":\"\"},\"creator\":{\"name\":\"\",\"url\":\"\"},\"contact\":{\"address\":\"\",\"phone\":\"\",\"email\":\"\"},\"support\":{\"customerServiceQRCode\":\"\",\"helpDocUrl\":\"\"},\"icp\":\"\",\"features\":{\"enableTOC\":true,\"enableReadingProgress\":true,\"enableSearch\":true},\"seo\":{\"keywords\":[],\"robots\":{\"index\":true,\"follow\":true,\"googleBot\":{\"index\":true,\"follow\":true,\"maxVideoPreview\":-1,\"maxImagePreview\":\"large\",\"maxSnippet\":-1}}},\"currentTheme\":\"nature\"}",
+    "config_value": "{\"name\":\"\",\"description\":\"\",\"url\":\"\",\"ogImage\":\"\",\"links\":{\"email\":\"\",\"wechat\":\"\",\"github\":\"\",\"twitter\":\"\"},\"creator\":{\"name\":\"\",\"url\":\"\"},\"contact\":{\"address\":\"\",\"phone\":\"\",\"email\":\"\"},\"support\":{\"customerServiceQRCode\":\"\",\"helpDocUrl\":\"\"},\"icp\":\"\",\"features\":{\"enableTOC\":true,\"enableReadingProgress\":true,\"enableSearch\":true},\"seo\":{\"keywords\":[],\"robots\":{\"index\":true,\"follow\":true,\"googleBot\":{\"index\":true,\"follow\":true,\"maxVideoPreview\":-1,\"maxImagePreview\":\"large\",\"maxSnippet\":-1}}}}",
     "created_at": "2026-03-27 21:36:34",
     "updated_at": "2026-03-29T21:09:10.026Z"
   },

@@ -734,8 +734,6 @@ export function ModuleFieldEditor({ moduleId, data, onChange }: ModuleFieldEdito
 
   return (
     <div className={styles.formEditor}>
-      {topLevelObjectFields.map(([key, property]) => renderObjectField(key, property))}
-      
       {topLevelSimpleFields.length > 0 && (
         <div className={styles.formSection}>
           <div className={styles.formSectionHeader}>
@@ -750,6 +748,8 @@ export function ModuleFieldEditor({ moduleId, data, onChange }: ModuleFieldEdito
           </div>
         </div>
       )}
+      
+      {topLevelObjectFields.map(([key, property]) => renderObjectField(key, property))}
     </div>
   )
 }
