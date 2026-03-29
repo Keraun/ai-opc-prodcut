@@ -355,6 +355,13 @@ export function writeConfig(configType: string, data: any): void {
         })
       }
       
+      const siteRootDefaultPath = path.join(process.cwd(), 'modules', 'site-root', 'default.json')
+      try {
+        fs.writeFileSync(siteRootDefaultPath, JSON.stringify(data, null, 2), 'utf-8')
+      } catch (e) {
+        console.error('Error writing site-root default.json:', e)
+      }
+      
       const existingSiteFooter = jsonDb.findOne('module_registry', { module_id: 'site-footer' })
       if (existingSiteFooter) {
         try {
@@ -398,6 +405,13 @@ export function writeConfig(configType: string, data: any): void {
           default_data: JSON.stringify(data),
           updated_at: new Date().toISOString()
         })
+      }
+      
+      const siteFooterDefaultPath = path.join(process.cwd(), 'modules', 'site-footer', 'default.json')
+      try {
+        fs.writeFileSync(siteFooterDefaultPath, JSON.stringify(data, null, 2), 'utf-8')
+      } catch (e) {
+        console.error('Error writing site-footer default.json:', e)
       }
       
       return

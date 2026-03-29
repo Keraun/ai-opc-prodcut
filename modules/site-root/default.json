@@ -1,26 +1,26 @@
 {
-  "name": "站点名称",
-  "description": "站点描述",
-  "url": "",
+  "name": "",
+  "description": "专注AI一人公司服务",
+  "url": "https://makerai.com",
   "ogImage": "/og-image.png",
   "links": {
-    "email": "xxx@xxx.com",
-    "wechat": "xxxxxxx",
+    "email": "test@163.com",
+    "wechat": "makerai_official",
     "github": "https://github.com/makerai",
     "twitter": "https://twitter.com/makerai"
   },
   "creator": {
     "name": "",
-    "url": "https://xxx.com"
+    "url": "https://makerai.com"
   },
   "contact": {
-    "address": "xxx省xxx市xxx区xxxxxxx",
-    "phone": "xxx-xxx-xxxx",
-    "email": "xxx@xxx.com"
+    "address": "浙江省杭州市西湖区三墩镇西园八路3号浙大森林",
+    "phone": "400-888-4889",
+    "email": "wuly93@163.com"
   },
   "support": {
     "customerServiceQRCode": "/images/customer-service-qr.png",
-    "helpDocUrl": "https:/xxxx.com"
+    "helpDocUrl": "https://help.makerai.com"
   },
   "icp": "浙ICP备XXXXXXXX号",
   "features": {
@@ -29,7 +29,18 @@
     "enableSearch": true
   },
   "seo": {
-    "keywords": [],
+    "keywords": [
+      "AI一人公司",
+      "AI工具",
+      "AI课程",
+      "AI工作流",
+      "AI赋能",
+      "个人创业",
+      "一人公司",
+      "AI GEO课程",
+      "AI解决方案",
+      "创业者服务"
+    ],
     "robots": {
       "index": true,
       "follow": true,
@@ -42,5 +53,5 @@
       }
     }
   },
-  "currentTheme": "modern"
+  "currentTheme": "minimal"
 }

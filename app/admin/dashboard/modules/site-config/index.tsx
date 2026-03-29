@@ -2,9 +2,9 @@ import { useState, useEffect } from 'react'
 import { Button, Card, Modal, Tabs, Checkbox } from '@arco-design/web-react'
 import { IconSave, IconSync, IconInfoCircle } from '@arco-design/web-react/icon'
 import { toast } from 'sonner'
-import { 
-  getSiteRootConfig, 
-  saveSiteRootConfig, 
+import {
+  getSiteRootConfig,
+  saveSiteRootConfig,
   getSiteFooterConfig,
   saveSiteFooterConfig,
   syncGlobalConfig
@@ -105,7 +105,7 @@ export function SiteConfigManager() {
         siteRootData: syncOptions.siteRoot ? siteRootData : undefined,
         siteFooterData: syncOptions.siteFooter ? siteFooterData : undefined
       })
-      
+
       if (result.success) {
         toast.success(result.message || '同步成功')
       } else {
@@ -162,32 +162,30 @@ export function SiteConfigManager() {
         actions={renderActions()}
       />
 
-      <Card className={styles.formCard}>
-        <Tabs 
-          activeTab={activeTab} 
-          onChange={(key) => setActiveTab(key as ConfigTab)}
-          type="card-gutter"
-        >
-          <TabPane key="site-root" title="站点配置">
-            <div className={styles.tabContent}>
-              <ModuleFieldEditor
-                moduleId="site-root"
-                data={siteRootData}
-                onChange={handleSiteRootChange}
-              />
-            </div>
-          </TabPane>
-          <TabPane key="site-footer" title="页脚配置">
-            <div className={styles.tabContent}>
-              <ModuleFieldEditor
-                moduleId="site-footer"
-                data={siteFooterData}
-                onChange={handleSiteFooterChange}
-              />
-            </div>
-          </TabPane>
-        </Tabs>
-      </Card>
+      <Tabs
+        activeTab={activeTab}
+        onChange={(key) => setActiveTab(key as ConfigTab)}
+        type="card-gutter"
+      >
+        <TabPane key="site-root" title="站点配置">
+          <div className={styles.tabContent}>
+            <ModuleFieldEditor
+              moduleId="site-root"
+              data={siteRootData}
+              onChange={handleSiteRootChange}
+            />
+          </div>
+        </TabPane>
+        <TabPane key="site-footer" title="页脚配置">
+          <div className={styles.tabContent}>
+            <ModuleFieldEditor
+              moduleId="site-footer"
+              data={siteFooterData}
+              onChange={handleSiteFooterChange}
+            />
+          </div>
+        </TabPane>
+      </Tabs>
 
       <Modal
         title={
