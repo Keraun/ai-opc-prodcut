@@ -26,12 +26,20 @@
     "wechatQrCode": {
       "type": "string",
       "title": "微信二维码路径",
-      "description": "微信二维码图片路径"
+      "description": "微信二维码图片路径",
+      "ui": {
+        "widget": "image",
+        "placeholder": "请输入微信二维码图片链接或点击上传"
+      }
     },
     "officialAccountQrCode": {
       "type": "string",
       "title": "公众号二维码路径",
-      "description": "微信公众号二维码图片路径"
+      "description": "微信公众号二维码图片路径",
+      "ui": {
+        "widget": "image",
+        "placeholder": "请输入公众号二维码图片链接或点击上传"
+      }
     },
     "showAdminLink": {
       "type": "boolean",

@@ -3,6 +3,7 @@ import { Input, Select, DatePicker, Upload, Button, Tag, Switch, InputNumber, Ra
 import { Plus as IconPlus, Trash2 as IconTrash2 } from "lucide-react"
 import type { FieldSchema } from "./useDynamicFormHook"
 import { getDefaultWidget } from "./useDynamicFormHook"
+import { ImageUploadInput } from "./ImageUploadInput"
 import styles from "./DynamicForm.module.css"
 
 export function renderField(
@@ -145,6 +146,13 @@ export function renderField(
           type="color"
           placeholder={ui.placeholder}
           style={{ width: '100%', height: '40px' }}
+        />
+      )
+
+    case 'image':
+      return (
+        <ImageUploadInput
+          placeholder={ui.placeholder || '请输入图片链接或点击上传'}
         />
       )
 

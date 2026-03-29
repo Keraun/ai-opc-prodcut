@@ -25,7 +25,11 @@
       "type": "string",
       "title": "OG图片",
       "description": "社交分享时显示的图片路径",
-      "default": "/og-image.png"
+      "default": "/og-image.png",
+      "ui": {
+        "widget": "image",
+        "placeholder": "请输入OG图片链接或点击上传"
+      }
     },
     "icp": {
       "type": "string",
@@ -115,7 +119,11 @@
           "type": "string",
           "title": "客服二维码",
           "description": "客服微信二维码图片路径",
-          "default": "/images/customer-service-qr.png"
+          "default": "/images/customer-service-qr.png",
+          "ui": {
+            "widget": "image",
+            "placeholder": "请输入客服二维码图片链接或点击上传"
+          }
         },
         "helpDocUrl": {
           "type": "string",

@@ -31,7 +31,7 @@ export interface FieldSchema {
 }
 
 export interface FieldUIConfig {
-  widget?: 'input' | 'textarea' | 'select' | 'date' | 'tags' | 'upload' | 'switch' | 'number' | 'radio' | 'checkbox' | 'color'
+  widget?: 'input' | 'textarea' | 'select' | 'date' | 'tags' | 'upload' | 'switch' | 'number' | 'radio' | 'checkbox' | 'color' | 'image'
   placeholder?: string
   width?: string
   rows?: number

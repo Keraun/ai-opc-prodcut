@@ -1,0 +1,98 @@
+.imageUploadInput {
+  width: 100%;
+  position: relative;
+}
+
+.inputWrapper {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.input {
+  flex: 1;
+}
+
+.inputIcon {
+  color: #86909c;
+}
+
+.uploadButton {
+  flex-shrink: 0;
+  white-space: nowrap;
+}
+
+.previewContainer {
+  margin-top: 12px;
+  background: #f7f8fa;
+  border-radius: 6px;
+  border: 1px solid #e5e6eb;
+  overflow: hidden;
+}
+
+.previewHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 12px;
+  background: #fff;
+  border-bottom: 1px solid #e5e6eb;
+}
+
+.previewLabel {
+  font-size: 13px;
+  font-weight: 500;
+  color: #4e5969;
+}
+
+.toggleButton {
+  padding: 4px 12px;
+  font-size: 12px;
+  color: #165dff;
+  background: transparent;
+  border: 1px solid #165dff;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.toggleButton:hover {
+  background: #e8f3ff;
+}
+
+.previewImage {
+  padding: 12px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100px;
+  background: #fff;
+}
+
+.previewImage img {
+  max-width: 100%;
+  max-height: 300px;
+  border-radius: 4px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.uploadingOverlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(255, 255, 255, 0.9);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  border-radius: 4px;
+  z-index: 10;
+}
+
+.uploadingOverlay span {
+  font-size: 14px;
+  color: #4e5969;
+}
