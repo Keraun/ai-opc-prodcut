@@ -10,7 +10,9 @@ import {
   Download,
   HardDrive,
   FileImage,
-  TrendingUp
+  TrendingUp,
+  Link2,
+  Copy
 } from 'lucide-react'
 import { ManagementHeader } from './ManagementHeader'
 import styles from './ImageManagement.module.css'
@@ -155,6 +157,21 @@ export function ImageManagement() {
     link.click()
   }
 
+  const handleCopyLink = async (url: string, label: string) => {
+    try {
+      const fullUrl = window.location.origin + url
+      await navigator.clipboard.writeText(fullUrl)
+      Message.success(`${label}链接已复制`)
+    } catch (error) {
+      console.error('Copy link error:', error)
+      Message.error('复制链接失败')
+    }
+  }
+
+  const getFullUrl = (url: string) => {
+    return window.location.origin + url
+  }
+
   const formatFileSize = (bytes: number) => {
     if (bytes === 0) return '0 B'
     const k = 1024
@@ -267,6 +284,13 @@ export function ImageManagement() {
                     </button>
                     <button
                       className={styles.overlayBtn}
+                      onClick={() => handleCopyLink(image.webpUrl, 'WebP')}
+                      title="复制 WebP 链接"
+                    >
+                      <Link2 size={16} />
+                    </button>
+                    <button
+                      className={styles.overlayBtn}
                       onClick={() => handleDownload(image, true)}
                       title="下载 WebP"
                     >
@@ -314,7 +338,7 @@ export function ImageManagement() {
         visible={previewVisible}
         onCancel={() => setPreviewVisible(false)}
         footer={null}
-        style={{ width: 800 }}
+        style={{ width: 900 }}
       >
         {previewImage && (
           <div className={styles.previewContent}>
@@ -326,9 +350,51 @@ export function ImageManagement() {
             <div className={styles.previewInfo}>
               <p><strong>文件名：</strong>{previewImage.name}</p>
               <p><strong>尺寸：</strong>{previewImage.width}x{previewImage.height}</p>
+              
+              <div className={styles.linkSection}>
+                <div className={styles.linkItem}>
+                  <span className={styles.linkLabel}>WebP 链接：</span>
+                  <div className={styles.linkContainer}>
+                    <input
+                      type="text"
+                      value={getFullUrl(previewImage.webpUrl)}
+                      readOnly
+                      className={styles.linkInput}
+                    />
+                    <button
+                      className={styles.copyBtn}
+                      onClick={() => handleCopyLink(previewImage.webpUrl, 'WebP')}
+                      title="复制"
+                    >
+                      <Copy size={14} />
+                    </button>
+                  </div>
+                </div>
+                
+                <div className={styles.linkItem}>
+                  <span className={styles.linkLabel}>原图链接：</span>
+                  <div className={styles.linkContainer}>
+                    <input
+                      type="text"
+                      value={getFullUrl(previewImage.url)}
+                      readOnly
+                      className={styles.linkInput}
+                    />
+                    <button
+                      className={styles.copyBtn}
+                      onClick={() => handleCopyLink(previewImage.url, '原图')}
+                      title="复制"
+                    >
+                      <Copy size={14} />
+                    </button>
+                  </div>
+                </div>
+              </div>
+              
               <p><strong>原图大小：</strong>{formatFileSize(previewImage.size)}</p>
               <p><strong>WebP 大小：</strong>{formatFileSize(previewImage.webpSize)}</p>
               <p><strong>上传时间：</strong>{formatDate(previewImage.createdAt)}</p>
+              
               <div className={styles.previewActions}>
                 <Button 
                   type="primary" 

@@ -9,6 +9,8 @@
 所有管理后台页面必须优先使用以下公共组件：
 - `ManagementHeader` - 管理页面头部组件
 - `CommonTable` - 通用表格组件
+- `WebPImage` - WebP 兼容图片组件（基于 Next.js Image）
+- `ResponsiveImage` - 响应式图片组件
 
 ### 保持风格一致
 
@@ -112,7 +114,140 @@ import { Tag } from '@arco-design/web-react'
 - `emptyIcon` (可选)：空状态图标
 - `className` (可选)：额外类名
 
-### 3. 辅助组件
+### 3. WebPImage 组件
+
+**功能**：基于 Next.js Image 的 WebP 兼容图片组件，自动检测浏览器 WebP 支持情况，智能回退到原图。
+
+**使用场景**：所有需要展示图片的页面，优先使用 WebP 格式以优化性能。
+
+**核心特性**：
+- 自动 WebP 检测与降级
+- 完整继承 Next.js Image 所有功能
+- 支持自动推导 WebP 路径
+- 支持兜底图片
+
+**使用示例**：
+
+```tsx
+import { WebPImage } from '@/components'
+
+// 方式一：自动推导 WebP 路径（推荐）
+<WebPImage
+  src="/uploads/editor/image.jpg"
+  alt="图片描述"
+  width={800}
+  height={600}
+/>
+
+// 方式二：手动指定 WebP 路径
+<WebPImage
+  src="/uploads/editor/original.jpg"
+  webpSrc="/uploads/editor/optimized.webp"
+  alt="图片描述"
+  width={800}
+  height={600}
+/>
+
+// 方式三：带兜底图片和回调
+<WebPImage
+  src="/uploads/editor/image.jpg"
+  webpSrc="/uploads/editor/image.webp"
+  fallbackSrc="/fallback-image.jpg"
+  alt="图片描述"
+  width={800}
+  height={600}
+  onWebPFallback={() => console.log('WebP 加载失败')}
+  onLoadError={() => console.log('所有图片加载失败')}
+/>
+
+// 方式四：完整 Next.js Image 功能
+<WebPImage
+  src="/uploads/editor/image.jpg"
+  alt="产品图片"
+  width={400}
+  height={300}
+  priority={true}
+  placeholder="blur"
+  blurDataURL="data:image/jpeg;base64,..."
+  className="rounded-lg shadow-md"
+  quality={85}
+  fill
+  style={{ objectFit: 'cover' }}
+/>
+```
+
+**参数说明**：
+- `src` (必填)：原图 URL
+- `webpSrc` (可选)：WebP 格式图片 URL，不传则自动从 `src` 推导
+- `fallbackSrc` (可选)：兜底图片 URL
+- `onWebPFallback` (可选)：WebP 回退回调
+- `onLoadError` (可选)：最终加载失败回调
+- ...其他所有 Next.js Image 属性
+
+### 4. ResponsiveImage 组件
+
+**功能**：响应式图片组件，支持懒加载和 Intersection Observer。
+
+**使用场景**：需要懒加载和响应式的图片展示场景。
+
+**使用示例**：
+
+```tsx
+import { ResponsiveImage } from '@/components'
+
+<ResponsiveImage
+  src="/uploads/editor/image.jpg"
+  webpSrc="/uploads/editor/image.webp"
+  alt="图片描述"
+  sizes="(max-width: 768px) 100vw, 50vw"
+  priority={false}
+/>
+```
+
+### 5. 辅助工具
+
+#### useWebPSupport Hook
+
+检测浏览器是否支持 WebP：
+
+```tsx
+import { useWebPSupport } from '@/components'
+
+function MyComponent() {
+  const supportsWebP = useWebPSupport()
+  
+  return (
+    <div>
+      {supportsWebP ? '✅ 支持 WebP' : '❌ 不支持 WebP'}
+    </div>
+  )
+}
+```
+
+#### checkWebPSupport 函数
+
+同步检测 WebP 支持：
+
+```tsx
+import { checkWebPSupport } from '@/components'
+
+if (checkWebPSupport()) {
+  console.log('浏览器支持 WebP')
+}
+```
+
+#### deriveWebPSrc 函数
+
+从原图路径推导 WebP 路径：
+
+```tsx
+import { deriveWebPSrc } from '@/components'
+
+const webpPath = deriveWebPSrc('/uploads/image.jpg')
+// 返回: /uploads/image.webp
+```
+
+### 6. 辅助组件
 
 #### Tag 组件
 
@@ -247,6 +382,8 @@ import { Tooltip } from '@arco-design/web-react'
 2. **合理使用**：
    - 表格数据使用 `CommonTable`
    - 页面头部使用 `ManagementHeader`
+   - 图片展示优先使用 `WebPImage` 组件
+   - 需要响应式和懒加载的图片使用 `ResponsiveImage` 组件
    - 状态显示使用 Arco Design 的 `Tag` 组件
    - 分类/标签显示使用 Arco Design 的 `Tag` 组件
    - 操作按钮使用 `ActionButton`

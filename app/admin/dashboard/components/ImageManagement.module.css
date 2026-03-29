@@ -226,6 +226,79 @@
   color: #86909c;
 }
 
+.linkSection {
+  margin: 16px 0;
+  padding: 12px;
+  background: #fff;
+  border-radius: 6px;
+  border: 1px solid #e5e6eb;
+}
+
+.linkItem {
+  margin-bottom: 12px;
+}
+
+.linkItem:last-child {
+  margin-bottom: 0;
+}
+
+.linkLabel {
+  display: block;
+  font-size: 12px;
+  font-weight: 500;
+  color: #4e5969;
+  margin-bottom: 6px;
+}
+
+.linkContainer {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.linkInput {
+  flex: 1;
+  padding: 8px 12px;
+  border: 1px solid #e5e6eb;
+  border-radius: 4px;
+  font-size: 12px;
+  color: #4e5969;
+  background: #f7f8fa;
+  font-family: 'SF Mono', Monaco, 'Cascadia Code', monospace;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.linkInput:focus {
+  outline: none;
+  border-color: #165dff;
+  background: #fff;
+}
+
+.copyBtn {
+  padding: 8px 12px;
+  border: 1px solid #e5e6eb;
+  border-radius: 4px;
+  background: #fff;
+  color: #4e5969;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+}
+
+.copyBtn:hover {
+  background: #f7f8fa;
+  border-color: #165dff;
+  color: #165dff;
+}
+
+.copyBtn:active {
+  transform: scale(0.95);
+}
+
 .previewActions {
   margin-top: 16px;
   display: flex;
