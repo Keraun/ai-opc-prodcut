@@ -34,3 +34,6 @@ export { ArticlesManagement } from './ArticlesManagement'
 
 // Products
 export { ProductsManagement } from './ProductsManagement'
+
+// Image Management
+export { ImageManagement } from './ImageManagement'

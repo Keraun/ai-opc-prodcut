@@ -9,7 +9,8 @@ import {
   Palette, 
   Users, 
   Settings,
-  Globe
+  Globe,
+  Image
 } from "lucide-react"
 import styles from "../../dashboard.module.css"
 
@@ -32,6 +33,7 @@ const MENU_STRUCTURE: MenuItem[] = [
   { id: 'pages', label: '页面管理', icon: FileText },
   { id: 'products', label: '产品管理', icon: Package },
   { id: 'articles', label: '资讯管理', icon: Newspaper },
+  { id: 'images', label: '图片管理', icon: Image },
   { id: 'feishu-app', label: '飞书管理', icon: MessageCircle },
   { id: 'theme', label: '主题管理', icon: Palette },
   { id: 'accounts', label: '账号管理', icon: Users },
