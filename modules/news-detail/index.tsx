@@ -1,19 +1,100 @@
+'use client'
+
+import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import type { ModuleProps } from '@/modules/types'
 import type { NewsDetailData } from './types'
 import styles from './index.module.css'
 
-export function NewsDetailModule({ data }: ModuleProps) {
-  const config: NewsDetailData = (data as NewsDetailData) || {}
+interface Article {
+  id: number
+  title: string
+  slug: string
+  summary: string
+  content: string
+  date: string
+  author?: string
+  category?: string
+  tags?: string[]
+  image?: string
+  viewCount?: number
+  status: string
+  created_at: string
+  updated_at: string
+}
 
-  const { article, relatedArticles } = config
+export function NewsDetailModule({ data }: ModuleProps) {
+  const config: NewsDetailData = (data as NewsDetailData) || {
+    showAuthor: true,
+    showDate: true,
+    showRelated: true,
+    relatedCount: 4,
+    showShare: true,
+    showComments: false
+  }
+
+  const [article, setArticle] = useState<Article | null>(null)
+  const [relatedArticles, setRelatedArticles] = useState<Article[]>([])
+  const [loading, setLoading] = useState(true)
+
+  useEffect(() => {
+    const fetchArticle = async () => {
+      const param = window.location.pathname.split('/').pop()
+      if (!param) return
+
+      try {
+        let response = await fetch(`/api/articles?slug=${param}`)
+        let result = await response.json()
+        
+        if (!result.success || !result.data) {
+          response = await fetch(`/api/articles?id=${param}`)
+          result = await response.json()
+        }
+        
+        if (result.success && result.data) {
+          setArticle(result.data)
+          
+          if (config.showRelated) {
+            const listResponse = await fetch('/api/articles')
+            const listResult = await listResponse.json()
+            if (listResult.success && listResult.data) {
+              setRelatedArticles(
+                listResult.data
+                  .filter((a: Article) => a.id !== result.data.id)
+                  .slice(0, config.relatedCount || 4)
+              )
+            }
+          }
+        }
+      } catch (error) {
+        console.error('Failed to fetch article:', error)
+      } finally {
+        setLoading(false)
+      }
+    }
+    fetchArticle()
+  }, [config.showRelated, config.relatedCount])
+
+  if (loading) {
+    return (
+      <div className={styles.loading}>
+        <div className={styles.loadingSpinner}></div>
+        <p className={styles.loadingText}>加载中...</p>
+      </div>
+    )
+  }
 
   if (!article) {
     return (
       <div className={styles.error}>
-        <div className={styles.errorText}>
-          文章不存在
+        <div className={styles.errorIcon}>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
+            <path d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+          </svg>
         </div>
+        <h2 className={styles.errorTitle}>文章不存在</h2>
+        <p className={styles.errorText}>抱歉，您访问的文章不存在</p>
+        <a href="/news" className={styles.errorButton}>返回资讯列表</a>
       </div>
     )
   }
