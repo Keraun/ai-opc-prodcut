@@ -70,7 +70,7 @@ export function ArticlesManagement() {
       {
         key: "title",
         label: "文章标题",
-        width: 300,
+        width: 250,
         render: (item) => (
           <div className={styles.productInfo}>
             <Tooltip content={item.title}>
@@ -85,7 +85,7 @@ export function ArticlesManagement() {
       {
         key: "categoryName",
         label: "分类",
-        width: 80,
+        width: 70,
         render: (item) => item.categoryName ? (
           <ArcoTag color="orange" size="small">{item.categoryName}</ArcoTag>
         ) : (
@@ -95,7 +95,7 @@ export function ArticlesManagement() {
       {
         key: "author",
         label: "作者",
-        width: 150,
+        width: 120,
         render: (item) => item.author ? (
           <div className={styles.authorInfo}>
             <User size={14} />
@@ -108,7 +108,7 @@ export function ArticlesManagement() {
       {
         key: "tags",
         label: "标签",
-        width: 200,
+        width: 160,
         render: (item) => item.tags && item.tags.length > 0 ? (
           <div className={styles.tagsList}>
             {item.tags.map((tag: string, index: number) => (
@@ -122,7 +122,7 @@ export function ArticlesManagement() {
       {
         key: "status",
         label: "状态",
-        width: 80,
+        width: 70,
         render: (item) => {
           const statusConfig: Record<string, { text: string; color: 'gray' | 'green' }> = {
             draft: { text: '草稿', color: 'gray' },

@@ -199,19 +199,19 @@ export function PageManagement({ onEditPage }: PageManagementProps) {
       title: "序号",
       dataIndex: "dbId",
       key: "dbId",
-      width: 80,
+      width: 70,
     },
     {
       title: "页面名称",
       dataIndex: "name",
       key: "name",
-      width: 140,
+      width: 120,
     },
     {
       title: "页面属性",
       dataIndex: "pageType",
       key: "pageType",
-      width: 110,
+      width: 100,
       render: (_: any, record: PageInfo) => {
         const isSystemPage = systemPages.includes(record.id)
         return <Tag color={isSystemPage ? 'orange' : 'green'}>
@@ -223,7 +223,7 @@ export function PageManagement({ onEditPage }: PageManagementProps) {
       title: "页面类型",
       dataIndex: "type",
       key: "type",
-      width: 110,
+      width: 100,
       render: (type: string) => {
         return <Tag color={type === 'dynamic' ? 'purple' : 'blue'}>
           {type === 'dynamic' ? '动态路由' : '静态页面'}
@@ -234,7 +234,7 @@ export function PageManagement({ onEditPage }: PageManagementProps) {
       title: "路径",
       dataIndex: "slug",
       key: "slug",
-      width: 180,
+      width: 160,
       render: (slug: string, record: PageInfo) => {
         if (record.type === 'dynamic') {
           return <Tag color="purple">/{slug}/[{record.dynamicParam || 'id'}]</Tag>
@@ -246,7 +246,7 @@ export function PageManagement({ onEditPage }: PageManagementProps) {
       title: "模块数量",
       dataIndex: "modules",
       key: "modules",
-      width: 100,
+      width: 90,
       render: (modules: string[]) => (
         <Tag color="green">{modules?.length || 0} 个模块</Tag>
       ),
@@ -255,7 +255,7 @@ export function PageManagement({ onEditPage }: PageManagementProps) {
       title: "状态",
       dataIndex: "status",
       key: "status",
-      width: 90,
+      width: 80,
       render: (status: string) => {
         const statusConfig: Record<string, { text: string; color: 'gray' | 'green' | 'red' }> = {
           draft: { text: '草稿', color: 'gray' },
@@ -269,7 +269,7 @@ export function PageManagement({ onEditPage }: PageManagementProps) {
     {
       title: "操作",
       key: "actions",
-      width: 320,
+      width: 300,
       fixed: 'right' as const,
       render: (_: any, record: PageInfo) => {
         const isSystemPage = systemPages.includes(record.id)
@@ -358,7 +358,7 @@ export function PageManagement({ onEditPage }: PageManagementProps) {
         data={pages}
         loading={loading}
         rowKey="id"
-        scroll={{ x: 1050 }}
+        scroll={{ x: 1100 }}
         pagination={{
           pageSize: 10,
         }}
