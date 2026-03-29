@@ -5,7 +5,7 @@ import defaultData from "./default.json"
 
 export function registerSiteRootModule() {
   registerModule({
-    moduleName: "站点根配置",
+    moduleName: "站点容器",
     moduleId: "site-root",
     component: SiteRootModule,
     schema,

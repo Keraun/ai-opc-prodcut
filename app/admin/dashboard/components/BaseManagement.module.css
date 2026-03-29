@@ -493,6 +493,39 @@
   pointer-events: none;
 }
 
+.editorContent :global(.editor-image) {
+  max-width: 100%;
+  height: auto;
+  border-radius: 4px;
+  margin: 12px 0;
+}
+
+.editorContent :global(.editor-link) {
+  color: #165dff;
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+.editorContent :global(.editor-link:hover) {
+  color: #4080ff;
+}
+
+.editorContent :global(img) {
+  max-width: 100%;
+  height: auto;
+  border-radius: 4px;
+  margin: 12px 0;
+}
+
+.editorContent :global(a) {
+  color: #165dff;
+  text-decoration: underline;
+}
+
+.editorContent :global(a:hover) {
+  color: #4080ff;
+}
+
 .formFooter {
   display: flex;
   justify-content: flex-end;

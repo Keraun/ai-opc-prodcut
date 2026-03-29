@@ -1,9 +1,13 @@
 "use client"
 
-import { useState, useEffect } from "react"
+import { useState, useEffect, useRef, useCallback } from "react"
 import { useEditor, EditorContent } from "@tiptap/react"
 import StarterKit from "@tiptap/starter-kit"
 import Placeholder from "@tiptap/extension-placeholder"
+import Image from "@tiptap/extension-image"
+import Link from "@tiptap/extension-link"
+import TextAlign from "@tiptap/extension-text-align"
+import Underline from "@tiptap/extension-underline"
 import { 
   Plus, 
   Trash2, 
@@ -16,10 +20,16 @@ import {
   ListOrdered,
   Save,
   X,
-  FileText
+  FileText,
+  Image as ImageIcon,
+  Link as LinkIcon,
+  AlignLeft,
+  AlignCenter,
+  AlignRight,
+  Underline as UnderlineIcon
 } from "lucide-react"
 import { toast } from "sonner"
-import { Tooltip } from '@arco-design/web-react'
+import { Tooltip, Modal, Input, Button } from '@arco-design/web-react'
 import { ManagementHeader } from './ManagementHeader'
 import { CommonTable, ActionButton } from './CommonTable'
 import styles from "./BaseManagement.module.css"
@@ -79,12 +89,33 @@ function RichTextEditor({
   onChange: (value: string) => void
   placeholder?: string
 }) {
+  const fileInputRef = useRef<HTMLInputElement>(null)
+  const [linkModalVisible, setLinkModalVisible] = useState(false)
+  const [linkUrl, setLinkUrl] = useState('')
+
   const editor = useEditor({
     extensions: [
       StarterKit,
       Placeholder.configure({
         placeholder,
       }),
+      Image.configure({
+        inline: true,
+        allowBase64: true,
+        HTMLAttributes: {
+          class: 'editor-image',
+        },
+      }),
+      Link.configure({
+        openOnClick: false,
+        HTMLAttributes: {
+          class: 'editor-link',
+        },
+      }),
+      TextAlign.configure({
+        types: ['heading', 'paragraph'],
+      }),
+      Underline,
     ],
     content: value,
     immediatelyRender: false,
@@ -92,6 +123,62 @@ function RichTextEditor({
       onChange(editor.getHTML())
     },
   })
+
+  const handleImageUpload = useCallback(async (file: File) => {
+    try {
+      const formData = new FormData()
+      formData.append('file', file)
+      
+      const response = await fetch('/api/upload', {
+        method: 'POST',
+        body: formData,
+      })
+      
+      const result = await response.json()
+      
+      if (result.success && result.url) {
+        editor?.chain().focus().setImage({ src: result.url }).run()
+        toast.success('图片上传成功')
+      } else {
+        toast.error(result.message || '图片上传失败')
+      }
+    } catch (error) {
+      console.error('Image upload error:', error)
+      const reader = new FileReader()
+      reader.onload = (e) => {
+        const base64 = e.target?.result as string
+        editor?.chain().focus().setImage({ src: base64 }).run()
+      }
+      reader.readAsDataURL(file)
+      toast.success('图片已插入（Base64格式）')
+    }
+  }, [editor])
+
+  const handleFileSelect = useCallback((event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0]
+    if (file) {
+      if (file.size > 5 * 1024 * 1024) {
+        toast.error('图片大小不能超过5MB')
+        return
+      }
+      if (!file.type.startsWith('image/')) {
+        toast.error('请选择图片文件')
+        return
+      }
+      handleImageUpload(file)
+    }
+    if (fileInputRef.current) {
+      fileInputRef.current.value = ''
+    }
+  }, [handleImageUpload])
+
+  const addLink = useCallback(() => {
+    if (linkUrl) {
+      editor?.chain().focus().setLink({ href: linkUrl }).run()
+      setLinkUrl('')
+      setLinkModalVisible(false)
+    }
+  }, [editor, linkUrl])
 
   if (!editor) {
     return null
@@ -116,6 +203,14 @@ function RichTextEditor({
         >
           <Italic size={16} />
         </button>
+        <button
+          type="button"
+          onClick={() => editor.chain().focus().toggleUnderline().run()}
+          className={`${styles.toolbarButton} ${editor.isActive('underline') ? styles.toolbarButtonActive : ''}`}
+          title="下划线"
+        >
+          <UnderlineIcon size={16} />
+        </button>
         <div className={styles.toolbarDivider} />
         <button
           type="button"
@@ -133,8 +228,84 @@ function RichTextEditor({
         >
           <ListOrdered size={16} />
         </button>
+        <div className={styles.toolbarDivider} />
+        <button
+          type="button"
+          onClick={() => editor.chain().focus().setTextAlign('left').run()}
+          className={`${styles.toolbarButton} ${editor.isActive({ textAlign: 'left' }) ? styles.toolbarButtonActive : ''}`}
+          title="左对齐"
+        >
+          <AlignLeft size={16} />
+        </button>
+        <button
+          type="button"
+          onClick={() => editor.chain().focus().setTextAlign('center').run()}
+          className={`${styles.toolbarButton} ${editor.isActive({ textAlign: 'center' }) ? styles.toolbarButtonActive : ''}`}
+          title="居中"
+        >
+          <AlignCenter size={16} />
+        </button>
+        <button
+          type="button"
+          onClick={() => editor.chain().focus().setTextAlign('right').run()}
+          className={`${styles.toolbarButton} ${editor.isActive({ textAlign: 'right' }) ? styles.toolbarButtonActive : ''}`}
+          title="右对齐"
+        >
+          <AlignRight size={16} />
+        </button>
+        <div className={styles.toolbarDivider} />
+        <button
+          type="button"
+          onClick={() => setLinkModalVisible(true)}
+          className={`${styles.toolbarButton} ${editor.isActive('link') ? styles.toolbarButtonActive : ''}`}
+          title="插入链接"
+        >
+          <LinkIcon size={16} />
+        </button>
+        <input
+          ref={fileInputRef}
+          type="file"
+          accept="image/*"
+          onChange={handleFileSelect}
+          style={{ display: 'none' }}
+        />
+        <button
+          type="button"
+          onClick={() => fileInputRef.current?.click()}
+          className={styles.toolbarButton}
+          title="插入图片"
+        >
+          <ImageIcon size={16} />
+        </button>
       </div>
       <EditorContent editor={editor} className={styles.editorContent} />
+      
+      <Modal
+        title="插入链接"
+        visible={linkModalVisible}
+        onCancel={() => {
+          setLinkModalVisible(false)
+          setLinkUrl('')
+        }}
+        footer={
+          <div style={{ display: 'flex', justifyContent: 'flex-end', gap: 8 }}>
+            <Button onClick={() => {
+              setLinkModalVisible(false)
+              setLinkUrl('')
+            }}>取消</Button>
+            <Button type="primary" onClick={addLink}>确定</Button>
+          </div>
+        }
+      >
+        <div style={{ padding: '16px 0' }}>
+          <Input
+            placeholder="请输入链接地址"
+            value={linkUrl}
+            onChange={setLinkUrl}
+            onPressEnter={addLink}
+          />
+        </div>
+      </Modal>
     </div>
   )
 }

@@ -1,6 +1,6 @@
 {
   "type": "object",
-  "title": "站点根配置",
+  "title": "站点容器",
   "description": "网站全局配置，包括基本信息、联系方式、SEO设置等",
   "properties": {
     "name": {

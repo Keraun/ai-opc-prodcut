@@ -10,7 +10,11 @@
   },
   "dependencies": {
     "@arco-design/web-react": "^2.65.0",
+    "@tiptap/extension-image": "^3.21.0",
+    "@tiptap/extension-link": "^3.21.0",
     "@tiptap/extension-placeholder": "^3.21.0",
+    "@tiptap/extension-text-align": "^3.21.0",
+    "@tiptap/extension-underline": "^3.21.0",
     "@tiptap/react": "^3.21.0",
     "@tiptap/starter-kit": "^3.21.0",
     "@types/nodemailer": "^7.0.11",

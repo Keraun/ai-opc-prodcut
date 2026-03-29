@@ -77,7 +77,7 @@ export function ProductsManagement() {
       {
         key: "title",
         label: "产品名称",
-        width: "160",
+        width: "150",
         render: (item) => (
           <div className={styles.productName}>{item.title}</div>
         )
@@ -85,7 +85,7 @@ export function ProductsManagement() {
       {
         key: "description",
         label: "产品描述",
-        width: "180",
+        width: "200",
         render: (item) => (
           item.description ? (
             <Tooltip content={item.description}>
@@ -99,7 +99,7 @@ export function ProductsManagement() {
       {
         key: "category",
         label: "分类",
-        width: "90",
+        width: "100",
         render: (item) => item.categoryName ? (
           <Tag color="arcoblue" size="small">{item.categoryName}</Tag>
         ) : (
@@ -109,7 +109,7 @@ export function ProductsManagement() {
       {
         key: "price",
         label: "价格",
-        width: "60",
+        width: "100",
         render: (item) => (
           <div className={styles.priceInfo}>
             {item.price ? (
@@ -128,7 +128,7 @@ export function ProductsManagement() {
       {
         key: "tags",
         label: "标签",
-        width: "120",
+        width: "150",
         render: (item) => item.tags && item.tags.length > 0 ? (
           <div className={styles.tagsList}>
             {item.tags.map((tag: string, index: number) => (
@@ -142,7 +142,7 @@ export function ProductsManagement() {
       {
         key: "status",
         label: "状态",
-        width: "60",
+        width: "80",
         render: (item) => {
           const statusConfig: Record<string, { text: string; color: 'green' | 'red' }> = {
             active: { text: '上架', color: 'green' },
