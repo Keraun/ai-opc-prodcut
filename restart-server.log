@@ -1,0 +1,83 @@
+========================================
+[2026年 3月30日 星期一 05时31分21秒 CST] 开始重启服务
+端口: 3000
+项目根目录: /Users/wulingyang/Documents/workspace/ai-opc-prodcut
+========================================
+[2026年 3月30日 星期一 05时31分21秒 CST] 正在查找占用端口 3000 的进程...
+[2026年 3月30日 星期一 05时31分21秒 CST] 发现进程: 45925
+45981
+[2026年 3月30日 星期一 05时31分21秒 CST] 已终止进程
+[2026年 3月30日 星期一 05时31分21秒 CST] 等待端口释放...
+[2026年 3月30日 星期一 05时31分23秒 CST] 准备启动服务: npm run dev
+[2026年 3月30日 星期一 05时31分23秒 CST] 服务已启动，PID: 46055
+========================================
+
+> my-project@0.1.0 dev
+> next dev
+
+▲ Next.js 16.2.0 (Turbopack)
+- Local:         http://localhost:3000
+- Network:       http://192.168.10.50:3000
+- Environments: .env.local
+✓ Ready in 217ms
+
+ GET /admin/dashboard?menu=system 200 in 517ms (next.js: 203ms, application-code: 315ms)
+ GET /api/admin/pages 200 in 116ms (next.js: 76ms, application-code: 39ms)
+ GET /api/admin/auth 200 in 116ms (next.js: 110ms, application-code: 6ms)
+ GET /api/admin/themes 200 in 142ms (next.js: 137ms, application-code: 4ms)
+ GET /api/admin/system/info 200 in 16ms (next.js: 14ms, application-code: 2ms)
+ GET /api/admin/pages 200 in 19ms (next.js: 16ms, application-code: 3ms)
+ GET /api/admin/system/info 200 in 3ms (next.js: 1384µs, application-code: 1556µs)
+ GET /admin/dashboard?menu=system 200 in 77ms (next.js: 9ms, application-code: 68ms)
+ GET /api/admin/pages 200 in 9ms (next.js: 2ms, application-code: 7ms)
+ GET /api/admin/auth 200 in 9ms (next.js: 4ms, application-code: 5ms)
+ GET /api/admin/themes 200 in 10ms (next.js: 5ms, application-code: 5ms)
+ GET /api/admin/system/info 200 in 4ms (next.js: 1196µs, application-code: 2ms)
+ GET /api/admin/system/info 200 in 3ms (next.js: 2ms, application-code: 1246µs)
+ GET /api/admin/pages 200 in 5ms (next.js: 1039µs, application-code: 4ms)
+ GET /admin/dashboard?menu=system 200 in 71ms (next.js: 3ms, application-code: 68ms)
+ GET /api/admin/pages 200 in 5ms (next.js: 1390µs, application-code: 4ms)
+ GET /api/admin/auth 200 in 7ms (next.js: 3ms, application-code: 4ms)
+ GET /api/admin/themes 200 in 8ms (next.js: 5ms, application-code: 2ms)
+ GET /api/admin/system/info 200 in 3ms (next.js: 1228µs, application-code: 1650µs)
+ GET /api/admin/pages 200 in 6ms (next.js: 3ms, application-code: 3ms)
+ GET /api/admin/system/info 200 in 2ms (next.js: 1042µs, application-code: 1063µs)
+✓ Compiled in 320ms
+[browser] Accessing element.ref was removed in React 19. ref is now a regular prop. It will be removed from the JSX Element type in a future release. 
+ GET /api/admin/config?type=site-root 200 in 38ms (next.js: 32ms, application-code: 6ms)
+ GET /api/admin/config?type=site-footer 200 in 37ms (next.js: 32ms, application-code: 4ms)
+🔄 Initializing and syncing modules to database...
+📦 Found 15 modules
+Synced 15/15 modules to database
+✅ Successfully synced 15/15 modules to database
+ GET /api/admin/config?type=site-root 200 in 59ms (next.js: 52ms, application-code: 7ms)
+ GET /api/admin/config?type=site-footer 200 in 7ms (next.js: 5ms, application-code: 3ms)
+ GET /admin/dashboard?menu=site-config 200 in 159ms (next.js: 17ms, application-code: 143ms)
+🔄 Initializing and syncing modules to database...
+📦 Found 15 modules
+Synced 15/15 modules to database
+✅ Successfully synced 15/15 modules to database
+ GET /api/modules/site-root/schema 200 in 641ms (next.js: 638ms, application-code: 3ms)
+ GET /api/modules/site-root/schema 200 in 3ms (next.js: 2ms, application-code: 1226µs)
+ GET /api/modules/site-root/schema 200 in 2ms (next.js: 756µs, application-code: 1473µs)
+ GET /api/modules/site-root/schema 200 in 1435µs (next.js: 487µs, application-code: 948µs)
+🔄 Initializing and syncing modules to database...
+📦 Found 15 modules
+Synced 15/15 modules to database
+✅ Successfully synced 15/15 modules to database
+ GET /api/admin/system/info 200 in 43ms (next.js: 38ms, application-code: 6ms)
+ GET /admin/dashboard?menu=system 200 in 90ms (next.js: 12ms, application-code: 78ms)
+ GET /api/admin/system/info 200 in 4ms (next.js: 830µs, application-code: 3ms)
+ GET /api/admin/config?type=site-root 200 in 14ms (next.js: 3ms, application-code: 12ms)
+ GET /api/admin/config?type=site-footer 200 in 15ms (next.js: 7ms, application-code: 9ms)
+ GET /api/modules/site-root/schema 200 in 18ms (next.js: 15ms, application-code: 3ms)
+ GET /api/admin/config?type=site-footer 200 in 7ms (next.js: 3ms, application-code: 4ms)
+ GET /api/admin/config?type=site-root 200 in 11ms (next.js: 7ms, application-code: 4ms)
+ GET /admin/dashboard?menu=site-config 200 in 79ms (next.js: 5ms, application-code: 74ms)
+ GET /api/modules/site-root/schema 200 in 4ms (next.js: 1278µs, application-code: 3ms)
+ GET /api/modules/site-root/schema 200 in 3ms (next.js: 910µs, application-code: 2ms)
+ GET /api/modules/site-root/schema 200 in 24ms (next.js: 15ms, application-code: 9ms)
+🔄 Initializing and syncing modules to database...
+📦 Found 15 modules
+Synced 15/15 modules to database
+✅ Successfully synced 15/15 modules to database

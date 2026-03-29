@@ -66,7 +66,9 @@ export {
   syncSiteRootToPages,
   getSiteFooterConfig,
   saveSiteFooterConfig,
-  syncGlobalConfig
+  syncGlobalConfig,
+  getSystemInfo,
+  restartSystem
 } from './api/config'
 
 export {

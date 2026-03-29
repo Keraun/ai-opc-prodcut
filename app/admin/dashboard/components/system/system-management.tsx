@@ -30,6 +30,9 @@ interface SystemManagementProps {
   onResetWebsite: () => void
   currentUser: any
   onChangePassword: () => void
+  systemInfo?: any
+  onRestartSystem?: () => void
+  restarting?: boolean
 }
 
 export function SystemManagement({
@@ -38,13 +41,23 @@ export function SystemManagement({
   onImportConfig,
   onResetWebsite,
   currentUser,
-  onChangePassword
+  onChangePassword,
+  systemInfo,
+  onRestartSystem,
+  restarting
 }: SystemManagementProps) {
   const [showSuperAdminTokenModal, setShowSuperAdminTokenModal] = useState(false)
   const [superAdminPassword, setSuperAdminPassword] = useState("")
   const [superAdminToken, setSuperAdminToken] = useState("")
   const [loadingToken, setLoadingToken] = useState(false)
   const [passwordError, setPasswordError] = useState("")
+
+  function formatUptime(seconds: number): string {
+    const hours = Math.floor(seconds / 3600)
+    const minutes = Math.floor((seconds % 3600) / 60)
+    const secs = Math.floor(seconds % 60)
+    return `${hours}h ${minutes}m ${secs}s`
+  }
   return (
     <div className={styles.systemManagementNew}>
       <ManagementHeader
@@ -136,6 +149,36 @@ export function SystemManagement({
                 <span className={styles.overviewStatLabel}>运行状态</span>
                 <Badge status="success" text="运行正常" />
               </div>
+              {systemInfo && (
+                <>
+                  <div className={styles.overviewStatItem}>
+                    <span className={styles.overviewStatLabel}>运行端口</span>
+                    <Tag color="green" size="small">{systemInfo.port}</Tag>
+                  </div>
+                  <div className={styles.overviewStatItem}>
+                    <span className={styles.overviewStatLabel}>IP 地址</span>
+                    <span className={styles.overviewStatValue}>{systemInfo.ipAddress}</span>
+                  </div>
+                  <div className={styles.overviewStatItem}>
+                    <span className={styles.overviewStatLabel}>运行环境</span>
+                    <Tag color={systemInfo.environment === 'production' ? 'red' : 'arcoblue'} size="small">
+                      {systemInfo.environment === 'production' ? '生产环境' : '开发环境'}
+                    </Tag>
+                  </div>
+                  <div className={styles.overviewStatItem}>
+                    <span className={styles.overviewStatLabel}>主机名</span>
+                    <span className={styles.overviewStatValue}>{systemInfo.hostname}</span>
+                  </div>
+                  <div className={styles.overviewStatItem}>
+                    <span className={styles.overviewStatLabel}>Node 版本</span>
+                    <span className={styles.overviewStatValue}>{systemInfo.nodeVersion}</span>
+                  </div>
+                  <div className={styles.overviewStatItem}>
+                    <span className={styles.overviewStatLabel}>运行时间</span>
+                    <span className={styles.overviewStatValue}>{formatUptime(systemInfo.uptime)}</span>
+                  </div>
+                </>
+              )}
             </div>
           </Card>
         </div>
@@ -220,9 +263,31 @@ export function SystemManagement({
               <div className={styles.dangerAlert}>
                 <IconInfoCircle className={styles.dangerAlertIcon} />
                 <span className={styles.dangerAlertText}>
-                  一键还原将把所有配置恢复到初始状态，此操作不可撤销
+                  以下操作不可逆，请谨慎操作
                 </span>
               </div>
+
+              {onRestartSystem && (
+                <div className={styles.dangerAction}>
+                  <div className={styles.dangerActionInfo}>
+                    <h4 className={styles.dangerActionTitle}>重启服务</h4>
+                    <p className={styles.dangerActionDesc}>终止占用端口的进程并重新启动服务</p>
+                  </div>
+                  <Tooltip content="重启服务">
+                    <Button 
+                      type="primary" 
+                      status="warning"
+                      icon={<IconSync />}
+                      onClick={onRestartSystem}
+                      loading={restarting}
+                    >
+                      重启服务
+                    </Button>
+                  </Tooltip>
+                </div>
+              )}
+
+              <Divider style={{ margin: '16px 0' }} />
 
               <div className={styles.dangerAction}>
                 <div className={styles.dangerActionInfo}>

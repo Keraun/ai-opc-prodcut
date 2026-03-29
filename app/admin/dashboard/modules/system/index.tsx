@@ -1,10 +1,11 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { toast } from 'sonner'
 import { useAuth } from '../../common/hooks/useAuth'
 import { useConfig } from '../../common/hooks/useConfig'
 import { handleExportConfig, handleImportConfig, handleResetWebsite } from '../../common/utils/config-utils'
 import { SystemManagement } from '../../components'
 import { ChangePasswordModal } from '../auth'
+import { getSystemInfo, restartSystem } from '@/lib/api-client'
 import styles from './system.module.css'
 
 export function SystemManager() {
@@ -12,6 +13,43 @@ export function SystemManager() {
   const { configs } = useConfig()
   const [importing, setImporting] = useState(false)
   const [showChangePassword, setShowChangePassword] = useState(false)
+  const [systemInfo, setSystemInfo] = useState<any>(null)
+  const [restarting, setRestarting] = useState(false)
+
+  useEffect(() => {
+    loadSystemInfo()
+  }, [])
+
+  const loadSystemInfo = async () => {
+    try {
+      const result = await getSystemInfo()
+      if (result.success && result.data) {
+        setSystemInfo(result.data)
+      }
+    } catch (error) {
+      console.error('加载系统信息失败:', error)
+    }
+  }
+
+  const handleRestart = async () => {
+    const confirmed = window.confirm('确定要重启服务吗？这将终止占用当前端口的进程并重新启动服务。')
+    if (!confirmed) return
+
+    setRestarting(true)
+    try {
+      const result = await restartSystem()
+      if (result.success) {
+        toast.success(result.message || '正在重启服务，请稍候...')
+      } else {
+        toast.error(result.message || '重启服务失败')
+      }
+    } catch (error) {
+      console.error('重启服务失败:', error)
+      toast.error('重启服务失败')
+    } finally {
+      setRestarting(false)
+    }
+  }
 
   const handleExport = async () => {
     await handleExportConfig()
@@ -55,6 +93,9 @@ export function SystemManager() {
         onResetWebsite={handleReset}
         currentUser={currentUser}
         onChangePassword={handleChangePassword}
+        systemInfo={systemInfo}
+        onRestartSystem={handleRestart}
+        restarting={restarting}
       />
       <ChangePasswordModal
         visible={showChangePassword}

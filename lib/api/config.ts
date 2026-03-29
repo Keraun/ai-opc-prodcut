@@ -410,3 +410,47 @@ export async function syncGlobalConfig(options: {
     return { success: false, message: '同步失败' }
   }
 }
+
+export async function getSystemInfo(): Promise<{
+  success: boolean
+  data?: {
+    port: string
+    ipAddress: string
+    hostname: string
+    platform: string
+    nodeVersion: string
+    uptime: number
+    environment: string
+  }
+  message?: string
+}> {
+  try {
+    const result = await request<any>('/api/admin/system/info')
+    return {
+      success: result.success,
+      data: result.data,
+      message: result.message
+    }
+  } catch (error) {
+    console.error('Error fetching system info:', error)
+    return { success: false, message: '获取系统信息失败' }
+  }
+}
+
+export async function restartSystem(): Promise<{
+  success: boolean
+  message?: string
+}> {
+  try {
+    const result = await request<void>('/api/admin/system/restart', {
+      method: 'POST'
+    })
+    return {
+      success: result.success,
+      message: result.message
+    }
+  } catch (error) {
+    console.error('Error restarting system:', error)
+    return { success: false, message: '重启服务失败' }
+  }
+}
