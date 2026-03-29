@@ -19,7 +19,7 @@ export function ArticlesManagement() {
         icon: <Newspaper size={16} />
       },
       {
-        name: "categoryName",
+        name: "category",
         label: "文章分类",
         type: "text",
         placeholder: "请输入文章分类",
@@ -83,11 +83,11 @@ export function ArticlesManagement() {
         )
       },
       {
-        key: "categoryName",
+        key: "category",
         label: "分类",
         width: 70,
-        render: (item) => item.categoryName ? (
-          <ArcoTag color="orange" size="small">{item.categoryName}</ArcoTag>
+        render: (item) => item.category ? (
+          <ArcoTag color="orange" size="small">{item.category}</ArcoTag>
         ) : (
           <span className={styles.emptyValue}>-</span>
         )

@@ -19,6 +19,7 @@ import {
   FileText
 } from "lucide-react"
 import { toast } from "sonner"
+import { Tooltip } from '@arco-design/web-react'
 import { ManagementHeader } from './ManagementHeader'
 import { CommonTable, ActionButton } from './CommonTable'
 import styles from "./BaseManagement.module.css"
@@ -521,36 +522,36 @@ export function BaseManagement({ config }: BaseManagementProps) {
           {
             title: '操作',
             key: 'actions',
-            width: 150,
+            width: 120,
             render: (_: any, record: any) => (
               <div className={styles.actions}>
-                <ActionButton
-                  type="default"
-                  icon={<Eye size={18} />}
-                  onClick={() => {
-                    setCurrentItem(record)
-                    setViewMode('view')
-                  }}
-                >
-                  查看
-                </ActionButton>
-                <ActionButton
-                  type="primary"
-                  icon={<Edit3 size={18} />}
-                  onClick={() => {
-                    setCurrentItem(record)
-                    setViewMode('edit')
-                  }}
-                >
-                  编辑
-                </ActionButton>
-                <ActionButton
-                  type="danger"
-                  icon={<Trash2 size={18} />}
-                  onClick={() => record.id && handleDelete(record.id)}
-                >
-                  删除
-                </ActionButton>
+                <Tooltip content="查看">
+                  <ActionButton
+                    type="default"
+                    icon={<Eye size={18} />}
+                    onClick={() => {
+                      setCurrentItem(record)
+                      setViewMode('view')
+                    }}
+                  />
+                </Tooltip>
+                <Tooltip content="编辑">
+                  <ActionButton
+                    type="primary"
+                    icon={<Edit3 size={18} />}
+                    onClick={() => {
+                      setCurrentItem(record)
+                      setViewMode('edit')
+                    }}
+                  />
+                </Tooltip>
+                <Tooltip content="删除">
+                  <ActionButton
+                    type="danger"
+                    icon={<Trash2 size={18} />}
+                    onClick={() => record.id && handleDelete(record.id)}
+                  />
+                </Tooltip>
               </div>
             ),
           },
