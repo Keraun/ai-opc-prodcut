@@ -112,3 +112,11 @@ export {
 export {
   submitContactForm
 } from './api/contact'
+
+export {
+  uploadImage,
+  getImages,
+  deleteImage,
+  getImageStats,
+  ImageProcessor
+} from './api/images'

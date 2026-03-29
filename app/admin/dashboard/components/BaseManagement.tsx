@@ -130,7 +130,7 @@ function RichTextEditor({
       const formData = new FormData()
       formData.append('file', file)
       
-      const response = await fetch('/api/upload', {
+      const response = await fetch('/api/upload?quality=85', {
         method: 'POST',
         body: formData,
       })
@@ -139,7 +139,7 @@ function RichTextEditor({
       
       if (result.success && result.url) {
         editor?.chain().focus().setImage({ src: result.url }).run()
-        toast.success('图片上传成功')
+        toast.success(`图片上传成功，节省 ${result.savedPercentage}% 空间`)
       } else {
         toast.error(result.message || '图片上传失败')
       }
