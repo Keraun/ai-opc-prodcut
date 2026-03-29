@@ -10,6 +10,9 @@
   },
   "dependencies": {
     "@arco-design/web-react": "^2.65.0",
+    "@tiptap/extension-placeholder": "^3.21.0",
+    "@tiptap/react": "^3.21.0",
+    "@tiptap/starter-kit": "^3.21.0",
     "@types/nodemailer": "^7.0.11",
     "@vercel/analytics": "1.6.1",
     "clsx": "^2.1.1",

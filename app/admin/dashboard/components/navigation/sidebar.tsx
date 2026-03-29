@@ -1,6 +1,15 @@
 "use client"
 
 import { useMemo } from "react"
+import { 
+  FileText, 
+  Package, 
+  Newspaper, 
+  MessageCircle, 
+  Palette, 
+  Users, 
+  Settings 
+} from "lucide-react"
 import styles from "../../dashboard.module.css"
 
 interface SidebarProps {
@@ -13,18 +22,18 @@ interface SidebarProps {
 interface MenuItem {
   id: string
   label: string
-  icon: string
+  icon: React.ComponentType<{ className?: string }>
   category?: string
 }
 
 const MENU_STRUCTURE: MenuItem[] = [
-  { id: 'pages', label: '页面管理', icon: '📄' },
-  { id: 'products', label: '产品管理', icon: '📦' },
-  { id: 'articles', label: '资讯管理', icon: '📝' },
-  { id: 'feishu-app', label: '飞书管理', icon: '💬' },
-  { id: 'theme', label: '主题管理', icon: '🎨' },
-  { id: 'accounts', label: '账号管理', icon: '👥' },
-  { id: 'system', label: '系统管理', icon: '🔧' },
+  { id: 'pages', label: '页面管理', icon: FileText },
+  { id: 'products', label: '产品管理', icon: Package },
+  { id: 'articles', label: '资讯管理', icon: Newspaper },
+  { id: 'feishu-app', label: '飞书管理', icon: MessageCircle },
+  { id: 'theme', label: '主题管理', icon: Palette },
+  { id: 'accounts', label: '账号管理', icon: Users },
+  { id: 'system', label: '系统管理', icon: Settings },
 ]
 
 const CATEGORY_ORDER = ['']
@@ -66,16 +75,19 @@ export function Sidebar({
                     <span className={styles.navSectionTitle}>{category.name}</span>
                   </div>
                 )}
-                {category.items.map((item) => (
-                  <button
-                    key={item.id}
-                    onClick={() => onMenuClick(item.id)}
-                    className={`${styles.navItem} ${activeMenu === item.id ? styles.navItemActive : styles.navItemInactive}`}
-                  >
-                    <span className={styles.navItemIcon}>{item.icon}</span>
-                    {!collapsed && <span className={styles.navItemText}>{item.label}</span>}
-                  </button>
-                ))}
+                {category.items.map((item) => {
+                  const IconComponent = item.icon
+                  return (
+                    <button
+                      key={item.id}
+                      onClick={() => onMenuClick(item.id)}
+                      className={`${styles.navItem} ${activeMenu === item.id ? styles.navItemActive : styles.navItemInactive}`}
+                    >
+                      <IconComponent className={styles.navItemIcon} />
+                      {!collapsed && <span className={styles.navItemText}>{item.label}</span>}
+                    </button>
+                  )
+                })}
               </div>
             ))}
           </nav>

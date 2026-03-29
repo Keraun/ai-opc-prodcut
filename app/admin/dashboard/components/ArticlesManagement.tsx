@@ -1,37 +1,43 @@
 "use client"
 
-import { useState, useEffect, useRef, useCallback } from "react"
-import { Button, Card, Input, Select, Table } from "@arco-design/web-react"
+import { useState, useEffect } from "react"
+import { useEditor, EditorContent } from "@tiptap/react"
+import StarterKit from "@tiptap/starter-kit"
+import Placeholder from "@tiptap/extension-placeholder"
 import { 
-  IconBold, 
-  IconItalic, 
-  IconUnderline, 
-  IconOrderedList, 
-  IconUnorderedList,
-  IconLink,
-  IconImage
-} from "@arco-design/web-react/icon"
-import { ChevronLeft as IconChevronLeft, Edit as IconEdit, Eye as IconEye, Trash2 as IconTrash2, Plus as IconPlus } from "lucide-react"
+  Plus, 
+  Trash2, 
+  Edit3, 
+  Eye, 
+  ArrowLeft,
+  Bold, 
+  Italic, 
+  List, 
+  ListOrdered,
+  Save,
+  X,
+  Newspaper,
+  Tag,
+  FileText,
+  Calendar
+} from "lucide-react"
 import { toast } from "sonner"
-import styles from "./ArticlesManagement.module.css"
-
-const TextArea = Input.TextArea
-const Option = Select.Option
+import styles from "./ProductsManagement.module.css"
 
 interface Article {
   id?: number
   title: string
-  slug: string
   summary: string
   content: string
-  date: string
   author?: string
   category?: string
+  categoryName?: string
   tags?: string[]
   image?: string
   status: string
-  created_at: string
-  updated_at: string
+  publishTime?: string
+  created_at?: string
+  updated_at?: string
 }
 
 type ViewMode = 'list' | 'new' | 'edit' | 'view'
@@ -45,91 +51,61 @@ function RichTextEditor({
   onChange: (value: string) => void
   placeholder?: string
 }) {
-  const editorRef = useRef<HTMLDivElement>(null)
-  const [isFocused, setIsFocused] = useState(false)
+  const editor = useEditor({
+    extensions: [
+      StarterKit,
+      Placeholder.configure({
+        placeholder,
+      }),
+    ],
+    content: value,
+    onUpdate: ({ editor }) => {
+      onChange(editor.getHTML())
+    },
+  })
 
-  useEffect(() => {
-    if (editorRef.current && editorRef.current.innerHTML !== value) {
-      editorRef.current.innerHTML = value
-    }
-  }, [])
-
-  const execCommand = (command: string, value?: string) => {
-    document.execCommand(command, false, value)
-    if (editorRef.current) {
-      onChange(editorRef.current.innerHTML)
-    }
+  if (!editor) {
+    return null
   }
-
-  const handleInput = useCallback(() => {
-    if (editorRef.current) {
-      onChange(editorRef.current.innerHTML)
-    }
-  }, [onChange])
-
-  const handleLink = () => {
-    const url = prompt('请输入链接地址:', 'https://')
-    if (url) {
-      execCommand('createLink', url)
-    }
-  }
-
-  const handleImage = () => {
-    const url = prompt('请输入图片地址:', 'https://')
-    if (url) {
-      execCommand('insertImage', url)
-    }
-  }
-
-  const toolbarItems = [
-    { icon: <IconBold />, command: 'bold', title: '粗体' },
-    { icon: <IconItalic />, command: 'italic', title: '斜体' },
-    { icon: <IconUnderline />, command: 'underline', title: '下划线' },
-    { icon: <IconOrderedList />, command: 'insertOrderedList', title: '有序列表' },
-    { icon: <IconUnorderedList />, command: 'insertUnorderedList', title: '无序列表' },
-  ]
 
   return (
-    <div className={`${styles.richEditor} ${isFocused ? styles.richEditorFocused : ''}`}>
-      <div className={styles.richToolbar}>
-        {toolbarItems.map((item, index) => (
-          <button
-            key={index}
-            type="button"
-            className={styles.toolbarBtn}
-            onClick={() => execCommand(item.command)}
-            title={item.title}
-          >
-            {item.icon}
-          </button>
-        ))}
+    <div className={styles.editor}>
+      <div className={styles.editorToolbar}>
         <button
           type="button"
-          className={styles.toolbarBtn}
-          onClick={handleLink}
-          title="插入链接"
+          onClick={() => editor.chain().focus().toggleBold().run()}
+          className={`${styles.toolbarButton} ${editor.isActive('bold') ? styles.toolbarButtonActive : ''}`}
+          title="粗体"
         >
-          <IconLink />
+          <Bold size={16} />
         </button>
         <button
           type="button"
-          className={styles.toolbarBtn}
-          onClick={handleImage}
-          title="插入图片"
+          onClick={() => editor.chain().focus().toggleItalic().run()}
+          className={`${styles.toolbarButton} ${editor.isActive('italic') ? styles.toolbarButtonActive : ''}`}
+          title="斜体"
         >
-          <IconImage />
+          <Italic size={16} />
+        </button>
+        <div className={styles.toolbarDivider} />
+        <button
+          type="button"
+          onClick={() => editor.chain().focus().toggleBulletList().run()}
+          className={`${styles.toolbarButton} ${editor.isActive('bulletList') ? styles.toolbarButtonActive : ''}`}
+          title="无序列表"
+        >
+          <List size={16} />
+        </button>
+        <button
+          type="button"
+          onClick={() => editor.chain().focus().toggleOrderedList().run()}
+          className={`${styles.toolbarButton} ${editor.isActive('orderedList') ? styles.toolbarButtonActive : ''}`}
+          title="有序列表"
+        >
+          <ListOrdered size={16} />
         </button>
       </div>
-      <div
-        ref={editorRef}
-        className={styles.richContent}
-        contentEditable
-        onInput={handleInput}
-        onFocus={() => setIsFocused(true)}
-        onBlur={() => setIsFocused(false)}
-        data-placeholder={placeholder}
-        dangerouslySetInnerHTML={{ __html: value }}
-      />
+      <EditorContent editor={editor} className={styles.editorContent} />
     </div>
   )
 }
@@ -149,22 +125,21 @@ function ArticleForm({
 }) {
   const [formData, setFormData] = useState<Article>({
     title: '',
-    slug: '',
     summary: '',
     content: '',
-    date: new Date().toISOString().split('T')[0],
     author: '',
     category: '',
+    categoryName: '',
     tags: [],
     image: '',
-    status: 'published',
-    created_at: new Date().toISOString(),
-    updated_at: new Date().toISOString(),
+    status: 'draft',
     ...initialData
   })
+
   const [tagInput, setTagInput] = useState('')
 
-  const handleSubmit = () => {
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault()
     if (!formData.title.trim()) {
       toast.error('请输入文章标题')
       return
@@ -176,7 +151,7 @@ function ArticleForm({
     onSubmit(formData)
   }
 
-  const addTag = () => {
+  const handleAddTag = () => {
     if (tagInput.trim() && !formData.tags?.includes(tagInput.trim())) {
       setFormData({
         ...formData,
@@ -186,156 +161,156 @@ function ArticleForm({
     }
   }
 
-  const removeTag = (tag: string) => {
+  const handleRemoveTag = (tag: string) => {
     setFormData({
       ...formData,
-      tags: formData.tags?.filter(t => t !== tag)
+      tags: formData.tags?.filter(t => t !== tag) || []
     })
   }
 
   return (
-    <div className={styles.formContainer}>
-      <div className={styles.formSection}>
-        <h3 className={styles.sectionTitle}>基本信息</h3>
+    <form onSubmit={handleSubmit} className={styles.form}>
+      <div className={styles.formHeader}>
+        <h2 className={styles.formTitle}>
+          {mode === 'new' ? '新建资讯' : '编辑资讯'}
+        </h2>
+      </div>
+
+      <div className={styles.formBody}>
         <div className={styles.formRow}>
-          <div className={styles.formField}>
-            <label className={styles.fieldLabel}>
-              文章标题 <span className={styles.required}>*</span>
+          <div className={styles.formGroup}>
+            <label className={styles.label}>
+              <Newspaper size={16} />
+              文章标题 *
             </label>
-            <Input
+            <input
+              type="text"
               value={formData.title}
-              onChange={(value) => setFormData({ ...formData, title: value })}
+              onChange={(e) => setFormData({ ...formData, title: e.target.value })}
+              className={styles.input}
               placeholder="请输入文章标题"
             />
           </div>
-          <div className={styles.formField}>
-            <label className={styles.fieldLabel}>URL别名</label>
-            <Input
-              value={formData.slug}
-              onChange={(value) => setFormData({ ...formData, slug: value })}
-              placeholder="例如：my-first-article"
+
+          <div className={styles.formGroup}>
+            <label className={styles.label}>
+              <Tag size={16} />
+              文章分类
+            </label>
+            <input
+              type="text"
+              value={formData.categoryName || ''}
+              onChange={(e) => setFormData({ ...formData, categoryName: e.target.value })}
+              className={styles.input}
+              placeholder="请输入文章分类"
             />
           </div>
+        </div>
+
+        <div className={styles.formGroup}>
+          <label className={styles.label}>
+            <FileText size={16} />
+            文章摘要 *
+          </label>
+          <textarea
+            value={formData.summary}
+            onChange={(e) => setFormData({ ...formData, summary: e.target.value })}
+            className={styles.textarea}
+            placeholder="请输入文章摘要"
+            rows={3}
+          />
         </div>
 
         <div className={styles.formRow}>
-          <div className={styles.formField}>
-            <label className={styles.fieldLabel}>作者</label>
-            <Input
-              value={formData.author}
-              onChange={(value) => setFormData({ ...formData, author: value })}
-              placeholder="请输入作者"
+          <div className={styles.formGroup}>
+            <label className={styles.label}>
+              <Calendar size={16} />
+              作者
+            </label>
+            <input
+              type="text"
+              value={formData.author || ''}
+              onChange={(e) => setFormData({ ...formData, author: e.target.value })}
+              className={styles.input}
+              placeholder="请输入作者名称"
             />
           </div>
-          <div className={styles.formField}>
-            <label className={styles.fieldLabel}>发布日期</label>
-            <Input
-              value={formData.date}
-              onChange={(value) => setFormData({ ...formData, date: value })}
-              placeholder="YYYY-MM-DD"
-            />
-          </div>
-          <div className={styles.formField}>
-            <label className={styles.fieldLabel}>文章分类</label>
-            <Select
-              value={formData.category}
-              onChange={(value) => setFormData({ ...formData, category: value })}
-              placeholder="请选择分类"
-              allowClear
-            >
-              <Option value="industry">行业资讯</Option>
-              <Option value="technology">技术动态</Option>
-              <Option value="product">产品更新</Option>
-              <Option value="tutorial">教程指南</Option>
-            </Select>
-          </div>
-          <div className={styles.formField}>
-            <label className={styles.fieldLabel}>状态</label>
-            <Select
+
+          <div className={styles.formGroup}>
+            <label className={styles.label}>
+              <Tag size={16} />
+              状态
+            </label>
+            <select
               value={formData.status}
-              onChange={(value) => setFormData({ ...formData, status: value })}
-              style={{ width: '100%' }}
+              onChange={(e) => setFormData({ ...formData, status: e.target.value })}
+              className={styles.input}
             >
-              <Option value="published">已发布</Option>
-              <Option value="draft">草稿</Option>
-            </Select>
+              <option value="draft">草稿</option>
+              <option value="published">已发布</option>
+            </select>
           </div>
         </div>
 
-        <div className={styles.formField}>
-          <label className={styles.fieldLabel}>
-            文章摘要 <span className={styles.required}>*</span>
+        <div className={styles.formGroup}>
+          <label className={styles.label}>
+            <Tag size={16} />
+            文章标签
           </label>
-          <TextArea
-            value={formData.summary}
-            onChange={(value) => setFormData({ ...formData, summary: value })}
-            placeholder="请输入文章摘要"
-            autoSize={{ minRows: 2, maxRows: 4 }}
-          />
-        </div>
-
-        <div className={styles.formField}>
-          <label className={styles.fieldLabel}>文章内容</label>
-          <RichTextEditor
-            value={formData.content || ''}
-            onChange={(value) => setFormData({ ...formData, content: value })}
-            placeholder="请输入文章内容..."
-          />
-        </div>
-      </div>
-
-      <div className={styles.formSection}>
-        <h3 className={styles.sectionTitle}>媒体</h3>
-        <div className={styles.formField}>
-          <label className={styles.fieldLabel}>封面图片</label>
-          <Input
-            value={formData.image}
-            onChange={(value) => setFormData({ ...formData, image: value })}
-            placeholder="请输入封面图片URL"
-          />
-        </div>
-      </div>
-
-      <div className={styles.formSection}>
-        <h3 className={styles.sectionTitle}>标签</h3>
-        <div className={styles.formField}>
-          <label className={styles.fieldLabel}>文章标签</label>
           <div className={styles.tagInput}>
-            <Input
+            <input
+              type="text"
               value={tagInput}
-              onChange={setTagInput}
+              onChange={(e) => setTagInput(e.target.value)}
+              onKeyPress={(e) => e.key === 'Enter' && (e.preventDefault(), handleAddTag())}
+              className={styles.input}
               placeholder="输入标签后按回车添加"
-              onPressEnter={addTag}
-              style={{ flex: 1 }}
             />
-            <Button type="primary" onClick={addTag}>添加</Button>
+            <button type="button" onClick={handleAddTag} className={styles.addButton}>
+              添加
+            </button>
           </div>
           {formData.tags && formData.tags.length > 0 && (
-            <div className={styles.tagsList}>
+            <div className={styles.tags}>
               {formData.tags.map((tag, index) => (
-                <span key={index} className={styles.tagItem}>
+                <span key={index} className={styles.tag}>
                   {tag}
-                  <button 
-                    type="button" 
-                    className={styles.tagRemove}
-                    onClick={() => removeTag(tag)}
-                  >
-                    ×
+                  <button type="button" onClick={() => handleRemoveTag(tag)}>
+                    <X size={14} />
                   </button>
                 </span>
               ))}
             </div>
           )}
         </div>
+
+        <div className={styles.formGroup}>
+          <label className={styles.label}>
+            <FileText size={16} />
+            文章内容
+          </label>
+          <RichTextEditor
+            value={formData.content}
+            onChange={(value) => setFormData({ ...formData, content: value })}
+            placeholder="请输入文章内容..."
+          />
+        </div>
       </div>
 
-      <div className={styles.formActions}>
-        <Button onClick={onCancel}>取消</Button>
-        <Button type="primary" loading={loading} onClick={handleSubmit}>
-          {mode === 'new' ? '创建文章' : '保存修改'}
-        </Button>
+      <div className={styles.formFooter}>
+        <button type="button" onClick={onCancel} className={styles.cancelButton}>
+          取消
+        </button>
+        <button type="submit" disabled={loading} className={styles.submitButton}>
+          {loading ? '保存中...' : (
+            <>
+              <Save size={16} />
+              保存
+            </>
+          )}
+        </button>
       </div>
-    </div>
+    </form>
   )
 }
 
@@ -353,370 +328,159 @@ export function ArticlesManagement() {
   const fetchArticles = async () => {
     try {
       setLoading(true)
-      const response = await fetch('/api/articles?admin=true')
+      const response = await fetch('/api/articles')
       const result = await response.json()
       if (result.success && result.data) {
         setArticles(result.data)
       }
     } catch (error) {
-      console.error('Failed to fetch articles:', error)
-      toast.error('获取文章列表失败')
+      console.error('获取资讯列表失败:', error)
+      toast.error('获取资讯列表失败')
     } finally {
       setLoading(false)
     }
   }
 
-  const handleAddArticle = () => {
-    setCurrentArticle(null)
-    setViewMode('new')
-  }
-
-  const handleEditArticle = (article: Article) => {
-    setCurrentArticle(article)
-    setViewMode('edit')
-  }
-
-  const handleViewArticle = (article: Article) => {
-    setCurrentArticle(article)
-    setViewMode('view')
-  }
-
-  const handleDeleteArticle = async (article: Article) => {
-    if (confirm(`确定要删除文章 "${article.title}" 吗？`)) {
-      try {
-        const response = await fetch(`/api/articles?id=${article.id}`, {
-          method: 'DELETE'
-        })
-        const result = await response.json()
-        
-        if (result.success) {
-          setArticles(articles.filter(a => a.id !== article.id))
-          toast.success('文章删除成功')
-        } else {
-          toast.error('删除文章失败')
-        }
-      } catch (error) {
-        console.error('Failed to delete article:', error)
-        toast.error('删除文章失败')
-      }
-    }
-  }
-
-  const handleSubmit = async (data: Article) => {
-    setSubmitting(true)
+  const handleCreate = async (data: Article) => {
     try {
-      let response
-      if (currentArticle) {
-        response = await fetch('/api/articles', {
-          method: 'PUT',
-          headers: {
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify({ ...data, id: currentArticle.id })
-        })
-      } else {
-        response = await fetch('/api/articles', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify(data)
-        })
-      }
+      setSubmitting(true)
+      const response = await fetch('/api/articles', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data)
+      })
       const result = await response.json()
-      
       if (result.success) {
-        if (currentArticle) {
-          setArticles(articles.map(article => 
-            article.id === currentArticle.id ? result.data : article
-          ))
-          toast.success('文章更新成功')
-        } else {
-          if (result.data) {
-            setArticles([...articles, result.data])
-          }
-          toast.success('文章创建成功')
-        }
+        toast.success('资讯创建成功')
         setViewMode('list')
         fetchArticles()
       } else {
-        toast.error(result.message || '保存文章失败')
+        toast.error(result.message || '创建失败')
       }
     } catch (error) {
-      console.error('Failed to save article:', error)
-      toast.error('保存文章失败')
+      console.error('创建资讯失败:', error)
+      toast.error('创建资讯失败')
     } finally {
       setSubmitting(false)
     }
   }
 
-  const handleBack = () => {
-    setViewMode('list')
-    setCurrentArticle(null)
-  }
-
-  const formatDate = (dateString: string) => {
-    return new Date(dateString).toLocaleString('zh-CN', {
-      year: 'numeric',
-      month: '2-digit',
-      day: '2-digit',
-      hour: '2-digit',
-      minute: '2-digit'
-    })
-  }
-
-  const getCategoryName = (category: string) => {
-    const categoryMap: Record<string, string> = {
-      'industry': '行业资讯',
-      'technology': '技术动态',
-      'product': '产品更新',
-      'tutorial': '教程指南'
+  const handleUpdate = async (data: Article) => {
+    if (!currentArticle?.id) return
+    try {
+      setSubmitting(true)
+      const response = await fetch('/api/articles', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ ...data, id: currentArticle.id })
+      })
+      const result = await response.json()
+      if (result.success) {
+        toast.success('资讯更新成功')
+        setViewMode('list')
+        fetchArticles()
+      } else {
+        toast.error(result.message || '更新失败')
+      }
+    } catch (error) {
+      console.error('更新资讯失败:', error)
+      toast.error('更新资讯失败')
+    } finally {
+      setSubmitting(false)
     }
-    return categoryMap[category] || category
   }
 
-  const columns = [
-    {
-      title: '文章标题',
-      dataIndex: 'title',
-      key: 'title',
-      width: 250,
-      render: (text: string) => (
-        <div className={styles.titleCell}>{text}</div>
-      )
-    },
-    {
-      title: '摘要',
-      dataIndex: 'summary',
-      key: 'summary',
-      render: (text: string) => (
-        <div className={styles.summaryCell}>{text}</div>
-      )
-    },
-    {
-      title: '分类',
-      dataIndex: 'category',
-      key: 'category',
-      width: 100,
-      render: (category: string) => category ? getCategoryName(category) : '未分类'
-    },
-    {
-      title: '作者',
-      dataIndex: 'author',
-      key: 'author',
-      width: 100
-    },
-    {
-      title: '日期',
-      dataIndex: 'date',
-      key: 'date',
-      width: 120
-    },
-    {
-      title: '状态',
-      dataIndex: 'status',
-      key: 'status',
-      width: 100,
-      render: (status: string) => (
-        <span className={`${styles.statusBadge} ${status === 'published' ? styles.statusPublished : styles.statusDraft}`}>
-          {status === 'published' ? '已发布' : '草稿'}
-        </span>
-      )
-    },
-    {
-      title: '操作',
-      key: 'action',
-      width: 200,
-      render: (_: any, record: Article) => (
-        <div className={styles.actionButtons}>
-          <Button
-            type="text"
-            size="small"
-            icon={<IconEye size={16} />}
-            onClick={() => handleViewArticle(record)}
-          >
-            查看
-          </Button>
-          <Button
-            type="text"
-            size="small"
-            icon={<IconEdit size={16} />}
-            onClick={() => handleEditArticle(record)}
-          >
-            编辑
-          </Button>
-          <Button
-            type="text"
-            size="small"
-            status="danger"
-            icon={<IconTrash2 size={16} />}
-            onClick={() => handleDeleteArticle(record)}
-          >
-            删除
-          </Button>
-        </div>
-      )
+  const handleDelete = async (id: number) => {
+    if (!confirm('确定要删除这篇资讯吗？')) return
+    try {
+      const response = await fetch(`/api/articles?id=${id}`, {
+        method: 'DELETE'
+      })
+      const result = await response.json()
+      if (result.success) {
+        toast.success('资讯删除成功')
+        fetchArticles()
+      } else {
+        toast.error(result.message || '删除失败')
+      }
+    } catch (error) {
+      console.error('删除资讯失败:', error)
+      toast.error('删除资讯失败')
     }
-  ]
+  }
 
-  if (viewMode === 'new' || viewMode === 'edit') {
+  if (loading) {
     return (
-      <div className={styles.container}>
-        <div className={styles.header}>
-          <div className={styles.headerContent}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
-              <Button
-                type="text"
-                icon={<IconChevronLeft />}
-                onClick={handleBack}
-                style={{ color: 'white' }}
-              >
-                返回文章列表
-              </Button>
-              <h1 className={styles.headerTitle}>
-                {viewMode === 'new' ? '新建文章' : '编辑文章'}
-              </h1>
-            </div>
-          </div>
-        </div>
-
-        <div className={styles.content}>
-          <Card className={styles.formCard}>
-            <ArticleForm
-              mode={viewMode as 'new' | 'edit'}
-              initialData={currentArticle || undefined}
-              onSubmit={handleSubmit}
-              onCancel={handleBack}
-              loading={submitting}
-            />
-          </Card>
-        </div>
+      <div className={styles.loading}>
+        <div className={styles.spinner}></div>
+        <p>加载中...</p>
       </div>
+    )
+  }
+
+  if (viewMode === 'new') {
+    return (
+      <ArticleForm
+        onSubmit={handleCreate}
+        onCancel={() => setViewMode('list')}
+        loading={submitting}
+        mode="new"
+      />
+    )
+  }
+
+  if (viewMode === 'edit' && currentArticle) {
+    return (
+      <ArticleForm
+        initialData={currentArticle}
+        onSubmit={handleUpdate}
+        onCancel={() => {
+          setViewMode('list')
+          setCurrentArticle(null)
+        }}
+        loading={submitting}
+        mode="edit"
+      />
     )
   }
 
   if (viewMode === 'view' && currentArticle) {
     return (
-      <div className={styles.container}>
-        <div className={styles.header}>
-          <div className={styles.headerContent}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
-              <Button
-                type="text"
-                icon={<IconChevronLeft />}
-                onClick={handleBack}
-                style={{ color: 'white' }}
-              >
-                返回文章列表
-              </Button>
-              <h1 className={styles.headerTitle}>{currentArticle.title}</h1>
-            </div>
-            <Button
-              type="primary"
-              icon={<IconEdit size={16} />}
-              onClick={() => handleEditArticle(currentArticle)}
-            >
-              编辑文章
-            </Button>
-          </div>
+      <div className={styles.detailView}>
+        <div className={styles.detailHeader}>
+          <button onClick={() => {
+            setViewMode('list')
+            setCurrentArticle(null)
+          }} className={styles.backButton}>
+            <ArrowLeft size={20} />
+            返回列表
+          </button>
+          <h2 className={styles.detailTitle}>{currentArticle.title}</h2>
         </div>
-
-        <div className={styles.content}>
-          <Card className={styles.viewCard}>
-            <div className={styles.viewContent}>
-              <div className={styles.viewSection}>
-                <h3 className={styles.sectionTitle}>基本信息</h3>
-                <div className={styles.viewField}>
-                  <label className={styles.viewLabel}>文章标题</label>
-                  <p className={styles.viewValue}>{currentArticle.title}</p>
-                </div>
-                <div className={styles.viewRow}>
-                  <div className={styles.viewField}>
-                    <label className={styles.viewLabel}>URL别名</label>
-                    <p className={styles.viewValue}>{currentArticle.slug}</p>
-                  </div>
-                  <div className={styles.viewField}>
-                    <label className={styles.viewLabel}>文章分类</label>
-                    <p className={styles.viewValue}>{currentArticle.category ? getCategoryName(currentArticle.category) : '未分类'}</p>
-                  </div>
-                  <div className={styles.viewField}>
-                    <label className={styles.viewLabel}>状态</label>
-                    <span className={`${styles.statusBadge} ${currentArticle.status === 'published' ? styles.statusPublished : styles.statusDraft}`}>
-                      {currentArticle.status === 'published' ? '已发布' : '草稿'}
-                    </span>
-                  </div>
-                </div>
-                <div className={styles.viewRow}>
-                  <div className={styles.viewField}>
-                    <label className={styles.viewLabel}>作者</label>
-                    <p className={styles.viewValue}>{currentArticle.author || '未设置'}</p>
-                  </div>
-                  <div className={styles.viewField}>
-                    <label className={styles.viewLabel}>发布日期</label>
-                    <p className={styles.viewValue}>{currentArticle.date}</p>
-                  </div>
-                </div>
-                <div className={styles.viewField}>
-                  <label className={styles.viewLabel}>文章摘要</label>
-                  <p className={styles.viewValue}>{currentArticle.summary}</p>
-                </div>
-              </div>
-
-              <div className={styles.viewSection}>
-                <h3 className={styles.sectionTitle}>媒体</h3>
-                <div className={styles.viewField}>
-                  <label className={styles.viewLabel}>封面图片</label>
-                  {currentArticle.image ? (
-                    <div className={styles.imagePreview}>
-                      <img src={currentArticle.image} alt={currentArticle.title} />
-                    </div>
-                  ) : (
-                    <p className={styles.viewValue}>暂无封面图片</p>
-                  )}
-                </div>
-              </div>
-
-              <div className={styles.viewSection}>
-                <h3 className={styles.sectionTitle}>标签</h3>
-                <div className={styles.viewField}>
-                  <label className={styles.viewLabel}>文章标签</label>
-                  <div className={styles.tagsList}>
-                    {currentArticle.tags && currentArticle.tags.length > 0 ? (
-                      currentArticle.tags.map((tag, index) => (
-                        <span key={index} className={styles.tagItem}>{tag}</span>
-                      ))
-                    ) : (
-                      <span className={styles.noTags}>无标签</span>
-                    )}
-                  </div>
-                </div>
-              </div>
-
-              {currentArticle.content && (
-                <div className={styles.viewSection}>
-                  <h3 className={styles.sectionTitle}>文章内容</h3>
-                  <div 
-                    className={styles.htmlContent}
-                    dangerouslySetInnerHTML={{ __html: currentArticle.content }}
-                  />
-                </div>
-              )}
-
-              <div className={styles.viewSection}>
-                <h3 className={styles.sectionTitle}>时间信息</h3>
-                <div className={styles.viewRow}>
-                  <div className={styles.viewField}>
-                    <label className={styles.viewLabel}>创建时间</label>
-                    <p className={styles.viewValue}>{formatDate(currentArticle.created_at)}</p>
-                  </div>
-                  <div className={styles.viewField}>
-                    <label className={styles.viewLabel}>更新时间</label>
-                    <p className={styles.viewValue}>{formatDate(currentArticle.updated_at)}</p>
-                  </div>
-                </div>
-              </div>
+        <div className={styles.detailBody}>
+          <div className={styles.detailSection}>
+            <h3>文章摘要</h3>
+            <p>{currentArticle.summary}</p>
+          </div>
+          {currentArticle.content && (
+            <div className={styles.detailSection}>
+              <h3>文章内容</h3>
+              <div dangerouslySetInnerHTML={{ __html: currentArticle.content }} />
             </div>
-          </Card>
+          )}
+          <div className={styles.detailMeta}>
+            {currentArticle.author && (
+              <div className={styles.metaItem}>
+                <span>作者: {currentArticle.author}</span>
+              </div>
+            )}
+            {currentArticle.categoryName && (
+              <div className={styles.metaItem}>
+                <Tag size={16} />
+                <span>{currentArticle.categoryName}</span>
+              </div>
+            )}
+          </div>
         </div>
       </div>
     )
@@ -725,35 +489,78 @@ export function ArticlesManagement() {
   return (
     <div className={styles.container}>
       <div className={styles.header}>
-        <div className={styles.headerContent}>
-          <div>
-            <h1 className={styles.headerTitle}>文章管理</h1>
-            <p className={styles.headerDescription}>管理网站文章内容</p>
-          </div>
-          <Button
-            type="primary"
-            icon={<IconPlus size={16} />}
-            onClick={handleAddArticle}
-          >
-            新建文章
-          </Button>
-        </div>
+        <h1 className={styles.title}>资讯管理</h1>
+        <button onClick={() => setViewMode('new')} className={styles.primaryButton}>
+          <Plus size={20} />
+          新建资讯
+        </button>
       </div>
 
-      <div className={styles.content}>
-        <Card className={styles.tableCard}>
-          <Table
-            columns={columns}
-            data={articles}
-            loading={loading}
-            rowKey="id"
-            pagination={{ 
-              pageSize: 10,
-              showTotal: true,
-              showJumper: true
-            }}
-          />
-        </Card>
+      <div className={styles.table}>
+        <div className={styles.tableHeader}>
+          <div className={styles.tableRow}>
+            <div className={styles.tableCell}>文章标题</div>
+            <div className={styles.tableCell}>分类</div>
+            <div className={styles.tableCell}>作者</div>
+            <div className={styles.tableCell}>状态</div>
+            <div className={styles.tableCell}>操作</div>
+          </div>
+        </div>
+        <div className={styles.tableBody}>
+          {articles.length === 0 ? (
+            <div className={styles.empty}>
+              <Newspaper size={48} />
+              <p>暂无资讯数据</p>
+            </div>
+          ) : (
+            articles.map((article) => (
+              <div key={article.id} className={styles.tableRow}>
+                <div className={styles.tableCell}>
+                  <div className={styles.productName}>{article.title}</div>
+                  <div className={styles.productDesc}>{article.summary}</div>
+                </div>
+                <div className={styles.tableCell}>{article.categoryName || '-'}</div>
+                <div className={styles.tableCell}>{article.author || '-'}</div>
+                <div className={styles.tableCell}>
+                  <span className={`${styles.status} ${article.status === 'published' ? styles.statusActive : styles.statusInactive}`}>
+                    {article.status === 'published' ? '已发布' : '草稿'}
+                  </span>
+                </div>
+                <div className={styles.tableCell}>
+                  <div className={styles.actions}>
+                    <button
+                      onClick={() => {
+                        setCurrentArticle(article)
+                        setViewMode('view')
+                      }}
+                      className={styles.iconButton}
+                      title="查看"
+                    >
+                      <Eye size={18} />
+                    </button>
+                    <button
+                      onClick={() => {
+                        setCurrentArticle(article)
+                        setViewMode('edit')
+                      }}
+                      className={styles.iconButton}
+                      title="编辑"
+                    >
+                      <Edit3 size={18} />
+                    </button>
+                    <button
+                      onClick={() => article.id && handleDelete(article.id)}
+                      className={`${styles.iconButton} ${styles.deleteButton}`}
+                      title="删除"
+                    >
+                      <Trash2 size={18} />
+                    </button>
+                  </div>
+                </div>
+              </div>
+            ))
+          )}
+        </div>
       </div>
     </div>
   )

@@ -1,26 +1,29 @@
 "use client"
 
-import { useState, useEffect, useRef, useCallback } from "react"
-import { Button, Card, Table, Input, Select, InputNumber, Spin } from "@arco-design/web-react"
+import { useState, useEffect } from "react"
+import { useEditor, EditorContent } from "@tiptap/react"
+import StarterKit from "@tiptap/starter-kit"
+import Placeholder from "@tiptap/extension-placeholder"
 import { 
-  IconPlus, 
-  IconDelete, 
-  IconEdit, 
-  IconEye, 
-  IconLeft,
-  IconBold, 
-  IconItalic, 
-  IconUnderline, 
-  IconOrderedList, 
-  IconUnorderedList,
-  IconLink,
-  IconImage
-} from "@arco-design/web-react/icon"
+  Plus, 
+  Trash2, 
+  Edit3, 
+  Eye, 
+  ArrowLeft,
+  Bold, 
+  Italic, 
+  List, 
+  ListOrdered,
+  Save,
+  X,
+  Package,
+  DollarSign,
+  Tag,
+  FileText,
+  Image as ImageIcon
+} from "lucide-react"
 import { toast } from "sonner"
 import styles from "./ProductsManagement.module.css"
-
-const TextArea = Input.TextArea
-const Option = Select.Option
 
 interface Product {
   id?: number
@@ -53,91 +56,61 @@ function RichTextEditor({
   onChange: (value: string) => void
   placeholder?: string
 }) {
-  const editorRef = useRef<HTMLDivElement>(null)
-  const [isFocused, setIsFocused] = useState(false)
+  const editor = useEditor({
+    extensions: [
+      StarterKit,
+      Placeholder.configure({
+        placeholder,
+      }),
+    ],
+    content: value,
+    onUpdate: ({ editor }) => {
+      onChange(editor.getHTML())
+    },
+  })
 
-  useEffect(() => {
-    if (editorRef.current && editorRef.current.innerHTML !== value) {
-      editorRef.current.innerHTML = value
-    }
-  }, [])
-
-  const execCommand = (command: string, value?: string) => {
-    document.execCommand(command, false, value)
-    if (editorRef.current) {
-      onChange(editorRef.current.innerHTML)
-    }
+  if (!editor) {
+    return null
   }
-
-  const handleInput = useCallback(() => {
-    if (editorRef.current) {
-      onChange(editorRef.current.innerHTML)
-    }
-  }, [onChange])
-
-  const handleLink = () => {
-    const url = prompt('请输入链接地址:', 'https://')
-    if (url) {
-      execCommand('createLink', url)
-    }
-  }
-
-  const handleImage = () => {
-    const url = prompt('请输入图片地址:', 'https://')
-    if (url) {
-      execCommand('insertImage', url)
-    }
-  }
-
-  const toolbarItems = [
-    { icon: <IconBold />, command: 'bold', title: '粗体' },
-    { icon: <IconItalic />, command: 'italic', title: '斜体' },
-    { icon: <IconUnderline />, command: 'underline', title: '下划线' },
-    { icon: <IconOrderedList />, command: 'insertOrderedList', title: '有序列表' },
-    { icon: <IconUnorderedList />, command: 'insertUnorderedList', title: '无序列表' },
-  ]
 
   return (
-    <div className={`${styles.richEditor} ${isFocused ? styles.richEditorFocused : ''}`}>
-      <div className={styles.richToolbar}>
-        {toolbarItems.map((item, index) => (
-          <button
-            key={index}
-            type="button"
-            className={styles.toolbarBtn}
-            onClick={() => execCommand(item.command)}
-            title={item.title}
-          >
-            {item.icon}
-          </button>
-        ))}
+    <div className={styles.editor}>
+      <div className={styles.editorToolbar}>
         <button
           type="button"
-          className={styles.toolbarBtn}
-          onClick={handleLink}
-          title="插入链接"
+          onClick={() => editor.chain().focus().toggleBold().run()}
+          className={`${styles.toolbarButton} ${editor.isActive('bold') ? styles.toolbarButtonActive : ''}`}
+          title="粗体"
         >
-          <IconLink />
+          <Bold size={16} />
         </button>
         <button
           type="button"
-          className={styles.toolbarBtn}
-          onClick={handleImage}
-          title="插入图片"
+          onClick={() => editor.chain().focus().toggleItalic().run()}
+          className={`${styles.toolbarButton} ${editor.isActive('italic') ? styles.toolbarButtonActive : ''}`}
+          title="斜体"
         >
-          <IconImage />
+          <Italic size={16} />
+        </button>
+        <div className={styles.toolbarDivider} />
+        <button
+          type="button"
+          onClick={() => editor.chain().focus().toggleBulletList().run()}
+          className={`${styles.toolbarButton} ${editor.isActive('bulletList') ? styles.toolbarButtonActive : ''}`}
+          title="无序列表"
+        >
+          <List size={16} />
+        </button>
+        <button
+          type="button"
+          onClick={() => editor.chain().focus().toggleOrderedList().run()}
+          className={`${styles.toolbarButton} ${editor.isActive('orderedList') ? styles.toolbarButtonActive : ''}`}
+          title="有序列表"
+        >
+          <ListOrdered size={16} />
         </button>
       </div>
-      <div
-        ref={editorRef}
-        className={styles.richContent}
-        contentEditable
-        onInput={handleInput}
-        onFocus={() => setIsFocused(true)}
-        onBlur={() => setIsFocused(false)}
-        data-placeholder={placeholder}
-        dangerouslySetInnerHTML={{ __html: value }}
-      />
+      <EditorContent editor={editor} className={styles.editorContent} />
     </div>
   )
 }
@@ -170,12 +143,13 @@ function ProductForm({
     status: 'active',
     ...initialData
   })
-  const [tagInput, setTagInput] = useState('')
-  const [featureInput, setFeatureInput] = useState('')
 
-  const handleSubmit = () => {
+  const [tagInput, setTagInput] = useState('')
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault()
     if (!formData.title.trim()) {
-      toast.error('请输入产品名称')
+      toast.error('请输入产品标题')
       return
     }
     if (!formData.description.trim()) {
@@ -185,7 +159,7 @@ function ProductForm({
     onSubmit(formData)
   }
 
-  const addTag = () => {
+  const handleAddTag = () => {
     if (tagInput.trim() && !formData.tags?.includes(tagInput.trim())) {
       setFormData({
         ...formData,
@@ -195,172 +169,139 @@ function ProductForm({
     }
   }
 
-  const removeTag = (tag: string) => {
+  const handleRemoveTag = (tag: string) => {
     setFormData({
       ...formData,
-      tags: formData.tags?.filter(t => t !== tag)
-    })
-  }
-
-  const addFeature = () => {
-    if (featureInput.trim() && !formData.features?.includes(featureInput.trim())) {
-      setFormData({
-        ...formData,
-        features: [...(formData.features || []), featureInput.trim()]
-      })
-      setFeatureInput('')
-    }
-  }
-
-  const removeFeature = (feature: string) => {
-    setFormData({
-      ...formData,
-      features: formData.features?.filter(f => f !== feature)
+      tags: formData.tags?.filter(t => t !== tag) || []
     })
   }
 
   return (
-    <div className={styles.formContainer}>
-      <div className={styles.formSection}>
-        <h3 className={styles.sectionTitle}>基本信息</h3>
+    <form onSubmit={handleSubmit} className={styles.form}>
+      <div className={styles.formHeader}>
+        <h2 className={styles.formTitle}>
+          {mode === 'new' ? '新建产品' : '编辑产品'}
+        </h2>
+      </div>
+
+      <div className={styles.formBody}>
         <div className={styles.formRow}>
-          <div className={styles.formField}>
-            <label className={styles.fieldLabel}>
-              产品名称 <span className={styles.required}>*</span>
+          <div className={styles.formGroup}>
+            <label className={styles.label}>
+              <Package size={16} />
+              产品标题 *
             </label>
-            <Input
+            <input
+              type="text"
               value={formData.title}
-              onChange={(value) => setFormData({ ...formData, title: value })}
-              placeholder="请输入产品名称"
+              onChange={(e) => setFormData({ ...formData, title: e.target.value })}
+              className={styles.input}
+              placeholder="请输入产品标题"
             />
           </div>
-          <div className={styles.formField}>
-            <label className={styles.fieldLabel}>产品分类</label>
-            <Select
-              value={formData.category}
-              onChange={(value) => setFormData({ 
-                ...formData, 
-                category: value,
-                categoryName: value === 'ai-tools' ? 'AI工具' : 
-                             value === 'ai-services' ? 'AI服务' : 
-                             value === 'ai-models' ? 'AI模型' : ''
-              })}
-              placeholder="请选择分类"
-              allowClear
-            >
-              <Option value="ai-tools">AI工具</Option>
-              <Option value="ai-services">AI服务</Option>
-              <Option value="ai-models">AI模型</Option>
-            </Select>
+
+          <div className={styles.formGroup}>
+            <label className={styles.label}>
+              <Tag size={16} />
+              产品分类
+            </label>
+            <input
+              type="text"
+              value={formData.categoryName || ''}
+              onChange={(e) => setFormData({ ...formData, categoryName: e.target.value })}
+              className={styles.input}
+              placeholder="请输入产品分类"
+            />
           </div>
         </div>
 
-        <div className={styles.formField}>
-          <label className={styles.fieldLabel}>
-            产品描述 <span className={styles.required}>*</span>
+        <div className={styles.formGroup}>
+          <label className={styles.label}>
+            <FileText size={16} />
+            产品描述 *
           </label>
-          <TextArea
+          <textarea
             value={formData.description}
-            onChange={(value) => setFormData({ ...formData, description: value })}
+            onChange={(e) => setFormData({ ...formData, description: e.target.value })}
+            className={styles.textarea}
             placeholder="请输入产品描述"
-            autoSize={{ minRows: 2, maxRows: 4 }}
+            rows={3}
           />
         </div>
 
-        <div className={styles.formField}>
-          <label className={styles.fieldLabel}>产品详情</label>
-          <RichTextEditor
-            value={formData.content || ''}
-            onChange={(value) => setFormData({ ...formData, content: value })}
-            placeholder="请输入产品详情内容..."
-          />
-        </div>
-      </div>
-
-      <div className={styles.formSection}>
-        <h3 className={styles.sectionTitle}>价格与状态</h3>
         <div className={styles.formRow}>
-          <div className={styles.formField}>
-            <label className={styles.fieldLabel}>售价</label>
-            <InputNumber
+          <div className={styles.formGroup}>
+            <label className={styles.label}>
+              <DollarSign size={16} />
+              现价 *
+            </label>
+            <input
+              type="number"
               value={formData.price}
-              onChange={(value) => setFormData({ ...formData, price: value || 0 })}
-              placeholder="请输入售价"
-              min={0}
-              prefix="¥"
-              style={{ width: '100%' }}
+              onChange={(e) => setFormData({ ...formData, price: parseFloat(e.target.value) || 0 })}
+              className={styles.input}
+              placeholder="0.00"
+              min="0"
+              step="0.01"
             />
           </div>
-          <div className={styles.formField}>
-            <label className={styles.fieldLabel}>原价</label>
-            <InputNumber
-              value={formData.originalPrice}
-              onChange={(value) => setFormData({ ...formData, originalPrice: value || undefined })}
-              placeholder="请输入原价"
-              min={0}
-              prefix="¥"
-              style={{ width: '100%' }}
+
+          <div className={styles.formGroup}>
+            <label className={styles.label}>
+              <DollarSign size={16} />
+              原价
+            </label>
+            <input
+              type="number"
+              value={formData.originalPrice || ''}
+              onChange={(e) => setFormData({ ...formData, originalPrice: parseFloat(e.target.value) || undefined })}
+              className={styles.input}
+              placeholder="0.00"
+              min="0"
+              step="0.01"
             />
           </div>
-          <div className={styles.formField}>
-            <label className={styles.fieldLabel}>状态</label>
-            <Select
-              value={formData.status}
-              onChange={(value) => setFormData({ ...formData, status: value })}
-              style={{ width: '100%' }}
-            >
-              <Option value="active">上架</Option>
-              <Option value="inactive">下架</Option>
-            </Select>
-          </div>
         </div>
-      </div>
 
-      <div className={styles.formSection}>
-        <h3 className={styles.sectionTitle}>媒体与链接</h3>
-        <div className={styles.formField}>
-          <label className={styles.fieldLabel}>产品图片</label>
-          <Input
-            value={formData.image}
-            onChange={(value) => setFormData({ ...formData, image: value })}
-            placeholder="请输入产品图片URL"
+        <div className={styles.formGroup}>
+          <label className={styles.label}>
+            <ImageIcon size={16} />
+            产品图片
+          </label>
+          <input
+            type="text"
+            value={formData.image || ''}
+            onChange={(e) => setFormData({ ...formData, image: e.target.value })}
+            className={styles.input}
+            placeholder="请输入图片URL"
           />
         </div>
-        <div className={styles.formField}>
-          <label className={styles.fieldLabel}>产品链接</label>
-          <Input
-            value={formData.link}
-            onChange={(value) => setFormData({ ...formData, link: value })}
-            placeholder="请输入产品链接"
-          />
-        </div>
-      </div>
 
-      <div className={styles.formSection}>
-        <h3 className={styles.sectionTitle}>标签与特性</h3>
-        <div className={styles.formField}>
-          <label className={styles.fieldLabel}>产品标签</label>
+        <div className={styles.formGroup}>
+          <label className={styles.label}>
+            <Tag size={16} />
+            产品标签
+          </label>
           <div className={styles.tagInput}>
-            <Input
+            <input
+              type="text"
               value={tagInput}
-              onChange={setTagInput}
+              onChange={(e) => setTagInput(e.target.value)}
+              onKeyPress={(e) => e.key === 'Enter' && (e.preventDefault(), handleAddTag())}
+              className={styles.input}
               placeholder="输入标签后按回车添加"
-              onPressEnter={addTag}
-              style={{ flex: 1 }}
             />
-            <Button type="primary" onClick={addTag}>添加</Button>
+            <button type="button" onClick={handleAddTag} className={styles.addButton}>
+              添加
+            </button>
           </div>
           {formData.tags && formData.tags.length > 0 && (
-            <div className={styles.tagsList}>
+            <div className={styles.tags}>
               {formData.tags.map((tag, index) => (
-                <span key={index} className={styles.tagItem}>
+                <span key={index} className={styles.tag}>
                   {tag}
-                  <button 
-                    type="button" 
-                    className={styles.tagRemove}
-                    onClick={() => removeTag(tag)}
-                  >
-                    ×
+                  <button type="button" onClick={() => handleRemoveTag(tag)}>
+                    <X size={14} />
                   </button>
                 </span>
               ))}
@@ -368,156 +309,33 @@ function ProductForm({
           )}
         </div>
 
-        <div className={styles.formField}>
-          <label className={styles.fieldLabel}>产品特性</label>
-          <div className={styles.tagInput}>
-            <Input
-              value={featureInput}
-              onChange={setFeatureInput}
-              placeholder="输入特性后按回车添加"
-              onPressEnter={addFeature}
-              style={{ flex: 1 }}
-            />
-            <Button type="primary" onClick={addFeature}>添加</Button>
-          </div>
-          {formData.features && formData.features.length > 0 && (
-            <div className={styles.featuresList}>
-              {formData.features.map((feature, index) => (
-                <div key={index} className={styles.featureItem}>
-                  <span>{feature}</span>
-                  <button 
-                    type="button" 
-                    className={styles.featureRemove}
-                    onClick={() => removeFeature(feature)}
-                  >
-                    ×
-                  </button>
-                </div>
-              ))}
-            </div>
-          )}
+        <div className={styles.formGroup}>
+          <label className={styles.label}>
+            <FileText size={16} />
+            产品详情
+          </label>
+          <RichTextEditor
+            value={formData.content}
+            onChange={(value) => setFormData({ ...formData, content: value })}
+            placeholder="请输入产品详情..."
+          />
         </div>
       </div>
 
-      <div className={styles.formActions}>
-        <Button onClick={onCancel}>取消</Button>
-        <Button type="primary" loading={loading} onClick={handleSubmit}>
-          {mode === 'new' ? '创建产品' : '保存修改'}
-        </Button>
-      </div>
-    </div>
-  )
-}
-
-function ProductView({ product, onBack }: { product: Product; onBack: () => void }) {
-  const formatPrice = (price: number) => {
-    if (price === 0) return '免费'
-    return `¥${price}`
-  }
-
-  return (
-    <div className={styles.viewContainer}>
-      <div className={styles.viewHeader}>
-        <Button type="text" icon={<IconLeft />} onClick={onBack}>
-          返回列表
-        </Button>
-        <h2 className={styles.viewTitle}>{product.title}</h2>
-      </div>
-
-      <Card className={styles.viewCard}>
-        <div className={styles.viewContent}>
-          <div className={styles.viewSection}>
-            <div className={styles.viewRow}>
-              <div className={styles.viewField}>
-                <span className={styles.viewLabel}>分类</span>
-                <p className={styles.viewValue}>{product.categoryName || '-'}</p>
-              </div>
-              <div className={styles.viewField}>
-                <span className={styles.viewLabel}>状态</span>
-                <p className={styles.viewValue}>
-                  <span className={`${styles.statusBadge} ${product.status === 'active' ? styles.statusActive : styles.statusInactive}`}>
-                    {product.status === 'active' ? '上架' : '下架'}
-                  </span>
-                </p>
-              </div>
-              <div className={styles.viewField}>
-                <span className={styles.viewLabel}>销量</span>
-                <p className={styles.viewValue}>{product.salesCount || 0}</p>
-              </div>
-            </div>
-
-            <div className={styles.viewField}>
-              <span className={styles.viewLabel}>价格</span>
-              <p className={styles.viewPrice}>
-                {formatPrice(product.price)}
-                {product.originalPrice && product.originalPrice > product.price && (
-                  <span style={{ textDecoration: 'line-through', color: '#c9cdd4', marginLeft: '8px', fontSize: '0.875rem' }}>
-                    {formatPrice(product.originalPrice)}
-                  </span>
-                )}
-              </p>
-            </div>
-
-            <div className={styles.viewField}>
-              <span className={styles.viewLabel}>描述</span>
-              <p className={styles.viewValue}>{product.description}</p>
-            </div>
-
-            {product.image && (
-              <div className={styles.viewField}>
-                <span className={styles.viewLabel}>产品图片</span>
-                <div className={styles.imagePreview}>
-                  <img src={product.image} alt={product.title} />
-                </div>
-              </div>
-            )}
-
-            {product.link && (
-              <div className={styles.viewField}>
-                <span className={styles.viewLabel}>产品链接</span>
-                <p className={styles.viewValue}>
-                  <a href={product.link} target="_blank" rel="noopener noreferrer" className={styles.viewLink}>
-                    {product.link}
-                  </a>
-                </p>
-              </div>
-            )}
-
-            {product.tags && product.tags.length > 0 && (
-              <div className={styles.viewField}>
-                <span className={styles.viewLabel}>标签</span>
-                <div className={styles.tagsList}>
-                  {product.tags.map((tag, index) => (
-                    <span key={index} className={styles.tag}>{tag}</span>
-                  ))}
-                </div>
-              </div>
-            )}
-
-            {product.features && product.features.length > 0 && (
-              <div className={styles.viewField}>
-                <span className={styles.viewLabel}>特性</span>
-                <ul style={{ margin: 0, paddingLeft: '1.5rem' }}>
-                  {product.features.map((feature, index) => (
-                    <li key={index} style={{ marginBottom: '0.5rem' }}>
-                      <span className={styles.featureIcon}>✓</span>
-                      {feature}
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            )}
-          </div>
-
-          {product.content && (
-            <div className={styles.viewSection}>
-              <span className={styles.viewLabel}>产品详情</span>
-              <div className={styles.htmlContent} dangerouslySetInnerHTML={{ __html: product.content }} />
-            </div>
+      <div className={styles.formFooter}>
+        <button type="button" onClick={onCancel} className={styles.cancelButton}>
+          取消
+        </button>
+        <button type="submit" disabled={loading} className={styles.submitButton}>
+          {loading ? '保存中...' : (
+            <>
+              <Save size={16} />
+              保存
+            </>
           )}
-        </div>
-      </Card>
-    </div>
+        </button>
+      </div>
+    </form>
   )
 }
 
@@ -535,220 +353,163 @@ export function ProductsManagement() {
   const fetchProducts = async () => {
     try {
       setLoading(true)
-      const response = await fetch('/api/products?admin=true')
+      const response = await fetch('/api/products')
       const result = await response.json()
       if (result.success && result.data) {
         setProducts(result.data)
       }
     } catch (error) {
-      console.error('Failed to fetch products:', error)
+      console.error('获取产品列表失败:', error)
       toast.error('获取产品列表失败')
     } finally {
       setLoading(false)
     }
   }
 
-  const handleAddProduct = () => {
-    setCurrentProduct(null)
-    setViewMode('new')
-  }
-
-  const handleEditProduct = (product: Product) => {
-    setCurrentProduct(product)
-    setViewMode('edit')
-  }
-
-  const handleViewProduct = (product: Product) => {
-    setCurrentProduct(product)
-    setViewMode('view')
-  }
-
-  const handleDeleteProduct = async (product: Product) => {
-    if (confirm(`确定要删除产品 "${product.title}" 吗？`)) {
-      try {
-        const response = await fetch(`/api/products?id=${product.id}`, {
-          method: 'DELETE'
-        })
-        const result = await response.json()
-        
-        if (result.success) {
-          setProducts(products.filter(p => p.id !== product.id))
-          toast.success('产品删除成功')
-        } else {
-          toast.error('删除产品失败')
-        }
-      } catch (error) {
-        console.error('Failed to delete product:', error)
-        toast.error('删除产品失败')
-      }
-    }
-  }
-
-  const handleSubmit = async (data: Product) => {
-    setSubmitting(true)
+  const handleCreate = async (data: Product) => {
     try {
+      setSubmitting(true)
       const response = await fetch('/api/products', {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-          ...data,
-          id: viewMode === 'edit' ? currentProduct?.id : undefined
-        })
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data)
       })
       const result = await response.json()
-      
       if (result.success) {
-        toast.success(viewMode === 'new' ? '产品创建成功' : '产品更新成功')
-        await fetchProducts()
+        toast.success('产品创建成功')
         setViewMode('list')
-        setCurrentProduct(null)
+        fetchProducts()
       } else {
-        toast.error(result.message || '保存产品失败')
+        toast.error(result.message || '创建失败')
       }
     } catch (error) {
-      console.error('Failed to save product:', error)
-      toast.error('保存产品失败')
+      console.error('创建产品失败:', error)
+      toast.error('创建产品失败')
     } finally {
       setSubmitting(false)
     }
   }
 
-  const handleCancel = () => {
-    setViewMode('list')
-    setCurrentProduct(null)
-  }
-
-  const formatPrice = (price: number) => {
-    if (price === 0) return '免费'
-    return `¥${price}`
-  }
-
-  const columns = [
-    {
-      title: '产品名称',
-      dataIndex: 'title',
-      key: 'title',
-      width: 200,
-      render: (text: string) => (
-        <div className={styles.titleCell}>{text}</div>
-      )
-    },
-    {
-      title: '描述',
-      dataIndex: 'description',
-      key: 'description',
-      render: (text: string) => (
-        <div className={styles.descriptionCell}>{text}</div>
-      )
-    },
-    {
-      title: '价格',
-      dataIndex: 'price',
-      key: 'price',
-      width: 120,
-      render: (price: number, record: Product) => (
-        <div className={styles.priceCell}>
-          <span className={styles.currentPrice}>{formatPrice(price)}</span>
-          {record.originalPrice && record.originalPrice > price && (
-            <span className={styles.originalPrice}>{formatPrice(record.originalPrice)}</span>
-          )}
-        </div>
-      )
-    },
-    {
-      title: '分类',
-      dataIndex: 'categoryName',
-      key: 'categoryName',
-      width: 100
-    },
-    {
-      title: '销量',
-      dataIndex: 'salesCount',
-      key: 'salesCount',
-      width: 80,
-      render: (count: number) => count || 0
-    },
-    {
-      title: '状态',
-      dataIndex: 'status',
-      key: 'status',
-      width: 100,
-      render: (status: string) => (
-        <span className={`${styles.statusBadge} ${status === 'active' ? styles.statusActive : styles.statusInactive}`}>
-          {status === 'active' ? '上架' : '下架'}
-        </span>
-      )
-    },
-    {
-      title: '操作',
-      key: 'action',
-      width: 200,
-      render: (_: any, record: Product) => (
-        <div className={styles.actionButtons}>
-          <Button
-            type="text"
-            size="small"
-            icon={<IconEye />}
-            onClick={() => handleViewProduct(record)}
-          >
-            查看
-          </Button>
-          <Button
-            type="primary"
-            size="small"
-            icon={<IconEdit />}
-            onClick={() => handleEditProduct(record)}
-          >
-            编辑
-          </Button>
-          <Button
-            status="danger"
-            size="small"
-            icon={<IconDelete />}
-            onClick={() => handleDeleteProduct(record)}
-          >
-            删除
-          </Button>
-        </div>
-      )
+  const handleUpdate = async (data: Product) => {
+    if (!currentProduct?.id) return
+    try {
+      setSubmitting(true)
+      const response = await fetch('/api/products', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ ...data, id: currentProduct.id })
+      })
+      const result = await response.json()
+      if (result.success) {
+        toast.success('产品更新成功')
+        setViewMode('list')
+        fetchProducts()
+      } else {
+        toast.error(result.message || '更新失败')
+      }
+    } catch (error) {
+      console.error('更新产品失败:', error)
+      toast.error('更新产品失败')
+    } finally {
+      setSubmitting(false)
     }
-  ]
+  }
+
+  const handleDelete = async (id: number) => {
+    if (!confirm('确定要删除这个产品吗？')) return
+    try {
+      const response = await fetch(`/api/products?id=${id}`, {
+        method: 'DELETE'
+      })
+      const result = await response.json()
+      if (result.success) {
+        toast.success('产品删除成功')
+        fetchProducts()
+      } else {
+        toast.error(result.message || '删除失败')
+      }
+    } catch (error) {
+      console.error('删除产品失败:', error)
+      toast.error('删除产品失败')
+    }
+  }
+
+  if (loading) {
+    return (
+      <div className={styles.loading}>
+        <div className={styles.spinner}></div>
+        <p>加载中...</p>
+      </div>
+    )
+  }
+
+  if (viewMode === 'new') {
+    return (
+      <ProductForm
+        onSubmit={handleCreate}
+        onCancel={() => setViewMode('list')}
+        loading={submitting}
+        mode="new"
+      />
+    )
+  }
+
+  if (viewMode === 'edit' && currentProduct) {
+    return (
+      <ProductForm
+        initialData={currentProduct}
+        onSubmit={handleUpdate}
+        onCancel={() => {
+          setViewMode('list')
+          setCurrentProduct(null)
+        }}
+        loading={submitting}
+        mode="edit"
+      />
+    )
+  }
 
   if (viewMode === 'view' && currentProduct) {
-    return <ProductView product={currentProduct} onBack={handleCancel} />
-  }
-
-  if (viewMode === 'new' || viewMode === 'edit') {
     return (
-      <div className={styles.container}>
-        <div className={styles.header}>
-          <div className={styles.headerContent}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
-              <Button
-                type="text"
-                icon={<IconLeft />}
-                onClick={handleCancel}
-                style={{ color: 'white' }}
-              >
-                返回列表
-              </Button>
-              <h1 className={styles.headerTitle}>{viewMode === 'new' ? '新建产品' : '编辑产品'}</h1>
-            </div>
-          </div>
+      <div className={styles.detailView}>
+        <div className={styles.detailHeader}>
+          <button onClick={() => {
+            setViewMode('list')
+            setCurrentProduct(null)
+          }} className={styles.backButton}>
+            <ArrowLeft size={20} />
+            返回列表
+          </button>
+          <h2 className={styles.detailTitle}>{currentProduct.title}</h2>
         </div>
-
-        <div className={styles.content}>
-          <Card className={styles.formCard}>
-            <ProductForm
-              mode={viewMode}
-              initialData={currentProduct}
-              onSubmit={handleSubmit}
-              onCancel={handleCancel}
-              loading={submitting}
-            />
-          </Card>
+        <div className={styles.detailBody}>
+          <div className={styles.detailSection}>
+            <h3>产品描述</h3>
+            <p>{currentProduct.description}</p>
+          </div>
+          {currentProduct.content && (
+            <div className={styles.detailSection}>
+              <h3>产品详情</h3>
+              <div dangerouslySetInnerHTML={{ __html: currentProduct.content }} />
+            </div>
+          )}
+          <div className={styles.detailMeta}>
+            <div className={styles.metaItem}>
+              <DollarSign size={16} />
+              <span>现价: ¥{currentProduct.price}</span>
+            </div>
+            {currentProduct.originalPrice && (
+              <div className={styles.metaItem}>
+                <span>原价: ¥{currentProduct.originalPrice}</span>
+              </div>
+            )}
+            {currentProduct.categoryName && (
+              <div className={styles.metaItem}>
+                <Tag size={16} />
+                <span>{currentProduct.categoryName}</span>
+              </div>
+            )}
+          </div>
         </div>
       </div>
     )
@@ -757,40 +518,78 @@ export function ProductsManagement() {
   return (
     <div className={styles.container}>
       <div className={styles.header}>
-        <div className={styles.headerContent}>
-          <div>
-            <h1 className={styles.headerTitle}>产品管理</h1>
-            <p className={styles.headerDescription}>管理网站产品信息，包括价格、特性、分类等</p>
-          </div>
-          <Button
-            type="primary"
-            icon={<IconPlus />}
-            onClick={handleAddProduct}
-          >
-            新建产品
-          </Button>
-        </div>
+        <h1 className={styles.title}>产品管理</h1>
+        <button onClick={() => setViewMode('new')} className={styles.primaryButton}>
+          <Plus size={20} />
+          新建产品
+        </button>
       </div>
 
-      <div className={styles.content}>
-        {loading ? (
-          <div className={styles.loadingContainer}>
-            <Spin size={32} />
+      <div className={styles.table}>
+        <div className={styles.tableHeader}>
+          <div className={styles.tableRow}>
+            <div className={styles.tableCell}>产品名称</div>
+            <div className={styles.tableCell}>分类</div>
+            <div className={styles.tableCell}>价格</div>
+            <div className={styles.tableCell}>状态</div>
+            <div className={styles.tableCell}>操作</div>
           </div>
-        ) : (
-          <Card className={styles.tableCard}>
-            <Table
-              columns={columns}
-              data={products}
-              rowKey="id"
-              pagination={{ 
-                pageSize: 10,
-                showTotal: true,
-                showJumper: true
-              }}
-            />
-          </Card>
-        )}
+        </div>
+        <div className={styles.tableBody}>
+          {products.length === 0 ? (
+            <div className={styles.empty}>
+              <Package size={48} />
+              <p>暂无产品数据</p>
+            </div>
+          ) : (
+            products.map((product) => (
+              <div key={product.id} className={styles.tableRow}>
+                <div className={styles.tableCell}>
+                  <div className={styles.productName}>{product.title}</div>
+                  <div className={styles.productDesc}>{product.description}</div>
+                </div>
+                <div className={styles.tableCell}>{product.categoryName || '-'}</div>
+                <div className={styles.tableCell}>¥{product.price}</div>
+                <div className={styles.tableCell}>
+                  <span className={`${styles.status} ${product.status === 'active' ? styles.statusActive : styles.statusInactive}`}>
+                    {product.status === 'active' ? '上架' : '下架'}
+                  </span>
+                </div>
+                <div className={styles.tableCell}>
+                  <div className={styles.actions}>
+                    <button
+                      onClick={() => {
+                        setCurrentProduct(product)
+                        setViewMode('view')
+                      }}
+                      className={styles.iconButton}
+                      title="查看"
+                    >
+                      <Eye size={18} />
+                    </button>
+                    <button
+                      onClick={() => {
+                        setCurrentProduct(product)
+                        setViewMode('edit')
+                      }}
+                      className={styles.iconButton}
+                      title="编辑"
+                    >
+                      <Edit3 size={18} />
+                    </button>
+                    <button
+                      onClick={() => product.id && handleDelete(product.id)}
+                      className={`${styles.iconButton} ${styles.deleteButton}`}
+                      title="删除"
+                    >
+                      <Trash2 size={18} />
+                    </button>
+                  </div>
+                </div>
+              </div>
+            ))
+          )}
+        </div>
       </div>
     </div>
   )
