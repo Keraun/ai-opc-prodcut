@@ -55,7 +55,8 @@ import { ManagementHeader } from '@/app/admin/dashboard/components'
 **示例代码**：
 
 ```tsx
-import { CommonTable, Tag, ActionButton } from '@/app/admin/dashboard/components'
+import { CommonTable, ActionButton } from '@/app/admin/dashboard/components'
+import { Tag } from '@arco-design/web-react'
 
 <CommonTable
   columns={[
@@ -133,18 +134,26 @@ import { StatusBadge } from '@/app/admin/dashboard/components'
 
 **功能**：标签组件，用于显示分类、标签等。
 
+**使用说明**：使用 Arco Design 官方的 Tag 组件，支持更多特性和更好的视觉效果。
+
 **使用示例**：
 
 ```tsx
-import { Tag } from '@/app/admin/dashboard/components'
+import { Tag } from '@arco-design/web-react'
 
-<Tag color="primary">静态页面</Tag>
+<Tag color="arcoblue">静态页面</Tag>
 <Tag color="success">用户页面</Tag>
 <Tag color="warning">系统页面</Tag>
 <Tag color="danger">已删除</Tag>
 <Tag color="purple">动态路由</Tag>
 <Tag color="orange">重要</Tag>
 ```
+
+**参数说明**：
+- `color`：标签颜色，支持 'arcoblue', 'success', 'warning', 'danger', 'purple', 'orange' 等
+- `size`：标签大小，支持 'small', 'default', 'large'
+- `closable`：是否可关闭
+- `onClose`：关闭事件回调
 
 #### ActionButton 组件
 
@@ -250,7 +259,7 @@ import { Tooltip } from '@/app/admin/dashboard/components'
    - 表格数据使用 `CommonTable`
    - 页面头部使用 `ManagementHeader`
    - 状态显示使用 `StatusBadge`
-   - 标签显示使用 `Tag`
+   - 标签显示使用 Arco Design 的 `Tag` 组件
    - 操作按钮使用 `ActionButton`
 
 3. **性能优化**：
@@ -269,7 +278,8 @@ import { Tooltip } from '@/app/admin/dashboard/components'
 ### 页面管理
 
 ```tsx
-import { CommonTable, Tag, ActionButton } from '@/app/admin/dashboard/components'
+import { CommonTable, ActionButton } from '@/app/admin/dashboard/components'
+import { Tag } from '@arco-design/web-react'
 
 <CommonTable
   columns={[
@@ -283,7 +293,7 @@ import { CommonTable, Tag, ActionButton } from '@/app/admin/dashboard/components
       dataIndex: 'type',
       key: 'type',
       render: (type: string) => (
-        <Tag color={type === 'dynamic' ? 'purple' : 'primary'}>
+        <Tag color={type === 'dynamic' ? 'purple' : 'arcoblue'}>
           {type === 'dynamic' ? '动态路由' : '静态页面'}
         </Tag>
       ),

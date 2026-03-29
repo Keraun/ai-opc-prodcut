@@ -28,11 +28,7 @@ interface ThemeSelectorProps {
 
 export function ThemeSelector({ themeData, onThemeChange }: ThemeSelectorProps) {
   return (
-    <Card title="主题皮肤选择">
-      <div className={styles.themeSection}>
-        <p className={styles.themeDescription}>选择您喜欢的主题皮肤,不同主题有不同的配色方案和布局风格。</p>
-      </div>
-      
+    <Card >
       <div className={styles.themeGrid}>
         {themeData && themeData.themes && Object.entries(themeData.themes).map(([key, theme]) => (
           <div
