@@ -85,6 +85,23 @@
     "published_at": null
   },
   {
+    "id": 8,
+    "page_id": "product-detail",
+    "name": "产品详情",
+    "slug": "product-detail",
+    "type": "dynamic",
+    "description": "产品详情页面（动态路由）",
+    "status": "published",
+    "is_system": 1,
+    "is_deletable": 0,
+    "route": "/product/[id]",
+    "dynamic_param": "id",
+    "module_instance_ids": "[\"site-root-1774743000000-0\",\"site-header-1774743000001-1\",\"product-detail-1774743000002-2\",\"site-footer-1774743000003-3\"]",
+    "created_at": null,
+    "updated_at": null,
+    "published_at": null
+  },
+  {
     "page_id": "666",
     "name": "666",
     "slug": "666",

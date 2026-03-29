@@ -16,7 +16,9 @@ class JsonDatabase {
     theme_config: 'theme_config.json',
     pages: 'pages.json',
     module_registry: 'module_registry.json',
-    page_modules: 'page_modules.json'
+    page_modules: 'page_modules.json',
+    articles: 'articles.json',
+    products: 'products.json'
   }
   private options: JsonDatabaseOptions
 

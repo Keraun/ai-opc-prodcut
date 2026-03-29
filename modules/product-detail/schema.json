@@ -1,0 +1,41 @@
+{
+  "type": "object",
+  "properties": {
+    "showPrice": {
+      "type": "boolean",
+      "title": "显示价格",
+      "default": true,
+      "description": "是否显示产品价格"
+    },
+    "showFeatures": {
+      "type": "boolean",
+      "title": "显示特性",
+      "default": true,
+      "description": "是否显示产品特性列表"
+    },
+    "showRating": {
+      "type": "boolean",
+      "title": "显示评分",
+      "default": true,
+      "description": "是否显示产品评分"
+    },
+    "showSalesCount": {
+      "type": "boolean",
+      "title": "显示销量",
+      "default": true,
+      "description": "是否显示销量"
+    },
+    "showRelated": {
+      "type": "boolean",
+      "title": "显示相关产品",
+      "default": true,
+      "description": "是否显示相关产品推荐"
+    },
+    "relatedCount": {
+      "type": "number",
+      "title": "相关产品数量",
+      "default": 4,
+      "description": "显示的相关产品数量"
+    }
+  }
+}

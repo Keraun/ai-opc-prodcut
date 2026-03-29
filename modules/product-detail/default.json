@@ -1,0 +1,8 @@
+{
+  "showPrice": true,
+  "showFeatures": true,
+  "showRating": true,
+  "showSalesCount": true,
+  "showRelated": true,
+  "relatedCount": 4
+}

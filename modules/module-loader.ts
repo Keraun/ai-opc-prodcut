@@ -18,6 +18,7 @@ export const MODULE_LOADERS: Record<string, () => Promise<any>> = {
   'news-detail': () => import('./news-detail/mod'),
   'section-404': () => import('./section-404/mod'),
   'product-list': () => import('./product-list/mod'),
+  'product-detail': () => import('./product-detail/mod'),
 }
 
 export const MODULE_COMPONENT_NAMES: Record<string, string> = {
@@ -35,6 +36,7 @@ export const MODULE_COMPONENT_NAMES: Record<string, string> = {
   'news-detail': 'NewsDetailModule',
   'section-404': 'NotFoundModule',
   'product-list': 'ProductListModule',
+  'product-detail': 'ProductDetailModule',
 }
 
 export function getModuleLoaderConfig(): ModuleLoaderConfig {

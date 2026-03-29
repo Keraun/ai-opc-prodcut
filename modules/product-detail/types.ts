@@ -17,13 +17,11 @@ export interface Product {
   updated_at: string
 }
 
-export interface ProductListData {
-  title: string
-  subtitle: string
+export interface ProductDetailData {
   showPrice: boolean
-  showTags: boolean
-  categories?: Array<{
-    key: string
-    title: string
-  }>
+  showFeatures: boolean
+  showRating: boolean
+  showSalesCount: boolean
+  showRelated: boolean
+  relatedCount: number
 }

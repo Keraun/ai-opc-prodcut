@@ -138,9 +138,9 @@
     "module_id": "product-list",
     "module_name": "产品列表",
     "module_order": 2,
-    "data": null,
+    "data": "{\"title\":\"AI产品中心\",\"subtitle\":\"精选优质 AI 工具、课程和服务，助力个人创业者实现10倍效率提升\",\"showPrice\":true,\"showTags\":true,\"categories\":[{\"key\":\"tools\",\"title\":\"AI工具\"},{\"key\":\"courses\",\"title\":\"AI课程\"},{\"key\":\"services\",\"title\":\"AI服务\"}]}",
     "created_at": "2026-03-27T20:18:12.903Z",
-    "updated_at": "2026-03-27T20:18:12.903Z"
+    "updated_at": "2026-03-29T15:00:00.000Z"
   },
   {
     "id": 14,
@@ -182,9 +182,9 @@
     "module_id": "news-list",
     "module_name": "新闻列表",
     "module_order": 2,
-    "data": null,
+    "data": "{\"title\":\"资讯中心\",\"subtitle\":\"最新行业动态、深度分析与实战案例\",\"showDate\":true,\"showSummary\":true,\"itemsPerPage\":10}",
     "created_at": "2026-03-27T20:18:12.903Z",
-    "updated_at": "2026-03-27T20:18:12.903Z"
+    "updated_at": "2026-03-29T15:00:00.000Z"
   },
   {
     "id": 18,
@@ -284,6 +284,50 @@
     "data": null,
     "created_at": "2026-03-27T20:18:12.903Z",
     "updated_at": "2026-03-27T20:18:12.903Z"
+  },
+  {
+    "id": 33,
+    "module_instance_id": "site-root-1774743000000-0",
+    "page_id": "product-detail",
+    "module_id": "site-root",
+    "module_name": "站点根配置",
+    "module_order": 0,
+    "data": null,
+    "created_at": "2026-03-29T16:00:00.000Z",
+    "updated_at": "2026-03-29T16:00:00.000Z"
+  },
+  {
+    "id": 34,
+    "module_instance_id": "site-header-1774743000001-1",
+    "page_id": "product-detail",
+    "module_id": "site-header",
+    "module_name": "站点头部",
+    "module_order": 1,
+    "data": null,
+    "created_at": "2026-03-29T16:00:00.000Z",
+    "updated_at": "2026-03-29T16:00:00.000Z"
+  },
+  {
+    "id": 35,
+    "module_instance_id": "product-detail-1774743000002-2",
+    "page_id": "product-detail",
+    "module_id": "product-detail",
+    "module_name": "产品详情",
+    "module_order": 2,
+    "data": "{\"showPrice\":true,\"showFeatures\":true,\"showRating\":true,\"showSalesCount\":true,\"showRelated\":true,\"relatedCount\":4}",
+    "created_at": "2026-03-29T16:00:00.000Z",
+    "updated_at": "2026-03-29T16:00:00.000Z"
+  },
+  {
+    "id": 36,
+    "module_instance_id": "site-footer-1774743000003-3",
+    "page_id": "product-detail",
+    "module_id": "site-footer",
+    "module_name": "站点页脚",
+    "module_order": 3,
+    "data": null,
+    "created_at": "2026-03-29T16:00:00.000Z",
+    "updated_at": "2026-03-29T16:00:00.000Z"
   },
   {
     "page_id": "666",
