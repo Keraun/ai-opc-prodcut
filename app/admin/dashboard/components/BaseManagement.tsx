@@ -63,6 +63,7 @@ export interface ManagementConfig {
   columns: ColumnConfig[]
   emptyIcon: React.ReactNode
   emptyText: string
+  description?: string
 }
 
 interface BaseManagementProps {
@@ -515,7 +516,12 @@ export function BaseManagement({ config }: BaseManagementProps) {
   return (
     <div className={styles.container}>
       <div className={styles.header}>
-        <h1 className={styles.title}>{config.title}管理</h1>
+        <div className={styles.headerLeft}>
+          <h1 className={styles.title}>{config.title}管理</h1>
+          {config.description && (
+            <p className={styles.description}>{config.description}</p>
+          )}
+        </div>
         <button onClick={() => setViewMode('new')} className={styles.primaryButton}>
           <Plus size={20} />
           新建{config.title}
@@ -548,7 +554,6 @@ export function BaseManagement({ config }: BaseManagementProps) {
               <div key={item.id} className={styles.tableRow}>
                 {config.columns.map(column => {
                   const isTitleColumn = column.key === 'name' || column.key === 'title'
-                  const content = column.render ? column.render(item) : item[column.key]
                   const titleText = item[column.key]
                   
                   return (
@@ -557,13 +562,7 @@ export function BaseManagement({ config }: BaseManagementProps) {
                       className={styles.tableCell}
                       style={column.width ? { width: column.width } : undefined}
                     >
-                      {isTitleColumn && titleText ? (
-                        <Tooltip content={titleText}>
-                          <span className={styles.titleCell}>{content}</span>
-                        </Tooltip>
-                      ) : (
-                        content
-                      )}
+                      {column.render ? column.render(item) : item[column.key]}
                     </div>
                   )
                 })}

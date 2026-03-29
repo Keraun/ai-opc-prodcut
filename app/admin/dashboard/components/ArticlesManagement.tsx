@@ -1,7 +1,26 @@
 "use client"
 
+import { useState } from "react"
 import { BaseManagement, type ManagementConfig } from "./BaseManagement"
 import { Newspaper, Tag, FileText, Calendar } from "lucide-react"
+import styles from "./BaseManagement.module.css"
+
+function Tooltip({ children, content }: { children: React.ReactNode; content: string }) {
+  const [show, setShow] = useState(false)
+  
+  return (
+    <div 
+      className={styles.tooltipWrapper}
+      onMouseEnter={() => setShow(true)}
+      onMouseLeave={() => setShow(false)}
+    >
+      {children}
+      {show && content && (
+        <div className={styles.tooltip}>{content}</div>
+      )}
+    </div>
+  )
+}
 
 export function ArticlesManagement() {
   const config: ManagementConfig = {
@@ -71,7 +90,9 @@ export function ArticlesManagement() {
         width: "2fr",
         render: (item) => (
           <div>
-            <div className="productName">{item.title}</div>
+            <Tooltip content={item.title}>
+              <div className="productName">{item.title}</div>
+            </Tooltip>
             <div className="productDesc">{item.summary}</div>
           </div>
         )
@@ -97,7 +118,8 @@ export function ArticlesManagement() {
       }
     ],
     emptyIcon: <Newspaper size={48} />,
-    emptyText: "暂无资讯数据"
+    emptyText: "暂无资讯数据",
+    description: "管理网站的所有资讯文章，包括创建、编辑和删除文章"
   }
 
   return <BaseManagement config={config} />

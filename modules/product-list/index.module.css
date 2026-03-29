@@ -301,7 +301,7 @@
 }
 
 .actionButton:hover {
-  background: var(--theme-primary-hover);
+  background: var(--theme-secondary);
 }
 
 .loading {

@@ -1,7 +1,26 @@
 "use client"
 
+import { useState } from "react"
 import { BaseManagement, type ManagementConfig } from "./BaseManagement"
 import { Package } from "lucide-react"
+import styles from "./BaseManagement.module.css"
+
+function Tooltip({ children, content }: { children: React.ReactNode; content: string }) {
+  const [show, setShow] = useState(false)
+  
+  return (
+    <div 
+      className={styles.tooltipWrapper}
+      onMouseEnter={() => setShow(true)}
+      onMouseLeave={() => setShow(false)}
+    >
+      {children}
+      {show && content && (
+        <div className={styles.tooltip}>{content}</div>
+      )}
+    </div>
+  )
+}
 
 export function ProductsManagement() {
   const config: ManagementConfig = {
@@ -78,7 +97,9 @@ export function ProductsManagement() {
         width: "2fr",
         render: (item) => (
           <div>
-            <div className="productName">{item.name}</div>
+            <Tooltip content={item.name}>
+              <div className="productName">{item.name}</div>
+            </Tooltip>
             <div className="productDesc">{item.description}</div>
           </div>
         )
@@ -104,7 +125,8 @@ export function ProductsManagement() {
       }
     ],
     emptyIcon: <Package size={48} />,
-    emptyText: "暂无产品数据"
+    emptyText: "暂无产品数据",
+    description: "管理网站的所有产品，包括创建、编辑和删除产品"
   }
 
   return <BaseManagement config={config} />

@@ -1,20 +1,28 @@
 .container {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 2rem;
+  padding: 0;
 }
 
 .header {
   display: flex;
   justify-content: space-between;
-  align-items: center;
-  margin-bottom: 2rem;
+  align-items: flex-start;
+  margin-bottom: 1.5rem;
+}
+
+.headerLeft {
+  flex: 1;
 }
 
 .title {
-  font-size: 1.875rem;
+  font-size: 1.5rem;
   font-weight: 600;
   color: #111827;
+  margin: 0 0 0.5rem 0;
+}
+
+.description {
+  font-size: 0.875rem;
+  color: #6b7280;
   margin: 0;
 }
 
@@ -39,8 +47,9 @@
 
 .table {
   background: white;
-  border-radius: 0.75rem;
+  border-radius: 12px;
   border: 1px solid #e5e7eb;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
   overflow: hidden;
 }
 
@@ -49,10 +58,21 @@
   border-bottom: 1px solid #e5e7eb;
 }
 
+.tableHeader .tableRow {
+  padding: 0.75rem 1rem;
+  background: #f9fafb;
+}
+
+.tableHeader .tableCell {
+  font-weight: 500;
+  color: #111827;
+  font-size: 0.875rem;
+}
+
 .tableRow {
   display: flex;
   gap: 1rem;
-  padding: 1rem 1.5rem;
+  padding: 0.75rem 1rem;
   align-items: center;
 }
 
@@ -91,15 +111,6 @@
   overflow: hidden;
   text-overflow: ellipsis;
   max-width: 250px;
-}
-
-.titleCell {
-  display: block;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  max-width: 250px;
-  cursor: pointer;
 }
 
 .tooltipWrapper {
