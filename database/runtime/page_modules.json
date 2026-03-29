@@ -6,9 +6,9 @@
     "module_id": "site-root",
     "module_name": "站点容器",
     "module_order": 0,
-    "data": null,
+    "data": "{\"name\":\"\",\"description\":\"专注AI一人公司服务\",\"url\":\"https://makerai.com\",\"ogImage\":\"/og-image.png\",\"links\":{\"email\":\"test@163.com\",\"wechat\":\"makerai_official\",\"github\":\"https://github.com/makerai\",\"twitter\":\"https://twitter.com/makerai\"},\"creator\":{\"name\":\"\",\"url\":\"https://makerai.com\"},\"contact\":{\"address\":\"浙江省杭州市西湖区三墩镇西园八路3号浙大森林\",\"phone\":\"400-888-4889\",\"email\":\"wuly93@163.com\"},\"support\":{\"customerServiceQRCode\":\"/images/customer-service-qr.png\",\"helpDocUrl\":\"https://help.makerai.com\"},\"icp\":\"浙ICP备XXXXXXXX号\",\"features\":{\"enableTOC\":true,\"enableReadingProgress\":true,\"enableSearch\":true},\"seo\":{\"keywords\":[\"AI一人公司\",\"AI工具\",\"AI课程\",\"AI工作流\",\"AI赋能\",\"个人创业\",\"一人公司\",\"AI GEO课程\",\"AI解决方案\",\"创业者服务\"],\"robots\":{\"index\":true,\"follow\":true,\"googleBot\":{\"index\":true,\"follow\":true,\"maxVideoPreview\":-1,\"maxImagePreview\":\"large\",\"maxSnippet\":-1}}},\"currentTheme\":\"minimal\"}",
     "created_at": "2026-03-27T20:18:12.903Z",
-    "updated_at": "2026-03-27T20:18:12.903Z"
+    "updated_at": "2026-03-29T17:38:42.850Z"
   },
   {
     "id": 12,
@@ -50,9 +50,9 @@
     "module_id": "site-root",
     "module_name": "站点容器",
     "module_order": 0,
-    "data": null,
+    "data": "{\"name\":\"\",\"description\":\"专注AI一人公司服务\",\"url\":\"https://makerai.com\",\"ogImage\":\"/og-image.png\",\"links\":{\"email\":\"test@163.com\",\"wechat\":\"makerai_official\",\"github\":\"https://github.com/makerai\",\"twitter\":\"https://twitter.com/makerai\"},\"creator\":{\"name\":\"\",\"url\":\"https://makerai.com\"},\"contact\":{\"address\":\"浙江省杭州市西湖区三墩镇西园八路3号浙大森林\",\"phone\":\"400-888-4889\",\"email\":\"wuly93@163.com\"},\"support\":{\"customerServiceQRCode\":\"/images/customer-service-qr.png\",\"helpDocUrl\":\"https://help.makerai.com\"},\"icp\":\"浙ICP备XXXXXXXX号\",\"features\":{\"enableTOC\":true,\"enableReadingProgress\":true,\"enableSearch\":true},\"seo\":{\"keywords\":[\"AI一人公司\",\"AI工具\",\"AI课程\",\"AI工作流\",\"AI赋能\",\"个人创业\",\"一人公司\",\"AI GEO课程\",\"AI解决方案\",\"创业者服务\"],\"robots\":{\"index\":true,\"follow\":true,\"googleBot\":{\"index\":true,\"follow\":true,\"maxVideoPreview\":-1,\"maxImagePreview\":\"large\",\"maxSnippet\":-1}}},\"currentTheme\":\"minimal\"}",
     "created_at": "2026-03-27T20:18:12.903Z",
-    "updated_at": "2026-03-27T20:18:12.903Z"
+    "updated_at": "2026-03-29T17:38:42.851Z"
   },
   {
     "id": 16,
@@ -94,9 +94,9 @@
     "module_id": "site-root",
     "module_name": "站点容器",
     "module_order": 0,
-    "data": null,
+    "data": "{\"name\":\"\",\"description\":\"专注AI一人公司服务\",\"url\":\"https://makerai.com\",\"ogImage\":\"/og-image.png\",\"links\":{\"email\":\"test@163.com\",\"wechat\":\"makerai_official\",\"github\":\"https://github.com/makerai\",\"twitter\":\"https://twitter.com/makerai\"},\"creator\":{\"name\":\"\",\"url\":\"https://makerai.com\"},\"contact\":{\"address\":\"浙江省杭州市西湖区三墩镇西园八路3号浙大森林\",\"phone\":\"400-888-4889\",\"email\":\"wuly93@163.com\"},\"support\":{\"customerServiceQRCode\":\"/images/customer-service-qr.png\",\"helpDocUrl\":\"https://help.makerai.com\"},\"icp\":\"浙ICP备XXXXXXXX号\",\"features\":{\"enableTOC\":true,\"enableReadingProgress\":true,\"enableSearch\":true},\"seo\":{\"keywords\":[\"AI一人公司\",\"AI工具\",\"AI课程\",\"AI工作流\",\"AI赋能\",\"个人创业\",\"一人公司\",\"AI GEO课程\",\"AI解决方案\",\"创业者服务\"],\"robots\":{\"index\":true,\"follow\":true,\"googleBot\":{\"index\":true,\"follow\":true,\"maxVideoPreview\":-1,\"maxImagePreview\":\"large\",\"maxSnippet\":-1}}},\"currentTheme\":\"minimal\"}",
     "created_at": "2026-03-27T20:18:12.903Z",
-    "updated_at": "2026-03-27T20:18:12.903Z"
+    "updated_at": "2026-03-29T17:38:42.851Z"
   },
   {
     "id": 20,
@@ -138,9 +138,9 @@
     "module_id": "site-root",
     "module_name": "站点容器",
     "module_order": 0,
-    "data": null,
+    "data": "{\"name\":\"\",\"description\":\"专注AI一人公司服务\",\"url\":\"https://makerai.com\",\"ogImage\":\"/og-image.png\",\"links\":{\"email\":\"test@163.com\",\"wechat\":\"makerai_official\",\"github\":\"https://github.com/makerai\",\"twitter\":\"https://twitter.com/makerai\"},\"creator\":{\"name\":\"\",\"url\":\"https://makerai.com\"},\"contact\":{\"address\":\"浙江省杭州市西湖区三墩镇西园八路3号浙大森林\",\"phone\":\"400-888-4889\",\"email\":\"wuly93@163.com\"},\"support\":{\"customerServiceQRCode\":\"/images/customer-service-qr.png\",\"helpDocUrl\":\"https://help.makerai.com\"},\"icp\":\"浙ICP备XXXXXXXX号\",\"features\":{\"enableTOC\":true,\"enableReadingProgress\":true,\"enableSearch\":true},\"seo\":{\"keywords\":[\"AI一人公司\",\"AI工具\",\"AI课程\",\"AI工作流\",\"AI赋能\",\"个人创业\",\"一人公司\",\"AI GEO课程\",\"AI解决方案\",\"创业者服务\"],\"robots\":{\"index\":true,\"follow\":true,\"googleBot\":{\"index\":true,\"follow\":true,\"maxVideoPreview\":-1,\"maxImagePreview\":\"large\",\"maxSnippet\":-1}}},\"currentTheme\":\"minimal\"}",
     "created_at": "2026-03-27T20:18:12.903Z",
-    "updated_at": "2026-03-27T20:18:12.903Z"
+    "updated_at": "2026-03-29T17:38:42.851Z"
   },
   {
     "id": 24,
@@ -182,9 +182,9 @@
     "module_id": "site-root",
     "module_name": "站点容器",
     "module_order": 0,
-    "data": null,
+    "data": "{\"name\":\"\",\"description\":\"专注AI一人公司服务\",\"url\":\"https://makerai.com\",\"ogImage\":\"/og-image.png\",\"links\":{\"email\":\"test@163.com\",\"wechat\":\"makerai_official\",\"github\":\"https://github.com/makerai\",\"twitter\":\"https://twitter.com/makerai\"},\"creator\":{\"name\":\"\",\"url\":\"https://makerai.com\"},\"contact\":{\"address\":\"浙江省杭州市西湖区三墩镇西园八路3号浙大森林\",\"phone\":\"400-888-4889\",\"email\":\"wuly93@163.com\"},\"support\":{\"customerServiceQRCode\":\"/images/customer-service-qr.png\",\"helpDocUrl\":\"https://help.makerai.com\"},\"icp\":\"浙ICP备XXXXXXXX号\",\"features\":{\"enableTOC\":true,\"enableReadingProgress\":true,\"enableSearch\":true},\"seo\":{\"keywords\":[\"AI一人公司\",\"AI工具\",\"AI课程\",\"AI工作流\",\"AI赋能\",\"个人创业\",\"一人公司\",\"AI GEO课程\",\"AI解决方案\",\"创业者服务\"],\"robots\":{\"index\":true,\"follow\":true,\"googleBot\":{\"index\":true,\"follow\":true,\"maxVideoPreview\":-1,\"maxImagePreview\":\"large\",\"maxSnippet\":-1}}},\"currentTheme\":\"minimal\"}",
     "created_at": "2026-03-29T16:00:00.000Z",
-    "updated_at": "2026-03-29T16:00:00.000Z"
+    "updated_at": "2026-03-29T17:38:42.851Z"
   },
   {
     "id": 34,
@@ -225,9 +225,9 @@
     "module_instance_id": "site-root-1774642127716-1774642692903",
     "module_name": "站点容器",
     "module_order": 0,
-    "data": "{\"name\":\"站点名称\",\"description\":\"站点描述\",\"url\":\"\",\"ogImage\":\"/og-image.png\",\"links\":{\"email\":\"xxx@xxx.com\",\"wechat\":\"xxxxxxx\",\"github\":\"https://github.com/makerai\",\"twitter\":\"https://twitter.com/makerai\"},\"creator\":{\"name\":\"\",\"url\":\"https://xxx.com\"},\"contact\":{\"address\":\"xxx省xxx市xxx区xxxxxxx\",\"phone\":\"xxx-xxx-xxxx\",\"email\":\"xxx@xxx.com\"},\"support\":{\"customerServiceQRCode\":\"/images/customer-service-qr.png\",\"helpDocUrl\":\"https:/xxxx.com\"},\"icp\":\"浙ICP备XXXXXXXX号\",\"features\":{\"enableTOC\":true,\"enableReadingProgress\":true,\"enableSearch\":true},\"seo\":{\"keywords\":[],\"robots\":{\"index\":true,\"follow\":true,\"googleBot\":{\"index\":true,\"follow\":true,\"maxVideoPreview\":-1,\"maxImagePreview\":\"large\",\"maxSnippet\":-1}}},\"currentTheme\":\"modern\"}",
+    "data": "{\"name\":\"\",\"description\":\"专注AI一人公司服务\",\"url\":\"https://makerai.com\",\"ogImage\":\"/og-image.png\",\"links\":{\"email\":\"test@163.com\",\"wechat\":\"makerai_official\",\"github\":\"https://github.com/makerai\",\"twitter\":\"https://twitter.com/makerai\"},\"creator\":{\"name\":\"\",\"url\":\"https://makerai.com\"},\"contact\":{\"address\":\"浙江省杭州市西湖区三墩镇西园八路3号浙大森林\",\"phone\":\"400-888-4889\",\"email\":\"wuly93@163.com\"},\"support\":{\"customerServiceQRCode\":\"/images/customer-service-qr.png\",\"helpDocUrl\":\"https://help.makerai.com\"},\"icp\":\"浙ICP备XXXXXXXX号\",\"features\":{\"enableTOC\":true,\"enableReadingProgress\":true,\"enableSearch\":true},\"seo\":{\"keywords\":[\"AI一人公司\",\"AI工具\",\"AI课程\",\"AI工作流\",\"AI赋能\",\"个人创业\",\"一人公司\",\"AI GEO课程\",\"AI解决方案\",\"创业者服务\"],\"robots\":{\"index\":true,\"follow\":true,\"googleBot\":{\"index\":true,\"follow\":true,\"maxVideoPreview\":-1,\"maxImagePreview\":\"large\",\"maxSnippet\":-1}}},\"currentTheme\":\"minimal\"}",
     "created_at": "2026/03/30 01:20:36",
-    "updated_at": "2026/03/30 01:20:36",
+    "updated_at": "2026-03-29T17:38:42.851Z",
     "id": 37
   },
   {
@@ -335,9 +335,9 @@
     "module_instance_id": "site-root-1774805399358-0-o51pwkwg3",
     "module_name": "站点容器",
     "module_order": 0,
-    "data": "{\"name\":\"\",\"description\":\"专注AI一人公司服务\",\"url\":\"https://makerai.com\",\"ogImage\":\"/og-image.png\",\"links\":{\"email\":\"915064510@163.com\",\"wechat\":\"makerai_official\",\"github\":\"https://github.com/makerai\",\"twitter\":\"https://twitter.com/makerai\"},\"creator\":{\"name\":\"\",\"url\":\"https://makerai.com\"},\"contact\":{\"address\":\"浙江省杭州市西湖区三墩镇西园八路3号浙大森林\",\"phone\":\"400-888-4889\",\"email\":\"wuly93@163.com\"},\"support\":{\"customerServiceQRCode\":\"/images/customer-service-qr.png\",\"helpDocUrl\":\"https://help.makerai.com\"},\"icp\":\"浙ICP备XXXXXXXX号\",\"features\":{\"enableTOC\":true,\"enableReadingProgress\":true,\"enableSearch\":true},\"seo\":{\"keywords\":[\"AI一人公司\",\"AI工具\",\"AI课程\",\"AI工作流\",\"AI赋能\",\"个人创业\",\"一人公司\",\"AI GEO课程\",\"AI解决方案\",\"创业者服务\"],\"robots\":{\"index\":true,\"follow\":true,\"googleBot\":{\"index\":true,\"follow\":true,\"maxVideoPreview\":-1,\"maxImagePreview\":\"large\",\"maxSnippet\":-1}}},\"currentTheme\":\"minimal\"}",
+    "data": "{\"name\":\"\",\"description\":\"专注AI一人公司服务\",\"url\":\"https://makerai.com\",\"ogImage\":\"/og-image.png\",\"links\":{\"email\":\"test@163.com\",\"wechat\":\"makerai_official\",\"github\":\"https://github.com/makerai\",\"twitter\":\"https://twitter.com/makerai\"},\"creator\":{\"name\":\"\",\"url\":\"https://makerai.com\"},\"contact\":{\"address\":\"浙江省杭州市西湖区三墩镇西园八路3号浙大森林\",\"phone\":\"400-888-4889\",\"email\":\"wuly93@163.com\"},\"support\":{\"customerServiceQRCode\":\"/images/customer-service-qr.png\",\"helpDocUrl\":\"https://help.makerai.com\"},\"icp\":\"浙ICP备XXXXXXXX号\",\"features\":{\"enableTOC\":true,\"enableReadingProgress\":true,\"enableSearch\":true},\"seo\":{\"keywords\":[\"AI一人公司\",\"AI工具\",\"AI课程\",\"AI工作流\",\"AI赋能\",\"个人创业\",\"一人公司\",\"AI GEO课程\",\"AI解决方案\",\"创业者服务\"],\"robots\":{\"index\":true,\"follow\":true,\"googleBot\":{\"index\":true,\"follow\":true,\"maxVideoPreview\":-1,\"maxImagePreview\":\"large\",\"maxSnippet\":-1}}},\"currentTheme\":\"minimal\"}",
     "created_at": "2026/03/30 01:29:59",
-    "updated_at": "2026/03/30 01:29:59",
+    "updated_at": "2026-03-29T17:38:42.852Z",
     "id": 47
   },
   {
