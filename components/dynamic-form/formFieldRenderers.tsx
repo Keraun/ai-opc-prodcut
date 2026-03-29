@@ -166,6 +166,117 @@ export function renderField(
   }
 }
 
+function renderArraySubField(
+  subField: FieldSchema,
+  value: any,
+  onChange: (value: any) => void
+): React.ReactNode {
+  const { ui = {} } = subField
+  const widget = ui.widget || getDefaultWidget(subField)
+
+  switch (widget) {
+    case 'input':
+      return (
+        <Input
+          placeholder={ui.placeholder || `输入 ${subField.title}`}
+          value={value || ''}
+          onChange={onChange}
+          disabled={ui.readonly}
+          style={{ width: '100%' }}
+        />
+      )
+
+    case 'textarea':
+      return (
+        <Input.TextArea
+          placeholder={ui.placeholder || `输入 ${subField.title}`}
+          value={value || ''}
+          onChange={onChange}
+          rows={ui.rows || 4}
+          style={{ width: '100%' }}
+        />
+      )
+
+    case 'select':
+      return (
+        <Select
+          placeholder={ui.placeholder || `选择 ${subField.title}`}
+          value={value}
+          onChange={onChange}
+          style={{ width: '100%' }}
+        >
+          {(ui.options || subField.enum || []).map(item => (
+            <Select.Option key={item.value} value={item.value}>
+              {item.label}
+            </Select.Option>
+          ))}
+        </Select>
+      )
+
+    case 'date':
+      return (
+        <DatePicker
+          placeholder={ui.placeholder || `选择 ${subField.title}`}
+          value={value}
+          onChange={onChange}
+          style={{ width: '100%' }}
+          format="YYYY-MM-DD"
+        />
+      )
+
+    case 'number':
+      return (
+        <InputNumber
+          placeholder={ui.placeholder || `输入 ${subField.title}`}
+          value={value}
+          onChange={onChange}
+          min={ui.min ?? subField.minimum}
+          max={ui.max ?? subField.maximum}
+          step={ui.step}
+          style={{ width: '100%' }}
+        />
+      )
+
+    case 'switch':
+      return (
+        <Switch
+          checked={value || subField.default}
+          onChange={onChange}
+        />
+      )
+
+    case 'color':
+      return (
+        <Input
+          type="color"
+          placeholder={ui.placeholder}
+          value={value || ''}
+          onChange={onChange}
+          style={{ width: '100%', height: '40px' }}
+        />
+      )
+
+    case 'image':
+      return (
+        <ImageUploadInput
+          value={value || ''}
+          onChange={onChange}
+          placeholder={ui.placeholder || '请输入图片链接或点击上传'}
+        />
+      )
+
+    default:
+      return (
+        <Input
+          placeholder={ui.placeholder || `输入 ${subField.title}`}
+          value={value || ''}
+          onChange={onChange}
+          style={{ width: '100%' }}
+        />
+      )
+  }
+}
+
 export function renderArrayField(
   fieldName: string,
   fieldSchema: FieldSchema,
@@ -189,14 +300,14 @@ export function renderArrayField(
                     {(subField as FieldSchema).title}
                     {(subField as FieldSchema).required && <span className={styles.requiredMark}>*</span>}
                   </label>
-                  <Input
-                    placeholder={`输入 ${(subField as FieldSchema).title}`}
-                    value={item[subKey]}
-                    onChange={(value) => {
+                  {renderArraySubField(
+                    subField as FieldSchema,
+                    item[subKey],
+                    (value) => {
                       const newItem = { ...item, [subKey]: value }
                       updateArrayItem(fieldName, index, newItem)
-                    }}
-                  />
+                    }
+                  )}
                 </div>
               ))}
             </div>

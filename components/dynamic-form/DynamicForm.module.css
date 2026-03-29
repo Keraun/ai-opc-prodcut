@@ -49,6 +49,48 @@
   gap: 20px;
 }
 
+.objectField {
+  width: 100%;
+  margin-bottom: 24px;
+  padding: 20px;
+  background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
+  border: 1px solid #bae6fd;
+  border-radius: 8px;
+  transition: all 0.2s ease;
+}
+
+.objectField:hover {
+  box-shadow: 0 2px 8px rgba(56, 189, 248, 0.15);
+  border-color: #7dd3fc;
+}
+
+.objectTitle {
+  font-size: 16px;
+  font-weight: 600;
+  color: #0c4a6e;
+  margin: 0 0 8px 0;
+  padding-bottom: 8px;
+  border-bottom: 1px solid #bae6fd;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.objectTitle::before {
+  content: '';
+  width: 3px;
+  height: 16px;
+  background: linear-gradient(135deg, #0ea5e9 0%, #0284c7 100%);
+  border-radius: 2px;
+}
+
+.objectDescription {
+  font-size: 13px;
+  color: #0369a1;
+  margin: 0 0 16px 0;
+  font-style: italic;
+}
+
 .formItem {
   margin-bottom: 0;
 }

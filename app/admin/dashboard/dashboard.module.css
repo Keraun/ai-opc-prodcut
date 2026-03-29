@@ -3006,3 +3006,103 @@
   height: 100%;
   border: none;
 }
+
+/* Image Upload Field Styles */
+.imageUploadField {
+  position: relative;
+}
+
+.imageUploadInputWrapper {
+  display: flex;
+  gap: 12px;
+  align-items: stretch;
+}
+
+.imageUploadInput {
+  flex: 1;
+}
+
+.imageUploadInput :global(.arco-input-inner-wrapper) {
+  padding-left: 12px;
+}
+
+.imageUploadIcon {
+  color: #9ca3af;
+  font-size: 16px;
+}
+
+.imageUploadButton {
+  flex-shrink: 0;
+  white-space: nowrap;
+}
+
+.imagePreviewContainer {
+  margin-top: 12px;
+  padding: 12px;
+  background: #f9fafb;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+}
+
+.imagePreviewHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.imagePreviewLabel {
+  font-size: 12px;
+  color: #6b7280;
+  font-weight: 500;
+}
+
+.imagePreviewToggle {
+  font-size: 12px;
+  color: #3b82f6;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 4px 8px;
+  border-radius: 4px;
+  transition: background-color 0.2s;
+}
+
+.imagePreviewToggle:hover {
+  background: #eff6ff;
+}
+
+.imagePreviewWrapper {
+  border-radius: 6px;
+  overflow: hidden;
+  background: #ffffff;
+  border: 1px solid #e5e7eb;
+}
+
+.imagePreview {
+  width: 100%;
+  max-height: 200px;
+  object-fit: contain;
+  display: block;
+}
+
+.imageUploadingOverlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(255, 255, 255, 0.9);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  border-radius: 8px;
+  z-index: 10;
+}
+
+.imageUploadingOverlay span {
+  font-size: 12px;
+  color: #6b7280;
+}

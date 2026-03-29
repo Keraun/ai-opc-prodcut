@@ -1,46 +1,35 @@
 {
   "name": "",
-  "description": "专注AI一人公司服务",
-  "url": "https://makerai.com",
-  "ogImage": "/og-image.png",
+  "description": "",
+  "url": "",
+  "ogImage": "",
   "links": {
     "email": "",
-    "wechat": "makerai_official",
+    "wechat": "",
     "github": "",
     "twitter": ""
   },
   "creator": {
     "name": "",
-    "url": "https://makerai.com"
+    "url": ""
   },
   "contact": {
-    "address": "浙江省杭州市西湖区三墩镇西园八路3号浙大森林",
-    "phone": "400-888-4889",
-    "email": "wuly93@163.com"
+    "address": "",
+    "phone": "",
+    "email": ""
   },
   "support": {
-    "customerServiceQRCode": "/images/customer-service-qr.png",
-    "helpDocUrl": "https://help.makerai.com"
+    "customerServiceQRCode": "",
+    "helpDocUrl": ""
   },
-  "icp": "浙ICP备XXXXXXXX号",
+  "icp": "",
   "features": {
     "enableTOC": true,
     "enableReadingProgress": true,
     "enableSearch": true
   },
   "seo": {
-    "keywords": [
-      "AI一人公司",
-      "AI工具",
-      "AI课程",
-      "AI工作流",
-      "AI赋能",
-      "个人创业",
-      "一人公司",
-      "AI GEO课程",
-      "AI解决方案",
-      "创业者服务"
-    ],
+    "keywords": [],
     "robots": {
       "index": true,
       "follow": true,
@@ -53,5 +42,5 @@
       }
     }
   },
-  "currentTheme": "minimal"
+  "currentTheme": "nature"
 }

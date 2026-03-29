@@ -1,11 +1,12 @@
 "use client"
 
-import { useState, useEffect } from "react"
-import { Input, InputNumber, Switch, Select, InputTag, Table, Button, Space, Popconfirm, Input as AInput } from "@arco-design/web-react"
-import { IconPlus, IconDelete } from "@arco-design/web-react/icon"
+import { useState, useEffect, useRef } from "react"
+import { Input, InputNumber, Switch, Select, InputTag, Table, Button, Space, Popconfirm, Input as AInput, Spin } from "@arco-design/web-react"
+import { IconPlus, IconDelete, IconUpload, IconImage } from "@arco-design/web-react/icon"
 import { toast } from "sonner"
 import styles from "../../dashboard.module.css"
 import { getModuleSchema } from "@/lib/api-client"
+import { uploadImage } from "@/lib/api/images"
 
 interface SchemaProperty {
   type: string
@@ -17,6 +18,10 @@ interface SchemaProperty {
   default?: any
   "x-col-span"?: number
   "x-component"?: string
+  ui?: {
+    widget?: string
+    placeholder?: string
+  }
 }
 
 interface ModuleFieldEditorProps {
@@ -93,9 +98,9 @@ function groupFieldsByRow(items: FieldLayoutItem[]): FieldLayoutItem[][] {
   return rows
 }
 
-function getDefaultItemForArray(itemSchema: SchemaProperty): Record<string, unknown> {
+function getDefaultItemForArray(itemSchema: SchemaProperty): Record<string, unknown> | string | number | boolean {
   const result: Record<string, unknown> = {}
-  
+
   if (itemSchema.type === "object" && itemSchema.properties) {
     Object.entries(itemSchema.properties).forEach(([key, prop]) => {
       result[key] = prop.default ?? (prop.type === "string" ? "" : prop.type === "number" ? 0 : prop.type === "boolean" ? false : prop.type === "array" ? [] : null)
@@ -107,8 +112,91 @@ function getDefaultItemForArray(itemSchema: SchemaProperty): Record<string, unkn
   } else if (itemSchema.type === "boolean") {
     return false
   }
-  
+
   return result
+}
+
+function TableImageUploadField({
+  value,
+  onChange,
+  placeholder
+}: {
+  value: string
+  onChange: (value: string) => void
+  placeholder?: string
+}) {
+  const [uploading, setUploading] = useState(false)
+  const fileInputRef = useRef<HTMLInputElement>(null)
+
+  const handleUploadClick = () => {
+    fileInputRef.current?.click()
+  }
+
+  const handleFileChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0]
+    if (!file) return
+
+    if (file.size > 10 * 1024 * 1024) {
+      toast.error("图片大小不能超过10MB")
+      return
+    }
+
+    if (!file.type.startsWith("image/")) {
+      toast.error("请选择图片文件")
+      return
+    }
+
+    try {
+      setUploading(true)
+      const result = await uploadImage(file, { quality: 80 })
+
+      if (result.success && result.url) {
+        const fullUrl = getFullImageUrl(result.url)
+        onChange(fullUrl)
+        toast.success(`图片上传成功${result.savedPercentage ? `，节省 ${result.savedPercentage}% 空间` : ""}`)
+      } else {
+        toast.error(result.message || "上传失败")
+      }
+    } catch (error) {
+      console.error("Upload error:", error)
+      toast.error("上传失败")
+    } finally {
+      setUploading(false)
+      if (fileInputRef.current) {
+        fileInputRef.current.value = ""
+      }
+    }
+  }
+
+  return (
+    <div style={{ display: "flex", gap: 8, alignItems: "center" }}>
+      <Input
+        value={value || ""}
+        onChange={onChange}
+        placeholder={placeholder || "请输入图片链接或点击上传"}
+        disabled={uploading}
+        style={{ flex: 1 }}
+        prefix={<IconImage style={{ color: "#9ca3af" }} />}
+      />
+      <Button
+        type="primary"
+        size="small"
+        onClick={handleUploadClick}
+        disabled={uploading}
+        loading={uploading}
+        icon={<IconUpload />}
+      >
+        上传
+      </Button>
+      <input
+        ref={fileInputRef}
+        type="file"
+        accept="image/*"
+        onChange={handleFileChange}
+        style={{ display: "none" }}
+      />
+    </div>
+  )
 }
 
 function renderTableFieldCell(
@@ -116,6 +204,17 @@ function renderTableFieldCell(
   schema: SchemaProperty,
   onChange: (newValue: unknown) => void
 ): React.ReactNode {
+  // 处理图片上传字段
+  if (schema.ui?.widget === "image") {
+    return (
+      <TableImageUploadField
+        value={value as string}
+        onChange={onChange}
+        placeholder={schema.ui?.placeholder}
+      />
+    )
+  }
+
   switch (schema.type) {
     case "string":
       if (schema.enum && schema.enum.length > 0) {
@@ -166,17 +265,17 @@ function renderTableField(
   const { title, description, items } = property
   const value = getNestedValue(data, path)
   const listValue = Array.isArray(value) ? value : []
-  
+
   const fieldStyle = {
     gridColumn: `span ${colSpan} / span ${colSpan}`
   }
 
-  const itemSchema = items || { type: "string" }
-  
+  const itemSchema: SchemaProperty = items || { type: "string", title: "" }
+
   let columns: any[] = []
-  
+
   if (itemSchema.type === "object" && itemSchema.properties) {
-    columns = Object.entries(itemSchema.properties).map(([key, prop]) => ({
+    columns = Object.entries(itemSchema.properties).map(([key, prop]: [string, SchemaProperty]) => ({
       title: prop.title || key,
       dataIndex: key,
       render: (_: unknown, record: any, index: number) => {
@@ -276,6 +375,146 @@ function renderTableField(
   )
 }
 
+function getFullImageUrl(url: string): string {
+  if (!url) return ""
+  if (url.startsWith("http://") || url.startsWith("https://")) {
+    return url
+  }
+  // 相对路径，添加域名前缀
+  const baseUrl = typeof window !== "undefined" ? window.location.origin : ""
+  return `${baseUrl}${url.startsWith("/") ? url : `/${url}`}`
+}
+
+function ImageUploadField({
+  value,
+  onChange,
+  placeholder,
+  title
+}: {
+  value: string
+  onChange: (value: string) => void
+  placeholder?: string
+  title?: string
+}) {
+  const [uploading, setUploading] = useState(false)
+  const [showPreview, setShowPreview] = useState(true)
+  const fileInputRef = useRef<HTMLInputElement>(null)
+
+  const handleUploadClick = () => {
+    fileInputRef.current?.click()
+  }
+
+  const handleFileChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0]
+    if (!file) return
+
+    if (file.size > 10 * 1024 * 1024) {
+      toast.error("图片大小不能超过10MB")
+      return
+    }
+
+    if (!file.type.startsWith("image/")) {
+      toast.error("请选择图片文件")
+      return
+    }
+
+    try {
+      setUploading(true)
+      const result = await uploadImage(file, { quality: 80 })
+
+      if (result.success && result.url) {
+        // 存储完整 URL
+        const fullUrl = getFullImageUrl(result.url)
+        onChange(fullUrl)
+        toast.success(`图片上传成功${result.savedPercentage ? `，节省 ${result.savedPercentage}% 空间` : ""}`)
+      } else {
+        toast.error(result.message || "上传失败")
+      }
+    } catch (error) {
+      console.error("Upload error:", error)
+      toast.error("上传失败")
+    } finally {
+      setUploading(false)
+      if (fileInputRef.current) {
+        fileInputRef.current.value = ""
+      }
+    }
+  }
+
+  // 获取用于预览的完整 URL
+  const previewUrl = getFullImageUrl(value)
+
+  return (
+    <div className={styles.imageUploadField}>
+      <div className={styles.imageUploadInputWrapper}>
+        <Input
+          value={value || ""}
+          onChange={onChange}
+          placeholder={placeholder || `请输入${title || "图片链接"}或点击上传`}
+          disabled={uploading}
+          className={styles.imageUploadInput}
+          prefix={<IconImage className={styles.imageUploadIcon} />}
+        />
+        <Button
+          type="primary"
+          onClick={handleUploadClick}
+          disabled={uploading}
+          loading={uploading}
+          className={styles.imageUploadButton}
+          icon={<IconUpload />}
+        >
+          上传图片
+        </Button>
+      </div>
+
+      <input
+        ref={fileInputRef}
+        type="file"
+        accept="image/*"
+        onChange={handleFileChange}
+        style={{ display: "none" }}
+      />
+
+      {value && (
+        <div className={styles.imagePreviewContainer}>
+          <div className={styles.imagePreviewHeader}>
+            <span className={styles.imagePreviewLabel}>图片预览</span>
+            <button
+              type="button"
+              className={styles.imagePreviewToggle}
+              onClick={() => setShowPreview(!showPreview)}
+            >
+              {showPreview ? "隐藏" : "显示"}
+            </button>
+          </div>
+          {showPreview && (
+            <div className={styles.imagePreviewWrapper}>
+              <img
+                src={previewUrl}
+                alt="预览"
+                className={styles.imagePreview}
+                onError={(e) => {
+                  e.currentTarget.style.display = "none"
+                }}
+                onLoad={(e) => {
+                  e.currentTarget.style.display = "block"
+                }}
+              />
+            </div>
+          )}
+        </div>
+      )}
+
+      {uploading && (
+        <div className={styles.imageUploadingOverlay}>
+          <Spin size={20} />
+          <span>上传中...</span>
+        </div>
+      )}
+    </div>
+  )
+}
+
 export function ModuleFieldEditor({ moduleId, data, onChange }: ModuleFieldEditorProps) {
   const [schema, setSchema] = useState<Record<string, SchemaProperty>>({})
   const [loading, setLoading] = useState(true)
@@ -302,11 +541,33 @@ export function ModuleFieldEditor({ moduleId, data, onChange }: ModuleFieldEdito
 
   const renderSimpleField = (item: FieldLayoutItem): React.ReactNode => {
     const { property, path, colSpan } = item
-    const { type, title, description, enum: enumValues, "x-component": component } = property
+    const { type, title, description, enum: enumValues, "x-component": component, ui } = property
     const value = getNestedValue(data, path)
 
     const fieldStyle = {
       gridColumn: `span ${colSpan} / span ${colSpan}`
+    }
+
+    // 处理图片上传字段
+    if (ui?.widget === "image") {
+      return (
+        <div key={path} className={styles.formField} style={fieldStyle}>
+          <div className={styles.formFieldRow}>
+            <div className={styles.formFieldLabel}>
+              <label className={styles.formLabel}>{title}</label>
+              {description && <span className={styles.formHint}>{description}</span>}
+            </div>
+            <div className={styles.formFieldControl}>
+              <ImageUploadField
+                value={value as string}
+                onChange={(val) => handleFieldChange(path, val)}
+                placeholder={ui.placeholder}
+                title={title}
+              />
+            </div>
+          </div>
+        </div>
+      )
     }
 
     if (type === "array" && property.items) {

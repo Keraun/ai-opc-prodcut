@@ -43,6 +43,56 @@ export function DynamicForm({
     )
   }
 
+  const renderObjectField = (fieldName: string, fieldSchema: FieldSchema) => {
+    if (fieldSchema.type !== 'object' || !fieldSchema.properties) {
+      return null
+    }
+
+    return (
+      <div key={fieldName} className={styles.objectField}>
+        <h4 className={styles.objectTitle}>{fieldSchema.title}</h4>
+        {fieldSchema.description && (
+          <p className={styles.objectDescription}>{fieldSchema.description}</p>
+        )}
+        <Row gutter={[16, 16]}>
+          {Object.entries(fieldSchema.properties).map(([subFieldName, subFieldSchema]) => {
+            const subField = subFieldSchema as FieldSchema
+            const fullFieldName = `${fieldName}.${subFieldName}`
+            const fieldWidth = subField.ui?.width || '100%'
+            const { span } = parseWidth(fieldWidth)
+            const isRequired = fieldSchema.required?.includes(subFieldName) || subField.required
+
+            return (
+              <Col key={fullFieldName} span={span}>
+                <Form.Item
+                  label={
+                    <span className={styles.fieldLabel}>
+                      {subField.title}
+                      {isRequired && <span className={styles.requiredMark}>*</span>}
+                    </span>
+                  }
+                  field={fullFieldName}
+                  rules={[
+                    {
+                      required: isRequired,
+                      message: `请输入${subField.title}`
+                    }
+                  ]}
+                  extra={subField.description}
+                  className={styles.formItem}
+                >
+                  {subField.type === 'array' && !subField.ui?.widget
+                    ? renderArrayFieldComponent(fullFieldName, subField)
+                    : renderFieldComponent(fullFieldName, subField)}
+                </Form.Item>
+              </Col>
+            )
+          })}
+        </Row>
+      </div>
+    )
+  }
+
   const renderFields = () => {
     const { properties = {}, required = [], ui: formUI = {} } = schema
     const groups = formUI.groups || []
@@ -55,6 +105,10 @@ export function DynamicForm({
             {group.fields.map(fieldName => {
               const fieldSchema = properties[fieldName]
               if (!fieldSchema) return null
+
+              if (fieldSchema.type === 'object' && fieldSchema.properties) {
+                return renderObjectField(fieldName, fieldSchema)
+              }
 
               const fieldWidth = fieldSchema.ui?.width || '100%'
               const { span } = parseWidth(fieldWidth)
@@ -94,6 +148,10 @@ export function DynamicForm({
     return (
       <Row gutter={[16, 16]}>
         {Object.entries(properties).map(([fieldName, fieldSchema]) => {
+          if (fieldSchema.type === 'object' && fieldSchema.properties) {
+            return renderObjectField(fieldName, fieldSchema)
+          }
+
           const fieldWidth = fieldSchema.ui?.width || '100%'
           const { span } = parseWidth(fieldWidth)
           const isRequired = required.includes(fieldName) || fieldSchema.required

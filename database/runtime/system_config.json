@@ -9,9 +9,9 @@
   {
     "id": 3,
     "config_key": "site_config",
-    "config_value": "{\"name\":\"\",\"description\":\"专注AI一人公司服务\",\"url\":\"https://makerai.com\",\"ogImage\":\"/og-image.png\",\"links\":{\"email\":\"\",\"wechat\":\"makerai_official\",\"github\":\"\",\"twitter\":\"\"},\"creator\":{\"name\":\"\",\"url\":\"https://makerai.com\"},\"contact\":{\"address\":\"浙江省杭州市西湖区三墩镇西园八路3号浙大森林\",\"phone\":\"400-888-4889\",\"email\":\"wuly93@163.com\"},\"support\":{\"customerServiceQRCode\":\"/images/customer-service-qr.png\",\"helpDocUrl\":\"https://help.makerai.com\"},\"icp\":\"浙ICP备XXXXXXXX号\",\"features\":{\"enableTOC\":true,\"enableReadingProgress\":true,\"enableSearch\":true},\"seo\":{\"keywords\":[\"AI一人公司\",\"AI工具\",\"AI课程\",\"AI工作流\",\"AI赋能\",\"个人创业\",\"一人公司\",\"AI GEO课程\",\"AI解决方案\",\"创业者服务\"],\"robots\":{\"index\":true,\"follow\":true,\"googleBot\":{\"index\":true,\"follow\":true,\"maxVideoPreview\":-1,\"maxImagePreview\":\"large\",\"maxSnippet\":-1}}},\"currentTheme\":\"minimal\"}",
+    "config_value": "{\"name\":\"\",\"description\":\"\",\"url\":\"\",\"ogImage\":\"\",\"links\":{\"email\":\"\",\"wechat\":\"\",\"github\":\"\",\"twitter\":\"\"},\"creator\":{\"name\":\"\",\"url\":\"\"},\"contact\":{\"address\":\"\",\"phone\":\"\",\"email\":\"\"},\"support\":{\"customerServiceQRCode\":\"\",\"helpDocUrl\":\"\"},\"icp\":\"\",\"features\":{\"enableTOC\":true,\"enableReadingProgress\":true,\"enableSearch\":true},\"seo\":{\"keywords\":[],\"robots\":{\"index\":true,\"follow\":true,\"googleBot\":{\"index\":true,\"follow\":true,\"maxVideoPreview\":-1,\"maxImagePreview\":\"large\",\"maxSnippet\":-1}}},\"currentTheme\":\"nature\"}",
     "created_at": "2026-03-27 21:36:34",
-    "updated_at": "2026-03-29T18:27:56.819Z"
+    "updated_at": "2026-03-29T21:09:10.026Z"
   },
   {
     "id": 4,
@@ -22,9 +22,9 @@
   },
   {
     "config_key": "site_footer_config",
-    "config_value": "{\"description\":\"专注AI一人公司服务，为企业提供智能化解决方案\",\"address\":\"\",\"phone\":\"\",\"email\":\"\",\"wechatQrCode\":\"\",\"officialAccountQrCode\":\"\",\"showAdminLink\":true}",
+    "config_value": "{\"description\":\"\",\"address\":\"\",\"phone\":\"\",\"email\":\"\",\"wechatQrCode\":\"\",\"officialAccountQrCode\":\"\",\"showAdminLink\":true}",
     "created_at": "2026-03-29T17:50:07.138Z",
-    "updated_at": "2026-03-29T18:28:25.540Z",
+    "updated_at": "2026-03-29T20:58:07.556Z",
     "id": 5
   }
 ]
