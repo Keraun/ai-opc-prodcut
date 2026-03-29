@@ -344,3 +344,24 @@ export async function saveSiteRootConfig(data: any): Promise<{ success: boolean;
     return { success: false, message: '配置保存失败' }
   }
 }
+
+export async function syncSiteRootToPages(data: any): Promise<{ 
+  success: boolean
+  message?: string
+  syncedPages?: string[]
+}> {
+  try {
+    const result = await request<{ syncedPages: string[] }>('/api/admin/site-config/sync', {
+      method: 'POST',
+      body: JSON.stringify({ data }),
+    })
+    return {
+      success: result.success,
+      message: result.message,
+      syncedPages: result.data?.syncedPages
+    }
+  } catch (error) {
+    console.error('Error syncing site root to pages:', error)
+    return { success: false, message: '同步失败' }
+  }
+}

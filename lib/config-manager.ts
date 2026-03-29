@@ -655,3 +655,32 @@ export function registerModule(moduleId: string, moduleName: string, schema: any
     console.error('Error registering module:', error)
   }
 }
+
+export function syncSiteRootToAllPages(data: any): { success: boolean; syncedPages: string[]; message?: string } {
+  try {
+    const siteRootModules = jsonDb.find('page_modules', { module_id: 'site-root' })
+    
+    const syncedPages: string[] = []
+    
+    for (const module of siteRootModules) {
+      jsonDb.update('page_modules', module.id, {
+        data: JSON.stringify(data),
+        updated_at: new Date().toISOString()
+      })
+      syncedPages.push(module.page_id)
+    }
+    
+    return {
+      success: true,
+      syncedPages,
+      message: `成功同步到 ${syncedPages.length} 个页面`
+    }
+  } catch (error) {
+    console.error('Error syncing site-root to all pages:', error)
+    return {
+      success: false,
+      syncedPages: [],
+      message: '同步失败'
+    }
+  }
+}
