@@ -2,7 +2,7 @@
 
 import { BaseManagement, type ManagementConfig } from "./BaseManagement"
 import { Package } from "lucide-react"
-import { Tooltip } from './CommonTable'
+import { Tag, Tooltip } from '@arco-design/web-react'
 import styles from "./BaseManagement.module.css"
 
 export function ProductsManagement() {
@@ -11,7 +11,7 @@ export function ProductsManagement() {
     apiEndpoint: "/api/products",
     fields: [
       {
-        name: "name",
+        name: "title",
         label: "产品名称",
         type: "text",
         required: true,
@@ -19,7 +19,7 @@ export function ProductsManagement() {
         icon: <Package size={16} />
       },
       {
-        name: "category",
+        name: "categoryName",
         label: "产品分类",
         type: "text",
         placeholder: "请输入产品分类",
@@ -75,36 +75,78 @@ export function ProductsManagement() {
     ],
     columns: [
       {
-        key: "name",
+        key: "title",
         label: "产品名称",
-        width: "2fr",
+        width: 200,
         render: (item) => (
-          <div>
-            <Tooltip content={item.name}>
-              <div className="productName">{item.name}</div>
+          <div className={styles.productName}>{item.title}</div>
+        )
+      },
+      {
+        key: "description",
+        label: "产品描述",
+        width: 100,
+        render: (item) => (
+          item.description ? (
+            <Tooltip content={item.description}>
+              <div className={styles.productDesc}>{item.description}</div>
             </Tooltip>
-            <div className="productDesc">{item.description}</div>
-          </div>
+          ) : (
+            <span className={styles.emptyValue}>-</span>
+          )
         )
       },
       {
         key: "category",
         label: "分类",
-        render: (item) => item.category || '-'
+        render: (item) => item.categoryName ? (
+          <Tag color="arcoblue" size="small">{item.categoryName}</Tag>
+        ) : (
+          <span className={styles.emptyValue}>-</span>
+        )
       },
       {
         key: "price",
         label: "价格",
-        render: (item) => item.price ? `¥${item.price}` : '免费'
+        render: (item) => (
+          <div className={styles.priceInfo}>
+            {item.price ? (
+              <>
+                <span className={styles.currentPrice}>¥{item.price}</span>
+                {item.originalPrice && (
+                  <span className={styles.originalPrice}>¥{item.originalPrice}</span>
+                )}
+              </>
+            ) : (
+              <Tag color="success" size="small">免费</Tag>
+            )}
+          </div>
+        )
+      },
+      {
+        key: "tags",
+        label: "标签",
+        render: (item) => item.tags && item.tags.length > 0 ? (
+          <div className={styles.tagsList}>
+            {item.tags.map((tag: string, index: number) => (
+              <Tag key={index} color="purple" size="small">{tag}</Tag>
+            ))}
+          </div>
+        ) : (
+          <span className={styles.emptyValue}>-</span>
+        )
       },
       {
         key: "status",
         label: "状态",
-        render: (item) => (
-          <span className={`status ${item.status === 'active' ? 'statusActive' : 'statusInactive'}`}>
-            {item.status === 'active' ? '上架' : '下架'}
-          </span>
-        )
+        render: (item) => {
+          const statusConfig: Record<string, { text: string; color: 'green' | 'red' }> = {
+            active: { text: '上架', color: 'green' },
+            inactive: { text: '下架', color: 'red' },
+          }
+          const config = statusConfig[item.status] || statusConfig.inactive
+          return <Tag color={config.color}>{config.text}</Tag>
+        }
       }
     ],
     emptyIcon: <Package size={48} />,

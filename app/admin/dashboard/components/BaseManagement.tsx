@@ -20,7 +20,7 @@ import {
 } from "lucide-react"
 import { toast } from "sonner"
 import { ManagementHeader } from './ManagementHeader'
-import { CommonTable, ActionButton, Tooltip } from './CommonTable'
+import { CommonTable, ActionButton } from './CommonTable'
 import styles from "./BaseManagement.module.css"
 
 export interface FieldConfig {
@@ -74,6 +74,7 @@ function RichTextEditor({
       }),
     ],
     content: value,
+    immediatelyRender: false,
     onUpdate: ({ editor }) => {
       onChange(editor.getHTML())
     },

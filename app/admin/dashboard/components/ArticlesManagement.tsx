@@ -1,8 +1,8 @@
 "use client"
 
 import { BaseManagement, type ManagementConfig } from "./BaseManagement"
-import { Newspaper, Tag, FileText, Calendar } from "lucide-react"
-import { Tooltip } from './CommonTable'
+import { Newspaper, Tag, FileText, Calendar, User } from "lucide-react"
+import { Tag as ArcoTag, Tooltip } from '@arco-design/web-react'
 import styles from "./BaseManagement.module.css"
 
 export function ArticlesManagement() {
@@ -70,34 +70,63 @@ export function ArticlesManagement() {
       {
         key: "title",
         label: "文章标题",
-        width: "2fr",
+        width: 300,
         render: (item) => (
-          <div>
+          <div className={styles.productInfo}>
             <Tooltip content={item.title}>
-              <div className="productName">{item.title}</div>
+              <div className={styles.productName}>{item.title}</div>
             </Tooltip>
-            <div className="productDesc">{item.summary}</div>
+            <Tooltip content={item.summary}>
+              <div className={styles.productDesc}>{item.summary}</div>
+            </Tooltip>
           </div>
         )
       },
       {
         key: "categoryName",
         label: "分类",
-        render: (item) => item.categoryName || '-'
+        render: (item) => item.categoryName ? (
+          <ArcoTag color="orange" size="small">{item.categoryName}</ArcoTag>
+        ) : (
+          <span className={styles.emptyValue}>-</span>
+        )
       },
       {
         key: "author",
         label: "作者",
-        render: (item) => item.author || '-'
+        render: (item) => item.author ? (
+          <div className={styles.authorInfo}>
+            <User size={14} />
+            <span>{item.author}</span>
+          </div>
+        ) : (
+          <span className={styles.emptyValue}>-</span>
+        )
+      },
+      {
+        key: "tags",
+        label: "标签",
+        render: (item) => item.tags && item.tags.length > 0 ? (
+          <div className={styles.tagsList}>
+            {item.tags.map((tag: string, index: number) => (
+              <ArcoTag key={index} color="purple" size="small">{tag}</ArcoTag>
+            ))}
+          </div>
+        ) : (
+          <span className={styles.emptyValue}>-</span>
+        )
       },
       {
         key: "status",
         label: "状态",
-        render: (item) => (
-          <span className={`status ${item.status === 'published' ? 'statusActive' : 'statusInactive'}`}>
-            {item.status === 'published' ? '已发布' : '草稿'}
-          </span>
-        )
+        render: (item) => {
+          const statusConfig: Record<string, { text: string; color: 'gray' | 'green' }> = {
+            draft: { text: '草稿', color: 'gray' },
+            published: { text: '已发布', color: 'green' },
+          }
+          const config = statusConfig[item.status] || statusConfig.draft
+          return <ArcoTag color={config.color}>{config.text}</ArcoTag>
+        }
       }
     ],
     emptyIcon: <Newspaper size={48} />,

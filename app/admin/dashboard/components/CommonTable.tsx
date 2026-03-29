@@ -61,30 +61,6 @@ export function CommonTable<T extends Record<string, any> = any>({
   )
 }
 
-export function StatusBadge({ 
-  status, 
-  children 
-}: { 
-  status: 'success' | 'warning' | 'error' | 'info' | 'default'
-  children: React.ReactNode 
-}) {
-  const statusClass = {
-    success: styles.statusBadgeSuccess,
-    warning: styles.statusBadgeWarning,
-    error: styles.statusBadgeError,
-    info: styles.statusBadgeInfo,
-    default: styles.statusBadgeDefault,
-  }[status]
-
-  return (
-    <span className={`${styles.statusBadge} ${statusClass}`}>
-      {children}
-    </span>
-  )
-}
-
-
-
 export function ActionButton({ 
   children,
   type = 'default',
@@ -119,28 +95,3 @@ export function ActionButton({
     </button>
   )
 }
-
-export function Tooltip({ 
-  children, 
-  content 
-}: { 
-  children: React.ReactNode
-  content: string 
-}) {
-  const [show, setShow] = useState(false)
-  
-  return (
-    <div 
-      className={styles.tooltipWrapper}
-      onMouseEnter={() => setShow(true)}
-      onMouseLeave={() => setShow(false)}
-    >
-      {children}
-      {show && content && (
-        <div className={styles.tooltip}>{content}</div>
-      )}
-    </div>
-  )
-}
-
-import { useState } from "react"

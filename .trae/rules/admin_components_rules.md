@@ -114,25 +114,9 @@ import { Tag } from '@arco-design/web-react'
 
 ### 3. 辅助组件
 
-#### StatusBadge 组件
-
-**功能**：状态徽章组件，用于显示不同状态。
-
-**使用示例**：
-
-```tsx
-import { StatusBadge } from '@/app/admin/dashboard/components'
-
-<StatusBadge status="success">已上线</StatusBadge>
-<StatusBadge status="warning">草稿</StatusBadge>
-<StatusBadge status="error">已下线</StatusBadge>
-<StatusBadge status="info">已更新</StatusBadge>
-<StatusBadge status="default">未知</StatusBadge>
-```
-
 #### Tag 组件
 
-**功能**：标签组件，用于显示分类、标签等。
+**功能**：标签组件，用于显示分类、标签、状态等。
 
 **使用说明**：使用 Arco Design 官方的 Tag 组件，支持更多特性和更好的视觉效果。
 
@@ -141,16 +125,19 @@ import { StatusBadge } from '@/app/admin/dashboard/components'
 ```tsx
 import { Tag } from '@arco-design/web-react'
 
+// 状态标签
+<Tag color="green">已上线</Tag>
+<Tag color="gray">草稿</Tag>
+<Tag color="red">已下线</Tag>
+
+// 分类标签
 <Tag color="arcoblue">静态页面</Tag>
-<Tag color="success">用户页面</Tag>
-<Tag color="warning">系统页面</Tag>
-<Tag color="danger">已删除</Tag>
+<Tag color="orange">用户页面</Tag>
 <Tag color="purple">动态路由</Tag>
-<Tag color="orange">重要</Tag>
 ```
 
 **参数说明**：
-- `color`：标签颜色，支持 'arcoblue', 'success', 'warning', 'danger', 'purple', 'orange' 等
+- `color`：标签颜色，支持 'arcoblue', 'success', 'warning', 'danger', 'purple', 'orange', 'green', 'red', 'gray' 等
 - `size`：标签大小，支持 'small', 'default', 'large'
 - `closable`：是否可关闭
 - `onClose`：关闭事件回调
@@ -193,10 +180,12 @@ import { ActionButton } from '@/app/admin/dashboard/components'
 
 **功能**：提示框组件，用于显示悬停提示。
 
+**使用说明**：使用 Arco Design 官方的 Tooltip 组件。
+
 **使用示例**：
 
 ```tsx
-import { Tooltip } from '@/app/admin/dashboard/components'
+import { Tooltip } from '@arco-design/web-react'
 
 <Tooltip content="这是一个提示">
   <span>悬停查看提示</span>
@@ -258,9 +247,10 @@ import { Tooltip } from '@/app/admin/dashboard/components'
 2. **合理使用**：
    - 表格数据使用 `CommonTable`
    - 页面头部使用 `ManagementHeader`
-   - 状态显示使用 `StatusBadge`
-   - 标签显示使用 Arco Design 的 `Tag` 组件
+   - 状态显示使用 Arco Design 的 `Tag` 组件
+   - 分类/标签显示使用 Arco Design 的 `Tag` 组件
    - 操作按钮使用 `ActionButton`
+   - 提示框使用 Arco Design 的 `Tooltip` 组件
 
 3. **性能优化**：
    - 合理使用 `loading` 状态
@@ -304,12 +294,12 @@ import { Tag } from '@arco-design/web-react'
       key: 'status',
       render: (status: string) => {
         const statusMap = {
-          draft: { text: '草稿', status: 'warning' as const },
-          published: { text: '已上线', status: 'success' as const },
-          offline: { text: '已下线', status: 'error' as const },
+          draft: { text: '草稿', color: 'gray' as const },
+          published: { text: '已上线', color: 'green' as const },
+          offline: { text: '已下线', color: 'red' as const },
         }
         const config = statusMap[status] || statusMap.draft
-        return <StatusBadge status={config.status}>{config.text}</StatusBadge>
+        return <Tag color={config.color}>{config.text}</Tag>
       },
     },
     {
