@@ -17,6 +17,8 @@ export async function POST(request: NextRequest) {
 
     const targetUsername = username || authResult.username
 
+    jsonDb.reloadTable('accounts')
+    
     const admin = jsonDb.findOne('accounts', { username: targetUsername })
 
     if (!admin) {

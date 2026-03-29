@@ -66,6 +66,8 @@ export async function POST(request: NextRequest) {
       return badRequestResponse('标题和摘要不能为空')
     }
     
+    jsonDb.reloadTable('articles')
+    
     const article = {
       title: data.title,
       slug: data.slug || data.title.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, ''),
@@ -97,6 +99,8 @@ export async function PUT(request: NextRequest) {
     if (!data.id) {
       return badRequestResponse('文章ID不能为空')
     }
+    
+    jsonDb.reloadTable('articles')
     
     const existing = jsonDb.findOne('articles', { id: parseInt(data.id) })
     if (!existing) {
@@ -133,6 +137,8 @@ export async function DELETE(request: NextRequest) {
   if (!id) {
     return badRequestResponse('文章ID不能为空')
   }
+  
+  jsonDb.reloadTable('articles')
   
   const success = jsonDb.delete('articles', { id: parseInt(id) })
   if (success) {

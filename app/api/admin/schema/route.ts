@@ -46,6 +46,8 @@ export async function GET(request: NextRequest) {
         return successResponse(schema)
       }
       
+      jsonDb.reloadTable('module_registry')
+      
       const module = jsonDb.findOne('module_registry', { module_id: 'site-root' })
       if (module?.schema) {
         try {

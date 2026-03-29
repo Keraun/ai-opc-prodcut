@@ -64,6 +64,8 @@ export async function POST(request: NextRequest) {
       return badRequestResponse('标题和描述不能为空')
     }
     
+    jsonDb.reloadTable('products')
+    
     const product = {
       title: data.title,
       description: data.description,
@@ -98,6 +100,8 @@ export async function PUT(request: NextRequest) {
     if (!data.id) {
       return badRequestResponse('产品ID不能为空')
     }
+    
+    jsonDb.reloadTable('products')
     
     const existing = jsonDb.findOne('products', { id: parseInt(data.id) })
     if (!existing) {
@@ -136,6 +140,8 @@ export async function DELETE(request: NextRequest) {
   if (!id) {
     return badRequestResponse('产品ID不能为空')
   }
+  
+  jsonDb.reloadTable('products')
   
   const success = jsonDb.delete('products', { id: parseInt(id) })
   if (success) {

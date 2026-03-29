@@ -11,6 +11,9 @@ export async function POST(request: NextRequest) {
       return badRequestResponse('密码不能为空')
     }
 
+    jsonDb.reloadTable('accounts')
+    jsonDb.reloadTable('system_config')
+    
     const admin = jsonDb.findOne('accounts', { username: authResult.username })
     
     if (!admin) {

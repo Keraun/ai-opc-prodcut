@@ -42,7 +42,7 @@ export function ModuleDragEditor({ modules, onChange }: ModuleDragEditorProps) {
   const [draggedIndex, setDraggedIndex] = useState<number | null>(null)
   const [draggedModule, setDraggedModule] = useState<AvailableModule | null>(null)
   const [dragOverIndex, setDragOverIndex] = useState<number | null>(null)
-  const [gridColumns, setGridColumns] = useState<1 | 2>(2)
+  const [gridColumns, setGridColumns] = useState<1 | 2 | 3>(3)
   const [previewDevice, setPreviewDevice] = useState<'web' | 'mobile' | 'ipad'>('web')
   const [editPreviewDevice, setEditPreviewDevice] = useState<'web' | 'mobile' | 'ipad'>('ipad')
   const editPreviewIframeRef = useRef<HTMLIFrameElement>(null)
@@ -221,8 +221,14 @@ export function ModuleDragEditor({ modules, onChange }: ModuleDragEditorProps) {
     return acc
   }, {} as Record<string, AvailableModule[]>)
 
+  const sortedCategories = Object.keys(groupedModules).sort((a, b) => {
+    if (a === '站点') return 1
+    if (b === '站点') return -1
+    return a.localeCompare(b)
+  })
+
   const gridStyle = {
-    gridTemplateColumns: gridColumns === 1 ? '1fr' : 'repeat(2, 1fr)'
+    gridTemplateColumns: gridColumns === 1 ? '1fr' : gridColumns === 2 ? 'repeat(2, 1fr)' : 'repeat(3, 1fr)'
   }
 
   return (
@@ -250,44 +256,55 @@ export function ModuleDragEditor({ modules, onChange }: ModuleDragEditorProps) {
                 onClick={() => setGridColumns(2)}
               />
             </Tooltip>
+            <Tooltip content="一排三个">
+              <Button 
+                size="mini" 
+                type={gridColumns === 3 ? "primary" : "text"}
+                icon={<IconDesktop />}
+                onClick={() => setGridColumns(3)}
+              />
+            </Tooltip>
           </div>
         </div>
         
         <div className={styles.modulePickerContentV2}>
-          {Object.entries(groupedModules).map(([category, mods]) => (
-            <div key={category} className={styles.moduleCategoryV2}>
-              <div className={styles.moduleCategoryTitleV2}>{category}</div>
-              <div className={styles.moduleGridV2} style={gridStyle}>
-                {mods.map((mod) => (
-                  <div
-                    key={mod.moduleId}
-                    className={`${styles.moduleCardV2} ${draggedModule?.moduleId === mod.moduleId ? styles.moduleCardDraggingV2 : ""}`}
-                    draggable
-                    onDragStart={(e) => handleModuleDragStart(e, mod)}
-                    onDragEnd={handleModuleDragEnd}
-                    onClick={() => handleAddModule(mod)}
-                  >
-                    <div className={styles.moduleCardInfoV2}>
-                      <div className={styles.moduleCardNameV2}>{mod.moduleName}</div>
-                      <Tag size="small" color="arcoblue" className={styles.moduleCardTagV2}>{mod.moduleId}</Tag>
+          {sortedCategories.map((category) => {
+            const mods = groupedModules[category]
+            return (
+              <div key={category} className={styles.moduleCategoryV2}>
+                <div className={styles.moduleCategoryTitleV2}>{category}</div>
+                <div className={styles.moduleGridV2} style={gridStyle}>
+                  {mods.map((mod) => (
+                    <div
+                      key={mod.moduleId}
+                      className={`${styles.moduleCardV2} ${draggedModule?.moduleId === mod.moduleId ? styles.moduleCardDraggingV2 : ""}`}
+                      draggable
+                      onDragStart={(e) => handleModuleDragStart(e, mod)}
+                      onDragEnd={handleModuleDragEnd}
+                      onClick={() => handleAddModule(mod)}
+                    >
+                      <div className={styles.moduleCardInfoV2}>
+                        <div className={styles.moduleCardNameV2}>{mod.moduleName}</div>
+                        <Tag size="small" color="arcoblue" className={styles.moduleCardTagV2}>{mod.moduleId}</Tag>
+                      </div>
+                      <Tooltip content="预览模块">
+                        <Button
+                          type="text"
+                          size="mini"
+                          icon={<IconEye />}
+                          className={styles.moduleCardPreviewBtnV2}
+                          onClick={(e) => {
+                            e.stopPropagation()
+                            setPreviewingModule(mod)
+                          }}
+                        />
+                      </Tooltip>
                     </div>
-                    <Tooltip content="预览模块">
-                      <Button
-                        type="text"
-                        size="mini"
-                        icon={<IconEye />}
-                        className={styles.moduleCardPreviewBtnV2}
-                        onClick={(e) => {
-                          e.stopPropagation()
-                          setPreviewingModule(mod)
-                        }}
-                      />
-                    </Tooltip>
-                  </div>
-                ))}
+                  ))}
+                </div>
               </div>
-            </div>
-          ))}
+            )
+          })}
         </div>
       </div>
 
