@@ -11,7 +11,7 @@
     "config_key": "site_config",
     "config_value": "{\"name\":\"\",\"description\":\"\",\"url\":\"\",\"ogImage\":\"\",\"links\":{\"email\":\"\",\"wechat\":\"\",\"github\":\"\",\"twitter\":\"\"},\"creator\":{\"name\":\"\",\"url\":\"\"},\"contact\":{\"address\":\"\",\"phone\":\"\",\"email\":\"\"},\"support\":{\"customerServiceQRCode\":\"\",\"helpDocUrl\":\"\"},\"icp\":\"\",\"features\":{\"enableTOC\":true,\"enableReadingProgress\":true,\"enableSearch\":true},\"seo\":{\"keywords\":[],\"robots\":{\"index\":true,\"follow\":true,\"googleBot\":{\"index\":true,\"follow\":true,\"maxVideoPreview\":-1,\"maxImagePreview\":\"large\",\"maxSnippet\":-1}}},\"currentTheme\":\"nature\"}",
     "created_at": "2026-03-27 21:36:34",
-    "updated_at": "2026-03-29T21:09:10.026Z"
+    "updated_at": "2026-03-29T21:37:19.535Z"
   },
   {
     "id": 4,
@@ -22,9 +22,9 @@
   },
   {
     "config_key": "site_footer_config",
-    "config_value": "{\"description\":\"\",\"address\":\"\",\"phone\":\"\",\"email\":\"\",\"wechatQrCode\":\"\",\"officialAccountQrCode\":\"\",\"showAdminLink\":true}",
+    "config_value": "{\"description\":\"1\",\"address\":\"\",\"phone\":\"\",\"email\":\"\",\"wechatQrCode\":\"\",\"officialAccountQrCode\":\"\",\"showAdminLink\":true}",
     "created_at": "2026-03-29T17:50:07.138Z",
-    "updated_at": "2026-03-29T20:58:07.556Z",
+    "updated_at": "2026-03-29T21:36:21.231Z",
     "id": 5
   }
 ]

@@ -13,7 +13,7 @@
     "dynamic_param": null,
     "module_instance_ids": "[\"site-root-1774642127716-1774642692903\",\"site-header-1774642128717-1774642693903\",\"section-hero-1774642129718-1774642694903\",\"section-partner-1774642130719-1774642695903\",\"section-products-1774642131720-1774642696903\",\"section-services-1774642132721-1774642697903\",\"section-pricing-1774642133722-1774642698903\",\"section-about-1774642134723-1774642699903\",\"section-contact-1774642135724-1774642700903\",\"site-footer-1774642136725-1774642701903\"]",
     "created_at": null,
-    "updated_at": null,
+    "updated_at": "2026/03/30 02:42:28",
     "published_at": null
   },
   {
@@ -102,37 +102,20 @@
     "published_at": null
   },
   {
-    "page_id": "666",
-    "name": "666",
-    "slug": "666",
-    "type": "static",
-    "description": "新创建的静态页面",
-    "status": "draft",
-    "is_system": 0,
-    "is_deletable": 1,
-    "route": "/666",
-    "dynamic_param": null,
-    "module_instance_ids": "[\"site-root-1774739871306-0\",\"site-header-1774739871307-1\",\"site-footer-1774739871307-2\"]",
-    "created_at": "2026/03/29 07:17:51",
-    "updated_at": "2026/03/29 07:17:51",
-    "published_at": null,
-    "id": 6
-  },
-  {
     "page_id": "test",
     "name": "test",
     "slug": "test",
-    "type": "static",
-    "description": "新创建的静态页面",
+    "type": "dynamic",
+    "description": "新创建的动态页面",
     "status": "draft",
     "is_system": 0,
     "is_deletable": 1,
-    "route": "/test",
-    "dynamic_param": null,
-    "module_instance_ids": "[\"site-root-1774740284399-0-wzx7j5yi0\",\"site-header-1774740284399-1-oeqww4ry6\",\"site-footer-1774740284399-2-kdv7vsh7r\"]",
-    "created_at": "2026/03/29 07:24:44",
-    "updated_at": "2026/03/29 07:24:44",
+    "route": "/test/[id]",
+    "dynamic_param": "id",
+    "module_instance_ids": "[\"site-root-1774807517667-0-l2s6qo74q\",\"site-header-1774807517667-1-nt5b7vp4z\",\"site-footer-1774807517667-2-7z5yymb60\"]",
+    "created_at": "2026/03/30 02:05:17",
+    "updated_at": "2026/03/30 02:05:17",
     "published_at": null,
-    "id": 7
+    "id": 9
   }
 ]

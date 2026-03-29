@@ -81,3 +81,94 @@ Synced 15/15 modules to database
 📦 Found 15 modules
 Synced 15/15 modules to database
 ✅ Successfully synced 15/15 modules to database
+ GET /admin/dashboard?menu=site-config 200 in 79ms (next.js: 6ms, application-code: 73ms)
+ GET /api/admin/pages 200 in 6ms (next.js: 1673µs, application-code: 5ms)
+ GET /api/admin/auth 200 in 7ms (next.js: 3ms, application-code: 3ms)
+ GET /api/admin/themes 200 in 10ms (next.js: 7ms, application-code: 3ms)
+[browser] Accessing element.ref was removed in React 19. ref is now a regular prop. It will be removed from the JSX Element type in a future release. 
+ GET /api/admin/config?type=site-root 200 in 7ms (next.js: 1717µs, application-code: 6ms)
+ GET /api/admin/config?type=site-footer 200 in 8ms (next.js: 3ms, application-code: 5ms)
+ GET /api/modules/site-root/schema 200 in 4ms (next.js: 3ms, application-code: 1704µs)
+ GET /api/admin/pages 200 in 14ms (next.js: 5ms, application-code: 9ms)
+ GET /api/admin/config?type=site-root 200 in 15ms (next.js: 6ms, application-code: 9ms)
+ GET /api/admin/config?type=site-footer 200 in 16ms (next.js: 8ms, application-code: 8ms)
+ GET /api/modules/site-root/schema 200 in 3ms (next.js: 1218µs, application-code: 1406µs)
+ GET /api/modules/site-root/schema 200 in 3ms (next.js: 939µs, application-code: 2ms)
+ GET /api/modules/site-root/schema 200 in 3ms (next.js: 850µs, application-code: 1743µs)
+ GET /api/modules/site-footer/schema 200 in 3ms (next.js: 1067µs, application-code: 1659µs)
+ GET /api/modules/site-footer/schema 200 in 2ms (next.js: 771µs, application-code: 1311µs)
+🔄 Initializing and syncing modules to database...
+📦 Found 15 modules
+Synced 15/15 modules to database
+✅ Successfully synced 15/15 modules to database
+ GET /admin/dashboard?menu=site-config 200 in 76ms (next.js: 7ms, application-code: 70ms)
+ GET /api/admin/pages 200 in 7ms (next.js: 1889µs, application-code: 5ms)
+ GET /api/admin/auth 200 in 7ms (next.js: 3ms, application-code: 4ms)
+ GET /api/admin/themes 200 in 9ms (next.js: 5ms, application-code: 4ms)
+[browser] Accessing element.ref was removed in React 19. ref is now a regular prop. It will be removed from the JSX Element type in a future release. 
+ GET /api/admin/config?type=site-root 200 in 6ms (next.js: 2ms, application-code: 3ms)
+ GET /api/admin/config?type=site-footer 200 in 8ms (next.js: 4ms, application-code: 5ms)
+ GET /api/admin/pages 200 in 9ms (next.js: 5ms, application-code: 4ms)
+ GET /api/modules/site-root/schema 200 in 5ms (next.js: 3ms, application-code: 1307µs)
+ GET /api/admin/config?type=site-root 200 in 9ms (next.js: 5ms, application-code: 4ms)
+ GET /api/admin/config?type=site-footer 200 in 9ms (next.js: 6ms, application-code: 3ms)
+ GET /api/modules/site-root/schema 200 in 4ms (next.js: 1672µs, application-code: 2ms)
+ GET /api/modules/site-root/schema 200 in 3ms (next.js: 856µs, application-code: 1799µs)
+ GET /api/modules/site-root/schema 200 in 2ms (next.js: 686µs, application-code: 1327µs)
+🔄 Initializing and syncing modules to database...
+📦 Found 15 modules
+Synced 15/15 modules to database
+✅ Successfully synced 15/15 modules to database
+ GET /api/modules/site-footer/schema 200 in 22ms (next.js: 15ms, application-code: 7ms)
+ GET /api/modules/site-footer/schema 200 in 5ms (next.js: 2ms, application-code: 2ms)
+🔄 Initializing and syncing modules to database...
+📦 Found 15 modules
+Synced 15/15 modules to database
+✅ Successfully synced 15/15 modules to database
+Config updated: site-root
+ POST /api/admin/config 200 in 25ms (next.js: 4ms, application-code: 21ms)
+Config updated: site-footer
+ POST /api/admin/config 200 in 27ms (next.js: 8ms, application-code: 19ms)
+[browser] Module with ID "site-root" is already registered. Overwriting. (modules/registry.ts:8:15)
+[browser] Module with ID "site-header" is already registered. Overwriting. (modules/registry.ts:8:15)
+[browser] Module with ID "section-hero" is already registered. Overwriting. (modules/registry.ts:8:15)
+[browser] Module with ID "section-services" is already registered. Overwriting. (modules/registry.ts:8:15)
+[browser] Module with ID "section-partner" is already registered. Overwriting. (modules/registry.ts:8:15)
+[browser] Module with ID "section-products" is already registered. Overwriting. (modules/registry.ts:8:15)
+[browser] Module with ID "section-pricing" is already registered. Overwriting. (modules/registry.ts:8:15)
+[browser] Module with ID "section-about" is already registered. Overwriting. (modules/registry.ts:8:15)
+[browser] Module with ID "section-contact" is already registered. Overwriting. (modules/registry.ts:8:15)
+[browser] Module with ID "site-footer" is already registered. Overwriting. (modules/registry.ts:8:15)
+[browser] Module with ID "news-list" is already registered. Overwriting. (modules/registry.ts:8:15)
+[browser] Module with ID "news-detail" is already registered. Overwriting. (modules/registry.ts:8:15)
+[browser] Module with ID "product-list" is already registered. Overwriting. (modules/registry.ts:8:15)
+[browser] Module with ID "product-detail" is already registered. Overwriting. (modules/registry.ts:8:15)
+[browser] Module with ID "section-404" is already registered. Overwriting. (modules/registry.ts:8:15)
+✓ Compiled in 341ms
+Config updated: site-root
+ POST /api/admin/config 200 in 18ms (next.js: 5ms, application-code: 13ms)
+[browser] Module with ID "site-root" is already registered. Overwriting. (modules/registry.ts:8:15)
+[browser] Module with ID "site-header" is already registered. Overwriting. (modules/registry.ts:8:15)
+[browser] Module with ID "section-hero" is already registered. Overwriting. (modules/registry.ts:8:15)
+[browser] Module with ID "section-services" is already registered. Overwriting. (modules/registry.ts:8:15)
+[browser] Module with ID "section-partner" is already registered. Overwriting. (modules/registry.ts:8:15)
+[browser] Module with ID "section-products" is already registered. Overwriting. (modules/registry.ts:8:15)
+[browser] Module with ID "section-pricing" is already registered. Overwriting. (modules/registry.ts:8:15)
+[browser] Module with ID "section-about" is already registered. Overwriting. (modules/registry.ts:8:15)
+[browser] Module with ID "section-contact" is already registered. Overwriting. (modules/registry.ts:8:15)
+[browser] Module with ID "site-footer" is already registered. Overwriting. (modules/registry.ts:8:15)
+[browser] Module with ID "news-list" is already registered. Overwriting. (modules/registry.ts:8:15)
+[browser] Module with ID "news-detail" is already registered. Overwriting. (modules/registry.ts:8:15)
+[browser] Module with ID "product-list" is already registered. Overwriting. (modules/registry.ts:8:15)
+[browser] Module with ID "product-detail" is already registered. Overwriting. (modules/registry.ts:8:15)
+[browser] Module with ID "section-404" is already registered. Overwriting. (modules/registry.ts:8:15)
+✓ Compiled in 45ms
+ GET / 200 in 89ms (next.js: 35ms, application-code: 54ms)
+ GET /api/admin/themes 200 in 8ms (next.js: 3ms, application-code: 5ms)
+ GET /api/admin/pages 200 in 8ms (next.js: 2ms, application-code: 6ms)
+ GET /admin/dashboard?menu=pages 200 in 61ms (next.js: 22ms, application-code: 39ms)
+ GET /api/admin/pages 200 in 8ms (next.js: 2ms, application-code: 6ms)
+ GET /api/admin/pages 200 in 9ms (next.js: 1607µs, application-code: 7ms)
+ GET /api/admin/pages 200 in 6ms (next.js: 1372µs, application-code: 4ms)
+[browser] [@arco-design/web-react]: Element does not define the `getRootDOMNode` method causing a call to React.findDOMNode. but findDOMNode is deprecated in StrictMode. Please check the code logic { detail: [ { element: [1mnull[22m, instance: [32m'[object Object]'[39m } ] } 
+[browser] [@arco-design/web-react]: Element does not define the `getRootDOMNode` method causing a call to React.findDOMNode. but findDOMNode is deprecated in StrictMode. Please check the code logic { detail: [ { element: [90mundefined[39m, instance: [32m'[object Object]'[39m } ] } 

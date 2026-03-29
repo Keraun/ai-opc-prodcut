@@ -9,7 +9,11 @@
     "image": "/news/chatgpt5.png",
     "author": "AI研究院",
     "category": "行业动态",
-    "tags": ["ChatGPT", "OpenAI", "AI"],
+    "tags": [
+      "ChatGPT",
+      "OpenAI",
+      "AI"
+    ],
     "viewCount": 12580,
     "status": "published",
     "created_at": "2024-03-28 10:00:00",
@@ -25,7 +29,11 @@
     "image": "/news/one-person-company.png",
     "author": "创业导师",
     "category": "实战案例",
-    "tags": ["一人公司", "创业", "AI工具"],
+    "tags": [
+      "一人公司",
+      "创业",
+      "AI工具"
+    ],
     "viewCount": 8956,
     "status": "published",
     "created_at": "2024-03-25 14:30:00",
@@ -41,7 +49,11 @@
     "image": "/news/midjourney-v6.png",
     "author": "设计观察",
     "category": "产品更新",
-    "tags": ["Midjourney", "AI绘画", "设计"],
+    "tags": [
+      "Midjourney",
+      "AI绘画",
+      "设计"
+    ],
     "viewCount": 15234,
     "status": "published",
     "created_at": "2024-03-22 09:00:00",
@@ -57,7 +69,11 @@
     "image": "/news/ai-tools-2024.png",
     "author": "工具评测",
     "category": "工具推荐",
-    "tags": ["AI工具", "推荐", "2024"],
+    "tags": [
+      "AI工具",
+      "推荐",
+      "2024"
+    ],
     "viewCount": 20156,
     "status": "published",
     "created_at": "2024-03-20 16:00:00",
@@ -73,7 +89,11 @@
     "image": "/news/claude3.png",
     "author": "AI前沿",
     "category": "产品更新",
-    "tags": ["Claude", "Anthropic", "AI"],
+    "tags": [
+      "Claude",
+      "Anthropic",
+      "AI"
+    ],
     "viewCount": 18923,
     "status": "published",
     "created_at": "2024-03-18 11:00:00",
@@ -89,7 +109,11 @@
     "image": "/news/ai-writing.png",
     "author": "内容创作",
     "category": "实战案例",
-    "tags": ["AI写作", "内容创作", "教程"],
+    "tags": [
+      "AI写作",
+      "内容创作",
+      "教程"
+    ],
     "viewCount": 11234,
     "status": "published",
     "created_at": "2024-03-15 13:00:00",
@@ -105,7 +129,11 @@
     "image": "/news/sora.png",
     "author": "科技前沿",
     "category": "行业动态",
-    "tags": ["Sora", "OpenAI", "AI视频"],
+    "tags": [
+      "Sora",
+      "OpenAI",
+      "AI视频"
+    ],
     "viewCount": 25678,
     "status": "published",
     "created_at": "2024-03-12 10:30:00",
@@ -121,10 +149,30 @@
     "image": "/news/startup-funding.png",
     "author": "创投观察",
     "category": "创业指南",
-    "tags": ["融资", "创业", "AI"],
+    "tags": [
+      "融资",
+      "创业",
+      "AI"
+    ],
     "viewCount": 9876,
     "status": "published",
     "created_at": "2024-03-10 15:00:00",
     "updated_at": "2024-03-10 15:00:00"
+  },
+  {
+    "title": "113131313131311111",
+    "slug": "113131313131311111",
+    "summary": "13131212\n",
+    "content": "",
+    "date": "2026-03-29",
+    "author": "",
+    "category": "13131",
+    "tags": [],
+    "image": "",
+    "viewCount": 0,
+    "status": "draft",
+    "created_at": "2026-03-29T04:24:12.800Z",
+    "updated_at": "2026-03-29T04:24:12.800Z",
+    "id": 9
   }
 ]
