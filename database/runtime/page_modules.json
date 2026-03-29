@@ -355,7 +355,7 @@
     "page_id": "my",
     "module_id": "site-footer",
     "module_instance_id": "site-footer-1774805399358-2-xzoezyeel",
-    "module_name": "站点底部",
+    "module_name": "站点页脚",
     "module_order": 2,
     "data": "{\"description\":\"专注AI一人公司服务，为企业提供智能化解决方案\",\"address\":\"测试\",\"phone\":\"400-123-4567\",\"email\":\"contact@example.com\",\"wechatQrCode\":\"\",\"officialAccountQrCode\":\"\",\"showAdminLink\":true}",
     "created_at": "2026/03/30 01:29:59",

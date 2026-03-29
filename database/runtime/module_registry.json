@@ -67,7 +67,7 @@
     "module_id": "site-footer",
     "module_name": "站点页脚",
     "schema": "{\"type\":\"object\",\"title\":\"Footer Configuration\",\"description\":\"配置网站底部页脚的内容\",\"properties\":{\"description\":{\"type\":\"string\",\"title\":\"描述\",\"description\":\"页脚显示的简短介绍文本\"},\"address\":{\"type\":\"string\",\"title\":\"地址\",\"description\":\"公司或办公地址\"},\"phone\":{\"type\":\"string\",\"title\":\"电话\",\"description\":\"联系电话号码\"},\"email\":{\"type\":\"string\",\"title\":\"邮箱\",\"description\":\"联系邮箱地址\"},\"wechatQrCode\":{\"type\":\"string\",\"title\":\"微信二维码路径\",\"description\":\"微信二维码图片路径\"},\"officialAccountQrCode\":{\"type\":\"string\",\"title\":\"公众号二维码路径\",\"description\":\"微信公众号二维码图片路径\"},\"showAdminLink\":{\"type\":\"boolean\",\"title\":\"显示管理后台链接\",\"description\":\"在页脚显示管理后台入口链接\"}}}",
-    "default_data": "{\"description\":\"专注AI一人公司服务\",\"address\":\"浙江省杭州市西湖区三墩镇西园八路3号浙大森林\",\"phone\":\"400-888-4889\",\"email\":\"wuly93@163.com\",\"wechatQrCode\":\"\",\"officialAccountQrCode\":\"\",\"showAdminLink\":true}",
+    "default_data": "{\"description\":\"专注AI一人公司服务，为企业提供智能化解决方案\",\"address\":\"测试\",\"phone\":\"400-123-4567\",\"email\":\"contact@example.com\",\"wechatQrCode\":\"\",\"officialAccountQrCode\":\"\",\"showAdminLink\":true}",
     "id": 10,
     "updated_at": "2026-03-29T17:57:34.150Z"
   },

@@ -121,7 +121,7 @@ function createPage(
     const defaultModules = [
       { moduleId: 'site-root', moduleName: '站点容器' },
       { moduleId: 'site-header', moduleName: '站点头部' },
-      { moduleId: 'site-footer', moduleName: '站点底部' }
+      { moduleId: 'site-footer', moduleName: '站点页脚' }
     ]
     
     const moduleInstanceIds: string[] = []
