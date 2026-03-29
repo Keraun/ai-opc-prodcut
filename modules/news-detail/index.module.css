@@ -1,5 +1,7 @@
 .newsDetail {
   width: 100%;
+  padding-top: 120px;
+  min-height: 100vh;
 }
 
 .container {
@@ -54,6 +56,7 @@
   line-height: 1.6;
   color: #374151;
   margin-bottom: 2rem;
+  min-height: 200px;
 }
 
 .articleContent p {
@@ -258,6 +261,123 @@
 
 .errorButton:hover {
   background: #2563eb;
+}
+
+.navigationSection {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+  margin-top: 2rem;
+  padding-top: 2rem;
+  border-top: 1px solid #e5e7eb;
+}
+
+.navItem {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 1.25rem;
+  background: white;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  text-decoration: none;
+  transition: all 0.2s ease;
+}
+
+.navItem:hover {
+  border-color: var(--theme-primary, #3b82f6);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.navItem:first-child {
+  justify-content: flex-start;
+}
+
+.navItem:last-child {
+  justify-content: flex-end;
+}
+
+.navContent {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  flex: 1;
+}
+
+.navItem:first-child .navContent {
+  flex: none;
+}
+
+.navItem:last-child .navContent {
+  flex: none;
+  text-align: right;
+}
+
+.navLabel {
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: #6b7280;
+}
+
+.navTitle {
+  font-size: 0.9375rem;
+  font-weight: 600;
+  color: #111827;
+  line-height: 1.4;
+}
+
+.navIcon {
+  width: 24px;
+  height: 24px;
+  color: #9ca3af;
+  transition: color 0.2s ease;
+  flex-shrink: 0;
+}
+
+.navItem:hover .navIcon {
+  color: var(--theme-primary, #3b82f6);
+}
+
+@media (max-width: 640px) {
+  .navigationSection {
+    grid-template-columns: 1fr;
+  }
+
+  .navItem {
+    justify-content: space-between !important;
+  }
+
+  .navItem:first-child .navContent,
+  .navItem:last-child .navContent {
+    flex: 1;
+    text-align: left;
+  }
+
+  .navItem:first-child {
+    order: 1;
+  }
+
+  .navItem:last-child {
+    order: 2;
+  }
+
+  .navItem:last-child .navContent {
+    text-align: right;
+  }
+
+  .navItem:last-child {
+    justify-content: space-between;
+  }
+
+  .navItem:last-child .navIcon {
+    order: 2;
+  }
+
+  .navItem:last-child .navContent {
+    order: 1;
+  }
 }
 
 @media (max-width: 768px) {

@@ -1,0 +1,145 @@
+.overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  animation: fadeIn 0.2s ease;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.modal {
+  background: white;
+  border-radius: 12px;
+  width: 90%;
+  max-width: 480px;
+  max-height: 90vh;
+  overflow: auto;
+  animation: slideUp 0.3s ease;
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1.5rem;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.title {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: #111827;
+  margin: 0;
+}
+
+.closeButton {
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  background: #f3f4f6;
+  border-radius: 50%;
+  cursor: pointer;
+  color: #6b7280;
+  transition: all 0.2s ease;
+}
+
+.closeButton:hover {
+  background: #e5e7eb;
+  color: #111827;
+}
+
+.closeButton svg {
+  width: 20px;
+  height: 20px;
+}
+
+.content {
+  padding: 1.5rem;
+}
+
+.serviceItem {
+  display: flex;
+  gap: 1rem;
+  padding: 1.25rem;
+  background: #f9fafb;
+  border-radius: 8px;
+  margin-bottom: 1rem;
+  transition: background 0.2s ease;
+}
+
+.serviceItem:last-child {
+  margin-bottom: 0;
+}
+
+.serviceItem:hover {
+  background: #f3f4f6;
+}
+
+.serviceIcon {
+  width: 48px;
+  height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, var(--theme-primary, #3b82f6), #60a5fa);
+  border-radius: 12px;
+  color: white;
+  flex-shrink: 0;
+}
+
+.serviceIcon svg {
+  width: 24px;
+  height: 24px;
+}
+
+.serviceInfo {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.serviceTitle {
+  font-size: 1rem;
+  font-weight: 600;
+  color: #111827;
+  margin: 0;
+}
+
+.serviceText {
+  font-size: 0.9375rem;
+  color: var(--theme-primary, #3b82f6);
+  font-weight: 500;
+  margin: 0;
+}
+
+.serviceDesc {
+  font-size: 0.8125rem;
+  color: #6b7280;
+  margin: 0;
+}

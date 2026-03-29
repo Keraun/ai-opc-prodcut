@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import type { ModuleProps } from '@/modules/types'
 import type { ProductListData, Product } from './types'
+import { QrcodeModal } from '@/components/QrcodeModal'
 import styles from './index.module.css'
 
 function ProductImage({ product, onImageError }: { product: Product; onImageError: (id: number) => void }) {
@@ -57,6 +58,8 @@ export function ProductListModule({ data }: ModuleProps) {
   const [loading, setLoading] = useState(true)
   const [selectedCategory, setSelectedCategory] = useState<string>('all')
   const [imageErrors, setImageErrors] = useState<Set<number>>(new Set())
+  const [isModalOpen, setIsModalOpen] = useState(false)
+  const [modalTitle, setModalTitle] = useState('联系客服')
 
   useEffect(() => {
     const fetchProducts = async () => {
@@ -90,7 +93,16 @@ export function ProductListModule({ data }: ModuleProps) {
 
   const formatPrice = (price: number) => {
     if (price === 0) return '免费'
-    return `¥${price}`
+    return '¥' + price
+  }
+
+  const handleBuyClick = (product: Product) => {
+    if (product.buyLink) {
+      window.open(product.buyLink, '_blank', 'noopener,noreferrer')
+    } else {
+      setModalTitle('咨询：' + product.title)
+      setIsModalOpen(true)
+    }
   }
 
   return (
@@ -169,14 +181,24 @@ export function ProductListModule({ data }: ModuleProps) {
                     </div>
                   )}
                   
-                  {product.link && (
-                    <Link href={product.link} className={styles.actionButton}>
-                      了解详情
-                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                        <path d="M9 18l6-6-6-6" />
-                      </svg>
-                    </Link>
-                  )}
+                  <div className={styles.actionGroup}>
+                    <button 
+                      className={styles.buyButton}
+                      onClick={() => handleBuyClick(product)}
+                    >
+                      立即购买
+                    </button>
+                    {product.link && (
+                      <Link 
+                        href={product.link} 
+                        className={styles.actionButton}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                      >
+                        了解详情
+                      </Link>
+                    )}
+                  </div>
                 </div>
               </div>
             ))}
@@ -192,6 +214,12 @@ export function ProductListModule({ data }: ModuleProps) {
           </div>
         )}
       </section>
+      
+      <QrcodeModal 
+        isOpen={isModalOpen} 
+        onClose={() => setIsModalOpen(false)}
+        title={modalTitle}
+      />
     </div>
   )
 }

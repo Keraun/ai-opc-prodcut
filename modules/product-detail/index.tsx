@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react'
 import type { ModuleProps } from '@/modules/types'
 import type { ProductDetailData, Product } from './types'
+import { QrcodeModal } from '@/components/QrcodeModal'
 import styles from './index.module.css'
 
 function ProductDetailImage({ product }: { product: Product | null }) {
@@ -53,6 +54,7 @@ export function ProductDetailModule({ data }: ModuleProps) {
   const [product, setProduct] = useState<Product | null>(null)
   const [relatedProducts, setRelatedProducts] = useState<Product[]>([])
   const [loading, setLoading] = useState(true)
+  const [isModalOpen, setIsModalOpen] = useState(false)
 
   useEffect(() => {
     const fetchProduct = async () => {
@@ -88,7 +90,19 @@ export function ProductDetailModule({ data }: ModuleProps) {
 
   const formatPrice = (price: number) => {
     if (price === 0) return '免费'
-    return `¥${price}`
+    return '¥' + price
+  }
+
+  const handleBuyClick = () => {
+    if (product && product.buyLink) {
+      window.open(product.buyLink, '_blank', 'noopener,noreferrer')
+    } else {
+      setIsModalOpen(true)
+    }
+  }
+
+  const handleContactClick = () => {
+    setIsModalOpen(true)
   }
 
   if (loading) {
@@ -187,10 +201,10 @@ export function ProductDetailModule({ data }: ModuleProps) {
             )}
             
             <div className={styles.actionSection}>
-              <button className={styles.buyButton}>
+              <button className={styles.buyButton} onClick={handleBuyClick}>
                 立即购买
               </button>
-              <button className={styles.contactButton}>
+              <button className={styles.contactButton} onClick={handleContactClick}>
                 咨询客服
               </button>
             </div>
@@ -226,6 +240,12 @@ export function ProductDetailModule({ data }: ModuleProps) {
           </div>
         )}
       </div>
+      
+      <QrcodeModal 
+        isOpen={isModalOpen} 
+        onClose={() => setIsModalOpen(false)}
+        title={product && product.title ? '咨询：' + product.title : '联系客服'}
+      />
     </div>
   )
 }

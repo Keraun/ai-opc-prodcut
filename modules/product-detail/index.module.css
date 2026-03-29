@@ -2,7 +2,7 @@
   width: 100%;
   min-height: 100vh;
   background: #f8fafc;
-  padding-top: 80px;
+  padding-top: 120px;
 }
 
 .container {
@@ -10,6 +10,7 @@
   margin: 0 auto;
   padding: 2rem;
 }
+
 
 .productMain {
   display: grid;
@@ -207,7 +208,7 @@
 .buyButton {
   flex: 1;
   padding: 0.875rem 1.5rem;
-  background: #3b82f6;
+  background: var(--theme-primary, #3b82f6);
   color: white;
   border: none;
   border-radius: 6px;
@@ -218,14 +219,14 @@
 }
 
 .buyButton:hover {
-  background: #2563eb;
+  background: var(--theme-primary-hover, #2563eb);
 }
 
 .contactButton {
   padding: 0.875rem 1.5rem;
   background: transparent;
-  color: #3b82f6;
-  border: 1px solid #3b82f6;
+  color: var(--theme-primary, #3b82f6);
+  border: 1px solid var(--theme-primary, #3b82f6);
   border-radius: 6px;
   font-size: 1rem;
   font-weight: 600;
@@ -234,7 +235,7 @@
 }
 
 .contactButton:hover {
-  background: #eff6ff;
+  background: var(--theme-background-secondary, #eff6ff);
 }
 
 .relatedSection {

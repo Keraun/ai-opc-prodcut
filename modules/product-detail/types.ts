@@ -9,6 +9,7 @@ export interface Product {
   category?: string
   categoryName?: string
   link?: string
+  buyLink?: string
   features?: string[]
   salesCount?: number
   rating?: number

@@ -104,6 +104,8 @@ export function NewsListModule({ data }: ModuleProps) {
                   href={`/news/${article.slug}`}
                   className={styles.articleCard}
                   style={{ animationDelay: `${index * 0.1}s` }}
+                  target="_blank"
+                  rel="noopener noreferrer"
                 >
                   <div className={styles.cardImage}>
                     <ArticleImage article={article} onImageError={handleImageError} />

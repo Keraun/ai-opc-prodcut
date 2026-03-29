@@ -300,8 +300,57 @@
   height: 14px;
 }
 
-.actionButton:hover {
+.actionGroup {
+  display: flex;
+  gap: 0.5rem;
+  flex-direction: column;
+  flex: 1;
+}
+
+.buyButton {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.5rem 1rem;
+  background: var(--theme-primary);
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-weight: 500;
+  font-size: 0.875rem;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+  white-space: nowrap;
+}
+
+.buyButton:hover {
   background: var(--theme-secondary);
+}
+
+.actionButton {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.5rem 1rem;
+  background: white;
+  color: var(--theme-text-secondary);
+  border: 1px solid var(--theme-border);
+  text-decoration: none;
+  border-radius: 6px;
+  font-weight: 500;
+  font-size: 0.875rem;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+}
+
+.actionButton svg {
+  display: none;
+}
+
+.actionButton:hover {
+  border-color: var(--theme-primary);
+  color: var(--theme-primary);
+  background: white;
 }
 
 .loading {
@@ -391,7 +440,15 @@
     gap: 0.75rem;
   }
 
+  .actionGroup {
+    width: 100%;
+  }
+
   .actionButton {
+    justify-content: center;
+  }
+
+  .buyButton {
     justify-content: center;
   }
 }
