@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react"
 import { useRouter } from "next/navigation"
-import { Button, Card, Modal, Input, Table, Space, Tag, Popconfirm, Radio } from "@arco-design/web-react"
+import { Modal, Input, Space, Popconfirm, Radio, Tag } from "@arco-design/web-react"
 import { toast } from "sonner"
 import { 
   getPageList, 
@@ -14,6 +14,7 @@ import {
 } from "@/lib/api-client"
 import { IconPlus, IconEdit, IconDelete, IconEye } from "@/components/icons"
 import { ManagementHeader } from '../ManagementHeader'
+import { CommonTable, ActionButton } from '../CommonTable'
 import styles from "../../dashboard.module.css"
 
 interface PageInfo {
@@ -256,12 +257,12 @@ export function PageManagement({ onEditPage }: PageManagementProps) {
       key: "status",
       width: 90,
       render: (status: string) => {
-        const statusConfig = {
+        const statusConfig: Record<string, { text: string; color: 'gray' | 'green' | 'red' }> = {
           draft: { text: '草稿', color: 'gray' },
           published: { text: '已上线', color: 'green' },
           offline: { text: '已下线', color: 'red' },
         }
-        const config = statusConfig[status as keyof typeof statusConfig] || statusConfig.draft
+        const config = statusConfig[status] || statusConfig.draft
         return <Tag color={config.color}>{config.text}</Tag>
       },
     },
@@ -273,54 +274,45 @@ export function PageManagement({ onEditPage }: PageManagementProps) {
       render: (_: any, record: PageInfo) => {
         const isSystemPage = systemPages.includes(record.id)
         return (
-          <Space>
-            <Button
-              type="text"
-              size="small"
-              icon={<IconEdit />}
+          <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
+            <ActionButton
+              type="primary"
+              icon={<IconEdit size={16} />}
               onClick={() => handleEditPage(record.id)}
             >
               编辑
-            </Button>
-            <Button
-              type="text"
-              size="small"
-              icon={<IconEye />}
+            </ActionButton>
+            <ActionButton
+              type="default"
+              icon={<IconEye size={16} />}
               onClick={() => handlePreviewPage(record.slug, record.type, record.dynamicParam)}
             >
               预览
-            </Button>
+            </ActionButton>
             {record.status === 'draft' && (
-              <Button
-                type="text"
-                size="small"
-                status="success"
+              <ActionButton
+                type="success"
                 onClick={() => handlePublishPage(record.id)}
               >
                 发布
-              </Button>
+              </ActionButton>
             )}
             {record.status === 'published' && (
-              <Button
-                type="text"
-                size="small"
-                status="warning"
+              <ActionButton
+                type="warning"
                 onClick={() => handleOfflinePage(record.id)}
                 disabled={systemPages.includes(record.id)}
-                style={systemPages.includes(record.id) ? { opacity: 0.5 } : {}}
               >
                 下线
-              </Button>
+              </ActionButton>
             )}
             {record.status === 'offline' && (
-              <Button
-                type="text"
-                size="small"
-                status="success"
+              <ActionButton
+                type="success"
                 onClick={() => handlePublishPage(record.id)}
               >
                 发布
-              </Button>
+              </ActionButton>
             )}
             {!isSystemPage ? (
               <Popconfirm
@@ -328,16 +320,24 @@ export function PageManagement({ onEditPage }: PageManagementProps) {
                 content="删除后将无法恢复"
                 onOk={() => handleDeletePage(record.id)}
               >
-                <Button type="text" size="small" status="danger" icon={<IconDelete />}>
+                <ActionButton
+                  type="danger"
+                  icon={<IconDelete size={16} />}
+                  onClick={() => handleDeletePage(record.id)}
+                >
                   删除
-                </Button>
+                </ActionButton>
               </Popconfirm>
             ) : (
-              <Button type="text" size="small" disabled icon={<IconDelete />} style={{ opacity: 0.5 }}>
+              <ActionButton
+                type="danger"
+                icon={<IconDelete size={16} />}
+                disabled
+              >
                 删除
-              </Button>
+              </ActionButton>
             )}
-          </Space>
+          </div>
         )
       },
     },
@@ -353,18 +353,17 @@ export function PageManagement({ onEditPage }: PageManagementProps) {
         onButtonClick={() => setShowCreateModal(true)}
       />
 
-      <Card className={styles.pageManagementCard}>
-        <Table
-          columns={columns}
-          data={pages}
-          loading={loading}
-          rowKey="id"
-          scroll={{ x: 1050 }}
-          pagination={{
-            pageSize: 10,
-          }}
-        />
-      </Card>
+      <CommonTable
+        columns={columns}
+        data={pages}
+        loading={loading}
+        rowKey="id"
+        scroll={{ x: 1050 }}
+        pagination={{
+          pageSize: 10,
+        }}
+        emptyText="暂无页面数据"
+      />
 
       <Modal
         title="新建页面"

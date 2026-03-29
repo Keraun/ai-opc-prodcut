@@ -1,9 +1,10 @@
 "use client"
 
-import { Button, Card, Typography, Modal, Input, Table, Popconfirm, Form } from "@arco-design/web-react"
+import { Typography, Modal, Input, Popconfirm, Form } from "@arco-design/web-react"
 import { User as IconUser, Plus as IconPlus, Trash2 as IconTrash2, Edit as IconEdit } from "lucide-react"
 import { useAccountManagement } from "./useAccountManagementHook"
 import { ManagementHeader } from "../ManagementHeader"
+import { CommonTable, ActionButton } from "../CommonTable"
 import styles from "../../dashboard.module.css"
 
 export function AccountManagement() {
@@ -44,62 +45,58 @@ export function AccountManagement() {
         onButtonClick={openAddAccountModal}
       />
 
-      <Card 
-        className={styles.accountManagementCard}
-        bordered={false}
-      >
-        <Table 
-          data={accounts}
-          loading={loadingAccounts}
-          columns={[
-            {
-              title: '用户名',
-              dataIndex: 'username',
-              key: 'username',
-            },
-            {
-              title: '邮箱',
-              dataIndex: 'email',
-              key: 'email',
-            },
-            {
-              title: '备注',
-              dataIndex: 'remark',
-              key: 'remark',
-            },
-            {
-              title: '操作',
-              key: 'action',
-              render: (_, record) => (
-                <div style={{ display: 'flex', gap: 8 }}>
-                  <Button 
-                    type="text" 
-                    icon={<IconEdit />}
-                    onClick={() => openEditAccountModal(record)}
-                  >
-                    修改
-                  </Button>
-                  <Popconfirm
-                    title={`确定要删除账号 ${record.username} 吗？`}
-                    onConfirm={() => openDeleteAccountModal(record)}
+      <CommonTable
+        data={accounts}
+        loading={loadingAccounts}
+        columns={[
+          {
+            title: '用户名',
+            dataIndex: 'username',
+            key: 'username',
+          },
+          {
+            title: '邮箱',
+            dataIndex: 'email',
+            key: 'email',
+          },
+          {
+            title: '备注',
+            dataIndex: 'remark',
+            key: 'remark',
+          },
+          {
+            title: '操作',
+            key: 'action',
+            render: (_: any, record: any) => (
+              <div style={{ display: 'flex', gap: 8 }}>
+                <ActionButton
+                  type="primary"
+                  icon={<IconEdit size={16} />}
+                  onClick={() => openEditAccountModal(record)}
+                >
+                  修改
+                </ActionButton>
+                <Popconfirm
+                  title={`确定要删除账号 ${record.username} 吗？`}
+                  onConfirm={() => openDeleteAccountModal(record)}
+                  disabled={record.username === 'admin'}
+                >
+                  <ActionButton
+                    type="danger"
+                    icon={<IconTrash2 size={16} />}
+                    onClick={() => openDeleteAccountModal(record)}
                     disabled={record.username === 'admin'}
                   >
-                    <Button 
-                      type="text" 
-                      status="danger"
-                      icon={<IconTrash2 />}
-                      disabled={record.username === 'admin'}
-                    >
-                      删除
-                    </Button>
-                  </Popconfirm>
-                </div>
-              ),
-            },
-          ]}
-          pagination={false}
-        />
-      </Card>
+                    删除
+                  </ActionButton>
+                </Popconfirm>
+              </div>
+            ),
+          },
+        ]}
+        pagination={false}
+        emptyText="暂无账号数据"
+      />
 
       {/* 添加账号弹窗 */}
       <Modal

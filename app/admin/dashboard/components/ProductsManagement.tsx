@@ -1,26 +1,9 @@
 "use client"
 
-import { useState } from "react"
 import { BaseManagement, type ManagementConfig } from "./BaseManagement"
 import { Package } from "lucide-react"
+import { Tooltip } from './CommonTable'
 import styles from "./BaseManagement.module.css"
-
-function Tooltip({ children, content }: { children: React.ReactNode; content: string }) {
-  const [show, setShow] = useState(false)
-  
-  return (
-    <div 
-      className={styles.tooltipWrapper}
-      onMouseEnter={() => setShow(true)}
-      onMouseLeave={() => setShow(false)}
-    >
-      {children}
-      {show && content && (
-        <div className={styles.tooltip}>{content}</div>
-      )}
-    </div>
-  )
-}
 
 export function ProductsManagement() {
   const config: ManagementConfig = {

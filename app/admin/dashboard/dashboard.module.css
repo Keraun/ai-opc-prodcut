@@ -1489,12 +1489,26 @@
   display: flex;
   flex-direction: column;
   gap: 20px;
+  height: 100%;
+}
+
+.systemLeftColumn .systemCardNew {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
 }
 
 .systemRightColumn {
   display: flex;
   flex-direction: column;
   gap: 20px;
+  height: 100%;
+}
+
+.systemRightColumn .systemCardNew {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
 }
 
 .systemCardNew {

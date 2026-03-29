@@ -13,7 +13,9 @@ export { SystemManagement } from './system/system-management'
 // Accounts
 export { AccountManagement } from './accounts/account-management'
 
-
+// Common Components
+export { CommonTable, StatusBadge, ActionButton, Tooltip } from './CommonTable'
+export type { CommonTableProps } from './CommonTable'
 
 // Page Management
 export { PageManagement } from './page-management/PageManagement'

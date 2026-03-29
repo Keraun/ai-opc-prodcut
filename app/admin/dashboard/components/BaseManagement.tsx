@@ -20,24 +20,8 @@ import {
 } from "lucide-react"
 import { toast } from "sonner"
 import { ManagementHeader } from './ManagementHeader'
+import { CommonTable, ActionButton, Tooltip } from './CommonTable'
 import styles from "./BaseManagement.module.css"
-
-function Tooltip({ children, content }: { children: React.ReactNode; content: string }) {
-  const [show, setShow] = useState(false)
-  
-  return (
-    <div 
-      className={styles.tooltipWrapper}
-      onMouseEnter={() => setShow(true)}
-      onMouseLeave={() => setShow(false)}
-    >
-      {children}
-      {show && content && (
-        <div className={styles.tooltip}>{content}</div>
-      )}
-    </div>
-  )
-}
 
 export interface FieldConfig {
   name: string
@@ -524,80 +508,57 @@ export function BaseManagement({ config }: BaseManagementProps) {
         onButtonClick={() => setViewMode('new')}
       />
 
-      <div className={styles.table}>
-        <div className={styles.tableHeader}>
-          <div className={styles.tableRow}>
-            {config.columns.map(column => (
-              <div 
-                key={column.key} 
-                className={styles.tableCell}
-                style={column.width ? { width: column.width } : undefined}
-              >
-                {column.label}
+      <CommonTable
+        columns={[
+          ...config.columns.map(col => ({
+            title: col.label,
+            dataIndex: col.key,
+            key: col.key,
+            width: col.width,
+            render: col.render ? (_: any, record: any) => col.render!(record) : undefined,
+          })),
+          {
+            title: '操作',
+            key: 'actions',
+            width: '150px',
+            render: (_: any, record: any) => (
+              <div className={styles.actions}>
+                <ActionButton
+                  type="default"
+                  icon={<Eye size={18} />}
+                  onClick={() => {
+                    setCurrentItem(record)
+                    setViewMode('view')
+                  }}
+                >
+                  查看
+                </ActionButton>
+                <ActionButton
+                  type="primary"
+                  icon={<Edit3 size={18} />}
+                  onClick={() => {
+                    setCurrentItem(record)
+                    setViewMode('edit')
+                  }}
+                >
+                  编辑
+                </ActionButton>
+                <ActionButton
+                  type="danger"
+                  icon={<Trash2 size={18} />}
+                  onClick={() => record.id && handleDelete(record.id)}
+                >
+                  删除
+                </ActionButton>
               </div>
-            ))}
-            <div className={styles.tableCell}>操作</div>
-          </div>
-        </div>
-        <div className={styles.tableBody}>
-          {items.length === 0 ? (
-            <div className={styles.empty}>
-              {config.emptyIcon}
-              <p>{config.emptyText}</p>
-            </div>
-          ) : (
-            items.map((item) => (
-              <div key={item.id} className={styles.tableRow}>
-                {config.columns.map(column => {
-                  const isTitleColumn = column.key === 'name' || column.key === 'title'
-                  const titleText = item[column.key]
-                  
-                  return (
-                    <div 
-                      key={column.key} 
-                      className={styles.tableCell}
-                      style={column.width ? { width: column.width } : undefined}
-                    >
-                      {column.render ? column.render(item) : item[column.key]}
-                    </div>
-                  )
-                })}
-                <div className={styles.tableCell}>
-                  <div className={styles.actions}>
-                    <button
-                      onClick={() => {
-                        setCurrentItem(item)
-                        setViewMode('view')
-                      }}
-                      className={styles.iconButton}
-                      title="查看"
-                    >
-                      <Eye size={18} />
-                    </button>
-                    <button
-                      onClick={() => {
-                        setCurrentItem(item)
-                        setViewMode('edit')
-                      }}
-                      className={styles.iconButton}
-                      title="编辑"
-                    >
-                      <Edit3 size={18} />
-                    </button>
-                    <button
-                      onClick={() => item.id && handleDelete(item.id)}
-                      className={`${styles.iconButton} ${styles.deleteButton}`}
-                      title="删除"
-                    >
-                      <Trash2 size={18} />
-                    </button>
-                  </div>
-                </div>
-              </div>
-            ))
-          )}
-        </div>
-      </div>
+            ),
+          },
+        ]}
+        data={items}
+        loading={loading}
+        emptyText={config.emptyText}
+        emptyIcon={config.emptyIcon}
+      />
     </div>
   )
 }
