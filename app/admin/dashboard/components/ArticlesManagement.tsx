@@ -21,8 +21,15 @@ export function ArticlesManagement() {
       {
         name: "category",
         label: "文章分类",
-        type: "text",
-        placeholder: "请输入文章分类",
+        type: "select-with-input",
+        options: [
+          { value: "tech", label: "技术" },
+          { value: "product", label: "产品" },
+          { value: "news", label: "新闻" },
+          { value: "tutorial", label: "教程" },
+          { value: "other", label: "其他" }
+        ],
+        placeholder: "请选择文章分类",
         icon: <Tag size={16} />
       },
       {
@@ -40,16 +47,6 @@ export function ArticlesManagement() {
         type: "text",
         placeholder: "请输入作者名称",
         icon: <Calendar size={16} />
-      },
-      {
-        name: "status",
-        label: "状态",
-        type: "status-button",
-        options: [
-          { value: "draft", label: "保存草稿" },
-          { value: "published", label: "发布" }
-        ],
-        icon: <Tag size={16} />
       },
       {
         name: "tags",
@@ -70,7 +67,7 @@ export function ArticlesManagement() {
       {
         key: "title",
         label: "文章标题",
-        width: 250,
+        width: "250",
         render: (item) => (
           <div className={styles.productInfo}>
             <Tooltip content={item.title}>
@@ -85,7 +82,7 @@ export function ArticlesManagement() {
       {
         key: "category",
         label: "分类",
-        width: 70,
+        width: "70",
         render: (item) => item.category ? (
           <ArcoTag color="orange" size="small">{item.category}</ArcoTag>
         ) : (
@@ -95,7 +92,7 @@ export function ArticlesManagement() {
       {
         key: "author",
         label: "作者",
-        width: 120,
+        width: "120",
         render: (item) => item.author ? (
           <div className={styles.authorInfo}>
             <User size={14} />
@@ -108,7 +105,7 @@ export function ArticlesManagement() {
       {
         key: "tags",
         label: "标签",
-        width: 160,
+        width: "160",
         render: (item) => item.tags && item.tags.length > 0 ? (
           <div className={styles.tagsList}>
             {item.tags.map((tag: string, index: number) => (
@@ -122,7 +119,7 @@ export function ArticlesManagement() {
       {
         key: "status",
         label: "状态",
-        width: 70,
+        width: "70",
         render: (item) => {
           const statusConfig: Record<string, { text: string; color: 'gray' | 'green' }> = {
             draft: { text: '草稿', color: 'gray' },
@@ -135,7 +132,14 @@ export function ArticlesManagement() {
     ],
     emptyIcon: <Newspaper size={48} />,
     emptyText: "暂无资讯数据",
-    description: "管理网站的所有资讯文章，包括创建、编辑和删除文章"
+    description: "管理网站的所有资讯文章，包括创建、编辑和删除文章",
+    statusConfig: {
+      field: "status",
+      states: [
+        { value: "published", label: "上线", action: "上线文章", type: "success" },
+        { value: "draft", label: "下线", action: "下线文章", type: "warning" }
+      ]
+    }
   }
 
   return <BaseManagement config={config} />

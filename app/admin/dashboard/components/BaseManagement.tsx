@@ -27,7 +27,7 @@ import styles from "./BaseManagement.module.css"
 export interface FieldConfig {
   name: string
   label: string
-  type: 'text' | 'textarea' | 'select' | 'richtext' | 'tags' | 'status-button'
+  type: 'text' | 'textarea' | 'select' | 'select-with-input' | 'richtext' | 'tags' | 'status-button'
   required?: boolean
   placeholder?: string
   options?: { value: string; label: string }[]
@@ -43,6 +43,16 @@ export interface ColumnConfig {
   width?: string
 }
 
+export interface StatusConfig {
+  field: string
+  states: {
+    value: string
+    label: string
+    action: string
+    type: 'success' | 'warning' | 'default'
+  }[]
+}
+
 export interface ManagementConfig {
   title: string
   apiEndpoint: string
@@ -51,6 +61,7 @@ export interface ManagementConfig {
   emptyIcon: React.ReactNode
   emptyText: string
   description?: string
+  statusConfig?: StatusConfig
 }
 
 interface BaseManagementProps {
@@ -193,6 +204,30 @@ function FormField({
         </select>
       )}
       
+      {field.type === 'select-with-input' && (
+        <div className={styles.selectWithInput}>
+          <select
+            value={value && field.options?.some(opt => opt.value === value) ? value : 'custom'}
+            onChange={(e) => onChange(e.target.value === 'custom' ? '' : e.target.value)}
+            className={styles.input}
+          >
+            {field.options?.map(option => (
+              <option key={option.value} value={option.value}>
+                {option.label}
+              </option>
+            ))}
+            <option value="custom">自定义</option>
+          </select>
+          <input
+            type="text"
+            value={value && !field.options?.some(opt => opt.value === value) ? value : ''}
+            onChange={(e) => onChange(e.target.value)}
+            className={styles.input}
+            placeholder="或输入自定义分类"
+          />
+        </div>
+      )}
+      
       {field.type === 'richtext' && (
         <div className={styles.richtextContainer}>
           <RichTextEditor
@@ -312,7 +347,11 @@ function ItemForm({
   const threeColumnFields = config.fields.filter(f => 
     f.type !== 'richtext' && 
     f.type !== 'textarea' && 
+    f.type !== 'tags' &&
     !f.inlineGroup
+  );
+  const tagsFields = config.fields.filter(f => 
+    f.type === 'tags'
   );
   const fullWidthFields = config.fields.filter(f => 
     f.type === 'richtext' || f.type === 'textarea'
@@ -351,25 +390,31 @@ function ItemForm({
         {Object.entries(fieldsByGroup).map(([groupName, groupFields]) => {
           if (groupName !== 'default' && groupFields.length > 0) {
             return (
-              <div key={groupName} className={styles.formRow}>
-                <label className={styles.label}>{groupName}</label>
-                <div className={styles.inlineGroup}>
-                  {groupFields.map(field => (
-                    <div key={field.name} className={styles.inlineField}>
-                      <label className={styles.inlineLabel}>{field.label}</label>
-                      <FormField
-                        field={field}
-                        value={formData[field.name]}
-                        onChange={(value) => updateField(field.name, value)}
-                      />
-                    </div>
-                  ))}
-                </div>
+              <div key={groupName} className={styles.formRowThree}>
+                {groupFields.map(field => (
+                  <div key={field.name} className={styles.inlineField}>
+                    <label className={styles.inlineLabel}>{field.label}</label>
+                    <FormField
+                      field={field}
+                      value={formData[field.name]}
+                      onChange={(value) => updateField(field.name, value)}
+                    />
+                  </div>
+                ))}
               </div>
             );
           }
           return null;
         })}
+
+        {tagsFields.map(field => (
+          <FormField
+            key={field.name}
+            field={field}
+            value={formData[field.name]}
+            onChange={(value) => updateField(field.name, value)}
+          />
+        ))}
 
         {fullWidthFields.map(field => (
           <FormField
@@ -385,14 +430,29 @@ function ItemForm({
         <button type="button" onClick={onCancel} className={styles.cancelButton}>
           取消
         </button>
-        <button type="submit" disabled={loading} className={styles.submitButton}>
-          {loading ? '保存中...' : (
-            <>
-              <Save size={16} />
-              保存
-            </>
-          )}
-        </button>
+        <div className={styles.formActions}>
+          <button 
+            type="button" 
+            onClick={() => onSubmit({ ...formData, status: 'draft' })} 
+            disabled={loading}
+            className={styles.draftButton}
+          >
+            {loading ? '保存中...' : '保存草稿'}
+          </button>
+          <button 
+            type="button" 
+            onClick={() => onSubmit({ ...formData, status: 'published' })} 
+            disabled={loading}
+            className={styles.publishButton}
+          >
+            {loading ? '发布中...' : (
+              <>
+                <Save size={16} />
+                发布
+              </>
+            )}
+          </button>
+        </div>
       </div>
     </form>
   )
@@ -493,6 +553,30 @@ export function BaseManagement({ config }: BaseManagementProps) {
     }
   }
 
+  const handleStatusChange = async (record: any, newStatus: string) => {
+    if (!config.statusConfig) return
+    try {
+      const response = await fetch(config.apiEndpoint, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ 
+          ...record, 
+          [config.statusConfig!.field]: newStatus 
+        })
+      })
+      const result = await response.json()
+      if (result.success) {
+        toast.success('状态更新成功')
+        fetchItems()
+      } else {
+        toast.error(result.message || '状态更新失败')
+      }
+    } catch (error) {
+      console.error('状态更新失败:', error)
+      toast.error('状态更新失败')
+    }
+  }
+
   if (loading) {
     return (
       <div className={styles.loading}>
@@ -590,9 +674,28 @@ export function BaseManagement({ config }: BaseManagementProps) {
           {
             title: '操作',
             key: 'actions',
-            width: 120,
+            width: config.statusConfig ? 180 : 120,
             render: (_: any, record: any) => (
               <div className={styles.actions}>
+                {config.statusConfig && (
+                  <>
+                    {config.statusConfig.states.map(state => {
+                      if (record[config.statusConfig!.field] !== state.value) {
+                        return (
+                          <Tooltip key={state.value} content={state.action}>
+                            <ActionButton
+                              type={state.type}
+                              onClick={() => handleStatusChange(record, state.value)}
+                            >
+                              {state.label}
+                            </ActionButton>
+                          </Tooltip>
+                        )
+                      }
+                      return null
+                    })}
+                  </>
+                )}
                 <Tooltip content="查看">
                   <ActionButton
                     type="default"

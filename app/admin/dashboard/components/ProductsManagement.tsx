@@ -16,7 +16,8 @@ export function ProductsManagement() {
         type: "text",
         required: true,
         placeholder: "请输入产品名称",
-        icon: <Package size={16} />
+        icon: <Package size={16} />,
+        inlineGroup: "基本信息"
       },
       {
         name: "categoryName",
@@ -29,7 +30,8 @@ export function ProductsManagement() {
           { value: "other", label: "其他" }
         ],
         placeholder: "请选择产品分类",
-        icon: <Package size={16} />
+        icon: <Package size={16} />,
+        inlineGroup: "基本信息"
       },
       {
         name: "description",
@@ -46,7 +48,7 @@ export function ProductsManagement() {
         type: "text",
         placeholder: "请输入价格",
         icon: <Package size={16} />,
-        inlineGroup: "价格设置"
+        inlineGroup: "基本信息"
       },
       {
         name: "originalPrice",
@@ -54,17 +56,7 @@ export function ProductsManagement() {
         type: "text",
         placeholder: "请输入原价",
         icon: <Package size={16} />,
-        inlineGroup: "价格设置"
-      },
-      {
-        name: "status",
-        label: "状态",
-        type: "status-button",
-        options: [
-          { value: "active", label: "上架" },
-          { value: "inactive", label: "下架" }
-        ],
-        icon: <Package size={16} />
+        inlineGroup: "基本信息"
       },
       {
         name: "tags",
@@ -85,7 +77,7 @@ export function ProductsManagement() {
       {
         key: "title",
         label: "产品名称",
-        width: 160,
+        width: "160",
         render: (item) => (
           <div className={styles.productName}>{item.title}</div>
         )
@@ -93,7 +85,7 @@ export function ProductsManagement() {
       {
         key: "description",
         label: "产品描述",
-        width: 180,
+        width: "180",
         render: (item) => (
           item.description ? (
             <Tooltip content={item.description}>
@@ -107,7 +99,7 @@ export function ProductsManagement() {
       {
         key: "category",
         label: "分类",
-        width: 90,
+        width: "90",
         render: (item) => item.categoryName ? (
           <Tag color="arcoblue" size="small">{item.categoryName}</Tag>
         ) : (
@@ -117,7 +109,7 @@ export function ProductsManagement() {
       {
         key: "price",
         label: "价格",
-        width: 90,
+        width: "60",
         render: (item) => (
           <div className={styles.priceInfo}>
             {item.price ? (
@@ -136,7 +128,7 @@ export function ProductsManagement() {
       {
         key: "tags",
         label: "标签",
-        width: 140,
+        width: "120",
         render: (item) => item.tags && item.tags.length > 0 ? (
           <div className={styles.tagsList}>
             {item.tags.map((tag: string, index: number) => (
@@ -150,7 +142,7 @@ export function ProductsManagement() {
       {
         key: "status",
         label: "状态",
-        width: 90,
+        width: "60",
         render: (item) => {
           const statusConfig: Record<string, { text: string; color: 'green' | 'red' }> = {
             active: { text: '上架', color: 'green' },
@@ -163,7 +155,14 @@ export function ProductsManagement() {
     ],
     emptyIcon: <Package size={48} />,
     emptyText: "暂无产品数据",
-    description: "管理网站的所有产品，包括创建、编辑和删除产品"
+    description: "管理网站的所有产品，包括创建、编辑和删除产品",
+    statusConfig: {
+      field: "status",
+      states: [
+        { value: "active", label: "上架", action: "上架产品", type: "success" },
+        { value: "inactive", label: "下架", action: "下架产品", type: "warning" }
+      ]
+    }
   }
 
   return <BaseManagement config={config} />

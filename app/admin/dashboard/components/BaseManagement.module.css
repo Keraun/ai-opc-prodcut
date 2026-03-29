@@ -330,6 +330,20 @@
   color: #9ca3af;
 }
 
+.selectWithInput {
+  display: flex;
+  gap: 8px;
+  flex: 1;
+}
+
+.selectWithInput select {
+  flex: 1;
+}
+
+.selectWithInput input {
+  flex: 1;
+}
+
 .tagInput {
   flex: 1;
   display: flex;
@@ -406,6 +420,17 @@
   border: 1px solid #e5e7eb;
   border-radius: 4px;
   overflow: hidden;
+  width: 100%;
+}
+
+.editorContent :global(.ProseMirror) {
+  outline: none;
+  width: 100%;
+  min-width: 100%;
+}
+
+.editorContent :global(.ProseMirror) > * {
+  max-width: 100%;
 }
 
 .editorToolbar {
@@ -449,17 +474,14 @@
 }
 
 .editorContent {
-  padding: 16px;
-  min-height: 400px;
-  max-height: 600px;
+  padding: 20px;
+  min-height: 500px;
+  max-height: 700px;
   overflow-y: auto;
+  width: 100%;
 }
 
 .editorContent:focus {
-  outline: none;
-}
-
-.editorContent :global(.ProseMirror) {
   outline: none;
 }
 
@@ -496,7 +518,33 @@
   background: #f7f8fa;
 }
 
-.submitButton {
+.formActions {
+  display: flex;
+  gap: 12px;
+}
+
+.draftButton {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 8px 20px;
+  background: white;
+  color: #4b5563;
+  border: 1px solid #e5e7eb;
+  border-radius: 4px;
+  font-size: 14px;
+  font-weight: 400;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.draftButton:hover:not(:disabled) {
+  background: #f7f8fa;
+  border-color: #165dff;
+  color: #165dff;
+}
+
+.publishButton {
   display: inline-flex;
   align-items: center;
   gap: 0.5rem;
@@ -511,11 +559,12 @@
   transition: background-color 0.2s;
 }
 
-.submitButton:hover:not(:disabled) {
+.publishButton:hover:not(:disabled) {
   background: #4080ff;
 }
 
-.submitButton:disabled {
+.draftButton:disabled,
+.publishButton:disabled {
   opacity: 0.5;
   cursor: not-allowed;
 }
