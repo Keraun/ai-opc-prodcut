@@ -4,7 +4,7 @@ import { useState, useEffect } from "react"
 import { Button, Drawer, Dropdown, Menu } from "@arco-design/web-react"
 import { IconMenu, IconCustomerService } from "@arco-design/web-react/icon"
 import Link from "next/link"
-import { useRouter } from "next/navigation"
+import { useRouter, usePathname } from "next/navigation"
 import { Logo } from "@/components/common/logo"
 import { useConfig } from "@/components/initial-data-provider"
 import { useTheme } from "@/components/theme-provider"
@@ -43,6 +43,7 @@ export function Header({
   config: propConfig
 }: HeaderProps) {
   const router = useRouter()
+  const pathname = usePathname()
   const { themeConfig } = useTheme()
   const siteConfig = useConfig('site')
   const headerConfig = useConfig('site-header')
@@ -108,19 +109,22 @@ export function Header({
           </div>
           {navItems && navItems.length > 0 && (
             <nav className={styles.nav}>
-              {navItems.map((item: any) => (
-                <button
-                  key={item?.href}
-                  onClick={() => handleNavClick(item?.href)}
-                  className={styles.navButton}
-                >
-                  {item?.label}
-                  <span
-                    className={styles.navUnderline}
-                    style={{ backgroundColor: accentColor }}
-                  />
-                </button>
-              ))}
+              {navItems.map((item: any) => {
+                const isActive = pathname === item?.href || (item?.href !== '/' && pathname?.startsWith(item?.href))
+                return (
+                  <button
+                    key={item?.href}
+                    onClick={() => handleNavClick(item?.href)}
+                    className={`${styles.navButton} ${isActive ? styles.navButtonActive : ''}`}
+                  >
+                    {item?.label}
+                    <span
+                      className={styles.navUnderline}
+                      style={{ backgroundColor: accentColor }}
+                    />
+                  </button>
+                )
+              })}
             </nav>
           )}
 

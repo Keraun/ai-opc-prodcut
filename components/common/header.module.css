@@ -111,6 +111,15 @@
   color: #111827;
 }
 
+.navButtonActive {
+  color: #111827;
+  font-weight: 600;
+}
+
+.navButtonActive .navUnderline {
+  width: 100%;
+}
+
 .navUnderline {
   position: absolute;
   bottom: -0.25rem;

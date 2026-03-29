@@ -132,6 +132,29 @@ export function ModuleDragEditor({ modules, onChange }: ModuleDragEditorProps) {
 
   const handleDragEnd = () => {
     setDraggedIndex(null)
+    setDragOverIndex(null)
+  }
+
+  const handleReorderDragOver = (e: React.DragEvent, index: number) => {
+    e.preventDefault()
+    if (draggedIndex !== null && draggedIndex !== index) {
+      setDragOverIndex(index)
+    }
+  }
+
+  const handleReorderDrop = (e: React.DragEvent, targetIndex: number) => {
+    e.preventDefault()
+    e.stopPropagation()
+    
+    if (draggedIndex !== null && draggedIndex !== targetIndex) {
+      const newModules = [...modules]
+      const [movedModule] = newModules.splice(draggedIndex, 1)
+      newModules.splice(targetIndex, 0, movedModule)
+      onChange(newModules)
+    }
+    
+    setDraggedIndex(null)
+    setDragOverIndex(null)
   }
 
   const handleSaveModuleData = (data: Record<string, unknown>) => {
@@ -318,12 +341,24 @@ export function ModuleDragEditor({ modules, onChange }: ModuleDragEditorProps) {
             {modules.map((module, index) => (
               <div
                 key={module.moduleInstanceId}
-                onDragOver={(e) => handleListDragOver(e, index)}
-                onDrop={(e) => handleListDrop(e, index)}
+                onDragOver={(e) => {
+                  if (draggedModule) {
+                    handleListDragOver(e, index)
+                  } else if (draggedIndex !== null) {
+                    handleReorderDragOver(e, index)
+                  }
+                }}
+                onDrop={(e) => {
+                  if (draggedModule) {
+                    handleListDrop(e, index)
+                  } else {
+                    handleReorderDrop(e, index)
+                  }
+                }}
               >
-                {dragOverIndex === index && draggedModule && (
+                {dragOverIndex === index && (
                   <div className={styles.dropIndicatorV2}>
-                    放置到此处
+                    {draggedModule ? '放置到此处' : '移动到此位置'}
                   </div>
                 )}
                 <div
