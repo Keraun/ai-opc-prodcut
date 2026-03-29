@@ -37,13 +37,14 @@ import styles from "./BaseManagement.module.css"
 export interface FieldConfig {
   name: string
   label: string
-  type: 'text' | 'textarea' | 'select' | 'select-with-input' | 'richtext' | 'tags' | 'status-button'
+  type: 'text' | 'textarea' | 'select' | 'select-with-input' | 'richtext' | 'tags' | 'status-button' | 'image'
   required?: boolean
   placeholder?: string
   options?: { value: string; label: string }[]
   rows?: number
   icon?: React.ReactNode
   inlineGroup?: string
+  hint?: string
 }
 
 export interface ColumnConfig {
@@ -321,6 +322,7 @@ function FormField({
   onChange: (value: any) => void 
 }) {
   const [tagInput, setTagInput] = useState('')
+  const fileInputRef = useRef<HTMLInputElement>(null)
 
   const handleAddTag = () => {
     if (tagInput.trim() && !value?.includes(tagInput.trim())) {
@@ -333,8 +335,50 @@ function FormField({
     onChange(value?.filter((t: string) => t !== tag) || [])
   }
 
+  const handleImageUpload = async (file: File) => {
+    try {
+      const formData = new FormData()
+      formData.append('file', file)
+      
+      const response = await fetch('/api/upload?quality=85', {
+        method: 'POST',
+        body: formData,
+      })
+      
+      const result = await response.json()
+      
+      if (result.success && result.url) {
+        onChange(result.url)
+        toast.success('图片上传成功')
+      } else {
+        toast.error(result.message || '图片上传失败')
+      }
+    } catch (error) {
+      console.error('Image upload error:', error)
+      toast.error('图片上传失败')
+    }
+  }
+
+  const handleFileSelect = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0]
+    if (file) {
+      if (file.size > 5 * 1024 * 1024) {
+        toast.error('图片大小不能超过5MB')
+        return
+      }
+      if (!file.type.startsWith('image/')) {
+        toast.error('请选择图片文件')
+        return
+      }
+      handleImageUpload(file)
+    }
+    if (fileInputRef.current) {
+      fileInputRef.current.value = ''
+    }
+  }
+
   return (
-    <div className={`${styles.formGroup} ${field.type === 'richtext' ? styles.formGroupRichtext : ''} ${field.inlineGroup ? styles.formGroupInline : ''}`}>
+    <div className={`${styles.formGroup} ${field.type === 'richtext' ? styles.formGroupRichtext : ''} ${field.type === 'image' ? styles.formGroupImage : ''} ${field.inlineGroup ? styles.formGroupInline : ''}`}>
       {!field.inlineGroup && (
         <label className={styles.label}>
           {field.icon}
@@ -406,6 +450,39 @@ function FormField({
             value={value || ''}
             onChange={onChange}
             placeholder={field.placeholder}
+          />
+        </div>
+      )}
+      
+      {field.type === 'image' && (
+        <div className={styles.imageUploadContainer}>
+          {value ? (
+            <div className={styles.imagePreviewWrapper}>
+              <img src={value} alt={field.label} className={styles.imagePreview} />
+              <button 
+                type="button" 
+                onClick={() => onChange('')}
+                className={styles.removeImageButton}
+              >
+                <X size={16} />
+              </button>
+            </div>
+          ) : (
+            <div 
+              className={styles.imageUploadPlaceholder}
+              onClick={() => fileInputRef.current?.click()}
+            >
+              <ImageIcon size={40} />
+              <span>点击上传图片</span>
+              {field.hint && <span className={styles.imageHint}>{field.hint}</span>}
+            </div>
+          )}
+          <input
+            ref={fileInputRef}
+            type="file"
+            accept="image/*"
+            onChange={handleFileSelect}
+            style={{ display: 'none' }}
           />
         </div>
       )}
@@ -520,7 +597,11 @@ function ItemForm({
     f.type !== 'richtext' && 
     f.type !== 'textarea' && 
     f.type !== 'tags' &&
+    f.type !== 'image' &&
     !f.inlineGroup
+  );
+  const imageFields = config.fields.filter(f => 
+    f.type === 'image'
   );
   const tagsFields = config.fields.filter(f => 
     f.type === 'tags'
@@ -578,6 +659,15 @@ function ItemForm({
           }
           return null;
         })}
+
+        {imageFields.map(field => (
+          <FormField
+            key={field.name}
+            field={field}
+            value={formData[field.name]}
+            onChange={(value) => updateField(field.name, value)}
+          />
+        ))}
 
         {tagsFields.map(field => (
           <FormField

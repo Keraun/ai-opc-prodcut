@@ -1,7 +1,7 @@
 "use client"
 
 import { BaseManagement, type ManagementConfig } from "./BaseManagement"
-import { Package } from "lucide-react"
+import { Package, Image as ImageIcon } from "lucide-react"
 import { Tag, Tooltip } from '@arco-design/web-react'
 import styles from "./BaseManagement.module.css"
 
@@ -32,6 +32,13 @@ export function ProductsManagement() {
         placeholder: "请选择产品分类",
         icon: <Package size={16} />,
         inlineGroup: "基本信息"
+      },
+      {
+        name: "mainImage",
+        label: "产品主图",
+        type: "image",
+        hint: "建议尺寸: 800x600px",
+        icon: <ImageIcon size={16} />
       },
       {
         name: "description",
@@ -74,6 +81,16 @@ export function ProductsManagement() {
       }
     ],
     columns: [
+      {
+        key: "mainImage",
+        label: "主图",
+        width: "80",
+        render: (item) => item.mainImage ? (
+          <img src={item.mainImage} alt={item.title} className={styles.listImage} />
+        ) : (
+          <span className={styles.emptyValue}>-</span>
+        )
+      },
       {
         key: "title",
         label: "产品名称",

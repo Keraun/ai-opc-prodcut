@@ -1,0 +1,18 @@
+{
+  "type": "object",
+  "title": "内容区块配置",
+  "description": "配置内容区块的标题和富文本内容",
+  "properties": {
+    "title": {
+      "type": "string",
+      "title": "区块标题",
+      "description": "内容区块的可选标题"
+    },
+    "content": {
+      "type": "string",
+      "title": "富文本内容",
+      "description": "主要的富文本内容",
+      "x-component": "richtext"
+    }
+  }
+}

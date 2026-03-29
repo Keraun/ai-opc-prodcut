@@ -1,7 +1,7 @@
 "use client"
 
 import { BaseManagement, type ManagementConfig } from "./BaseManagement"
-import { Newspaper, Tag, FileText, Calendar, User } from "lucide-react"
+import { Newspaper, Tag, FileText, Calendar, User, Image as ImageIcon } from "lucide-react"
 import { Tag as ArcoTag, Tooltip } from '@arco-design/web-react'
 import styles from "./BaseManagement.module.css"
 
@@ -31,6 +31,13 @@ export function ArticlesManagement() {
         ],
         placeholder: "请选择文章分类",
         icon: <Tag size={16} />
+      },
+      {
+        name: "mainImage",
+        label: "资讯主图",
+        type: "image",
+        hint: "建议尺寸: 1200x630px",
+        icon: <ImageIcon size={16} />
       },
       {
         name: "summary",
@@ -64,6 +71,16 @@ export function ArticlesManagement() {
       }
     ],
     columns: [
+      {
+        key: "mainImage",
+        label: "主图",
+        width: "80",
+        render: (item) => item.mainImage ? (
+          <img src={item.mainImage} alt={item.title} className={styles.listImage} />
+        ) : (
+          <span className={styles.emptyValue}>-</span>
+        )
+      },
       {
         key: "title",
         label: "文章标题",

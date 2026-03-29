@@ -105,5 +105,19 @@
     "schema": "{\"type\":\"object\",\"title\":\"404 Section Configuration\",\"description\":\"配置404错误页面的内容\",\"properties\":{}}",
     "default_data": "{}",
     "id": 15
+  },
+  {
+    "module_id": "section-content",
+    "module_name": "内容区块",
+    "schema": "{\"type\":\"object\",\"title\":\"内容区块配置\",\"description\":\"配置内容区块的标题和富文本内容\",\"properties\":{\"title\":{\"type\":\"string\",\"title\":\"区块标题\",\"description\":\"内容区块的可选标题\"},\"content\":{\"type\":\"string\",\"title\":\"富文本内容\",\"description\":\"主要的富文本内容\",\"x-component\":\"richtext\"}}}",
+    "default_data": "{\"title\":\"关于我们\",\"content\":\"<p>这是一段示例内容。你可以使用富文本编辑器来编辑这段内容。</p>\"}",
+    "id": 16
+  },
+  {
+    "module_id": "section-image",
+    "module_name": "图片区块",
+    "schema": "{\"type\":\"object\",\"title\":\"图片区块配置\",\"description\":\"配置图片展示区块,支持移动端和Web端区分图片\",\"properties\":{\"title\":{\"type\":\"string\",\"title\":\"区块标题\",\"description\":\"图片区块的可选标题\"},\"description\":{\"type\":\"string\",\"title\":\"区块描述\",\"description\":\"图片区块的可选描述\"},\"webImage\":{\"type\":\"string\",\"title\":\"Web端图片\",\"description\":\"Web端显示的图片\",\"ui\":{\"widget\":\"image\",\"placeholder\":\"请上传Web端图片\"}},\"mobileImage\":{\"type\":\"string\",\"title\":\"移动端图片\",\"description\":\"移动端显示的图片(可选,不填则使用Web端图片)\",\"ui\":{\"widget\":\"image\",\"placeholder\":\"请上传移动端图片\"}},\"alt\":{\"type\":\"string\",\"title\":\"图片描述\",\"description\":\"图片的替代文本,用于无障碍访问\"},\"caption\":{\"type\":\"string\",\"title\":\"图片说明\",\"description\":\"图片下方的说明文字\"},\"width\":{\"type\":\"number\",\"title\":\"图片宽度\",\"description\":\"设置图片宽度(像素)\",\"default\":1200},\"height\":{\"type\":\"number\",\"title\":\"图片高度\",\"description\":\"设置图片高度(像素)\",\"default\":630},\"fullWidth\":{\"type\":\"boolean\",\"title\":\"全宽显示\",\"description\":\"是否使用全宽显示\",\"default\":false},\"priority\":{\"type\":\"boolean\",\"title\":\"优先加载\",\"description\":\"是否优先加载此图片\",\"default\":false},\"background\":{\"type\":\"string\",\"title\":\"背景样式\",\"description\":\"选择区块的背景样式\",\"enum\":[\"light\",\"dark\"],\"default\":\"light\"}}}",
+    "default_data": "{\"title\":\"\",\"description\":\"\",\"webImage\":\"\",\"mobileImage\":\"\",\"alt\":\"图片描述\",\"caption\":\"\",\"width\":1200,\"height\":630,\"fullWidth\":false,\"priority\":false,\"background\":\"light\"}",
+    "id": 17
   }
 ]

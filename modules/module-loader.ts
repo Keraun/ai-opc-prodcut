@@ -19,6 +19,8 @@ export const MODULE_LOADERS: Record<string, () => Promise<any>> = {
   'section-404': () => import('./section-404/mod'),
   'product-list': () => import('./product-list/mod'),
   'product-detail': () => import('./product-detail/mod'),
+  'section-content': () => import('./section-content/mod'),
+  'section-image': () => import('./section-image/mod'),
 }
 
 export const MODULE_COMPONENT_NAMES: Record<string, string> = {
@@ -37,6 +39,8 @@ export const MODULE_COMPONENT_NAMES: Record<string, string> = {
   'section-404': 'NotFoundModule',
   'product-list': 'ProductListModule',
   'product-detail': 'ProductDetailModule',
+  'section-content': 'ContentModule',
+  'section-image': 'ImageModule',
 }
 
 export function getModuleLoaderConfig(): ModuleLoaderConfig {

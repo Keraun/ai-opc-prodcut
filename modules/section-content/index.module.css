@@ -1,0 +1,95 @@
+.container {
+  width: 100%;
+}
+
+.title {
+  font-size: 2rem;
+  font-weight: 700;
+  color: #111827;
+  margin-bottom: 24px;
+  line-height: 1.2;
+}
+
+.content {
+  font-size: 1rem;
+  line-height: 1.8;
+  color: #4b5563;
+}
+
+.content :global(h1) {
+  font-size: 2rem;
+  font-weight: 700;
+  color: #111827;
+  margin: 32px 0 16px 0;
+}
+
+.content :global(h2) {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: #111827;
+  margin: 28px 0 14px 0;
+}
+
+.content :global(h3) {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: #111827;
+  margin: 24px 0 12px 0;
+}
+
+.content :global(p) {
+  margin: 16px 0;
+}
+
+.content :global(ul),
+.content :global(ol) {
+  margin: 16px 0;
+  padding-left: 24px;
+}
+
+.content :global(li) {
+  margin: 8px 0;
+}
+
+.content :global(a) {
+  color: #165dff;
+  text-decoration: underline;
+}
+
+.content :global(img) {
+  max-width: 100%;
+  height: auto;
+  border-radius: 8px;
+  margin: 16px 0;
+}
+
+.content :global(blockquote) {
+  border-left: 4px solid #165dff;
+  padding-left: 16px;
+  margin: 16px 0;
+  color: #6b7280;
+  font-style: italic;
+}
+
+.content :global(code) {
+  background: #f3f4f6;
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-family: monospace;
+  font-size: 0.875rem;
+}
+
+.content :global(pre) {
+  background: #1f2937;
+  color: #f9fafb;
+  padding: 16px;
+  border-radius: 8px;
+  overflow-x: auto;
+  margin: 16px 0;
+}
+
+.content :global(pre code) {
+  background: transparent;
+  padding: 0;
+  color: inherit;
+}

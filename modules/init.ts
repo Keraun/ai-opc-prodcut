@@ -13,6 +13,8 @@ import { registerNewsDetailModule } from "./news-detail/register"
 import { registerProductListModule } from "./product-list/register"
 import { registerProductDetailModule } from "./product-detail/register"
 import { registerNotFoundModule } from "./section-404/register"
+import { registerContentModule } from "./section-content/register"
+import { registerImageModule } from "./section-image/register"
 
 export function initializeModules() {
   registerSiteRootModule()
@@ -30,6 +32,8 @@ export function initializeModules() {
   registerProductListModule()
   registerProductDetailModule()
   registerNotFoundModule()
+  registerContentModule()
+  registerImageModule()
 }
 
 export { HeaderModule } from "./site-header/register"
@@ -47,3 +51,5 @@ export { NewsDetailModule } from "./news-detail/register"
 export { ProductListModule } from "./product-list/register"
 export { ProductDetailModule } from "./product-detail/register"
 export { NotFoundModule } from "./section-404/register"
+export { ContentModule } from "./section-content/register"
+export { ImageModule } from "./section-image/register"
