@@ -192,12 +192,19 @@ export function ConfigFormEditor({
       />
 
       <Card className={styles.formCard}>
-        <DynamicForm
-          schema={schema}
-          initialValues={configData}
-          onSubmit={handleSubmit}
-          loading={submitting}
-        />
+        {!schema ? (
+          <div style={{ padding: '40px', textAlign: 'center' }}>
+            <Spin size={40} />
+            <div style={{ marginTop: '16px', color: '#999' }}>加载表单配置中...</div>
+          </div>
+        ) : (
+          <DynamicForm
+            schema={schema}
+            initialValues={configData}
+            onSubmit={handleSubmit}
+            loading={submitting}
+          />
+        )}
       </Card>
 
       {isFeishuConfig && tableLink && (

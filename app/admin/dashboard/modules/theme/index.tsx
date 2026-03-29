@@ -62,7 +62,7 @@ export function ThemeManager() {
   }
 
   return (
-    <div className={styles.themeManager}>
+    <>
       <ManagementHeader
         title="主题管理"
         description="选择和管理网站的主题皮肤，不同主题有不同的配色方案和布局风格"
@@ -71,6 +71,6 @@ export function ThemeManager() {
         themeData={themeData}
         onThemeChange={handleThemeChange}
       />
-    </div>
+    </>
   )
 }

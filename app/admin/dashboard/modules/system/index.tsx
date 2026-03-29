@@ -47,7 +47,7 @@ export function SystemManager() {
   }
 
   return (
-    <div className={styles.systemManager}>
+    <>
       <SystemManagement
         siteConfig={configs.site_config}
         onExportConfig={handleExport}
@@ -61,6 +61,6 @@ export function SystemManager() {
         onClose={() => setShowChangePassword(false)}
         mustChange={false}
       />
-    </div>
+    </>
   )
 }
