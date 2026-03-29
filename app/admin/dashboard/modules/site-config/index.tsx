@@ -68,22 +68,44 @@ export function SiteConfigManager() {
   const handleSave = async () => {
     setSaving(true)
     try {
-      if (activeTab === 'site-root') {
-        const result = await saveSiteRootConfig(siteRootData)
-        if (result.success) {
-          toast.success('站点配置保存成功')
-          setHasSiteRootChanges(false)
+      const savePromises: Promise<{ success: boolean; message?: string }>[] = []
+      
+      if (hasSiteRootChanges) {
+        savePromises.push(saveSiteRootConfig(siteRootData))
+      }
+      if (hasSiteFooterChanges) {
+        savePromises.push(saveSiteFooterConfig(siteFooterData))
+      }
+      
+      if (savePromises.length === 0) {
+        toast.info('没有需要保存的更改')
+        return
+      }
+      
+      const results = await Promise.all(savePromises)
+      const allSuccess = results.every(r => r.success)
+      
+      if (allSuccess) {
+        const savedItems = []
+        if (hasSiteRootChanges) savedItems.push('站点配置')
+        if (hasSiteFooterChanges) savedItems.push('页脚配置')
+        
+        const syncResult = await syncGlobalConfig({
+          siteRootData: hasSiteRootChanges ? siteRootData : undefined,
+          siteFooterData: hasSiteFooterChanges ? siteFooterData : undefined
+        })
+        
+        if (syncResult.success) {
+          toast.success(`${savedItems.join('、')}保存并同步成功`)
         } else {
-          toast.error(result.message || '配置保存失败')
+          toast.warning(`${savedItems.join('、')}保存成功，但同步失败：${syncResult.message}`)
         }
+        
+        setHasSiteRootChanges(false)
+        setHasSiteFooterChanges(false)
       } else {
-        const result = await saveSiteFooterConfig(siteFooterData)
-        if (result.success) {
-          toast.success('页脚配置保存成功')
-          setHasSiteFooterChanges(false)
-        } else {
-          toast.error(result.message || '配置保存失败')
-        }
+        const failedMessages = results.filter(r => !r.success).map(r => r.message).join('；')
+        toast.error(failedMessages || '部分配置保存失败')
       }
     } catch (error) {
       console.error('保存配置失败:', error)
@@ -120,7 +142,7 @@ export function SiteConfigManager() {
     }
   }
 
-  const hasChanges = activeTab === 'site-root' ? hasSiteRootChanges : hasSiteFooterChanges
+  const hasChanges = hasSiteRootChanges || hasSiteFooterChanges
 
   const renderActions = () => (
     <>
@@ -130,6 +152,7 @@ export function SiteConfigManager() {
           setSyncOptions({ siteRoot: true, siteFooter: true })
           setShowSyncModal(true)
         }}
+        loading={syncing}
       >
         同步到所有页面
       </Button>
@@ -140,7 +163,7 @@ export function SiteConfigManager() {
         disabled={!hasChanges}
         onClick={handleSave}
       >
-        保存配置
+        保存并同步
       </Button>
     </>
   )
@@ -158,7 +181,7 @@ export function SiteConfigManager() {
     <div className={styles.container}>
       <ManagementHeader
         title="全局配置"
-        description="管理网站的全局配置，包括站点配置和页脚配置。保存后将同步更新相关数据。"
+        description="管理网站的全局配置，包括站点配置和页脚配置。保存时会自动将配置同步到所有页面。"
         actions={renderActions()}
       />
 

@@ -4,10 +4,10 @@
   "url": "https://makerai.com",
   "ogImage": "/og-image.png",
   "links": {
-    "email": "test@163.com",
+    "email": "",
     "wechat": "makerai_official",
-    "github": "https://github.com/makerai",
-    "twitter": "https://twitter.com/makerai"
+    "github": "",
+    "twitter": ""
   },
   "creator": {
     "name": "",
