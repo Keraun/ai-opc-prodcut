@@ -26,7 +26,7 @@ function ProductImage({ product, onImageError }: { product: Product; onImageErro
             />
           </svg>
         </div>
-        <span className={styles.fallbackLabel}>AI 产品</span>
+        <span className={styles.fallbackLabel}>产品图</span>
       </div>
     )
   }

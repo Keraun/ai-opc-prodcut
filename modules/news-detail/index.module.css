@@ -119,9 +119,9 @@
 }
 
 .shareButton:hover {
-  background: #3b82f6;
+  background: var(--theme-primary);
   color: white;
-  border-color: #3b82f6;
+  border-color: var(--theme-primary);
 }
 
 .relatedSection {
@@ -166,7 +166,7 @@
 }
 
 .relatedLink:hover .relatedItemTitle {
-  color: #3b82f6;
+  color: var(--theme-primary);
 }
 
 .relatedItemMeta {
