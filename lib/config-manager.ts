@@ -141,6 +141,26 @@ export function readConfig(configType: string): any {
       return {}
     }
     
+    if (configType === 'site-footer') {
+      const config = jsonDb.findOne('system_config', { config_key: 'site_footer_config' })
+      if (config) {
+        try {
+          return JSON.parse(config.config_value)
+        } catch {
+          return {}
+        }
+      }
+      const module = jsonDb.findOne('module_registry', { module_id: 'site-footer' })
+      if (module) {
+        try {
+          return JSON.parse(module.default_data)
+        } catch {
+          return {}
+        }
+      }
+      return {}
+    }
+    
     if (configType === 'theme') {
       const themes = jsonDb.getAll('theme_config')
       
@@ -351,6 +371,33 @@ export function writeConfig(configType: string, data: any): void {
         } catch (e) {
           console.error('Error updating site-footer:', e)
         }
+      }
+      
+      return
+    }
+    
+    if (configType === 'site-footer') {
+      const existing = jsonDb.findOne('system_config', { config_key: 'site_footer_config' })
+      if (existing) {
+        jsonDb.update('system_config', existing.id, {
+          config_value: JSON.stringify(data),
+          updated_at: new Date().toISOString()
+        })
+      } else {
+        jsonDb.insert('system_config', {
+          config_key: 'site_footer_config',
+          config_value: JSON.stringify(data),
+          created_at: new Date().toISOString(),
+          updated_at: new Date().toISOString()
+        })
+      }
+      
+      const existingSiteFooter = jsonDb.findOne('module_registry', { module_id: 'site-footer' })
+      if (existingSiteFooter) {
+        jsonDb.update('module_registry', existingSiteFooter.id, {
+          default_data: JSON.stringify(data),
+          updated_at: new Date().toISOString()
+        })
       }
       
       return
@@ -677,6 +724,35 @@ export function syncSiteRootToAllPages(data: any): { success: boolean; syncedPag
     }
   } catch (error) {
     console.error('Error syncing site-root to all pages:', error)
+    return {
+      success: false,
+      syncedPages: [],
+      message: '同步失败'
+    }
+  }
+}
+
+export function syncSiteFooterToAllPages(data: any): { success: boolean; syncedPages: string[]; message?: string } {
+  try {
+    const siteFooterModules = jsonDb.find('page_modules', { module_id: 'site-footer' })
+    
+    const syncedPages: string[] = []
+    
+    for (const module of siteFooterModules) {
+      jsonDb.update('page_modules', module.id, {
+        data: JSON.stringify(data),
+        updated_at: new Date().toISOString()
+      })
+      syncedPages.push(module.page_id)
+    }
+    
+    return {
+      success: true,
+      syncedPages,
+      message: `成功同步到 ${syncedPages.length} 个页面`
+    }
+  } catch (error) {
+    console.error('Error syncing site-footer to all pages:', error)
     return {
       success: false,
       syncedPages: [],

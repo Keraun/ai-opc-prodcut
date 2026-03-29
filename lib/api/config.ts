@@ -353,7 +353,7 @@ export async function syncSiteRootToPages(data: any): Promise<{
   try {
     const result = await request<{ syncedPages: string[] }>('/api/admin/site-config/sync', {
       method: 'POST',
-      body: JSON.stringify({ data }),
+      body: JSON.stringify({ siteRootData: data }),
     })
     return {
       success: result.success,
@@ -362,6 +362,51 @@ export async function syncSiteRootToPages(data: any): Promise<{
     }
   } catch (error) {
     console.error('Error syncing site root to pages:', error)
+    return { success: false, message: '同步失败' }
+  }
+}
+
+export async function getSiteFooterConfig(): Promise<Record<string, any>> {
+  try {
+    const result = await request<Record<string, any>>('/api/admin/config?type=site-footer')
+    return result.success && result.data ? result.data : {}
+  } catch (error) {
+    console.error('Error fetching site footer config:', error)
+    return {}
+  }
+}
+
+export async function saveSiteFooterConfig(data: any): Promise<{ success: boolean; message?: string }> {
+  try {
+    const result = await request<void>('/api/admin/config', {
+      method: 'POST',
+      body: JSON.stringify({ type: 'site-footer', data }),
+    })
+    return { success: result.success, message: result.message }
+  } catch (error) {
+    console.error('Error saving site footer config:', error)
+    return { success: false, message: '配置保存失败' }
+  }
+}
+
+export async function syncGlobalConfig(options: {
+  siteRootData?: any
+  siteFooterData?: any
+}): Promise<{ 
+  success: boolean
+  message?: string
+}> {
+  try {
+    const result = await request<{ results: any }>('/api/admin/site-config/sync', {
+      method: 'POST',
+      body: JSON.stringify(options),
+    })
+    return {
+      success: result.success,
+      message: result.message
+    }
+  } catch (error) {
+    console.error('Error syncing global config:', error)
     return { success: false, message: '同步失败' }
   }
 }

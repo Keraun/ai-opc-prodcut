@@ -1,26 +1,45 @@
 import { NextRequest } from "next/server"
-import { syncSiteRootToAllPages } from "@/lib/config-manager"
+import { syncSiteRootToAllPages, syncSiteFooterToAllPages } from "@/lib/config-manager"
 import { wrapAuthApiHandler, successResponse, errorResponse } from "@/lib/api-utils"
 
 export async function POST(request: NextRequest) {
   return wrapAuthApiHandler(async () => {
     try {
       const body = await request.json()
-      const { data } = body
+      const { siteRootData, siteFooterData } = body
 
-      if (!data) {
-        return errorResponse('缺少配置数据')
+      const results: {
+        siteRoot?: { success: boolean; syncedPages: string[]; message?: string }
+        siteFooter?: { success: boolean; syncedPages: string[]; message?: string }
+      } = {}
+
+      if (siteRootData) {
+        results.siteRoot = syncSiteRootToAllPages(siteRootData)
       }
 
-      const result = syncSiteRootToAllPages(data)
+      if (siteFooterData) {
+        results.siteFooter = syncSiteFooterToAllPages(siteFooterData)
+      }
 
-      if (result.success) {
+      const allSuccess = 
+        (!siteRootData || results.siteRoot?.success) && 
+        (!siteFooterData || results.siteFooter?.success)
+
+      if (allSuccess) {
+        const messages: string[] = []
+        if (results.siteRoot) {
+          messages.push(`站点配置: ${results.siteRoot.message}`)
+        }
+        if (results.siteFooter) {
+          messages.push(`页脚配置: ${results.siteFooter.message}`)
+        }
+        
         return successResponse({
-          syncedPages: result.syncedPages,
-          message: result.message
+          results,
+          message: messages.join('；')
         })
       } else {
-        return errorResponse(result.message || '同步失败')
+        return errorResponse('部分同步失败')
       }
     } catch (error) {
       console.error('Error syncing site config:', error)
