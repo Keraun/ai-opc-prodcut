@@ -8,7 +8,8 @@ import {
   MessageCircle, 
   Palette, 
   Users, 
-  Settings 
+  Settings,
+  Globe
 } from "lucide-react"
 import styles from "../../dashboard.module.css"
 
@@ -27,6 +28,7 @@ interface MenuItem {
 }
 
 const MENU_STRUCTURE: MenuItem[] = [
+  { id: 'site-config', label: '站点配置', icon: Globe },
   { id: 'pages', label: '页面管理', icon: FileText },
   { id: 'products', label: '产品管理', icon: Package },
   { id: 'articles', label: '资讯管理', icon: Newspaper },

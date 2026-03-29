@@ -60,7 +60,9 @@ export {
   createTheme,
   updateTheme,
   deleteTheme,
-  setCurrentTheme
+  setCurrentTheme,
+  getSiteRootConfig,
+  saveSiteRootConfig
 } from './api/config'
 
 export {

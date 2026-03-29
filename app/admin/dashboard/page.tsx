@@ -16,7 +16,8 @@ import {
   AccountManager,
   PageManager,
   ArticleManager,
-  ProductManager
+  ProductManager,
+  SiteConfigManager
 } from "./modules"
 import styles from "./dashboard.module.css"
 
@@ -74,6 +75,8 @@ export default function AdminDashboardPage() {
 
   const renderContent = () => {
     switch (activeMenu) {
+      case 'site-config':
+        return <SiteConfigManager />
       case 'pages':
         return <PageManager />
       case 'articles':

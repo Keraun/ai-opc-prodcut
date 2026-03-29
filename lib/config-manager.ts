@@ -121,6 +121,26 @@ export function readConfig(configType: string): any {
       return {}
     }
     
+    if (configType === 'site-root') {
+      const config = jsonDb.findOne('system_config', { config_key: 'site_config' })
+      if (config) {
+        try {
+          return JSON.parse(config.config_value)
+        } catch {
+          return {}
+        }
+      }
+      const module = jsonDb.findOne('module_registry', { module_id: 'site-root' })
+      if (module) {
+        try {
+          return JSON.parse(module.default_data)
+        } catch {
+          return {}
+        }
+      }
+      return {}
+    }
+    
     if (configType === 'theme') {
       const themes = jsonDb.getAll('theme_config')
       
@@ -288,6 +308,51 @@ export function writeConfig(configType: string, data: any): void {
           updated_at: new Date().toISOString()
         })
       }
+      return
+    }
+    
+    if (configType === 'site-root') {
+      const existingSiteConfig = jsonDb.findOne('system_config', { config_key: 'site_config' })
+      if (existingSiteConfig) {
+        jsonDb.update('system_config', existingSiteConfig.id, {
+          config_value: JSON.stringify(data),
+          updated_at: new Date().toISOString()
+        })
+      } else {
+        jsonDb.insert('system_config', {
+          config_key: 'site_config',
+          config_value: JSON.stringify(data),
+          created_at: new Date().toISOString(),
+          updated_at: new Date().toISOString()
+        })
+      }
+      
+      const existingSiteRoot = jsonDb.findOne('module_registry', { module_id: 'site-root' })
+      if (existingSiteRoot) {
+        jsonDb.update('module_registry', existingSiteRoot.id, {
+          default_data: JSON.stringify(data),
+          updated_at: new Date().toISOString()
+        })
+      }
+      
+      const existingSiteFooter = jsonDb.findOne('module_registry', { module_id: 'site-footer' })
+      if (existingSiteFooter) {
+        try {
+          const footerData = JSON.parse(existingSiteFooter.default_data)
+          footerData.description = data.description || footerData.description
+          footerData.address = data.contact?.address || footerData.address
+          footerData.phone = data.contact?.phone || footerData.phone
+          footerData.email = data.contact?.email || footerData.email
+          
+          jsonDb.update('module_registry', existingSiteFooter.id, {
+            default_data: JSON.stringify(footerData),
+            updated_at: new Date().toISOString()
+          })
+        } catch (e) {
+          console.error('Error updating site-footer:', e)
+        }
+      }
+      
       return
     }
     

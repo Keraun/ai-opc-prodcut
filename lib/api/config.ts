@@ -321,3 +321,26 @@ export async function setCurrentTheme(themeId: string): Promise<{ success: boole
     return { success: false, message: '设置主题失败' }
   }
 }
+
+export async function getSiteRootConfig(): Promise<Record<string, any>> {
+  try {
+    const result = await request<Record<string, any>>('/api/admin/config?type=site-root')
+    return result.success && result.data ? result.data : {}
+  } catch (error) {
+    console.error('Error fetching site root config:', error)
+    return {}
+  }
+}
+
+export async function saveSiteRootConfig(data: any): Promise<{ success: boolean; message?: string }> {
+  try {
+    const result = await request<void>('/api/admin/config', {
+      method: 'POST',
+      body: JSON.stringify({ type: 'site-root', data }),
+    })
+    return { success: result.success, message: result.message }
+  } catch (error) {
+    console.error('Error saving site root config:', error)
+    return { success: false, message: '配置保存失败' }
+  }
+}

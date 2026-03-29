@@ -2,6 +2,7 @@ import { NextRequest } from 'next/server'
 import fs from 'fs'
 import path from 'path'
 import { wrapApiHandler, successResponse, badRequestResponse, errorResponse } from '@/lib/api-utils'
+import { jsonDb } from '@/lib/json-database'
 
 const schemaMap: Record<string, string> = {
   'article': 'article-schema.json',
@@ -29,7 +30,36 @@ export async function GET(request: NextRequest) {
     const { searchParams } = new URL(request.url)
     const type = searchParams.get('type')
 
-    if (!type || !schemaMap[type]) {
+    if (!type) {
+      return badRequestResponse('Schema type is required')
+    }
+
+    if (type === 'site-root') {
+      const moduleSchemaPath = path.join(
+        process.cwd(),
+        'modules/site-root/schema.json'
+      )
+      
+      if (fs.existsSync(moduleSchemaPath)) {
+        const schemaContent = fs.readFileSync(moduleSchemaPath, 'utf-8')
+        const schema = JSON.parse(schemaContent)
+        return successResponse(schema)
+      }
+      
+      const module = jsonDb.findOne('module_registry', { module_id: 'site-root' })
+      if (module?.schema) {
+        try {
+          const schema = JSON.parse(module.schema)
+          return successResponse(schema)
+        } catch {
+          return errorResponse('Failed to parse site-root schema')
+        }
+      }
+      
+      return badRequestResponse('site-root schema not found')
+    }
+
+    if (!schemaMap[type]) {
       return badRequestResponse('Invalid schema type')
     }
 
