@@ -521,7 +521,7 @@ export function BaseManagement({ config }: BaseManagementProps) {
           {
             title: '操作',
             key: 'actions',
-            width: '150px',
+            width: 150,
             render: (_: any, record: any) => (
               <div className={styles.actions}>
                 <ActionButton
@@ -559,6 +559,7 @@ export function BaseManagement({ config }: BaseManagementProps) {
         loading={loading}
         emptyText={config.emptyText}
         emptyIcon={config.emptyIcon}
+        scroll={{ x: 1000 }}
       />
     </div>
   )

@@ -85,6 +85,7 @@ export function ArticlesManagement() {
       {
         key: "categoryName",
         label: "分类",
+        width: 80,
         render: (item) => item.categoryName ? (
           <ArcoTag color="orange" size="small">{item.categoryName}</ArcoTag>
         ) : (
@@ -94,6 +95,7 @@ export function ArticlesManagement() {
       {
         key: "author",
         label: "作者",
+        width: 150,
         render: (item) => item.author ? (
           <div className={styles.authorInfo}>
             <User size={14} />
@@ -106,6 +108,7 @@ export function ArticlesManagement() {
       {
         key: "tags",
         label: "标签",
+        width: 200,
         render: (item) => item.tags && item.tags.length > 0 ? (
           <div className={styles.tagsList}>
             {item.tags.map((tag: string, index: number) => (
@@ -119,6 +122,7 @@ export function ArticlesManagement() {
       {
         key: "status",
         label: "状态",
+        width: 80,
         render: (item) => {
           const statusConfig: Record<string, { text: string; color: 'gray' | 'green' }> = {
             draft: { text: '草稿', color: 'gray' },
