@@ -72,6 +72,7 @@ export interface ManagementConfig {
   emptyText: string
   description?: string
   statusConfig?: StatusConfig
+  actionsColumnWidth?: number
 }
 
 interface BaseManagementProps {
@@ -839,13 +840,13 @@ export function BaseManagement({ config }: BaseManagementProps) {
             title: col.label,
             dataIndex: col.key,
             key: col.key,
-            width: col.width,
+            width: typeof col.width === 'string' ? parseInt(col.width, 10) : col.width,
             render: col.render ? (_: any, record: any) => col.render!(record) : undefined,
           })),
           {
             title: '操作',
             key: 'actions',
-            width: config.statusConfig ? 180 : 120,
+            width: config.actionsColumnWidth ?? (config.statusConfig ? 180 : 120),
             render: (_: any, record: any) => (
               <div className={styles.actions}>
                 {config.statusConfig && (
