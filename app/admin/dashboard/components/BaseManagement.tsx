@@ -21,6 +21,23 @@ import {
 import { toast } from "sonner"
 import styles from "./BaseManagement.module.css"
 
+function Tooltip({ children, content }: { children: React.ReactNode; content: string }) {
+  const [show, setShow] = useState(false)
+  
+  return (
+    <div 
+      className={styles.tooltipWrapper}
+      onMouseEnter={() => setShow(true)}
+      onMouseLeave={() => setShow(false)}
+    >
+      {children}
+      {show && content && (
+        <div className={styles.tooltip}>{content}</div>
+      )}
+    </div>
+  )
+}
+
 export interface FieldConfig {
   name: string
   label: string
@@ -529,15 +546,27 @@ export function BaseManagement({ config }: BaseManagementProps) {
           ) : (
             items.map((item) => (
               <div key={item.id} className={styles.tableRow}>
-                {config.columns.map(column => (
-                  <div 
-                    key={column.key} 
-                    className={styles.tableCell}
-                    style={column.width ? { width: column.width } : undefined}
-                  >
-                    {column.render ? column.render(item) : item[column.key]}
-                  </div>
-                ))}
+                {config.columns.map(column => {
+                  const isTitleColumn = column.key === 'name' || column.key === 'title'
+                  const content = column.render ? column.render(item) : item[column.key]
+                  const titleText = item[column.key]
+                  
+                  return (
+                    <div 
+                      key={column.key} 
+                      className={styles.tableCell}
+                      style={column.width ? { width: column.width } : undefined}
+                    >
+                      {isTitleColumn && titleText ? (
+                        <Tooltip content={titleText}>
+                          <span className={styles.titleCell}>{content}</span>
+                        </Tooltip>
+                      ) : (
+                        content
+                      )}
+                    </div>
+                  )
+                })}
                 <div className={styles.tableCell}>
                   <div className={styles.actions}>
                     <button
