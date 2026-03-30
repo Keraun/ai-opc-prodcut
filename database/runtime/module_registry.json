@@ -17,9 +17,9 @@
     "module_id": "site-header",
     "module_name": "站点导航",
     "schema": "{\"type\":\"object\",\"title\":\"Header Configuration\",\"description\":\"配置网站顶部导航栏的内容\",\"properties\":{\"navItems\":{\"type\":\"array\",\"title\":\"导航项列表\",\"description\":\"添加和管理导航菜单\",\"items\":{\"type\":\"object\",\"title\":\"导航项\",\"properties\":{\"label\":{\"type\":\"string\",\"title\":\"标签\",\"description\":\"导航菜单显示的文字\"},\"href\":{\"type\":\"string\",\"title\":\"链接地址\",\"description\":\"点击导航项后跳转的URL\"}}}},\"showContactButton\":{\"type\":\"boolean\",\"title\":\"显示联系按钮\",\"description\":\"在导航栏显示联系按钮\"},\"showCtaButton\":{\"type\":\"boolean\",\"title\":\"显示CTA按钮\",\"description\":\"在导航栏显示行动召唤按钮\"},\"ctaButtonText\":{\"type\":\"string\",\"title\":\"CTA按钮文本\",\"description\":\"行动召唤按钮上的文字\"},\"ctaButtonLink\":{\"type\":\"string\",\"title\":\"CTA按钮链接\",\"description\":\"点击CTA按钮后跳转的URL\"}}}",
-    "default_data": "{\"navItems\":[{\"label\":\"首页1\",\"href\":\"/\"},{\"label\":\"产品\",\"href\":\"/product\"},{\"label\":\"资讯\",\"href\":\"/news\"}],\"showContactButton\":true,\"showCtaButton\":true,\"ctaButtonText\":\"开始使用\",\"ctaButtonLink\":\"/product\"}",
+    "default_data": "{\"navItems\":[{\"label\":\"首页123\",\"href\":\"/\"},{\"label\":\"产品\",\"href\":\"/product\"},{\"label\":\"资讯\",\"href\":\"/news\"}],\"showContactButton\":true,\"showCtaButton\":true,\"ctaButtonText\":\"开始使用\",\"ctaButtonLink\":\"/product\"}",
     "id": 19,
-    "updated_at": "2026-03-30T22:26:00.456Z"
+    "updated_at": "2026-03-30T22:27:50.282Z"
   },
   {
     "module_id": "section-hero",
@@ -74,8 +74,9 @@
     "module_id": "site-footer",
     "module_name": "站点页脚",
     "schema": "{\"type\":\"object\",\"title\":\"Footer Configuration\",\"description\":\"配置网站底部页脚的内容\",\"properties\":{\"description\":{\"type\":\"string\",\"title\":\"描述\",\"description\":\"页脚显示的简短介绍文本\"},\"address\":{\"type\":\"string\",\"title\":\"地址\",\"description\":\"公司或办公地址\"},\"phone\":{\"type\":\"string\",\"title\":\"电话\",\"description\":\"联系电话号码\"},\"email\":{\"type\":\"string\",\"title\":\"邮箱\",\"description\":\"联系邮箱地址\"},\"wechatQrCode\":{\"type\":\"string\",\"title\":\"微信二维码路径\",\"description\":\"微信二维码图片路径\",\"ui\":{\"widget\":\"image\",\"placeholder\":\"请输入微信二维码图片链接或点击上传\"}},\"officialAccountQrCode\":{\"type\":\"string\",\"title\":\"公众号二维码路径\",\"description\":\"微信公众号二维码图片路径\",\"ui\":{\"widget\":\"image\",\"placeholder\":\"请输入公众号二维码图片链接或点击上传\"}},\"showAdminLink\":{\"type\":\"boolean\",\"title\":\"显示管理后台链接\",\"description\":\"在页脚显示管理后台入口链接\"}}}",
-    "default_data": "{\"description\":\"1\",\"address\":\"\",\"phone\":\"\",\"email\":\"\",\"wechatQrCode\":\"\",\"officialAccountQrCode\":\"\",\"showAdminLink\":true}",
-    "id": 27
+    "default_data": "{\"description\":\"12\",\"address\":\"\",\"phone\":\"\",\"email\":\"\",\"wechatQrCode\":\"\",\"officialAccountQrCode\":\"\",\"showAdminLink\":true}",
+    "id": 27,
+    "updated_at": "2026-03-30T22:27:50.269Z"
   },
   {
     "module_id": "news-list",

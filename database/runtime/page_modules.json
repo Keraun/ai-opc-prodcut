@@ -19,7 +19,7 @@
     "module_order": 1,
     "data": null,
     "created_at": "2026-03-27T20:18:12.903Z",
-    "updated_at": "2026-03-30T22:26:00.458Z"
+    "updated_at": "2026-03-30T22:27:50.284Z"
   },
   {
     "id": 13,
@@ -39,9 +39,9 @@
     "module_id": "site-footer",
     "module_name": "站点页脚",
     "module_order": 3,
-    "data": "{\"description\":\"专注AI一人公司服务，为企业提供智能化解决方案\",\"address\":\"测试\",\"phone\":\"400-123-4567\",\"email\":\"contact@example.com\",\"wechatQrCode\":\"\",\"officialAccountQrCode\":\"\",\"showAdminLink\":true}",
+    "data": null,
     "created_at": "2026-03-27T20:18:12.903Z",
-    "updated_at": "2026-03-29T17:56:55.006Z"
+    "updated_at": "2026-03-30T22:27:50.272Z"
   },
   {
     "id": 15,
@@ -63,7 +63,7 @@
     "module_order": 1,
     "data": null,
     "created_at": "2026-03-27T20:18:12.903Z",
-    "updated_at": "2026-03-30T22:26:00.460Z"
+    "updated_at": "2026-03-30T22:27:50.284Z"
   },
   {
     "id": 17,
@@ -85,7 +85,7 @@
     "module_order": 3,
     "data": null,
     "created_at": "2026-03-27T20:18:12.903Z",
-    "updated_at": "2026-03-30T22:26:00.460Z"
+    "updated_at": "2026-03-30T22:27:50.285Z"
   },
   {
     "id": 19,
@@ -107,7 +107,7 @@
     "module_order": 1,
     "data": null,
     "created_at": "2026-03-27T20:18:12.903Z",
-    "updated_at": "2026-03-30T22:26:00.461Z"
+    "updated_at": "2026-03-30T22:27:50.286Z"
   },
   {
     "id": 21,
@@ -127,9 +127,9 @@
     "module_id": "site-footer",
     "module_name": "站点页脚",
     "module_order": 3,
-    "data": "{\"description\":\"专注AI一人公司服务，为企业提供智能化解决方案\",\"address\":\"测试\",\"phone\":\"400-123-4567\",\"email\":\"contact@example.com\",\"wechatQrCode\":\"\",\"officialAccountQrCode\":\"\",\"showAdminLink\":true}",
+    "data": null,
     "created_at": "2026-03-27T20:18:12.903Z",
-    "updated_at": "2026-03-29T17:56:55.007Z"
+    "updated_at": "2026-03-30T22:27:50.273Z"
   },
   {
     "id": 23,
@@ -151,7 +151,7 @@
     "module_order": 1,
     "data": null,
     "created_at": "2026-03-27T20:18:12.903Z",
-    "updated_at": "2026-03-30T22:26:00.462Z"
+    "updated_at": "2026-03-30T22:27:50.286Z"
   },
   {
     "id": 25,
@@ -171,9 +171,9 @@
     "module_id": "site-footer",
     "module_name": "站点页脚",
     "module_order": 3,
-    "data": "{\"description\":\"专注AI一人公司服务，为企业提供智能化解决方案\",\"address\":\"测试\",\"phone\":\"400-123-4567\",\"email\":\"contact@example.com\",\"wechatQrCode\":\"\",\"officialAccountQrCode\":\"\",\"showAdminLink\":true}",
+    "data": null,
     "created_at": "2026-03-27T20:18:12.903Z",
-    "updated_at": "2026-03-29T17:56:55.008Z"
+    "updated_at": "2026-03-30T22:27:50.274Z"
   },
   {
     "id": 33,
@@ -195,7 +195,7 @@
     "module_order": 1,
     "data": null,
     "created_at": "2026-03-29T16:00:00.000Z",
-    "updated_at": "2026-03-30T22:26:00.463Z"
+    "updated_at": "2026-03-30T22:27:50.287Z"
   },
   {
     "id": 35,
@@ -215,9 +215,9 @@
     "module_id": "site-footer",
     "module_name": "站点页脚",
     "module_order": 3,
-    "data": "{\"description\":\"专注AI一人公司服务，为企业提供智能化解决方案\",\"address\":\"测试\",\"phone\":\"400-123-4567\",\"email\":\"contact@example.com\",\"wechatQrCode\":\"\",\"officialAccountQrCode\":\"\",\"showAdminLink\":true}",
+    "data": null,
     "created_at": "2026-03-29T16:00:00.000Z",
-    "updated_at": "2026-03-29T17:56:55.008Z"
+    "updated_at": "2026-03-30T22:27:50.275Z"
   },
   {
     "page_id": "home",
@@ -238,7 +238,7 @@
     "module_order": 1,
     "data": null,
     "created_at": "2026/03/31 05:17:08",
-    "updated_at": "2026-03-30T22:26:00.464Z",
+    "updated_at": "2026-03-30T22:27:50.287Z",
     "id": 38
   },
   {
@@ -381,7 +381,7 @@
     "module_order": 14,
     "data": null,
     "created_at": "2026/03/31 05:17:08",
-    "updated_at": "2026/03/31 05:17:08",
+    "updated_at": "2026-03-30T22:27:50.275Z",
     "id": 51
   }
 ]

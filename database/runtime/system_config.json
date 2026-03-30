@@ -23,9 +23,9 @@
   {
     "id": 5,
     "config_key": "site_footer_config",
-    "config_value": "{\"description\":\"1\",\"address\":\"\",\"phone\":\"\",\"email\":\"\",\"wechatQrCode\":\"\",\"officialAccountQrCode\":\"\",\"showAdminLink\":true}",
+    "config_value": "{\"description\":\"12\",\"address\":\"\",\"phone\":\"\",\"email\":\"\",\"wechatQrCode\":\"\",\"officialAccountQrCode\":\"\",\"showAdminLink\":true}",
     "created_at": "2026-03-29T17:50:07.138Z",
-    "updated_at": "2026-03-29T21:36:21.231Z"
+    "updated_at": "2026-03-30T22:27:50.267Z"
   },
   {
     "config_key": "product_categories",
@@ -36,9 +36,9 @@
   },
   {
     "config_key": "site_header_config",
-    "config_value": "{\"navItems\":[{\"label\":\"首页1\",\"href\":\"/\"},{\"label\":\"产品\",\"href\":\"/product\"},{\"label\":\"资讯\",\"href\":\"/news\"}],\"showContactButton\":true,\"showCtaButton\":true,\"ctaButtonText\":\"开始使用\",\"ctaButtonLink\":\"/product\"}",
+    "config_value": "{\"navItems\":[{\"label\":\"首页123\",\"href\":\"/\"},{\"label\":\"产品\",\"href\":\"/product\"},{\"label\":\"资讯\",\"href\":\"/news\"}],\"showContactButton\":true,\"showCtaButton\":true,\"ctaButtonText\":\"开始使用\",\"ctaButtonLink\":\"/product\"}",
     "created_at": "2026-03-30T22:26:00.456Z",
-    "updated_at": "2026-03-30T22:26:00.456Z",
+    "updated_at": "2026-03-30T22:27:50.282Z",
     "id": 7
   }
 ]
