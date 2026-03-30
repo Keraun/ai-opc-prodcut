@@ -787,7 +787,7 @@ export function BaseManagement({ config }: BaseManagementProps) {
   const fetchItems = async () => {
     try {
       setLoading(true)
-      const response = await fetch(`${config.apiEndpoint}?admin=true`)
+      const response = await fetch(`${config.apiEndpoint}?admin=true&_t=${Date.now()}`)
       const result = await response.json()
       if (result.success && result.data) {
         setItems(result.data)
@@ -804,7 +804,7 @@ export function BaseManagement({ config }: BaseManagementProps) {
     try {
       setSubmitting(true)
       const { saveOnly, ...submitData } = data
-      const response = await fetch(config.apiEndpoint, {
+      const response = await fetch(`${config.apiEndpoint}?_t=${Date.now()}`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(submitData)
@@ -812,10 +812,8 @@ export function BaseManagement({ config }: BaseManagementProps) {
       const result = await response.json()
       if (result.success) {
         toast.success(`${config.title}创建成功`)
-        // 只有当不是仅保存时才返回上一级页面
-        if (!saveOnly) {
-          setViewMode('list')
-        }
+        // 保存后都返回上一级页面
+        setViewMode('list')
         fetchItems()
       } else {
         toast.error(result.message || '创建失败')
@@ -833,7 +831,7 @@ export function BaseManagement({ config }: BaseManagementProps) {
     try {
       setSubmitting(true)
       const { saveOnly, ...submitData } = data
-      const response = await fetch(config.apiEndpoint, {
+      const response = await fetch(`${config.apiEndpoint}?_t=${Date.now()}`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ ...submitData, id: currentItem.id })
@@ -841,10 +839,8 @@ export function BaseManagement({ config }: BaseManagementProps) {
       const result = await response.json()
       if (result.success) {
         toast.success(`${config.title}更新成功`)
-        // 只有当不是仅保存时才返回上一级页面
-        if (!saveOnly) {
-          setViewMode('list')
-        }
+        // 保存后都返回上一级页面
+        setViewMode('list')
         fetchItems()
       } else {
         toast.error(result.message || '更新失败')

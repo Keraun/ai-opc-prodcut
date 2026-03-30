@@ -101,7 +101,7 @@ export function NewsListModule({ data }: ModuleProps) {
               return (
                 <Link 
                   key={article.id} 
-                  href={`/news/${article.slug}`}
+                  href={`/news/${article.id}`}
                   className={styles.articleCard}
                   style={{ animationDelay: `${index * 0.1}s` }}
                   target="_blank"

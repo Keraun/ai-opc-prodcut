@@ -44,11 +44,11 @@ export function NewsDetailModule({ data }: ModuleProps) {
       if (!param) return
 
       try {
-        let response = await fetch(`/api/articles?slug=${param}`)
+        let response = await fetch(`/api/articles?id=${param}`)
         let result = await response.json()
         
         if (!result.success || !result.data) {
-          response = await fetch(`/api/articles?id=${param}`)
+          response = await fetch(`/api/articles?slug=${param}`)
           result = await response.json()
         }
         
@@ -145,7 +145,7 @@ export function NewsDetailModule({ data }: ModuleProps) {
         {(prevArticle || nextArticle) && (
           <div className={styles.navigationSection}>
             {prevArticle && (
-              <Link href={`/news/${prevArticle.slug}`} className={`${styles.navItem} ${styles.prevItem}`}>
+              <Link href={`/news/${prevArticle.id}`} className={`${styles.navItem} ${styles.prevItem}`}>
                 <svg className={styles.navIcon} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                   <path d="M19 12H5M12 19l-7-7 7-7" />
                 </svg>
@@ -156,7 +156,7 @@ export function NewsDetailModule({ data }: ModuleProps) {
               </Link>
             )}
             {nextArticle && (
-              <Link href={`/news/${nextArticle.slug}`} className={`${styles.navItem} ${styles.nextItem}`}>
+              <Link href={`/news/${nextArticle.id}`} className={`${styles.navItem} ${styles.nextItem}`}>
                 <div className={styles.navContent}>
                   <div className={styles.navLabel}>下一篇</div>
                   <div className={styles.navTitle}>{nextArticle.title}</div>
@@ -176,7 +176,7 @@ export function NewsDetailModule({ data }: ModuleProps) {
               {relatedArticles.map((related) => (
                 <div key={related.id} className={styles.relatedItem}>
                   <Link 
-                    href={`/news/${related.slug}`} 
+                    href={`/news/${related.id}`} 
                     className={styles.relatedLink}
                   >
                     <h4 className={styles.relatedItemTitle}>{related.title}</h4>

@@ -146,18 +146,71 @@ export function MessagesManagement() {
     }
   }
 
+  const handleStatusChange = async (record: Message, newStatus: string) => {
+    try {
+      const response = await fetch('/api/admin/messages', {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          id: record.id,
+          status: newStatus,
+          note: record.note
+        })
+      })
+      const result = await response.json()
+      
+      if (result.success) {
+        toast.success('状态更新成功')
+        loadMessages(pagination.page, statusFilter)
+      } else {
+        toast.error(result.message || '更新失败')
+      }
+    } catch (error) {
+      console.error('更新状态失败:', error)
+      toast.error('更新失败')
+    }
+  }
+
   const columns = [
     {
       title: '用户信息',
       dataIndex: 'name',
       key: 'name',
-      width: 150,
+      width: 120,
       render: (_: any, record: Message) => (
         <div className={styles.productInfo}>
           <div className={styles.productName}>{record.name}</div>
-          <div className={styles.productDesc}>
-            {record.phone && <span><Phone size={12} /> {record.phone}</span>}
-          </div>
+        </div>
+      ),
+    },
+    {
+      title: '联系方式',
+      key: 'contact',
+      width: 220,
+      render: (_: any, record: Message) => (
+        <div className={styles.productInfo}>
+          {record.phone && (
+            <div style={{ display: 'flex', alignItems: 'center', gap: 4, fontSize: 12 }}>
+              <Phone size={12} />
+              <span>{record.phone}</span>
+            </div>
+          )}
+          {record.wechat && (
+            <div style={{ display: 'flex', alignItems: 'center', gap: 4, fontSize: 12 }}>
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2z" />
+                <path d="M8 14c.5 0 1-.5 1-1s-.5-1-1-1-1 .5-1 1 .5 1 1 1z" />
+                <path d="M16 14c.5 0 1-.5 1-1s-.5-1-1-1-1 .5-1 1 .5 1 1 1z" />
+              </svg>
+              <span>{record.wechat}</span>
+            </div>
+          )}
+          {record.email && (
+            <div style={{ display: 'flex', alignItems: 'center', gap: 4, fontSize: 12 }}>
+              <Mail size={12} />
+              <span>{record.email}</span>
+            </div>
+          )}
         </div>
       ),
     },
@@ -165,13 +218,17 @@ export function MessagesManagement() {
       title: '留言内容',
       dataIndex: 'message',
       key: 'message',
-      width: 250,
+      width: 220,
       render: (text: string) => (
         <div style={{ 
-          maxWidth: 250, 
-          overflow: 'hidden', 
-          textOverflow: 'ellipsis', 
-          whiteSpace: 'nowrap' 
+          maxWidth: 220, 
+          display: '-webkit-box',
+          WebkitLineClamp: 3,
+          WebkitBoxOrient: 'vertical',
+          overflow: 'hidden',
+          textOverflow: 'ellipsis',
+          lineHeight: '1.5',
+          fontSize: '13px'
         }}>
           {text}
         </div>
@@ -180,11 +237,11 @@ export function MessagesManagement() {
     {
       title: '设备信息',
       key: 'device',
-      width: 150,
+      width: 130,
       render: (_: any, record: Message) => (
         <div className={styles.productInfo}>
-          <div className={styles.productName}>{record.os} {record.osVersion}</div>
-          <div className={styles.productDesc}>{record.deviceModel}</div>
+          <div className={styles.productName} style={{ fontSize: 12 }}>{record.os} {record.osVersion}</div>
+          <div className={styles.productDesc} style={{ fontSize: 11 }}>{record.deviceModel}</div>
         </div>
       ),
     },
@@ -192,15 +249,42 @@ export function MessagesManagement() {
       title: '状态',
       dataIndex: 'status',
       key: 'status',
-      width: 100,
-      render: (status: string) => {
-        const statusConfig = statusOptions.find(s => s.value === status)
-        return (
-          <ArcoTag color={statusColorMap[status] || 'gray'}>
-            {statusConfig?.label || status}
-          </ArcoTag>
-        )
-      },
+      width: 130,
+      render: (status: string, record: Message) => (
+        <Select
+          value={status}
+          onChange={(newStatus) => handleStatusChange(record, newStatus)}
+          style={{ width: 110 }}
+          size="small"
+        >
+          {statusOptions.map(opt => (
+            <Select.Option key={opt.value} value={opt.value}>
+              {opt.label}
+            </Select.Option>
+          ))}
+        </Select>
+      ),
+    },
+    {
+      title: '备注',
+      dataIndex: 'note',
+      key: 'note',
+      width: 180,
+      render: (text: string) => (
+        <div style={{ 
+          maxWidth: 180, 
+          display: '-webkit-box',
+          WebkitLineClamp: 3,
+          WebkitBoxOrient: 'vertical',
+          overflow: 'hidden',
+          textOverflow: 'ellipsis',
+          lineHeight: '1.5',
+          fontSize: '13px',
+          color: text ? '#666' : '#999'
+        }}>
+          {text || '-'}
+        </div>
+      ),
     },
     {
       title: '提交时间',
@@ -212,7 +296,7 @@ export function MessagesManagement() {
     {
       title: '操作',
       key: 'action',
-      width: 180,
+      width: 150,
       fixed: 'right' as const,
       render: (_: any, record: Message) => (
         <Space size="small">

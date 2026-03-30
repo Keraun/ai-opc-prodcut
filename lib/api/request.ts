@@ -7,6 +7,8 @@ export async function request<T>(
   const isFormData = options.body instanceof FormData
   const headers: Record<string, string> = { ...options.headers as Record<string, string> }
   
+  headers['Accept'] = 'application/json'
+  
   if (!isFormData) {
     headers['Content-Type'] = 'application/json'
   }
