@@ -264,8 +264,9 @@
 }
 
 .navigationSection {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
   gap: 1rem;
   margin-top: 2rem;
   padding-top: 2rem;
@@ -282,6 +283,9 @@
   border-radius: 8px;
   text-decoration: none;
   transition: all 0.2s ease;
+  flex: 0 1 auto;
+  max-width: calc(50% - 0.5rem);
+  width: auto;
 }
 
 .navItem:hover {
@@ -289,12 +293,25 @@
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
 }
 
-.navItem:first-child {
+.prevItem {
   justify-content: flex-start;
+  align-self: flex-start;
 }
 
-.navItem:last-child {
+.nextItem {
   justify-content: flex-end;
+  align-self: flex-start;
+}
+
+/* 当只有一个导航项时的处理 */
+.navigationSection:has(.navItem:only-child) .prevItem {
+  max-width: calc(50% - 0.5rem);
+  align-self: flex-start;
+}
+
+.navigationSection:has(.navItem:only-child) .nextItem {
+  max-width: calc(50% - 0.5rem);
+  align-self: flex-start;
 }
 
 .navContent {
