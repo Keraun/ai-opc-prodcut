@@ -24,8 +24,6 @@
   },
   "icp": "",
   "features": {
-    "enableTOC": true,
-    "enableReadingProgress": true,
     "enableSearch": true
   },
   "seo": {

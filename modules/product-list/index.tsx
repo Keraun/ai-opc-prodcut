@@ -5,6 +5,7 @@ import Link from 'next/link'
 import type { ModuleProps } from '@/modules/types'
 import type { ProductListData, Product } from './types'
 import { QrcodeModal } from '@/components/QrcodeModal'
+import { useTheme } from '@/components/theme-provider'
 import styles from './index.module.css'
 
 function ProductImage({ product, onImageError }: { product: Product; onImageError: (id: number) => void }) {
@@ -54,10 +55,14 @@ export function ProductListModule({ data }: ModuleProps) {
     categories: []
   }
 
+  const { siteConfig } = useTheme()
+  const enableSearch = siteConfig?.features?.enableSearch ?? true
+
   const [products, setProducts] = useState<Product[]>([])
   const [categories, setCategories] = useState<{ key: string; title: string }[]>([{ key: 'all', title: '全部产品' }])
   const [loading, setLoading] = useState(true)
   const [selectedCategory, setSelectedCategory] = useState<string>('all')
+  const [searchQuery, setSearchQuery] = useState('')
   const [imageErrors, setImageErrors] = useState<Set<number>>(new Set())
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [modalTitle, setModalTitle] = useState('联系客服')
@@ -99,9 +104,14 @@ export function ProductListModule({ data }: ModuleProps) {
     setImageErrors(prev => new Set(prev).add(productId))
   }
 
-  const filteredProducts = selectedCategory === 'all'
-    ? products
-    : products.filter(p => p.category === selectedCategory)
+  const filteredProducts = products.filter(product => {
+    const matchesCategory = selectedCategory === 'all' || product.category === selectedCategory
+    const matchesSearch = !searchQuery || 
+      product.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      product.description.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      (product.tags && product.tags.some(tag => tag.toLowerCase().includes(searchQuery.toLowerCase())))
+    return matchesCategory && matchesSearch
+  })
 
   const formatPrice = (price: number) => {
     if (price === 0) return '免费'
@@ -123,6 +133,34 @@ export function ProductListModule({ data }: ModuleProps) {
         <div className={styles.heroContainer}>
           <h1 className={styles.heroTitle}>{config.title}</h1>
           <p className={styles.heroSubtitle}>{config.subtitle}</p>
+          
+          {enableSearch && (
+            <div className={styles.searchContainer}>
+              <div className={styles.searchWrapper}>
+                <svg className={styles.searchIcon} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                  <circle cx="11" cy="11" r="8" />
+                  <path d="m21 21-4.35-4.35" />
+                </svg>
+                <input
+                  type="text"
+                  className={styles.searchInput}
+                  placeholder="搜索产品..."
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                />
+                {searchQuery && (
+                  <button 
+                    className={styles.searchClear}
+                    onClick={() => setSearchQuery('')}
+                  >
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                      <path d="M18 6 6 18M6 6l12 12" />
+                    </svg>
+                  </button>
+                )}
+              </div>
+            </div>
+          )}
         </div>
       </section>
 
@@ -232,7 +270,9 @@ export function ProductListModule({ data }: ModuleProps) {
                 <path d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
               </svg>
             </div>
-            <p className={styles.emptyText}>暂无产品</p>
+            <p className={styles.emptyText}>
+              {searchQuery ? '没有找到匹配的产品' : '暂无产品'}
+            </p>
           </div>
         )}
       </section>

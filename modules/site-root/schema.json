@@ -135,22 +135,10 @@
       "title": "功能开关",
       "description": "启用或禁用网站的各项功能",
       "properties": {
-        "enableTOC": {
-          "type": "boolean",
-          "title": "启用目录",
-          "description": "显示文章目录导航",
-          "default": true
-        },
-        "enableReadingProgress": {
-          "type": "boolean",
-          "title": "启用阅读进度条",
-          "description": "显示页面阅读进度",
-          "default": true
-        },
         "enableSearch": {
           "type": "boolean",
           "title": "启用搜索",
-          "description": "启用站内搜索功能",
+          "description": "启用产品搜索功能",
           "default": true
         }
       }
