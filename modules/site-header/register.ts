@@ -5,7 +5,7 @@ import defaultData from "./default.json"
 
 export function registerSiteHeaderModule() {
   registerModule({
-    moduleName: "站点头部",
+    moduleName: "站点导航",
     moduleId: "site-header",
     component: HeaderModule,
     schema,

@@ -13,7 +13,7 @@ export default function NotFoundPage() {
   useEffect(() => {
     setModules([
       {
-        moduleName: '站点头部',
+        moduleName: '站点导航',
         moduleId: 'site-header',
         moduleInstanceId: 'site-header',
         data: {}

@@ -26,5 +26,12 @@
     "config_value": "{\"description\":\"1\",\"address\":\"\",\"phone\":\"\",\"email\":\"\",\"wechatQrCode\":\"\",\"officialAccountQrCode\":\"\",\"showAdminLink\":true}",
     "created_at": "2026-03-29T17:50:07.138Z",
     "updated_at": "2026-03-29T21:36:21.231Z"
+  },
+  {
+    "config_key": "product_categories",
+    "config_value": "[{\"value\":\"ai-tools\",\"label\":\"AI工具\"},{\"value\":\"courses\",\"label\":\"课程\"},{\"value\":\"services\",\"label\":\"服务\"},{\"value\":\"other\",\"label\":\"其他\"},{\"value\":\"test\",\"label\":\"测试\"}]",
+    "created_at": "2026-03-30T22:07:16.617Z",
+    "updated_at": "2026-03-30T22:07:16.617Z",
+    "id": 6
   }
 ]

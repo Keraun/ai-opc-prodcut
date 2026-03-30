@@ -41,6 +41,12 @@ export interface FieldConfig {
   required?: boolean
   placeholder?: string
   options?: { value: string; label: string }[]
+  dynamicOptions?: boolean
+  optionsEndpoint?: string
+  actionButton?: {
+    text: string
+    onClick: () => void
+  }
   rows?: number
   icon?: React.ReactNode
   inlineGroup?: string
@@ -410,17 +416,38 @@ function FormField({
       )}
       
       {field.type === 'select' && (
-        <select
-          value={value || ''}
-          onChange={(e) => onChange(e.target.value)}
-          className={styles.input}
-        >
-          {field.options?.map(option => (
-            <option key={option.value} value={option.value}>
-              {option.label}
-            </option>
-          ))}
-        </select>
+        <div style={{ display: 'flex', gap: '8px', alignItems: 'center', width: '100%' }}>
+          <select
+            value={value || ''}
+            onChange={(e) => onChange(e.target.value)}
+            className={styles.input}
+            style={{ flex: 1 }}
+          >
+            {field.options?.map(option => (
+              <option key={option.value} value={option.value}>
+                {option.label}
+              </option>
+            ))}
+          </select>
+          {field.actionButton && (
+            <button
+              type="button"
+              onClick={field.actionButton.onClick}
+              className={styles.actionButton}
+              style={{
+                padding: '8px 16px',
+                backgroundColor: '#f0f0f0',
+                border: '1px solid #d9d9d9',
+                borderRadius: '6px',
+                cursor: 'pointer',
+                fontSize: '14px',
+                whiteSpace: 'nowrap'
+              }}
+            >
+              {field.actionButton.text}
+            </button>
+          )}
+        </div>
       )}
       
       {field.type === 'select-with-input' && (

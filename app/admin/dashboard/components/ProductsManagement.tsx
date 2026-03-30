@@ -1,11 +1,103 @@
 "use client"
 
+import { useState, useEffect } from "react"
 import { BaseManagement, type ManagementConfig } from "./BaseManagement"
-import { Package, Image as ImageIcon } from "lucide-react"
-import { Tag, Tooltip } from '@arco-design/web-react'
+import { Package, Image as ImageIcon, Settings, Plus, X, Edit3, Trash2 } from "lucide-react"
+import { Tag, Tooltip, Modal, Input, Button } from '@arco-design/web-react'
+import { toast } from "sonner"
 import styles from "./BaseManagement.module.css"
 
 export function ProductsManagement() {
+  const [categories, setCategories] = useState<{ value: string; label: string }[]>([])
+  const [showCategoryModal, setShowCategoryModal] = useState(false)
+  const [categoryList, setCategoryList] = useState<{ value: string; label: string }[]>([])
+  const [editingCategoryIndex, setEditingCategoryIndex] = useState<number | null>(null)
+  const [newCategoryValue, setNewCategoryValue] = useState("")
+  const [newCategoryLabel, setNewCategoryLabel] = useState("")
+
+  useEffect(() => {
+    fetchCategories()
+  }, [])
+
+  const fetchCategories = async () => {
+    try {
+      const response = await fetch("/api/product-categories")
+      const result = await response.json()
+      if (result.success) {
+        setCategories(result.data)
+        setCategoryList([...result.data])
+      }
+    } catch (error) {
+      console.error("获取产品分类失败:", error)
+    }
+  }
+
+  const saveCategories = async () => {
+    try {
+      const response = await fetch("/api/product-categories", {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(categoryList)
+      })
+      const result = await response.json()
+      if (result.success) {
+        setCategories(categoryList)
+        setShowCategoryModal(false)
+        toast.success("分类保存成功")
+      } else {
+        toast.error(result.message || "保存失败")
+      }
+    } catch (error) {
+      console.error("保存产品分类失败:", error)
+      toast.error("保存失败")
+    }
+  }
+
+  const handleAddCategory = () => {
+    if (!newCategoryValue.trim() || !newCategoryLabel.trim()) {
+      toast.error("请输入分类标识和名称")
+      return
+    }
+    if (categoryList.some(c => c.value === newCategoryValue)) {
+      toast.error("分类标识已存在")
+      return
+    }
+    setCategoryList([...categoryList, { value: newCategoryValue, label: newCategoryLabel }])
+    setNewCategoryValue("")
+    setNewCategoryLabel("")
+  }
+
+  const handleUpdateCategory = (index: number) => {
+    if (editingCategoryIndex === null) return
+    const updatedList = [...categoryList]
+    updatedList[index] = { value: newCategoryValue, label: newCategoryLabel }
+    setCategoryList(updatedList)
+    setEditingCategoryIndex(null)
+    setNewCategoryValue("")
+    setNewCategoryLabel("")
+  }
+
+  const handleDeleteCategory = (index: number) => {
+    setCategoryList(categoryList.filter((_, i) => i !== index))
+  }
+
+  const handleEditCategory = (index: number) => {
+    setEditingCategoryIndex(index)
+    setNewCategoryValue(categoryList[index].value)
+    setNewCategoryLabel(categoryList[index].label)
+  }
+
+  const handleCancelEdit = () => {
+    setEditingCategoryIndex(null)
+    setNewCategoryValue("")
+    setNewCategoryLabel("")
+  }
+
+  const openCategoryModal = () => {
+    setCategoryList([...categories])
+    setShowCategoryModal(true)
+  }
+
   const config: ManagementConfig = {
     title: "产品",
     apiEndpoint: "/api/products",
@@ -23,15 +115,14 @@ export function ProductsManagement() {
         name: "categoryName",
         label: "产品分类",
         type: "select",
-        options: [
-          { value: "ai-tools", label: "AI工具" },
-          { value: "courses", label: "课程" },
-          { value: "services", label: "服务" },
-          { value: "other", label: "其他" }
-        ],
+        options: categories,
         placeholder: "请选择产品分类",
         icon: <Package size={16} />,
-        inlineGroup: "基本信息"
+        inlineGroup: "基本信息",
+        actionButton: {
+          text: "分类管理",
+          onClick: openCategoryModal
+        }
       },
       {
         name: "description",
@@ -221,5 +312,101 @@ export function ProductsManagement() {
     }
   }
 
-  return <BaseManagement config={config} />
+  return (
+    <>
+      <BaseManagement config={config} />
+      
+      <Modal
+        title={
+          <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+            <Settings size={18} />
+            产品分类管理
+          </div>
+        }
+        visible={showCategoryModal}
+        onCancel={() => setShowCategoryModal(false)}
+        footer={
+          <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '8px' }}>
+            <Button onClick={() => setShowCategoryModal(false)}>取消</Button>
+            <Button type="primary" onClick={saveCategories}>保存</Button>
+          </div>
+        }
+        style={{ width: '600px' }}
+      >
+        <div style={{ padding: '16px 0' }}>
+          <div style={{ display: 'flex', gap: '8px', marginBottom: '16px' }}>
+            <Input
+              placeholder="分类标识 (如: ai-tools)"
+              value={newCategoryValue}
+              onChange={setNewCategoryValue}
+              style={{ flex: 1 }}
+            />
+            <Input
+              placeholder="分类名称 (如: AI工具)"
+              value={newCategoryLabel}
+              onChange={setNewCategoryLabel}
+              style={{ flex: 1 }}
+            />
+            <Button 
+              type="primary" 
+              icon={<Plus size={16} />}
+              onClick={editingCategoryIndex !== null ? () => handleUpdateCategory(editingCategoryIndex) : handleAddCategory}
+            >
+              {editingCategoryIndex !== null ? '更新' : '添加'}
+            </Button>
+            {editingCategoryIndex !== null && (
+              <Button onClick={handleCancelEdit}>
+                取消
+              </Button>
+            )}
+          </div>
+          
+          <div style={{ maxHeight: '400px', overflowY: 'auto' }}>
+            {categoryList.map((category, index) => (
+              <div 
+                key={index}
+                style={{ 
+                  display: 'flex', 
+                  alignItems: 'center', 
+                  justifyContent: 'space-between',
+                  padding: '12px 16px',
+                  border: '1px solid #e5e7eb',
+                  borderRadius: '8px',
+                  marginBottom: '8px',
+                  backgroundColor: '#f9fafb'
+                }}
+              >
+                <div>
+                  <div style={{ fontWeight: 500, color: '#1f2937' }}>{category.label}</div>
+                  <div style={{ fontSize: '12px', color: '#6b7280' }}>标识: {category.value}</div>
+                </div>
+                <div style={{ display: 'flex', gap: '8px' }}>
+                  <Button 
+                    size="small"
+                    icon={<Edit3 size={14} />}
+                    onClick={() => handleEditCategory(index)}
+                  >
+                    编辑
+                  </Button>
+                  <Button 
+                    size="small"
+                    status="danger"
+                    icon={<Trash2 size={14} />}
+                    onClick={() => handleDeleteCategory(index)}
+                  >
+                    删除
+                  </Button>
+                </div>
+              </div>
+            ))}
+            {categoryList.length === 0 && (
+              <div style={{ textAlign: 'center', padding: '32px', color: '#9ca3af' }}>
+                暂无分类，添加新分类开始
+              </div>
+            )}
+          </div>
+        </div>
+      </Modal>
+    </>
+  )
 }

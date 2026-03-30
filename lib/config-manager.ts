@@ -183,6 +183,28 @@ export function readConfig(configType: string): any {
       }
     }
     
+    if (configType === 'product-categories') {
+      const config = jsonDb.findOne('system_config', { config_key: 'product_categories' })
+      if (config) {
+        try {
+          return JSON.parse(config.config_value)
+        } catch {
+          return [
+            { value: "ai-tools", label: "AI工具" },
+            { value: "courses", label: "课程" },
+            { value: "services", label: "服务" },
+            { value: "other", label: "其他" }
+          ]
+        }
+      }
+      return [
+        { value: "ai-tools", label: "AI工具" },
+        { value: "courses", label: "课程" },
+        { value: "services", label: "服务" },
+        { value: "other", label: "其他" }
+      ]
+    }
+
     if (configType === 'page-list') {
       const pages = jsonDb.getAll('pages')
       
@@ -417,6 +439,24 @@ export function writeConfig(configType: string, data: any): void {
       return
     }
     
+    if (configType === 'product-categories') {
+      const existing = jsonDb.findOne('system_config', { config_key: 'product_categories' })
+      if (existing) {
+        jsonDb.update('system_config', existing.id, {
+          config_value: JSON.stringify(data),
+          updated_at: new Date().toISOString()
+        })
+      } else {
+        jsonDb.insert('system_config', {
+          config_key: 'product_categories',
+          config_value: JSON.stringify(data),
+          created_at: new Date().toISOString(),
+          updated_at: new Date().toISOString()
+        })
+      }
+      return
+    }
+
     if (configType === 'theme') {
       if (data.currentTheme) {
         const themes = jsonDb.getAll('theme_config')
