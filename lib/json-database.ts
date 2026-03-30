@@ -18,7 +18,8 @@ class JsonDatabase {
     module_registry: 'module_registry.json',
     page_modules: 'page_modules.json',
     articles: 'articles.json',
-    products: 'products.json'
+    products: 'products.json',
+    messages: 'messages.json'
   }
   private options: JsonDatabaseOptions
 

@@ -17,7 +17,8 @@ import {
   PageManager,
   ArticleManager,
   ProductManager,
-  SiteConfigManager
+  SiteConfigManager,
+  MessageManager
 } from "./modules"
 import { ImageManagement } from "./components"
 import styles from "./dashboard.module.css"
@@ -84,6 +85,8 @@ export default function AdminDashboardPage() {
         return <ArticleManager />
       case 'products':
         return <ProductManager />
+      case 'messages':
+        return <MessageManager />
       case 'images':
         return <ImageManagement />
       case 'feishu-app':

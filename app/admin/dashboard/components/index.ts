@@ -16,6 +16,7 @@ export { AccountManagement } from './accounts/account-management'
 // Common Components
 export { CommonTable, ActionButton } from './CommonTable'
 export type { CommonTableProps } from './CommonTable'
+export { ManagementHeader } from './ManagementHeader'
 
 // Page Management
 export { PageManagement } from './page-management/PageManagement'
@@ -37,3 +38,6 @@ export { ProductsManagement } from './ProductsManagement'
 
 // Image Management
 export { ImageManagement } from './ImageManagement'
+
+// Messages Management
+export { MessagesManagement } from './MessagesManagement'

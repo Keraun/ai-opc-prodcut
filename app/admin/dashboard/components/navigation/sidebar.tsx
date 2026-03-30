@@ -33,6 +33,7 @@ const MENU_STRUCTURE: MenuItem[] = [
   { id: 'pages', label: '页面管理', icon: FileText },
   { id: 'products', label: '产品管理', icon: Package },
   { id: 'articles', label: '资讯管理', icon: Newspaper },
+  { id: 'messages', label: '留言管理', icon: MessageCircle },
   { id: 'images', label: '图片管理', icon: Image },
   { id: 'feishu-app', label: '飞书管理', icon: MessageCircle },
   { id: 'theme', label: '主题管理', icon: Palette },

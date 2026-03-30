@@ -778,8 +778,24 @@ export function ModuleFieldEditor({ moduleId, data, onChange }: ModuleFieldEdito
 
     if (!nestedProperties) return null
 
-    const layoutItems = calculateFieldLayout(nestedProperties, fieldPath)
-    const rows = groupFieldsByRow(layoutItems)
+    const simpleItems: FieldLayoutItem[] = []
+    const nestedObjectFields: Array<{ key: string; property: SchemaProperty }> = []
+
+    Object.entries(nestedProperties).forEach(([nestedKey, nestedProp]) => {
+      const nestedPath = `${fieldPath}.${nestedKey}`
+      if (nestedProp.type === "object" && nestedProp.properties) {
+        nestedObjectFields.push({ key: nestedKey, property: nestedProp })
+      } else {
+        simpleItems.push({
+          key: nestedKey,
+          property: nestedProp,
+          colSpan: 1,
+          path: nestedPath
+        })
+      }
+    })
+
+    const rows = groupFieldsByRow(simpleItems)
 
     return (
       <div key={fieldPath} className={styles.formSection}>
@@ -794,6 +810,9 @@ export function ModuleFieldEditor({ moduleId, data, onChange }: ModuleFieldEdito
             </div>
           ))}
         </div>
+        {nestedObjectFields.map(({ key: nestedKey, property: nestedProp }) => 
+          renderObjectField(nestedKey, nestedProp, fieldPath)
+        )}
       </div>
     )
   }
@@ -818,15 +837,33 @@ export function ModuleFieldEditor({ moduleId, data, onChange }: ModuleFieldEdito
   const topLevelObjectFields = Object.entries(schema).filter(([_, prop]) => prop.type === "object" && prop.properties)
   const topLevelSimpleFields = Object.entries(schema).filter(([_, prop]) => prop.type !== "object")
 
+  const sortedTopLevelObjectFields = [...topLevelObjectFields].sort(([keyA], [keyB]) => {
+    const isTitleA = keyA.toLowerCase().includes('title') || keyA === 'title'
+    const isTitleB = keyB.toLowerCase().includes('title') || keyB === 'title'
+    if (isTitleA && !isTitleB) return -1
+    if (!isTitleA && isTitleB) return 1
+    return 0
+  })
+
+  const sortedTopLevelSimpleFields = [...topLevelSimpleFields].sort(([keyA], [keyB]) => {
+    const isTitleA = keyA.toLowerCase().includes('title') || keyA === 'title'
+    const isTitleB = keyB.toLowerCase().includes('title') || keyB === 'title'
+    if (isTitleA && !isTitleB) return -1
+    if (!isTitleA && isTitleB) return 1
+    return 0
+  })
+
   return (
     <div className={styles.formEditor}>
-      {topLevelSimpleFields.length > 0 && (
+      {sortedTopLevelObjectFields.filter(([key]) => key.toLowerCase().includes('title') || key === 'title').map(([key, property]) => renderObjectField(key, property))}
+      
+      {sortedTopLevelSimpleFields.length > 0 && (
         <div className={styles.formSection}>
           <div className={styles.formSectionHeader}>
             <h4 className={styles.formSectionTitle}>基本设置</h4>
           </div>
           <div className={styles.formGrid}>
-            {groupFieldsByRow(calculateFieldLayout(Object.fromEntries(topLevelSimpleFields))).map((row, rowIndex) => (
+            {groupFieldsByRow(calculateFieldLayout(Object.fromEntries(sortedTopLevelSimpleFields))).map((row, rowIndex) => (
               <div key={rowIndex} className={styles.formRow}>
                 {row.map((item) => renderSimpleField(item))}
               </div>
@@ -835,7 +872,7 @@ export function ModuleFieldEditor({ moduleId, data, onChange }: ModuleFieldEdito
         </div>
       )}
       
-      {topLevelObjectFields.map(([key, property]) => renderObjectField(key, property))}
+      {sortedTopLevelObjectFields.filter(([key]) => !(key.toLowerCase().includes('title') || key === 'title')).map(([key, property]) => renderObjectField(key, property))}
     </div>
   )
 }
