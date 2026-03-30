@@ -88,8 +88,16 @@ export function Header({
     }
   }, [])
 
+  const isExternalLink = (href: string) => {
+    return /^https?:\/\/|^\/\//.test(href)
+  }
+
   const handleNavClick = (href: string) => {
-    router.push(href)
+    if (isExternalLink(href)) {
+      window.open(href, '_blank', 'noopener noreferrer')
+    } else {
+      router.push(href)
+    }
     setDrawerVisible(false)
   }
 
@@ -152,23 +160,43 @@ export function Header({
               </Dropdown>
             )}
             {showCta && (
-              <Link href={ctaLink}>
-                <Button
-                  style={{
-                    backgroundColor: primaryColor,
-                    color: 'white',
-                    borderColor: primaryColor,
-                    height: '2.5rem',
-                    paddingLeft: '1.5rem',
-                    paddingRight: '1.5rem',
-                    borderRadius: '9999px',
-                    boxShadow: '0 10px 15px -3px rgba(0, 0, 0, 0.1)',
-                    transition: 'all 0.3s ease'
-                  }}
-                >
-                  {ctaText}
-                </Button>
-              </Link>
+              isExternalLink(ctaLink) ? (
+                <a href={ctaLink} target="_blank" rel="noopener noreferrer">
+                  <Button
+                    style={{
+                      backgroundColor: primaryColor,
+                      color: 'white',
+                      borderColor: primaryColor,
+                      height: '2.5rem',
+                      paddingLeft: '1.5rem',
+                      paddingRight: '1.5rem',
+                      borderRadius: '9999px',
+                      boxShadow: '0 10px 15px -3px rgba(0, 0, 0, 0.1)',
+                      transition: 'all 0.3s ease'
+                    }}
+                  >
+                    {ctaText}
+                  </Button>
+                </a>
+              ) : (
+                <Link href={ctaLink}>
+                  <Button
+                    style={{
+                      backgroundColor: primaryColor,
+                      color: 'white',
+                      borderColor: primaryColor,
+                      height: '2.5rem',
+                      paddingLeft: '1.5rem',
+                      paddingRight: '1.5rem',
+                      borderRadius: '9999px',
+                      boxShadow: '0 10px 15px -3px rgba(0, 0, 0, 0.1)',
+                      transition: 'all 0.3s ease'
+                    }}
+                  >
+                    {ctaText}
+                  </Button>
+                </Link>
+              )
             )}
           </div>
 
@@ -221,23 +249,43 @@ export function Header({
           ))}
 
           <div className={styles.drawerFooter}>
-            <Link href={ctaLink} onClick={() => setDrawerVisible(false)}>
-              <Button
-                long
-                style={{
-                  backgroundColor: primaryColor,
-                  color: 'white',
-                  borderColor: primaryColor,
-                  height: '3rem',
-                  borderRadius: '0.75rem',
-                  boxShadow: '0 10px 15px -3px rgba(0, 0, 0, 0.1)',
-                  fontWeight: 600,
-                  fontSize: '1rem'
-                }}
-              >
-                {ctaText}
-              </Button>
-            </Link>
+            {isExternalLink(ctaLink) ? (
+              <a href={ctaLink} target="_blank" rel="noopener noreferrer" onClick={() => setDrawerVisible(false)}>
+                <Button
+                  long
+                  style={{
+                    backgroundColor: primaryColor,
+                    color: 'white',
+                    borderColor: primaryColor,
+                    height: '3rem',
+                    borderRadius: '0.75rem',
+                    boxShadow: '0 10px 15px -3px rgba(0, 0, 0, 0.1)',
+                    fontWeight: 600,
+                    fontSize: '1rem'
+                  }}
+                >
+                  {ctaText}
+                </Button>
+              </a>
+            ) : (
+              <Link href={ctaLink} onClick={() => setDrawerVisible(false)}>
+                <Button
+                  long
+                  style={{
+                    backgroundColor: primaryColor,
+                    color: 'white',
+                    borderColor: primaryColor,
+                    height: '3rem',
+                    borderRadius: '0.75rem',
+                    boxShadow: '0 10px 15px -3px rgba(0, 0, 0, 0.1)',
+                    fontWeight: 600,
+                    fontSize: '1rem'
+                  }}
+                >
+                  {ctaText}
+                </Button>
+              </Link>
+            )}
           </div>
         </div>
       </Drawer>
