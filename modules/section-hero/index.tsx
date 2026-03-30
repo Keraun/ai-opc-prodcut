@@ -58,13 +58,13 @@ export function HeroModule({ data }: ModuleProps) {
         {config.buttons?.primary && config.buttons.primary.text && (
           config.buttons.primary.href ? (
             <Link href={config.buttons.primary.href}>
-              <Button 
-                variant="primary" 
-                size="lg" 
-                icon={<CommandIcon />} 
+              <Button
+                variant="primary"
+                size="lg"
+                icon={<CommandIcon />}
                 iconPosition="left"
-                style={{ 
-                  backgroundColor: primaryColor, 
+                style={{
+                  backgroundColor: primaryColor,
                   borderColor: primaryColor,
                   color: '#ffffff',
                   boxShadow: `0 8px 25px -8px ${primaryColor}`
@@ -74,14 +74,14 @@ export function HeroModule({ data }: ModuleProps) {
               </Button>
             </Link>
           ) : (
-            <Button 
-              variant="primary" 
-              size="lg" 
-              icon={<CommandIcon />} 
+            <Button
+              variant="primary"
+              size="lg"
+              icon={<CommandIcon />}
               iconPosition="left"
               disabled
-              style={{ 
-                backgroundColor: primaryColor, 
+              style={{
+                backgroundColor: primaryColor,
                 borderColor: primaryColor,
                 color: '#ffffff',
                 boxShadow: `0 8px 25px -8px ${primaryColor}`
@@ -95,13 +95,13 @@ export function HeroModule({ data }: ModuleProps) {
         {config.buttons?.secondary && config.buttons.secondary.text && (
           config.buttons.secondary.href ? (
             <Link href={config.buttons.secondary.href}>
-              <Button 
-                variant="secondary" 
-                size="lg" 
-                icon={<ArrowRightIcon />} 
+              <Button
+                variant="secondary"
+                size="lg"
+                icon={<ArrowRightIcon />}
                 iconPosition="right"
-                style={{ 
-                  borderColor: primaryColor, 
+                style={{
+                  borderColor: primaryColor,
                   color: primaryColor
                 }}
               >
@@ -109,14 +109,14 @@ export function HeroModule({ data }: ModuleProps) {
               </Button>
             </Link>
           ) : (
-            <Button 
-              variant="secondary" 
-              size="lg" 
-              icon={<ArrowRightIcon />} 
-              iconPosition="right" 
+            <Button
+              variant="secondary"
+              size="lg"
+              icon={<ArrowRightIcon />}
+              iconPosition="right"
               disabled
-              style={{ 
-                borderColor: primaryColor, 
+              style={{
+                borderColor: primaryColor,
                 color: primaryColor
               }}
             >
@@ -136,13 +136,13 @@ export function HeroModule({ data }: ModuleProps) {
 
       {config.mainImage && (
         <div className={styles.mainImagePreview}>
-          <img 
-            src={config.mainImage} 
-            alt="Hero 主图" 
+          <img
+            src={config.mainImage}
+            alt="Hero 主图"
             className={styles.mainImage}
-            style={{ 
-              maxWidth: '100%', 
-              height: 'auto', 
+            style={{
+              maxWidth: '100%',
+              height: 'auto',
               borderRadius: '8px',
               marginTop: '2rem',
               boxShadow: '0 4px 12px rgba(0, 0, 0, 0.1)'
@@ -192,13 +192,13 @@ export function HeroModule({ data }: ModuleProps) {
           {config.buttons?.primary && config.buttons.primary.text && (
             config.buttons.primary.href ? (
               <Link href={config.buttons.primary.href}>
-                <Button 
-                  variant="primary" 
-                  size="lg" 
-                  icon={<StarIcon />} 
+                <Button
+                  variant="primary"
+                  size="lg"
+                  icon={<StarIcon />}
                   iconPosition="left"
-                  style={{ 
-                    background: primaryColor, 
+                  style={{
+                    background: primaryColor,
                     borderColor: primaryColor,
                     color: '#ffffff',
                     boxShadow: `0 8px 25px -8px ${primaryColor}`
@@ -208,14 +208,14 @@ export function HeroModule({ data }: ModuleProps) {
                 </Button>
               </Link>
             ) : (
-              <Button 
-                variant="primary" 
-                size="lg" 
-                icon={<StarIcon />} 
+              <Button
+                variant="primary"
+                size="lg"
+                icon={<StarIcon />}
                 iconPosition="left"
                 disabled
-                style={{ 
-                  background: primaryColor, 
+                style={{
+                  background: primaryColor,
                   borderColor: primaryColor,
                   color: '#ffffff',
                   boxShadow: `0 8px 25px -8px ${primaryColor}`
@@ -229,13 +229,13 @@ export function HeroModule({ data }: ModuleProps) {
           {config.buttons?.secondary && config.buttons.secondary.text && (
             config.buttons.secondary.href ? (
               <Link href={config.buttons.secondary.href}>
-                <Button 
-                  variant="secondary" 
-                  size="lg" 
-                  icon={<ArrowRightIcon />} 
+                <Button
+                  variant="secondary"
+                  size="lg"
+                  icon={<ArrowRightIcon />}
                   iconPosition="right"
-                  style={{ 
-                    borderColor: primaryColor, 
+                  style={{
+                    borderColor: primaryColor,
                     color: primaryColor
                   }}
                 >
@@ -243,14 +243,14 @@ export function HeroModule({ data }: ModuleProps) {
                 </Button>
               </Link>
             ) : (
-              <Button 
-                variant="secondary" 
-                size="lg" 
-                icon={<ArrowRightIcon />} 
-                iconPosition="right" 
+              <Button
+                variant="secondary"
+                size="lg"
+                icon={<ArrowRightIcon />}
+                iconPosition="right"
                 disabled
-                style={{ 
-                  borderColor: primaryColor, 
+                style={{
+                  borderColor: primaryColor,
                   color: primaryColor
                 }}
               >
@@ -272,13 +272,13 @@ export function HeroModule({ data }: ModuleProps) {
       <div className={styles.layout2Image}>
         <div className={styles.layout2ImageContainer}>
           {config.mainImage ? (
-            <img 
-              src={config.mainImage} 
-              alt="Hero 主图" 
+            <img
+              src={config.mainImage}
+              alt="Hero 主图"
               className={styles.layout2ImageBg}
-              style={{ 
-                width: '100%', 
-                height: '100%', 
+              style={{
+                width: '100%',
+                height: '100%',
                 objectFit: 'cover',
                 borderRadius: '8px'
               }}
@@ -286,13 +286,7 @@ export function HeroModule({ data }: ModuleProps) {
           ) : (
             <div className={styles.layout2ImageBg} />
           )}
-          <div className={styles.layout2ImageContent}>
-            <div className={styles.layout2ImageText}>
-              <ThunderboltIcon />
-              <h3 className={styles.layout2ImageTitle}>AI 赋能</h3>
-              <p className={styles.layout2ImageDesc}>提升业务效率</p>
-            </div>
-          </div>
+          <div className={styles.layout2ImageContent}></div>
         </div>
       </div>
     </div>
@@ -338,13 +332,13 @@ export function HeroModule({ data }: ModuleProps) {
             {config.buttons?.primary && config.buttons.primary.text && (
               config.buttons.primary.href ? (
                 <Link href={config.buttons.primary.href}>
-                  <Button 
-                    variant="primary" 
-                    size="lg" 
-                    icon={<CommandIcon />} 
+                  <Button
+                    variant="primary"
+                    size="lg"
+                    icon={<CommandIcon />}
                     iconPosition="left"
-                    style={{ 
-                      backgroundColor: primaryColor, 
+                    style={{
+                      backgroundColor: primaryColor,
                       borderColor: primaryColor,
                       color: '#ffffff',
                       boxShadow: `0 8px 25px -8px ${primaryColor}`
@@ -354,14 +348,14 @@ export function HeroModule({ data }: ModuleProps) {
                   </Button>
                 </Link>
               ) : (
-                <Button 
-                  variant="primary" 
-                  size="lg" 
-                  icon={<CommandIcon />} 
+                <Button
+                  variant="primary"
+                  size="lg"
+                  icon={<CommandIcon />}
                   iconPosition="left"
                   disabled
-                  style={{ 
-                    backgroundColor: primaryColor, 
+                  style={{
+                    backgroundColor: primaryColor,
                     borderColor: primaryColor,
                     color: '#ffffff',
                     boxShadow: `0 8px 25px -8px ${primaryColor}`
@@ -375,13 +369,13 @@ export function HeroModule({ data }: ModuleProps) {
             {config.buttons?.secondary && config.buttons.secondary.text && (
               config.buttons.secondary.href ? (
                 <Link href={config.buttons.secondary.href}>
-                  <Button 
-                    variant="secondary" 
-                    size="lg" 
-                    icon={<ArrowRightIcon />} 
+                  <Button
+                    variant="secondary"
+                    size="lg"
+                    icon={<ArrowRightIcon />}
                     iconPosition="right"
-                    style={{ 
-                      borderColor: primaryColor, 
+                    style={{
+                      borderColor: primaryColor,
                       color: primaryColor
                     }}
                   >
@@ -389,14 +383,14 @@ export function HeroModule({ data }: ModuleProps) {
                   </Button>
                 </Link>
               ) : (
-                <Button 
-                  variant="secondary" 
-                  size="lg" 
-                  icon={<ArrowRightIcon />} 
-                  iconPosition="right" 
+                <Button
+                  variant="secondary"
+                  size="lg"
+                  icon={<ArrowRightIcon />}
+                  iconPosition="right"
                   disabled
-                  style={{ 
-                    borderColor: primaryColor, 
+                  style={{
+                    borderColor: primaryColor,
                     color: primaryColor
                   }}
                 >
@@ -416,13 +410,13 @@ export function HeroModule({ data }: ModuleProps) {
 
           {config.mainImage && (
             <div className={styles.mainImagePreview}>
-              <img 
-                src={config.mainImage} 
-                alt="Hero 主图" 
+              <img
+                src={config.mainImage}
+                alt="Hero 主图"
                 className={styles.mainImage}
-                style={{ 
-                  maxWidth: '100%', 
-                  height: 'auto', 
+                style={{
+                  maxWidth: '100%',
+                  height: 'auto',
                   borderRadius: '8px',
                   marginTop: '2rem',
                   boxShadow: '0 4px 12px rgba(0, 0, 0, 0.1)'

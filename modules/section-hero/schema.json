@@ -28,11 +28,6 @@
           "type": "string",
           "title": "副标题",
           "description": "在主标题下方的次级标题"
-        },
-        "highlight": {
-          "type": "string",
-          "title": "高亮文本",
-          "description": "标题中需要高亮显示的文本"
         }
       }
     },
@@ -94,10 +89,10 @@
     "mainImage": {
       "type": "string",
       "title": "主图",
-      "description": "Hero 区块的主背景图片",
-      "x-component": "image",
-      "x-component-props": {
-        "hint": "建议尺寸: 1920x1080px (16:9比例)"
+      "description": "Hero 区块的主背景图片（建议尺寸: 584x400px）",
+      "ui": {
+        "widget": "image",
+        "placeholder": "请输入图片链接或点击上传"
       }
     }
   }
