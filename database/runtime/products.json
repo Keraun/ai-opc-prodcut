@@ -243,24 +243,23 @@
     "updated_at": "2024-03-28 10:00:00"
   },
   {
-    "title": "1231",
-    "description": "131313",
+    "title": "桑达大厦",
+    "description": "21313131",
     "content": "",
-    "price": "111",
-    "originalPrice": "222",
+    "price": 0,
+    "originalPrice": null,
     "image": "",
-    "tags": [
-      "131313"
-    ],
+    "tags": [],
     "category": "",
-    "categoryName": "",
-    "link": "baidu.com",
-    "features": "<p>123123131</p>",
+    "categoryName": "courses",
+    "link": "",
+    "buyLink": "baidu.com",
+    "features": [],
     "salesCount": 0,
     "rating": 5,
-    "status": "active",
-    "created_at": "2026-03-30T01:48:40.447Z",
-    "updated_at": "2026-03-30T01:48:47.525Z",
-    "id": 14
+    "status": "draft",
+    "created_at": "2026-03-30T02:17:45.268Z",
+    "updated_at": "2026-03-30T02:17:45.268Z",
+    "id": 10
   }
 ]

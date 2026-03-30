@@ -159,8 +159,8 @@ export function ArticlesManagement() {
     statusConfig: {
       field: "status",
       states: [
-        { value: "published", label: "上线", action: "上线文章", type: "success" },
-        { value: "draft", label: "下线", action: "下线文章", type: "warning" }
+        { value: "published", label: "下线", action: "下线文章", type: "warning", target: "draft" },
+        { value: "draft", label: "上线", action: "上线文章", type: "success", target: "published" }
       ]
     }
   }

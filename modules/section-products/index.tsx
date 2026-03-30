@@ -108,13 +108,20 @@ export function ProductsModule({ data }: ModuleProps) {
                 )}
 
                 <div className={styles.cardBottom}>
-                  {product?.features && product.features.length > 0 && (
+                  {product?.features && (
                     <div className={styles.features}>
-                      {product.features.map((feature: string, i: number) => (
-                        <span key={i} className={styles.feature}>
-                          {feature}
-                        </span>
-                      ))}
+                      {Array.isArray(product.features) 
+                        ? product.features.map((feature: string, i: number) => (
+                            <span key={i} className={styles.feature}>
+                              {feature}
+                            </span>
+                          ))
+                        : (
+                            <span className={styles.feature}>
+                              {typeof product.features === 'string' ? product.features.replace(/<[^>]*>/g, '') : String(product.features)}
+                            </span>
+                          )
+                      }
                     </div>
                   )}
 

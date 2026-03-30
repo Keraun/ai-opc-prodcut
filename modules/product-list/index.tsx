@@ -151,16 +151,26 @@ export function ProductListModule({ data }: ModuleProps) {
                   <h3 className={styles.productTitle}>{product.title}</h3>
                   <p className={styles.productDescription}>{product.description}</p>
                   
-                  {product.features && product.features.length > 0 && (
+                  {product.features && (
                     <div className={styles.featureList}>
-                      {product.features.slice(0, 3).map((feature, index) => (
-                        <div key={index} className={styles.featureItem}>
-                          <svg className={styles.featureIcon} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                            <path d="M5 13l4 4L19 7" />
-                          </svg>
-                          <span>{feature}</span>
-                        </div>
-                      ))}
+                      {Array.isArray(product.features) 
+                        ? product.features.slice(0, 3).map((feature, index) => (
+                            <div key={index} className={styles.featureItem}>
+                              <svg className={styles.featureIcon} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                                <path d="M5 13l4 4L19 7" />
+                              </svg>
+                              <span>{feature}</span>
+                            </div>
+                          ))
+                        : (
+                            <div className={styles.featureItem}>
+                              <svg className={styles.featureIcon} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                                <path d="M5 13l4 4L19 7" />
+                              </svg>
+                              <span>{typeof product.features === 'string' ? product.features.replace(/<[^>]*>/g, '') : String(product.features)}</span>
+                            </div>
+                          )
+                      }
                     </div>
                   )}
                 </div>

@@ -14,6 +14,7 @@ interface Product {
   category?: string
   categoryName?: string
   link?: string
+  buyLink?: string
   features?: string[]
   salesCount?: number
   rating?: number
@@ -77,6 +78,7 @@ export async function POST(request: NextRequest) {
       category: data.category || '',
       categoryName: data.categoryName || '',
       link: data.link || '',
+      buyLink: data.buyLink || '',
       features: data.features || [],
       salesCount: data.salesCount || 0,
       rating: data.rating || 5.0,
@@ -120,6 +122,7 @@ export async function PUT(request: NextRequest) {
       category: data.category || existing.category,
       categoryName: data.categoryName || existing.categoryName,
       link: data.link || existing.link,
+      buyLink: data.buyLink !== undefined ? data.buyLink : existing.buyLink,
       features: data.features || existing.features,
       status: data.status || existing.status,
       updated_at: new Date().toISOString()

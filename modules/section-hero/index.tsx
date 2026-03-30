@@ -55,7 +55,8 @@ export function HeroModule({ data }: ModuleProps) {
       )}
 
       <div className={styles.ctaButtons}>
-          {config.buttons?.primary?.href && config.buttons?.primary?.text && (
+        {config.buttons?.primary && config.buttons.primary.text && (
+          config.buttons.primary.href ? (
             <Link href={config.buttons.primary.href}>
               <Button 
                 variant="primary" 
@@ -72,31 +73,33 @@ export function HeroModule({ data }: ModuleProps) {
                 {config.buttons.primary.text}
               </Button>
             </Link>
-          )}
+          ) : (
+            <Button 
+              variant="primary" 
+              size="lg" 
+              icon={<CommandIcon />} 
+              iconPosition="left"
+              disabled
+              style={{ 
+                backgroundColor: primaryColor, 
+                borderColor: primaryColor,
+                color: '#ffffff',
+                boxShadow: `0 8px 25px -8px ${primaryColor}`
+              }}
+            >
+              {config.buttons.primary.text}
+            </Button>
+          )
+        )}
 
-          {config.buttons?.secondary?.text && (
-            config.buttons?.secondary?.href ? (
-              <Link href={config.buttons.secondary.href}>
-                <Button 
-                  variant="secondary" 
-                  size="lg" 
-                  icon={<ArrowRightIcon />} 
-                  iconPosition="right"
-                  style={{ 
-                    borderColor: primaryColor, 
-                    color: primaryColor
-                  }}
-                >
-                  {config.buttons.secondary.text}
-                </Button>
-              </Link>
-            ) : (
+        {config.buttons?.secondary && config.buttons.secondary.text && (
+          config.buttons.secondary.href ? (
+            <Link href={config.buttons.secondary.href}>
               <Button 
                 variant="secondary" 
                 size="lg" 
                 icon={<ArrowRightIcon />} 
-                iconPosition="right" 
-                disabled
+                iconPosition="right"
                 style={{ 
                   borderColor: primaryColor, 
                   color: primaryColor
@@ -104,9 +107,24 @@ export function HeroModule({ data }: ModuleProps) {
               >
                 {config.buttons.secondary.text}
               </Button>
-            )
-          )}
-        </div>
+            </Link>
+          ) : (
+            <Button 
+              variant="secondary" 
+              size="lg" 
+              icon={<ArrowRightIcon />} 
+              iconPosition="right" 
+              disabled
+              style={{ 
+                borderColor: primaryColor, 
+                color: primaryColor
+              }}
+            >
+              {config.buttons.secondary.text}
+            </Button>
+          )
+        )}
+      </div>
 
       <div className={styles.featurePills}>
         {config.featurePills?.map((item: string, index: number) => (
@@ -171,13 +189,31 @@ export function HeroModule({ data }: ModuleProps) {
         )}
 
         <div className={`${styles.ctaButtons} ${styles.ctaButtonsLeft}`}>
-          {config.buttons?.primary?.href && config.buttons?.primary?.text && (
-            <Link href={config.buttons.primary.href}>
+          {config.buttons?.primary && config.buttons.primary.text && (
+            config.buttons.primary.href ? (
+              <Link href={config.buttons.primary.href}>
+                <Button 
+                  variant="primary" 
+                  size="lg" 
+                  icon={<StarIcon />} 
+                  iconPosition="left"
+                  style={{ 
+                    background: primaryColor, 
+                    borderColor: primaryColor,
+                    color: '#ffffff',
+                    boxShadow: `0 8px 25px -8px ${primaryColor}`
+                  }}
+                >
+                  {config.buttons.primary.text}
+                </Button>
+              </Link>
+            ) : (
               <Button 
                 variant="primary" 
                 size="lg" 
                 icon={<StarIcon />} 
                 iconPosition="left"
+                disabled
                 style={{ 
                   background: primaryColor, 
                   borderColor: primaryColor,
@@ -187,11 +223,11 @@ export function HeroModule({ data }: ModuleProps) {
               >
                 {config.buttons.primary.text}
               </Button>
-            </Link>
+            )
           )}
 
-          {config.buttons?.secondary?.text && (
-            config.buttons?.secondary?.href ? (
+          {config.buttons?.secondary && config.buttons.secondary.text && (
+            config.buttons.secondary.href ? (
               <Link href={config.buttons.secondary.href}>
                 <Button 
                   variant="secondary" 
@@ -299,13 +335,31 @@ export function HeroModule({ data }: ModuleProps) {
           )}
 
           <div className={styles.ctaButtons}>
-            {config.buttons?.primary?.href && config.buttons?.primary?.text && (
-              <Link href={config.buttons.primary.href}>
+            {config.buttons?.primary && config.buttons.primary.text && (
+              config.buttons.primary.href ? (
+                <Link href={config.buttons.primary.href}>
+                  <Button 
+                    variant="primary" 
+                    size="lg" 
+                    icon={<CommandIcon />} 
+                    iconPosition="left"
+                    style={{ 
+                      backgroundColor: primaryColor, 
+                      borderColor: primaryColor,
+                      color: '#ffffff',
+                      boxShadow: `0 8px 25px -8px ${primaryColor}`
+                    }}
+                  >
+                    {config.buttons.primary.text}
+                  </Button>
+                </Link>
+              ) : (
                 <Button 
                   variant="primary" 
                   size="lg" 
                   icon={<CommandIcon />} 
                   iconPosition="left"
+                  disabled
                   style={{ 
                     backgroundColor: primaryColor, 
                     borderColor: primaryColor,
@@ -315,11 +369,11 @@ export function HeroModule({ data }: ModuleProps) {
                 >
                   {config.buttons.primary.text}
                 </Button>
-              </Link>
+              )
             )}
 
-            {config.buttons?.secondary?.text && (
-              config.buttons?.secondary?.href ? (
+            {config.buttons?.secondary && config.buttons.secondary.text && (
+              config.buttons.secondary.href ? (
                 <Link href={config.buttons.secondary.href}>
                   <Button 
                     variant="secondary" 

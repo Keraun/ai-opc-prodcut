@@ -184,18 +184,28 @@ export function ProductDetailModule({ data }: ModuleProps) {
               </div>
             )}
             
-            {config.showFeatures && product.features && product.features.length > 0 && (
+            {config.showFeatures && product.features && (
               <div className={styles.featuresSection}>
                 <h3 className={styles.featuresTitle}>产品特性</h3>
                 <ul className={styles.featuresList}>
-                  {product.features.map((feature, index) => (
-                    <li key={index} className={styles.featureItem}>
-                      <svg className={styles.featureIcon} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                        <path d="M5 13l4 4L19 7" />
-                      </svg>
-                      <span>{feature}</span>
-                    </li>
-                  ))}
+                  {Array.isArray(product.features) 
+                    ? product.features.map((feature, index) => (
+                        <li key={index} className={styles.featureItem}>
+                          <svg className={styles.featureIcon} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                            <path d="M5 13l4 4L19 7" />
+                          </svg>
+                          <span>{feature}</span>
+                        </li>
+                      ))
+                    : (
+                        <li className={styles.featureItem}>
+                          <svg className={styles.featureIcon} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                            <path d="M5 13l4 4L19 7" />
+                          </svg>
+                          <span>{typeof product.features === 'string' ? product.features.replace(/<[^>]*>/g, '') : String(product.features)}</span>
+                        </li>
+                      )
+                  }
                 </ul>
               </div>
             )}

@@ -616,9 +616,19 @@ function ItemForm({
   return (
     <form onSubmit={handleSubmit} className={styles.form}>
       <div className={styles.formHeader}>
-        <h2 className={styles.formTitle}>
-          {mode === 'new' ? `新建${config.title}` : `编辑${config.title}`}
-        </h2>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
+          <button 
+            type="button" 
+            onClick={onCancel} 
+            className={styles.backButton}
+          >
+            <ArrowLeft size={16} />
+            返回
+          </button>
+          <h2 className={styles.formTitle}>
+            {mode === 'new' ? `新建${config.title}` : `编辑${config.title}`}
+          </h2>
+        </div>
       </div>
 
       <div className={styles.formBody}>
@@ -763,14 +773,9 @@ export function BaseManagement({ config }: BaseManagementProps) {
       const result = await response.json()
       if (result.success) {
         toast.success(`${config.title}创建成功`)
-        if (data.status === 'published') {
-          setViewMode('list')
-          fetchItems()
-        } else {
-          // 保存草稿，保持在编辑页面
-          setCurrentItem({ ...data, id: result.data?.id })
-          setViewMode('edit')
-        }
+        // 保存草稿和发布后都返回上一级页面
+        setViewMode('list')
+        fetchItems()
       } else {
         toast.error(result.message || '创建失败')
       }
@@ -787,7 +792,7 @@ export function BaseManagement({ config }: BaseManagementProps) {
     try {
       setSubmitting(true)
       const response = await fetch(config.apiEndpoint, {
-        method: 'POST',
+        method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ ...data, id: currentItem.id })
       })
@@ -826,7 +831,7 @@ export function BaseManagement({ config }: BaseManagementProps) {
     }
   }
 
-  const handleStatusChange = async (record: any, newStatus: string) => {
+  const handleStatusChange = async (record: any, targetStatus: string) => {
     if (!config.statusConfig || !record.id) return
     try {
       const response = await fetch(config.apiEndpoint, {
@@ -834,7 +839,7 @@ export function BaseManagement({ config }: BaseManagementProps) {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ 
           id: record.id,
-          [config.statusConfig!.field]: newStatus 
+          [config.statusConfig!.field]: targetStatus 
         })
       })
       const result = await response.json()

@@ -68,9 +68,17 @@ export function ProductsManagement() {
       },
       {
         name: "link",
+        label: "产品链接",
+        type: "text",
+        placeholder: "请输入产品内部链接",
+        icon: <Package size={16} />,
+        inlineGroup: "链接与标签"
+      },
+      {
+        name: "buyLink",
         label: "购买链接(可选)",
         type: "text",
-        placeholder: "请输入产品购买链接",
+        placeholder: "请输入产品外部购买链接",
         icon: <Package size={16} />,
         inlineGroup: "链接与标签"
       },
@@ -113,9 +121,9 @@ export function ProductsManagement() {
         label: "产品名称",
         width: "150",
         render: (item) => (
-          item.purchaseLink ? (
+          item.buyLink ? (
             <a 
-              href={item.purchaseLink} 
+              href={item.buyLink} 
               target="_blank" 
               rel="noopener noreferrer"
               className={styles.productName}
