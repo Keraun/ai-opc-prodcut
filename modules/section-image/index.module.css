@@ -1,9 +1,36 @@
+.section {
+  position: relative;
+}
+
 .container {
   width: 100%;
 }
 
 .container.fullWidth {
   padding: 0;
+}
+
+/* 白底 + 十字格底图 */
+.whiteBackground {
+  position: relative;
+  background: #ffffff;
+}
+
+.whiteBackground::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image: 
+    linear-gradient(rgba(30, 64, 175, 0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(30, 64, 175, 0.03) 1px, transparent 1px);
+  background-size: 60px 60px;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.whiteBackground > * {
+  position: relative;
+  z-index: 1;
 }
 
 .header {

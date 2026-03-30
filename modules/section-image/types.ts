@@ -8,6 +8,6 @@ export interface ImageData {
   width?: number
   height?: number
   fullWidth?: boolean
-  priority?: boolean
-  background?: 'light' | 'dark'
+  containerPadding?: string
+  backgroundColor?: string
 }

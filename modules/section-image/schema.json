@@ -56,21 +56,20 @@
     "fullWidth": {
       "type": "boolean",
       "title": "全宽显示",
-      "description": "是否使用全宽显示",
+      "description": "是否使用全宽显示,开启时外部容器padding为0",
       "default": false
     },
-    "priority": {
-      "type": "boolean",
-      "title": "优先加载",
-      "description": "是否优先加载此图片",
-      "default": false
-    },
-    "background": {
+    "containerPadding": {
       "type": "string",
-      "title": "背景样式",
-      "description": "选择区块的背景样式",
-      "enum": ["light", "dark"],
-      "default": "light"
+      "title": "容器左右Padding",
+      "description": "设置外部容器的左右Padding值",
+      "default": "1.5rem"
+    },
+    "backgroundColor": {
+      "type": "string",
+      "title": "区块背景色",
+      "description": "选择区块的背景颜色",
+      "default": "#ffffff"
     }
   }
 }

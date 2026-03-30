@@ -28,6 +28,7 @@ interface AvailableModule {
   moduleId: string
   moduleName: string
   category?: string
+  defaultData?: Record<string, unknown>
 }
 
 interface ModuleDragEditorProps {
@@ -65,7 +66,7 @@ export function ModuleDragEditor({ modules, onChange }: ModuleDragEditorProps) {
       moduleId: moduleInfo.moduleId,
       moduleName: moduleInfo.moduleName,
       moduleInstanceId: `${moduleInfo.moduleId}-${Date.now()}`,
-      data: {},
+      data: moduleInfo.defaultData ? JSON.parse(JSON.stringify(moduleInfo.defaultData)) : {},
     }
 
     if (insertIndex !== undefined) {

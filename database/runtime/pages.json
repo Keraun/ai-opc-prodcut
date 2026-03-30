@@ -112,9 +112,9 @@
     "is_deletable": 1,
     "route": "/test/[id]",
     "dynamic_param": "id",
-    "module_instance_ids": "[\"site-root-1774807517667-0-l2s6qo74q\",\"site-header-1774807517667-1-nt5b7vp4z\",\"site-footer-1774807517667-2-7z5yymb60\"]",
+    "module_instance_ids": "[\"site-root-1774807517667-0-l2s6qo74q\",\"site-header-1774807517667-1-nt5b7vp4z\",\"section-image-1774828211990\",\"site-footer-1774807517667-2-7z5yymb60\"]",
     "created_at": "2026/03/30 02:05:17",
-    "updated_at": "2026/03/30 02:05:17",
+    "updated_at": "2026/03/30 08:12:07",
     "published_at": null,
     "id": 9
   }
