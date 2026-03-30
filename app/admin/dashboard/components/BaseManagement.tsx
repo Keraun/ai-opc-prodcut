@@ -556,7 +556,8 @@ function ItemForm({
   const [formData, setFormData] = useState<any>(() => {
     const initial: any = {}
     config.fields.forEach(field => {
-      initial[field.name] = initialData?.[field.name] ?? (field.type === 'tags' ? [] : '')
+      const value = getNestedValue(initialData, field.name)
+      setNestedValue(initial, field.name, value ?? (field.type === 'tags' ? [] : ''))
     })
     return { ...initial, ...initialData }
   })
@@ -566,7 +567,7 @@ function ItemForm({
     
     for (const field of config.fields) {
       if (field.required) {
-        const value = formData[field.name]
+        const value = getNestedValue(formData, field.name)
         if (!value || (Array.isArray(value) && value.length === 0)) {
           toast.error(`请输入${field.label}`)
           return
@@ -578,7 +579,36 @@ function ItemForm({
   }
 
   const updateField = (fieldName: string, value: any) => {
-    setFormData({ ...formData, [fieldName]: value })
+    const newFormData = { ...formData }
+    setNestedValue(newFormData, fieldName, value)
+    setFormData(newFormData)
+  }
+
+  function getNestedValue(obj: any, path: string) {
+    if (!obj || !path) return undefined
+    const keys = path.split('.')
+    let result = obj
+    for (const key of keys) {
+      if (result === null || result === undefined) {
+        return undefined
+      }
+      result = result[key]
+    }
+    return result
+  }
+
+  function setNestedValue(obj: any, path: string, value: any) {
+    if (!obj || !path) return
+    const keys = path.split('.')
+    let current = obj
+    for (let i = 0; i < keys.length - 1; i++) {
+      const key = keys[i]
+      if (current[key] === null || current[key] === undefined || typeof current[key] !== 'object') {
+        current[key] = {}
+      }
+      current = current[key]
+    }
+    current[keys[keys.length - 1]] = value
   }
 
   const fieldsByGroup = config.fields.reduce((groups, field) => {
@@ -643,7 +673,7 @@ function ItemForm({
                     <FormField
                       key={field.name}
                       field={field}
-                      value={formData[field.name]}
+                      value={getNestedValue(formData, field.name)}
                       onChange={(value) => updateField(field.name, value)}
                     />
                   ))}
@@ -664,7 +694,7 @@ function ItemForm({
                     </label>
                     <FormField
                       field={field}
-                      value={formData[field.name]}
+                      value={getNestedValue(formData, field.name)}
                       onChange={(value) => updateField(field.name, value)}
                     />
                   </div>
@@ -679,7 +709,7 @@ function ItemForm({
           <FormField
             key={field.name}
             field={field}
-            value={formData[field.name]}
+            value={getNestedValue(formData, field.name)}
             onChange={(value) => updateField(field.name, value)}
           />
         ))}
@@ -688,7 +718,7 @@ function ItemForm({
           <FormField
             key={field.name}
             field={field}
-            value={formData[field.name]}
+            value={getNestedValue(formData, field.name)}
             onChange={(value) => updateField(field.name, value)}
           />
         ))}
@@ -697,7 +727,7 @@ function ItemForm({
           <FormField
             key={field.name}
             field={field}
-            value={formData[field.name]}
+            value={getNestedValue(formData, field.name)}
             onChange={(value) => updateField(field.name, value)}
           />
         ))}

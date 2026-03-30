@@ -18,11 +18,17 @@ interface Article {
   date: string
   slug: string
   image: string
+  mainImage?: string
   author: string
   category: string
   tags: string[]
   viewCount: number
   status: string
+  seo?: {
+    title?: string
+    description?: string
+    keywords?: string[]
+  }
 }
 
 function getPageByRoute(route: string): PageInfo | undefined {
@@ -75,17 +81,23 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   const article = getArticle(id)
   const baseUrl = siteConfig?.url || 'http://localhost:3000'
   
-  const title = article 
-    ? `${article.title} - ${article.category} | ${siteConfig?.name || ''}`
-    : `${page?.name || '资讯详情'} | ${siteConfig?.name || ''}`
+  const title = article?.seo?.title 
+    ? `${article.seo.title} | ${siteConfig?.name || ''}`
+    : article 
+      ? `${article.title} - ${article.category} | ${siteConfig?.name || ''}`
+      : `${page?.name || '资讯详情'} | ${siteConfig?.name || ''}`
   
-  const description = article 
-    ? article.summary
-    : page?.description || siteConfig?.description || ''
+  const description = article?.seo?.description 
+    ? article.seo.description
+    : article 
+      ? article.summary
+      : page?.description || siteConfig?.description || ''
   
-  const keywords = article 
-    ? [...article.tags, article.category, article.title].join(', ')
-    : siteConfig?.seo?.keywords?.join(', ') || ''
+  const keywords = article?.seo?.keywords && article.seo.keywords.length > 0
+    ? article.seo.keywords.join(', ')
+    : article 
+      ? [...article.tags, article.category, article.title].join(', ')
+      : siteConfig?.seo?.keywords?.join(', ') || ''
   
   const ogImage = article 
     ? (article.mainImage || article.image)

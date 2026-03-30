@@ -117,14 +117,37 @@ export function useDynamicForm(
     const initialTags: Record<string, string[]> = {}
     const initialArrays: Record<string, any[]> = {}
 
-    Object.entries(schema.properties).forEach(([key, field]) => {
-      if (field.ui?.widget === 'tags' && Array.isArray(initialValues[key])) {
-        initialTags[key] = initialValues[key]
-      }
-      if (field.type === 'array' && !field.ui?.widget && Array.isArray(initialValues[key])) {
-        initialArrays[key] = initialValues[key]
-      }
-    })
+    const processFields = (props: any, initialVals: any, parentKey: string = '') => {
+      Object.entries(props).forEach(([key, field]) => {
+        const fullKey = parentKey ? `${parentKey}.${key}` : key
+        const fieldSchema = field as FieldSchema
+        
+        if (fieldSchema.type === 'object' && fieldSchema.properties) {
+          processFields(fieldSchema.properties, initialVals?.[key] || {}, fullKey)
+        }
+        
+        if (fieldSchema.ui?.widget === 'tags' || 
+            (fieldSchema['x-component'] === 'tags' && fieldSchema.type === 'array')) {
+          const value = parentKey 
+            ? initialVals?.[key] 
+            : initialVals[key]
+          if (Array.isArray(value)) {
+            initialTags[fullKey] = value
+          }
+        }
+        
+        if (fieldSchema.type === 'array' && !fieldSchema.ui?.widget && fieldSchema['x-component'] !== 'tags') {
+          const value = parentKey 
+            ? initialVals?.[key] 
+            : initialVals[key]
+          if (Array.isArray(value)) {
+            initialArrays[fullKey] = value
+          }
+        }
+      })
+    }
+
+    processFields(schema.properties, initialValues)
 
     setTags(initialTags)
     setArrayFields(initialArrays)

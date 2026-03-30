@@ -3,17 +3,6 @@
   "title": "Hero Section Configuration",
   "description": "配置 Hero 区块的外观和内容",
   "properties": {
-    "layout": {
-      "type": "string",
-      "title": "布局样式",
-      "description": "选择 Hero 区块的布局类型",
-      "enum": ["layout1", "layout2", "layout3"]
-    },
-    "badge": {
-      "type": "string",
-      "title": "徽章文本",
-      "description": "显示在标题上方的小徽章"
-    },
     "title": {
       "type": "object",
       "title": "标题配置",
@@ -30,6 +19,17 @@
           "description": "在主标题下方的次级标题"
         }
       }
+    },
+    "layout": {
+      "type": "string",
+      "title": "布局样式",
+      "description": "选择 Hero 区块的布局类型",
+      "enum": ["layout1", "layout2", "layout3"]
+    },
+    "badge": {
+      "type": "string",
+      "title": "徽章文本",
+      "description": "显示在标题上方的小徽章"
     },
     "subtitle": {
       "type": "string",

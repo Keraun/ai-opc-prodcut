@@ -3,11 +3,6 @@
   "title": "About Section Configuration",
   "description": "配置关于我们区块的内容和样式",
   "properties": {
-    "sectionTag": {
-      "type": "string",
-      "title": "区块标签",
-      "description": "显示在标题上方的小标签"
-    },
     "title": {
       "type": "object",
       "title": "标题配置",
@@ -24,6 +19,11 @@
           "description": "标题中需要高亮显示的文本"
         }
       }
+    },
+    "sectionTag": {
+      "type": "string",
+      "title": "区块标签",
+      "description": "显示在标题上方的小标签"
     },
     "description": {
       "type": "array",

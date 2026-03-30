@@ -205,6 +205,18 @@ function renderTableFieldCell(
   schema: SchemaProperty,
   onChange: (newValue: unknown) => void
 ): React.ReactNode {
+  // 处理 tags 组件
+  if (schema["x-component"] === "tags" && Array.isArray(value)) {
+    return (
+      <InputTag
+        value={value.map(String)}
+        onChange={onChange}
+        placeholder="输入后按回车添加"
+        style={{ width: "100%" }}
+      />
+    )
+  }
+
   // 处理图片上传字段
   if (schema.ui?.widget === "image") {
     return (
@@ -233,7 +245,7 @@ function renderTableFieldCell(
       }
       return (
         <Input
-          value={value as string}
+          value={typeof value === 'string' ? value : ''}
           onChange={onChange}
         />
       )
@@ -263,7 +275,7 @@ function renderTableField(
   onChange: (data: Record<string, unknown>) => void
 ): React.ReactNode {
   const { property, path, colSpan } = item
-  const { title, description, items } = property
+  const { title, description, items, "x-component": component } = property
   const value = getNestedValue(data, path)
   const listValue = Array.isArray(value) ? value : []
 
@@ -271,28 +283,80 @@ function renderTableField(
     gridColumn: `span ${colSpan} / span ${colSpan}`
   }
 
+  if (component === "tags") {
+    return (
+      <div key={path} className={styles.formField} style={fieldStyle}>
+        <div className={styles.formFieldRow}>
+          <div className={styles.formFieldLabel}>
+            <label className={styles.formLabel}>{title}</label>
+            {description && <span className={styles.formHint}>{description}</span>}
+          </div>
+          <div className={styles.formFieldControl}>
+            <InputTag
+              value={listValue.map(String)}
+              onChange={(vals) => {
+                const newData = setNestedValue(data, path, vals)
+                onChange(newData)
+              }}
+              placeholder="输入后按回车添加"
+              style={{ width: "100%" }}
+            />
+          </div>
+        </div>
+      </div>
+    )
+  }
+
   const itemSchema: SchemaProperty = items || { type: "string", title: "" }
 
   let columns: any[] = []
 
   if (itemSchema.type === "object" && itemSchema.properties) {
-    columns = Object.entries(itemSchema.properties).map(([key, prop]: [string, SchemaProperty]) => ({
-      title: prop.title || key,
-      dataIndex: key,
-      render: (_: unknown, record: any, index: number) => {
-        const cellValue = record[key]
-        return renderTableFieldCell(
-          cellValue,
-          prop,
-          (newVal) => {
-            const newList = [...listValue]
-            newList[index] = { ...newList[index], [key]: newVal }
-            const newData = setNestedValue(data, path, newList)
-            onChange(newData)
+    columns = Object.entries(itemSchema.properties).map(([key, prop]: [string, SchemaProperty]) => {
+      // 检查是否是 tags 组件
+      if (prop["x-component"] === "tags") {
+        return {
+          title: prop.title || key,
+          dataIndex: key,
+          render: (_: unknown, record: any, index: number) => {
+            const cellValue = record[key]
+            const arrayValue = Array.isArray(cellValue) ? cellValue : []
+            return (
+              <InputTag
+                value={arrayValue.map(String)}
+                onChange={(vals) => {
+                  const newList = [...listValue]
+                  newList[index] = { ...newList[index], [key]: vals }
+                  const newData = setNestedValue(data, path, newList)
+                  onChange(newData)
+                }}
+                placeholder="输入后按回车添加"
+                style={{ width: "100%" }}
+              />
+            )
           }
-        )
+        }
       }
-    }))
+
+      // 普通字段处理
+      return {
+        title: prop.title || key,
+        dataIndex: key,
+        render: (_: unknown, record: any, index: number) => {
+          const cellValue = record[key]
+          return renderTableFieldCell(
+            cellValue,
+            prop,
+            (newVal) => {
+              const newList = [...listValue]
+              newList[index] = { ...newList[index], [key]: newVal }
+              const newData = setNestedValue(data, path, newList)
+              onChange(newData)
+            }
+          )
+        }
+      }
+    })
   } else {
     columns = [
       {
@@ -304,7 +368,7 @@ function renderTableField(
             itemSchema,
             (newVal) => {
               const newList = [...listValue]
-              newList[index] = { value: newVal }
+              newList[index] = newVal
               const newData = setNestedValue(data, path, newList)
               onChange(newData)
             }
@@ -592,8 +656,26 @@ export function ModuleFieldEditor({ moduleId, data, onChange }: ModuleFieldEdito
       )
     }
 
-    if (type === "array" && property.items) {
-      return renderTableField(item, data, onChange)
+    if (component === "tags") {
+      const arrayValue = Array.isArray(value) ? value : []
+      return (
+        <div key={path} className={styles.formField} style={fieldStyle}>
+          <div className={styles.formFieldRow}>
+            <div className={styles.formFieldLabel}>
+              <label className={styles.formLabel}>{title}</label>
+              {description && <span className={styles.formHint}>{description}</span>}
+            </div>
+            <div className={styles.formFieldControl}>
+              <InputTag
+                value={arrayValue.map(String)}
+                onChange={(vals) => handleFieldChange(path, vals)}
+                placeholder="输入后按回车添加"
+                style={{ width: "100%" }}
+              />
+            </div>
+          </div>
+        </div>
+      )
     }
 
     if (enumValues && enumValues.length > 0) {
@@ -623,26 +705,8 @@ export function ModuleFieldEditor({ moduleId, data, onChange }: ModuleFieldEdito
       )
     }
 
-    if (component === "tags" || (type === "array" && !property.items)) {
-      const arrayValue = Array.isArray(value) ? value : []
-      return (
-        <div key={path} className={styles.formField} style={fieldStyle}>
-          <div className={styles.formFieldRow}>
-            <div className={styles.formFieldLabel}>
-              <label className={styles.formLabel}>{title}</label>
-              {description && <span className={styles.formHint}>{description}</span>}
-            </div>
-            <div className={styles.formFieldControl}>
-              <InputTag
-                value={arrayValue.map(String)}
-                onChange={(vals) => handleFieldChange(path, vals)}
-                placeholder="输入后按回车添加"
-                style={{ width: "100%" }}
-              />
-            </div>
-          </div>
-        </div>
-      )
+    if (type === "array" && property.items) {
+      return renderTableField(item, data, onChange)
     }
 
     switch (type) {

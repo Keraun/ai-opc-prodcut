@@ -15,7 +15,12 @@ export function renderField(
   removeTag: (fieldName: string, index: number) => void
 ): React.ReactNode {
   const { ui = {} } = fieldSchema
-  const widget = ui.widget || getDefaultWidget(fieldSchema)
+  
+  let widget = ui.widget || getDefaultWidget(fieldSchema)
+  
+  if (fieldSchema['x-component'] === 'tags' && fieldSchema.type === 'array') {
+    widget = 'tags'
+  }
 
   switch (widget) {
     case 'input':
@@ -311,7 +316,7 @@ export function renderArrayField(
                   </label>
                   {renderArraySubField(
                     subField as FieldSchema,
-                    item[subKey],
+                    item?.[subKey],
                     (value) => {
                       const newItem = { ...item, [subKey]: value }
                       updateArrayItem(fieldName, index, newItem)
@@ -322,7 +327,7 @@ export function renderArrayField(
             </div>
           ) : (
             <Input
-              value={item}
+              value={typeof item === 'string' ? item : ''}
               onChange={(value) => updateArrayItem(fieldName, index, value)}
               placeholder={`输入第 ${index + 1} 项`}
               style={{ flex: 1 }}

@@ -63,6 +63,28 @@ export function ArticlesManagement() {
         icon: <Tag size={16} />
       },
       {
+        name: "seo.title",
+        label: "SEO 标题",
+        type: "text",
+        placeholder: "SEO 标题（留空则使用文章标题）",
+        icon: <Tag size={16} />
+      },
+      {
+        name: "seo.description",
+        label: "SEO 描述",
+        type: "textarea",
+        placeholder: "SEO 描述（留空则使用文章摘要）",
+        rows: 2,
+        icon: <FileText size={16} />
+      },
+      {
+        name: "seo.keywords",
+        label: "SEO 关键词",
+        type: "tags",
+        placeholder: "输入关键词后按回车添加",
+        icon: <Tag size={16} />
+      },
+      {
         name: "content",
         label: "文章内容",
         type: "richtext",

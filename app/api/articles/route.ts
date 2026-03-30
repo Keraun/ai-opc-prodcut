@@ -13,10 +13,16 @@ interface Article {
   category?: string
   tags?: string[]
   image?: string
+  mainImage?: string
   viewCount?: number
   status: string
   created_at: string
   updated_at: string
+  seo?: {
+    title?: string
+    description?: string
+    keywords?: string[]
+  }
 }
 
 export async function GET(request: NextRequest) {
@@ -78,8 +84,10 @@ export async function POST(request: NextRequest) {
       category: data.category || '',
       tags: data.tags || [],
       image: data.image || '',
+      mainImage: data.mainImage || data.image || '',
       viewCount: 0,
       status: data.status || 'published',
+      seo: data.seo || {},
       created_at: new Date().toISOString(),
       updated_at: new Date().toISOString()
     }
@@ -118,7 +126,9 @@ export async function PUT(request: NextRequest) {
       category: data.category || existing.category,
       tags: data.tags || existing.tags,
       image: data.image || existing.image,
+      mainImage: data.mainImage || data.image || existing.mainImage || existing.image,
       status: data.status || existing.status,
+      seo: data.seo !== undefined ? data.seo : existing.seo,
       updated_at: new Date().toISOString()
     }
     

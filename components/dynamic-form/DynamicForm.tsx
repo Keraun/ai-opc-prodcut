@@ -70,6 +70,9 @@ export function DynamicForm({
               )
             }
 
+            const isTagsField = subField.ui?.widget === 'tags' || 
+                               (subField['x-component'] === 'tags' && subField.type === 'array')
+
             return (
               <Col key={fullFieldName} span={span}>
                 <Form.Item
@@ -79,19 +82,21 @@ export function DynamicForm({
                       {isRequired && <span className={styles.requiredMark}>*</span>}
                     </span>
                   }
-                  field={fullFieldName}
-                  rules={[
+                  field={isTagsField ? undefined : fullFieldName}
+                  rules={!isTagsField ? [
                     {
                       required: isRequired,
                       message: `请输入${subField.title}`
                     }
-                  ]}
+                  ] : undefined}
                   extra={subField.description}
                   className={styles.formItem}
                 >
-                  {subField.type === 'array' && !subField.ui?.widget
-                    ? renderArrayFieldComponent(fullFieldName, subField)
-                    : renderFieldComponent(fullFieldName, subField)}
+                  {isTagsField
+                    ? renderFieldComponent(fullFieldName, subField)
+                    : (subField.type === 'array' && !subField.ui?.widget
+                        ? renderArrayFieldComponent(fullFieldName, subField)
+                        : renderFieldComponent(fullFieldName, subField))}
                 </Form.Item>
               </Col>
             )
@@ -104,6 +109,42 @@ export function DynamicForm({
   const renderFields = () => {
     const { properties = {}, required = [], ui: formUI = {} } = schema
     const groups = formUI.groups || []
+
+    const renderFormItem = (fieldName: string, fieldSchema: FieldSchema) => {
+      const fieldWidth = fieldSchema.ui?.width || '100%'
+      const { span } = parseWidth(fieldWidth)
+      const isRequired = required.includes(fieldName) || fieldSchema.required
+      const isTagsField = fieldSchema.ui?.widget === 'tags' || 
+                         (fieldSchema['x-component'] === 'tags' && fieldSchema.type === 'array')
+
+      return (
+        <Col key={fieldName} span={span}>
+          <Form.Item
+            label={
+              <span className={styles.fieldLabel}>
+                {fieldSchema.title}
+                {isRequired && <span className={styles.requiredMark}>*</span>}
+              </span>
+            }
+            field={isTagsField ? undefined : fieldName}
+            rules={!isTagsField ? [
+              {
+                required: isRequired,
+                message: `请输入${fieldSchema.title}`
+              }
+            ] : undefined}
+            extra={fieldSchema.description}
+            className={styles.formItem}
+          >
+            {isTagsField
+              ? renderFieldComponent(fieldName, fieldSchema)
+              : (fieldSchema.type === 'array' && !fieldSchema.ui?.widget
+                  ? renderArrayFieldComponent(fieldName, fieldSchema)
+                  : renderFieldComponent(fieldName, fieldSchema))}
+          </Form.Item>
+        </Col>
+      )
+    }
 
     if (groups.length > 0) {
       return groups.map((group, groupIndex) => (
@@ -118,35 +159,7 @@ export function DynamicForm({
                 return renderObjectField(fieldName, fieldSchema)
               }
 
-              const fieldWidth = fieldSchema.ui?.width || '100%'
-              const { span } = parseWidth(fieldWidth)
-              const isRequired = required.includes(fieldName) || fieldSchema.required
-
-              return (
-                <Col key={fieldName} span={span}>
-                  <Form.Item
-                    label={
-                      <span className={styles.fieldLabel}>
-                        {fieldSchema.title}
-                        {isRequired && <span className={styles.requiredMark}>*</span>}
-                      </span>
-                    }
-                    field={fieldName}
-                    rules={[
-                      {
-                        required: isRequired,
-                        message: `请输入${fieldSchema.title}`
-                      }
-                    ]}
-                    extra={fieldSchema.description}
-                    className={styles.formItem}
-                  >
-                    {fieldSchema.type === 'array' && !fieldSchema.ui?.widget
-                      ? renderArrayFieldComponent(fieldName, fieldSchema)
-                      : renderFieldComponent(fieldName, fieldSchema)}
-                  </Form.Item>
-                </Col>
-              )
+              return renderFormItem(fieldName, fieldSchema)
             })}
           </Row>
         </div>
@@ -160,35 +173,7 @@ export function DynamicForm({
             return renderObjectField(fieldName, fieldSchema)
           }
 
-          const fieldWidth = fieldSchema.ui?.width || '100%'
-          const { span } = parseWidth(fieldWidth)
-          const isRequired = required.includes(fieldName) || fieldSchema.required
-
-          return (
-            <Col key={fieldName} span={span}>
-              <Form.Item
-                label={
-                  <span className={styles.fieldLabel}>
-                    {fieldSchema.title}
-                    {isRequired && <span className={styles.requiredMark}>*</span>}
-                  </span>
-                }
-                field={fieldName}
-                rules={[
-                  {
-                    required: isRequired,
-                    message: `请输入${fieldSchema.title}`
-                  }
-                ]}
-                extra={fieldSchema.description}
-                className={styles.formItem}
-              >
-                {fieldSchema.type === 'array' && !fieldSchema.ui?.widget
-                  ? renderArrayFieldComponent(fieldName, fieldSchema)
-                  : renderFieldComponent(fieldName, fieldSchema)}
-              </Form.Item>
-            </Col>
-          )
+          return renderFormItem(fieldName, fieldSchema)
         })}
       </Row>
     )
