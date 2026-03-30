@@ -220,50 +220,6 @@
     "updated_at": "2026-03-29T17:56:55.008Z"
   },
   {
-    "page_id": "test",
-    "module_id": "site-root",
-    "module_instance_id": "site-root-1774807517667-0-l2s6qo74q",
-    "module_name": "站点容器",
-    "module_order": 0,
-    "data": null,
-    "created_at": "2026/03/30 08:48:46",
-    "updated_at": "2026/03/30 08:48:46",
-    "id": 78
-  },
-  {
-    "page_id": "test",
-    "module_id": "site-header",
-    "module_instance_id": "site-header-1774807517667-1-nt5b7vp4z",
-    "module_name": "站点头部",
-    "module_order": 1,
-    "data": "{\"navItems\":[{\"label\":\"首页\",\"href\":\"/\"},{\"label\":\"产品\",\"href\":\"/product\"},{\"label\":\"资讯\",\"href\":\"/news\"}],\"showContactButton\":true,\"showCtaButton\":true,\"ctaButtonText\":\"开始使用\",\"ctaButtonLink\":\"/product\"}",
-    "created_at": "2026/03/30 08:48:46",
-    "updated_at": "2026/03/30 08:48:46",
-    "id": 79
-  },
-  {
-    "page_id": "test",
-    "module_id": "section-image",
-    "module_instance_id": "section-image-1774828211990",
-    "module_name": "图片区块",
-    "module_order": 2,
-    "data": "{\"webImage\":\"http://localhost:3000/uploads/editor/1774831722673_octhau.webp\",\"mobileImage\":\"http://localhost:3000/uploads/editor/1774831557703_1r59o6.webp\",\"title\":\"444\",\"containerPaddingX\":\"0\",\"containerPaddingY\":\"0\",\"containerType\":\"section\",\"backgroundColor\":\"red\"}",
-    "created_at": "2026/03/30 08:48:46",
-    "updated_at": "2026/03/30 08:48:46",
-    "id": 80
-  },
-  {
-    "page_id": "test",
-    "module_id": "site-footer",
-    "module_instance_id": "site-footer-1774807517667-2-7z5yymb60",
-    "module_name": "站点页脚",
-    "module_order": 3,
-    "data": null,
-    "created_at": "2026/03/30 08:48:46",
-    "updated_at": "2026/03/30 08:48:46",
-    "id": 81
-  },
-  {
     "page_id": "home",
     "module_id": "site-root",
     "module_instance_id": "site-root-1774642127716-1774642692903",

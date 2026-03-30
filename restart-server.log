@@ -1172,3 +1172,111 @@ Read more: https://nextjs.org/docs/app/api-reference/components/image#loading
 📦 Found 17 modules
 Synced 17/17 modules to database
 ✅ Successfully synced 17/17 modules to database
+ GET /api/admin/pages 200 in 18ms (next.js: 6ms, application-code: 12ms)
+ GET /api/admin/pages 200 in 11ms (next.js: 3ms, application-code: 7ms)
+ GET /api/admin/pages 200 in 6ms (next.js: 1229µs, application-code: 4ms)
+ GET /api/admin/pages 200 in 10ms (next.js: 3ms, application-code: 7ms)
+ DELETE /api/admin/pages/test 200 in 22ms (next.js: 8ms, application-code: 13ms)
+ GET /api/admin/pages 200 in 11ms (next.js: 3ms, application-code: 8ms)
+[browser] Uncaught TypeError: Cannot read properties of null (reading 'offsetParent')
+[browser] Uncaught TypeError: Cannot read properties of null (reading 'offsetParent')
+[browser] Uncaught TypeError: Cannot read properties of null (reading 'offsetParent')
+ GET /admin/dashboard?menu=products 200 in 56ms (next.js: 26ms, application-code: 31ms)
+ GET /api/products 200 in 112ms (next.js: 97ms, application-code: 15ms)
+ GET /api/products 200 in 16ms (next.js: 2ms, application-code: 14ms)
+ GET /admin/dashboard?menu=articles 200 in 42ms (next.js: 7ms, application-code: 35ms)
+ GET /api/articles 200 in 62ms (next.js: 57ms, application-code: 4ms)
+ GET /api/articles 200 in 3ms (next.js: 945µs, application-code: 1862µs)
+ GET /api/products 200 in 3ms (next.js: 1061µs, application-code: 2ms)
+ GET /api/products 200 in 3ms (next.js: 890µs, application-code: 2ms)
+ GET /admin/dashboard?menu=products 200 in 38ms (next.js: 3ms, application-code: 34ms)
+[browser] [tiptap warn]: Duplicate extension names found: ['link', 'underline']. This can lead to issues.
+ GET /admin/dashboard?menu=products 200 in 36ms (next.js: 7ms, application-code: 28ms)
+ GET /api/admin/pages 200 in 8ms (next.js: 3ms, application-code: 6ms)
+ GET /admin/dashboard?menu=pages 200 in 46ms (next.js: 5ms, application-code: 41ms)
+ GET /api/admin/pages 200 in 5ms (next.js: 1069µs, application-code: 4ms)
+ GET /api/admin/pages 200 in 6ms (next.js: 2ms, application-code: 4ms)
+ GET /api/admin/pages 200 in 4ms (next.js: 1056µs, application-code: 3ms)
+ GET /api/products 200 in 9ms (next.js: 3ms, application-code: 6ms)
+ GET /api/products 200 in 5ms (next.js: 1326µs, application-code: 4ms)
+ GET /admin/dashboard?menu=products 200 in 55ms (next.js: 4ms, application-code: 50ms)
+ GET /api/articles 200 in 10ms (next.js: 1610µs, application-code: 9ms)
+ GET /api/articles 200 in 15ms (next.js: 12ms, application-code: 3ms)
+ GET /admin/dashboard?menu=articles 200 in 79ms (next.js: 14ms, application-code: 65ms)
+ GET /api/products 200 in 8ms (next.js: 2ms, application-code: 6ms)
+ GET /api/products 200 in 13ms (next.js: 9ms, application-code: 3ms)
+ GET /admin/dashboard?menu=products 200 in 57ms (next.js: 14ms, application-code: 43ms)
+✓ Compiled in 154ms
+✓ Compiled in 43ms
+✓ Compiled in 33ms
+✓ Compiled in 69ms
+ GET /admin/dashboard?menu=products 200 in 162ms (next.js: 70ms, application-code: 92ms)
+ GET /api/admin/themes 200 in 10ms (next.js: 3ms, application-code: 7ms)
+ GET /api/admin/pages 200 in 10ms (next.js: 5ms, application-code: 5ms)
+ GET /api/admin/auth 200 in 11ms (next.js: 7ms, application-code: 4ms)
+ GET /api/products 200 in 8ms (next.js: 4ms, application-code: 4ms)
+ GET /api/products 200 in 10ms (next.js: 9ms, application-code: 1506µs)
+ GET /api/admin/pages 200 in 15ms (next.js: 3ms, application-code: 12ms)
+[browser] [@arco-design/web-react]: Element does not define the `getRootDOMNode` method causing a call to React.findDOMNode. but findDOMNode is deprecated in StrictMode. Please check the code logic { detail: [ { element: [1mnull[22m, instance: [32m'[object Object]'[39m } ] } 
+[browser] [@arco-design/web-react]: Element does not define the `getRootDOMNode` method causing a call to React.findDOMNode. but findDOMNode is deprecated in StrictMode. Please check the code logic { detail: [ { element: [90mundefined[39m, instance: [32m'[object Object]'[39m } ] } 
+ GET /api/articles 200 in 6ms (next.js: 3ms, application-code: 3ms)
+ GET /api/articles 200 in 10ms (next.js: 7ms, application-code: 3ms)
+ GET /admin/dashboard?menu=articles 200 in 53ms (next.js: 7ms, application-code: 46ms)
+ GET /api/products 200 in 8ms (next.js: 3ms, application-code: 5ms)
+ GET /api/products 200 in 16ms (next.js: 10ms, application-code: 6ms)
+ GET /admin/dashboard?menu=products 200 in 55ms (next.js: 3ms, application-code: 52ms)
+[browser] [tiptap warn]: Duplicate extension names found: ['link', 'underline']. This can lead to issues.
+✓ Compiled in 65ms
+✓ Compiled in 25ms
+ GET /admin/dashboard?menu=products 200 in 99ms (next.js: 28ms, application-code: 71ms)
+ GET /api/admin/pages 200 in 10ms (next.js: 1796µs, application-code: 8ms)
+ GET /api/admin/auth 200 in 10ms (next.js: 4ms, application-code: 6ms)
+ GET /api/admin/themes 200 in 11ms (next.js: 6ms, application-code: 4ms)
+ GET /api/products 200 in 9ms (next.js: 3ms, application-code: 6ms)
+ GET /api/products 200 in 17ms (next.js: 10ms, application-code: 7ms)
+ GET /api/admin/pages 200 in 16ms (next.js: 7ms, application-code: 10ms)
+[browser] [@arco-design/web-react]: Element does not define the `getRootDOMNode` method causing a call to React.findDOMNode. but findDOMNode is deprecated in StrictMode. Please check the code logic { detail: [ { element: [1mnull[22m, instance: [32m'[object Object]'[39m } ] } 
+[browser] [@arco-design/web-react]: Element does not define the `getRootDOMNode` method causing a call to React.findDOMNode. but findDOMNode is deprecated in StrictMode. Please check the code logic { detail: [ { element: [90mundefined[39m, instance: [32m'[object Object]'[39m } ] } 
+[browser] [tiptap warn]: Duplicate extension names found: ['link', 'underline']. This can lead to issues.
+✓ Compiled in 139ms
+ GET /admin/dashboard?menu=products 200 in 94ms (next.js: 29ms, application-code: 66ms)
+ GET /api/admin/themes 200 in 23ms (next.js: 3ms, application-code: 21ms)
+ GET /api/admin/pages 200 in 24ms (next.js: 10ms, application-code: 14ms)
+ GET /api/admin/auth 200 in 24ms (next.js: 16ms, application-code: 8ms)
+ GET /api/products 200 in 45ms (next.js: 36ms, application-code: 9ms)
+ GET /api/products 200 in 42ms (next.js: 40ms, application-code: 2ms)
+ GET /api/admin/pages 200 in 93ms (next.js: 21ms, application-code: 72ms)
+[browser] [@arco-design/web-react]: Element does not define the `getRootDOMNode` method causing a call to React.findDOMNode. but findDOMNode is deprecated in StrictMode. Please check the code logic { detail: [ { element: [1mnull[22m, instance: [32m'[object Object]'[39m } ] } 
+[browser] [@arco-design/web-react]: Element does not define the `getRootDOMNode` method causing a call to React.findDOMNode. but findDOMNode is deprecated in StrictMode. Please check the code logic { detail: [ { element: [90mundefined[39m, instance: [32m'[object Object]'[39m } ] } 
+[browser] [tiptap warn]: Duplicate extension names found: ['link', 'underline']. This can lead to issues.
+✓ Compiled in 45ms
+ GET /admin/dashboard?menu=products 200 in 58ms (next.js: 8ms, application-code: 49ms)
+ GET /api/admin/auth 200 in 7ms (next.js: 2ms, application-code: 5ms)
+ GET /api/admin/pages 200 in 8ms (next.js: 4ms, application-code: 4ms)
+ GET /api/admin/themes 200 in 11ms (next.js: 9ms, application-code: 3ms)
+ GET /api/products 200 in 5ms (next.js: 1826µs, application-code: 3ms)
+ GET /api/products 200 in 8ms (next.js: 5ms, application-code: 2ms)
+ GET /api/admin/pages 200 in 5ms (next.js: 988µs, application-code: 4ms)
+[browser] [@arco-design/web-react]: Element does not define the `getRootDOMNode` method causing a call to React.findDOMNode. but findDOMNode is deprecated in StrictMode. Please check the code logic { detail: [ { element: [1mnull[22m, instance: [32m'[object Object]'[39m } ] } 
+[browser] [@arco-design/web-react]: Element does not define the `getRootDOMNode` method causing a call to React.findDOMNode. but findDOMNode is deprecated in StrictMode. Please check the code logic { detail: [ { element: [90mundefined[39m, instance: [32m'[object Object]'[39m } ] } 
+[browser] [tiptap warn]: Duplicate extension names found: ['link', 'underline']. This can lead to issues.
+✓ Compiled in 36ms
+[browser] Encountered two children with the same key, `tags`. Keys should be unique so that components maintain their identity across updates. Non-unique keys may cause children to be duplicated and/or omitted — the behavior is unsupported and could change in a future version. 
+    at Set.forEach (<anonymous>) (<anonymous>)
+✓ Compiled in 26ms
+✓ Compiled in 37ms
+✓ Compiled in 31ms
+✓ Compiled in 26ms
+✓ Compiled in 37ms
+✓ Compiled in 48ms
+ POST /api/products 200 in 46ms (next.js: 19ms, application-code: 27ms)
+ GET /api/products 200 in 9ms (next.js: 1773µs, application-code: 7ms)
+ GET /admin/dashboard?menu=products 200 in 94ms (next.js: 28ms, application-code: 66ms)
+ GET /api/admin/pages 200 in 14ms (next.js: 3ms, application-code: 11ms)
+ GET /api/admin/auth 200 in 14ms (next.js: 7ms, application-code: 7ms)
+ GET /api/admin/themes 200 in 15ms (next.js: 10ms, application-code: 5ms)
+ GET /api/products 200 in 7ms (next.js: 4ms, application-code: 2ms)
+ GET /api/products 200 in 9ms (next.js: 7ms, application-code: 1663µs)
+ GET /api/admin/pages 200 in 10ms (next.js: 7ms, application-code: 3ms)
+[browser] [@arco-design/web-react]: Element does not define the `getRootDOMNode` method causing a call to React.findDOMNode. but findDOMNode is deprecated in StrictMode. Please check the code logic { detail: [ { element: [1mnull[22m, instance: [32m'[object Object]'[39m } ] } 
+[browser] [@arco-design/web-react]: Element does not define the `getRootDOMNode` method causing a call to React.findDOMNode. but findDOMNode is deprecated in StrictMode. Please check the code logic { detail: [ { element: [90mundefined[39m, instance: [32m'[object Object]'[39m } ] } 

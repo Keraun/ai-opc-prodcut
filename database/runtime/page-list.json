@@ -89,21 +89,6 @@
       "updatedAt": null,
       "publishedAt": null,
       "modules": []
-    },
-    {
-      "id": "test",
-      "name": "test",
-      "slug": "test",
-      "type": "dynamic",
-      "status": "draft",
-      "isSystem": false,
-      "isDeletable": true,
-      "route": "/test/[id]",
-      "dynamicParam": "id",
-      "createdAt": "2026/03/30 02:05:17",
-      "updatedAt": "2026/03/30 08:48:46",
-      "publishedAt": null,
-      "modules": []
     }
   ],
   "systemPages": [
@@ -111,6 +96,6 @@
     "404"
   ],
   "dynamicRoutePattern": "[param]",
-  "createdAt": "2026-03-30T01:03:24.296Z",
-  "updatedAt": "2026-03-30T01:03:24.296Z"
+  "createdAt": "2026-03-30T01:04:04.456Z",
+  "updatedAt": "2026-03-30T01:04:04.456Z"
 }

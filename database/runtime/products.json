@@ -6,11 +6,20 @@
     "price": 99,
     "originalPrice": 199,
     "image": "/products/chatgpt-plus.png",
-    "tags": ["热门", "GPT-4", "独享账号"],
+    "tags": [
+      "热门",
+      "GPT-4",
+      "独享账号"
+    ],
     "category": "tools",
     "categoryName": "AI工具",
     "link": "/product/1",
-    "features": ["GPT-4模型", "无限对话", "独享账号", "稳定可靠"],
+    "features": [
+      "GPT-4模型",
+      "无限对话",
+      "独享账号",
+      "稳定可靠"
+    ],
     "salesCount": 1256,
     "rating": 4.9,
     "status": "active",
@@ -24,11 +33,20 @@
     "price": 199,
     "originalPrice": 299,
     "image": "/products/midjourney.png",
-    "tags": ["AI绘画", "商业授权", "快速生成"],
+    "tags": [
+      "AI绘画",
+      "商业授权",
+      "快速生成"
+    ],
     "category": "tools",
     "categoryName": "AI工具",
     "link": "/product/2",
-    "features": ["专业版功能", "商业授权", "快速生成", "高清输出"],
+    "features": [
+      "专业版功能",
+      "商业授权",
+      "快速生成",
+      "高清输出"
+    ],
     "salesCount": 892,
     "rating": 4.8,
     "status": "active",
@@ -42,11 +60,20 @@
     "price": 0,
     "originalPrice": null,
     "image": "/products/claude.png",
-    "tags": ["免费", "API", "长文本"],
+    "tags": [
+      "免费",
+      "API",
+      "长文本"
+    ],
     "category": "tools",
     "categoryName": "AI工具",
     "link": "/product/3",
-    "features": ["免费使用", "API接口", "长文本处理", "代码生成"],
+    "features": [
+      "免费使用",
+      "API接口",
+      "长文本处理",
+      "代码生成"
+    ],
     "salesCount": 3567,
     "rating": 4.7,
     "status": "active",
@@ -60,11 +87,20 @@
     "price": 149,
     "originalPrice": 249,
     "image": "/products/notion-ai.png",
-    "tags": ["团队协作", "笔记", "项目管理"],
+    "tags": [
+      "团队协作",
+      "笔记",
+      "项目管理"
+    ],
     "category": "tools",
     "categoryName": "AI工具",
     "link": "/product/4",
-    "features": ["团队协作", "智能笔记", "文档写作", "项目管理"],
+    "features": [
+      "团队协作",
+      "智能笔记",
+      "文档写作",
+      "项目管理"
+    ],
     "salesCount": 678,
     "rating": 4.6,
     "status": "active",
@@ -78,11 +114,20 @@
     "price": 599,
     "originalPrice": 999,
     "image": "/products/ai-course.png",
-    "tags": ["新课", "实战项目", "终身学习"],
+    "tags": [
+      "新课",
+      "实战项目",
+      "终身学习"
+    ],
     "category": "courses",
     "categoryName": "AI课程",
     "link": "/product/5",
-    "features": ["20+实战项目", "终身学习", "社群答疑", "源码赠送"],
+    "features": [
+      "20+实战项目",
+      "终身学习",
+      "社群答疑",
+      "源码赠送"
+    ],
     "salesCount": 456,
     "rating": 4.9,
     "status": "active",
@@ -96,11 +141,20 @@
     "price": 299,
     "originalPrice": 499,
     "image": "/products/prompt-course.png",
-    "tags": ["提示词", "进阶课程", "实战案例"],
+    "tags": [
+      "提示词",
+      "进阶课程",
+      "实战案例"
+    ],
     "category": "courses",
     "categoryName": "AI课程",
     "link": "/product/6",
-    "features": ["核心技巧", "实战案例", "模板库", "持续更新"],
+    "features": [
+      "核心技巧",
+      "实战案例",
+      "模板库",
+      "持续更新"
+    ],
     "salesCount": 789,
     "rating": 4.8,
     "status": "active",
@@ -114,11 +168,20 @@
     "price": 199,
     "originalPrice": 399,
     "image": "/products/copywriting.png",
-    "tags": ["文案写作", "训练营", "转化提升"],
+    "tags": [
+      "文案写作",
+      "训练营",
+      "转化提升"
+    ],
     "category": "courses",
     "categoryName": "AI课程",
     "link": "/product/7",
-    "features": ["7天训练营", "爆款案例", "1对1辅导", "作业点评"],
+    "features": [
+      "7天训练营",
+      "爆款案例",
+      "1对1辅导",
+      "作业点评"
+    ],
     "salesCount": 567,
     "rating": 4.7,
     "status": "active",
@@ -132,13 +195,22 @@
     "price": 2999,
     "originalPrice": null,
     "image": "/products/workflow.png",
-    "tags": ["定制服务", "一对一", "效率提升"],
+    "tags": [
+      "定制服务",
+      "一对一",
+      "效率提升"
+    ],
     "category": "services",
     "categoryName": "AI服务",
     "link": "/product/8",
-    "features": ["一对一咨询", "定制方案", "技术支持", "效果保障"],
+    "features": [
+      "一对一咨询",
+      "定制方案",
+      "技术支持",
+      "效果保障"
+    ],
     "salesCount": 89,
-    "rating": 5.0,
+    "rating": 5,
     "status": "active",
     "created_at": "2024-03-08 10:00:00",
     "updated_at": "2024-03-28 10:00:00"
@@ -150,15 +222,43 @@
     "price": 4999,
     "originalPrice": 7999,
     "image": "/products/assistant.png",
-    "tags": ["企业定制", "智能客服", "24小时"],
+    "tags": [
+      "企业定制",
+      "智能客服",
+      "24小时"
+    ],
     "category": "services",
     "categoryName": "AI服务",
     "link": "/product/9",
-    "features": ["企业定制", "智能客服", "24小时在线", "知识库管理"],
+    "features": [
+      "企业定制",
+      "智能客服",
+      "24小时在线",
+      "知识库管理"
+    ],
     "salesCount": 45,
     "rating": 4.9,
     "status": "active",
     "created_at": "2024-03-09 10:00:00",
     "updated_at": "2024-03-28 10:00:00"
+  },
+  {
+    "title": "测试",
+    "description": "2131313131312",
+    "content": "",
+    "price": "111",
+    "originalPrice": "22",
+    "image": "",
+    "tags": [],
+    "category": "",
+    "categoryName": "",
+    "link": "",
+    "features": [],
+    "salesCount": 0,
+    "rating": 5,
+    "status": "published",
+    "created_at": "2026-03-30T01:22:58.627Z",
+    "updated_at": "2026-03-30T01:22:58.627Z",
+    "id": 10
   }
 ]

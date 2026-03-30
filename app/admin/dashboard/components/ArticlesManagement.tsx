@@ -76,7 +76,13 @@ export function ArticlesManagement() {
         label: "主图",
         width: "80",
         render: (item) => item.mainImage ? (
-          <img src={item.mainImage} alt={item.title} className={styles.listImage} />
+          <a 
+            href={item.mainImage} 
+            target="_blank" 
+            rel="noopener noreferrer"
+          >
+            <img src={item.mainImage} alt={item.title} className={styles.listImage} />
+          </a>
         ) : (
           <span className={styles.emptyValue}>-</span>
         )

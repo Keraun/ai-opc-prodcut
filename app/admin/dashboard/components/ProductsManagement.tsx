@@ -34,20 +34,14 @@ export function ProductsManagement() {
         inlineGroup: "基本信息"
       },
       {
-        name: "mainImage",
-        label: "产品主图",
-        type: "image",
-        hint: "建议尺寸: 800x600px",
-        icon: <ImageIcon size={16} />
-      },
-      {
         name: "description",
         label: "产品描述",
         type: "textarea",
         required: true,
         placeholder: "请输入产品描述",
         rows: 3,
-        icon: <Package size={16} />
+        icon: <Package size={16} />,
+        inlineGroup: "描述与图片"
       },
       {
         name: "price",
@@ -66,18 +60,35 @@ export function ProductsManagement() {
         inlineGroup: "基本信息"
       },
       {
-        name: "tags",
-        label: "产品标签",
-        type: "tags",
-        placeholder: "输入标签后按回车添加",
-        icon: <Package size={16} />
-      },
-      {
         name: "features",
         label: "产品特性",
         type: "richtext",
         placeholder: "请输入产品特性...",
         icon: <Package size={16} />
+      },
+      {
+        name: "purchaseLink",
+        label: "购买链接(可选)",
+        type: "text",
+        placeholder: "请输入产品购买链接",
+        icon: <Package size={16} />,
+        inlineGroup: "链接与标签"
+      },
+      {
+        name: "tags",
+        label: "产品标签",
+        type: "tags",
+        placeholder: "输入标签后按回车添加",
+        icon: <Package size={16} />,
+        inlineGroup: "链接与标签"
+      },
+      {
+        name: "mainImage",
+        label: "产品主图",
+        type: "image",
+        hint: "建议尺寸: 800x600px",
+        icon: <ImageIcon size={16} />,
+        inlineGroup: "描述与图片"
       }
     ],
     columns: [
@@ -86,7 +97,13 @@ export function ProductsManagement() {
         label: "主图",
         width: "80",
         render: (item) => item.mainImage ? (
-          <img src={item.mainImage} alt={item.title} className={styles.listImage} />
+          <a 
+            href={item.mainImage} 
+            target="_blank" 
+            rel="noopener noreferrer"
+          >
+            <img src={item.mainImage} alt={item.title} className={styles.listImage} />
+          </a>
         ) : (
           <span className={styles.emptyValue}>-</span>
         )
@@ -96,7 +113,19 @@ export function ProductsManagement() {
         label: "产品名称",
         width: "150",
         render: (item) => (
-          <div className={styles.productName}>{item.title}</div>
+          item.purchaseLink ? (
+            <a 
+              href={item.purchaseLink} 
+              target="_blank" 
+              rel="noopener noreferrer"
+              className={styles.productName}
+              style={{ color: '#1890ff', textDecoration: 'underline' }}
+            >
+              {item.title}
+            </a>
+          ) : (
+            <div className={styles.productName}>{item.title}</div>
+          )
         )
       },
       {

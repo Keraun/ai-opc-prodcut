@@ -403,6 +403,7 @@ function FormField({
           className={styles.textarea}
           placeholder={field.placeholder}
           rows={field.rows || 3}
+          style={{ minHeight: '160px' }}
         />
       )}
       
@@ -601,13 +602,13 @@ function ItemForm({
     !f.inlineGroup
   );
   const imageFields = config.fields.filter(f => 
-    f.type === 'image'
+    f.type === 'image' && !f.inlineGroup
   );
   const tagsFields = config.fields.filter(f => 
-    f.type === 'tags'
+    f.type === 'tags' && !f.inlineGroup
   );
   const fullWidthFields = config.fields.filter(f => 
-    f.type === 'richtext' || f.type === 'textarea'
+    (f.type === 'richtext' || f.type === 'textarea') && !f.inlineGroup
   );
 
   return (
