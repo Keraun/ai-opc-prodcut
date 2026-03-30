@@ -1,15 +1,15 @@
 ========================================
-[2026年 3月30日 星期一 08时33分06秒 CST] 开始重启服务
+[2026年 3月30日 星期一 09时28分59秒 CST] 开始重启服务
 端口: 3000
 项目根目录: /Users/wulingyang/Documents/workspace/ai-opc-prodcut
 ========================================
-[2026年 3月30日 星期一 08时33分06秒 CST] 正在查找占用端口 3000 的进程...
-[2026年 3月30日 星期一 08时33分06秒 CST] 发现进程: 46045
-46090
-[2026年 3月30日 星期一 08时33分06秒 CST] 已终止进程
-[2026年 3月30日 星期一 08时33分06秒 CST] 等待端口释放...
-[2026年 3月30日 星期一 08时33分08秒 CST] 准备启动服务: npm run dev
-[2026年 3月30日 星期一 08时33分08秒 CST] 服务已启动，PID: 73358
+[2026年 3月30日 星期一 09时28分59秒 CST] 正在查找占用端口 3000 的进程...
+[2026年 3月30日 星期一 09时28分59秒 CST] 发现进程: 73338
+73402
+[2026年 3月30日 星期一 09时28分59秒 CST] 已终止进程
+[2026年 3月30日 星期一 09时28分59秒 CST] 等待端口释放...
+[2026年 3月30日 星期一 09时29分01秒 CST] 准备启动服务: npm run dev
+[2026年 3月30日 星期一 09时29分01秒 CST] 服务已启动，PID: 83205
 ========================================
 
 > my-project@0.1.0 dev
@@ -19,578 +19,52 @@
 - Local:         http://localhost:3000
 - Network:       http://192.168.10.50:3000
 - Environments: .env.local
-✓ Ready in 303ms
+✓ Ready in 281ms
 
-[browser] Uncaught Error: Image with src "http://localhost:3000/uploads/editor/1774826048827_kbx6oa.webp" is missing required "height" property.
-    at WebPImage (components/WebPImage.tsx:101:5)
-    at ImageModule (modules/section-image/index.tsx:58:13)
-    at <unknown> (modules/renderer.tsx:79:11)
-    at Array.map (<anonymous>)
-    at ModuleRenderer (modules/renderer.tsx:70:16)
-    at GenericPage (components/common/GenericPage.tsx:19:19)
-    at Home (app/page.tsx:5:10)
-   99 |
-  100 |   return (
-> 101 |     <NextImage
-      |     ^
-  102 |       src={actualSrc}
-  103 |       onError={handleError}
-  104 |       {...props}
-[browser] Module with ID "site-root" is already registered. Overwriting. (modules/registry.ts:8:15)
-Error reading config: TypeError: this.data[table].find is not a function
-    at JsonDatabase.findOne (lib/json-database.ts:135:29)
-    at readConfig (lib/config-manager.ts:226:27)
-    at loadInitialData (lib/initial-data.ts:22:30)
-    at RootLayout (app/layout.tsx:117:38)
-  133 |
-  134 |   findOne(table: string, query: any = {}) {
-> 135 |     return this.data[table].find((item: any) => {
-      |                             ^
-  136 |       for (const [key, value] of Object.entries(query)) {
-  137 |         if (item[key] !== value) {
-  138 |           return false
-Error reading config: TypeError: this.data[table].find is not a function
-    at JsonDatabase.findOne (lib/json-database.ts:135:29)
-    at readConfig (lib/config-manager.ts:226:27)
-    at loadInitialData (lib/initial-data.ts:22:30)
-    at generateInitialDataScript (lib/initial-data.ts:78:16)
-    at RootLayout (app/layout.tsx:118:54)
-  133 |
-  134 |   findOne(table: string, query: any = {}) {
-> 135 |     return this.data[table].find((item: any) => {
-      |                             ^
-  136 |       for (const [key, value] of Object.entries(query)) {
-  137 |         if (item[key] !== value) {
-  138 |           return false
-Error reading config: TypeError: this.data[table].find is not a function
-    at JsonDatabase.findOne (lib/json-database.ts:135:29)
-    at readConfig (lib/config-manager.ts:226:27)
-    at loadInitialData (lib/initial-data.ts:22:30)
-    at RootLayout (app/layout.tsx:117:38)
-  133 |
-  134 |   findOne(table: string, query: any = {}) {
-> 135 |     return this.data[table].find((item: any) => {
-      |                             ^
-  136 |       for (const [key, value] of Object.entries(query)) {
-  137 |         if (item[key] !== value) {
-  138 |           return false
-Error reading config: TypeError: this.data[table].find is not a function
-    at JsonDatabase.findOne (lib/json-database.ts:135:29)
-    at readConfig (lib/config-manager.ts:226:27)
-    at loadInitialData (lib/initial-data.ts:22:30)
-    at generateInitialDataScript (lib/initial-data.ts:78:16)
-    at RootLayout (app/layout.tsx:118:54)
-  133 |
-  134 |   findOne(table: string, query: any = {}) {
-> 135 |     return this.data[table].find((item: any) => {
-      |                             ^
-  136 |       for (const [key, value] of Object.entries(query)) {
-  137 |         if (item[key] !== value) {
-  138 |           return false
-Error getting page response: TypeError: this.data[table].find is not a function
-    at JsonDatabase.findOne (lib/json-database.ts:135:29)
-    at getPageResponse (lib/config-manager.ts:648:29)
-    at loadPageData (lib/initial-data.ts:45:39)
-    at GenericPage (components/common/GenericPage.tsx:17:32)
-  133 |
-  134 |   findOne(table: string, query: any = {}) {
-> 135 |     return this.data[table].find((item: any) => {
-      |                             ^
-  136 |       for (const [key, value] of Object.entries(query)) {
-  137 |         if (item[key] !== value) {
-  138 |           return false
-[browser] Module with ID "site-header" is already registered. Overwriting. (modules/registry.ts:8:15)
-Error reading config: TypeError: this.data[table].find is not a function
-    at JsonDatabase.findOne (lib/json-database.ts:135:29)
-    at readConfig (lib/config-manager.ts:226:27)
-    at loadInitialData (lib/initial-data.ts:22:30)
-    at RootLayout (app/layout.tsx:117:38)
-  133 |
-  134 |   findOne(table: string, query: any = {}) {
-> 135 |     return this.data[table].find((item: any) => {
-      |                             ^
-  136 |       for (const [key, value] of Object.entries(query)) {
-  137 |         if (item[key] !== value) {
-  138 |           return false
-Error reading config: TypeError: this.data[table].find is not a function
-    at JsonDatabase.findOne (lib/json-database.ts:135:29)
-    at readConfig (lib/config-manager.ts:226:27)
-    at loadInitialData (lib/initial-data.ts:22:30)
-    at generateInitialDataScript (lib/initial-data.ts:78:16)
-    at RootLayout (app/layout.tsx:118:54)
-  133 |
-  134 |   findOne(table: string, query: any = {}) {
-> 135 |     return this.data[table].find((item: any) => {
-      |                             ^
-  136 |       for (const [key, value] of Object.entries(query)) {
-  137 |         if (item[key] !== value) {
-  138 |           return false
-Error getting page response: TypeError: this.data[table].find is not a function
-    at JsonDatabase.findOne (lib/json-database.ts:135:29)
-    at getPageResponse (lib/config-manager.ts:648:29)
-    at loadPageData (lib/initial-data.ts:45:39)
-    at GenericPage (components/common/GenericPage.tsx:17:32)
-  133 |
-  134 |   findOne(table: string, query: any = {}) {
-> 135 |     return this.data[table].find((item: any) => {
-      |                             ^
-  136 |       for (const [key, value] of Object.entries(query)) {
-  137 |         if (item[key] !== value) {
-  138 |           return false
-[browser] Module with ID "section-hero" is already registered. Overwriting. (modules/registry.ts:8:15)
-[browser] Module with ID "section-services" is already registered. Overwriting. (modules/registry.ts:8:15)
-[browser] Module with ID "section-partner" is already registered. Overwriting. (modules/registry.ts:8:15)
-[browser] Module with ID "section-products" is already registered. Overwriting. (modules/registry.ts:8:15)
-[browser] Module with ID "section-pricing" is already registered. Overwriting. (modules/registry.ts:8:15)
-[browser] Module with ID "section-about" is already registered. Overwriting. (modules/registry.ts:8:15)
-[browser] Module with ID "section-contact" is already registered. Overwriting. (modules/registry.ts:8:15)
-[browser] Module with ID "site-footer" is already registered. Overwriting. (modules/registry.ts:8:15)
-[browser] Module with ID "news-list" is already registered. Overwriting. (modules/registry.ts:8:15)
-[browser] Module with ID "news-detail" is already registered. Overwriting. (modules/registry.ts:8:15)
- GET / 200 in 913ms (next.js: 464ms, application-code: 449ms)
- GET / 200 in 906ms (next.js: 829ms, application-code: 77ms)
-[browser] Module with ID "product-list" is already registered. Overwriting. (modules/registry.ts:8:15)
- GET /admin/dashboard?menu=pages 200 in 910ms (next.js: 314ms, application-code: 596ms)
-[browser] Module with ID "product-detail" is already registered. Overwriting. (modules/registry.ts:8:15)
-[browser] Module with ID "section-404" is already registered. Overwriting. (modules/registry.ts:8:15)
-[browser] Module with ID "section-content" is already registered. Overwriting. (modules/registry.ts:8:15)
-[browser] Module with ID "section-image" is already registered. Overwriting. (modules/registry.ts:8:15)
-[browser] Module with ID "site-root" is already registered. Overwriting. (modules/registry.ts:8:15)
-[browser] Module with ID "site-header" is already registered. Overwriting. (modules/registry.ts:8:15)
-[browser] Module with ID "section-hero" is already registered. Overwriting. (modules/registry.ts:8:15)
-[browser] Module with ID "section-services" is already registered. Overwriting. (modules/registry.ts:8:15)
-[browser] Module with ID "section-partner" is already registered. Overwriting. (modules/registry.ts:8:15)
-[browser] Module with ID "section-products" is already registered. Overwriting. (modules/registry.ts:8:15)
-[browser] Module with ID "section-pricing" is already registered. Overwriting. (modules/registry.ts:8:15)
-[browser] Module with ID "section-about" is already registered. Overwriting. (modules/registry.ts:8:15)
-[browser] Module with ID "section-contact" is already registered. Overwriting. (modules/registry.ts:8:15)
-[browser] Module with ID "site-footer" is already registered. Overwriting. (modules/registry.ts:8:15)
-[browser] Module with ID "news-list" is already registered. Overwriting. (modules/registry.ts:8:15)
-[browser] Module with ID "news-detail" is already registered. Overwriting. (modules/registry.ts:8:15)
-[browser] Module with ID "product-list" is already registered. Overwriting. (modules/registry.ts:8:15)
-[browser] Module with ID "product-detail" is already registered. Overwriting. (modules/registry.ts:8:15)
-[browser] Module with ID "section-404" is already registered. Overwriting. (modules/registry.ts:8:15)
-[browser] Module with ID "section-content" is already registered. Overwriting. (modules/registry.ts:8:15)
-[browser] Module with ID "section-image" is already registered. Overwriting. (modules/registry.ts:8:15)
-Error reading config: TypeError: this.data[table].find is not a function
-    at JsonDatabase.findOne (lib/json-database.ts:135:29)
-    at readConfig (lib/config-manager.ts:226:27)
-    at loadInitialData (lib/initial-data.ts:22:30)
-    at RootLayout (app/layout.tsx:117:38)
-  133 |
-  134 |   findOne(table: string, query: any = {}) {
-> 135 |     return this.data[table].find((item: any) => {
-      |                             ^
-  136 |       for (const [key, value] of Object.entries(query)) {
-  137 |         if (item[key] !== value) {
-  138 |           return false
-Error reading config: TypeError: this.data[table].find is not a function
-    at JsonDatabase.findOne (lib/json-database.ts:135:29)
-    at readConfig (lib/config-manager.ts:226:27)
-    at loadInitialData (lib/initial-data.ts:22:30)
-    at generateInitialDataScript (lib/initial-data.ts:78:16)
-    at RootLayout (app/layout.tsx:118:54)
-  133 |
-  134 |   findOne(table: string, query: any = {}) {
-> 135 |     return this.data[table].find((item: any) => {
-      |                             ^
-  136 |       for (const [key, value] of Object.entries(query)) {
-  137 |         if (item[key] !== value) {
-  138 |           return false
- GET /admin/dashboard?menu=system 200 in 214ms (next.js: 118ms, application-code: 95ms)
- GET /api/admin/themes 200 in 94ms (next.js: 78ms, application-code: 17ms)
- GET /api/admin/themes 200 in 29ms (next.js: 7ms, application-code: 22ms)
- GET /api/admin/themes 200 in 22ms (next.js: 9ms, application-code: 13ms)
- GET /api/admin/auth 200 in 55ms (next.js: 29ms, application-code: 26ms)
- GET /api/admin/pages 200 in 55ms (next.js: 49ms, application-code: 6ms)
- GET /api/admin/pages 200 in 7ms (next.js: 3ms, application-code: 5ms)
- GET /api/admin/pages 200 in 7ms (next.js: 2ms, application-code: 5ms)
- GET /api/admin/auth 200 in 6ms (next.js: 1296µs, application-code: 5ms)
- GET /api/admin/themes 200 in 7ms (next.js: 3ms, application-code: 4ms)
- GET /api/admin/system/info 200 in 19ms (next.js: 17ms, application-code: 3ms)
- GET /api/admin/system/info 200 in 21ms (next.js: 19ms, application-code: 1304µs)
- GET /api/admin/pages 200 in 25ms (next.js: 21ms, application-code: 4ms)
-✓ Compiled in 93ms
-✓ Compiled in 106ms
- GET /api/admin/system/info 200 in 9ms (next.js: 3ms, application-code: 6ms)
-✓ Compiled in 33ms
-✓ Compiled in 557ms
-Error reading config: TypeError: this.data[table].find is not a function
-    at JsonDatabase.findOne (lib/json-database.ts:135:29)
-    at readConfig (lib/config-manager.ts:226:27)
-    at loadInitialData (lib/initial-data.ts:22:30)
-    at RootLayout (app/layout.tsx:117:38)
-  133 |
-  134 |   findOne(table: string, query: any = {}) {
-> 135 |     return this.data[table].find((item: any) => {
-      |                             ^
-  136 |       for (const [key, value] of Object.entries(query)) {
-  137 |         if (item[key] !== value) {
-  138 |           return false
-Error reading config: TypeError: this.data[table].find is not a function
-    at JsonDatabase.findOne (lib/json-database.ts:135:29)
-    at readConfig (lib/config-manager.ts:226:27)
-    at loadInitialData (lib/initial-data.ts:22:30)
-    at generateInitialDataScript (lib/initial-data.ts:78:16)
-    at RootLayout (app/layout.tsx:118:54)
-  133 |
-  134 |   findOne(table: string, query: any = {}) {
-> 135 |     return this.data[table].find((item: any) => {
-      |                             ^
-  136 |       for (const [key, value] of Object.entries(query)) {
-  137 |         if (item[key] !== value) {
-  138 |           return false
-Error getting page response: TypeError: this.data[table].find is not a function
-    at JsonDatabase.findOne (lib/json-database.ts:135:29)
-    at getPageResponse (lib/config-manager.ts:648:29)
-    at loadPageData (lib/initial-data.ts:45:39)
-    at GenericPage (components/common/GenericPage.tsx:17:32)
-  133 |
-  134 |   findOne(table: string, query: any = {}) {
-> 135 |     return this.data[table].find((item: any) => {
-      |                             ^
-  136 |       for (const [key, value] of Object.entries(query)) {
-  137 |         if (item[key] !== value) {
-  138 |           return false
- GET / 200 in 76ms (next.js: 14ms, application-code: 63ms)
- GET /api/admin/themes 200 in 12ms (next.js: 7ms, application-code: 5ms)
- GET / 200 in 90ms (next.js: 17ms, application-code: 73ms)
- GET /api/admin/themes 200 in 35ms (next.js: 23ms, application-code: 12ms)
-[browser] Uncaught Error: Image with src "http://localhost:3000/uploads/editor/1774826048827_kbx6oa.webp" is missing required "height" property.
-    at WebPImage (components/WebPImage.tsx:101:5)
-    at ImageModule (modules/section-image/index.tsx:58:13)
-    at <unknown> (modules/renderer.tsx:79:11)
-    at Array.map (<anonymous>)
-    at ModuleRenderer (modules/renderer.tsx:70:16)
-    at GenericPage (components/common/GenericPage.tsx:19:19)
-    at Home (app/page.tsx:5:10)
-   99 |
-  100 |   return (
-> 101 |     <NextImage
-      |     ^
-  102 |       src={actualSrc}
-  103 |       onError={handleError}
-  104 |       {...props}
-⚠ Fast Refresh had to perform a full reload due to a runtime error.
-✓ Compiled in 429ms
-⚠ Fast Refresh had to perform a full reload due to a runtime error.
- GET / 200 in 145ms (next.js: 15ms, application-code: 130ms)
- GET /api/admin/themes 200 in 10ms (next.js: 4ms, application-code: 6ms)
-[browser] ⨯ unhandledRejection: Error: No link element found for chunk /_next/static/chunks/_0as-wu.._.css
-    at new Promise (<anonymous>)
-✓ Compiled in 197ms
- GET / 200 in 81ms (next.js: 17ms, application-code: 64ms)
- GET /api/admin/themes 200 in 10ms (next.js: 6ms, application-code: 4ms)
- GET /uploads/editor/1774826048827_kbx6oa.webp 404 in 234ms (next.js: 162ms, application-code: 72ms)
- GET /uploads/editor/1774826048827_kbx6oa.webp 404 in 78ms (next.js: 6ms, application-code: 72ms)
-[browser] WebPImage load error: http://localhost:3000/uploads/editor/1774826048827_kbx6oa.webp (components/WebPImage.tsx:89:13)
-[browser] WebPImage load error: http://localhost:3000/uploads/editor/1774826048827_kbx6oa.webp (components/WebPImage.tsx:89:13)
- GET /api/admin/pages 200 in 6ms (next.js: 2ms, application-code: 4ms)
- GET /api/admin/pages 200 in 11ms (next.js: 8ms, application-code: 3ms)
- GET /admin/dashboard?menu=pages 200 in 61ms (next.js: 24ms, application-code: 37ms)
- GET /api/admin/pages 200 in 4ms (next.js: 1206µs, application-code: 3ms)
+ GET /admin/dashboard?menu=system 200 in 1485ms (next.js: 464ms, application-code: 1021ms)
+ GET / 200 in 1479ms (next.js: 349ms, application-code: 1130ms)
+ GET /admin/dashboard?menu=pages 200 in 1481ms (next.js: 892ms, application-code: 589ms)
+ GET / 200 in 527ms (next.js: 26ms, application-code: 501ms)
+ GET /api/admin/themes 200 in 140ms (next.js: 124ms, application-code: 15ms)
+ GET /api/admin/themes 200 in 11ms (next.js: 4ms, application-code: 7ms)
+ GET /api/admin/auth 200 in 133ms (next.js: 128ms, application-code: 5ms)
+ GET /api/admin/pages 200 in 29ms (next.js: 21ms, application-code: 8ms)
+ GET /api/admin/themes 200 in 27ms (next.js: 22ms, application-code: 6ms)
+ GET /api/admin/system/info 200 in 24ms (next.js: 20ms, application-code: 4ms)
+ GET /api/admin/system/info 200 in 5ms (next.js: 3ms, application-code: 2ms)
+ GET /api/admin/pages 200 in 9ms (next.js: 3ms, application-code: 6ms)
+ GET /api/admin/pages 200 in 20ms (next.js: 13ms, application-code: 7ms)
+ GET /api/admin/auth 200 in 10ms (next.js: 3ms, application-code: 7ms)
+ GET /api/admin/themes 200 in 7ms (next.js: 4ms, application-code: 3ms)
+ GET /api/admin/pages 200 in 7ms (next.js: 1648µs, application-code: 5ms)
+✓ Compiled in 129ms
+✓ Compiled in 42ms
+✓ Compiled in 28ms
+✓ Compiled in 25ms
+✓ Compiled in 29ms
+[browser] Accessing element.ref was removed in React 19. ref is now a regular prop. It will be removed from the JSX Element type in a future release. 
+ GET /admin/dashboard?menu=site-config 200 in 105ms (next.js: 44ms, application-code: 62ms)
+🔄 Initializing and syncing modules to database...
+📦 Found 17 modules
+Synced 17/17 modules to database
+✅ Successfully synced 17/17 modules to database
+ GET /api/admin/config?type=site-footer 200 in 321ms (next.js: 24ms, application-code: 297ms)
+ GET /api/admin/config?type=site-root 200 in 329ms (next.js: 259ms, application-code: 71ms)
+ GET /api/admin/config?type=site-footer 200 in 337ms (next.js: 319ms, application-code: 18ms)
+ GET /api/admin/config?type=site-root 200 in 342ms (next.js: 325ms, application-code: 17ms)
+ GET /api/admin/pages 200 in 38ms (next.js: 31ms, application-code: 7ms)
+ GET /api/admin/pages 200 in 39ms (next.js: 33ms, application-code: 6ms)
+ GET /api/admin/pages 200 in 3ms (next.js: 802µs, application-code: 1797µs)
+ GET /admin/dashboard?menu=pages 200 in 47ms (next.js: 2ms, application-code: 45ms)
 [browser] [@arco-design/web-react]: Element does not define the `getRootDOMNode` method causing a call to React.findDOMNode. but findDOMNode is deprecated in StrictMode. Please check the code logic { detail: [ { element: [1mnull[22m, instance: [32m'[object Object]'[39m } ] } 
 [browser] [@arco-design/web-react]: Element does not define the `getRootDOMNode` method causing a call to React.findDOMNode. but findDOMNode is deprecated in StrictMode. Please check the code logic { detail: [ { element: [90mundefined[39m, instance: [32m'[object Object]'[39m } ] } 
- GET /api/admin/pages 200 in 5ms (next.js: 1655µs, application-code: 3ms)
+ GET /api/admin/pages 200 in 4ms (next.js: 1172µs, application-code: 3ms)
 🔄 Initializing and syncing modules to database...
 📦 Found 17 modules
-Failed to sync module to database: TypeError: this.data[table].find is not a function
-    at JsonDatabase.findOne (lib/json-database.ts:135:29)
-    at ModuleRegistryRepository.findByField (lib/repositories/BaseRepository.ts:29:24)
-    at ModuleRegistryRepository.findByModuleId (lib/repositories/ModuleRegistryRepository.ts:41:17)
-    at ModuleRegistryRepository.registerModule (lib/repositories/ModuleRegistryRepository.ts:49:27)
-    at syncModuleToDatabase (lib/module-sync.ts:9:24)
-    at syncAllModulesToDatabase (lib/module-sync.ts:26:9)
-    at initializeAndSyncModules (lib/initialize-modules.ts:14:48)
-    at module evaluation (app/api/modules/route.ts:11:25)
-    at Object.<anonymous> (.next/dev/server/app/api/modules/route.js:5:3)
-  133 |
-  134 |   findOne(table: string, query: any = {}) {
-> 135 |     return this.data[table].find((item: any) => {
-      |                             ^
-  136 |       for (const [key, value] of Object.entries(query)) {
-  137 |         if (item[key] !== value) {
-  138 |           return false
-Failed to sync module to database: TypeError: this.data[table].find is not a function
-    at JsonDatabase.findOne (lib/json-database.ts:135:29)
-    at ModuleRegistryRepository.findByField (lib/repositories/BaseRepository.ts:29:24)
-    at ModuleRegistryRepository.findByModuleId (lib/repositories/ModuleRegistryRepository.ts:41:17)
-    at ModuleRegistryRepository.registerModule (lib/repositories/ModuleRegistryRepository.ts:49:27)
-    at syncModuleToDatabase (lib/module-sync.ts:9:24)
-    at syncAllModulesToDatabase (lib/module-sync.ts:26:9)
-    at initializeAndSyncModules (lib/initialize-modules.ts:14:48)
-    at module evaluation (app/api/modules/route.ts:11:25)
-    at Object.<anonymous> (.next/dev/server/app/api/modules/route.js:5:3)
-  133 |
-  134 |   findOne(table: string, query: any = {}) {
-> 135 |     return this.data[table].find((item: any) => {
-      |                             ^
-  136 |       for (const [key, value] of Object.entries(query)) {
-  137 |         if (item[key] !== value) {
-  138 |           return false
-Failed to sync module to database: TypeError: this.data[table].find is not a function
-    at JsonDatabase.findOne (lib/json-database.ts:135:29)
-    at ModuleRegistryRepository.findByField (lib/repositories/BaseRepository.ts:29:24)
-    at ModuleRegistryRepository.findByModuleId (lib/repositories/ModuleRegistryRepository.ts:41:17)
-    at ModuleRegistryRepository.registerModule (lib/repositories/ModuleRegistryRepository.ts:49:27)
-    at syncModuleToDatabase (lib/module-sync.ts:9:24)
-    at syncAllModulesToDatabase (lib/module-sync.ts:26:9)
-    at initializeAndSyncModules (lib/initialize-modules.ts:14:48)
-    at module evaluation (app/api/modules/route.ts:11:25)
-    at Object.<anonymous> (.next/dev/server/app/api/modules/route.js:5:3)
-  133 |
-  134 |   findOne(table: string, query: any = {}) {
-> 135 |     return this.data[table].find((item: any) => {
-      |                             ^
-  136 |       for (const [key, value] of Object.entries(query)) {
-  137 |         if (item[key] !== value) {
-  138 |           return false
-Failed to sync module to database: TypeError: this.data[table].find is not a function
-    at JsonDatabase.findOne (lib/json-database.ts:135:29)
-    at ModuleRegistryRepository.findByField (lib/repositories/BaseRepository.ts:29:24)
-    at ModuleRegistryRepository.findByModuleId (lib/repositories/ModuleRegistryRepository.ts:41:17)
-    at ModuleRegistryRepository.registerModule (lib/repositories/ModuleRegistryRepository.ts:49:27)
-    at syncModuleToDatabase (lib/module-sync.ts:9:24)
-    at syncAllModulesToDatabase (lib/module-sync.ts:26:9)
-    at initializeAndSyncModules (lib/initialize-modules.ts:14:48)
-    at module evaluation (app/api/modules/route.ts:11:25)
-    at Object.<anonymous> (.next/dev/server/app/api/modules/route.js:5:3)
-  133 |
-  134 |   findOne(table: string, query: any = {}) {
-> 135 |     return this.data[table].find((item: any) => {
-      |                             ^
-  136 |       for (const [key, value] of Object.entries(query)) {
-  137 |         if (item[key] !== value) {
-  138 |           return false
-Failed to sync module to database: TypeError: this.data[table].find is not a function
-    at JsonDatabase.findOne (lib/json-database.ts:135:29)
-    at ModuleRegistryRepository.findByField (lib/repositories/BaseRepository.ts:29:24)
-    at ModuleRegistryRepository.findByModuleId (lib/repositories/ModuleRegistryRepository.ts:41:17)
-    at ModuleRegistryRepository.registerModule (lib/repositories/ModuleRegistryRepository.ts:49:27)
-    at syncModuleToDatabase (lib/module-sync.ts:9:24)
-    at syncAllModulesToDatabase (lib/module-sync.ts:26:9)
-    at initializeAndSyncModules (lib/initialize-modules.ts:14:48)
-    at module evaluation (app/api/modules/route.ts:11:25)
-    at Object.<anonymous> (.next/dev/server/app/api/modules/route.js:5:3)
-  133 |
-  134 |   findOne(table: string, query: any = {}) {
-> 135 |     return this.data[table].find((item: any) => {
-      |                             ^
-  136 |       for (const [key, value] of Object.entries(query)) {
-  137 |         if (item[key] !== value) {
-  138 |           return false
-Failed to sync module to database: TypeError: this.data[table].find is not a function
-    at JsonDatabase.findOne (lib/json-database.ts:135:29)
-    at ModuleRegistryRepository.findByField (lib/repositories/BaseRepository.ts:29:24)
-    at ModuleRegistryRepository.findByModuleId (lib/repositories/ModuleRegistryRepository.ts:41:17)
-    at ModuleRegistryRepository.registerModule (lib/repositories/ModuleRegistryRepository.ts:49:27)
-    at syncModuleToDatabase (lib/module-sync.ts:9:24)
-    at syncAllModulesToDatabase (lib/module-sync.ts:26:9)
-    at initializeAndSyncModules (lib/initialize-modules.ts:14:48)
-    at module evaluation (app/api/modules/route.ts:11:25)
-    at Object.<anonymous> (.next/dev/server/app/api/modules/route.js:5:3)
-  133 |
-  134 |   findOne(table: string, query: any = {}) {
-> 135 |     return this.data[table].find((item: any) => {
-      |                             ^
-  136 |       for (const [key, value] of Object.entries(query)) {
-  137 |         if (item[key] !== value) {
-  138 |           return false
-Failed to sync module to database: TypeError: this.data[table].find is not a function
-    at JsonDatabase.findOne (lib/json-database.ts:135:29)
-    at ModuleRegistryRepository.findByField (lib/repositories/BaseRepository.ts:29:24)
-    at ModuleRegistryRepository.findByModuleId (lib/repositories/ModuleRegistryRepository.ts:41:17)
-    at ModuleRegistryRepository.registerModule (lib/repositories/ModuleRegistryRepository.ts:49:27)
-    at syncModuleToDatabase (lib/module-sync.ts:9:24)
-    at syncAllModulesToDatabase (lib/module-sync.ts:26:9)
-    at initializeAndSyncModules (lib/initialize-modules.ts:14:48)
-    at module evaluation (app/api/modules/route.ts:11:25)
-    at Object.<anonymous> (.next/dev/server/app/api/modules/route.js:5:3)
-  133 |
-  134 |   findOne(table: string, query: any = {}) {
-> 135 |     return this.data[table].find((item: any) => {
-      |                             ^
-  136 |       for (const [key, value] of Object.entries(query)) {
-  137 |         if (item[key] !== value) {
-  138 |           return false
-Failed to sync module to database: TypeError: this.data[table].find is not a function
-    at JsonDatabase.findOne (lib/json-database.ts:135:29)
-    at ModuleRegistryRepository.findByField (lib/repositories/BaseRepository.ts:29:24)
-    at ModuleRegistryRepository.findByModuleId (lib/repositories/ModuleRegistryRepository.ts:41:17)
-    at ModuleRegistryRepository.registerModule (lib/repositories/ModuleRegistryRepository.ts:49:27)
-    at syncModuleToDatabase (lib/module-sync.ts:9:24)
-    at syncAllModulesToDatabase (lib/module-sync.ts:26:9)
-    at initializeAndSyncModules (lib/initialize-modules.ts:14:48)
-    at module evaluation (app/api/modules/route.ts:11:25)
-    at Object.<anonymous> (.next/dev/server/app/api/modules/route.js:5:3)
-  133 |
-  134 |   findOne(table: string, query: any = {}) {
-> 135 |     return this.data[table].find((item: any) => {
-      |                             ^
-  136 |       for (const [key, value] of Object.entries(query)) {
-  137 |         if (item[key] !== value) {
-  138 |           return false
-Failed to sync module to database: TypeError: this.data[table].find is not a function
-    at JsonDatabase.findOne (lib/json-database.ts:135:29)
-    at ModuleRegistryRepository.findByField (lib/repositories/BaseRepository.ts:29:24)
-    at ModuleRegistryRepository.findByModuleId (lib/repositories/ModuleRegistryRepository.ts:41:17)
-    at ModuleRegistryRepository.registerModule (lib/repositories/ModuleRegistryRepository.ts:49:27)
-    at syncModuleToDatabase (lib/module-sync.ts:9:24)
-    at syncAllModulesToDatabase (lib/module-sync.ts:26:9)
-    at initializeAndSyncModules (lib/initialize-modules.ts:14:48)
-    at module evaluation (app/api/modules/route.ts:11:25)
-    at Object.<anonymous> (.next/dev/server/app/api/modules/route.js:5:3)
-  133 |
-  134 |   findOne(table: string, query: any = {}) {
-> 135 |     return this.data[table].find((item: any) => {
-      |                             ^
-  136 |       for (const [key, value] of Object.entries(query)) {
-  137 |         if (item[key] !== value) {
-  138 |           return false
-Failed to sync module to database: TypeError: this.data[table].find is not a function
-    at JsonDatabase.findOne (lib/json-database.ts:135:29)
-    at ModuleRegistryRepository.findByField (lib/repositories/BaseRepository.ts:29:24)
-    at ModuleRegistryRepository.findByModuleId (lib/repositories/ModuleRegistryRepository.ts:41:17)
-    at ModuleRegistryRepository.registerModule (lib/repositories/ModuleRegistryRepository.ts:49:27)
-    at syncModuleToDatabase (lib/module-sync.ts:9:24)
-    at syncAllModulesToDatabase (lib/module-sync.ts:26:9)
-    at initializeAndSyncModules (lib/initialize-modules.ts:14:48)
-    at module evaluation (app/api/modules/route.ts:11:25)
-    at Object.<anonymous> (.next/dev/server/app/api/modules/route.js:5:3)
-  133 |
-  134 |   findOne(table: string, query: any = {}) {
-> 135 |     return this.data[table].find((item: any) => {
-      |                             ^
-  136 |       for (const [key, value] of Object.entries(query)) {
-  137 |         if (item[key] !== value) {
-  138 |           return false
-Failed to sync module to database: TypeError: this.data[table].find is not a function
-    at JsonDatabase.findOne (lib/json-database.ts:135:29)
-    at ModuleRegistryRepository.findByField (lib/repositories/BaseRepository.ts:29:24)
-    at ModuleRegistryRepository.findByModuleId (lib/repositories/ModuleRegistryRepository.ts:41:17)
-    at ModuleRegistryRepository.registerModule (lib/repositories/ModuleRegistryRepository.ts:49:27)
-    at syncModuleToDatabase (lib/module-sync.ts:9:24)
-    at syncAllModulesToDatabase (lib/module-sync.ts:26:9)
-    at initializeAndSyncModules (lib/initialize-modules.ts:14:48)
-    at module evaluation (app/api/modules/route.ts:11:25)
-    at Object.<anonymous> (.next/dev/server/app/api/modules/route.js:5:3)
-  133 |
-  134 |   findOne(table: string, query: any = {}) {
-> 135 |     return this.data[table].find((item: any) => {
-      |                             ^
-  136 |       for (const [key, value] of Object.entries(query)) {
-  137 |         if (item[key] !== value) {
-  138 |           return false
-Failed to sync module to database: TypeError: this.data[table].find is not a function
-    at JsonDatabase.findOne (lib/json-database.ts:135:29)
-    at ModuleRegistryRepository.findByField (lib/repositories/BaseRepository.ts:29:24)
-    at ModuleRegistryRepository.findByModuleId (lib/repositories/ModuleRegistryRepository.ts:41:17)
-    at ModuleRegistryRepository.registerModule (lib/repositories/ModuleRegistryRepository.ts:49:27)
-    at syncModuleToDatabase (lib/module-sync.ts:9:24)
-    at syncAllModulesToDatabase (lib/module-sync.ts:26:9)
-    at initializeAndSyncModules (lib/initialize-modules.ts:14:48)
-    at module evaluation (app/api/modules/route.ts:11:25)
-    at Object.<anonymous> (.next/dev/server/app/api/modules/route.js:5:3)
-  133 |
-  134 |   findOne(table: string, query: any = {}) {
-> 135 |     return this.data[table].find((item: any) => {
-      |                             ^
-  136 |       for (const [key, value] of Object.entries(query)) {
-  137 |         if (item[key] !== value) {
-  138 |           return false
-Failed to sync module to database: TypeError: this.data[table].find is not a function
-    at JsonDatabase.findOne (lib/json-database.ts:135:29)
-    at ModuleRegistryRepository.findByField (lib/repositories/BaseRepository.ts:29:24)
-    at ModuleRegistryRepository.findByModuleId (lib/repositories/ModuleRegistryRepository.ts:41:17)
-    at ModuleRegistryRepository.registerModule (lib/repositories/ModuleRegistryRepository.ts:49:27)
-    at syncModuleToDatabase (lib/module-sync.ts:9:24)
-    at syncAllModulesToDatabase (lib/module-sync.ts:26:9)
-    at initializeAndSyncModules (lib/initialize-modules.ts:14:48)
-    at module evaluation (app/api/modules/route.ts:11:25)
-    at Object.<anonymous> (.next/dev/server/app/api/modules/route.js:5:3)
-  133 |
-  134 |   findOne(table: string, query: any = {}) {
-> 135 |     return this.data[table].find((item: any) => {
-      |                             ^
-  136 |       for (const [key, value] of Object.entries(query)) {
-  137 |         if (item[key] !== value) {
-  138 |           return false
-Failed to sync module to database: TypeError: this.data[table].find is not a function
-    at JsonDatabase.findOne (lib/json-database.ts:135:29)
-    at ModuleRegistryRepository.findByField (lib/repositories/BaseRepository.ts:29:24)
-    at ModuleRegistryRepository.findByModuleId (lib/repositories/ModuleRegistryRepository.ts:41:17)
-    at ModuleRegistryRepository.registerModule (lib/repositories/ModuleRegistryRepository.ts:49:27)
-    at syncModuleToDatabase (lib/module-sync.ts:9:24)
-    at syncAllModulesToDatabase (lib/module-sync.ts:26:9)
-    at initializeAndSyncModules (lib/initialize-modules.ts:14:48)
-    at module evaluation (app/api/modules/route.ts:11:25)
-    at Object.<anonymous> (.next/dev/server/app/api/modules/route.js:5:3)
-  133 |
-  134 |   findOne(table: string, query: any = {}) {
-> 135 |     return this.data[table].find((item: any) => {
-      |                             ^
-  136 |       for (const [key, value] of Object.entries(query)) {
-  137 |         if (item[key] !== value) {
-  138 |           return false
-Failed to sync module to database: TypeError: this.data[table].find is not a function
-    at JsonDatabase.findOne (lib/json-database.ts:135:29)
-    at ModuleRegistryRepository.findByField (lib/repositories/BaseRepository.ts:29:24)
-    at ModuleRegistryRepository.findByModuleId (lib/repositories/ModuleRegistryRepository.ts:41:17)
-    at ModuleRegistryRepository.registerModule (lib/repositories/ModuleRegistryRepository.ts:49:27)
-    at syncModuleToDatabase (lib/module-sync.ts:9:24)
-    at syncAllModulesToDatabase (lib/module-sync.ts:26:9)
-    at initializeAndSyncModules (lib/initialize-modules.ts:14:48)
-    at module evaluation (app/api/modules/route.ts:11:25)
-    at Object.<anonymous> (.next/dev/server/app/api/modules/route.js:5:3)
-  133 |
-  134 |   findOne(table: string, query: any = {}) {
-> 135 |     return this.data[table].find((item: any) => {
-      |                             ^
-  136 |       for (const [key, value] of Object.entries(query)) {
-  137 |         if (item[key] !== value) {
-  138 |           return false
-Failed to sync module to database: TypeError: this.data[table].find is not a function
-    at JsonDatabase.findOne (lib/json-database.ts:135:29)
-    at ModuleRegistryRepository.findByField (lib/repositories/BaseRepository.ts:29:24)
-    at ModuleRegistryRepository.findByModuleId (lib/repositories/ModuleRegistryRepository.ts:41:17)
-    at ModuleRegistryRepository.registerModule (lib/repositories/ModuleRegistryRepository.ts:49:27)
-    at syncModuleToDatabase (lib/module-sync.ts:9:24)
-    at syncAllModulesToDatabase (lib/module-sync.ts:26:9)
-    at initializeAndSyncModules (lib/initialize-modules.ts:14:48)
-    at module evaluation (app/api/modules/route.ts:11:25)
-    at Object.<anonymous> (.next/dev/server/app/api/modules/route.js:5:3)
-  133 |
-  134 |   findOne(table: string, query: any = {}) {
-> 135 |     return this.data[table].find((item: any) => {
-      |                             ^
-  136 |       for (const [key, value] of Object.entries(query)) {
-  137 |         if (item[key] !== value) {
-  138 |           return false
-Failed to sync module to database: TypeError: this.data[table].find is not a function
-    at JsonDatabase.findOne (lib/json-database.ts:135:29)
-    at ModuleRegistryRepository.findByField (lib/repositories/BaseRepository.ts:29:24)
-    at ModuleRegistryRepository.findByModuleId (lib/repositories/ModuleRegistryRepository.ts:41:17)
-    at ModuleRegistryRepository.registerModule (lib/repositories/ModuleRegistryRepository.ts:49:27)
-    at syncModuleToDatabase (lib/module-sync.ts:9:24)
-    at syncAllModulesToDatabase (lib/module-sync.ts:26:9)
-    at initializeAndSyncModules (lib/initialize-modules.ts:14:48)
-    at module evaluation (app/api/modules/route.ts:11:25)
-    at Object.<anonymous> (.next/dev/server/app/api/modules/route.js:5:3)
-  133 |
-  134 |   findOne(table: string, query: any = {}) {
-> 135 |     return this.data[table].find((item: any) => {
-      |                             ^
-  136 |       for (const [key, value] of Object.entries(query)) {
-  137 |         if (item[key] !== value) {
-  138 |           return false
-Synced 0/17 modules to database
-✅ Successfully synced 0/17 modules to database
- GET /api/modules 200 in 398ms (next.js: 394ms, application-code: 3ms)
- GET /api/modules 200 in 399ms (next.js: 397ms, application-code: 1831µs)
- GET /api/admin/pages/test 200 in 946ms (next.js: 941ms, application-code: 5ms)
- GET /api/admin/pages/test 200 in 948ms (next.js: 942ms, application-code: 6ms)
- GET /api/modules 200 in 3ms (next.js: 1374µs, application-code: 1613µs)
- GET /api/modules 200 in 2ms (next.js: 1178µs, application-code: 1232µs)
+Synced 17/17 modules to database
+✅ Successfully synced 17/17 modules to database
+ GET /api/modules/site-root/schema 200 in 895ms (next.js: 890ms, application-code: 4ms)
+ GET /api/modules/site-root/schema 200 in 897ms (next.js: 893ms, application-code: 4ms)
 🔄 Initializing and syncing modules to database...
 Module with ID "site-root" is already registered. Overwriting.
 Module with ID "site-header" is already registered. Overwriting.
@@ -612,6 +86,14 @@ Module with ID "section-image" is already registered. Overwriting.
 📦 Found 17 modules
 Synced 17/17 modules to database
 ✅ Successfully synced 17/17 modules to database
+ GET /api/modules 200 in 70ms (next.js: 66ms, application-code: 4ms)
+ GET /api/modules 200 in 75ms (next.js: 74ms, application-code: 1572µs)
+ GET /api/admin/pages/home 200 in 556ms (next.js: 549ms, application-code: 7ms)
+ GET /api/admin/pages/home 200 in 561ms (next.js: 551ms, application-code: 10ms)
+ GET /api/modules 200 in 3ms (next.js: 1147µs, application-code: 1695µs)
+ GET /api/modules 200 in 2ms (next.js: 1092µs, application-code: 1280µs)
+ GET /api/modules/site-header/schema 200 in 17ms (next.js: 14ms, application-code: 3ms)
+ GET /api/modules/site-header/schema 200 in 65ms (next.js: 17ms, application-code: 48ms)
 Module with ID "site-root" is already registered. Overwriting.
 Module with ID "site-header" is already registered. Overwriting.
 Module with ID "section-hero" is already registered. Overwriting.
@@ -629,16 +111,11 @@ Module with ID "product-detail" is already registered. Overwriting.
 Module with ID "section-404" is already registered. Overwriting.
 Module with ID "section-content" is already registered. Overwriting.
 Module with ID "section-image" is already registered. Overwriting.
- GET /admin/module-preview/section-image 200 in 342ms (next.js: 279ms, application-code: 63ms)
+ GET /admin/module-preview/site-header 200 in 441ms (next.js: 358ms, application-code: 84ms)
 🔄 Initializing and syncing modules to database...
 📦 Found 17 modules
 Synced 17/17 modules to database
 ✅ Successfully synced 17/17 modules to database
- GET /api/modules/section-image/schema 200 in 511ms (next.js: 506ms, application-code: 6ms)
- GET /api/modules/section-image/schema 200 in 435ms (next.js: 429ms, application-code: 6ms)
- GET /uploads/editor/1774828227809_qynpzu.webp 404 in 69ms (next.js: 10ms, application-code: 60ms)
- GET /uploads/editor/1774828231880_xxsx26.webp 404 in 69ms (next.js: 11ms, application-code: 58ms)
- GET /api/admin/themes 200 in 24ms (next.js: 15ms, application-code: 9ms)
 Module with ID "site-root" is already registered. Overwriting.
 Module with ID "site-header" is already registered. Overwriting.
 Module with ID "section-hero" is already registered. Overwriting.
@@ -656,627 +133,96 @@ Module with ID "product-detail" is already registered. Overwriting.
 Module with ID "section-404" is already registered. Overwriting.
 Module with ID "section-content" is already registered. Overwriting.
 Module with ID "section-image" is already registered. Overwriting.
- GET /api/modules/section-image/preview 200 in 554ms (next.js: 552ms, application-code: 2ms)
- GET /uploads/editor/1774828231880_xxsx26.webp 404 in 27ms (next.js: 2ms, application-code: 25ms)
- GET /uploads/editor/1774828231880_xxsx26.webp 404 in 25ms (next.js: 2ms, application-code: 23ms)
-[browser] WebPImage load error: http://localhost:3000/uploads/editor/1774828231880_xxsx26.webp (components/WebPImage.tsx:89:13)
-[browser] WebPImage load error: http://localhost:3000/uploads/editor/1774828231880_xxsx26.webp (components/WebPImage.tsx:89:13)
- POST /api/upload?quality=80 200 in 134ms (next.js: 118ms, application-code: 16ms)
- GET /uploads/editor/1774828231880_xxsx26.webp 404 in 56ms (next.js: 14ms, application-code: 42ms)
-[browser] WebPImage load error: http://localhost:3000/uploads/editor/1774828231880_xxsx26.webp (components/WebPImage.tsx:89:13)
- POST /api/upload?quality=80 200 in 30ms (next.js: 7ms, application-code: 23ms)
-[browser] Image with src "http://localhost:3000/uploads/editor/1774831557703_1r59o6.webp" was detected as the Largest Contentful Paint (LCP). Please add the `loading="eager"` property if this image is above the fold.
-Read more: https://nextjs.org/docs/app/api-reference/components/image#loading
- GET /api/modules/section-image/schema 200 in 10ms (next.js: 5ms, application-code: 4ms)
- GET /api/modules/section-image/schema 200 in 18ms (next.js: 16ms, application-code: 2ms)
- GET /admin/module-preview/section-image 200 in 138ms (next.js: 40ms, application-code: 98ms)
- GET /api/admin/themes 200 in 9ms (next.js: 4ms, application-code: 5ms)
- GET /api/modules/section-image/preview 200 in 27ms (next.js: 14ms, application-code: 13ms)
+ GET /api/admin/themes 200 in 64ms (next.js: 3ms, application-code: 62ms)
+ GET /api/modules/site-header/preview 200 in 543ms (next.js: 541ms, application-code: 1997µs)
+ GET /api/modules/section-hero/schema 200 in 69ms (next.js: 66ms, application-code: 3ms)
+ GET /api/modules/section-hero/schema 200 in 13ms (next.js: 11ms, application-code: 1703µs)
+ GET /admin/module-preview/section-hero 200 in 90ms (next.js: 25ms, application-code: 65ms)
+[browser] Accessing element.ref was removed in React 19. ref is now a regular prop. It will be removed from the JSX Element type in a future release. 
+[browser] Accessing element.ref was removed in React 19. ref is now a regular prop. It will be removed from the JSX Element type in a future release. 
+ GET /api/admin/themes 200 in 82ms (next.js: 10ms, application-code: 71ms)
+ GET /api/modules/section-hero/preview 200 in 21ms (next.js: 14ms, application-code: 7ms)
 🔄 Initializing and syncing modules to database...
 📦 Found 17 modules
 Synced 17/17 modules to database
 ✅ Successfully synced 17/17 modules to database
-[browser] Image with src "http://localhost:3000/uploads/editor/1774831557703_1r59o6.webp" was detected as the Largest Contentful Paint (LCP). Please add the `loading="eager"` property if this image is above the fold.
-Read more: https://nextjs.org/docs/app/api-reference/components/image#loading
- PUT /api/admin/pages/test 200 in 72ms (next.js: 19ms, application-code: 53ms)
- GET / 200 in 70ms (next.js: 8ms, application-code: 62ms)
- GET /api/admin/themes 200 in 12ms (next.js: 6ms, application-code: 5ms)
- GET /uploads/editor/1774826048827_kbx6oa.webp 404 in 32ms (next.js: 4ms, application-code: 28ms)
- GET /uploads/editor/1774826048827_kbx6oa.webp 404 in 58ms (next.js: 3ms, application-code: 54ms)
-[browser] WebPImage load error: http://localhost:3000/uploads/editor/1774826048827_kbx6oa.webp (components/WebPImage.tsx:89:13)
- GET /uploads/editor/1774826048827_kbx6oa.webp 404 in 64ms (next.js: 4ms, application-code: 61ms)
-[browser] WebPImage load error: http://localhost:3000/uploads/editor/1774826048827_kbx6oa.webp (components/WebPImage.tsx:89:13)
- GET /uploads/editor/1774826051547_nkf8ju.webp 404 in 64ms (next.js: 29ms, application-code: 34ms)
-[browser] WebPImage load error: http://localhost:3000/uploads/editor/1774826051547_nkf8ju.webp (components/WebPImage.tsx:89:13)
- GET /uploads/editor/1774826048827_kbx6oa.webp 404 in 124ms (next.js: 11ms, application-code: 113ms)
-[browser] WebPImage load error: http://localhost:3000/uploads/editor/1774826048827_kbx6oa.webp (components/WebPImage.tsx:89:13)
- GET / 200 in 53ms (next.js: 5ms, application-code: 48ms)
- GET /api/admin/themes 200 in 8ms (next.js: 3ms, application-code: 5ms)
- GET /uploads/editor/1774826048827_kbx6oa.webp 404 in 36ms (next.js: 3ms, application-code: 34ms)
- GET /uploads/editor/1774826048827_kbx6oa.webp 404 in 37ms (next.js: 3ms, application-code: 33ms)
-[browser] WebPImage load error: http://localhost:3000/uploads/editor/1774826048827_kbx6oa.webp (components/WebPImage.tsx:89:13)
- GET /uploads/editor/1774826048827_kbx6oa.webp 404 in 34ms (next.js: 3ms, application-code: 31ms)
-[browser] WebPImage load error: http://localhost:3000/uploads/editor/1774826048827_kbx6oa.webp (components/WebPImage.tsx:89:13)
- GET /api/modules/section-image/schema 200 in 33ms (next.js: 23ms, application-code: 10ms)
- GET /api/modules/section-image/schema 200 in 20ms (next.js: 13ms, application-code: 7ms)
- GET /admin/module-preview/section-image 200 in 245ms (next.js: 6ms, application-code: 239ms)
- GET /uploads/editor/1774831552666_q21t5f.webp 404 in 43ms (next.js: 4ms, application-code: 38ms)
- GET /uploads/editor/1774831557703_1r59o6.webp 404 in 56ms (next.js: 14ms, application-code: 43ms)
- GET /api/admin/themes 200 in 87ms (next.js: 14ms, application-code: 72ms)
- GET /api/modules/section-image/preview 200 in 19ms (next.js: 17ms, application-code: 1910µs)
- GET /uploads/editor/1774831557703_1r59o6.webp 404 in 102ms (next.js: 27ms, application-code: 75ms)
-[browser] WebPImage load error: http://localhost:3000/uploads/editor/1774831557703_1r59o6.webp (components/WebPImage.tsx:89:13)
+ GET /api/modules/site-header/schema 200 in 83ms (next.js: 78ms, application-code: 4ms)
+ GET /api/modules/site-header/schema 200 in 84ms (next.js: 83ms, application-code: 1721µs)
+ GET /admin/module-preview/site-header 200 in 145ms (next.js: 10ms, application-code: 135ms)
+ GET /api/admin/themes 200 in 28ms (next.js: 17ms, application-code: 12ms)
+ GET /api/modules/site-header/preview 200 in 9ms (next.js: 7ms, application-code: 2ms)
 🔄 Initializing and syncing modules to database...
 📦 Found 17 modules
 Synced 17/17 modules to database
 ✅ Successfully synced 17/17 modules to database
- GET /uploads/editor/1774831557703_1r59o6.webp 404 in 42ms (next.js: 6ms, application-code: 36ms)
-[browser] WebPImage load error: http://localhost:3000/uploads/editor/1774831557703_1r59o6.webp (components/WebPImage.tsx:89:13)
- POST /api/upload?quality=80 200 in 49ms (next.js: 15ms, application-code: 34ms)
- GET /uploads/editor/1774831557703_1r59o6.webp 404 in 42ms (next.js: 5ms, application-code: 37ms)
-[browser] WebPImage load error: http://localhost:3000/uploads/editor/1774831557703_1r59o6.webp (components/WebPImage.tsx:89:13)
- POST /api/upload?quality=80 200 in 27ms (next.js: 4ms, application-code: 22ms)
- GET /uploads/editor/1774831557703_1r59o6.webp 404 in 48ms (next.js: 6ms, application-code: 42ms)
-[browser] WebPImage load error: http://localhost:3000/uploads/editor/1774831557703_1r59o6.webp (components/WebPImage.tsx:89:13)
- PUT /api/admin/pages/test 200 in 28ms (next.js: 9ms, application-code: 19ms)
- GET /admin/dashboard?menu=pages 200 in 83ms (next.js: 10ms, application-code: 73ms)
- GET /api/admin/pages 200 in 13ms (next.js: 4ms, application-code: 9ms)
- GET /api/admin/auth 200 in 6ms (next.js: 1632µs, application-code: 4ms)
- GET /api/admin/themes 200 in 7ms (next.js: 3ms, application-code: 4ms)
- GET /api/admin/pages 200 in 10ms (next.js: 2ms, application-code: 7ms)
-[browser] [@arco-design/web-react]: Element does not define the `getRootDOMNode` method causing a call to React.findDOMNode. but findDOMNode is deprecated in StrictMode. Please check the code logic { detail: [ { element: [1mnull[22m, instance: [32m'[object Object]'[39m } ] } 
-[browser] [@arco-design/web-react]: Element does not define the `getRootDOMNode` method causing a call to React.findDOMNode. but findDOMNode is deprecated in StrictMode. Please check the code logic { detail: [ { element: [90mundefined[39m, instance: [32m'[object Object]'[39m } ] } 
- GET /api/modules 200 in 11ms (next.js: 6ms, application-code: 5ms)
- GET /api/modules 200 in 14ms (next.js: 11ms, application-code: 3ms)
- GET /api/admin/pages/test 200 in 10ms (next.js: 6ms, application-code: 4ms)
- GET /api/admin/pages/test 200 in 10ms (next.js: 7ms, application-code: 3ms)
- GET /api/modules 200 in 4ms (next.js: 1839µs, application-code: 3ms)
- GET /api/modules 200 in 6ms (next.js: 5ms, application-code: 1257µs)
- GET /api/modules/section-image/schema 200 in 12ms (next.js: 8ms, application-code: 4ms)
- GET /api/modules/section-image/schema 200 in 16ms (next.js: 15ms, application-code: 1730µs)
- GET /admin/module-preview/section-image 200 in 105ms (next.js: 23ms, application-code: 82ms)
- GET /uploads/editor/1774831557703_1r59o6.webp 404 in 46ms (next.js: 11ms, application-code: 36ms)
-🔄 Initializing and syncing modules to database...
-📦 Found 17 modules
- GET /api/admin/themes 200 in 18ms (next.js: 8ms, application-code: 10ms)
- GET /api/modules/section-image/preview 200 in 12ms (next.js: 9ms, application-code: 2ms)
-Synced 17/17 modules to database
-✅ Successfully synced 17/17 modules to database
- GET /uploads/editor/1774831557703_1r59o6.webp 404 in 44ms (next.js: 5ms, application-code: 39ms)
-[browser] WebPImage load error: http://localhost:3000/uploads/editor/1774831557703_1r59o6.webp (components/WebPImage.tsx:89:13)
- GET /uploads/editor/1774831557703_1r59o6.webp 404 in 26ms (next.js: 3ms, application-code: 23ms)
-[browser] WebPImage load error: http://localhost:3000/uploads/editor/1774831557703_1r59o6.webp (components/WebPImage.tsx:89:13)
- GET /api/admin/pages 200 in 16ms (next.js: 7ms, application-code: 9ms)
- GET /api/admin/pages 200 in 24ms (next.js: 17ms, application-code: 7ms)
- GET /api/admin/pages 200 in 7ms (next.js: 2ms, application-code: 5ms)
- GET /api/admin/pages 200 in 8ms (next.js: 1933µs, application-code: 6ms)
- GET /api/modules 200 in 8ms (next.js: 3ms, application-code: 5ms)
- GET /api/modules 200 in 6ms (next.js: 3ms, application-code: 3ms)
- GET /api/admin/pages/home 200 in 8ms (next.js: 3ms, application-code: 5ms)
- GET /api/admin/pages/home 200 in 5ms (next.js: 842µs, application-code: 4ms)
- GET /api/modules 200 in 3ms (next.js: 1407µs, application-code: 1602µs)
- GET /api/modules 200 in 5ms (next.js: 4ms, application-code: 1840µs)
- GET /api/modules/section-image/schema 200 in 35ms (next.js: 34ms, application-code: 1633µs)
- GET /api/modules/section-image/schema 200 in 4ms (next.js: 1571µs, application-code: 1954µs)
- GET /admin/module-preview/section-image 200 in 121ms (next.js: 9ms, application-code: 112ms)
- GET /uploads/editor/1774826051547_nkf8ju.webp 404 in 60ms (next.js: 6ms, application-code: 54ms)
- GET /uploads/editor/1774826048827_kbx6oa.webp 404 in 60ms (next.js: 26ms, application-code: 35ms)
- GET /api/admin/themes 200 in 24ms (next.js: 11ms, application-code: 13ms)
- GET /api/modules/section-image/preview 200 in 12ms (next.js: 9ms, application-code: 3ms)
+ PUT /api/admin/pages/home 200 in 54ms (next.js: 11ms, application-code: 43ms)
+ GET /uploads/editor/1774831748321_utx7e6.webp 404 in 69ms (next.js: 37ms, application-code: 32ms)
+[browser] WebPImage load error: http://localhost:3000/uploads/editor/1774831748321_utx7e6.webp (components/WebPImage.tsx:89:13)
+ GET /uploads/editor/1774831748321_utx7e6.webp 404 in 59ms (next.js: 6ms, application-code: 54ms)
+[browser] WebPImage load error: http://localhost:3000/uploads/editor/1774831748321_utx7e6.webp (components/WebPImage.tsx:89:13)
+ GET / 200 in 63ms (next.js: 6ms, application-code: 57ms)
+ GET /api/admin/themes 200 in 11ms (next.js: 4ms, application-code: 7ms)
+ GET /uploads/editor/1774831748321_utx7e6.webp 404 in 31ms (next.js: 4ms, application-code: 26ms)
+[browser] WebPImage load error: http://localhost:3000/uploads/editor/1774831748321_utx7e6.webp (components/WebPImage.tsx:89:13)
+ GET /uploads/editor/1774831748321_utx7e6.webp 404 in 50ms (next.js: 4ms, application-code: 46ms)
+[browser] WebPImage load error: http://localhost:3000/uploads/editor/1774831748321_utx7e6.webp (components/WebPImage.tsx:89:13)
+ GET /uploads/editor/1774831753501_lw0111.webp 404 in 95ms (next.js: 8ms, application-code: 87ms)
+[browser] WebPImage load error: http://localhost:3000/uploads/editor/1774831753501_lw0111.webp (components/WebPImage.tsx:89:13)
+ GET /uploads/editor/1774831748321_utx7e6.webp 404 in 114ms (next.js: 9ms, application-code: 105ms)
+[browser] WebPImage load error: http://localhost:3000/uploads/editor/1774831748321_utx7e6.webp (components/WebPImage.tsx:89:13)
+ GET /api/modules/site-header/schema 200 in 49ms (next.js: 46ms, application-code: 4ms)
+ GET /api/modules/site-header/schema 200 in 5ms (next.js: 1808µs, application-code: 3ms)
+ GET /admin/module-preview/site-header 200 in 62ms (next.js: 11ms, application-code: 50ms)
+ GET /api/admin/themes 200 in 8ms (next.js: 5ms, application-code: 3ms)
+ GET /api/modules/site-header/preview 200 in 20ms (next.js: 7ms, application-code: 12ms)
 🔄 Initializing and syncing modules to database...
 📦 Found 17 modules
 Synced 17/17 modules to database
 ✅ Successfully synced 17/17 modules to database
- GET /uploads/editor/1774826051547_nkf8ju.webp 404 in 42ms (next.js: 14ms, application-code: 27ms)
-[browser] WebPImage load error: http://localhost:3000/uploads/editor/1774826051547_nkf8ju.webp (components/WebPImage.tsx:89:13)
- GET /uploads/editor/1774826051547_nkf8ju.webp 404 in 27ms (next.js: 3ms, application-code: 25ms)
-[browser] WebPImage load error: http://localhost:3000/uploads/editor/1774826051547_nkf8ju.webp (components/WebPImage.tsx:89:13)
-[browser] Image with src "http://localhost:3000/uploads/editor/1774826051547_nkf8ju.webp" was detected as the Largest Contentful Paint (LCP). Please add the `loading="eager"` property if this image is above the fold.
-Read more: https://nextjs.org/docs/app/api-reference/components/image#loading
- POST /api/upload?quality=80 200 in 26ms (next.js: 3ms, application-code: 23ms)
- GET /uploads/editor/1774826051547_nkf8ju.webp 404 in 43ms (next.js: 4ms, application-code: 39ms)
-[browser] WebPImage load error: http://localhost:3000/uploads/editor/1774826051547_nkf8ju.webp (components/WebPImage.tsx:89:13)
- POST /api/upload?quality=80 200 in 55ms (next.js: 6ms, application-code: 49ms)
-[browser] Image with src "http://localhost:3000/uploads/editor/1774831753501_lw0111.webp" was detected as the Largest Contentful Paint (LCP). Please add the `loading="eager"` property if this image is above the fold.
-Read more: https://nextjs.org/docs/app/api-reference/components/image#loading
- PUT /api/admin/pages/home 200 in 30ms (next.js: 10ms, application-code: 19ms)
- GET / 200 in 62ms (next.js: 12ms, application-code: 49ms)
- GET /api/admin/themes 200 in 89ms (next.js: 10ms, application-code: 79ms)
- GET /api/modules/section-image/schema 200 in 49ms (next.js: 47ms, application-code: 1884µs)
- GET /api/modules/section-image/schema 200 in 9ms (next.js: 8ms, application-code: 1729µs)
- GET /admin/module-preview/section-image 200 in 62ms (next.js: 10ms, application-code: 52ms)
- GET /api/admin/themes 200 in 14ms (next.js: 7ms, application-code: 7ms)
- GET /api/modules/section-image/preview 200 in 7ms (next.js: 5ms, application-code: 2ms)
-[browser] Image with src "http://localhost:3000/uploads/editor/1774831753501_lw0111.webp" was detected as the Largest Contentful Paint (LCP). Please add the `loading="eager"` property if this image is above the fold.
-Read more: https://nextjs.org/docs/app/api-reference/components/image#loading
-🔄 Initializing and syncing modules to database...
-📦 Found 17 modules
-Synced 17/17 modules to database
-✅ Successfully synced 17/17 modules to database
- PUT /api/admin/pages/home 200 in 30ms (next.js: 10ms, application-code: 20ms)
- GET / 200 in 57ms (next.js: 6ms, application-code: 51ms)
- GET /api/admin/themes 200 in 11ms (next.js: 5ms, application-code: 7ms)
-[browser] Image with src "http://localhost:3000/uploads/editor/1774831748321_utx7e6.webp" was detected as the Largest Contentful Paint (LCP). Please add the `loading="eager"` property if this image is above the fold.
-Read more: https://nextjs.org/docs/app/api-reference/components/image#loading
- GET /api/modules/section-image/schema 200 in 131ms (next.js: 129ms, application-code: 3ms)
- GET /api/modules/section-image/schema 200 in 160ms (next.js: 159ms, application-code: 1369µs)
- GET /admin/module-preview/section-image 200 in 171ms (next.js: 12ms, application-code: 160ms)
- GET /api/admin/themes 200 in 16ms (next.js: 11ms, application-code: 5ms)
- GET /api/modules/section-image/preview 200 in 22ms (next.js: 15ms, application-code: 7ms)
-[browser] Image with src "http://localhost:3000/uploads/editor/1774831753501_lw0111.webp" was detected as the Largest Contentful Paint (LCP). Please add the `loading="eager"` property if this image is above the fold.
-Read more: https://nextjs.org/docs/app/api-reference/components/image#loading
-🔄 Initializing and syncing modules to database...
-📦 Found 17 modules
-Synced 17/17 modules to database
-✅ Successfully synced 17/17 modules to database
- GET / 200 in 57ms (next.js: 5ms, application-code: 51ms)
- GET /api/admin/themes 200 in 9ms (next.js: 4ms, application-code: 5ms)
-[browser] Image with src "http://localhost:3000/uploads/editor/1774831748321_utx7e6.webp" was detected as the Largest Contentful Paint (LCP). Please add the `loading="eager"` property if this image is above the fold.
-Read more: https://nextjs.org/docs/app/api-reference/components/image#loading
- GET /api/modules/section-content/schema 200 in 18ms (next.js: 11ms, application-code: 7ms)
- GET /api/modules/section-content/schema 200 in 48ms (next.js: 46ms, application-code: 1776µs)
-[browser] [tiptap warn]: Duplicate extension names found: ['link', 'underline']. This can lead to issues.
- GET /admin/module-preview/section-content 200 in 88ms (next.js: 24ms, application-code: 64ms)
- GET /api/admin/themes 200 in 5ms (next.js: 3ms, application-code: 2ms)
- GET /api/modules/section-content/preview 200 in 7ms (next.js: 4ms, application-code: 3ms)
-🔄 Initializing and syncing modules to database...
-📦 Found 17 modules
-Synced 17/17 modules to database
-✅ Successfully synced 17/17 modules to database
- GET /api/modules/section-image/schema 200 in 34ms (next.js: 33ms, application-code: 1533µs)
- GET /api/modules/section-image/schema 200 in 4ms (next.js: 1817µs, application-code: 2ms)
- GET /admin/module-preview/section-image 200 in 73ms (next.js: 7ms, application-code: 66ms)
- GET /api/admin/themes 200 in 49ms (next.js: 33ms, application-code: 16ms)
- GET /api/modules/section-image/preview 200 in 23ms (next.js: 18ms, application-code: 6ms)
-🔄 Initializing and syncing modules to database...
-📦 Found 17 modules
-Synced 17/17 modules to database
-✅ Successfully synced 17/17 modules to database
-[browser] Image with src "http://localhost:3000/uploads/editor/1774831753501_lw0111.webp" was detected as the Largest Contentful Paint (LCP). Please add the `loading="eager"` property if this image is above the fold.
-Read more: https://nextjs.org/docs/app/api-reference/components/image#loading
-✓ Compiled in 121ms
-[browser] Module with ID "site-root" is already registered. Overwriting. (modules/registry.ts:8:15)
-[browser] Module with ID "site-header" is already registered. Overwriting. (modules/registry.ts:8:15)
-[browser] Module with ID "section-hero" is already registered. Overwriting. (modules/registry.ts:8:15)
-[browser] Module with ID "section-services" is already registered. Overwriting. (modules/registry.ts:8:15)
-[browser] Module with ID "section-partner" is already registered. Overwriting. (modules/registry.ts:8:15)
-[browser] Module with ID "site-root" is already registered. Overwriting. (modules/registry.ts:8:15)
-[browser] Module with ID "section-products" is already registered. Overwriting. (modules/registry.ts:8:15)
-[browser] Module with ID "section-pricing" is already registered. Overwriting. (modules/registry.ts:8:15)
-[browser] Module with ID "site-header" is already registered. Overwriting. (modules/registry.ts:8:15)
-[browser] Module with ID "section-about" is already registered. Overwriting. (modules/registry.ts:8:15)
-[browser] Module with ID "section-contact" is already registered. Overwriting. (modules/registry.ts:8:15)
-[browser] Module with ID "section-hero" is already registered. Overwriting. (modules/registry.ts:8:15)
-[browser] Module with ID "site-footer" is already registered. Overwriting. (modules/registry.ts:8:15)
-[browser] Module with ID "section-services" is already registered. Overwriting. (modules/registry.ts:8:15)
-[browser] Module with ID "news-list" is already registered. Overwriting. (modules/registry.ts:8:15)
-[browser] Module with ID "news-detail" is already registered. Overwriting. (modules/registry.ts:8:15)
-[browser] Module with ID "section-partner" is already registered. Overwriting. (modules/registry.ts:8:15)
-[browser] Module with ID "product-list" is already registered. Overwriting. (modules/registry.ts:8:15)
-[browser] Module with ID "product-detail" is already registered. Overwriting. (modules/registry.ts:8:15)
-[browser] Module with ID "section-products" is already registered. Overwriting. (modules/registry.ts:8:15)
-[browser] Module with ID "section-pricing" is already registered. Overwriting. (modules/registry.ts:8:15)
-[browser] Module with ID "section-404" is already registered. Overwriting. (modules/registry.ts:8:15)
-[browser] Module with ID "section-about" is already registered. Overwriting. (modules/registry.ts:8:15)
-[browser] Module with ID "section-content" is already registered. Overwriting. (modules/registry.ts:8:15)
-[browser] Module with ID "section-image" is already registered. Overwriting. (modules/registry.ts:8:15)
-[browser] Module with ID "section-contact" is already registered. Overwriting. (modules/registry.ts:8:15)
-[browser] Module with ID "site-footer" is already registered. Overwriting. (modules/registry.ts:8:15)
-[browser] Module with ID "news-list" is already registered. Overwriting. (modules/registry.ts:8:15)
-[browser] Module with ID "news-detail" is already registered. Overwriting. (modules/registry.ts:8:15)
-[browser] Module with ID "product-list" is already registered. Overwriting. (modules/registry.ts:8:15)
-[browser] Module with ID "product-detail" is already registered. Overwriting. (modules/registry.ts:8:15)
-[browser] Module with ID "section-404" is already registered. Overwriting. (modules/registry.ts:8:15)
-[browser] Module with ID "section-content" is already registered. Overwriting. (modules/registry.ts:8:15)
-[browser] Module with ID "section-image" is already registered. Overwriting. (modules/registry.ts:8:15)
-✓ Compiled in 55ms
+✓ Compiled in 722ms
+✓ Compiled in 363ms
+✓ Compiled in 136ms
+✓ Compiled in 133ms
+✓ Compiled in 292ms
 ⚠ Fast Refresh had to perform a full reload due to a runtime error.
-[browser] Uncaught ReferenceError: getSectionPadding is not defined
-    at ImageModule (modules/section-image/index.tsx:30:16)
+⚠ Fast Refresh had to perform a full reload due to a runtime error.
+[browser] Uncaught ReferenceError: drawerCtaText is not defined
+    at Header (components/common/header.tsx:238:18)
     at Set.forEach (<anonymous>)
-    at ModulePreviewPage (app/admin/module-preview/[id]/page.tsx:105:19)
-  28 |       id="image-section"
-  29 |       variant="default"
-> 30 |       padding={getSectionPadding()}
-     |                ^
-  31 |       maxWidth={config.fullWidth ? 'full' : 'xl'}
-  32 |       className={styles.section}
-  33 |       style={{
- GET / 200 in 376ms (next.js: 65ms, application-code: 312ms)
- GET /api/admin/themes 200 in 10ms (next.js: 3ms, application-code: 7ms)
+    at HeaderModule (modules/site-header/index.tsx:12:17)
+    at ModulePreviewPage (app/admin/module-preview/[id]/page.tsx:111:20)
+  236 |                 }}
+  237 |               >
+> 238 |                 {drawerCtaText}
+      |                  ^
+  239 |               </Button>
+  240 |             </Link>
+  241 |           </div>
+ GET / 200 in 747ms (next.js: 59ms, application-code: 687ms)
+ GET / 200 in 768ms (next.js: 146ms, application-code: 622ms)
+ GET /api/admin/themes 200 in 16ms (next.js: 9ms, application-code: 6ms)
+ GET /api/admin/themes 200 in 12ms (next.js: 9ms, application-code: 3ms)
 ⚠ Fast Refresh had to perform a full reload due to a runtime error.
 ⚠ Fast Refresh had to perform a full reload due to a runtime error.
 ⚠ Fast Refresh had to perform a full reload due to a runtime error.
-✓ Compiled in 149ms
+⚠ Fast Refresh had to perform a full reload due to a runtime error.
+⚠ Fast Refresh had to perform a full reload due to a runtime error.
+✓ Compiled in 80ms
 ⚠ Fast Refresh had to perform a full reload due to a runtime error.
 [browser] Encountered a script tag while rendering React component. Scripts inside React components are never executed when rendering on the client. Consider using template tag instead (https://developer.mozilla.org/en-US/docs/Web/HTML/Element/template). 
     at Set.forEach (<anonymous>) (<anonymous>)
- GET /api/admin/themes 200 in 102ms (next.js: 96ms, application-code: 6ms)
- GET /api/modules/section-image/preview 200 in 153ms (next.js: 147ms, application-code: 6ms)
- GET / 200 in 570ms (next.js: 12ms, application-code: 558ms)
- GET /admin/module-preview/section-image 200 in 334ms (next.js: 44ms, application-code: 291ms)
- GET /admin/dashboard?menu=pages 200 in 108ms (next.js: 13ms, application-code: 96ms)
- GET /api/admin/themes 200 in 12ms (next.js: 6ms, application-code: 6ms)
- GET /api/admin/themes 200 in 11ms (next.js: 1395µs, application-code: 10ms)
- GET /api/admin/pages 200 in 87ms (next.js: 16ms, application-code: 70ms)
- GET /api/admin/auth 200 in 93ms (next.js: 61ms, application-code: 32ms)
- GET /api/admin/pages 200 in 16ms (next.js: 10ms, application-code: 6ms)
-[browser] [@arco-design/web-react]: Element does not define the `getRootDOMNode` method causing a call to React.findDOMNode. but findDOMNode is deprecated in StrictMode. Please check the code logic { detail: [ { element: [1mnull[22m, instance: [32m'[object Object]'[39m } ] } 
-[browser] [@arco-design/web-react]: Element does not define the `getRootDOMNode` method causing a call to React.findDOMNode. but findDOMNode is deprecated in StrictMode. Please check the code logic { detail: [ { element: [90mundefined[39m, instance: [32m'[object Object]'[39m } ] } 
-🔄 Initializing and syncing modules to database...
-📦 Found 17 modules
-Synced 17/17 modules to database
-✅ Successfully synced 17/17 modules to database
- GET /api/modules 200 in 182ms (next.js: 175ms, application-code: 7ms)
- GET /api/modules 200 in 183ms (next.js: 181ms, application-code: 1513µs)
- GET /api/admin/pages/home 200 in 187ms (next.js: 184ms, application-code: 4ms)
- GET /api/admin/pages/home 200 in 189ms (next.js: 185ms, application-code: 3ms)
- GET /api/modules 200 in 3ms (next.js: 994µs, application-code: 1830µs)
- GET /api/modules 200 in 5ms (next.js: 4ms, application-code: 1681µs)
-🔄 Initializing and syncing modules to database...
-📦 Found 17 modules
-Synced 17/17 modules to database
-✅ Successfully synced 17/17 modules to database
- GET /api/modules/section-image/schema 200 in 78ms (next.js: 74ms, application-code: 3ms)
- GET /api/modules/section-image/schema 200 in 80ms (next.js: 78ms, application-code: 2ms)
- GET /admin/module-preview/section-image 200 in 157ms (next.js: 10ms, application-code: 148ms)
- GET /api/admin/themes 200 in 12ms (next.js: 6ms, application-code: 6ms)
- GET /api/modules/section-image/preview 200 in 68ms (next.js: 7ms, application-code: 62ms)
-🔄 Initializing and syncing modules to database...
-📦 Found 17 modules
-Synced 17/17 modules to database
-✅ Successfully synced 17/17 modules to database
-[browser] Image with src "http://localhost:3000/uploads/editor/1774831753501_lw0111.webp" was detected as the Largest Contentful Paint (LCP). Please add the `loading="eager"` property if this image is above the fold.
-Read more: https://nextjs.org/docs/app/api-reference/components/image#loading
-✓ Compiled in 73ms
-[browser] Module with ID "site-root" is already registered. Overwriting. (modules/registry.ts:8:15)
-[browser] Module with ID "site-header" is already registered. Overwriting. (modules/registry.ts:8:15)
-[browser] Module with ID "section-hero" is already registered. Overwriting. (modules/registry.ts:8:15)
-[browser] Module with ID "section-services" is already registered. Overwriting. (modules/registry.ts:8:15)
-[browser] Module with ID "section-partner" is already registered. Overwriting. (modules/registry.ts:8:15)
-[browser] Module with ID "section-products" is already registered. Overwriting. (modules/registry.ts:8:15)
-[browser] Module with ID "section-pricing" is already registered. Overwriting. (modules/registry.ts:8:15)
-[browser] Module with ID "site-root" is already registered. Overwriting. (modules/registry.ts:8:15)
-[browser] Module with ID "site-header" is already registered. Overwriting. (modules/registry.ts:8:15)
-[browser] Module with ID "section-about" is already registered. Overwriting. (modules/registry.ts:8:15)
-[browser] Module with ID "section-contact" is already registered. Overwriting. (modules/registry.ts:8:15)
-[browser] Module with ID "section-hero" is already registered. Overwriting. (modules/registry.ts:8:15)
-[browser] Module with ID "site-footer" is already registered. Overwriting. (modules/registry.ts:8:15)
-[browser] Module with ID "news-list" is already registered. Overwriting. (modules/registry.ts:8:15)
-[browser] Module with ID "section-services" is already registered. Overwriting. (modules/registry.ts:8:15)
-[browser] Module with ID "news-detail" is already registered. Overwriting. (modules/registry.ts:8:15)
-[browser] Module with ID "section-partner" is already registered. Overwriting. (modules/registry.ts:8:15)
-[browser] Module with ID "product-list" is already registered. Overwriting. (modules/registry.ts:8:15)
-[browser] Module with ID "product-detail" is already registered. Overwriting. (modules/registry.ts:8:15)
-[browser] Module with ID "section-products" is already registered. Overwriting. (modules/registry.ts:8:15)
-[browser] Module with ID "section-404" is already registered. Overwriting. (modules/registry.ts:8:15)
-[browser] Module with ID "section-content" is already registered. Overwriting. (modules/registry.ts:8:15)
-[browser] Module with ID "section-pricing" is already registered. Overwriting. (modules/registry.ts:8:15)
-[browser] Module with ID "section-image" is already registered. Overwriting. (modules/registry.ts:8:15)
-[browser] Module with ID "section-about" is already registered. Overwriting. (modules/registry.ts:8:15)
-[browser] Module with ID "section-contact" is already registered. Overwriting. (modules/registry.ts:8:15)
-[browser] Module with ID "site-footer" is already registered. Overwriting. (modules/registry.ts:8:15)
-[browser] Module with ID "news-list" is already registered. Overwriting. (modules/registry.ts:8:15)
-[browser] Module with ID "news-detail" is already registered. Overwriting. (modules/registry.ts:8:15)
-[browser] Module with ID "product-list" is already registered. Overwriting. (modules/registry.ts:8:15)
-[browser] Module with ID "product-detail" is already registered. Overwriting. (modules/registry.ts:8:15)
-[browser] Module with ID "section-404" is already registered. Overwriting. (modules/registry.ts:8:15)
-[browser] Module with ID "section-content" is already registered. Overwriting. (modules/registry.ts:8:15)
-[browser] Module with ID "section-image" is already registered. Overwriting. (modules/registry.ts:8:15)
-✓ Compiled in 351ms
-[browser] ⨯ unhandledRejection: Error: No link element found for chunk /_next/static/chunks/_0as-wu.._.css
-    at new Promise (<anonymous>)
-✓ Compiled in 96ms
-✓ Compiled in 276ms
- GET / 200 in 120ms (next.js: 57ms, application-code: 63ms)
- GET /api/admin/themes 200 in 5ms (next.js: 1920µs, application-code: 3ms)
-✓ Compiled in 111ms
- GET / 200 in 79ms (next.js: 30ms, application-code: 49ms)
- GET /api/admin/themes 200 in 24ms (next.js: 13ms, application-code: 11ms)
-[browser] Image with src "http://localhost:3000/uploads/editor/1774831748321_utx7e6.webp" was detected as the Largest Contentful Paint (LCP). Please add the `loading="eager"` property if this image is above the fold.
-Read more: https://nextjs.org/docs/app/api-reference/components/image#loading
-[browser] [@arco-design/web-react]: Element does not define the `getRootDOMNode` method causing a call to React.findDOMNode. but findDOMNode is deprecated in StrictMode. Please check the code logic { detail: [ { element: [1mnull[22m, instance: [32m'[object Object]'[39m } ] } 
-[browser] [@arco-design/web-react]: Element does not define the `getRootDOMNode` method causing a call to React.findDOMNode. but findDOMNode is deprecated in StrictMode. Please check the code logic { detail: [ { element: [90mundefined[39m, instance: [32m'[object Object]'[39m } ] } 
-[browser] Module with ID "site-root" is already registered. Overwriting. (modules/registry.ts:8:15)
-[browser] Module with ID "site-header" is already registered. Overwriting. (modules/registry.ts:8:15)
-[browser] Module with ID "section-hero" is already registered. Overwriting. (modules/registry.ts:8:15)
-[browser] Module with ID "section-services" is already registered. Overwriting. (modules/registry.ts:8:15)
-[browser] Module with ID "section-partner" is already registered. Overwriting. (modules/registry.ts:8:15)
-[browser] Module with ID "section-products" is already registered. Overwriting. (modules/registry.ts:8:15)
-[browser] Module with ID "section-pricing" is already registered. Overwriting. (modules/registry.ts:8:15)
-[browser] Module with ID "section-about" is already registered. Overwriting. (modules/registry.ts:8:15)
-[browser] Module with ID "section-contact" is already registered. Overwriting. (modules/registry.ts:8:15)
-[browser] Module with ID "site-footer" is already registered. Overwriting. (modules/registry.ts:8:15)
-[browser] Module with ID "news-list" is already registered. Overwriting. (modules/registry.ts:8:15)
-[browser] Module with ID "news-detail" is already registered. Overwriting. (modules/registry.ts:8:15)
-[browser] Module with ID "product-list" is already registered. Overwriting. (modules/registry.ts:8:15)
-[browser] Module with ID "product-detail" is already registered. Overwriting. (modules/registry.ts:8:15)
-[browser] Module with ID "section-404" is already registered. Overwriting. (modules/registry.ts:8:15)
-[browser] Module with ID "section-content" is already registered. Overwriting. (modules/registry.ts:8:15)
-[browser] Module with ID "section-image" is already registered. Overwriting. (modules/registry.ts:8:15)
-[browser] Module with ID "site-root" is already registered. Overwriting. (modules/registry.ts:8:15)
-[browser] Module with ID "site-header" is already registered. Overwriting. (modules/registry.ts:8:15)
-[browser] Module with ID "section-hero" is already registered. Overwriting. (modules/registry.ts:8:15)
-[browser] Module with ID "section-services" is already registered. Overwriting. (modules/registry.ts:8:15)
-[browser] Module with ID "section-partner" is already registered. Overwriting. (modules/registry.ts:8:15)
-[browser] Module with ID "section-products" is already registered. Overwriting. (modules/registry.ts:8:15)
-[browser] Module with ID "section-pricing" is already registered. Overwriting. (modules/registry.ts:8:15)
-[browser] Module with ID "section-about" is already registered. Overwriting. (modules/registry.ts:8:15)
-[browser] Module with ID "section-contact" is already registered. Overwriting. (modules/registry.ts:8:15)
-[browser] Module with ID "site-footer" is already registered. Overwriting. (modules/registry.ts:8:15)
-[browser] Module with ID "news-list" is already registered. Overwriting. (modules/registry.ts:8:15)
-[browser] Module with ID "news-detail" is already registered. Overwriting. (modules/registry.ts:8:15)
-[browser] Module with ID "product-list" is already registered. Overwriting. (modules/registry.ts:8:15)
-[browser] Module with ID "product-detail" is already registered. Overwriting. (modules/registry.ts:8:15)
-[browser] Module with ID "section-404" is already registered. Overwriting. (modules/registry.ts:8:15)
-[browser] Module with ID "section-content" is already registered. Overwriting. (modules/registry.ts:8:15)
-[browser] Module with ID "section-image" is already registered. Overwriting. (modules/registry.ts:8:15)
-[browser] Module with ID "site-root" is already registered. Overwriting. (modules/registry.ts:8:15)
-[browser] Module with ID "site-header" is already registered. Overwriting. (modules/registry.ts:8:15)
-[browser] Module with ID "section-hero" is already registered. Overwriting. (modules/registry.ts:8:15)
-[browser] Module with ID "section-services" is already registered. Overwriting. (modules/registry.ts:8:15)
-[browser] Module with ID "section-partner" is already registered. Overwriting. (modules/registry.ts:8:15)
-[browser] Module with ID "section-products" is already registered. Overwriting. (modules/registry.ts:8:15)
-[browser] Module with ID "section-pricing" is already registered. Overwriting. (modules/registry.ts:8:15)
-[browser] Module with ID "section-about" is already registered. Overwriting. (modules/registry.ts:8:15)
-[browser] Module with ID "section-contact" is already registered. Overwriting. (modules/registry.ts:8:15)
-[browser] Module with ID "site-footer" is already registered. Overwriting. (modules/registry.ts:8:15)
-[browser] Module with ID "news-list" is already registered. Overwriting. (modules/registry.ts:8:15)
-[browser] Module with ID "news-detail" is already registered. Overwriting. (modules/registry.ts:8:15)
-[browser] Module with ID "product-list" is already registered. Overwriting. (modules/registry.ts:8:15)
-[browser] Module with ID "product-detail" is already registered. Overwriting. (modules/registry.ts:8:15)
-[browser] Module with ID "section-404" is already registered. Overwriting. (modules/registry.ts:8:15)
-[browser] Module with ID "section-content" is already registered. Overwriting. (modules/registry.ts:8:15)
-[browser] Module with ID "section-image" is already registered. Overwriting. (modules/registry.ts:8:15)
-[browser] Module with ID "site-root" is already registered. Overwriting. (modules/registry.ts:8:15)
-[browser] Module with ID "site-header" is already registered. Overwriting. (modules/registry.ts:8:15)
-[browser] Module with ID "section-hero" is already registered. Overwriting. (modules/registry.ts:8:15)
-[browser] Module with ID "section-services" is already registered. Overwriting. (modules/registry.ts:8:15)
-[browser] Module with ID "section-partner" is already registered. Overwriting. (modules/registry.ts:8:15)
-[browser] Module with ID "section-products" is already registered. Overwriting. (modules/registry.ts:8:15)
-[browser] Module with ID "section-pricing" is already registered. Overwriting. (modules/registry.ts:8:15)
-[browser] Module with ID "section-about" is already registered. Overwriting. (modules/registry.ts:8:15)
-[browser] Module with ID "section-contact" is already registered. Overwriting. (modules/registry.ts:8:15)
-[browser] Module with ID "site-footer" is already registered. Overwriting. (modules/registry.ts:8:15)
-[browser] Module with ID "news-list" is already registered. Overwriting. (modules/registry.ts:8:15)
-[browser] Module with ID "news-detail" is already registered. Overwriting. (modules/registry.ts:8:15)
-[browser] Module with ID "product-list" is already registered. Overwriting. (modules/registry.ts:8:15)
-[browser] Module with ID "product-detail" is already registered. Overwriting. (modules/registry.ts:8:15)
-[browser] Module with ID "section-404" is already registered. Overwriting. (modules/registry.ts:8:15)
-[browser] Module with ID "section-content" is already registered. Overwriting. (modules/registry.ts:8:15)
-[browser] Module with ID "section-image" is already registered. Overwriting. (modules/registry.ts:8:15)
-🔄 Initializing and syncing modules to database...
-📦 Found 17 modules
-Synced 17/17 modules to database
-✅ Successfully synced 17/17 modules to database
- GET /api/modules 200 in 94ms (next.js: 90ms, application-code: 5ms)
- GET /api/modules 200 in 9ms (next.js: 7ms, application-code: 2ms)
- GET /api/admin/pages/home 200 in 11ms (next.js: 4ms, application-code: 7ms)
- GET /api/admin/pages/home 200 in 6ms (next.js: 1806µs, application-code: 4ms)
- GET /api/modules 200 in 5ms (next.js: 1428µs, application-code: 4ms)
- GET /api/modules 200 in 6ms (next.js: 1846µs, application-code: 5ms)
-🔄 Initializing and syncing modules to database...
-📦 Found 17 modules
-Synced 17/17 modules to database
-✅ Successfully synced 17/17 modules to database
- GET /api/modules/section-image/schema 200 in 122ms (next.js: 116ms, application-code: 6ms)
-[browser] Accessing element.ref was removed in React 19. ref is now a regular prop. It will be removed from the JSX Element type in a future release. 
- GET /api/modules/section-image/schema 200 in 6ms (next.js: 4ms, application-code: 2ms)
-[browser] Accessing element.ref was removed in React 19. ref is now a regular prop. It will be removed from the JSX Element type in a future release. 
- GET /admin/module-preview/section-image 200 in 261ms (next.js: 131ms, application-code: 130ms)
- GET /api/admin/themes 200 in 7ms (next.js: 1358µs, application-code: 5ms)
- GET /api/modules/section-image/preview 200 in 54ms (next.js: 50ms, application-code: 4ms)
-🔄 Initializing and syncing modules to database...
-📦 Found 17 modules
-Synced 17/17 modules to database
-✅ Successfully synced 17/17 modules to database
-[browser] Image with src "http://localhost:3000/uploads/editor/1774831753501_lw0111.webp" was detected as the Largest Contentful Paint (LCP). Please add the `loading="eager"` property if this image is above the fold.
-Read more: https://nextjs.org/docs/app/api-reference/components/image#loading
- PUT /api/admin/pages/home 200 in 38ms (next.js: 10ms, application-code: 28ms)
- GET /api/admin/pages 200 in 16ms (next.js: 5ms, application-code: 11ms)
- GET /api/admin/pages 200 in 11ms (next.js: 3ms, application-code: 8ms)
- GET /api/admin/pages 200 in 8ms (next.js: 2ms, application-code: 6ms)
- GET /api/admin/pages 200 in 8ms (next.js: 3ms, application-code: 6ms)
- GET / 200 in 64ms (next.js: 5ms, application-code: 59ms)
- GET / 200 in 30ms (next.js: 2ms, application-code: 28ms)
- GET /api/admin/themes 200 in 7ms (next.js: 2ms, application-code: 5ms)
-[browser] Module with ID "site-root" is already registered. Overwriting. (modules/registry.ts:8:15)
-[browser] Module with ID "site-root" is already registered. Overwriting. (modules/registry.ts:8:15)
-[browser] Module with ID "site-header" is already registered. Overwriting. (modules/registry.ts:8:15)
-[browser] Module with ID "site-header" is already registered. Overwriting. (modules/registry.ts:8:15)
-[browser] Module with ID "section-hero" is already registered. Overwriting. (modules/registry.ts:8:15)
-[browser] Module with ID "section-hero" is already registered. Overwriting. (modules/registry.ts:8:15)
-[browser] Module with ID "section-services" is already registered. Overwriting. (modules/registry.ts:8:15)
-[browser] Module with ID "section-services" is already registered. Overwriting. (modules/registry.ts:8:15)
-[browser] Module with ID "section-partner" is already registered. Overwriting. (modules/registry.ts:8:15)
-[browser] Module with ID "section-partner" is already registered. Overwriting. (modules/registry.ts:8:15)
-[browser] Module with ID "section-products" is already registered. Overwriting. (modules/registry.ts:8:15)
-[browser] Module with ID "section-products" is already registered. Overwriting. (modules/registry.ts:8:15)
-[browser] Module with ID "section-pricing" is already registered. Overwriting. (modules/registry.ts:8:15)
-[browser] Module with ID "section-pricing" is already registered. Overwriting. (modules/registry.ts:8:15)
-[browser] Module with ID "section-about" is already registered. Overwriting. (modules/registry.ts:8:15)
-[browser] Module with ID "section-about" is already registered. Overwriting. (modules/registry.ts:8:15)
-[browser] Module with ID "section-contact" is already registered. Overwriting. (modules/registry.ts:8:15)
-[browser] Module with ID "section-contact" is already registered. Overwriting. (modules/registry.ts:8:15)
-[browser] Module with ID "site-footer" is already registered. Overwriting. (modules/registry.ts:8:15)
-[browser] Module with ID "site-footer" is already registered. Overwriting. (modules/registry.ts:8:15)
-[browser] Module with ID "news-list" is already registered. Overwriting. (modules/registry.ts:8:15)
-[browser] Module with ID "news-list" is already registered. Overwriting. (modules/registry.ts:8:15)
-[browser] Module with ID "news-detail" is already registered. Overwriting. (modules/registry.ts:8:15)
-[browser] Module with ID "news-detail" is already registered. Overwriting. (modules/registry.ts:8:15)
-[browser] Module with ID "product-list" is already registered. Overwriting. (modules/registry.ts:8:15)
-[browser] Module with ID "product-list" is already registered. Overwriting. (modules/registry.ts:8:15)
-[browser] Module with ID "product-detail" is already registered. Overwriting. (modules/registry.ts:8:15)
-[browser] Module with ID "product-detail" is already registered. Overwriting. (modules/registry.ts:8:15)
-[browser] Module with ID "section-404" is already registered. Overwriting. (modules/registry.ts:8:15)
-[browser] Module with ID "section-404" is already registered. Overwriting. (modules/registry.ts:8:15)
-[browser] Module with ID "section-content" is already registered. Overwriting. (modules/registry.ts:8:15)
-[browser] Module with ID "section-content" is already registered. Overwriting. (modules/registry.ts:8:15)
-[browser] Module with ID "section-image" is already registered. Overwriting. (modules/registry.ts:8:15)
-[browser] Module with ID "section-image" is already registered. Overwriting. (modules/registry.ts:8:15)
-[browser] Module with ID "site-root" is already registered. Overwriting. (modules/registry.ts:8:15)
-[browser] Module with ID "site-root" is already registered. Overwriting. (modules/registry.ts:8:15)
-[browser] Module with ID "site-header" is already registered. Overwriting. (modules/registry.ts:8:15)
-[browser] Module with ID "site-header" is already registered. Overwriting. (modules/registry.ts:8:15)
-[browser] Module with ID "section-hero" is already registered. Overwriting. (modules/registry.ts:8:15)
-[browser] Module with ID "section-hero" is already registered. Overwriting. (modules/registry.ts:8:15)
-[browser] Module with ID "section-services" is already registered. Overwriting. (modules/registry.ts:8:15)
-[browser] Module with ID "section-services" is already registered. Overwriting. (modules/registry.ts:8:15)
-[browser] Module with ID "section-partner" is already registered. Overwriting. (modules/registry.ts:8:15)
-[browser] Module with ID "section-partner" is already registered. Overwriting. (modules/registry.ts:8:15)
-[browser] Module with ID "section-products" is already registered. Overwriting. (modules/registry.ts:8:15)
-[browser] Module with ID "section-products" is already registered. Overwriting. (modules/registry.ts:8:15)
-[browser] Module with ID "section-pricing" is already registered. Overwriting. (modules/registry.ts:8:15)
-[browser] Module with ID "section-pricing" is already registered. Overwriting. (modules/registry.ts:8:15)
-[browser] Module with ID "section-about" is already registered. Overwriting. (modules/registry.ts:8:15)
-[browser] Module with ID "section-about" is already registered. Overwriting. (modules/registry.ts:8:15)
-[browser] Module with ID "section-contact" is already registered. Overwriting. (modules/registry.ts:8:15)
-[browser] Module with ID "section-contact" is already registered. Overwriting. (modules/registry.ts:8:15)
-[browser] Module with ID "site-footer" is already registered. Overwriting. (modules/registry.ts:8:15)
-[browser] Module with ID "site-footer" is already registered. Overwriting. (modules/registry.ts:8:15)
-[browser] Module with ID "news-list" is already registered. Overwriting. (modules/registry.ts:8:15)
-[browser] Module with ID "news-list" is already registered. Overwriting. (modules/registry.ts:8:15)
-[browser] Module with ID "news-detail" is already registered. Overwriting. (modules/registry.ts:8:15)
-[browser] Module with ID "news-detail" is already registered. Overwriting. (modules/registry.ts:8:15)
-[browser] Module with ID "product-list" is already registered. Overwriting. (modules/registry.ts:8:15)
-[browser] Module with ID "product-list" is already registered. Overwriting. (modules/registry.ts:8:15)
-[browser] Module with ID "product-detail" is already registered. Overwriting. (modules/registry.ts:8:15)
-[browser] Module with ID "product-detail" is already registered. Overwriting. (modules/registry.ts:8:15)
-[browser] Module with ID "section-404" is already registered. Overwriting. (modules/registry.ts:8:15)
-[browser] Module with ID "section-404" is already registered. Overwriting. (modules/registry.ts:8:15)
-[browser] Module with ID "section-content" is already registered. Overwriting. (modules/registry.ts:8:15)
-[browser] Module with ID "section-content" is already registered. Overwriting. (modules/registry.ts:8:15)
-[browser] Module with ID "section-image" is already registered. Overwriting. (modules/registry.ts:8:15)
-[browser] Module with ID "section-image" is already registered. Overwriting. (modules/registry.ts:8:15)
- PUT /api/admin/pages/home 200 in 34ms (next.js: 16ms, application-code: 19ms)
- GET /api/admin/pages 200 in 9ms (next.js: 2ms, application-code: 6ms)
- GET /api/admin/pages 200 in 8ms (next.js: 1841µs, application-code: 6ms)
- GET /api/admin/pages 200 in 7ms (next.js: 1803µs, application-code: 5ms)
- GET /api/admin/pages 200 in 6ms (next.js: 1716µs, application-code: 4ms)
- GET /api/modules 200 in 11ms (next.js: 4ms, application-code: 7ms)
- GET /api/modules 200 in 8ms (next.js: 3ms, application-code: 5ms)
- GET /api/admin/pages/home 200 in 15ms (next.js: 10ms, application-code: 5ms)
- GET /api/admin/pages/home 200 in 7ms (next.js: 3ms, application-code: 4ms)
- GET /api/modules 200 in 3ms (next.js: 1265µs, application-code: 1796µs)
- GET /api/modules 200 in 3ms (next.js: 1106µs, application-code: 1552µs)
- GET /api/modules/section-image/schema 200 in 39ms (next.js: 37ms, application-code: 3ms)
- GET /api/modules/section-image/schema 200 in 5ms (next.js: 3ms, application-code: 1753µs)
-[browser] Accessing element.ref was removed in React 19. ref is now a regular prop. It will be removed from the JSX Element type in a future release. 
-[browser] Accessing element.ref was removed in React 19. ref is now a regular prop. It will be removed from the JSX Element type in a future release. 
- GET /admin/module-preview/section-image 200 in 90ms (next.js: 9ms, application-code: 81ms)
- GET /api/admin/themes 200 in 6ms (next.js: 1749µs, application-code: 4ms)
- GET /api/modules/section-image/preview 200 in 5ms (next.js: 4ms, application-code: 1893µs)
-[browser] Image with src "http://localhost:3000/uploads/editor/1774831753501_lw0111.webp" was detected as the Largest Contentful Paint (LCP). Please add the `loading="eager"` property if this image is above the fold.
-Read more: https://nextjs.org/docs/app/api-reference/components/image#loading
-🔄 Initializing and syncing modules to database...
-📦 Found 17 modules
-Synced 17/17 modules to database
-✅ Successfully synced 17/17 modules to database
- GET /api/admin/pages 200 in 18ms (next.js: 6ms, application-code: 12ms)
- GET /api/admin/pages 200 in 11ms (next.js: 3ms, application-code: 7ms)
- GET /api/admin/pages 200 in 6ms (next.js: 1229µs, application-code: 4ms)
- GET /api/admin/pages 200 in 10ms (next.js: 3ms, application-code: 7ms)
- DELETE /api/admin/pages/test 200 in 22ms (next.js: 8ms, application-code: 13ms)
- GET /api/admin/pages 200 in 11ms (next.js: 3ms, application-code: 8ms)
-[browser] Uncaught TypeError: Cannot read properties of null (reading 'offsetParent')
-[browser] Uncaught TypeError: Cannot read properties of null (reading 'offsetParent')
-[browser] Uncaught TypeError: Cannot read properties of null (reading 'offsetParent')
- GET /admin/dashboard?menu=products 200 in 56ms (next.js: 26ms, application-code: 31ms)
- GET /api/products 200 in 112ms (next.js: 97ms, application-code: 15ms)
- GET /api/products 200 in 16ms (next.js: 2ms, application-code: 14ms)
- GET /admin/dashboard?menu=articles 200 in 42ms (next.js: 7ms, application-code: 35ms)
- GET /api/articles 200 in 62ms (next.js: 57ms, application-code: 4ms)
- GET /api/articles 200 in 3ms (next.js: 945µs, application-code: 1862µs)
- GET /api/products 200 in 3ms (next.js: 1061µs, application-code: 2ms)
- GET /api/products 200 in 3ms (next.js: 890µs, application-code: 2ms)
- GET /admin/dashboard?menu=products 200 in 38ms (next.js: 3ms, application-code: 34ms)
-[browser] [tiptap warn]: Duplicate extension names found: ['link', 'underline']. This can lead to issues.
- GET /admin/dashboard?menu=products 200 in 36ms (next.js: 7ms, application-code: 28ms)
- GET /api/admin/pages 200 in 8ms (next.js: 3ms, application-code: 6ms)
- GET /admin/dashboard?menu=pages 200 in 46ms (next.js: 5ms, application-code: 41ms)
- GET /api/admin/pages 200 in 5ms (next.js: 1069µs, application-code: 4ms)
- GET /api/admin/pages 200 in 6ms (next.js: 2ms, application-code: 4ms)
- GET /api/admin/pages 200 in 4ms (next.js: 1056µs, application-code: 3ms)
- GET /api/products 200 in 9ms (next.js: 3ms, application-code: 6ms)
- GET /api/products 200 in 5ms (next.js: 1326µs, application-code: 4ms)
- GET /admin/dashboard?menu=products 200 in 55ms (next.js: 4ms, application-code: 50ms)
- GET /api/articles 200 in 10ms (next.js: 1610µs, application-code: 9ms)
- GET /api/articles 200 in 15ms (next.js: 12ms, application-code: 3ms)
- GET /admin/dashboard?menu=articles 200 in 79ms (next.js: 14ms, application-code: 65ms)
- GET /api/products 200 in 8ms (next.js: 2ms, application-code: 6ms)
- GET /api/products 200 in 13ms (next.js: 9ms, application-code: 3ms)
- GET /admin/dashboard?menu=products 200 in 57ms (next.js: 14ms, application-code: 43ms)
-✓ Compiled in 154ms
-✓ Compiled in 43ms
-✓ Compiled in 33ms
-✓ Compiled in 69ms
- GET /admin/dashboard?menu=products 200 in 162ms (next.js: 70ms, application-code: 92ms)
- GET /api/admin/themes 200 in 10ms (next.js: 3ms, application-code: 7ms)
- GET /api/admin/pages 200 in 10ms (next.js: 5ms, application-code: 5ms)
- GET /api/admin/auth 200 in 11ms (next.js: 7ms, application-code: 4ms)
- GET /api/products 200 in 8ms (next.js: 4ms, application-code: 4ms)
- GET /api/products 200 in 10ms (next.js: 9ms, application-code: 1506µs)
- GET /api/admin/pages 200 in 15ms (next.js: 3ms, application-code: 12ms)
-[browser] [@arco-design/web-react]: Element does not define the `getRootDOMNode` method causing a call to React.findDOMNode. but findDOMNode is deprecated in StrictMode. Please check the code logic { detail: [ { element: [1mnull[22m, instance: [32m'[object Object]'[39m } ] } 
-[browser] [@arco-design/web-react]: Element does not define the `getRootDOMNode` method causing a call to React.findDOMNode. but findDOMNode is deprecated in StrictMode. Please check the code logic { detail: [ { element: [90mundefined[39m, instance: [32m'[object Object]'[39m } ] } 
- GET /api/articles 200 in 6ms (next.js: 3ms, application-code: 3ms)
- GET /api/articles 200 in 10ms (next.js: 7ms, application-code: 3ms)
- GET /admin/dashboard?menu=articles 200 in 53ms (next.js: 7ms, application-code: 46ms)
- GET /api/products 200 in 8ms (next.js: 3ms, application-code: 5ms)
- GET /api/products 200 in 16ms (next.js: 10ms, application-code: 6ms)
- GET /admin/dashboard?menu=products 200 in 55ms (next.js: 3ms, application-code: 52ms)
-[browser] [tiptap warn]: Duplicate extension names found: ['link', 'underline']. This can lead to issues.
-✓ Compiled in 65ms
-✓ Compiled in 25ms
- GET /admin/dashboard?menu=products 200 in 99ms (next.js: 28ms, application-code: 71ms)
- GET /api/admin/pages 200 in 10ms (next.js: 1796µs, application-code: 8ms)
- GET /api/admin/auth 200 in 10ms (next.js: 4ms, application-code: 6ms)
- GET /api/admin/themes 200 in 11ms (next.js: 6ms, application-code: 4ms)
- GET /api/products 200 in 9ms (next.js: 3ms, application-code: 6ms)
- GET /api/products 200 in 17ms (next.js: 10ms, application-code: 7ms)
- GET /api/admin/pages 200 in 16ms (next.js: 7ms, application-code: 10ms)
-[browser] [@arco-design/web-react]: Element does not define the `getRootDOMNode` method causing a call to React.findDOMNode. but findDOMNode is deprecated in StrictMode. Please check the code logic { detail: [ { element: [1mnull[22m, instance: [32m'[object Object]'[39m } ] } 
-[browser] [@arco-design/web-react]: Element does not define the `getRootDOMNode` method causing a call to React.findDOMNode. but findDOMNode is deprecated in StrictMode. Please check the code logic { detail: [ { element: [90mundefined[39m, instance: [32m'[object Object]'[39m } ] } 
-[browser] [tiptap warn]: Duplicate extension names found: ['link', 'underline']. This can lead to issues.
-✓ Compiled in 139ms
- GET /admin/dashboard?menu=products 200 in 94ms (next.js: 29ms, application-code: 66ms)
- GET /api/admin/themes 200 in 23ms (next.js: 3ms, application-code: 21ms)
- GET /api/admin/pages 200 in 24ms (next.js: 10ms, application-code: 14ms)
- GET /api/admin/auth 200 in 24ms (next.js: 16ms, application-code: 8ms)
- GET /api/products 200 in 45ms (next.js: 36ms, application-code: 9ms)
- GET /api/products 200 in 42ms (next.js: 40ms, application-code: 2ms)
- GET /api/admin/pages 200 in 93ms (next.js: 21ms, application-code: 72ms)
-[browser] [@arco-design/web-react]: Element does not define the `getRootDOMNode` method causing a call to React.findDOMNode. but findDOMNode is deprecated in StrictMode. Please check the code logic { detail: [ { element: [1mnull[22m, instance: [32m'[object Object]'[39m } ] } 
-[browser] [@arco-design/web-react]: Element does not define the `getRootDOMNode` method causing a call to React.findDOMNode. but findDOMNode is deprecated in StrictMode. Please check the code logic { detail: [ { element: [90mundefined[39m, instance: [32m'[object Object]'[39m } ] } 
-[browser] [tiptap warn]: Duplicate extension names found: ['link', 'underline']. This can lead to issues.
-✓ Compiled in 45ms
- GET /admin/dashboard?menu=products 200 in 58ms (next.js: 8ms, application-code: 49ms)
- GET /api/admin/auth 200 in 7ms (next.js: 2ms, application-code: 5ms)
- GET /api/admin/pages 200 in 8ms (next.js: 4ms, application-code: 4ms)
- GET /api/admin/themes 200 in 11ms (next.js: 9ms, application-code: 3ms)
- GET /api/products 200 in 5ms (next.js: 1826µs, application-code: 3ms)
- GET /api/products 200 in 8ms (next.js: 5ms, application-code: 2ms)
- GET /api/admin/pages 200 in 5ms (next.js: 988µs, application-code: 4ms)
-[browser] [@arco-design/web-react]: Element does not define the `getRootDOMNode` method causing a call to React.findDOMNode. but findDOMNode is deprecated in StrictMode. Please check the code logic { detail: [ { element: [1mnull[22m, instance: [32m'[object Object]'[39m } ] } 
-[browser] [@arco-design/web-react]: Element does not define the `getRootDOMNode` method causing a call to React.findDOMNode. but findDOMNode is deprecated in StrictMode. Please check the code logic { detail: [ { element: [90mundefined[39m, instance: [32m'[object Object]'[39m } ] } 
-[browser] [tiptap warn]: Duplicate extension names found: ['link', 'underline']. This can lead to issues.
-✓ Compiled in 36ms
-[browser] Encountered two children with the same key, `tags`. Keys should be unique so that components maintain their identity across updates. Non-unique keys may cause children to be duplicated and/or omitted — the behavior is unsupported and could change in a future version. 
-    at Set.forEach (<anonymous>) (<anonymous>)
-✓ Compiled in 26ms
-✓ Compiled in 37ms
-✓ Compiled in 31ms
-✓ Compiled in 26ms
-✓ Compiled in 37ms
-✓ Compiled in 48ms
- POST /api/products 200 in 46ms (next.js: 19ms, application-code: 27ms)
- GET /api/products 200 in 9ms (next.js: 1773µs, application-code: 7ms)
- GET /admin/dashboard?menu=products 200 in 94ms (next.js: 28ms, application-code: 66ms)
- GET /api/admin/pages 200 in 14ms (next.js: 3ms, application-code: 11ms)
- GET /api/admin/auth 200 in 14ms (next.js: 7ms, application-code: 7ms)
- GET /api/admin/themes 200 in 15ms (next.js: 10ms, application-code: 5ms)
- GET /api/products 200 in 7ms (next.js: 4ms, application-code: 2ms)
- GET /api/products 200 in 9ms (next.js: 7ms, application-code: 1663µs)
- GET /api/admin/pages 200 in 10ms (next.js: 7ms, application-code: 3ms)
+ GET /api/admin/themes 200 in 144ms (next.js: 139ms, application-code: 5ms)
+ GET /admin/module-preview/site-header 200 in 465ms (next.js: 32ms, application-code: 433ms)
+ GET / 200 in 709ms (next.js: 13ms, application-code: 696ms)
+ GET / 200 in 743ms (next.js: 68ms, application-code: 675ms)
+ GET /api/admin/themes 200 in 14ms (next.js: 6ms, application-code: 9ms)
+ GET /api/modules/site-header/preview 200 in 38ms (next.js: 31ms, application-code: 8ms)
+ GET /api/admin/themes 200 in 11ms (next.js: 7ms, application-code: 3ms)
+ GET /api/admin/themes 200 in 6ms (next.js: 1752µs, application-code: 4ms)
+ GET /admin/dashboard?menu=pages 200 in 145ms (next.js: 29ms, application-code: 116ms)
+ GET /api/admin/pages 200 in 10ms (next.js: 4ms, application-code: 6ms)
+ GET /api/admin/themes 200 in 12ms (next.js: 6ms, application-code: 7ms)
+ GET /api/admin/auth 200 in 13ms (next.js: 7ms, application-code: 6ms)
+ GET /api/admin/pages 200 in 4ms (next.js: 2ms, application-code: 2ms)
 [browser] [@arco-design/web-react]: Element does not define the `getRootDOMNode` method causing a call to React.findDOMNode. but findDOMNode is deprecated in StrictMode. Please check the code logic { detail: [ { element: [1mnull[22m, instance: [32m'[object Object]'[39m } ] } 
 [browser] [@arco-design/web-react]: Element does not define the `getRootDOMNode` method causing a call to React.findDOMNode. but findDOMNode is deprecated in StrictMode. Please check the code logic { detail: [ { element: [90mundefined[39m, instance: [32m'[object Object]'[39m } ] } 

@@ -29,7 +29,6 @@ interface HeaderProps {
       text?: string
       link?: string
       drawerText?: string
-      drawerHint?: string
     }
   }
 }
@@ -60,7 +59,6 @@ export function Header({
   })) || [])
 
   const primaryColor = themeConfig?.colors?.primary
-  const secondaryColor = themeConfig?.colors?.secondary
   const accentColor = themeConfig?.colors?.accent
 
   const logoText = siteConfig?.name || config?.logo?.text || ""
@@ -69,8 +67,6 @@ export function Header({
   const hintText = config?.contact?.hintText || "扫码联系客服"
   const ctaText = ctaButtonText || config?.cta?.text || "开始使用"
   const ctaLink = ctaButtonLink || config?.cta?.link || "/product"
-  const drawerCtaText = config?.cta?.drawerText || "开始使用"
-  const drawerHintText = config?.cta?.drawerHint || "免费试用 · 无需充值"
   const showContact = showContactButton !== undefined ? showContactButton : true
   const showCta = showCtaButton !== undefined ? showCtaButton : true
 
@@ -239,12 +235,9 @@ export function Header({
                   fontSize: '1rem'
                 }}
               >
-                {drawerCtaText}
+                {ctaText}
               </Button>
             </Link>
-            <p className={styles.drawerHint}>
-              {drawerHintText}
-            </p>
           </div>
         </div>
       </Drawer>

@@ -391,6 +391,7 @@ function FormField({
           type="text"
           value={value || ''}
           onChange={(e) => onChange(e.target.value)}
+          onKeyPress={(e) => e.key === 'Enter' && e.preventDefault()}
           className={styles.input}
           placeholder={field.placeholder}
         />
@@ -400,6 +401,7 @@ function FormField({
         <textarea
           value={value || ''}
           onChange={(e) => onChange(e.target.value)}
+          onKeyPress={(e) => e.key === 'Enter' && e.preventDefault()}
           className={styles.textarea}
           placeholder={field.placeholder}
           rows={field.rows || 3}
@@ -647,7 +649,9 @@ function ItemForm({
               <div key={groupName} className={styles.formRowThree}>
                 {groupFields.map(field => (
                   <div key={field.name} className={styles.inlineField}>
-                    <label className={styles.inlineLabel}>{field.label}</label>
+                    <label className={styles.inlineLabel}>
+                      {field.label} {field.required && '*'}
+                    </label>
                     <FormField
                       field={field}
                       value={formData[field.name]}
@@ -735,7 +739,7 @@ export function BaseManagement({ config }: BaseManagementProps) {
   const fetchItems = async () => {
     try {
       setLoading(true)
-      const response = await fetch(config.apiEndpoint)
+      const response = await fetch(`${config.apiEndpoint}?admin=true`)
       const result = await response.json()
       if (result.success && result.data) {
         setItems(result.data)
@@ -817,13 +821,13 @@ export function BaseManagement({ config }: BaseManagementProps) {
   }
 
   const handleStatusChange = async (record: any, newStatus: string) => {
-    if (!config.statusConfig) return
+    if (!config.statusConfig || !record.id) return
     try {
       const response = await fetch(config.apiEndpoint, {
-        method: 'POST',
+        method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ 
-          ...record, 
+          id: record.id,
           [config.statusConfig!.field]: newStatus 
         })
       })
@@ -943,12 +947,12 @@ export function BaseManagement({ config }: BaseManagementProps) {
                 {config.statusConfig && (
                   <>
                     {config.statusConfig.states.map(state => {
-                      if (record[config.statusConfig!.field] !== state.value) {
+                      if (record[config.statusConfig!.field] === state.value) {
                         return (
                           <Tooltip key={state.value} content={state.action}>
                             <ActionButton
                               type={state.type}
-                              onClick={() => handleStatusChange(record, state.value)}
+                              onClick={() => handleStatusChange(record, state.target || state.value)}
                             >
                               {state.label}
                             </ActionButton>

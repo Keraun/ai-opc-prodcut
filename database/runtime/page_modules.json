@@ -226,9 +226,9 @@
     "module_name": "站点容器",
     "module_order": 0,
     "data": null,
-    "created_at": "2026/03/30 09:03:24",
-    "updated_at": "2026/03/30 09:03:24",
-    "id": 82
+    "created_at": "2026/03/30 09:31:22",
+    "updated_at": "2026/03/30 09:31:22",
+    "id": 37
   },
   {
     "page_id": "home",
@@ -236,10 +236,10 @@
     "module_instance_id": "site-header-1774642128717-1774642693903",
     "module_name": "站点头部",
     "module_order": 1,
-    "data": "{\"navItems\":[{\"label\":\"首页\",\"href\":\"/\"},{\"label\":\"产品\",\"href\":\"/product\"},{\"label\":\"资讯\",\"href\":\"/news\"}],\"showContactButton\":true,\"showCtaButton\":true,\"ctaButtonText\":\"开始使用\",\"ctaButtonLink\":\"/product\"}",
-    "created_at": "2026/03/30 09:03:24",
-    "updated_at": "2026/03/30 09:03:24",
-    "id": 83
+    "data": "{\"navItems\":[{\"label\":\"首页444\",\"href\":\"/\"},{\"label\":\"产品\",\"href\":\"/product\"},{\"label\":\"资讯\",\"href\":\"/news\"}],\"showContactButton\":true,\"showCtaButton\":true,\"ctaButtonText\":\"开始使用6666\",\"ctaButtonLink\":\"/product\"}",
+    "created_at": "2026/03/30 09:31:22",
+    "updated_at": "2026/03/30 09:31:22",
+    "id": 38
   },
   {
     "page_id": "home",
@@ -248,9 +248,9 @@
     "module_name": "Hero 区块",
     "module_order": 2,
     "data": "{\"layout\":\"layout2\",\"badge\":\"专注AI一人公司服务\",\"title\":{\"main\":\"让AI成为你的\",\"sub\":\"超级员工\"},\"subtitle\":\"为个人创业者提供AI工具、课程和工作流，助力一人公司实现10倍效率提升\",\"buttons\":{\"primary\":{\"text\":\"开始探索\",\"href\":\"/product\"},\"secondary\":{\"text\":\"了解更多\",\"href\":\"/about\"}},\"featurePills\":[\"AI工具站\",\"GEO课程\",\"工作流定制\",\"一人公司\"]}",
-    "created_at": "2026/03/30 09:03:24",
-    "updated_at": "2026/03/30 09:03:24",
-    "id": 84
+    "created_at": "2026/03/30 09:31:22",
+    "updated_at": "2026/03/30 09:31:22",
+    "id": 39
   },
   {
     "page_id": "home",
@@ -259,9 +259,9 @@
     "module_name": "合作伙伴区块",
     "module_order": 3,
     "data": "{\"sectionTag\":\"合作伙伴\",\"title\":\"来自优秀伙伴的信任\",\"description\":\"与行业领先的企业和机构合作，为用户提供更好的服务\",\"items\":[{\"src\":\"/partner/partner_01.png\",\"alt\":\"合作伙伴1\"},{\"src\":\"/partner/partner_02.png\",\"alt\":\"合作伙伴2\"},{\"src\":\"/partner/partner_03.png\",\"alt\":\"合作伙伴3\"},{\"src\":\"/partner/partner_04.png\",\"alt\":\"合作伙伴4\"},{\"src\":\"/partner/partner_05.png\",\"alt\":\"合作伙伴5\"},{\"src\":\"/partner/partner_06.png\",\"alt\":\"合作伙伴6\"},{\"src\":\"/partner/partner_07.png\",\"alt\":\"合作伙伴7\"},{\"src\":\"/partner/partner_08.png\",\"alt\":\"合作伙伴8\"}]}",
-    "created_at": "2026/03/30 09:03:24",
-    "updated_at": "2026/03/30 09:03:24",
-    "id": 85
+    "created_at": "2026/03/30 09:31:22",
+    "updated_at": "2026/03/30 09:31:22",
+    "id": 40
   },
   {
     "page_id": "home",
@@ -270,9 +270,9 @@
     "module_name": "产品区块",
     "module_order": 4,
     "data": "{\"title\":\"我们的产品\",\"description\":\"为个人创业者提供全方位的AI解决方案\",\"sectionTag\":\"产品服务\",\"items\":[{\"id\":\"workflow\",\"name\":\"AI 工作流\",\"description\":\"自动化内容创作、客服、数据分析等业务流程\",\"icon\":\"IconThunderbolt\",\"tag\":\"热门\",\"tagColor\":\"blue\",\"features\":[\"自动化流程\",\"降低成本\",\"提升效率\"],\"link\":\"/product\"},{\"id\":\"tools\",\"name\":\"AI 工具站\",\"description\":\"精选 1000+ AI 工具，持续更新\",\"icon\":\"IconApps\",\"tag\":\"免费\",\"tagColor\":\"green\",\"features\":[\"1000+ 工具\",\"每周更新\",\"智能分类\"],\"link\":\"/product\"},{\"id\":\"courses\",\"name\":\"AI GEO 课程\",\"description\":\"从入门到精通的 AI 学习路径\",\"icon\":\"IconBook\",\"tag\":\"新课\",\"tagColor\":\"orange\",\"features\":[\"零基础入门\",\"实战案例\",\"社群答疑\"],\"link\":\"/product\"},{\"id\":\"services\",\"name\":\"AI 咨询服务\",\"description\":\"一对一 AI 应用咨询与定制开发\",\"icon\":\"IconCustomerService\",\"tag\":\"定制\",\"tagColor\":\"purple\",\"features\":[\"专家咨询\",\"定制方案\",\"技术支持\"],\"link\":\"/product\"}]}",
-    "created_at": "2026/03/30 09:03:24",
-    "updated_at": "2026/03/30 09:03:24",
-    "id": 86
+    "created_at": "2026/03/30 09:31:22",
+    "updated_at": "2026/03/30 09:31:22",
+    "id": 41
   },
   {
     "page_id": "home",
@@ -281,9 +281,9 @@
     "module_name": "服务区块",
     "module_order": 5,
     "data": "{\"title\":\"我们的服务\",\"description\":\"为个人创业者提供专业的AI服务\",\"sectionTag\":\"服务内容\",\"items\":[{\"title\":\"AI 工具站\",\"description\":\"精选优质 AI 工具集合，涵盖写作、设计、营销等多个领域\",\"highlights\":[\"1000+ 精选工具\",\"每周更新\",\"智能分类\",\"免费使用\"]},{\"title\":\"AI GEO 课程\",\"description\":\"系统化 AI 学习课程，从零基础到实战应用\",\"highlights\":[\"零基础入门\",\"实战案例\",\"社群答疑\",\"终身学习\"]},{\"title\":\"AI 工作流\",\"description\":\"定制化 AI 工作流解决方案，提升业务效率\",\"highlights\":[\"自动化流程\",\"降低成本\",\"提升效率\",\"持续优化\"]},{\"title\":\"AI 咨询服务\",\"description\":\"一对一 AI 应用咨询，助力企业 AI 转型\",\"highlights\":[\"专家咨询\",\"定制方案\",\"技术支持\",\"效果保障\"]}]}",
-    "created_at": "2026/03/30 09:03:24",
-    "updated_at": "2026/03/30 09:03:24",
-    "id": 87
+    "created_at": "2026/03/30 09:31:22",
+    "updated_at": "2026/03/30 09:31:22",
+    "id": 42
   },
   {
     "page_id": "home",
@@ -292,9 +292,9 @@
     "module_name": "价格区块",
     "module_order": 6,
     "data": "{\"sectionTag\":\"价格方案\",\"title\":\"选择适合你的计划\",\"description\":\"无论你是个人创业者还是企业用户，我们都有适合你的AI解决方案\",\"plans\":[{\"title\":\"免费版\",\"price\":\"¥0\",\"description\":\"适合个人用户和小型项目\",\"features\":[\"1000+ AI工具访问\",\"基础工作流模板\",\"社区支持\",\"每月100次API调用\"],\"buttonText\":\"开始免费使用\",\"buttonLink\":\"/product\"},{\"title\":\"专业版\",\"price\":\"¥999\",\"description\":\"适合专业用户和小型企业\",\"features\":[\"全部AI工具访问\",\"高级工作流定制\",\"优先技术支持\",\"每月1000次API调用\",\"AI GEO课程访问\"],\"buttonText\":\"升级专业版\",\"buttonLink\":\"/product\",\"isPopular\":true},{\"title\":\"企业版\",\"price\":\"¥2999\",\"description\":\"适合企业级用户和团队\",\"features\":[\"全部AI工具访问\",\"企业级工作流定制\",\"专属技术支持\",\"无限制API调用\",\"AI GEO课程访问\",\"企业级安全保障\"],\"buttonText\":\"联系销售\",\"buttonLink\":\"/contact\"}]}",
-    "created_at": "2026/03/30 09:03:24",
-    "updated_at": "2026/03/30 09:03:24",
-    "id": 88
+    "created_at": "2026/03/30 09:31:22",
+    "updated_at": "2026/03/30 09:31:22",
+    "id": 43
   },
   {
     "page_id": "home",
@@ -303,9 +303,9 @@
     "module_name": "关于我们区块",
     "module_order": 7,
     "data": "{\"sectionTag\":\"关于我们\",\"title\":{\"main\":\"关于\",\"highlight\":\"\"},\"description\":[\"专注于为个人创业者提供AI赋能服务\",\"我们深知一人公司的挑战与机遇，致力于通过AI工具、课程和工作流，帮助创业者提升效率、降低成本、实现增长\"],\"mission\":{\"title\":\"使命\",\"description\":\"让每一个创业者都能用上AI，实现业务自动化增长\"},\"vision\":{\"title\":\"愿景\",\"description\":\"成为最受信赖的AI一人公司服务平台\"},\"values\":{\"title\":\"价值观\",\"description\":\"客户第一、持续创新、简单可信赖\"},\"stats\":[{\"value\":\"1000+\",\"label\":\"AI工具\"},{\"value\":\"10万+\",\"label\":\"服务用户\"},{\"value\":\"99%\",\"label\":\"满意度\"}]}",
-    "created_at": "2026/03/30 09:03:24",
-    "updated_at": "2026/03/30 09:03:24",
-    "id": 89
+    "created_at": "2026/03/30 09:31:22",
+    "updated_at": "2026/03/30 09:31:22",
+    "id": 44
   },
   {
     "page_id": "home",
@@ -314,9 +314,9 @@
     "module_name": "联系我们区块",
     "module_order": 8,
     "data": "{\"sectionTag\":\"联系我们\",\"title\":\"准备好开启AI之旅了吗？\",\"description\":\"留下您的联系方式，我们会尽快与您取得联系\",\"contactPreferences\":[{\"label\":\"电话\",\"value\":\"phone\"},{\"label\":\"微信\",\"value\":\"wechat\"},{\"label\":\"邮箱\",\"value\":\"email\"}]}",
-    "created_at": "2026/03/30 09:03:24",
-    "updated_at": "2026/03/30 09:03:24",
-    "id": 90
+    "created_at": "2026/03/30 09:31:22",
+    "updated_at": "2026/03/30 09:31:22",
+    "id": 45
   },
   {
     "page_id": "home",
@@ -325,9 +325,9 @@
     "module_name": "图片区块",
     "module_order": 9,
     "data": "{\"webImage\":\"http://localhost:3000/uploads/editor/1774831748321_utx7e6.webp\",\"mobileImage\":\"http://localhost:3000/uploads/editor/1774831753501_lw0111.webp\",\"width\":960,\"containerPadding\":\"0\",\"title\":\"111\",\"description\":\"222\",\"caption\":\"33333\",\"alt\":\"44444\",\"fullWidth\":false}",
-    "created_at": "2026/03/30 09:03:24",
-    "updated_at": "2026/03/30 09:03:24",
-    "id": 91
+    "created_at": "2026/03/30 09:31:22",
+    "updated_at": "2026/03/30 09:31:22",
+    "id": 46
   },
   {
     "page_id": "home",
@@ -336,9 +336,9 @@
     "module_name": "内容区块",
     "module_order": 10,
     "data": "{\"content\":\"<p>123123123113132222222222222222222</p><p>123123123113132222222222222222222</p><p>123123123113132222222222222222222</p><p>123123123113132222222222222222222</p><p>123123123113132222222222222222222</p>\"}",
-    "created_at": "2026/03/30 09:03:24",
-    "updated_at": "2026/03/30 09:03:24",
-    "id": 92
+    "created_at": "2026/03/30 09:31:22",
+    "updated_at": "2026/03/30 09:31:22",
+    "id": 47
   },
   {
     "page_id": "home",
@@ -347,8 +347,8 @@
     "module_name": "站点页脚",
     "module_order": 11,
     "data": null,
-    "created_at": "2026/03/30 09:03:24",
-    "updated_at": "2026/03/30 09:03:24",
-    "id": 93
+    "created_at": "2026/03/30 09:31:22",
+    "updated_at": "2026/03/30 09:31:22",
+    "id": 48
   }
 ]
