@@ -6,8 +6,8 @@ export interface ImageData {
   alt?: string
   caption?: string
   width?: number
-  height?: number
-  fullWidth?: boolean
-  containerPadding?: string
+  containerPaddingX?: string
+  containerPaddingY?: string
+  containerType?: 'section' | 'empty'
   backgroundColor?: string
 }

@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
 import { toast } from 'sonner'
+import { Modal } from '@arco-design/web-react'
 import { useAuth } from '../../common/hooks/useAuth'
 import { useConfig } from '../../common/hooks/useConfig'
 import { handleExportConfig, handleImportConfig, handleResetWebsite } from '../../common/utils/config-utils'
@@ -15,6 +16,7 @@ export function SystemManager() {
   const [showChangePassword, setShowChangePassword] = useState(false)
   const [systemInfo, setSystemInfo] = useState<any>(null)
   const [restarting, setRestarting] = useState(false)
+  const [showRestartConfirm, setShowRestartConfirm] = useState(false)
 
   useEffect(() => {
     loadSystemInfo()
@@ -32,9 +34,11 @@ export function SystemManager() {
   }
 
   const handleRestart = async () => {
-    const confirmed = window.confirm('确定要重启服务吗？这将终止占用当前端口的进程并重新启动服务。')
-    if (!confirmed) return
+    setShowRestartConfirm(true)
+  }
 
+  const confirmRestart = async () => {
+    setShowRestartConfirm(false)
     setRestarting(true)
     try {
       const result = await restartSystem()
@@ -102,6 +106,16 @@ export function SystemManager() {
         onClose={() => setShowChangePassword(false)}
         mustChange={false}
       />
+      <Modal
+        title="确认重启服务"
+        visible={showRestartConfirm}
+        onOk={confirmRestart}
+        onCancel={() => setShowRestartConfirm(false)}
+        okText="确认重启"
+        cancelText="取消"
+      >
+        <p>确定要重启服务吗？这将终止占用当前端口的进程并重新启动服务。</p>
+      </Modal>
     </>
   )
 }

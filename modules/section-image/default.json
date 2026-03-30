@@ -6,8 +6,8 @@
   "alt": "图片描述",
   "caption": "",
   "width": 1200,
-  "height": 630,
-  "fullWidth": false,
-  "containerPadding": "1.5rem",
+  "containerPaddingX": "1.5rem",
+  "containerPaddingY": "0",
+  "containerType": "section",
   "backgroundColor": "#ffffff"
 }

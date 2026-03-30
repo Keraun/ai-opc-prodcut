@@ -47,23 +47,24 @@
       "description": "设置图片宽度(像素)",
       "default": 1200
     },
-    "height": {
-      "type": "number",
-      "title": "图片高度",
-      "description": "设置图片高度(像素)",
-      "default": 630
-    },
-    "fullWidth": {
-      "type": "boolean",
-      "title": "全宽显示",
-      "description": "是否使用全宽显示,开启时外部容器padding为0",
-      "default": false
-    },
-    "containerPadding": {
+    "containerPaddingX": {
       "type": "string",
-      "title": "容器左右Padding",
-      "description": "设置外部容器的左右Padding值",
+      "title": "容器左右间距",
+      "description": "设置外部容器的左右间距值",
       "default": "1.5rem"
+    },
+    "containerPaddingY": {
+      "type": "string",
+      "title": "容器上下间距",
+      "description": "设置外部容器的上下间距值",
+      "default": "0"
+    },
+    "containerType": {
+      "type": "string",
+      "title": "容器类型",
+      "description": "选择图片区块的容器类型",
+      "enum": ["section", "empty"],
+      "default": "section"
     },
     "backgroundColor": {
       "type": "string",
