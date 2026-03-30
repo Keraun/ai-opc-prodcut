@@ -383,7 +383,7 @@ export function ModuleDragEditor({ modules, onChange }: ModuleDragEditorProps) {
                   className={`${styles.moduleItemV2} ${
                     draggedIndex === index ? styles.moduleItemDraggingV2 : ""
                   }`}
-                  draggable={module.moduleId !== 'site-root' && module.moduleId !== 'site-footer'}
+                  draggable={module.moduleId !== 'site-root' && module.moduleId !== 'site-footer' && module.moduleId !== 'site-header'}
                   onDragStart={() => handleDragStart(index)}
                   onDragEnd={handleDragEnd}
                 >
@@ -400,7 +400,7 @@ export function ModuleDragEditor({ modules, onChange }: ModuleDragEditorProps) {
                       </div>
                     </div>
                     <div className={styles.moduleItemActionsV2}>
-                      {module.moduleId !== 'site-root' && module.moduleId !== 'site-footer' && (
+                      {module.moduleId !== 'site-root' && module.moduleId !== 'site-footer' && module.moduleId !== 'site-header' && (
                         <Button
                           type="primary"
                           size="small"
@@ -410,7 +410,7 @@ export function ModuleDragEditor({ modules, onChange }: ModuleDragEditorProps) {
                           编辑
                         </Button>
                       )}
-                      {module.moduleId !== 'site-root' && module.moduleId !== 'site-footer' && (
+                      {module.moduleId !== 'site-root' && module.moduleId !== 'site-footer' && module.moduleId !== 'site-header' && (
                         <Button
                           type="text"
                           size="small"
@@ -419,7 +419,7 @@ export function ModuleDragEditor({ modules, onChange }: ModuleDragEditorProps) {
                           onClick={() => handleDeleteModule(index)}
                         />
                       )}
-                      {(module.moduleId === 'site-root' || module.moduleId === 'site-footer') && (
+                      {(module.moduleId === 'site-root' || module.moduleId === 'site-footer' || module.moduleId === 'site-header') && (
                         <>
                           <Button
                             type="text"
