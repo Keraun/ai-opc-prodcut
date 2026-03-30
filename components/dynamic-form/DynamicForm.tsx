@@ -62,6 +62,14 @@ export function DynamicForm({
             const { span } = parseWidth(fieldWidth)
             const isRequired = fieldSchema.required?.includes(subFieldName) || subField.required
 
+            if (subField.type === 'object' && subField.properties) {
+              return (
+                <Col key={fullFieldName} span={span}>
+                  {renderObjectField(fullFieldName, subField)}
+                </Col>
+              )
+            }
+
             return (
               <Col key={fullFieldName} span={span}>
                 <Form.Item
