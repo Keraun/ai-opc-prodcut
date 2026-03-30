@@ -710,11 +710,19 @@ function ItemForm({
         <div className={styles.formActions}>
           <button 
             type="button" 
-            onClick={() => onSubmit({ ...formData, status: 'draft' })} 
+            onClick={() => onSubmit({ ...formData, status: 'draft', saveOnly: true })} 
             disabled={loading}
             className={styles.draftButton}
           >
             {loading ? '保存中...' : '保存草稿'}
+          </button>
+          <button 
+            type="button" 
+            onClick={() => onSubmit({ ...formData, status: 'draft' })} 
+            disabled={loading}
+            className={styles.draftButton}
+          >
+            {loading ? '保存中...' : '保存并返回'}
           </button>
           <button 
             type="button" 
@@ -765,16 +773,19 @@ export function BaseManagement({ config }: BaseManagementProps) {
   const handleCreate = async (data: any) => {
     try {
       setSubmitting(true)
+      const { saveOnly, ...submitData } = data
       const response = await fetch(config.apiEndpoint, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(data)
+        body: JSON.stringify(submitData)
       })
       const result = await response.json()
       if (result.success) {
         toast.success(`${config.title}创建成功`)
-        // 保存草稿和发布后都返回上一级页面
-        setViewMode('list')
+        // 只有当不是仅保存时才返回上一级页面
+        if (!saveOnly) {
+          setViewMode('list')
+        }
         fetchItems()
       } else {
         toast.error(result.message || '创建失败')
@@ -791,15 +802,19 @@ export function BaseManagement({ config }: BaseManagementProps) {
     if (!currentItem?.id) return
     try {
       setSubmitting(true)
+      const { saveOnly, ...submitData } = data
       const response = await fetch(config.apiEndpoint, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ ...data, id: currentItem.id })
+        body: JSON.stringify({ ...submitData, id: currentItem.id })
       })
       const result = await response.json()
       if (result.success) {
         toast.success(`${config.title}更新成功`)
-        setViewMode('list')
+        // 只有当不是仅保存时才返回上一级页面
+        if (!saveOnly) {
+          setViewMode('list')
+        }
         fetchItems()
       } else {
         toast.error(result.message || '更新失败')
@@ -979,8 +994,16 @@ export function BaseManagement({ config }: BaseManagementProps) {
                     type="default"
                     icon={<Eye size={18} />}
                     onClick={() => {
-                      setCurrentItem(record)
-                      setViewMode('view')
+                      // 打开对应的详情页面
+                      if (config.apiEndpoint === '/api/products' && record.id) {
+                        window.open(`/product/${record.id}`, '_blank')
+                      } else if (config.apiEndpoint === '/api/articles' && record.id) {
+                        window.open(`/news/${record.id}`, '_blank')
+                      } else {
+                        // 保持原有行为
+                        setCurrentItem(record)
+                        setViewMode('view')
+                      }
                     }}
                   />
                 </Tooltip>
