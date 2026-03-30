@@ -144,7 +144,7 @@ export function NewsDetailModule({ data }: ModuleProps) {
 
         {(prevArticle || nextArticle) && (
           <div className={styles.navigationSection}>
-            {prevArticle && (
+            {prevArticle ? (
               <Link href={`/news/${prevArticle.id}`} className={`${styles.navItem} ${styles.prevItem}`}>
                 <svg className={styles.navIcon} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                   <path d="M19 12H5M12 19l-7-7 7-7" />
@@ -154,8 +154,8 @@ export function NewsDetailModule({ data }: ModuleProps) {
                   <div className={styles.navTitle}>{prevArticle.title}</div>
                 </div>
               </Link>
-            )}
-            {nextArticle && (
+            ) : <div></div>}
+            {nextArticle ? (
               <Link href={`/news/${nextArticle.id}`} className={`${styles.navItem} ${styles.nextItem}`}>
                 <div className={styles.navContent}>
                   <div className={styles.navLabel}>下一篇</div>
@@ -165,7 +165,7 @@ export function NewsDetailModule({ data }: ModuleProps) {
                   <path d="M5 12h14M12 5l7 7-7 7" />
                 </svg>
               </Link>
-            )}
+            ): <div></div>}
           </div>
         )}
         

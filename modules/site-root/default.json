@@ -24,7 +24,7 @@
   },
   "icp": "",
   "features": {
-    "enableSearch": true
+    "enableSearch": false
   },
   "seo": {
     "keywords": [],
