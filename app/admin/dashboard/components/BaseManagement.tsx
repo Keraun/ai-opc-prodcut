@@ -699,18 +699,17 @@ function ItemForm({
   return (
     <form onSubmit={handleSubmit} className={styles.form}>
       <div className={styles.formHeader}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', width: '100%' }}>
+          <h2 className={styles.formTitle}>
+            {mode === 'new' ? `新建${config.title}` : `编辑${config.title}`}
+          </h2>
           <button 
             type="button" 
             onClick={onCancel} 
             className={styles.backButton}
           >
-            <ArrowLeft size={16} />
             返回
           </button>
-          <h2 className={styles.formTitle}>
-            {mode === 'new' ? `新建${config.title}` : `编辑${config.title}`}
-          </h2>
         </div>
       </div>
 
