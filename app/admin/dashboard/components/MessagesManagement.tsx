@@ -190,7 +190,7 @@ export function MessagesManagement() {
           toast.warning('请先配置飞书应用信息', {
             action: {
               label: '去配置',
-              onClick: () => router.push('/admin/dashboard?tab=system')
+              onClick: () => router.push('/admin/dashboard?menu=feishu-app')
             }
           })
         } else {
