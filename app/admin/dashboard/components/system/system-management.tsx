@@ -292,7 +292,7 @@ export function SystemManagement({
               <div className={styles.dangerAction}>
                 <div className={styles.dangerActionInfo}>
                   <h4 className={styles.dangerActionTitle}>一键还原网站配置</h4>
-                  <p className={styles.dangerActionDesc}>将所有配置还原到模版文件状态</p>
+                  <p className={styles.dangerActionDesc}>将所有配置还原到出厂状态</p>
                 </div>
                 <Tooltip content="请先导出配置备份">
                   <Button 

@@ -1,15 +1,15 @@
 ========================================
-[2026年 3月30日 星期一 09时58分09秒 CST] 开始重启服务
+[2026年 3月30日 星期一 11时25分11秒 CST] 开始重启服务
 端口: 3000
 项目根目录: /Users/wulingyang/Documents/workspace/ai-opc-prodcut
 ========================================
-[2026年 3月30日 星期一 09时58分09秒 CST] 正在查找占用端口 3000 的进程...
-[2026年 3月30日 星期一 09时58分09秒 CST] 发现进程: 83187
-83256
-[2026年 3月30日 星期一 09时58分09秒 CST] 已终止进程
-[2026年 3月30日 星期一 09时58分09秒 CST] 等待端口释放...
-[2026年 3月30日 星期一 09时58分11秒 CST] 准备启动服务: npm run dev
-[2026年 3月30日 星期一 09时58分11秒 CST] 服务已启动，PID: 89375
+[2026年 3月30日 星期一 11时25分11秒 CST] 正在查找占用端口 3000 的进程...
+[2026年 3月30日 星期一 11时25分11秒 CST] 发现进程: 89363
+90664
+[2026年 3月30日 星期一 11时25分11秒 CST] 已终止进程
+[2026年 3月30日 星期一 11时25分11秒 CST] 等待端口释放...
+[2026年 3月30日 星期一 11时25分13秒 CST] 准备启动服务: npm run dev
+[2026年 3月30日 星期一 11时25分13秒 CST] 服务已启动，PID: 2979
 ========================================
 
 > my-project@0.1.0 dev
@@ -19,185 +19,29 @@
 - Local:         http://localhost:3000
 - Network:       http://192.168.10.50:3000
 - Environments: .env.local
-✓ Ready in 266ms
+✓ Ready in 281ms
 
- GET / 200 in 936ms (next.js: 178ms, application-code: 757ms)
- GET /admin/dashboard?menu=articles 200 in 927ms (next.js: 381ms, application-code: 546ms)
- GET /admin/dashboard?menu=system 200 in 949ms (next.js: 435ms, application-code: 514ms)
- GET / 200 in 167ms (next.js: 9ms, application-code: 158ms)
- GET /api/admin/auth 200 in 186ms (next.js: 123ms, application-code: 63ms)
- GET /api/admin/themes 200 in 192ms (next.js: 155ms, application-code: 37ms)
- GET /api/admin/pages 200 in 199ms (next.js: 192ms, application-code: 7ms)
- GET /api/articles?admin=true 200 in 27ms (next.js: 24ms, application-code: 3ms)
- GET /api/admin/pages 200 in 17ms (next.js: 11ms, application-code: 6ms)
- GET /api/articles?admin=true 200 in 8ms (next.js: 5ms, application-code: 2ms)
- GET /api/admin/themes 200 in 11ms (next.js: 5ms, application-code: 6ms)
- GET /api/admin/pages 200 in 5ms (next.js: 3ms, application-code: 3ms)
- GET /api/admin/auth 200 in 19ms (next.js: 6ms, application-code: 13ms)
- GET /api/admin/themes 200 in 17ms (next.js: 11ms, application-code: 6ms)
- GET /api/admin/themes 200 in 7ms (next.js: 2ms, application-code: 5ms)
- GET /api/admin/system/info 200 in 23ms (next.js: 20ms, application-code: 3ms)
- GET /api/admin/pages 200 in 5ms (next.js: 1943µs, application-code: 3ms)
- GET /api/admin/system/info 200 in 3ms (next.js: 1057µs, application-code: 1549µs)
- GET /admin/dashboard?menu=pages 200 in 94ms (next.js: 37ms, application-code: 57ms)
- GET /api/admin/pages 200 in 19ms (next.js: 6ms, application-code: 13ms)
- GET /api/admin/auth 200 in 18ms (next.js: 8ms, application-code: 10ms)
- GET /api/admin/themes 200 in 25ms (next.js: 14ms, application-code: 11ms)
- GET /api/admin/pages 200 in 9ms (next.js: 2ms, application-code: 7ms)
-[browser] [@arco-design/web-react]: Element does not define the `getRootDOMNode` method causing a call to React.findDOMNode. but findDOMNode is deprecated in StrictMode. Please check the code logic { detail: [ { element: [1mnull[22m, instance: [32m'[object Object]'[39m } ] } 
-[browser] [@arco-design/web-react]: Element does not define the `getRootDOMNode` method causing a call to React.findDOMNode. but findDOMNode is deprecated in StrictMode. Please check the code logic { detail: [ { element: [90mundefined[39m, instance: [32m'[object Object]'[39m } ] } 
- GET /admin/dashboard?menu=products 200 in 41ms (next.js: 7ms, application-code: 34ms)
- GET /api/products?admin=true 200 in 33ms (next.js: 27ms, application-code: 6ms)
- GET /api/products?admin=true 200 in 36ms (next.js: 34ms, application-code: 2ms)
- GET /api/articles?admin=true 200 in 5ms (next.js: 1829µs, application-code: 3ms)
- GET /api/articles?admin=true 200 in 9ms (next.js: 7ms, application-code: 1778µs)
- GET /admin/dashboard?menu=articles 200 in 45ms (next.js: 4ms, application-code: 41ms)
- GET /api/products?admin=true 200 in 3ms (next.js: 1156µs, application-code: 1866µs)
- GET /api/products?admin=true 200 in 6ms (next.js: 4ms, application-code: 1942µs)
- GET /admin/dashboard?menu=products 200 in 38ms (next.js: 3ms, application-code: 34ms)
- GET /api/images 200 in 116ms (next.js: 109ms, application-code: 6ms)
- GET /api/images 200 in 118ms (next.js: 113ms, application-code: 5ms)
- GET /api/images?stats=true 200 in 118ms (next.js: 113ms, application-code: 5ms)
- GET /api/images?stats=true 200 in 118ms (next.js: 117ms, application-code: 1471µs)
- GET /admin/dashboard?menu=images 200 in 158ms (next.js: 4ms, application-code: 155ms)
- GET /api/articles?admin=true 200 in 3ms (next.js: 1172µs, application-code: 1697µs)
- GET /api/articles?admin=true 200 in 6ms (next.js: 4ms, application-code: 1942µs)
- GET /admin/dashboard?menu=articles 200 in 22ms (next.js: 1696µs, application-code: 20ms)
- GET /api/products?admin=true 200 in 4ms (next.js: 1188µs, application-code: 3ms)
- GET /api/products?admin=true 200 in 7ms (next.js: 5ms, application-code: 1995µs)
- GET /admin/dashboard?menu=products 200 in 39ms (next.js: 3ms, application-code: 36ms)
- GET /api/articles?admin=true 200 in 4ms (next.js: 2ms, application-code: 1864µs)
- GET /api/articles?admin=true 200 in 6ms (next.js: 4ms, application-code: 2ms)
- GET /admin/dashboard?menu=articles 200 in 37ms (next.js: 3ms, application-code: 34ms)
- GET /api/products?admin=true 200 in 4ms (next.js: 1633µs, application-code: 3ms)
- GET /api/products?admin=true 200 in 6ms (next.js: 5ms, application-code: 1772µs)
- GET /admin/dashboard?menu=products 200 in 38ms (next.js: 3ms, application-code: 35ms)
- GET /api/admin/pages 200 in 12ms (next.js: 3ms, application-code: 9ms)
- GET /api/admin/pages 200 in 15ms (next.js: 7ms, application-code: 8ms)
- GET /api/admin/pages 200 in 4ms (next.js: 1217µs, application-code: 3ms)
- GET /admin/dashboard?menu=pages 200 in 85ms (next.js: 19ms, application-code: 67ms)
- GET /api/admin/pages 200 in 5ms (next.js: 1541µs, application-code: 4ms)
-🔄 Initializing and syncing modules to database...
-📦 Found 17 modules
-Synced 17/17 modules to database
-✅ Successfully synced 17/17 modules to database
- GET /api/modules 200 in 84ms (next.js: 80ms, application-code: 4ms)
- GET /api/modules 200 in 86ms (next.js: 85ms, application-code: 1913µs)
- GET /api/admin/pages/home 200 in 612ms (next.js: 607ms, application-code: 5ms)
- GET /api/admin/pages/home 200 in 613ms (next.js: 606ms, application-code: 8ms)
- GET /api/modules 200 in 3ms (next.js: 1381µs, application-code: 1786µs)
- GET /api/modules 200 in 2ms (next.js: 815µs, application-code: 1629µs)
-🔄 Initializing and syncing modules to database...
-Module with ID "site-root" is already registered. Overwriting.
-Module with ID "site-header" is already registered. Overwriting.
-Module with ID "section-hero" is already registered. Overwriting.
-Module with ID "section-services" is already registered. Overwriting.
-Module with ID "section-partner" is already registered. Overwriting.
-Module with ID "section-products" is already registered. Overwriting.
-Module with ID "section-pricing" is already registered. Overwriting.
-Module with ID "section-about" is already registered. Overwriting.
-Module with ID "section-contact" is already registered. Overwriting.
-Module with ID "site-footer" is already registered. Overwriting.
-Module with ID "news-list" is already registered. Overwriting.
-Module with ID "news-detail" is already registered. Overwriting.
-Module with ID "product-list" is already registered. Overwriting.
-Module with ID "product-detail" is already registered. Overwriting.
-Module with ID "section-404" is already registered. Overwriting.
-Module with ID "section-content" is already registered. Overwriting.
-Module with ID "section-image" is already registered. Overwriting.
-📦 Found 17 modules
-Synced 17/17 modules to database
-✅ Successfully synced 17/17 modules to database
-Module with ID "site-root" is already registered. Overwriting.
-Module with ID "site-header" is already registered. Overwriting.
-Module with ID "section-hero" is already registered. Overwriting.
-Module with ID "section-services" is already registered. Overwriting.
-Module with ID "section-partner" is already registered. Overwriting.
-Module with ID "section-products" is already registered. Overwriting.
-Module with ID "section-pricing" is already registered. Overwriting.
-Module with ID "section-about" is already registered. Overwriting.
-Module with ID "section-contact" is already registered. Overwriting.
-Module with ID "site-footer" is already registered. Overwriting.
-Module with ID "news-list" is already registered. Overwriting.
-Module with ID "news-detail" is already registered. Overwriting.
-Module with ID "product-list" is already registered. Overwriting.
-Module with ID "product-detail" is already registered. Overwriting.
-Module with ID "section-404" is already registered. Overwriting.
-Module with ID "section-content" is already registered. Overwriting.
-Module with ID "section-image" is already registered. Overwriting.
- GET /admin/module-preview/section-hero 200 in 575ms (next.js: 503ms, application-code: 73ms)
-🔄 Initializing and syncing modules to database...
-📦 Found 17 modules
-Synced 17/17 modules to database
-✅ Successfully synced 17/17 modules to database
- GET /api/modules/section-hero/schema 200 in 676ms (next.js: 672ms, application-code: 3ms)
- GET /api/modules/section-hero/schema 200 in 675ms (next.js: 672ms, application-code: 3ms)
+ GET /admin/dashboard?menu=system 200 in 890ms (next.js: 502ms, application-code: 388ms)
+ GET / 200 in 880ms (next.js: 372ms, application-code: 508ms)
+ GET /admin/dashboard?menu=system 200 in 90ms (next.js: 3ms, application-code: 87ms)
+ GET /api/admin/auth 200 in 152ms (next.js: 76ms, application-code: 76ms)
+ GET /api/admin/pages 200 in 154ms (next.js: 146ms, application-code: 7ms)
+ GET /api/admin/themes 200 in 174ms (next.js: 170ms, application-code: 4ms)
+ GET /api/admin/system/info 200 in 23ms (next.js: 19ms, application-code: 3ms)
+ GET /api/admin/system/info 200 in 5ms (next.js: 2ms, application-code: 3ms)
+ GET /api/admin/pages 200 in 5ms (next.js: 2ms, application-code: 3ms)
+ GET /api/admin/themes 200 in 6ms (next.js: 3ms, application-code: 2ms)
 [browser] Accessing element.ref was removed in React 19. ref is now a regular prop. It will be removed from the JSX Element type in a future release. 
-[browser] Accessing element.ref was removed in React 19. ref is now a regular prop. It will be removed from the JSX Element type in a future release. 
- GET /api/admin/themes 200 in 9ms (next.js: 1813µs, application-code: 7ms)
-Module with ID "site-root" is already registered. Overwriting.
-Module with ID "site-header" is already registered. Overwriting.
-Module with ID "section-hero" is already registered. Overwriting.
-Module with ID "section-services" is already registered. Overwriting.
-Module with ID "section-partner" is already registered. Overwriting.
-Module with ID "section-products" is already registered. Overwriting.
-Module with ID "section-pricing" is already registered. Overwriting.
-Module with ID "section-about" is already registered. Overwriting.
-Module with ID "section-contact" is already registered. Overwriting.
-Module with ID "site-footer" is already registered. Overwriting.
-Module with ID "news-list" is already registered. Overwriting.
-Module with ID "news-detail" is already registered. Overwriting.
-Module with ID "product-list" is already registered. Overwriting.
-Module with ID "product-detail" is already registered. Overwriting.
-Module with ID "section-404" is already registered. Overwriting.
-Module with ID "section-content" is already registered. Overwriting.
-Module with ID "section-image" is already registered. Overwriting.
- GET /api/modules/section-hero/preview 200 in 569ms (next.js: 564ms, application-code: 4ms)
-✓ Compiled in 536ms
-✓ Compiled in 34ms
-✓ Compiled in 386ms
-✓ Compiled in 799ms
-✓ Compiled in 188ms
-✓ Compiled in 149ms
-🔄 Initializing and syncing modules to database...
-📦 Found 17 modules
-Synced 17/17 modules to database
-✅ Successfully synced 17/17 modules to database
- GET /api/modules/section-hero/schema 200 in 88ms (next.js: 82ms, application-code: 5ms)
- GET /api/modules/section-hero/schema 200 in 93ms (next.js: 91ms, application-code: 1886µs)
- GET /admin/module-preview/section-hero 200 in 153ms (next.js: 101ms, application-code: 52ms)
- GET /api/admin/themes 200 in 18ms (next.js: 8ms, application-code: 10ms)
- GET /api/modules/section-hero/preview 200 in 180ms (next.js: 170ms, application-code: 10ms)
-🔄 Initializing and syncing modules to database...
-📦 Found 17 modules
-Synced 17/17 modules to database
-✅ Successfully synced 17/17 modules to database
- GET /admin/dashboard?menu=pages 200 in 70ms (next.js: 11ms, application-code: 58ms)
- GET /api/admin/pages 200 in 8ms (next.js: 3ms, application-code: 5ms)
- GET /api/admin/themes 200 in 12ms (next.js: 8ms, application-code: 4ms)
- GET /api/admin/auth 200 in 14ms (next.js: 10ms, application-code: 4ms)
- GET /api/admin/pages 200 in 9ms (next.js: 2ms, application-code: 6ms)
-[browser] [@arco-design/web-react]: Element does not define the `getRootDOMNode` method causing a call to React.findDOMNode. but findDOMNode is deprecated in StrictMode. Please check the code logic { detail: [ { element: [1mnull[22m, instance: [32m'[object Object]'[39m } ] } 
-[browser] [@arco-design/web-react]: Element does not define the `getRootDOMNode` method causing a call to React.findDOMNode. but findDOMNode is deprecated in StrictMode. Please check the code logic { detail: [ { element: [90mundefined[39m, instance: [32m'[object Object]'[39m } ] } 
-🔄 Initializing and syncing modules to database...
-📦 Found 17 modules
-Synced 17/17 modules to database
-✅ Successfully synced 17/17 modules to database
- GET /api/modules 200 in 96ms (next.js: 91ms, application-code: 5ms)
- GET /api/modules 200 in 97ms (next.js: 95ms, application-code: 1907µs)
- GET /api/admin/pages/home 200 in 8ms (next.js: 4ms, application-code: 4ms)
- GET /api/admin/pages/home 200 in 9ms (next.js: 5ms, application-code: 3ms)
- GET /api/modules 200 in 4ms (next.js: 2ms, application-code: 1570µs)
- GET /api/modules 200 in 5ms (next.js: 4ms, application-code: 1386µs)
- GET /api/modules/section-hero/schema 200 in 9ms (next.js: 5ms, application-code: 4ms)
- GET /api/modules/section-hero/schema 200 in 15ms (next.js: 10ms, application-code: 5ms)
- GET /admin/module-preview/section-hero 200 in 131ms (next.js: 5ms, application-code: 126ms)
-[browser] Accessing element.ref was removed in React 19. ref is now a regular prop. It will be removed from the JSX Element type in a future release. 
-[browser] Accessing element.ref was removed in React 19. ref is now a regular prop. It will be removed from the JSX Element type in a future release. 
- GET /api/admin/themes 200 in 12ms (next.js: 6ms, application-code: 5ms)
- GET /api/modules/section-hero/preview 200 in 8ms (next.js: 4ms, application-code: 4ms)
-🔄 Initializing and syncing modules to database...
-📦 Found 17 modules
-Synced 17/17 modules to database
-✅ Successfully synced 17/17 modules to database
+ POST /api/admin/super-admin-token 401 in 67ms (next.js: 59ms, application-code: 8ms)
+ POST /api/admin/super-admin-token 200 in 16ms (next.js: 4ms, application-code: 12ms)
+[browser] ⨯ unhandledRejection: TypeError: CopyReactDOM.render is not a function
+    at new Promise (<anonymous>)
+    at onClick (app/admin/dashboard/components/system/system-management.tsx:387:25)
+  385 |               onClick={() => {
+  386 |                 navigator.clipboard.writeText(superAdminToken)
+> 387 |                 Message.success('口令已复制到剪贴板')
+      |                         ^
+  388 |               }}
+  389 |             >
+  390 |               复制口令
 [?25h
