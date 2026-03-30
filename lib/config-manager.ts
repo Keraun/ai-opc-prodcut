@@ -161,6 +161,26 @@ export function readConfig(configType: string): any {
       return {}
     }
     
+    if (configType === 'site-header') {
+      const config = jsonDb.findOne('system_config', { config_key: 'site_header_config' })
+      if (config) {
+        try {
+          return JSON.parse(config.config_value)
+        } catch {
+          return {}
+        }
+      }
+      const module = jsonDb.findOne('module_registry', { module_id: 'site-header' })
+      if (module) {
+        try {
+          return JSON.parse(module.default_data)
+        } catch {
+          return {}
+        }
+      }
+      return {}
+    }
+    
     if (configType === 'theme') {
       const themes = jsonDb.getAll('theme_config')
       
@@ -384,6 +404,14 @@ export function writeConfig(configType: string, data: any): void {
         console.error('Error writing site-root default.json:', e)
       }
       
+      const siteRootPageModules = jsonDb.find('page_modules', { module_id: 'site-root' })
+      for (const pm of siteRootPageModules) {
+        jsonDb.update('page_modules', pm.id, {
+          data: null,
+          updated_at: new Date().toISOString()
+        })
+      }
+      
       const existingSiteFooter = jsonDb.findOne('module_registry', { module_id: 'site-footer' })
       if (existingSiteFooter) {
         try {
@@ -434,6 +462,56 @@ export function writeConfig(configType: string, data: any): void {
         fs.writeFileSync(siteFooterDefaultPath, JSON.stringify(data, null, 2), 'utf-8')
       } catch (e) {
         console.error('Error writing site-footer default.json:', e)
+      }
+      
+      const siteFooterPageModules = jsonDb.find('page_modules', { module_id: 'site-footer' })
+      for (const pm of siteFooterPageModules) {
+        jsonDb.update('page_modules', pm.id, {
+          data: null,
+          updated_at: new Date().toISOString()
+        })
+      }
+      
+      return
+    }
+    
+    if (configType === 'site-header') {
+      const existing = jsonDb.findOne('system_config', { config_key: 'site_header_config' })
+      if (existing) {
+        jsonDb.update('system_config', existing.id, {
+          config_value: JSON.stringify(data),
+          updated_at: new Date().toISOString()
+        })
+      } else {
+        jsonDb.insert('system_config', {
+          config_key: 'site_header_config',
+          config_value: JSON.stringify(data),
+          created_at: new Date().toISOString(),
+          updated_at: new Date().toISOString()
+        })
+      }
+      
+      const existingSiteHeader = jsonDb.findOne('module_registry', { module_id: 'site-header' })
+      if (existingSiteHeader) {
+        jsonDb.update('module_registry', existingSiteHeader.id, {
+          default_data: JSON.stringify(data),
+          updated_at: new Date().toISOString()
+        })
+      }
+      
+      const siteHeaderDefaultPath = path.join(process.cwd(), 'modules', 'site-header', 'default.json')
+      try {
+        fs.writeFileSync(siteHeaderDefaultPath, JSON.stringify(data, null, 2), 'utf-8')
+      } catch (e) {
+        console.error('Error writing site-header default.json:', e)
+      }
+      
+      const siteHeaderPageModules = jsonDb.find('page_modules', { module_id: 'site-header' })
+      for (const pm of siteHeaderPageModules) {
+        jsonDb.update('page_modules', pm.id, {
+          data: null,
+          updated_at: new Date().toISOString()
+        })
       }
       
       return
@@ -695,6 +773,9 @@ export function getPageResponse(pageId: string): any {
       } else if (pm.module_id === 'site-footer') {
         const footerConfig = jsonDb.findOne('system_config', { config_key: 'site_footer_config' })
         moduleData = footerConfig ? JSON.parse(footerConfig.config_value) : {}
+      } else if (pm.module_id === 'site-header') {
+        const headerConfig = jsonDb.findOne('system_config', { config_key: 'site_header_config' })
+        moduleData = headerConfig ? JSON.parse(headerConfig.config_value) : {}
       } else {
         moduleData = pm.data 
           ? JSON.parse(pm.data) 

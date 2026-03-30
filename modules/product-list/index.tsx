@@ -55,6 +55,7 @@ export function ProductListModule({ data }: ModuleProps) {
   }
 
   const [products, setProducts] = useState<Product[]>([])
+  const [categories, setCategories] = useState<{ key: string; title: string }[]>([{ key: 'all', title: '全部产品' }])
   const [loading, setLoading] = useState(true)
   const [selectedCategory, setSelectedCategory] = useState<string>('all')
   const [imageErrors, setImageErrors] = useState<Set<number>>(new Set())
@@ -62,20 +63,36 @@ export function ProductListModule({ data }: ModuleProps) {
   const [modalTitle, setModalTitle] = useState('联系客服')
 
   useEffect(() => {
-    const fetchProducts = async () => {
+    const fetchData = async () => {
       try {
-        const response = await fetch('/api/products')
-        const result = await response.json()
-        if (result.success && result.data) {
-          setProducts(result.data)
+        const [productsRes, categoriesRes] = await Promise.all([
+          fetch('/api/products'),
+          fetch('/api/product-categories')
+        ])
+        
+        const productsResult = await productsRes.json()
+        if (productsResult.success && productsResult.data) {
+          setProducts(productsResult.data)
+        }
+        
+        const categoriesResult = await categoriesRes.json()
+        if (categoriesResult.success && categoriesResult.data) {
+          const formattedCategories = [
+            { key: 'all', title: '全部产品' },
+            ...categoriesResult.data.map((cat: any) => ({
+              key: cat.value,
+              title: cat.label
+            }))
+          ]
+          setCategories(formattedCategories)
         }
       } catch (error) {
-        console.error('Failed to fetch products:', error)
+        console.error('Failed to fetch data:', error)
       } finally {
         setLoading(false)
       }
     }
-    fetchProducts()
+    fetchData()
   }, [])
 
   const handleImageError = (productId: number) => {
@@ -85,11 +102,6 @@ export function ProductListModule({ data }: ModuleProps) {
   const filteredProducts = selectedCategory === 'all'
     ? products
     : products.filter(p => p.category === selectedCategory)
-
-  const categories = [
-    { key: 'all', title: '全部产品' },
-    ...(config.categories || [])
-  ]
 
   const formatPrice = (price: number) => {
     if (price === 0) return '免费'

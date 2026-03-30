@@ -1,6 +1,7 @@
 {
-  "navItems": [{
-      "label": "首页",
+  "navItems": [
+    {
+      "label": "首页1",
       "href": "/"
     },
     {

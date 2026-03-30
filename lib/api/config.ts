@@ -389,6 +389,29 @@ export async function saveSiteFooterConfig(data: any): Promise<{ success: boolea
   }
 }
 
+export async function getSiteHeaderConfig(): Promise<Record<string, any>> {
+  try {
+    const result = await request<Record<string, any>>('/api/admin/config?type=site-header')
+    return result.success && result.data ? result.data : {}
+  } catch (error) {
+    console.error('Error fetching site header config:', error)
+    return {}
+  }
+}
+
+export async function saveSiteHeaderConfig(data: any): Promise<{ success: boolean; message?: string }> {
+  try {
+    const result = await request<void>('/api/admin/config', {
+      method: 'POST',
+      body: JSON.stringify({ type: 'site-header', data }),
+    })
+    return { success: result.success, message: result.message }
+  } catch (error) {
+    console.error('Error saving site header config:', error)
+    return { success: false, message: '配置保存失败' }
+  }
+}
+
 export async function syncGlobalConfig(options: {
   siteRootData?: any
   siteFooterData?: any

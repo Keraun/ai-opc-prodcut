@@ -1,7 +1,7 @@
 "use client"
 
 import { useState } from "react"
-import { Button, Card, Typography, Space, Statistic, Tag, Avatar, Divider, Badge, Tooltip, Modal, Input, Message } from "@arco-design/web-react"
+import { Button, Card, Typography, Space, Statistic, Tag, Avatar, Divider, Badge, Tooltip, Modal, Input } from "@arco-design/web-react"
 import { 
   IconExport, 
   IconDownload, 
@@ -19,6 +19,7 @@ import {
   IconEye,
   IconCopy
 } from "@arco-design/web-react/icon"
+import { toast } from "sonner"
 import { getSuperAdminToken } from "@/lib/api-client"
 import { ManagementHeader } from "../ManagementHeader"
 import styles from "../../dashboard.module.css"
@@ -312,7 +313,12 @@ export function SystemManagement({
 
       {/* 查看超级管理员口令弹窗 */}
       <Modal
-        title="查看超级管理员口令"
+        title={
+          <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+            <IconSafe style={{ color: '#165DFF' }} />
+            查看超级管理员口令
+          </div>
+        }
         visible={showSuperAdminTokenModal}
         onCancel={() => {
           setShowSuperAdminTokenModal(false)
@@ -365,49 +371,92 @@ export function SystemManagement({
             </>
           )
         }
+        style={{ top: '15%' }}
       >
         {superAdminToken ? (
-          <div style={{ textAlign: 'center', padding: '20px 0' }}>
-            <div style={{ 
-              background: '#f5f5f5', 
-              padding: '16px', 
-              borderRadius: '8px',
-              marginBottom: '16px',
-              fontFamily: 'monospace',
-              fontSize: '14px',
-              wordBreak: 'break-all'
+          <div style={{ padding: '24px 0' }}>
+            <div style={{
+              background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+              padding: '24px',
+              borderRadius: '12px',
+              marginBottom: '20px',
+              textAlign: 'center'
             }}>
-              {superAdminToken}
+              <Typography.Text style={{ color: 'rgba(255,255,255,0.8)', display: 'block', marginBottom: '12px', fontSize: '14px' }}>
+                您的超级管理员口令
+              </Typography.Text>
+              <div style={{
+                background: 'rgba(255,255,255,0.95)',
+                padding: '16px 20px',
+                borderRadius: '8px',
+                fontFamily: "'SF Mono', Monaco, 'Cascadia Code', 'Roboto Mono', monospace",
+                fontSize: '15px',
+                wordBreak: 'break-all',
+                color: '#1d2129',
+                fontWeight: 500,
+                letterSpacing: '0.5px',
+                boxShadow: '0 4px 12px rgba(0,0,0,0.1)'
+              }}>
+                {superAdminToken}
+              </div>
             </div>
-            <Button 
-              type="primary" 
-              icon={<IconCopy />}
-              onClick={() => {
-                navigator.clipboard.writeText(superAdminToken)
-                Message.success('口令已复制到剪贴板')
-              }}
-            >
-              复制口令
-            </Button>
+            <div style={{ textAlign: 'center' }}>
+              <Button 
+                type="primary" 
+                size="large"
+                icon={<IconCopy />}
+                onClick={async () => {
+                  try {
+                    await navigator.clipboard.writeText(superAdminToken)
+                    toast.success('口令已成功复制到剪贴板')
+                  } catch {
+                    toast.error('复制失败，请手动复制')
+                  }
+                }}
+                style={{ minWidth: '160px', height: '44px' }}
+              >
+                复制口令
+              </Button>
+            </div>
           </div>
         ) : (
           <div style={{ padding: '20px 0' }}>
-            <Typography.Paragraph style={{ marginBottom: '16px' }}>
-              请输入当前账户密码以查看超级管理员口令
+            <Typography.Paragraph style={{ 
+              marginBottom: '24px', 
+              fontSize: '14px', 
+              color: '#4e5969',
+              lineHeight: '1.6'
+            }}>
+              请输入当前账户密码以验证身份，查看超级管理员口令
             </Typography.Paragraph>
-            <Input.Password
-              placeholder="请输入当前账户密码"
-              value={superAdminPassword}
-              onChange={(value) => {
-                setSuperAdminPassword(value)
-                setPasswordError("")
-              }}
-              error={!!passwordError}
-            />
+            <div style={{ marginBottom: '16px' }}>
+              <Input.Password
+                placeholder="请输入当前账户密码"
+                value={superAdminPassword}
+                onChange={(value) => {
+                  setSuperAdminPassword(value)
+                  setPasswordError("")
+                }}
+                error={!!passwordError}
+                size="large"
+                style={{ borderRadius: '8px' }}
+              />
+            </div>
             {passwordError && (
-              <Typography.Text type="error" style={{ display: 'block', marginTop: '8px' }}>
+              <div style={{
+                display: 'flex',
+                alignItems: 'center',
+                gap: '6px',
+                padding: '10px 12px',
+                background: '#fff2f0',
+                border: '1px solid #ffccc7',
+                borderRadius: '6px',
+                color: '#f53f3f',
+                fontSize: '13px'
+              }}>
+                <IconCloseCircle />
                 {passwordError}
-              </Typography.Text>
+              </div>
             )}
           </div>
         )}

@@ -6,7 +6,9 @@ import {
   getSiteRootConfig,
   saveSiteRootConfig,
   getSiteFooterConfig,
-  saveSiteFooterConfig
+  saveSiteFooterConfig,
+  getSiteHeaderConfig,
+  saveSiteHeaderConfig
 } from '@/lib/api-client'
 import { ManagementHeader } from '../../components/ManagementHeader'
 import { ModuleFieldEditor } from '../../components/module-editor/ModuleFieldEditor'
@@ -14,16 +16,18 @@ import styles from './site-config.module.css'
 
 const TabPane = Tabs.TabPane
 
-type ConfigTab = 'site-root' | 'site-footer'
+type ConfigTab = 'site-root' | 'site-header' | 'site-footer'
 
 export function SiteConfigManager() {
   const [activeTab, setActiveTab] = useState<ConfigTab>('site-root')
   const [siteRootData, setSiteRootData] = useState<Record<string, unknown>>({})
   const [siteFooterData, setSiteFooterData] = useState<Record<string, unknown>>({})
+  const [siteHeaderData, setSiteHeaderData] = useState<Record<string, unknown>>({})
   const [loading, setLoading] = useState(false)
   const [saving, setSaving] = useState(false)
   const [hasSiteRootChanges, setHasSiteRootChanges] = useState(false)
   const [hasSiteFooterChanges, setHasSiteFooterChanges] = useState(false)
+  const [hasSiteHeaderChanges, setHasSiteHeaderChanges] = useState(false)
 
   useEffect(() => {
     fetchData()
@@ -32,14 +36,17 @@ export function SiteConfigManager() {
   const fetchData = async () => {
     setLoading(true)
     try {
-      const [rootConfig, footerConfig] = await Promise.all([
+      const [rootConfig, footerConfig, headerConfig] = await Promise.all([
         getSiteRootConfig(),
-        getSiteFooterConfig()
+        getSiteFooterConfig(),
+        getSiteHeaderConfig()
       ])
       setSiteRootData(rootConfig)
       setSiteFooterData(footerConfig)
+      setSiteHeaderData(headerConfig)
       setHasSiteRootChanges(false)
       setHasSiteFooterChanges(false)
+      setHasSiteHeaderChanges(false)
     } catch (error) {
       console.error('获取配置失败:', error)
       toast.error('获取配置失败')
@@ -58,6 +65,11 @@ export function SiteConfigManager() {
     setHasSiteFooterChanges(true)
   }
 
+  const handleSiteHeaderChange = (data: Record<string, unknown>) => {
+    setSiteHeaderData(data)
+    setHasSiteHeaderChanges(true)
+  }
+
   const handleSave = async () => {
     setSaving(true)
     try {
@@ -68,6 +80,9 @@ export function SiteConfigManager() {
       }
       if (hasSiteFooterChanges) {
         savePromises.push(saveSiteFooterConfig(siteFooterData))
+      }
+      if (hasSiteHeaderChanges) {
+        savePromises.push(saveSiteHeaderConfig(siteHeaderData))
       }
       
       if (savePromises.length === 0) {
@@ -81,10 +96,12 @@ export function SiteConfigManager() {
       if (allSuccess) {
         const savedItems = []
         if (hasSiteRootChanges) savedItems.push('站点配置')
+        if (hasSiteHeaderChanges) savedItems.push('站点导航')
         if (hasSiteFooterChanges) savedItems.push('页脚配置')
         toast.success(`${savedItems.join('、')}保存成功`)
         setHasSiteRootChanges(false)
         setHasSiteFooterChanges(false)
+        setHasSiteHeaderChanges(false)
       } else {
         const failedMessages = results.filter(r => !r.success).map(r => r.message).join('；')
         toast.error(failedMessages || '部分配置保存失败')
@@ -97,7 +114,7 @@ export function SiteConfigManager() {
     }
   }
 
-  const hasChanges = hasSiteRootChanges || hasSiteFooterChanges
+  const hasChanges = hasSiteRootChanges || hasSiteFooterChanges || hasSiteHeaderChanges
 
   const renderActions = () => (
     <Button
@@ -124,7 +141,7 @@ export function SiteConfigManager() {
     <div className={styles.container}>
       <ManagementHeader
         title="全局配置"
-        description="管理网站的全局配置，包括站点配置和页脚配置。配置保存后将全局生效，所有页面自动使用最新配置。"
+        description="管理网站的全局配置，包括站点配置、站点导航和页脚配置。配置保存后将全局生效，所有页面自动使用最新配置。"
         actions={renderActions()}
       />
 
@@ -139,6 +156,15 @@ export function SiteConfigManager() {
               moduleId="site-root"
               data={siteRootData}
               onChange={handleSiteRootChange}
+            />
+          </div>
+        </TabPane>
+        <TabPane key="site-header" title="站点导航">
+          <div className={styles.tabContent}>
+            <ModuleFieldEditor
+              moduleId="site-header"
+              data={siteHeaderData}
+              onChange={handleSiteHeaderChange}
             />
           </div>
         </TabPane>

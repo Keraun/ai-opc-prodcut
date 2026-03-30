@@ -66,6 +66,8 @@ export {
   syncSiteRootToPages,
   getSiteFooterConfig,
   saveSiteFooterConfig,
+  getSiteHeaderConfig,
+  saveSiteHeaderConfig,
   syncGlobalConfig,
   getSystemInfo,
   restartSystem
