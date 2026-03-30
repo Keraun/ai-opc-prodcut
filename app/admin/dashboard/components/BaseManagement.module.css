@@ -325,6 +325,7 @@
   font-family: inherit;
   resize: vertical;
   transition: border-color 0.2s, box-shadow 0.2s;
+  width: 100%;
 }
 
 .textarea:focus {
@@ -753,6 +754,7 @@
   transition: all 0.2s;
   color: #6b7280;
   background: #f9fafb;
+  width: 100%;
 }
 
 .imageUploadPlaceholder:hover {

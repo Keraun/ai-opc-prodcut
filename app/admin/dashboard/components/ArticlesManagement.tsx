@@ -30,14 +30,16 @@ export function ArticlesManagement() {
           { value: "other", label: "其他" }
         ],
         placeholder: "请选择文章分类",
-        icon: <Tag size={16} />
+        icon: <Tag size={16} />,
+        inlineGroup: "分类与标签"
       },
       {
         name: "mainImage",
         label: "资讯主图",
         type: "image",
         hint: "建议尺寸: 1200x630px",
-        icon: <ImageIcon size={16} />
+        icon: <ImageIcon size={16} />,
+        inlineGroup: "摘要与SEO"
       },
       {
         name: "summary",
@@ -62,14 +64,16 @@ export function ArticlesManagement() {
         label: "文章标签",
         type: "tags",
         placeholder: "输入标签后按回车添加",
-        icon: <Tag size={16} />
+        icon: <Tag size={16} />,
+        inlineGroup: "分类与标签"
       },
       {
         name: "seo.title",
         label: "SEO 标题",
         type: "text",
         placeholder: "SEO 标题（留空则使用文章标题）",
-        icon: <Tag size={16} />
+        icon: <Tag size={16} />,
+        inlineGroup: "SEO标题与关键词"
       },
       {
         name: "seo.description",
@@ -86,7 +90,8 @@ export function ArticlesManagement() {
         label: "SEO 关键词",
         type: "tags",
         placeholder: "输入关键词后按回车添加",
-        icon: <Tag size={16} />
+        icon: <Tag size={16} />,
+        inlineGroup: "SEO标题与关键词"
       },
       {
         name: "content",

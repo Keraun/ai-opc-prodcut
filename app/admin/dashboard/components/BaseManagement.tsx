@@ -405,7 +405,7 @@ function FormField({
       )}
       
       {field.type === 'textarea' && (
-        <div style={{ position: 'relative' }}>
+        <div style={{ position: 'relative', width: '100%' }}>
           <textarea
             value={value || ''}
             onChange={(e) => {
