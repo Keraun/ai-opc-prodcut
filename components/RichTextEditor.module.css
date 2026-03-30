@@ -26,13 +26,14 @@
 
 .editorContent {
   padding: 16px;
-  min-height: 200px;
+  min-height: 300px;
   background: #fff;
 }
 
 .editorContent :global(.ProseMirror) {
   outline: none;
   width: 100%;
+  min-height: 300px;
 }
 
 .editorContent :global(.ProseMirror > *) {

@@ -395,28 +395,30 @@ export function SystemManagement({
                 color: '#1d2129',
                 fontWeight: 500,
                 letterSpacing: '0.5px',
-                boxShadow: '0 4px 12px rgba(0,0,0,0.1)'
+                boxShadow: '0 4px 12px rgba(0,0,0,0.1)',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'space-between',
+                gap: '12px'
               }}>
-                {superAdminToken}
+                <span style={{ flex: 1, textAlign: 'left' }}>{superAdminToken}</span>
+                <Tooltip content="复制口令">
+                  <Button 
+                    type="text" 
+                    size="small"
+                    icon={<IconCopy />}
+                    onClick={async () => {
+                      try {
+                        await navigator.clipboard.writeText(superAdminToken)
+                        toast.success('口令已成功复制到剪贴板')
+                      } catch {
+                        toast.error('复制失败，请手动复制')
+                      }
+                    }}
+                    style={{ flexShrink: 0 }}
+                  />
+                </Tooltip>
               </div>
-            </div>
-            <div style={{ textAlign: 'center' }}>
-              <Button 
-                type="primary" 
-                size="large"
-                icon={<IconCopy />}
-                onClick={async () => {
-                  try {
-                    await navigator.clipboard.writeText(superAdminToken)
-                    toast.success('口令已成功复制到剪贴板')
-                  } catch {
-                    toast.error('复制失败，请手动复制')
-                  }
-                }}
-                style={{ minWidth: '160px', height: '44px' }}
-              >
-                复制口令
-              </Button>
             </div>
           </div>
         ) : (
@@ -436,6 +438,26 @@ export function SystemManagement({
                 onChange={(value) => {
                   setSuperAdminPassword(value)
                   setPasswordError("")
+                }}
+                onPressEnter={async () => {
+                  if (!superAdminPassword) {
+                    setPasswordError("请输入当前账户密码")
+                    return
+                  }
+                  setLoadingToken(true)
+                  setPasswordError("")
+                  try {
+                    const result = await getSuperAdminToken(superAdminPassword)
+                    if (result.success && result.token) {
+                      setSuperAdminToken(result.token)
+                    } else {
+                      setPasswordError(result.message || "密码错误")
+                    }
+                  } catch (error) {
+                    setPasswordError("获取口令失败")
+                  } finally {
+                    setLoadingToken(false)
+                  }
                 }}
                 error={!!passwordError}
                 size="large"

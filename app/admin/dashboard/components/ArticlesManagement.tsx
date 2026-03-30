@@ -46,7 +46,9 @@ export function ArticlesManagement() {
         required: true,
         placeholder: "请输入文章摘要",
         rows: 3,
-        icon: <FileText size={16} />
+        icon: <FileText size={16} />,
+        maxLength: 150,
+        inlineGroup: "摘要与SEO"
       },
       {
         name: "author",
@@ -74,8 +76,10 @@ export function ArticlesManagement() {
         label: "SEO 描述",
         type: "textarea",
         placeholder: "SEO 描述（留空则使用文章摘要）",
-        rows: 2,
-        icon: <FileText size={16} />
+        rows: 3,
+        icon: <FileText size={16} />,
+        maxLength: 160,
+        inlineGroup: "摘要与SEO"
       },
       {
         name: "seo.keywords",

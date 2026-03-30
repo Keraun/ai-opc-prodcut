@@ -51,6 +51,7 @@ export interface FieldConfig {
   icon?: React.ReactNode
   inlineGroup?: string
   hint?: string
+  maxLength?: number
 }
 
 export interface ColumnConfig {
@@ -404,15 +405,40 @@ function FormField({
       )}
       
       {field.type === 'textarea' && (
-        <textarea
-          value={value || ''}
-          onChange={(e) => onChange(e.target.value)}
-          onKeyPress={(e) => e.key === 'Enter' && e.preventDefault()}
-          className={styles.textarea}
-          placeholder={field.placeholder}
-          rows={field.rows || 3}
-          style={{ minHeight: '160px' }}
-        />
+        <div style={{ position: 'relative' }}>
+          <textarea
+            value={value || ''}
+            onChange={(e) => {
+              const newValue = e.target.value
+              if (field.maxLength && newValue.length > field.maxLength) {
+                onChange(newValue.substring(0, field.maxLength))
+              } else {
+                onChange(newValue)
+              }
+            }}
+            onKeyPress={(e) => e.key === 'Enter' && e.preventDefault()}
+            className={styles.textarea}
+            placeholder={field.placeholder}
+            rows={field.rows || 3}
+            style={{ 
+              minHeight: '160px',
+              paddingRight: field.maxLength ? '80px' : undefined
+            }}
+            maxLength={field.maxLength}
+          />
+          {field.maxLength && (
+            <div style={{
+              position: 'absolute',
+              bottom: '8px',
+              right: '12px',
+              fontSize: '12px',
+              color: (value?.length || 0) > field.maxLength * 0.9 ? '#ff7d00' : '#86909c',
+              fontWeight: (value?.length || 0) > field.maxLength * 0.9 ? 500 : 400
+            }}>
+              {value?.length || 0} / {field.maxLength}
+            </div>
+          )}
+        </div>
       )}
       
       {field.type === 'select' && (
@@ -713,7 +739,10 @@ function ItemForm({
         {Object.entries(fieldsByGroup).map(([groupName, groupFields]) => {
           if (groupName !== 'default' && groupFields.length > 0) {
             return (
-              <div key={groupName} className={styles.formRowThree}>
+              <div 
+                key={groupName} 
+                className={groupFields.length === 2 ? styles.formRowTwo : styles.formRowThree}
+              >
                 {groupFields.map(field => (
                   <div key={field.name} className={styles.inlineField}>
                     <label className={styles.inlineLabel}>

@@ -205,6 +205,13 @@
   margin-bottom: 20px;
 }
 
+.formRowTwo {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  margin-bottom: 20px;
+}
+
 .formGroup {
   display: flex;
   align-items: center;
@@ -427,9 +434,11 @@
   outline: none;
   width: 100%;
   min-width: 100%;
+  min-height: 300px;
+
 }
 
-.editorContent :global(.ProseMirror) > * {
+.editorContent :global(.ProseMirror)>* {
   max-width: 100%;
 }
 

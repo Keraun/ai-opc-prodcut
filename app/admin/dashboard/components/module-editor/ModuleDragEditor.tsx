@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useRef, useCallback } from "react"
 import { Button, Tag, Drawer, Tooltip } from "@arco-design/web-react"
+import { IconFullscreen, IconFullscreenExit } from "@arco-design/web-react/icon"
 import { toast } from "sonner"
 import styles from "../../dashboard.module.css"
 import { ModuleFieldEditor } from "./ModuleFieldEditor"
@@ -46,10 +47,36 @@ export function ModuleDragEditor({ modules, onChange }: ModuleDragEditorProps) {
   const [gridColumns, setGridColumns] = useState<1 | 2 | 3>(3)
   const [previewDevice, setPreviewDevice] = useState<'web' | 'mobile' | 'ipad'>('web')
   const [editPreviewDevice, setEditPreviewDevice] = useState<'web' | 'mobile' | 'ipad'>('ipad')
+  const [isFullscreen, setIsFullscreen] = useState(false)
   const editPreviewIframeRef = useRef<HTMLIFrameElement>(null)
+  const previewPanelRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
     loadAvailableModules()
+  }, [])
+
+  const toggleFullscreen = useCallback(async () => {
+    try {
+      if (!document.fullscreenElement && previewPanelRef.current) {
+        await previewPanelRef.current.requestFullscreen()
+        setIsFullscreen(true)
+      } else {
+        await document.exitFullscreen()
+        setIsFullscreen(false)
+      }
+    } catch (error) {
+      console.error('全屏切换失败:', error)
+    }
+  }, [])
+
+  useEffect(() => {
+    const handleFullscreenChange = () => {
+      setIsFullscreen(!!document.fullscreenElement)
+    }
+    document.addEventListener('fullscreenchange', handleFullscreenChange)
+    return () => {
+      document.removeEventListener('fullscreenchange', handleFullscreenChange)
+    }
   }, [])
 
   const loadAvailableModules = async () => {
@@ -478,32 +505,45 @@ export function ModuleDragEditor({ modules, onChange }: ModuleDragEditorProps) {
       >
         {editingModule && (
           <div className={styles.editModuleSplitLayout}>
-            <div className={styles.editModulePreviewPanel}>
+            <div 
+              className={`${styles.editModulePreviewPanel} ${isFullscreen ? styles.fullscreenPreview : ''}`}
+              ref={previewPanelRef}
+            >
               <div className={styles.editModulePreviewHeader}>
                 <h4>实时预览</h4>
-                <div className={styles.editModulePreviewDevices}>
-                  <Tooltip content="桌面端">
+                <div className={styles.editModulePreviewControls}>
+                  <div className={styles.editModulePreviewDevices}>
+                    <Tooltip content="桌面端">
+                      <Button 
+                        size="mini" 
+                        type={editPreviewDevice === 'web' ? "primary" : "text"}
+                        icon={<IconDesktop />}
+                        onClick={() => setEditPreviewDevice('web')}
+                      />
+                    </Tooltip>
+                    <Tooltip content="平板端">
+                      <Button 
+                        size="mini" 
+                        type={editPreviewDevice === 'ipad' ? "primary" : "text"}
+                        icon={<IconApps />}
+                        onClick={() => setEditPreviewDevice('ipad')}
+                      />
+                    </Tooltip>
+                    <Tooltip content="移动端">
+                      <Button 
+                        size="mini" 
+                        type={editPreviewDevice === 'mobile' ? "primary" : "text"}
+                        icon={<IconMobile />}
+                        onClick={() => setEditPreviewDevice('mobile')}
+                      />
+                    </Tooltip>
+                  </div>
+                  <Tooltip content={isFullscreen ? "退出全屏" : "全屏查看"}>
                     <Button 
-                      size="mini" 
-                      type={editPreviewDevice === 'web' ? "primary" : "text"}
-                      icon={<IconDesktop />}
-                      onClick={() => setEditPreviewDevice('web')}
-                    />
-                  </Tooltip>
-                  <Tooltip content="平板端">
-                    <Button 
-                      size="mini" 
-                      type={editPreviewDevice === 'ipad' ? "primary" : "text"}
-                      icon={<IconApps />}
-                      onClick={() => setEditPreviewDevice('ipad')}
-                    />
-                  </Tooltip>
-                  <Tooltip content="移动端">
-                    <Button 
-                      size="mini" 
-                      type={editPreviewDevice === 'mobile' ? "primary" : "text"}
-                      icon={<IconMobile />}
-                      onClick={() => setEditPreviewDevice('mobile')}
+                      size="mini"
+                      type="text"
+                      icon={isFullscreen ? <IconFullscreenExit /> : <IconFullscreen />}
+                      onClick={toggleFullscreen}
                     />
                   </Tooltip>
                 </div>

@@ -132,7 +132,8 @@ export function ProductsManagement() {
         placeholder: "请输入产品描述",
         rows: 3,
         icon: <Package size={16} />,
-        inlineGroup: "描述与图片"
+        inlineGroup: "描述与图片",
+        maxLength: 200
       },
       {
         name: "price",
