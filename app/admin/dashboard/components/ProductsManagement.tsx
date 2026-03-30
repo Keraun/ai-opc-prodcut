@@ -67,7 +67,7 @@ export function ProductsManagement() {
         icon: <Package size={16} />
       },
       {
-        name: "purchaseLink",
+        name: "link",
         label: "购买链接(可选)",
         type: "text",
         placeholder: "请输入产品购买链接",
@@ -207,6 +207,7 @@ export function ProductsManagement() {
       states: [
         { value: "active", label: "下架", action: "下架产品", type: "warning", target: "inactive" },
         { value: "inactive", label: "上架", action: "上架产品", type: "success", target: "active" },
+        { value: "draft", label: "上架", action: "上架产品", type: "success", target: "active" },
         { value: "published", label: "下架", action: "下架产品", type: "warning", target: "inactive" }
       ]
     }

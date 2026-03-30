@@ -763,8 +763,14 @@ export function BaseManagement({ config }: BaseManagementProps) {
       const result = await response.json()
       if (result.success) {
         toast.success(`${config.title}创建成功`)
-        setViewMode('list')
-        fetchItems()
+        if (data.status === 'published') {
+          setViewMode('list')
+          fetchItems()
+        } else {
+          // 保存草稿，保持在编辑页面
+          setCurrentItem({ ...data, id: result.data?.id })
+          setViewMode('edit')
+        }
       } else {
         toast.error(result.message || '创建失败')
       }

@@ -115,6 +115,23 @@ export function HeroModule({ data }: ModuleProps) {
           </span>
         ))}
       </div>
+
+      {config.mainImage && (
+        <div className={styles.mainImagePreview}>
+          <img 
+            src={config.mainImage} 
+            alt="Hero 主图" 
+            className={styles.mainImage}
+            style={{ 
+              maxWidth: '100%', 
+              height: 'auto', 
+              borderRadius: '8px',
+              marginTop: '2rem',
+              boxShadow: '0 4px 12px rgba(0, 0, 0, 0.1)'
+            }}
+          />
+        </div>
+      )}
     </div>
   )
 
@@ -218,7 +235,21 @@ export function HeroModule({ data }: ModuleProps) {
 
       <div className={styles.layout2Image}>
         <div className={styles.layout2ImageContainer}>
-          <div className={styles.layout2ImageBg} />
+          {config.mainImage ? (
+            <img 
+              src={config.mainImage} 
+              alt="Hero 主图" 
+              className={styles.layout2ImageBg}
+              style={{ 
+                width: '100%', 
+                height: '100%', 
+                objectFit: 'cover',
+                borderRadius: '8px'
+              }}
+            />
+          ) : (
+            <div className={styles.layout2ImageBg} />
+          )}
           <div className={styles.layout2ImageContent}>
             <div className={styles.layout2ImageText}>
               <ThunderboltIcon />
@@ -328,6 +359,23 @@ export function HeroModule({ data }: ModuleProps) {
               </span>
             ))}
           </div>
+
+          {config.mainImage && (
+            <div className={styles.mainImagePreview}>
+              <img 
+                src={config.mainImage} 
+                alt="Hero 主图" 
+                className={styles.mainImage}
+                style={{ 
+                  maxWidth: '100%', 
+                  height: 'auto', 
+                  borderRadius: '8px',
+                  marginTop: '2rem',
+                  boxShadow: '0 4px 12px rgba(0, 0, 0, 0.1)'
+                }}
+              />
+            </div>
+          )}
         </div>
       </div>
     </div>

@@ -16,5 +16,6 @@
       "href": "/about"
     }
   },
-  "featurePills": ["AI工具站", "GEO课程", "工作流定制", "一人公司"]
+  "featurePills": ["AI工具站", "GEO课程", "工作流定制", "一人公司"],
+  "mainImage": ""
 }

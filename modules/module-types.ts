@@ -21,6 +21,7 @@ export interface HeroData {
   subtitle?: string
   buttons?: HeroButtons
   featurePills?: string[]
+  mainImage?: string
 }
 
 export interface ServicesItem {

@@ -226,3 +226,302 @@ Synced 17/17 modules to database
  GET /api/admin/pages 200 in 4ms (next.js: 2ms, application-code: 2ms)
 [browser] [@arco-design/web-react]: Element does not define the `getRootDOMNode` method causing a call to React.findDOMNode. but findDOMNode is deprecated in StrictMode. Please check the code logic { detail: [ { element: [1mnull[22m, instance: [32m'[object Object]'[39m } ] } 
 [browser] [@arco-design/web-react]: Element does not define the `getRootDOMNode` method causing a call to React.findDOMNode. but findDOMNode is deprecated in StrictMode. Please check the code logic { detail: [ { element: [90mundefined[39m, instance: [32m'[object Object]'[39m } ] } 
+ GET /api/modules 200 in 34ms (next.js: 19ms, application-code: 15ms)
+ GET /api/modules 200 in 35ms (next.js: 32ms, application-code: 2ms)
+ GET /api/admin/pages/home 200 in 15ms (next.js: 7ms, application-code: 8ms)
+ GET /api/admin/pages/home 200 in 15ms (next.js: 10ms, application-code: 5ms)
+ GET /api/modules 200 in 5ms (next.js: 2ms, application-code: 2ms)
+ GET /api/modules 200 in 7ms (next.js: 6ms, application-code: 1595µs)
+ GET /api/admin/pages 200 in 8ms (next.js: 2ms, application-code: 6ms)
+ GET /api/admin/pages 200 in 9ms (next.js: 4ms, application-code: 4ms)
+ GET /api/admin/pages 200 in 4ms (next.js: 771µs, application-code: 3ms)
+ GET /api/admin/pages 200 in 3ms (next.js: 1289µs, application-code: 1896µs)
+ GET /admin/dashboard?menu=pages 200 in 50ms (next.js: 9ms, application-code: 41ms)
+ GET /admin/dashboard?menu=products 200 in 110ms (next.js: 10ms, application-code: 100ms)
+ GET /api/products?admin=true 200 in 45ms (next.js: 41ms, application-code: 3ms)
+ GET /api/products?admin=true 200 in 54ms (next.js: 46ms, application-code: 8ms)
+[browser] [tiptap warn]: Duplicate extension names found: ['link', 'underline']. This can lead to issues.
+ POST /api/products 200 in 49ms (next.js: 34ms, application-code: 15ms)
+ GET /api/products?admin=true 200 in 4ms (next.js: 1611µs, application-code: 2ms)
+[browser] [tiptap warn]: Duplicate extension names found: ['link', 'underline']. This can lead to issues.
+✓ Compiled in 72ms
+ GET / 200 in 79ms (next.js: 24ms, application-code: 55ms)
+ GET /api/admin/themes 401 in 8ms (next.js: 3ms, application-code: 5ms)
+ GET /@vite/client 404 in 51ms (next.js: 12ms, application-code: 39ms)
+✓ Compiled in 46ms
+✓ Compiled in 301ms
+[browser] Module with ID "site-root" is already registered. Overwriting. (modules/registry.ts:8:15)
+[browser] Module with ID "site-header" is already registered. Overwriting. (modules/registry.ts:8:15)
+[browser] Module with ID "section-hero" is already registered. Overwriting. (modules/registry.ts:8:15)
+[browser] Module with ID "section-services" is already registered. Overwriting. (modules/registry.ts:8:15)
+[browser] Module with ID "section-partner" is already registered. Overwriting. (modules/registry.ts:8:15)
+[browser] Module with ID "section-products" is already registered. Overwriting. (modules/registry.ts:8:15)
+[browser] Module with ID "section-pricing" is already registered. Overwriting. (modules/registry.ts:8:15)
+[browser] Module with ID "section-about" is already registered. Overwriting. (modules/registry.ts:8:15)
+[browser] Module with ID "section-contact" is already registered. Overwriting. (modules/registry.ts:8:15)
+[browser] Module with ID "site-footer" is already registered. Overwriting. (modules/registry.ts:8:15)
+[browser] Module with ID "news-list" is already registered. Overwriting. (modules/registry.ts:8:15)
+[browser] Module with ID "news-detail" is already registered. Overwriting. (modules/registry.ts:8:15)
+[browser] Module with ID "product-list" is already registered. Overwriting. (modules/registry.ts:8:15)
+[browser] Module with ID "product-detail" is already registered. Overwriting. (modules/registry.ts:8:15)
+[browser] Module with ID "section-404" is already registered. Overwriting. (modules/registry.ts:8:15)
+[browser] Module with ID "section-content" is already registered. Overwriting. (modules/registry.ts:8:15)
+[browser] Module with ID "section-image" is already registered. Overwriting. (modules/registry.ts:8:15)
+[browser] Module with ID "site-root" is already registered. Overwriting. (modules/registry.ts:8:15)
+[browser] Module with ID "site-header" is already registered. Overwriting. (modules/registry.ts:8:15)
+[browser] Module with ID "section-hero" is already registered. Overwriting. (modules/registry.ts:8:15)
+[browser] Module with ID "section-services" is already registered. Overwriting. (modules/registry.ts:8:15)
+[browser] Module with ID "section-partner" is already registered. Overwriting. (modules/registry.ts:8:15)
+[browser] Module with ID "section-products" is already registered. Overwriting. (modules/registry.ts:8:15)
+[browser] Module with ID "section-pricing" is already registered. Overwriting. (modules/registry.ts:8:15)
+[browser] Module with ID "section-about" is already registered. Overwriting. (modules/registry.ts:8:15)
+[browser] Module with ID "section-contact" is already registered. Overwriting. (modules/registry.ts:8:15)
+[browser] Module with ID "site-footer" is already registered. Overwriting. (modules/registry.ts:8:15)
+[browser] Module with ID "news-list" is already registered. Overwriting. (modules/registry.ts:8:15)
+[browser] Module with ID "news-detail" is already registered. Overwriting. (modules/registry.ts:8:15)
+[browser] Module with ID "product-list" is already registered. Overwriting. (modules/registry.ts:8:15)
+[browser] Module with ID "product-detail" is already registered. Overwriting. (modules/registry.ts:8:15)
+[browser] Module with ID "section-404" is already registered. Overwriting. (modules/registry.ts:8:15)
+[browser] Module with ID "section-content" is already registered. Overwriting. (modules/registry.ts:8:15)
+[browser] Module with ID "section-image" is already registered. Overwriting. (modules/registry.ts:8:15)
+✓ Compiled in 59ms
+ GET /admin/dashboard?menu=products 200 in 92ms (next.js: 37ms, application-code: 55ms)
+ GET /api/admin/auth 200 in 213ms (next.js: 41ms, application-code: 171ms)
+ GET /api/admin/pages 200 in 216ms (next.js: 160ms, application-code: 56ms)
+ GET /api/admin/themes 200 in 199ms (next.js: 195ms, application-code: 4ms)
+ GET /api/products?admin=true 200 in 9ms (next.js: 4ms, application-code: 5ms)
+ GET /api/products?admin=true 200 in 14ms (next.js: 11ms, application-code: 3ms)
+ GET /api/admin/pages 200 in 7ms (next.js: 3ms, application-code: 3ms)
+[browser] [@arco-design/web-react]: Element does not define the `getRootDOMNode` method causing a call to React.findDOMNode. but findDOMNode is deprecated in StrictMode. Please check the code logic { detail: [ { element: [1mnull[22m, instance: [32m'[object Object]'[39m } ] } 
+[browser] [@arco-design/web-react]: Element does not define the `getRootDOMNode` method causing a call to React.findDOMNode. but findDOMNode is deprecated in StrictMode. Please check the code logic { detail: [ { element: [90mundefined[39m, instance: [32m'[object Object]'[39m } ] } 
+[browser] [tiptap warn]: Duplicate extension names found: ['link', 'underline']. This can lead to issues.
+ POST /api/products 200 in 47ms (next.js: 28ms, application-code: 18ms)
+ GET /api/products?admin=true 200 in 12ms (next.js: 4ms, application-code: 7ms)
+ GET /admin/dashboard?menu=products 200 in 92ms (next.js: 6ms, application-code: 87ms)
+ GET /api/admin/pages 200 in 13ms (next.js: 5ms, application-code: 8ms)
+ GET /api/admin/auth 200 in 21ms (next.js: 8ms, application-code: 14ms)
+ GET /api/admin/themes 200 in 20ms (next.js: 13ms, application-code: 7ms)
+ GET /api/products?admin=true 200 in 4ms (next.js: 2ms, application-code: 2ms)
+ GET /api/products?admin=true 200 in 8ms (next.js: 6ms, application-code: 1932µs)
+ GET /api/admin/pages 200 in 5ms (next.js: 816µs, application-code: 4ms)
+[browser] [@arco-design/web-react]: Element does not define the `getRootDOMNode` method causing a call to React.findDOMNode. but findDOMNode is deprecated in StrictMode. Please check the code logic { detail: [ { element: [1mnull[22m, instance: [32m'[object Object]'[39m } ] } 
+[browser] [@arco-design/web-react]: Element does not define the `getRootDOMNode` method causing a call to React.findDOMNode. but findDOMNode is deprecated in StrictMode. Please check the code logic { detail: [ { element: [90mundefined[39m, instance: [32m'[object Object]'[39m } ] } 
+[browser] [tiptap warn]: Duplicate extension names found: ['link', 'underline']. This can lead to issues.
+ POST /api/products 200 in 9ms (next.js: 3ms, application-code: 7ms)
+ GET /api/products?admin=true 200 in 9ms (next.js: 2ms, application-code: 7ms)
+[browser] [tiptap warn]: Duplicate extension names found: ['link', 'underline']. This can lead to issues.
+ POST /api/products 200 in 8ms (next.js: 3ms, application-code: 6ms)
+ GET /api/products?admin=true 200 in 10ms (next.js: 4ms, application-code: 6ms)
+ PUT /api/products 200 in 12ms (next.js: 3ms, application-code: 9ms)
+ GET /api/products?admin=true 200 in 11ms (next.js: 3ms, application-code: 9ms)
+ PUT /api/products 200 in 9ms (next.js: 3ms, application-code: 6ms)
+ GET /api/products?admin=true 200 in 10ms (next.js: 3ms, application-code: 7ms)
+ PUT /api/products 200 in 9ms (next.js: 3ms, application-code: 6ms)
+ GET /api/products?admin=true 200 in 7ms (next.js: 1873µs, application-code: 6ms)
+ PUT /api/products 200 in 9ms (next.js: 3ms, application-code: 6ms)
+ GET /api/products?admin=true 200 in 7ms (next.js: 1793µs, application-code: 5ms)
+[browser] [tiptap warn]: Duplicate extension names found: ['link', 'underline']. This can lead to issues.
+ POST /api/products 200 in 15ms (next.js: 4ms, application-code: 12ms)
+ GET /api/products?admin=true 200 in 10ms (next.js: 3ms, application-code: 7ms)
+[browser] [tiptap warn]: Duplicate extension names found: ['link', 'underline']. This can lead to issues.
+[browser] [tiptap warn]: Duplicate extension names found: ['link', 'underline']. This can lead to issues.
+ DELETE /api/products?id=15 200 in 36ms (next.js: 11ms, application-code: 26ms)
+ GET /api/products?admin=true 200 in 10ms (next.js: 3ms, application-code: 7ms)
+[browser] [tiptap warn]: Duplicate extension names found: ['link', 'underline']. This can lead to issues.
+ DELETE /api/products?id=11 200 in 10ms (next.js: 5ms, application-code: 5ms)
+ GET /api/products?admin=true 200 in 12ms (next.js: 1803µs, application-code: 10ms)
+ DELETE /api/products?id=12 200 in 9ms (next.js: 3ms, application-code: 7ms)
+ GET /api/products?admin=true 200 in 51ms (next.js: 2ms, application-code: 49ms)
+ DELETE /api/products?id=13 200 in 10ms (next.js: 4ms, application-code: 6ms)
+ GET /api/products?admin=true 200 in 14ms (next.js: 5ms, application-code: 9ms)
+[browser] [tiptap warn]: Duplicate extension names found: ['link', 'underline']. This can lead to issues.
+[browser] [tiptap warn]: Invalid content. Passed value: [] Error: RangeError: Unknown node type: undefined
+ POST /api/products 200 in 14ms (next.js: 4ms, application-code: 10ms)
+ GET /api/products?admin=true 200 in 10ms (next.js: 2ms, application-code: 8ms)
+[browser] [tiptap warn]: Duplicate extension names found: ['link', 'underline']. This can lead to issues.
+[browser] [tiptap warn]: Invalid content. Passed value: [] Error: RangeError: Unknown node type: undefined
+✓ Compiled in 36ms
+ GET /api/admin/pages 200 in 8ms (next.js: 3ms, application-code: 5ms)
+ GET /api/admin/pages 200 in 12ms (next.js: 9ms, application-code: 3ms)
+ GET /admin/dashboard?menu=pages 200 in 85ms (next.js: 41ms, application-code: 43ms)
+ GET /api/admin/pages 200 in 5ms (next.js: 1306µs, application-code: 3ms)
+ GET /api/admin/pages 200 in 8ms (next.js: 2ms, application-code: 6ms)
+🔄 Initializing and syncing modules to database...
+📦 Found 17 modules
+Synced 17/17 modules to database
+✅ Successfully synced 17/17 modules to database
+ GET /api/modules 200 in 99ms (next.js: 95ms, application-code: 4ms)
+ GET /api/modules 200 in 102ms (next.js: 100ms, application-code: 1564µs)
+ GET /api/admin/pages/home 200 in 9ms (next.js: 5ms, application-code: 4ms)
+ GET /api/admin/pages/home 200 in 11ms (next.js: 6ms, application-code: 5ms)
+ GET /api/modules 200 in 3ms (next.js: 1752µs, application-code: 1700µs)
+ GET /api/modules 200 in 6ms (next.js: 4ms, application-code: 2ms)
+🔄 Initializing and syncing modules to database...
+📦 Found 17 modules
+Synced 17/17 modules to database
+✅ Successfully synced 17/17 modules to database
+ GET /api/modules/section-hero/schema 200 in 90ms (next.js: 87ms, application-code: 3ms)
+ GET /api/modules/section-hero/schema 200 in 93ms (next.js: 91ms, application-code: 1739µs)
+ GET /admin/module-preview/section-hero 200 in 164ms (next.js: 18ms, application-code: 146ms)
+[browser] Accessing element.ref was removed in React 19. ref is now a regular prop. It will be removed from the JSX Element type in a future release. 
+[browser] Accessing element.ref was removed in React 19. ref is now a regular prop. It will be removed from the JSX Element type in a future release. 
+ GET /api/modules/section-hero/preview 200 in 399ms (next.js: 389ms, application-code: 10ms)
+🔄 Initializing and syncing modules to database...
+📦 Found 17 modules
+Synced 17/17 modules to database
+ GET /api/admin/themes 200 in 78ms (next.js: 51ms, application-code: 27ms)
+✅ Successfully synced 17/17 modules to database
+ GET /uploads/editor/1774831748321_utx7e6.webp 404 in 89ms (next.js: 38ms, application-code: 52ms)
+[browser] WebPImage load error: http://localhost:3000/uploads/editor/1774831748321_utx7e6.webp (components/WebPImage.tsx:89:13)
+ GET /uploads/editor/1774831748321_utx7e6.webp 404 in 38ms (next.js: 6ms, application-code: 32ms)
+[browser] WebPImage load error: http://localhost:3000/uploads/editor/1774831748321_utx7e6.webp (components/WebPImage.tsx:89:13)
+ GET /admin 200 in 145ms (next.js: 64ms, application-code: 81ms)
+ GET /api/admin/auth 200 in 15ms (next.js: 6ms, application-code: 9ms)
+ GET /api/admin/themes 200 in 14ms (next.js: 11ms, application-code: 3ms)
+ GET /admin/dashboard?menu=pages 200 in 17ms (next.js: 3ms, application-code: 13ms)
+ GET /api/admin/pages 200 in 10ms (next.js: 6ms, application-code: 4ms)
+ GET /api/admin/auth 200 in 5ms (next.js: 2ms, application-code: 3ms)
+ GET /api/admin/pages 200 in 6ms (next.js: 2ms, application-code: 3ms)
+ GET /api/admin/auth 200 in 7ms (next.js: 2ms, application-code: 4ms)
+ GET /api/admin/pages 200 in 7ms (next.js: 3ms, application-code: 4ms)
+[browser] [@arco-design/web-react]: Element does not define the `getRootDOMNode` method causing a call to React.findDOMNode. but findDOMNode is deprecated in StrictMode. Please check the code logic { detail: [ { element: [1mnull[22m, instance: [32m'[object Object]'[39m } ] } 
+[browser] [@arco-design/web-react]: Element does not define the `getRootDOMNode` method causing a call to React.findDOMNode. but findDOMNode is deprecated in StrictMode. Please check the code logic { detail: [ { element: [90mundefined[39m, instance: [32m'[object Object]'[39m } ] } 
+ GET /api/admin/pages 200 in 6ms (next.js: 1591µs, application-code: 4ms)
+ GET /api/products?admin=true 200 in 6ms (next.js: 1989µs, application-code: 4ms)
+ GET /api/products?admin=true 200 in 3ms (next.js: 950µs, application-code: 3ms)
+ GET /admin/dashboard?menu=products 200 in 42ms (next.js: 4ms, application-code: 38ms)
+ DELETE /api/products?id=15 200 in 73ms (next.js: 56ms, application-code: 17ms)
+ GET /api/products?admin=true 200 in 8ms (next.js: 5ms, application-code: 3ms)
+[browser] Module with ID "site-root" is already registered. Overwriting. (modules/registry.ts:8:15)
+[browser] Module with ID "site-header" is already registered. Overwriting. (modules/registry.ts:8:15)
+[browser] Module with ID "section-hero" is already registered. Overwriting. (modules/registry.ts:8:15)
+[browser] Module with ID "section-services" is already registered. Overwriting. (modules/registry.ts:8:15)
+[browser] Module with ID "section-partner" is already registered. Overwriting. (modules/registry.ts:8:15)
+[browser] Module with ID "section-products" is already registered. Overwriting. (modules/registry.ts:8:15)
+[browser] Module with ID "section-pricing" is already registered. Overwriting. (modules/registry.ts:8:15)
+[browser] Module with ID "section-about" is already registered. Overwriting. (modules/registry.ts:8:15)
+[browser] Module with ID "section-contact" is already registered. Overwriting. (modules/registry.ts:8:15)
+[browser] Module with ID "site-footer" is already registered. Overwriting. (modules/registry.ts:8:15)
+[browser] Module with ID "news-list" is already registered. Overwriting. (modules/registry.ts:8:15)
+[browser] Module with ID "news-detail" is already registered. Overwriting. (modules/registry.ts:8:15)
+[browser] Module with ID "product-list" is already registered. Overwriting. (modules/registry.ts:8:15)
+[browser] Module with ID "product-detail" is already registered. Overwriting. (modules/registry.ts:8:15)
+[browser] Module with ID "section-404" is already registered. Overwriting. (modules/registry.ts:8:15)
+[browser] Module with ID "section-content" is already registered. Overwriting. (modules/registry.ts:8:15)
+[browser] Module with ID "section-image" is already registered. Overwriting. (modules/registry.ts:8:15)
+[browser] Module with ID "site-root" is already registered. Overwriting. (modules/registry.ts:8:15)
+[browser] Module with ID "site-header" is already registered. Overwriting. (modules/registry.ts:8:15)
+[browser] Module with ID "section-hero" is already registered. Overwriting. (modules/registry.ts:8:15)
+[browser] Module with ID "section-services" is already registered. Overwriting. (modules/registry.ts:8:15)
+[browser] Module with ID "section-partner" is already registered. Overwriting. (modules/registry.ts:8:15)
+[browser] Module with ID "section-products" is already registered. Overwriting. (modules/registry.ts:8:15)
+[browser] Module with ID "section-pricing" is already registered. Overwriting. (modules/registry.ts:8:15)
+[browser] Module with ID "section-about" is already registered. Overwriting. (modules/registry.ts:8:15)
+[browser] Module with ID "section-contact" is already registered. Overwriting. (modules/registry.ts:8:15)
+[browser] Module with ID "site-footer" is already registered. Overwriting. (modules/registry.ts:8:15)
+[browser] Module with ID "news-list" is already registered. Overwriting. (modules/registry.ts:8:15)
+[browser] Module with ID "news-detail" is already registered. Overwriting. (modules/registry.ts:8:15)
+[browser] Module with ID "product-list" is already registered. Overwriting. (modules/registry.ts:8:15)
+[browser] Module with ID "product-detail" is already registered. Overwriting. (modules/registry.ts:8:15)
+[browser] Module with ID "section-404" is already registered. Overwriting. (modules/registry.ts:8:15)
+[browser] Module with ID "section-content" is already registered. Overwriting. (modules/registry.ts:8:15)
+[browser] Module with ID "section-image" is already registered. Overwriting. (modules/registry.ts:8:15)
+✓ Compiled in 232ms
+[browser] [tiptap warn]: Duplicate extension names found: ['link', 'underline']. This can lead to issues.
+[browser] [tiptap warn]: Invalid content. Passed value: [] Error: RangeError: Unknown node type: undefined
+ POST /api/products 200 in 89ms (next.js: 9ms, application-code: 80ms)
+ GET /api/products?admin=true 200 in 47ms (next.js: 1106µs, application-code: 46ms)
+✓ Compiled in 369ms
+ DELETE /api/products?id=15 200 in 49ms (next.js: 10ms, application-code: 39ms)
+ GET /api/products?admin=true 200 in 10ms (next.js: 5ms, application-code: 5ms)
+ DELETE /api/products?id=10 200 in 28ms (next.js: 4ms, application-code: 24ms)
+ GET /api/products?admin=true 200 in 6ms (next.js: 1743µs, application-code: 4ms)
+✓ Compiled in 291ms
+✓ Compiled in 98ms
+ GET /api/articles?admin=true 200 in 126ms (next.js: 106ms, application-code: 20ms)
+ GET /api/articles?admin=true 200 in 13ms (next.js: 9ms, application-code: 5ms)
+ GET /admin/dashboard?menu=articles 200 in 164ms (next.js: 35ms, application-code: 128ms)
+ PUT /api/articles 200 in 19ms (next.js: 5ms, application-code: 14ms)
+ GET /api/articles?admin=true 200 in 9ms (next.js: 4ms, application-code: 5ms)
+ PUT /api/articles 200 in 9ms (next.js: 4ms, application-code: 5ms)
+ GET /api/articles?admin=true 200 in 5ms (next.js: 1659µs, application-code: 3ms)
+ PUT /api/articles 200 in 9ms (next.js: 3ms, application-code: 6ms)
+ GET /api/articles?admin=true 200 in 8ms (next.js: 1975µs, application-code: 6ms)
+ GET /admin/dashboard?menu=articles 200 in 80ms (next.js: 5ms, application-code: 75ms)
+ GET /api/admin/pages 200 in 17ms (next.js: 3ms, application-code: 13ms)
+ GET /api/admin/auth 200 in 17ms (next.js: 7ms, application-code: 11ms)
+ GET /api/admin/themes 200 in 24ms (next.js: 19ms, application-code: 5ms)
+ GET /api/articles?admin=true 200 in 5ms (next.js: 2ms, application-code: 3ms)
+ GET /api/articles?admin=true 200 in 3ms (next.js: 744µs, application-code: 1919µs)
+ GET /api/admin/pages 200 in 3ms (next.js: 690µs, application-code: 3ms)
+[browser] [@arco-design/web-react]: Element does not define the `getRootDOMNode` method causing a call to React.findDOMNode. but findDOMNode is deprecated in StrictMode. Please check the code logic { detail: [ { element: [1mnull[22m, instance: [32m'[object Object]'[39m } ] } 
+[browser] [@arco-design/web-react]: Element does not define the `getRootDOMNode` method causing a call to React.findDOMNode. but findDOMNode is deprecated in StrictMode. Please check the code logic { detail: [ { element: [90mundefined[39m, instance: [32m'[object Object]'[39m } ] } 
+[browser] [tiptap warn]: Duplicate extension names found: ['link', 'underline']. This can lead to issues.
+ POST /api/articles 200 in 13ms (next.js: 5ms, application-code: 8ms)
+ GET /api/articles?admin=true 200 in 9ms (next.js: 4ms, application-code: 6ms)
+[browser] Module with ID "site-root" is already registered. Overwriting. (modules/registry.ts:8:15)
+[browser] Module with ID "site-header" is already registered. Overwriting. (modules/registry.ts:8:15)
+[browser] Module with ID "section-hero" is already registered. Overwriting. (modules/registry.ts:8:15)
+[browser] Module with ID "section-services" is already registered. Overwriting. (modules/registry.ts:8:15)
+[browser] Module with ID "section-partner" is already registered. Overwriting. (modules/registry.ts:8:15)
+[browser] Module with ID "section-products" is already registered. Overwriting. (modules/registry.ts:8:15)
+[browser] Module with ID "section-pricing" is already registered. Overwriting. (modules/registry.ts:8:15)
+[browser] Module with ID "section-about" is already registered. Overwriting. (modules/registry.ts:8:15)
+[browser] Module with ID "section-contact" is already registered. Overwriting. (modules/registry.ts:8:15)
+[browser] Module with ID "site-footer" is already registered. Overwriting. (modules/registry.ts:8:15)
+[browser] Module with ID "news-list" is already registered. Overwriting. (modules/registry.ts:8:15)
+[browser] Module with ID "news-detail" is already registered. Overwriting. (modules/registry.ts:8:15)
+[browser] Module with ID "product-list" is already registered. Overwriting. (modules/registry.ts:8:15)
+[browser] Module with ID "product-detail" is already registered. Overwriting. (modules/registry.ts:8:15)
+[browser] Module with ID "section-404" is already registered. Overwriting. (modules/registry.ts:8:15)
+[browser] Module with ID "section-content" is already registered. Overwriting. (modules/registry.ts:8:15)
+[browser] Module with ID "section-image" is already registered. Overwriting. (modules/registry.ts:8:15)
+[browser] Module with ID "site-root" is already registered. Overwriting. (modules/registry.ts:8:15)
+[browser] Module with ID "site-header" is already registered. Overwriting. (modules/registry.ts:8:15)
+[browser] Module with ID "section-hero" is already registered. Overwriting. (modules/registry.ts:8:15)
+[browser] Module with ID "section-services" is already registered. Overwriting. (modules/registry.ts:8:15)
+[browser] Module with ID "section-partner" is already registered. Overwriting. (modules/registry.ts:8:15)
+[browser] Module with ID "section-products" is already registered. Overwriting. (modules/registry.ts:8:15)
+[browser] Module with ID "section-pricing" is already registered. Overwriting. (modules/registry.ts:8:15)
+[browser] Module with ID "section-about" is already registered. Overwriting. (modules/registry.ts:8:15)
+[browser] Module with ID "section-contact" is already registered. Overwriting. (modules/registry.ts:8:15)
+[browser] Module with ID "site-footer" is already registered. Overwriting. (modules/registry.ts:8:15)
+[browser] Module with ID "news-list" is already registered. Overwriting. (modules/registry.ts:8:15)
+[browser] Module with ID "news-detail" is already registered. Overwriting. (modules/registry.ts:8:15)
+[browser] Module with ID "product-list" is already registered. Overwriting. (modules/registry.ts:8:15)
+[browser] Module with ID "product-detail" is already registered. Overwriting. (modules/registry.ts:8:15)
+[browser] Module with ID "section-404" is already registered. Overwriting. (modules/registry.ts:8:15)
+[browser] Module with ID "section-content" is already registered. Overwriting. (modules/registry.ts:8:15)
+[browser] Module with ID "section-image" is already registered. Overwriting. (modules/registry.ts:8:15)
+ GET /admin/dashboard?menu=pages 200 in 70ms (next.js: 9ms, application-code: 62ms)
+ GET /api/admin/pages 200 in 8ms (next.js: 3ms, application-code: 4ms)
+ GET /api/admin/auth 200 in 14ms (next.js: 1477µs, application-code: 12ms)
+ GET /api/admin/themes 200 in 18ms (next.js: 5ms, application-code: 13ms)
+ GET /api/admin/pages 200 in 21ms (next.js: 3ms, application-code: 18ms)
+[browser] [@arco-design/web-react]: Element does not define the `getRootDOMNode` method causing a call to React.findDOMNode. but findDOMNode is deprecated in StrictMode. Please check the code logic { detail: [ { element: [1mnull[22m, instance: [32m'[object Object]'[39m } ] } 
+[browser] [@arco-design/web-react]: Element does not define the `getRootDOMNode` method causing a call to React.findDOMNode. but findDOMNode is deprecated in StrictMode. Please check the code logic { detail: [ { element: [90mundefined[39m, instance: [32m'[object Object]'[39m } ] } 
+🔄 Initializing and syncing modules to database...
+📦 Found 17 modules
+Synced 17/17 modules to database
+✅ Successfully synced 17/17 modules to database
+ GET /api/modules 200 in 97ms (next.js: 92ms, application-code: 4ms)
+ GET /api/modules 200 in 97ms (next.js: 96ms, application-code: 1759µs)
+ GET /api/admin/pages/home 200 in 7ms (next.js: 3ms, application-code: 4ms)
+ GET /api/admin/pages/home 200 in 9ms (next.js: 5ms, application-code: 4ms)
+ GET /api/modules 200 in 3ms (next.js: 1803µs, application-code: 1692µs)
+ GET /api/modules 200 in 5ms (next.js: 4ms, application-code: 1343µs)
+🔄 Initializing and syncing modules to database...
+📦 Found 17 modules
+Synced 17/17 modules to database
+✅ Successfully synced 17/17 modules to database
+ GET /api/modules/section-hero/schema 200 in 121ms (next.js: 117ms, application-code: 4ms)
+ GET /api/modules/section-hero/schema 200 in 124ms (next.js: 122ms, application-code: 1414µs)
+ GET /admin/module-preview/section-hero 200 in 132ms (next.js: 16ms, application-code: 116ms)
+[browser] Accessing element.ref was removed in React 19. ref is now a regular prop. It will be removed from the JSX Element type in a future release. 
+[browser] Accessing element.ref was removed in React 19. ref is now a regular prop. It will be removed from the JSX Element type in a future release. 
+🔄 Initializing and syncing modules to database...
+📦 Found 17 modules
+Synced 17/17 modules to database
+✅ Successfully synced 17/17 modules to database
+ GET /api/modules/section-hero/preview 200 in 75ms (next.js: 71ms, application-code: 4ms)
+ GET /api/admin/themes 200 in 10ms (next.js: 6ms, application-code: 5ms)

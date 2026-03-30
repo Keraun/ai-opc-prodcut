@@ -90,6 +90,15 @@
       "items": {
         "type": "string"
       }
+    },
+    "mainImage": {
+      "type": "string",
+      "title": "主图",
+      "description": "Hero 区块的主背景图片",
+      "x-component": "image",
+      "x-component-props": {
+        "hint": "建议尺寸: 1920x1080px (16:9比例)"
+      }
     }
   }
 }
