@@ -1,15 +1,16 @@
 "use client"
 
 import { useState, useEffect } from "react"
-import { ManagementHeader, CommonTable, ActionButton, ConfigFormEditor } from "./index"
-import { MessageSquare, User, Phone, Mail, CheckCircle, XCircle, Eye, Settings, Bell } from "lucide-react"
-import { Tag as ArcoTag, Modal, Input, Select, Space, Popconfirm, Tabs } from '@arco-design/web-react'
+import { ManagementHeader, CommonTable, ActionButton } from "./index"
+import { MessageSquare, User, Phone, Mail, CheckCircle, XCircle, Eye, Settings, Bell, Save, Code } from "lucide-react"
+import { Tag as ArcoTag, Modal, Input, Select, Space, Popconfirm, Tabs, Form, Switch, Button, Card } from '@arco-design/web-react'
 import styles from "./BaseManagement.module.css"
 import { toast } from "sonner"
-import { useRouter } from "next/navigation"
+import { useRouter, useSearchParams } from "next/navigation"
 import { useConfig } from '../common/hooks/useConfig'
 
 const TabPane = Tabs.TabPane
+const FormItem = Form.Item
 
 interface Message {
   id: number
@@ -33,6 +34,16 @@ interface Message {
   llmModel?: string
 }
 
+interface NotificationConfig {
+  pushplus?: {
+    enabled?: boolean
+    token?: string
+    wechatEnabled?: boolean
+    feishuEnabled?: boolean
+  }
+  notificationTemplate?: string
+}
+
 const statusOptions = [
   { value: 'pending', label: '待处理' },
   { value: 'processing', label: '处理中' },
@@ -47,8 +58,25 @@ const statusColorMap: Record<string, string> = {
   ignored: 'gray'
 }
 
+const templateOptions = [
+  {
+    name: '默认模板',
+    content: '【新留言通知】\n\n用户信息：\n姓名：{name}\n电话：{phone || \'\'}\n微信：{wechat || \'\'}\n邮箱：{email || \'\'}\n\n留言内容：\n{message}\n\n设备信息：\nIP地址：{ip}\n地区：{region || \'\'}\n操作系统：{os} {osVersion}\n浏览器：{browser} {browserVersion}\n设备机型：{deviceModel}\n\n提交时间：{created_at}\n\n请及时处理！'
+  },
+  {
+    name: '简洁模板',
+    content: '【新留言】\n\n姓名：{name}\n电话：{phone || \'\'}\n内容：{message}\n\n提交时间：{created_at}'
+  },
+  {
+    name: '详细模板',
+    content: '【重要通知】新留言提醒\n\n尊敬的管理员：\n\n您收到了一条新的用户留言，详情如下：\n\n用户信息\n姓名：{name}\n联系电话：{phone || \'未提供\'}\n微信：{wechat || \'未提供\'}\n邮箱：{email || \'未提供\'}\n\n留言内容\n{message}\n\n设备信息\nIP地址：{ip}\n地区：{region || \'未知\'}\n操作系统：{os} {osVersion}\n浏览器：{browser} {browserVersion}\n设备：{deviceModel}\n\n提交时间：{created_at}\n\n请及时登录管理后台处理此留言。\n\n系统自动发送，请勿回复。'
+  }
+]
+
 export function MessagesManagement() {
-  const [activeTab, setActiveTab] = useState('messages')
+  const router = useRouter()
+  const searchParams = useSearchParams()
+  const [activeTab, setActiveTab] = useState(searchParams.get('tab') || 'messages')
   const [messages, setMessages] = useState<Message[]>([])
   const [loading, setLoading] = useState(true)
   const [pagination, setPagination] = useState({ page: 1, pageSize: 20, total: 0 })
@@ -58,7 +86,11 @@ export function MessagesManagement() {
   const [editNote, setEditNote] = useState('')
   const [editStatus, setEditStatus] = useState('')
   const { configs, loading: configLoading, saveConfig, hasChanges, fetchConfigs } = useConfig()
-  const router = useRouter()
+
+  // 通知管理表单状态
+  const [notificationForm] = Form.useForm()
+  const [notificationSubmitting, setNotificationSubmitting] = useState(false)
+  const [showJsonPreview, setShowJsonPreview] = useState(false)
 
   const loadMessages = async (page = 1, status = '') => {
     try {
@@ -93,6 +125,28 @@ export function MessagesManagement() {
     loadMessages(pagination.page, statusFilter)
     fetchConfigs()
   }, [])
+
+  // 当配置数据加载完成后，设置表单初始值
+  useEffect(() => {
+    if (configs.notification) {
+      notificationForm.setFieldsValue({
+        enabled: configs.notification?.pushplus?.enabled || false,
+        token: configs.notification?.pushplus?.token || '',
+        wechatEnabled: configs.notification?.pushplus?.wechatEnabled || false,
+        feishuEnabled: configs.notification?.pushplus?.feishuEnabled || false,
+        notificationTemplate: configs.notification?.notificationTemplate || ''
+      })
+    }
+  }, [configs.notification, notificationForm])
+
+  // 处理 Tab 切换，同时更新 URL
+  const handleTabChange = (key: string) => {
+    setActiveTab(key)
+    // 更新 URL，保留当前 Tab 状态
+    const params = new URLSearchParams(searchParams.toString())
+    params.set('tab', key)
+    router.push(`?${params.toString()}`, { scroll: false })
+  }
 
   const handleStatusFilterChange = (value: string) => {
     setStatusFilter(value)
@@ -180,7 +234,33 @@ export function MessagesManagement() {
     }
   }
 
+  // 处理通知配置保存
+  const handleNotificationSubmit = async (values: any) => {
+    setNotificationSubmitting(true)
+    try {
+      const configData = {
+        pushplus: {
+          enabled: values.enabled,
+          token: values.token,
+          wechatEnabled: values.wechatEnabled,
+          feishuEnabled: values.feishuEnabled
+        },
+        notificationTemplate: values.notificationTemplate
+      }
+      await saveConfig('notification', configData)
+      toast.success('配置保存成功')
+    } catch (error) {
+      console.error('保存配置失败:', error)
+      toast.error('配置保存失败')
+    } finally {
+      setNotificationSubmitting(false)
+    }
+  }
 
+  // 选择模板
+  const handleSelectTemplate = (content: string) => {
+    notificationForm.setFieldValue('notificationTemplate', content)
+  }
 
   const columns = [
     {
@@ -276,7 +356,6 @@ export function MessagesManagement() {
           value={status}
           onChange={(newStatus) => handleStatusChange(record, newStatus)}
           style={{ width: 110 }}
-          size="small"
         >
           {statusOptions.map(opt => (
             <Select.Option key={opt.value} value={opt.value}>
@@ -320,10 +399,9 @@ export function MessagesManagement() {
       width: 150,
       fixed: 'right' as const,
       render: (_: any, record: Message) => (
-        <Space size="small">
+        <Space>
           <ActionButton
             type="primary"
-            size="small"
             icon={<Eye size={14} />}
             onClick={() => handleView(record)}
           >
@@ -333,10 +411,7 @@ export function MessagesManagement() {
             title="确定要删除这条留言吗？"
             onOk={() => handleDelete(record.id)}
           >
-            <ActionButton
-              type="danger"
-              size="small"
-            >
+            <ActionButton type="danger">
               删除
             </ActionButton>
           </Popconfirm>
@@ -352,7 +427,7 @@ export function MessagesManagement() {
         description="查看和管理用户提交的留言信息"
       />
       
-      <Tabs activeTab={activeTab} onChange={setActiveTab} type="card">
+      <Tabs activeTab={activeTab} onChange={handleTabChange} type="card">
         <TabPane key="messages" title="留言列表">
           <div className={styles.filterBar}>
             <Select
@@ -378,7 +453,7 @@ export function MessagesManagement() {
               current: pagination.page,
               pageSize: pagination.pageSize,
               total: pagination.total,
-              onChange: (page) => loadMessages(page, statusFilter),
+              onChange: (page: number) => loadMessages(page, statusFilter),
             }}
             emptyIcon={<MessageSquare size={48} />}
             emptyText="暂无留言数据"
@@ -391,7 +466,7 @@ export function MessagesManagement() {
             onCancel={() => setViewModalVisible(false)}
             okText="保存"
             cancelText="关闭"
-            width={700}
+            style={{ width: 700 }}
           >
             {currentMessage && (
               <div className={styles.modalContent}>
@@ -486,18 +561,172 @@ export function MessagesManagement() {
             )}
           </Modal>
         </TabPane>
+        
+        {/* 通知管理 - 硬编码表单 */}
         <TabPane key="notification" title="通知管理">
-          <ConfigFormEditor
-            configType="notification"
-            title="通知管理"
-            description="配置用户提交留言时的消息通知功能"
-            configData={configs.notification}
-            onSave={async (data) => {
-              await saveConfig('notification', data)
-            }}
-            hasChanges={hasChanges('notification')}
-            loading={configLoading}
-          />
+          <div style={{ padding: '24px' }}>
+            <ManagementHeader
+              title="通知管理"
+              description="配置用户提交留言时的消息通知功能"
+              actions={
+                <>
+                  <Button
+                    icon={<Code size={16} />}
+                    onClick={() => setShowJsonPreview(true)}
+                    style={{ marginRight: 8 }}
+                  >
+                    查看JSON
+                  </Button>
+                  <Button
+                    type="primary"
+                    icon={<Save size={16} />}
+                    loading={notificationSubmitting}
+                    onClick={() => notificationForm.submit()}
+                  >
+                    保存配置
+                  </Button>
+                </>
+              }
+            />
+
+            <Card style={{ marginTop: 16 }}>
+              <Form
+                form={notificationForm}
+                layout="vertical"
+                onSubmit={handleNotificationSubmit}
+                autoComplete="off"
+              >
+                {/* PushPlus 配置区域 */}
+                <div style={{ marginBottom: 24 }}>
+                  <h4 style={{ marginBottom: 16, fontSize: 16, fontWeight: 600 }}>PushPlus配置</h4>
+                  
+                  <FormItem
+                    label="启用通知"
+                    field="enabled"
+                    triggerPropName="checked"
+                  >
+                    <Switch />
+                  </FormItem>
+
+                  <FormItem
+                    label="PushPlus Token"
+                    field="token"
+                    extra="PushPlus的Token，用于发送消息。获取方式：登录PushPlus官网(https://www.pushplus.plus/)，注册账号后在个人中心获取Token。"
+                  >
+                    <Input.Password placeholder="请输入PushPlus Token" style={{ width: '100%' }} />
+                  </FormItem>
+
+                  <FormItem
+                    label="启用微信通知"
+                    field="wechatEnabled"
+                    triggerPropName="checked"
+                    extra="是否通过PushPlus发送微信通知"
+                  >
+                    <Switch />
+                  </FormItem>
+
+                  <FormItem
+                    label="启用飞书通知"
+                    field="feishuEnabled"
+                    triggerPropName="checked"
+                    extra="是否通过PushPlus发送飞书通知"
+                  >
+                    <Switch />
+                  </FormItem>
+                </div>
+
+                {/* 通知模板区域 */}
+                <div style={{ marginTop: 24, paddingTop: 24, borderTop: '1px solid #e5e7eb' }}>
+                  <FormItem
+                    label="通知模板"
+                    field="notificationTemplate"
+                    extra={
+                      <div style={{ marginTop: 8 }}>
+                        消息通知的模板内容，可使用以下变量：<br/>
+                        {'{name}'} - 姓名 {'{phone}'} - 电话 {'{wechat}'} - 微信 {'{email}'} - 邮箱<br/>
+                        {'{message}'} - 留言内容 {'{ip}'} - IP地址 {'{region}'} - 地区<br/>
+                        {'{os}'} - 操作系统 {'{osVersion}'} - 操作系统版本 {'{browser}'} - 浏览器<br/>
+                        {'{browserVersion}'} - 浏览器版本 {'{deviceModel}'} - 设备机型 {'{created_at}'} - 提交时间
+                      </div>
+                    }
+                  >
+                    <Input.TextArea
+                      placeholder="请输入通知模板"
+                      rows={15}
+                      style={{ width: '100%', minHeight: '400px', fontFamily: 'monospace' }}
+                    />
+                  </FormItem>
+
+                  {/* 模板选择 */}
+                  <div style={{ marginTop: 16 }}>
+                    <h4 style={{ marginBottom: 12, fontSize: 14, fontWeight: 500 }}>模板选择</h4>
+                    <div style={{ display: 'flex', gap: '12px', flexWrap: 'wrap' }}>
+                      {templateOptions.map((template, index) => (
+                        <Button
+                          key={index}
+                          onClick={() => handleSelectTemplate(template.content)}
+                          style={{ flex: '1 1 calc(33.333% - 8px)', minWidth: '200px' }}
+                        >
+                          {template.name}
+                        </Button>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+              </Form>
+            </Card>
+          </div>
+
+          {/* JSON 预览弹窗 */}
+          <Modal
+            title="JSON预览"
+            visible={showJsonPreview}
+            onCancel={() => setShowJsonPreview(false)}
+            footer={[
+              <Button key="close" onClick={() => setShowJsonPreview(false)}>
+                关闭
+              </Button>,
+              <Button
+                key="copy"
+                type="primary"
+                onClick={() => {
+                  const values = notificationForm.getFieldsValue()
+                  navigator.clipboard.writeText(JSON.stringify({
+                    pushplus: {
+                      enabled: values.enabled,
+                      token: values.token,
+                      wechatEnabled: values.wechatEnabled,
+                      feishuEnabled: values.feishuEnabled
+                    },
+                    notificationTemplate: values.notificationTemplate
+                  }, null, 2))
+                  toast.success('已复制到剪贴板')
+                }}
+              >
+                复制
+              </Button>
+            ]}
+            style={{ width: 800 }}
+          >
+            <pre style={{ 
+              backgroundColor: '#f5f5f5', 
+              padding: 16, 
+              borderRadius: 4, 
+              overflow: 'auto',
+              maxHeight: 500,
+              fontSize: 12
+            }}>
+              {JSON.stringify({
+                pushplus: {
+                  enabled: notificationForm.getFieldValue('enabled'),
+                  token: notificationForm.getFieldValue('token'),
+                  wechatEnabled: notificationForm.getFieldValue('wechatEnabled'),
+                  feishuEnabled: notificationForm.getFieldValue('feishuEnabled')
+                },
+                notificationTemplate: notificationForm.getFieldValue('notificationTemplate')
+              }, null, 2)}
+            </pre>
+          </Modal>
         </TabPane>
       </Tabs>
     </div>
