@@ -2,9 +2,9 @@
   {
     "username": "superadmin",
     "password": "sheep902",
-    "email": "wuly93@163.com",
+    "email": "",
     "remark": "默认管理员账号",
-    "must_change_password": false,
+    "must_change_password": true,
     "last_login_time": "2026/04/01 05:54:39",
     "last_login_ip": "::1",
     "current_login_ip": "::1",
