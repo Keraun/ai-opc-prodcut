@@ -47,9 +47,18 @@ export default function AdminDashboardPage() {
   useEffect(() => {
     const init = async () => {
       const authenticated = await checkAuth()
-      if (authenticated && currentUser) {
-        if ((currentUser as any)?.mustChangePassword) {
-          setMustChangePassword(true)
+      if (authenticated) {
+        const userStr = sessionStorage.getItem('currentUser')
+        let user = currentUser
+        if (!user && userStr) {
+          try {
+            user = JSON.parse(userStr)
+          } catch {}
+        }
+        if (user) {
+          if ((user as any)?.mustChangePassword) {
+            setMustChangePassword(true)
+          }
         }
         await fetchConfigs()
         await fetchSchema()
@@ -57,7 +66,7 @@ export default function AdminDashboardPage() {
     }
     
     init()
-  }, [])
+  }, [currentUser])
 
   const handleMenuClick = (menu: string) => {
     setActiveMenu(menu)

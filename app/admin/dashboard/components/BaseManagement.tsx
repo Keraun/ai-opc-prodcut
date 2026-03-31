@@ -1213,7 +1213,7 @@ export function BaseManagement({ config }: BaseManagementProps) {
           loading={loading}
           emptyText={config.emptyText}
           emptyIcon={config.emptyIcon}
-          scroll={{ x: 1000 }}
+          scroll={{ x: 1400 }}
         />
       </div>
 
