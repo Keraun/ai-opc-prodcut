@@ -86,8 +86,8 @@ export function useAccountManagement() {
   }, [hasValidSuperAdminToken, superAdminPasswordForAction, verifySuperAdminPassword])
 
   const handleAddAccount = useCallback(async () => {
-    if (!newAccount.username || !newAccount.password || !newAccount.email) {
-      toast.error("请填写完整的账号信息")
+    if (!newAccount.username || !newAccount.password) {
+      toast.error("请填写用户名和密码")
       return
     }
 
@@ -135,11 +135,6 @@ export function useAccountManagement() {
   }, [accountToDelete, handleActionWithSuperAdmin, loadAccounts])
 
   const handleEditAccount = useCallback(async () => {
-    if (!editedAccount.email) {
-      toast.error("请输入邮箱")
-      return
-    }
-
     const action = async () => {
       try {
         const result = await updateAccount(editedAccount.username, editedAccount)

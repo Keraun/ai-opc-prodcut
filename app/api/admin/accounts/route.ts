@@ -19,8 +19,8 @@ export async function POST(request: NextRequest) {
     const newAccount = await request.json()
     
     // 验证参数
-    if (!newAccount.username || !newAccount.password || !newAccount.email) {
-      return badRequestResponse('用户名、密码和邮箱不能为空')
+    if (!newAccount.username || !newAccount.password) {
+      return badRequestResponse('用户名和密码不能为空')
     }
     
     // 读取现有账号
@@ -103,11 +103,6 @@ export async function PUT(request: NextRequest) {
     }
     
     const updatedAccount = await request.json()
-    
-    // 验证参数
-    if (!updatedAccount.email) {
-      return badRequestResponse('邮箱不能为空')
-    }
     
     // 读取现有账号
     const accounts = readConfig('account') || []

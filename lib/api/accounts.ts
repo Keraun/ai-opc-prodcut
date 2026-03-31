@@ -59,13 +59,13 @@ export async function deleteAccount(username: string): Promise<{ success: boolea
  * @param username - 要更新的用户名
  * @param data - 更新数据
  * @param data.password - 新密码（可选）
- * @param data.email - 邮箱地址
+ * @param data.email - 邮箱地址（可选）
  * @param data.remark - 备注（可选）
  * @returns 更新结果，包含 success 和 message
  */
 export async function updateAccount(username: string, data: {
   password?: string
-  email: string
+  email?: string
   remark?: string
 }): Promise<{ success: boolean; message?: string }> {
   try {
