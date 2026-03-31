@@ -64,6 +64,10 @@ export function ChangePasswordModal({ visible, onClose, mustChange = false }: Ch
         }
 
         onClose()
+        
+        setTimeout(() => {
+          window.location.reload()
+        }, 500)
       } else {
         toast.error(result.message || "密码修改失败")
       }
