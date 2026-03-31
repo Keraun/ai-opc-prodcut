@@ -48,8 +48,8 @@ export default function AdminDashboardPage() {
     try {
       const checkAuthRes = await fetch('/api/admin/auth')
       const authResult = await checkAuthRes.json()
-      if (authResult.success && authResult.user) {
-        setMustChangePassword(authResult.user.mustChangePassword || false)
+      if (authResult.success && authResult?.data?.user) {
+        setMustChangePassword(authResult?.data?.user?.mustChangePassword || false)
       }
     } catch (error) {
       console.error('Failed to check must change password:', error)
@@ -62,7 +62,6 @@ export default function AdminDashboardPage() {
       if (authenticated) {
         await checkMustChangePassword()
         await fetchConfigs()
-        await fetchSchema()
       }
     }
     

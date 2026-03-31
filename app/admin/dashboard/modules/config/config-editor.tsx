@@ -15,7 +15,7 @@ interface ConfigEditorProps {
 }
 
 export function ConfigEditor({ configType, title, description }: ConfigEditorProps) {
-  const { configs, schema, loading, saveConfig, hasChanges } = useConfig()
+  const { configs, schema, loading, saveConfig, hasChanges, fetchSchema } = useConfig()
   const { viewingPreviousVersion, previousVersionData, previousVersionInfo, restoringVersion, viewPreviousVersion, restoreVersion, closeVersionView } = useVersion()
   
   const [editingConfig, setEditingConfig] = useState(false)
@@ -27,6 +27,12 @@ export function ConfigEditor({ configType, title, description }: ConfigEditorPro
   const [editLeftWidth, setEditLeftWidth] = useState(70)
   const [isEditDragging, setIsEditDragging] = useState(false)
   const [showDiff, setShowDiff] = useState(false)
+
+  useEffect(() => {
+    if (configType && !schema[configType]) {
+      fetchSchema(configType)
+    }
+  }, [configType, schema, fetchSchema])
 
   useEffect(() => {
     const handleMouseMove = (e: MouseEvent) => {

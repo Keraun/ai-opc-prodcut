@@ -51,10 +51,15 @@ export function useConfig() {
     }
   }, [])
 
-  const fetchSchema = useCallback(async () => {
+  const fetchSchema = useCallback(async (configType?: string) => {
     try {
-      const schemaData = await getSchema()
-      setSchema(schemaData)
+      if (configType) {
+        const schemaData = await getSchema(configType)
+        setSchema((prev: any) => ({
+          ...prev,
+          [configType]: schemaData
+        }))
+      }
     } catch (error) {
       console.error("获取配置说明失败", error)
     }
