@@ -258,21 +258,20 @@ export function NotificationSettings() {
                   field: 'wechatEnabled'
                 },
                 {
-                  id: 'webhook',
-                  name: 'WebHook通知',
-                  description: '通过PushPlus发送WebHook通知(钉钉、飞书等)，需要先在PushPlus平台配置webhook',
-                  isFree: true,
-                  field: 'webHookEnabled',
-                  link: 'https://www.pushplus.plus/doc/extend/webhook.html'
-                },
-
-                {
                   id: 'email',
                   name: '邮件通知',
                   description: '通过PushPlus邮件渠道发送通知，需要先在PushPlus平台配置邮箱',
                   isFree: true,
                   field: 'emailEnabled',
                   link: 'https://www.pushplus.plus/doc/extend/mail.html'
+                },
+                {
+                  id: 'webhook',
+                  name: 'WebHook通知',
+                  description: '通过PushPlus发送WebHook通知(钉钉、飞书等)，需要先在PushPlus平台配置webhook',
+                  isFree: true,
+                  field: 'webHookEnabled',
+                  link: 'https://www.pushplus.plus/doc/extend/webhook.html'
                 },
                 {
                   id: 'sms',
@@ -325,13 +324,24 @@ export function NotificationSettings() {
               </div>}
               field="notificationTemplate"
               extra={
-                <div style={{ marginTop: 8 }}>
-                  消息通知的模板内容，可使用以下变量：<br />
-                  {'{name}'} - 姓名 {'{phone}'} - 电话 {'{wechat}'} - 微信 {'{email}'} - 邮箱<br />
-                  {'{message}'} - 留言内容 {'{ip}'} - IP地址 {'{region}'} - 地区<br />
-                  {'{os}'} - 操作系统 {'{osVersion}'} - 操作系统版本 {'{browser}'} - 浏览器<br />
-                  {'{browserVersion}'} - 浏览器版本 {'{deviceModel}'} - 设备机型 {'{created_at}'} - 提交时间<br />
-                  {'{detail_link}'} - 留言详情链接（带会话验证）<br />
+                <div style={{ marginTop: 12 }}>
+                  消息通知的模板内容，可使用以下变量：<br /><br />
+                  <div style={{ display: 'flex', flexWrap: 'wrap', gap: '20px' }}>
+                    <span>姓名: {'{name}'}</span>
+                    <span>电话: {'{phone}'}</span>
+                    <span>微信: {'{wechat}'}</span>
+                    <span>邮箱: {'{email}'}</span>
+                    <span>留言内容: {'{message}'}</span>
+                    <span>IP地址: {'{ip}'}</span>
+                    <span>地区: {'{region}'}</span>
+                    <span>操作系统: {'{os}'}</span>
+                    <span>操作系统版本: {'{osVersion}'}</span>
+                    <span>浏览器: {'{browser}'}</span>
+                    <span>浏览器版本: {'{browserVersion}'}</span>
+                    <span>设备机型: {'{deviceModel}'}</span>
+                    <span>提交时间: {'{created_at}'}</span>
+                    <span>留言详情链接: {'{detail_link}'}</span>
+                  </div>
                 </div>
               }
             >
