@@ -294,7 +294,6 @@
   position: absolute;
   inset: 0;
   background: linear-gradient(135deg, rgba(59, 130, 246, 0.2) 0%, rgba(99, 102, 241, 0.2) 100%);
-  animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
 }
 
 .layout2ImageContent {
