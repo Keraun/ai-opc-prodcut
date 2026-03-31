@@ -6,7 +6,7 @@ import {
   errorResponse, 
   badRequestResponse 
 } from "@/lib/api-utils"
-import { parseUserAgent, getClientIp } from "@/lib/device-utils"
+import { parseUserAgent, getClientIp, detectLLMModel } from "@/lib/device-utils"
 import { notificationService } from "@/lib/notification-service"
 
 export async function POST(request: NextRequest) {
@@ -46,8 +46,12 @@ export async function POST(request: NextRequest) {
     }
 
     const userAgent = request.headers.get('user-agent') || ''
+    const referer = request.headers.get('referer') || ''
     const deviceInfo = parseUserAgent(userAgent)
     const ip = getClientIp(request)
+    
+    // 自动检测 LLM 模型（如果前端没有提供）
+    const detectedLLMModel = llmModel || detectLLMModel(referer, userAgent)
     
     const messageData = {
       name: String(name || ''),
@@ -56,7 +60,7 @@ export async function POST(request: NextRequest) {
       email: String(email || ''),
       preference: String(preference || ''),
       message: String(message || ''),
-      llmModel: String(llmModel || ''),
+      llmModel: String(detectedLLMModel || ''),
       ip,
       region: '',
       os: deviceInfo.os,
@@ -81,7 +85,7 @@ export async function POST(request: NextRequest) {
         email: String(email || ''),
         message: String(message || ''),
         preference: String(preference || ''),
-        llmModel: String(llmModel || ''),
+        llmModel: String(detectedLLMModel || ''),
         created_at: new Date().toISOString()
       })
     } catch (notificationError) {

@@ -23,10 +23,8 @@ interface MessageData {
 }
 
 export class NotificationService {
-  private config: NotificationConfig
-
-  constructor() {
-    this.config = readConfig('notification') as NotificationConfig
+  private getConfig(): NotificationConfig {
+    return readConfig('notification') as NotificationConfig
   }
 
   private renderTemplate(template: string, data: MessageData): string {
@@ -42,12 +40,13 @@ export class NotificationService {
   }
 
   async sendPushPlusNotification(data: MessageData, channel: string): Promise<boolean> {
-    if (!this.config.enabled || !this.config.pushplus?.enabled || !this.config.pushplus.token) {
+    const config = this.getConfig()
+    if (!config.enabled || !config.pushplus?.enabled || !config.pushplus.token) {
       return false
     }
 
     try {
-      const template = this.config.notificationTemplate || '收到新留言：\n姓名：{name}\n电话：{phone}\n内容：{message}'
+      const template = config.notificationTemplate || '收到新留言：\n姓名：{name}\n电话：{phone}\n内容：{message}'
       const content = this.renderTemplate(template, data)
 
       const response = await fetch('https://www.pushplus.plus/send', {
@@ -56,7 +55,7 @@ export class NotificationService {
           'Content-Type': 'application/json'
         },
         body: JSON.stringify({
-          token: this.config.pushplus.token,
+          token: config.pushplus.token,
           title: '新留言通知',
           content: content,
           template: 'txt',
@@ -78,17 +77,18 @@ export class NotificationService {
   }
 
   async sendNotifications(data: MessageData): Promise<void> {
-    if (!this.config.enabled || !this.config.pushplus?.enabled) {
+    const config = this.getConfig()
+    if (!config.enabled || !config.pushplus?.enabled) {
       return
     }
 
     const notifications = []
 
-    if (this.config.pushplus.wechatEnabled) {
+    if (config.pushplus.wechatEnabled) {
       notifications.push(this.sendPushPlusNotification(data, 'wechat'))
     }
 
-    if (this.config.pushplus.feishuEnabled) {
+    if (config.pushplus.feishuEnabled) {
       notifications.push(this.sendPushPlusNotification(data, 'feishu'))
     }
 
