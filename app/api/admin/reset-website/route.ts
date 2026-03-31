@@ -5,7 +5,8 @@ import {
   badRequestResponse, 
   errorResponse,
   withAuth,
-  unauthorizedResponse
+  unauthorizedResponse,
+  deleteCookie
 } from "@/lib/api-utils"
 import { jsonDb } from "@/lib/json-database"
 import fs from 'fs'
@@ -47,6 +48,8 @@ export async function POST(request: NextRequest) {
 
       const zip = new AdmZip(initDatabaseZipPath)
       zip.extractAllTo(runtimeDir, true)
+
+      await deleteCookie('adminUser')
 
       console.log(`网站配置已还原到初始状态`)
 

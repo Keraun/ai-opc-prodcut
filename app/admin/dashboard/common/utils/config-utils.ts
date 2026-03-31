@@ -73,9 +73,10 @@ export async function handleResetWebsite(superAdminToken: string): Promise<boole
     const success = await resetWebsite(superAdminToken)
 
     if (success) {
-      toast.success("网站配置已成功还原到初始状态")
+      toast.success("网站配置已成功还原到初始状态,正在跳转到登录页...")
       setTimeout(() => {
-        window.location.reload()
+        sessionStorage.removeItem('currentUser')
+        window.location.href = '/admin'
       }, 1500)
       return true
     } else {
