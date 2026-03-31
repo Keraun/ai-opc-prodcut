@@ -58,8 +58,8 @@ export function Header({
     href: item.href
   })) || [])
 
-  const primaryColor = themeConfig?.colors?.primary
-  const accentColor = themeConfig?.colors?.accent
+  const primaryColor = themeConfig?.colors?.primary || "#1e40af"
+  const accentColor = themeConfig?.colors?.accent || "#06b6d4"
 
   const logoText = siteConfig?.name || config?.logo?.text || ""
   const contactText = config?.contact?.text || "联系我们"
