@@ -169,6 +169,16 @@ function TableImageUploadField({
     }
   }
 
+  const handleGenerateRandomImage = () => {
+    // 使用 picsum.photos 生成随机图片
+    const randomWidth = 1200
+    const randomHeight = 600
+    const randomId = Math.floor(Math.random() * 1000)
+    const randomImageUrl = `https://picsum.photos/id/${randomId}/${randomWidth}/${randomHeight}`
+    onChange(randomImageUrl)
+    toast.success('随机图片生成成功')
+  }
+
   return (
     <div style={{ display: "flex", gap: 8, alignItems: "center" }}>
       <Input
@@ -179,16 +189,26 @@ function TableImageUploadField({
         style={{ flex: 1 }}
         prefix={<IconImage style={{ color: "#9ca3af" }} />}
       />
-      <Button
-        type="primary"
-        size="small"
-        onClick={handleUploadClick}
-        disabled={uploading}
-        loading={uploading}
-        icon={<IconUpload />}
-      >
-        上传
-      </Button>
+      <Space size={4}>
+        <Button
+          type="primary"
+          size="small"
+          onClick={handleUploadClick}
+          disabled={uploading}
+          loading={uploading}
+          icon={<IconUpload />}
+        >
+          上传
+        </Button>
+        <Button
+          type="default"
+          size="small"
+          onClick={handleGenerateRandomImage}
+          disabled={uploading}
+        >
+          随机
+        </Button>
+      </Space>
       <input
         ref={fileInputRef}
         type="file"
@@ -506,6 +526,16 @@ function ImageUploadField({
     }
   }
 
+  const handleGenerateRandomImage = () => {
+    // 使用 picsum.photos 生成随机图片
+    const randomWidth = 1200
+    const randomHeight = 600
+    const randomId = Math.floor(Math.random() * 1000)
+    const randomImageUrl = `https://picsum.photos/id/${randomId}/${randomWidth}/${randomHeight}`
+    onChange(randomImageUrl)
+    toast.success('随机图片生成成功')
+  }
+
   // 获取用于预览的完整 URL
   const previewUrl = getFullImageUrl(value)
 
@@ -520,16 +550,26 @@ function ImageUploadField({
           className={styles.imageUploadInput}
           prefix={<IconImage className={styles.imageUploadIcon} />}
         />
-        <Button
-          type="primary"
-          onClick={handleUploadClick}
-          disabled={uploading}
-          loading={uploading}
-          className={styles.imageUploadButton}
-          icon={<IconUpload />}
-        >
-          上传图片
-        </Button>
+        <Space size={8}>
+          <Button
+            type="primary"
+            onClick={handleUploadClick}
+            disabled={uploading}
+            loading={uploading}
+            className={styles.imageUploadButton}
+            icon={<IconUpload />}
+          >
+            上传图片
+          </Button>
+          <Button
+            type="default"
+            onClick={handleGenerateRandomImage}
+            disabled={uploading}
+            className={styles.imageUploadButton}
+          >
+            随机生成图片
+          </Button>
+        </Space>
       </div>
 
       <input

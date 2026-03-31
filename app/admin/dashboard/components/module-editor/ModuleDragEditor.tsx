@@ -437,15 +437,7 @@ export function ModuleDragEditor({ modules, onChange }: ModuleDragEditorProps) {
                           编辑
                         </Button>
                       )}
-                      {(module.moduleId !== 'site-root' && module.moduleId !== 'site-header' && module.moduleId !== 'site-footer') && (
-                        <Button
-                          type="text"
-                          size="small"
-                          status="danger"
-                          icon={<IconDelete />}
-                          onClick={() => handleDeleteModule(index)}
-                        />
-                      )}
+                     
                       {(module.moduleId === 'site-root' || module.moduleId === 'site-footer' || module.moduleId === 'site-header') && (
                         <>
                           <Button
@@ -461,6 +453,15 @@ export function ModuleDragEditor({ modules, onChange }: ModuleDragEditorProps) {
                           </Button>
                           <Tag color="orange" size="small">全局配置</Tag>
                         </>
+                      )}
+                       {(module.moduleId !== 'site-root') && (
+                        <Button
+                          type="text"
+                          size="small"
+                          status="danger"
+                          icon={<IconDelete />}
+                          onClick={() => handleDeleteModule(index)}
+                        />
                       )}
                     </div>
                   </div>
