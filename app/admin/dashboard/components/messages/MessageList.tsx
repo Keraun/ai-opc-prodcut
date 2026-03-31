@@ -30,10 +30,10 @@ interface Message {
 }
 
 const statusOptions = [
-  { value: 'pending', label: '待处理' },
-  { value: 'processing', label: '处理中' },
-  { value: 'completed', label: '已完成' },
-  { value: 'ignored', label: '已忽略' }
+  { value: 'pending', label: '待处理', color: 'warning' },
+  { value: 'processing', label: '处理中', color: 'arcoblue' },
+  { value: 'completed', label: '已完成', color: 'success' },
+  { value: 'ignored', label: '已忽略', color: 'gray' }
 ]
 
 interface MessageListProps {
@@ -272,9 +272,6 @@ export function MessageList({ onStatusChange }: MessageListProps) {
         
         return (
           <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-            <Tag color={statusColorMap[status as keyof typeof statusColorMap] || 'gray'}>
-              {statusLabelMap[status as keyof typeof statusLabelMap] || status}
-            </Tag>
             <Select
               value={status}
               onChange={(newStatus) => handleStatusChange(record, newStatus)}
@@ -282,7 +279,7 @@ export function MessageList({ onStatusChange }: MessageListProps) {
               style={{ width: 110 }}
             >
               {statusOptions.map(opt => (
-                <Select.Option key={opt.value} value={opt.value}>
+                <Select.Option key={opt.value} value={opt.value} style={{ color: opt.color === 'arcoblue' ? '#165DFF' : opt.color === 'warning' ? '#F5A623' : opt.color === 'success' ? '#00B42A' : '#86909C' }}>
                   {opt.label}
                 </Select.Option>
               ))}
@@ -358,7 +355,7 @@ export function MessageList({ onStatusChange }: MessageListProps) {
           onChange={handleStatusFilterChange}
         >
           {statusOptions.map(opt => (
-            <Select.Option key={opt.value} value={opt.value}>
+            <Select.Option key={opt.value} value={opt.value} style={{ color: opt.color === 'arcoblue' ? '#165DFF' : opt.color === 'warning' ? '#F5A623' : opt.color === 'success' ? '#00B42A' : '#86909C' }}>
               {opt.label}
             </Select.Option>
           ))}
@@ -457,7 +454,7 @@ export function MessageList({ onStatusChange }: MessageListProps) {
                     style={{ width: '100%' }}
                   >
                     {statusOptions.map(opt => (
-                      <Select.Option key={opt.value} value={opt.value}>
+                      <Select.Option key={opt.value} value={opt.value} style={{ color: opt.color === 'arcoblue' ? '#165DFF' : opt.color === 'warning' ? '#F5A623' : opt.color === 'success' ? '#00B42A' : '#86909C' }}>
                         {opt.label}
                       </Select.Option>
                     ))}
