@@ -18,6 +18,12 @@
       "title": "区块描述",
       "description": "在标题下方的详细描述"
     },
+    "popularBadgeText": {
+      "type": "string",
+      "title": "热门标签文本",
+      "description": "热门方案上显示的标签文本",
+      "default": "最受欢迎"
+    },
     "plans": {
       "type": "array",
       "title": "价格计划列表",

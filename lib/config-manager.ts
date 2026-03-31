@@ -89,6 +89,11 @@ export function readConfig(configType: string): any {
       return config ? JSON.parse(config.config_value) : {}
     }
     
+    if (configType === 'notification') {
+      const config = jsonDb.findOne('system_config', { config_key: 'notification' })
+      return config ? JSON.parse(config.config_value) : {}
+    }
+    
     if (configType === 'token') {
       const config = jsonDb.findOne('system_config', { config_key: 'super_admin_token' })
       return config ? { superAdminToken: config.config_value } : { superAdminToken: '' }
@@ -311,6 +316,24 @@ export function writeConfig(configType: string, data: any): void {
       } else {
         jsonDb.insert('system_config', {
           config_key: 'feishu_app',
+          config_value: JSON.stringify(data),
+          created_at: new Date().toISOString(),
+          updated_at: new Date().toISOString()
+        })
+      }
+      return
+    }
+    
+    if (configType === 'notification') {
+      const existing = jsonDb.findOne('system_config', { config_key: 'notification' })
+      if (existing) {
+        jsonDb.update('system_config', existing.id, {
+          config_value: JSON.stringify(data),
+          updated_at: new Date().toISOString()
+        })
+      } else {
+        jsonDb.insert('system_config', {
+          config_key: 'notification',
           config_value: JSON.stringify(data),
           created_at: new Date().toISOString(),
           updated_at: new Date().toISOString()
@@ -693,7 +716,7 @@ export function writeSystemConfig(configName: string, data: any): void {
 }
 
 export function listSystemConfigs(): string[] {
-  return ['account', 'token', 'feishu-app', 'system-logs', 'theme']
+  return ['account', 'token', 'feishu-app', 'system-logs', 'theme', 'notification']
 }
 
 export function readAllConfigs(): Record<string, any> {

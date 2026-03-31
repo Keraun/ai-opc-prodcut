@@ -1,6 +1,5 @@
 import { NextRequest, NextResponse } from "next/server"
 import { readConfig } from "@/lib/config-manager"
-import { createFeishuAPI } from "@/lib/feishu-api"
 import { jsonDb } from "@/lib/json-database"
 import { 
   successResponse, 
@@ -8,6 +7,7 @@ import {
   badRequestResponse 
 } from "@/lib/api-utils"
 import { parseUserAgent, getClientIp } from "@/lib/device-utils"
+import { notificationService } from "@/lib/notification-service"
 
 export async function POST(request: NextRequest) {
   try {
@@ -69,43 +69,19 @@ export async function POST(request: NextRequest) {
 
     const savedMessage = jsonDb.insert('messages', messageData)
 
-    const feishuConfig = readConfig('feishu-app')
-
-    if (feishuConfig?.appId && feishuConfig?.appSecret && feishuConfig?.appToken && feishuConfig?.tableId) {
-      try {
-        const feishuAPI = createFeishuAPI({
-          appId: feishuConfig.appId,
-          appSecret: feishuConfig.appSecret,
-          appToken: feishuConfig.appToken
-        })
-
-        const result = await feishuAPI.addRecord(feishuConfig.appToken, feishuConfig.tableId, {
-          fields: {
-            "姓名": name,
-            "电话": phone,
-            "微信": wechat || "",
-            "邮箱": email || "",
-            "偏好联系方式": preference || "",
-            "留言内容": message,
-            "提交时间": new Date().toISOString(),
-            "IP地址": ip,
-            "操作系统": deviceInfo.os,
-            "设备机型": deviceInfo.deviceModel,
-            "浏览器": deviceInfo.browser
-          }
-        })
-
-        if (!result.success) {
-          console.warn("提交数据到飞书表格失败:", result.error)
-        } else {
-          jsonDb.update('messages', savedMessage.id, { 
-            feishuRecordId: result.data?.record?.record_id,
-            updated_at: new Date().toISOString()
-          })
-        }
-      } catch (feishuError) {
-        console.warn("飞书同步失败，留言已保存到本地:", feishuError)
-      }
+    // 发送通知
+    try {
+      await notificationService.sendNotifications({
+        name: String(name || ''),
+        phone: String(phone || ''),
+        wechat: String(wechat || ''),
+        email: String(email || ''),
+        message: String(message || ''),
+        preference: String(preference || ''),
+        created_at: new Date().toISOString()
+      })
+    } catch (notificationError) {
+      console.warn('发送通知失败:', notificationError)
     }
 
     const acceptHeader = request.headers.get('accept') || ''

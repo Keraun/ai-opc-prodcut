@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react"
 import { ManagementHeader, CommonTable, ActionButton } from "./index"
-import { MessageSquare, User, Phone, Mail, CheckCircle, XCircle, Eye, RefreshCw, Settings } from "lucide-react"
+import { MessageSquare, User, Phone, Mail, CheckCircle, XCircle, Eye, Settings } from "lucide-react"
 import { Tag as ArcoTag, Modal, Input, Select, Space, Popconfirm } from '@arco-design/web-react'
 import styles from "./BaseManagement.module.css"
 import { toast } from "sonner"
@@ -46,7 +46,6 @@ const statusColorMap: Record<string, string> = {
 export function MessagesManagement() {
   const [messages, setMessages] = useState<Message[]>([])
   const [loading, setLoading] = useState(true)
-  const [syncing, setSyncing] = useState(false)
   const [pagination, setPagination] = useState({ page: 1, pageSize: 20, total: 0 })
   const [statusFilter, setStatusFilter] = useState<string>('')
   const [viewModalVisible, setViewModalVisible] = useState(false)
@@ -174,36 +173,7 @@ export function MessagesManagement() {
     }
   }
 
-  const handleSyncFeishu = async () => {
-    try {
-      setSyncing(true)
-      const response = await fetch('/api/admin/messages/sync', {
-        method: 'POST'
-      })
-      const result = await response.json()
-      
-      if (result.success) {
-        toast.success(result.message || '同步成功')
-        loadMessages(pagination.page, statusFilter)
-      } else {
-        if (result.message?.includes('请先配置飞书应用信息')) {
-          toast.warning('请先配置飞书应用信息', {
-            action: {
-              label: '去配置',
-              onClick: () => router.push('/admin/dashboard?menu=feishu-app')
-            }
-          })
-        } else {
-          toast.error(result.message || '同步失败')
-        }
-      }
-    } catch (error) {
-      console.error('同步飞书数据失败:', error)
-      toast.error('同步飞书数据失败')
-    } finally {
-      setSyncing(false)
-    }
-  }
+
 
   const columns = [
     {
@@ -363,10 +333,6 @@ export function MessagesManagement() {
       <ManagementHeader
         title="留言管理"
         description="查看和管理用户提交的留言信息"
-        buttonText="同步飞书数据"
-        buttonIcon={<RefreshCw size={16} />}
-        onButtonClick={handleSyncFeishu}
-        buttonLoading={syncing}
       />
       
       <div className={styles.filterBar}>

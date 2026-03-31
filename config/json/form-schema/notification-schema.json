@@ -1,0 +1,55 @@
+{
+  "title": "数据通知配置",
+  "description": "配置用户提交留言时的消息通知功能",
+  "type": "object",
+  "properties": {
+    "enabled": {
+      "type": "boolean",
+      "title": "启用通知",
+      "description": "是否启用留言通知功能",
+      "default": false
+    },
+    "wechat": {
+      "type": "object",
+      "title": "微信通知配置",
+      "description": "配置微信消息通知",
+      "properties": {
+        "enabled": {
+          "type": "boolean",
+          "title": "启用微信通知",
+          "description": "是否启用微信消息通知",
+          "default": false
+        },
+        "webhookUrl": {
+          "type": "string",
+          "title": "微信机器人Webhook",
+          "description": "企业微信机器人的Webhook地址"
+        }
+      }
+    },
+    "feishu": {
+      "type": "object",
+      "title": "飞书通知配置",
+      "description": "配置飞书消息通知",
+      "properties": {
+        "enabled": {
+          "type": "boolean",
+          "title": "启用飞书通知",
+          "description": "是否启用飞书消息通知",
+          "default": false
+        },
+        "webhookUrl": {
+          "type": "string",
+          "title": "飞书机器人Webhook",
+          "description": "飞书机器人的Webhook地址"
+        }
+      }
+    },
+    "notificationTemplate": {
+      "type": "string",
+      "title": "通知模板",
+      "description": "消息通知的模板内容，可使用{name}、{phone}、{message}等变量",
+      "default": "收到新留言：\n姓名：{name}\n电话：{phone}\n内容：{message}"
+    }
+  }
+}

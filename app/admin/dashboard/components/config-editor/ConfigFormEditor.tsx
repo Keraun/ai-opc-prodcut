@@ -48,6 +48,7 @@ export function ConfigFormEditor({
   const [tableLink, setTableLink] = useState<string>('')
 
   const isFeishuConfig = configType === 'feishu-app'
+  const isNotificationConfig = configType === 'notification'
 
   useEffect(() => {
     fetchSchema()

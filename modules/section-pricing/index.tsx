@@ -15,6 +15,7 @@ export function PricingModule({ data }: ModuleProps) {
   const accentColor = themeConfig?.colors.accent || "#06b6d4" // 默认强调色
 
   const pricingPlans: PricingFeature[] = config?.plans || []
+  const popularBadgeText = config?.popularBadgeText || '最受欢迎'
 
   return (
     <Section
@@ -88,7 +89,7 @@ export function PricingModule({ data }: ModuleProps) {
                   className={styles.popularBadge}
                   style={{ backgroundColor: primaryColor }}
                 >
-                  最受欢迎
+                  {popularBadgeText}
                 </div>
               )}
               <div className={styles.cardContent}>
