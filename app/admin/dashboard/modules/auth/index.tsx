@@ -63,9 +63,7 @@ export function ChangePasswordModal({ visible, onClose, mustChange = false }: Ch
           updateCurrentUser(result.user)
         }
 
-        if (!mustChange) {
-          onClose()
-        }
+        onClose()
       } else {
         toast.error(result.message || "密码修改失败")
       }
@@ -85,9 +83,7 @@ export function ChangePasswordModal({ visible, onClose, mustChange = false }: Ch
           <h3 className={styles.modalTitle}>
             {mustChange ? '首次登录需修改密码' : '修改密码'}
           </h3>
-          {!mustChange && (
-            <button onClick={onClose} className={styles.closeButton}>×</button>
-          )}
+          <button onClick={onClose} className={styles.closeButton}>×</button>
         </div>
         <div className={styles.modalBody}>
           {mustChange && (

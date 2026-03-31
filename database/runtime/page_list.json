@@ -11,7 +11,7 @@
       "route": "/",
       "dynamicParam": null,
       "createdAt": null,
-      "updatedAt": "2026/03/31 10:22:19",
+      "updatedAt": "2026/04/01 05:33:46",
       "publishedAt": null,
       "modules": []
     },
@@ -56,7 +56,7 @@
       "route": "/news/[id]",
       "dynamicParam": "id",
       "createdAt": null,
-      "updatedAt": "2026/03/31 08:33:13",
+      "updatedAt": "2026/04/01 05:35:20",
       "publishedAt": null,
       "modules": []
     },
@@ -96,6 +96,6 @@
     "404"
   ],
   "dynamicRoutePattern": "[param]",
-  "createdAt": "2026-03-31T12:55:47.607Z",
-  "updatedAt": "2026-03-31T12:55:47.607Z"
+  "createdAt": "2026-03-31T21:35:20.818Z",
+  "updatedAt": "2026-03-31T21:35:20.818Z"
 }
