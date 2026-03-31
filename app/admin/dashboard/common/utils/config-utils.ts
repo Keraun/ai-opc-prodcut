@@ -1,5 +1,5 @@
 import { toast } from 'sonner'
-import { exportConfig, importConfig, resetWebsite } from '@/lib/api-client'
+import { exportConfig, importConfig, resetWebsite, logout } from '@/lib/api-client'
 
 export async function handleExportConfig(): Promise<boolean> {
   try {
@@ -73,9 +73,10 @@ export async function handleResetWebsite(superAdminToken: string): Promise<boole
     const success = await resetWebsite(superAdminToken)
 
     if (success) {
-      toast.success("网站配置已成功还原到初始状态,正在跳转到登录页...")
+      toast.success("网站配置已成功还原到初始状态,正在退出登录...")
+      await logout()
+      sessionStorage.removeItem('currentUser')
       setTimeout(() => {
-        sessionStorage.removeItem('currentUser')
         window.location.href = '/admin'
       }, 1500)
       return true

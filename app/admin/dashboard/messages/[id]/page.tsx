@@ -6,7 +6,7 @@ import { ManagementHeader } from '@/app/admin/dashboard/components'
 import { Tag, Select, Input, Button } from '@arco-design/web-react'
 import { ArrowLeft, CheckCircle, XCircle, Clock, User, Phone, Mail, Globe, Laptop, Monitor, Wifi, Calendar } from 'lucide-react'
 import { toast } from 'sonner'
-import { checkAuthStatus } from '@/lib/api-client'
+import { checkAuthStatus, logout } from '@/lib/api-client'
 import styles from './message-detail.module.css'
 
 interface Message {
@@ -73,9 +73,10 @@ export default function MessageDetailPage() {
         if (sessionId) params.set('sessionId', sessionId)
 
         // 检查认证状态
-        const authResult = await checkAuthStatus(token, sessionId)
+        const authResult = await checkAuthStatus(token || undefined, sessionId || undefined)
         
         if (!authResult.authenticated) {
+          await logout()
           setAuthError('认证失败，请登录后访问')
           toast.error('认证失败，请登录后访问')
           // 跳转到登录页面
@@ -87,6 +88,7 @@ export default function MessageDetailPage() {
         await loadMessageDetail()
       } catch (error) {
         console.error('认证失败:', error)
+        await logout()
         setAuthError('认证失败，请登录后访问')
         toast.error('认证失败，请登录后访问')
         router.push('/admin')

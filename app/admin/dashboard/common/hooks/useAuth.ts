@@ -13,6 +13,7 @@ export function useAuth() {
       const authResult = await checkAuthStatus()
 
       if (!authResult.authenticated) {
+        await logoutApi()
         sessionStorage.removeItem('currentUser')
         router.push("/admin")
         return false
@@ -22,6 +23,7 @@ export function useAuth() {
       sessionStorage.setItem('currentUser', JSON.stringify(authResult.user))
       return true
     } catch (error) {
+      await logoutApi()
       sessionStorage.removeItem('currentUser')
       router.push("/admin")
       return false
@@ -34,6 +36,7 @@ export function useAuth() {
     const validateSession = async () => {
       const authResult = await checkAuthStatus()
       if (!authResult.authenticated) {
+        await logoutApi()
         sessionStorage.removeItem('currentUser')
         router.push("/admin")
       }
