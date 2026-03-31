@@ -6,7 +6,7 @@ export interface NotificationConfig {
     enabled: boolean
     token: string
     wechatEnabled: boolean
-    feishuEnabled: boolean
+    webHookEnabled: boolean
     voiceEnabled: boolean
   }
   email?: {
@@ -29,6 +29,7 @@ export interface NotificationConfig {
     openId: string
   }
   notificationTemplate?: string
+  notificationTemplateType?: 'txt' | 'html'
 }
 
 // 消息数据接口
@@ -78,7 +79,8 @@ class PushPlusChannel implements NotificationChannel {
 
     try {
       const template = this.config.notificationTemplate || '收到新留言：\n姓名：{name}\n电话：{phone}\n内容：{message}'
-      const content = this.renderTemplate(template, data)
+      const templateType = this.config.notificationTemplateType || 'html' // 默认使用html类型
+      const content = this.renderTemplate(template, data, templateType)
 
       const response = await fetch('https://www.pushplus.plus/send', {
         method: 'POST',
@@ -89,7 +91,7 @@ class PushPlusChannel implements NotificationChannel {
           token: this.config.pushplus.token,
           title: '新留言通知',
           content: content,
-          template: 'txt',
+          template: templateType,
           channel: this.channel
         })
       })
@@ -107,27 +109,77 @@ class PushPlusChannel implements NotificationChannel {
     }
   }
 
-  protected renderTemplate(template: string, data: MessageData): string {
+  protected detectTemplateType(template: string): 'txt' | 'html' {
+    // 简单检测模板是否包含HTML标签
+    const htmlPattern = /<[^>]+>/g
+    return htmlPattern.test(template) ? 'html' : 'txt'
+  }
+
+  protected renderTemplate(template: string, data: MessageData, templateType: 'txt' | 'html'): string {
     // 确保message字段中的换行符被正确处理
-    const processedMessage = data.message.replace(/\n/g, '\n')
+    const processedMessage = templateType === 'html' 
+      ? data.message.replace(/\n/g, '<br/>')
+      : data.message
     
-    return template
-      .replace('{name}', data.name)
-      .replace('{phone}', data.phone)
-      .replace('{wechat}', data.wechat || '-')
-      .replace('{email}', data.email || '-')
-      .replace('{message}', processedMessage)
-      .replace('{preference}', data.preference || '-')
-      .replace('{llmModel}', data.llmModel || '-')
-      .replace('{ip}', data.ip || '-')
-      .replace('{region}', data.region || '-')
-      .replace('{os}', data.os || '-')
-      .replace('{osVersion}', data.osVersion || '-')
-      .replace('{browser}', data.browser || '-')
-      .replace('{browserVersion}', data.browserVersion || '-')
-      .replace('{deviceModel}', data.deviceModel || '-')
-      .replace('{detail_link}', data.detail_link || '-')
-      .replace('{created_at}', this.formatDate(data.created_at))
+    // 替换所有变量
+    let content = template
+      .replace(/{name}/g, data.name)
+      .replace(/{phone}/g, data.phone)
+      .replace(/{wechat}/g, data.wechat || '-')
+      .replace(/{email}/g, data.email || '-')
+      .replace(/{message}/g, processedMessage)
+      .replace(/{preference}/g, data.preference || '-')
+      .replace(/{llmModel}/g, data.llmModel || '-')
+      .replace(/{ip}/g, data.ip || '-')
+      .replace(/{region}/g, data.region || '-')
+      .replace(/{os}/g, data.os || '-')
+      .replace(/{osVersion}/g, data.osVersion || '-')
+      .replace(/{browser}/g, data.browser || '-')
+      .replace(/{browserVersion}/g, data.browserVersion || '-')
+      .replace(/{deviceModel}/g, data.deviceModel || '-')
+      .replace(/{created_at}/g, this.formatDate(data.created_at))
+
+    // 处理 detail_link
+    if (data.detail_link) {
+      if (templateType === 'html') {
+        content = content.replace(
+          /查看详情：{detail_link}/g,
+          `<a href="${data.detail_link}" style="color: #165DFF; text-decoration: underline;">查看详情</a>`
+        )
+        // 也处理没有"查看详情："前缀的情况
+        content = content.replace(
+          /{detail_link}/g,
+          `<a href="${data.detail_link}" style="color: #165DFF; text-decoration: underline;">查看详情</a>`
+        )
+      } else {
+        content = content.replace(/{detail_link}/g, data.detail_link)
+      }
+    } else {
+      content = content.replace(/查看详情：{detail_link}/g, '查看详情：-')
+      content = content.replace(/{detail_link}/g, '-')
+    }
+
+    // 如果是HTML格式，添加基本的HTML结构
+    if (templateType === 'html' && !content.includes('<html') && !content.includes('<body') && !content.includes('<div')) {
+      content = this.convertToHtml(content)
+    }
+
+    return content
+  }
+
+  protected convertToHtml(text: string): string {
+    // 将换行符转换为 <br/>
+    let html = text.replace(/\n/g, '<br/>')
+    
+    // 将连续的 <br/><br/> 转换为段落
+    html = html.replace(/<br\/><br\/>/g, '</p><p>')
+    
+    // 包装在段落标签中
+    html = `<div style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif; line-height: 1.6; color: #333;">
+<p>${html}</p>
+</div>`
+    
+    return html
   }
 
   protected formatDate(dateString: string): string {
@@ -153,7 +205,7 @@ class WechatChannel extends PushPlusChannel {
 // 飞书通知渠道
 class FeishuChannel extends PushPlusChannel {
   isEnabled(): boolean {
-    return super.isEnabled() && this.config.pushplus?.feishuEnabled || false
+    return super.isEnabled() && this.config.pushplus?.webHookEnabled || false
   }
 }
 
@@ -185,7 +237,8 @@ class SmsChannel extends PushPlusChannel {
     try {
       // 短信模板需要更简洁
       const template = this.config.notificationTemplate || '收到新留言：姓名：{name}，电话：{phone}，内容：{message}'
-      const content = this.renderTemplate(template, data)
+      const templateType = this.config.notificationTemplateType || 'html' // 默认使用html类型
+      const content = this.renderTemplate(template, data, templateType)
 
       const response = await fetch('https://www.pushplus.plus/send', {
         method: 'POST',
@@ -196,7 +249,7 @@ class SmsChannel extends PushPlusChannel {
           token: this.config.pushplus.token,
           title: '新留言通知',
           content: content,
-          template: 'txt',
+          template: templateType,
           channel: 'sms'
         })
       })
