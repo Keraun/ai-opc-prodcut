@@ -17,7 +17,7 @@
         "token": {
           "type": "string",
           "title": "PushPlus Token",
-          "description": "PushPlus的Token，用于发送消息。获取方式：登录PushPlus官网(<https://www.pushplus.plus/)，注册账号后在个人中心获取Token。",
+          "description": "PushPlus的Token，用于发送消息。获取方式：登录PushPlus官网(https://www.pushplus.plus/)，注册账号后在个人中心获取Token。"
         },
         "wechatEnabled": {
           "type": "boolean",

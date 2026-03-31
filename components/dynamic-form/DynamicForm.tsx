@@ -29,7 +29,7 @@ export function DynamicForm({
   } = useDynamicForm(schema, initialValues, onSubmit)
 
   const renderFieldComponent = (fieldName: string, fieldSchema: FieldSchema) => {
-    return renderField(fieldName, fieldSchema, tags, addTag, removeTag)
+    return renderField(fieldName, fieldSchema, tags, addTag, removeTag, form.getFieldValue(fieldName), (value) => form.setFieldValue(fieldName, value))
   }
 
   const renderArrayFieldComponent = (fieldName: string, fieldSchema: FieldSchema) => {

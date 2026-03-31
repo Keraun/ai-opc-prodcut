@@ -11,18 +11,21 @@ export interface Configs {
   site_config: any
   feishu_app: any
   super_admin_token: string
+  notification: any
 }
 
 export function useConfig() {
   const [configs, setConfigs] = useState<Configs>({
     site_config: {},
     feishu_app: {},
-    super_admin_token: ''
+    super_admin_token: '',
+    notification: {}
   })
   const [originalConfigs, setOriginalConfigs] = useState<Configs>({
     site_config: {},
     feishu_app: {},
-    super_admin_token: ''
+    super_admin_token: '',
+    notification: {}
   })
   const [loading, setLoading] = useState(false)
   const [schema, setSchema] = useState<any>({})

@@ -18,6 +18,7 @@ interface MessageData {
   email?: string
   message: string
   preference?: string
+  llmModel?: string
   created_at: string
 }
 
@@ -36,6 +37,7 @@ export class NotificationService {
       .replace('{email}', data.email || '-')
       .replace('{message}', data.message)
       .replace('{preference}', data.preference || '-')
+      .replace('{llmModel}', data.llmModel || '-')
       .replace('{created_at}', data.created_at)
   }
 

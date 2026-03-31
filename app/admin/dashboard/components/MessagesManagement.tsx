@@ -30,6 +30,7 @@ interface Message {
   note: string
   created_at: string
   updated_at: string
+  llmModel?: string
 }
 
 const statusOptions = [
@@ -255,6 +256,16 @@ export function MessagesManagement() {
       ),
     },
     {
+      title: '大模型',
+      key: 'llmModel',
+      width: 100,
+      render: (_: any, record: Message) => (
+        <div className={styles.productInfo}>
+          <div className={styles.productName} style={{ fontSize: 12 }}>{record.llmModel || '-'}</div>
+        </div>
+      ),
+    },
+    {
       title: '状态',
       dataIndex: 'status',
       key: 'status',
@@ -401,6 +412,10 @@ export function MessagesManagement() {
                     <div className={styles.detailItem}>
                       <span className={styles.detailLabel}>邮箱:</span>
                       <span className={styles.detailValue}>{currentMessage.email || '-'}</span>
+                    </div>
+                    <div className={styles.detailItem}>
+                      <span className={styles.detailLabel}>大模型:</span>
+                      <span className={styles.detailValue}>{currentMessage.llmModel || '-'}</span>
                     </div>
                   </div>
                 </div>

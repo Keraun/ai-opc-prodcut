@@ -12,7 +12,9 @@ export function renderField(
   fieldSchema: FieldSchema,
   tags: Record<string, string[]>,
   addTag: (fieldName: string, value: string) => void,
-  removeTag: (fieldName: string, index: number) => void
+  removeTag: (fieldName: string, index: number) => void,
+  value?: any,
+  onChange?: (value: any) => void
 ): React.ReactNode {
   const { ui = {} } = fieldSchema
   
@@ -36,8 +38,10 @@ export function renderField(
       return (
         <Input.TextArea
           placeholder={ui.placeholder}
-          rows={ui.rows || 4}
-          style={{ width: '100%' }}
+          rows={ui.rows || 10}
+          style={{ width: '100%', minHeight: '400px' }}
+          value={value}
+          onChange={onChange}
         />
       )
 

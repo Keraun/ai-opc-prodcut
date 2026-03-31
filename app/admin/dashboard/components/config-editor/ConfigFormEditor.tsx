@@ -184,6 +184,29 @@ export function ConfigFormEditor({
     </>
   )
 
+  const templateOptions = [
+    {
+      name: '默认模板',
+      content: '【新留言通知】\n\n用户信息：\n姓名：{name}\n电话：{phone || \'\'}\n微信：{wechat || \'\'}\n邮箱：{email || \'\'}\n\n留言内容：\n{message}\n\n设备信息：\nIP地址：{ip}\n地区：{region || \'\'}\n操作系统：{os} {osVersion}\n浏览器：{browser} {browserVersion}\n设备机型：{deviceModel}\n\n提交时间：{created_at}\n\n请及时处理！'
+    },
+    {
+      name: '简洁模板',
+      content: '【新留言】\n\n姓名：{name}\n电话：{phone || \'\'}\n内容：{message}\n\n提交时间：{created_at}'
+    },
+    {
+      name: '详细模板',
+      content: '【重要通知】新留言提醒\n\n尊敬的管理员：\n\n您收到了一条新的用户留言，详情如下：\n\n用户信息\n姓名：{name}\n联系电话：{phone || \'未提供\'}\n微信：{wechat || \'未提供\'}\n邮箱：{email || \'未提供\'}\n\n留言内容\n{message}\n\n设备信息\nIP地址：{ip}\n地区：{region || \'未知\'}\n操作系统：{os} {osVersion}\n浏览器：{browser} {browserVersion}\n设备：{deviceModel}\n\n提交时间：{created_at}\n\n请及时登录管理后台处理此留言。\n\n系统自动发送，请勿回复。'
+    }
+  ]
+
+  const handleSelectTemplate = (content: string) => {
+    const updatedConfig = {
+      ...configData,
+      notificationTemplate: content
+    }
+    onSave(updatedConfig)
+  }
+
   return (
     <div className={styles.container}>
       <ManagementHeader
@@ -199,12 +222,30 @@ export function ConfigFormEditor({
             <div style={{ marginTop: '16px', color: '#999' }}>加载表单配置中...</div>
           </div>
         ) : (
-          <DynamicForm
-            schema={schema}
-            initialValues={configData}
-            onSubmit={handleSubmit}
-            loading={submitting}
-          />
+          <>
+            <DynamicForm
+              schema={schema}
+              initialValues={configData}
+              onSubmit={handleSubmit}
+              loading={submitting}
+            />
+            {isNotificationConfig && (
+              <div style={{ marginTop: '16px', paddingTop: '16px', borderTop: '1px solid #e5e7eb' }}>
+                <h4 style={{ marginBottom: '12px' }}>模板选择</h4>
+                <div style={{ display: 'flex', gap: '12px', flexWrap: 'wrap' }}>
+                  {templateOptions.map((template, index) => (
+                    <Button
+                      key={index}
+                      onClick={() => handleSelectTemplate(template.content)}
+                      style={{ flex: '1 1 calc(33.333% - 8px)', minWidth: '200px' }}
+                    >
+                      {template.name}
+                    </Button>
+                  ))}
+                </div>
+              </div>
+            )}
+          </>
         )}
       </Card>
 

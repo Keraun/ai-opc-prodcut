@@ -11,7 +11,7 @@ import { notificationService } from "@/lib/notification-service"
 
 export async function POST(request: NextRequest) {
   try {
-    let name, phone, wechat, email, preference, message
+    let name, phone, wechat, email, preference, message, llmModel
     
     const contentType = request.headers.get('content-type') || ''
     
@@ -23,6 +23,7 @@ export async function POST(request: NextRequest) {
       email = body.email
       preference = body.preference
       message = body.message
+      llmModel = body.llmModel
     } else {
       const formData = await request.formData()
       name = formData.get('name')
@@ -31,6 +32,7 @@ export async function POST(request: NextRequest) {
       email = formData.get('email')
       preference = formData.get('contactPreference')
       message = formData.get('message')
+      llmModel = formData.get('llmModel')
     }
 
     if (!name || !phone || !message) {
@@ -54,6 +56,7 @@ export async function POST(request: NextRequest) {
       email: String(email || ''),
       preference: String(preference || ''),
       message: String(message || ''),
+      llmModel: String(llmModel || ''),
       ip,
       region: '',
       os: deviceInfo.os,
@@ -78,6 +81,7 @@ export async function POST(request: NextRequest) {
         email: String(email || ''),
         message: String(message || ''),
         preference: String(preference || ''),
+        llmModel: String(llmModel || ''),
         created_at: new Date().toISOString()
       })
     } catch (notificationError) {
