@@ -6,6 +6,27 @@ import type { ProductDetailData, Product } from './types'
 import { QrcodeModal } from '@/components/QrcodeModal'
 import styles from './index.module.css'
 
+// 预览模式下的模拟产品数据
+const previewProduct: Product = {
+  id: 1,
+  title: '示例产品名称',
+  description: '这是一款示例产品的描述，用于预览模式展示。您可以配置是否显示价格、特性、评分、销量等相关信息。',
+  price: 99,
+  originalPrice: 199,
+  image: '',
+  tags: ['热门', '推荐'],
+  category: '示例分类',
+  categoryName: '示例分类',
+  link: '#',
+  buyLink: '#',
+  features: ['特性一：高效便捷', '特性二：安全可靠', '特性三：易于使用', '特性四：专业支持'],
+  salesCount: 1000,
+  rating: 4.8,
+  status: 'published',
+  created_at: new Date().toISOString(),
+  updated_at: new Date().toISOString()
+}
+
 function ProductDetailImage({ product }: { product: Product | null }) {
   const [hasError, setHasError] = useState(false)
 
@@ -55,9 +76,22 @@ export function ProductDetailModule({ data }: ModuleProps) {
   const [relatedProducts, setRelatedProducts] = useState<Product[]>([])
   const [loading, setLoading] = useState(true)
   const [isModalOpen, setIsModalOpen] = useState(false)
+  const [isPreview, setIsPreview] = useState(false)
 
   useEffect(() => {
     const fetchProduct = async () => {
+      // 检测是否在预览模式
+      const isPreviewMode = window.location.pathname.includes('/admin/module-preview/')
+      setIsPreview(isPreviewMode)
+      
+      if (isPreviewMode) {
+        // 预览模式：使用模拟数据
+        setProduct(previewProduct)
+        setRelatedProducts([])
+        setLoading(false)
+        return
+      }
+
       const slug = window.location.pathname.split('/').pop()
       if (!slug) return
 

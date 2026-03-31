@@ -11,9 +11,9 @@
     "is_deletable": 0,
     "route": "/",
     "dynamic_param": null,
-    "module_instance_ids": "[\"site-root-1774642127716-1774642692903\",\"site-header-1774642128717-1774642693903\",\"section-hero-1774642129718-1774642694903\",\"section-partner-1774642130719-1774642695903\",\"section-products-1774642131720-1774642696903\",\"section-services-1774642132721-1774642697903\",\"section-pricing-1774642133722-1774642698903\",\"section-about-1774642134723-1774642699903\",\"section-contact-1774642135724-1774642700903\",\"section-image-1774826038402\",\"section-content-1774826281479\",\"section-services-1774840655785\",\"section-partner-1774840703876\",\"section-about-1774840717345\",\"site-footer-1774642136725-1774642701903\"]",
+    "module_instance_ids": "[\"site-root-1774642127716-1774642692903\",\"site-header-1774642128717-1774642693903\",\"section-hero-1774642129718-1774642694903\",\"section-partner-1774642130719-1774642695903\",\"section-products-1774642131720-1774642696903\",\"section-services-1774642132721-1774642697903\",\"section-pricing-1774642133722-1774642698903\",\"section-about-1774642134723-1774642699903\",\"section-contact-1774642135724-1774642700903\",\"site-footer-1774642136725-1774642701903\"]",
     "created_at": null,
-    "updated_at": "2026/03/31 05:17:08",
+    "updated_at": "2026/03/31 08:36:35",
     "published_at": null
   },
   {
@@ -64,7 +64,7 @@
     "dynamic_param": "id",
     "module_instance_ids": "[\"site-root-1774642145717-1774642692903\",\"site-header-1774642146718-1774642693903\",\"news-detail-1774642147719-1774642694903\",\"site-footer-1774642148720-1774642695903\"]",
     "created_at": null,
-    "updated_at": null,
+    "updated_at": "2026/03/31 08:33:13",
     "published_at": null
   },
   {
@@ -98,7 +98,7 @@
     "dynamic_param": "id",
     "module_instance_ids": "[\"site-root-1774743000000-0\",\"site-header-1774743000001-1\",\"product-detail-1774743000002-2\",\"site-footer-1774743000003-3\"]",
     "created_at": null,
-    "updated_at": null,
+    "updated_at": "2026/03/31 08:32:30",
     "published_at": null
   }
 ]

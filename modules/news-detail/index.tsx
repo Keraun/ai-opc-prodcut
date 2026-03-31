@@ -23,8 +23,26 @@ interface Article {
   updated_at: string
 }
 
+// 预览模式下的模拟文章数据
+const previewArticle: Article = {
+  id: 1,
+  title: '示例文章标题',
+  slug: 'preview-article',
+  summary: '这是一篇示例文章的摘要，用于预览模式展示。',
+  content: '<p>这是示例文章的正文内容。在预览模式下，我们展示一些示例内容来演示资讯详情模块的样式和布局。</p><p>您可以配置是否显示作者、日期、相关文章等选项。</p>',
+  date: new Date().toISOString().split('T')[0],
+  author: '示例作者',
+  category: '示例分类',
+  tags: ['标签1', '标签2'],
+  image: '',
+  viewCount: 100,
+  status: 'published',
+  created_at: new Date().toISOString(),
+  updated_at: new Date().toISOString()
+}
+
 export function NewsDetailModule({ data }: ModuleProps) {
-  const config: NewsDetailData = (data as NewsDetailData) || {
+  const config: NewsDetailData = (data as unknown as NewsDetailData) || {
     showAuthor: true,
     showDate: true,
     showRelated: true,
@@ -37,9 +55,24 @@ export function NewsDetailModule({ data }: ModuleProps) {
   const [prevArticle, setPrevArticle] = useState<Article | null>(null)
   const [nextArticle, setNextArticle] = useState<Article | null>(null)
   const [loading, setLoading] = useState(true)
+  const [isPreview, setIsPreview] = useState(false)
 
   useEffect(() => {
     const fetchArticle = async () => {
+      // 检测是否在预览模式
+      const isPreviewMode = window.location.pathname.includes('/admin/module-preview/')
+      setIsPreview(isPreviewMode)
+      
+      if (isPreviewMode) {
+        // 预览模式：使用模拟数据
+        setArticle(previewArticle)
+        setRelatedArticles([])
+        setPrevArticle(null)
+        setNextArticle(null)
+        setLoading(false)
+        return
+      }
+
       const param = window.location.pathname.split('/').pop()
       if (!param) return
 
