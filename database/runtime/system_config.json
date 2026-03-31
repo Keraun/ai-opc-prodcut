@@ -43,9 +43,9 @@
   },
   {
     "config_key": "notification",
-    "config_value": "{\"pushplus\":{\"enabled\":true,\"token\":\"20169976d69346eb8c82162c74e0df10\",\"wechatEnabled\":true,\"webHookEnabled\":false,\"voiceEnabled\":false},\"email\":{\"enabled\":true},\"sms\":{\"enabled\":false},\"wxClawBot\":{\"enabled\":false},\"notificationTemplate\":\"【重要通知】新留言提醒\\n\\n尊敬的管理员：\\n\\n您收到了一条新的用户留言，详情如下：\\n\\n用户信息\\n姓名：{name}\\n联系电话：{phone}\\n微信：{wechat}\\n邮箱：{email}\\n偏好联系方式：{preference}\\n\\n留言内容\\n{message}\\n\\n大模型信息\\n使用模型：{llmModel}\\n\\n设备信息\\nIP地址：{ip}\\n地区：{region}\\n操作系统：{os} {osVersion}\\n浏览器：{browser} {browserVersion}\\n设备：{deviceModel}\\n\\n提交时间：{created_at}\\n\\n查看详情：{detail_link}\\n\\n请及时处理此留言。\\n\\n系统自动发送，请勿回复。\"}",
+    "config_value": "{\"pushplus\":{\"enabled\":true,\"token\":\"20169976d69346eb8c82162c74e0df10\",\"wechatEnabled\":false,\"webHookEnabled\":false,\"voiceEnabled\":true},\"email\":{\"enabled\":false},\"sms\":{\"enabled\":true},\"wxClawBot\":{\"enabled\":true},\"notificationTemplate\":\"【重要通知】新留言提醒\\n\\n尊敬的管理员：\\n\\n您收到了一条新的用户留言，详情如下：\\n\\n用户信息\\n姓名：{name}\\n联系电话：{phone}\\n微信：{wechat}\\n邮箱：{email}\\n偏好联系方式：{preference}\\n\\n留言内容\\n{message}\\n\\n大模型信息\\n使用模型：{llmModel}\\n\\n设备信息\\nIP地址：{ip}\\n地区：{region}\\n操作系统：{os} {osVersion}\\n浏览器：{browser} {browserVersion}\\n设备：{deviceModel}\\n\\n提交时间：{created_at}\\n\\n查看详情：{detail_link}\\n\\n请及时处理此留言。\\n\\n系统自动发送，请勿回复。\"}",
     "created_at": "2026-03-31T03:50:40.707Z",
-    "updated_at": "2026-03-31T11:38:58.602Z",
+    "updated_at": "2026-03-31T11:44:34.742Z",
     "id": 8
   }
 ]

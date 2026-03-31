@@ -14,6 +14,9 @@ export async function GET(request: NextRequest) {
     const pageSize = parseInt(searchParams.get('pageSize') || '20')
     const status = searchParams.get('status') || ''
 
+    // 重新加载数据，确保获取最新的留言信息
+    jsonDb.reload()
+
     // 处理单个留言详情请求
     if (id) {
       const message = jsonDb.findOne('messages', { id: parseInt(id) })
@@ -60,6 +63,9 @@ export async function PATCH(request: NextRequest) {
       return badRequestResponse("留言ID不能为空")
     }
 
+    // 重新加载数据，确保获取最新的留言信息
+    jsonDb.reload()
+
     const message = jsonDb.findOne('messages', { id: id })
     
     if (!message) {
@@ -95,6 +101,9 @@ export async function DELETE(request: NextRequest) {
     if (!id) {
       return badRequestResponse("留言ID不能为空")
     }
+
+    // 重新加载数据，确保获取最新的留言信息
+    jsonDb.reload()
 
     const deleted = jsonDb.delete('messages', id)
     
