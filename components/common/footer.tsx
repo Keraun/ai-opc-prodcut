@@ -3,28 +3,34 @@
 import { IconLocation, IconPhone, IconEmail, IconSettings } from "@arco-design/web-react/icon"
 import { Logo } from "@/components/common/logo"
 import { useConfig } from "@/components/initial-data-provider"
+import type { FooterData, SiteRootData } from "@/modules/module-types"
 import styles from "./footer.module.css"
 
-export function Footer() {
-  const siteConfig = useConfig('site')
-  const footerConfig = useConfig('site-footer')
+interface FooterProps {
+  footerData?: FooterData
+  siteData?: SiteRootData
+}
+
+export function Footer({ footerData, siteData }: FooterProps) {
+  const siteConfig = siteData || useConfig('site')
+  const footerConfig = footerData || useConfig('site-footer')
   const currentYear = new Date().getFullYear()
 
   const contactInfo = [
     {
       icon: IconLocation,
       title: "公司地址",
-      content: siteConfig?.contact?.address || '',
+      content: footerConfig?.address || siteConfig?.contact?.address || '',
     },
     {
       icon: IconPhone,
       title: "联系电话",
-      content: siteConfig?.contact?.phone || '',
+      content: footerConfig?.phone || siteConfig?.contact?.phone || '',
     },
     {
       icon: IconEmail,
       title: "电子邮箱",
-      content: siteConfig?.contact?.email || '',
+      content: footerConfig?.email || siteConfig?.contact?.email || '',
     },
   ]
 
@@ -43,10 +49,11 @@ export function Footer() {
           </div>
 
           <div>
-            <h4 className={styles.sectionTitle}>联系方式</h4>
+            {contactInfo?.some(info => info.content) ? <h4 className={styles.sectionTitle}>联系方式</h4>: ''}
             <ul className={styles.contactList}>
               {contactInfo.map((info, index) => {
                 const Icon = info.icon
+                if(!info.content) return null;
                 return (
                   <li key={index} className={styles.contactItem}>
                     <Icon className={styles.contactIcon} />
