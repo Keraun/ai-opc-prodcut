@@ -89,20 +89,7 @@ export default function AdminDashboardPage() {
         return <MessageManager />
       case 'images':
         return <ImageManagement />
-      case 'notification':
-          return (
-            <ConfigFormEditor
-              configType="notification"
-              title="通知管理"
-              description="配置消息通知服务"
-              configData={configs.notification}
-              onSave={async (data) => {
-                await saveConfig('notification', data)
-              }}
-              hasChanges={hasChanges('notification')}
-              loading={configLoading}
-            />
-          )
+
       case 'theme':
         return <ThemeManager />
       case 'accounts':

@@ -1,12 +1,15 @@
 "use client"
 
 import { useState, useEffect } from "react"
-import { ManagementHeader, CommonTable, ActionButton } from "./index"
-import { MessageSquare, User, Phone, Mail, CheckCircle, XCircle, Eye, Settings } from "lucide-react"
-import { Tag as ArcoTag, Modal, Input, Select, Space, Popconfirm } from '@arco-design/web-react'
+import { ManagementHeader, CommonTable, ActionButton, ConfigFormEditor } from "./index"
+import { MessageSquare, User, Phone, Mail, CheckCircle, XCircle, Eye, Settings, Bell } from "lucide-react"
+import { Tag as ArcoTag, Modal, Input, Select, Space, Popconfirm, Tabs } from '@arco-design/web-react'
 import styles from "./BaseManagement.module.css"
 import { toast } from "sonner"
 import { useRouter } from "next/navigation"
+import { useConfig } from '../common/hooks/useConfig'
+
+const TabPane = Tabs.TabPane
 
 interface Message {
   id: number
@@ -44,6 +47,7 @@ const statusColorMap: Record<string, string> = {
 }
 
 export function MessagesManagement() {
+  const [activeTab, setActiveTab] = useState('messages')
   const [messages, setMessages] = useState<Message[]>([])
   const [loading, setLoading] = useState(true)
   const [pagination, setPagination] = useState({ page: 1, pageSize: 20, total: 0 })
@@ -52,6 +56,7 @@ export function MessagesManagement() {
   const [currentMessage, setCurrentMessage] = useState<Message | null>(null)
   const [editNote, setEditNote] = useState('')
   const [editStatus, setEditStatus] = useState('')
+  const { configs, loading: configLoading, saveConfig, hasChanges } = useConfig()
   const router = useRouter()
 
   const loadMessages = async (page = 1, status = '') => {
@@ -335,133 +340,150 @@ export function MessagesManagement() {
         description="查看和管理用户提交的留言信息"
       />
       
-      <div className={styles.filterBar}>
-        <Select
-          placeholder="筛选状态"
-          style={{ width: 150 }}
-          allowClear
-          value={statusFilter}
-          onChange={handleStatusFilterChange}
-        >
-          {statusOptions.map(opt => (
-            <Select.Option key={opt.value} value={opt.value}>
-              {opt.label}
-            </Select.Option>
-          ))}
-        </Select>
-      </div>
-
-      <CommonTable
-        columns={columns}
-        data={messages}
-        loading={loading}
-        pagination={{
-          current: pagination.page,
-          pageSize: pagination.pageSize,
-          total: pagination.total,
-          onChange: (page) => loadMessages(page, statusFilter),
-        }}
-        emptyIcon={<MessageSquare size={48} />}
-        emptyText="暂无留言数据"
-      />
-
-      <Modal
-        title="留言详情"
-        visible={viewModalVisible}
-        onOk={handleUpdate}
-        onCancel={() => setViewModalVisible(false)}
-        okText="保存"
-        cancelText="关闭"
-        width={700}
-      >
-        {currentMessage && (
-          <div className={styles.modalContent}>
-            <div className={styles.detailSection}>
-              <h4 className={styles.detailTitle}>基本信息</h4>
-              <div className={styles.detailGrid}>
-                <div className={styles.detailItem}>
-                  <span className={styles.detailLabel}>姓名:</span>
-                  <span className={styles.detailValue}>{currentMessage.name}</span>
-                </div>
-                <div className={styles.detailItem}>
-                  <span className={styles.detailLabel}>电话:</span>
-                  <span className={styles.detailValue}>{currentMessage.phone || '-'}</span>
-                </div>
-                <div className={styles.detailItem}>
-                  <span className={styles.detailLabel}>微信:</span>
-                  <span className={styles.detailValue}>{currentMessage.wechat || '-'}</span>
-                </div>
-                <div className={styles.detailItem}>
-                  <span className={styles.detailLabel}>邮箱:</span>
-                  <span className={styles.detailValue}>{currentMessage.email || '-'}</span>
-                </div>
-              </div>
-            </div>
-
-            <div className={styles.detailSection}>
-              <h4 className={styles.detailTitle}>留言内容</h4>
-              <div className={styles.messageContent}>
-                {currentMessage.message}
-              </div>
-            </div>
-
-            <div className={styles.detailSection}>
-              <h4 className={styles.detailTitle}>设备信息</h4>
-              <div className={styles.detailGrid}>
-                <div className={styles.detailItem}>
-                  <span className={styles.detailLabel}>操作系统:</span>
-                  <span className={styles.detailValue}>{currentMessage.os} {currentMessage.osVersion}</span>
-                </div>
-                <div className={styles.detailItem}>
-                  <span className={styles.detailLabel}>浏览器:</span>
-                  <span className={styles.detailValue}>{currentMessage.browser} {currentMessage.browserVersion}</span>
-                </div>
-                <div className={styles.detailItem}>
-                  <span className={styles.detailLabel}>设备机型:</span>
-                  <span className={styles.detailValue}>{currentMessage.deviceModel}</span>
-                </div>
-                <div className={styles.detailItem}>
-                  <span className={styles.detailLabel}>IP地址:</span>
-                  <span className={styles.detailValue}>{currentMessage.ip}</span>
-                </div>
-              </div>
-            </div>
-
-            <div className={styles.detailSection}>
-              <h4 className={styles.detailTitle}>处理信息</h4>
-              <div className={styles.editForm}>
-                <div className={styles.formField}>
-                  <label className={styles.formLabel}>状态</label>
-                  <Select
-                    value={editStatus}
-                    onChange={setEditStatus}
-                    style={{ width: '100%' }}
-                  >
-                    {statusOptions.map(opt => (
-                      <Select.Option key={opt.value} value={opt.value}>
-                        {opt.label}
-                      </Select.Option>
-                    ))}
-                  </Select>
-                </div>
-                <div className={styles.formField}>
-                  <label className={styles.formLabel}>备注</label>
-                  <Input.TextArea
-                    value={editNote}
-                    onChange={setEditNote}
-                    placeholder="添加处理备注..."
-                    rows={3}
-                  />
-                </div>
-                <div className={styles.detailItem}>
-                  <span className={styles.detailLabel}>提交时间:</span>
-                  <span className={styles.detailValue}>{new Date(currentMessage.created_at).toLocaleString('zh-CN')}</span>
-                </div>
-              </div>
-            </div>
+      <Tabs activeTab={activeTab} onChange={setActiveTab} type="card">
+        <TabPane key="messages" title="留言列表">
+          <div className={styles.filterBar}>
+            <Select
+              placeholder="筛选状态"
+              style={{ width: 150 }}
+              allowClear
+              value={statusFilter}
+              onChange={handleStatusFilterChange}
+            >
+              {statusOptions.map(opt => (
+                <Select.Option key={opt.value} value={opt.value}>
+                  {opt.label}
+                </Select.Option>
+              ))}
+            </Select>
           </div>
-        )}
-      </Modal>
+
+          <CommonTable
+            columns={columns}
+            data={messages}
+            loading={loading}
+            pagination={{
+              current: pagination.page,
+              pageSize: pagination.pageSize,
+              total: pagination.total,
+              onChange: (page) => loadMessages(page, statusFilter),
+            }}
+            emptyIcon={<MessageSquare size={48} />}
+            emptyText="暂无留言数据"
+          />
+
+          <Modal
+            title="留言详情"
+            visible={viewModalVisible}
+            onOk={handleUpdate}
+            onCancel={() => setViewModalVisible(false)}
+            okText="保存"
+            cancelText="关闭"
+            width={700}
+          >
+            {currentMessage && (
+              <div className={styles.modalContent}>
+                <div className={styles.detailSection}>
+                  <h4 className={styles.detailTitle}>基本信息</h4>
+                  <div className={styles.detailGrid}>
+                    <div className={styles.detailItem}>
+                      <span className={styles.detailLabel}>姓名:</span>
+                      <span className={styles.detailValue}>{currentMessage.name}</span>
+                    </div>
+                    <div className={styles.detailItem}>
+                      <span className={styles.detailLabel}>电话:</span>
+                      <span className={styles.detailValue}>{currentMessage.phone || '-'}</span>
+                    </div>
+                    <div className={styles.detailItem}>
+                      <span className={styles.detailLabel}>微信:</span>
+                      <span className={styles.detailValue}>{currentMessage.wechat || '-'}</span>
+                    </div>
+                    <div className={styles.detailItem}>
+                      <span className={styles.detailLabel}>邮箱:</span>
+                      <span className={styles.detailValue}>{currentMessage.email || '-'}</span>
+                    </div>
+                  </div>
+                </div>
+
+                <div className={styles.detailSection}>
+                  <h4 className={styles.detailTitle}>留言内容</h4>
+                  <div className={styles.messageContent}>
+                    {currentMessage.message}
+                  </div>
+                </div>
+
+                <div className={styles.detailSection}>
+                  <h4 className={styles.detailTitle}>设备信息</h4>
+                  <div className={styles.detailGrid}>
+                    <div className={styles.detailItem}>
+                      <span className={styles.detailLabel}>操作系统:</span>
+                      <span className={styles.detailValue}>{currentMessage.os} {currentMessage.osVersion}</span>
+                    </div>
+                    <div className={styles.detailItem}>
+                      <span className={styles.detailLabel}>浏览器:</span>
+                      <span className={styles.detailValue}>{currentMessage.browser} {currentMessage.browserVersion}</span>
+                    </div>
+                    <div className={styles.detailItem}>
+                      <span className={styles.detailLabel}>设备机型:</span>
+                      <span className={styles.detailValue}>{currentMessage.deviceModel}</span>
+                    </div>
+                    <div className={styles.detailItem}>
+                      <span className={styles.detailLabel}>IP地址:</span>
+                      <span className={styles.detailValue}>{currentMessage.ip}</span>
+                    </div>
+                  </div>
+                </div>
+
+                <div className={styles.detailSection}>
+                  <h4 className={styles.detailTitle}>处理信息</h4>
+                  <div className={styles.editForm}>
+                    <div className={styles.formField}>
+                      <label className={styles.formLabel}>状态</label>
+                      <Select
+                        value={editStatus}
+                        onChange={setEditStatus}
+                        style={{ width: '100%' }}
+                      >
+                        {statusOptions.map(opt => (
+                          <Select.Option key={opt.value} value={opt.value}>
+                            {opt.label}
+                          </Select.Option>
+                        ))}
+                      </Select>
+                    </div>
+                    <div className={styles.formField}>
+                      <label className={styles.formLabel}>备注</label>
+                      <Input.TextArea
+                        value={editNote}
+                        onChange={setEditNote}
+                        placeholder="添加处理备注..."
+                        rows={3}
+                      />
+                    </div>
+                    <div className={styles.detailItem}>
+                      <span className={styles.detailLabel}>提交时间:</span>
+                      <span className={styles.detailValue}>{new Date(currentMessage.created_at).toLocaleString('zh-CN')}</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            )}
+          </Modal>
+        </TabPane>
+        <TabPane key="notification" title="通知管理">
+          <ConfigFormEditor
+            configType="notification"
+            title="通知管理"
+            description="配置用户提交留言时的消息通知功能"
+            configData={configs.notification}
+            onSave={async (data) => {
+              await saveConfig('notification', data)
+            }}
+            hasChanges={hasChanges('notification')}
+            loading={configLoading}
+          />
+        </TabPane>
+      </Tabs>
     </div>
   )
 }

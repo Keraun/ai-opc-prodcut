@@ -804,6 +804,11 @@
   display: flex;
   gap: 16px;
   margin-bottom: 16px;
+  padding: 16px;
+  background: #f9fafb;
+  border-radius: 8px;
+  border: 1px solid #e5e7eb;
+  align-items: center;
 }
 
 .modalContent {

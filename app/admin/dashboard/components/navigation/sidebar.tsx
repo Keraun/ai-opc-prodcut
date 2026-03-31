@@ -35,7 +35,6 @@ const MENU_STRUCTURE: MenuItem[] = [
   { id: 'articles', label: '资讯管理', icon: Newspaper },
   { id: 'messages', label: '留言管理', icon: MessageCircle },
   { id: 'images', label: '图片管理', icon: Image },
-  { id: 'notification', label: '通知管理', icon: MessageCircle },
   { id: 'theme', label: '主题管理', icon: Palette },
   { id: 'accounts', label: '账号管理', icon: Users },
   { id: 'system', label: '系统管理', icon: Settings },
