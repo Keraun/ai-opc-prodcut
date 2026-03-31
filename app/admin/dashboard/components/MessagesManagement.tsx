@@ -77,15 +77,15 @@ const statusColorMap: Record<string, string> = {
 const templateOptions = [
   {
     name: '默认模板',
-    content: '【新留言通知】\n\n用户信息：\n姓名：{name}\n电话：{phone}\n微信：{wechat}\n邮箱：{email}\n\n留言内容：\n{message}\n\n设备信息：\nIP地址：{ip}\n地区：{region}\n操作系统：{os} {osVersion}\n浏览器：{browser} {browserVersion}\n设备机型：{deviceModel}\n\n提交时间：{created_at}\n\n查看详情：{detail_link}\n\n请及时处理！'
+    content: '【新留言通知】\n\n用户信息：\n姓名：{name}\n电话：{phone}\n微信：{wechat}\n邮箱：{email}\n偏好联系方式：{preference}\n\n留言内容：\n{message}\n\n大模型信息：\n使用模型：{llmModel}\n\n设备信息：\nIP地址：{ip}\n地区：{region}\n操作系统：{os} {osVersion}\n浏览器：{browser} {browserVersion}\n设备机型：{deviceModel}\n\n提交时间：{created_at}\n\n查看详情：{detail_link}\n\n请及时处理！'
   },
   {
     name: '简洁模板',
-    content: '【新留言】\n\n姓名：{name}\n电话：{phone}\n内容：{message}\n\n提交时间：{created_at}\n\n查看详情：{detail_link}'
+    content: '【新留言】\n\n姓名：{name}\n电话：{phone}\n偏好联系方式：{preference}\n内容：{message}\n大模型：{llmModel}\n\n提交时间：{created_at}\n\n查看详情：{detail_link}'
   },
   {
     name: '详细模板',
-    content: '【重要通知】新留言提醒\n\n尊敬的管理员：\n\n您收到了一条新的用户留言，详情如下：\n\n用户信息\n姓名：{name}\n联系电话：{phone}\n微信：{wechat}\n邮箱：{email}\n\n留言内容\n{message}\n\n设备信息\nIP地址：{ip}\n地区：{region}\n操作系统：{os} {osVersion}\n浏览器：{browser} {browserVersion}\n设备：{deviceModel}\n\n提交时间：{created_at}\n\n查看详情：{detail_link}\n\n请及时处理此留言。\n\n系统自动发送，请勿回复。'
+    content: '【重要通知】新留言提醒\n\n尊敬的管理员：\n\n您收到了一条新的用户留言，详情如下：\n\n用户信息\n姓名：{name}\n联系电话：{phone}\n微信：{wechat}\n邮箱：{email}\n偏好联系方式：{preference}\n\n留言内容\n{message}\n\n大模型信息\n使用模型：{llmModel}\n\n设备信息\nIP地址：{ip}\n地区：{region}\n操作系统：{os} {osVersion}\n浏览器：{browser} {browserVersion}\n设备：{deviceModel}\n\n提交时间：{created_at}\n\n查看详情：{detail_link}\n\n请及时处理此留言。\n\n系统自动发送，请勿回复。'
   }
 ]
 
@@ -118,7 +118,7 @@ export function MessagesManagement() {
       })
       const response = await fetch(`/api/admin/messages?${params.toString()}`)
       const result = await response.json()
-      
+
       if (result.success) {
         setMessages(result.data.list)
         setPagination(prev => ({
@@ -181,7 +181,7 @@ export function MessagesManagement() {
 
   const handleUpdate = async () => {
     if (!currentMessage) return
-    
+
     try {
       const response = await fetch('/api/admin/messages', {
         method: 'PATCH',
@@ -193,7 +193,7 @@ export function MessagesManagement() {
         })
       })
       const result = await response.json()
-      
+
       if (result.success) {
         toast.success('更新成功')
         setViewModalVisible(false)
@@ -215,7 +215,7 @@ export function MessagesManagement() {
         body: JSON.stringify({ id })
       })
       const result = await response.json()
-      
+
       if (result.success) {
         toast.success('删除成功')
         loadMessages(pagination.page, statusFilter)
@@ -240,7 +240,7 @@ export function MessagesManagement() {
         })
       })
       const result = await response.json()
-      
+
       if (result.success) {
         toast.success('状态更新成功')
         loadMessages(pagination.page, statusFilter)
@@ -340,8 +340,8 @@ export function MessagesManagement() {
       width: 220,
       render: (text: string) => (
         <Tooltip content={text} position="top">
-          <div style={{ 
-            maxWidth: 220, 
+          <div style={{
+            maxWidth: 220,
             display: '-webkit-box',
             WebkitLineClamp: 3,
             WebkitBoxOrient: 'vertical',
@@ -392,8 +392,8 @@ export function MessagesManagement() {
       key: 'note',
       width: 160,
       render: (text: string) => (
-        <div style={{ 
-          maxWidth: 160, 
+        <div style={{
+          maxWidth: 160,
           display: '-webkit-box',
           WebkitLineClamp: 3,
           WebkitBoxOrient: 'vertical',
@@ -447,7 +447,7 @@ export function MessagesManagement() {
         title="留言管理"
         description="查看和管理用户提交的留言信息"
       />
-      
+
       <Tabs activeTab={activeTab} onChange={handleTabChange} type="card">
         <TabPane key="messages" title="留言列表">
           <div className={styles.filterBar}>
@@ -584,7 +584,7 @@ export function MessagesManagement() {
             )}
           </Modal>
         </TabPane>
-        
+
         {/* 通知管理 - 硬编码表单 */}
         <TabPane key="notification" title="通知管理">
           <div style={{ padding: '24px' }}>
@@ -622,11 +622,38 @@ export function MessagesManagement() {
                 {/* PushPlus 配置区域 */}
                 <div style={{ marginBottom: 24 }}>
                   <h4 style={{ marginBottom: 16, fontSize: 16, fontWeight: 600 }}>PushPlus配置</h4>
-                  
+                  <div>需要你在 <a href="https://www.pushplus.plus/" style={{ color: '#165DFF' }} target="_blank">pushplus </a> 网站注册账号,并在微信服务号 <b style={{ color: 'red' }}>pushplus推送加</b> 绑定你个人微信,完成 <b style={{ color: 'red' }}>实名验证</b>(3块钱费用)才可正常推送消息</div>
                   <FormItem
-                    label="启用通知"
-                    field="enabled"
+                    label="启用飞书通知"
+                    field="feishuEnabled"
                     triggerPropName="checked"
+                    extra={
+                      <div style={{ marginTop: 8, lineHeight: 1.5 }}>
+                        使用 PushPlus 飞书渠道发送通知，需要先在 PushPlus 平台配置 webhook
+                        <div style={{ marginTop: 8, fontSize: 12, color: '#666' }}>
+                          <div>• 配置教程：
+                            <a
+                              href="https://www.pushplus.plus/doc/extend/webhook.html"
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              style={{ marginLeft: 4, color: '#165DFF' }}
+                            >
+                              飞书webhook配置说明
+                            </a>
+                          </div>
+                          <div>• 配置链接：
+                            <a
+                              href="https://www.pushplus.plus/uc-channel.html"
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              style={{ marginLeft: 4, color: '#165DFF' }}
+                            >
+                              PushPlus个人中心-渠道配置
+                            </a>
+                          </div>
+                        </div>
+                      </div>
+                    }
                   >
                     <Switch />
                   </FormItem>
@@ -634,16 +661,21 @@ export function MessagesManagement() {
                   <FormItem
                     label="PushPlus Token"
                     field="token"
-                    extra={<div>PushPlus的Token，用于发送消息。获取方式：登录PushPlus官网(<a style={{ color: 'blue' }}  href='https://www.pushplus.plus/' target='_blank'>https://www.pushplus.plus/</a>)，注册账号后在个人中心获取Token。</div>}
+                    extra={<div>PushPlus的Token，用于发送消息。获取方式：登录PushPlus官网(<a style={{ color: 'blue' }} href='https://www.pushplus.plus/' target='_blank'>https://www.pushplus.plus/</a>)，注册账号后在个人中心获取Token。</div>}
                   >
                     <Input.Password placeholder="请输入PushPlus Token" allowClear style={{ width: '100%' }} />
                   </FormItem>
 
                   <FormItem
-                    label="启用微信通知"
+                    label="启用 PushPlus 微信通知"
                     field="wechatEnabled"
                     triggerPropName="checked"
-                    extra="是否通过PushPlus发送微信通知"
+                    extra={
+                      <div>
+                        <div>是否通过PushPlus发送微信通知</div>
+                        <div>pushplus推送加 消息推送在 <b style={{ color: 'red' }}>pushplus推送加</b> 服务号</div>
+                      </div>
+                    }
                   >
                     <Switch />
                   </FormItem>
@@ -661,7 +693,7 @@ export function MessagesManagement() {
                 {/* 邮件配置区域 */}
                 <div style={{ marginTop: 24, paddingTop: 24, borderTop: '1px solid #e5e7eb' }}>
                   <h4 style={{ marginBottom: 16, fontSize: 16, fontWeight: 600 }}>邮件配置</h4>
-                  
+
                   <FormItem
                     label="启用邮件通知"
                     field="emailEnabled"
@@ -669,9 +701,9 @@ export function MessagesManagement() {
                     extra={
                       <div style={{ marginTop: 8 }}>
                         使用 PushPlus 邮件渠道发送通知，需要先在 PushPlus 平台配置邮箱
-                        <a 
-                          href="https://www.pushplus.plus/doc/extend/mail.html" 
-                          target="_blank" 
+                        <a
+                          href="https://www.pushplus.plus/doc/extend/mail.html"
+                          target="_blank"
                           rel="noopener noreferrer"
                           style={{ marginLeft: 8, color: '#165DFF' }}
                         >
@@ -687,22 +719,29 @@ export function MessagesManagement() {
                 {/* 短信配置区域 */}
                 <div style={{ marginTop: 24, paddingTop: 24, borderTop: '1px solid #e5e7eb' }}>
                   <h4 style={{ marginBottom: 16, fontSize: 16, fontWeight: 600 }}>短信配置</h4>
-                  
+
                   <FormItem
                     label="启用短信通知"
                     field="smsEnabled"
                     triggerPropName="checked"
                     extra={
-                      <div style={{ marginTop: 8 }}>
-                        使用 PushPlus 短信渠道发送通知，需要先在 PushPlus 平台配置手机号
-                        <a 
-                          href="https://www.pushplus.plus/doc/extend/mail.html" 
-                          target="_blank" 
-                          rel="noopener noreferrer"
-                          style={{ marginLeft: 8, color: '#165DFF' }}
-                        >
-                          查看配置教程
-                        </a>
+                      <div style={{ marginTop: 8, lineHeight: 1.5 }}>
+                        使用 PushPlus 短信渠道发送通知
+                        <div style={{ marginTop: 8, fontSize: 12, color: '#666' }}>
+                          <div>• 需要先在 PushPlus 平台个人中心绑定手机号：
+                            <a
+                              href="https://www.pushplus.plus/uc-profile.html"
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              style={{ marginLeft: 4, color: '#165DFF' }}
+                            >
+                              PushPlus个人中心
+                            </a>
+                          </div>
+                        </div>
+                        <div style={{ marginTop: 8, fontSize: 12, color: '#ff4d4f' }}>
+                          • 收费使用，1条短信扣减10积分
+                        </div>
                       </div>
                     }
                   >
@@ -713,22 +752,27 @@ export function MessagesManagement() {
                 {/* 微信ClawBot配置区域 */}
                 <div style={{ marginTop: 24, paddingTop: 24, borderTop: '1px solid #e5e7eb' }}>
                   <h4 style={{ marginBottom: 16, fontSize: 16, fontWeight: 600 }}>微信ClawBot配置</h4>
-                  
+
                   <FormItem
                     label="启用微信ClawBot通知"
                     field="clawbotEnabled"
                     triggerPropName="checked"
                     extra={
-                      <div style={{ marginTop: 8 }}>
+                      <div style={{ marginTop: 8, lineHeight: 1.5 }}>
                         使用 PushPlus 微信ClawBot渠道发送通知，需要先在 PushPlus 平台绑定微信
-                        <a 
-                          href="https://www.pushplus.plus/doc/channel/clawbot.html#%E6%93%8D%E4%BD%9C%E6%B5%81%E7%A8%8B" 
-                          target="_blank" 
+                        <a
+                          href="https://www.pushplus.plus/doc/channel/clawbot.html#%E6%93%8D%E4%BD%9C%E6%B5%81%E7%A8%8B"
+                          target="_blank"
                           rel="noopener noreferrer"
                           style={{ marginLeft: 8, color: '#165DFF' }}
                         >
                           查看配置教程
                         </a>
+                        <div style={{ marginTop: 8, fontSize: 12, color: '#666' }}>
+                          <div>• 绑定后需要主动发起一次对话，才能下发消息</div>
+                          <div>• 每下发10次消息后，需要主动发起一次对话</div>
+                          <div>• 每隔24小时，也需要有一次主动对话</div>
+                        </div>
                       </div>
                     }
                   >
@@ -743,11 +787,11 @@ export function MessagesManagement() {
                     field="notificationTemplate"
                     extra={
                       <div style={{ marginTop: 8 }}>
-                        消息通知的模板内容，可使用以下变量：<br/>
-                        {'{name}'} - 姓名 {'{phone}'} - 电话 {'{wechat}'} - 微信 {'{email}'} - 邮箱<br/>
-                        {'{message}'} - 留言内容 {'{ip}'} - IP地址 {'{region}'} - 地区<br/>
-                        {'{os}'} - 操作系统 {'{osVersion}'} - 操作系统版本 {'{browser}'} - 浏览器<br/>
-                        {'{browserVersion}'} - 浏览器版本 {'{deviceModel}'} - 设备机型 {'{created_at}'} - 提交时间<br/>
+                        消息通知的模板内容，可使用以下变量：<br />
+                        {'{name}'} - 姓名 {'{phone}'} - 电话 {'{wechat}'} - 微信 {'{email}'} - 邮箱<br />
+                        {'{message}'} - 留言内容 {'{ip}'} - IP地址 {'{region}'} - 地区<br />
+                        {'{os}'} - 操作系统 {'{osVersion}'} - 操作系统版本 {'{browser}'} - 浏览器<br />
+                        {'{browserVersion}'} - 浏览器版本 {'{deviceModel}'} - 设备机型 {'{created_at}'} - 提交时间<br />
                         {'{detail_link}'} - 留言详情链接（带会话验证）
                       </div>
                     }
@@ -820,10 +864,10 @@ export function MessagesManagement() {
             ]}
             style={{ width: 800 }}
           >
-            <pre style={{ 
-              backgroundColor: '#f5f5f5', 
-              padding: 16, 
-              borderRadius: 4, 
+            <pre style={{
+              backgroundColor: '#f5f5f5',
+              padding: 16,
+              borderRadius: 4,
               overflow: 'auto',
               maxHeight: 500,
               fontSize: 12

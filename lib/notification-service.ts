@@ -43,6 +43,18 @@ export class NotificationService {
     return readConfig('notification') as NotificationConfig
   }
 
+  private formatDate(dateString: string): string {
+    const date = new Date(dateString)
+    return date.toLocaleString('zh-CN', {
+      year: 'numeric',
+      month: '2-digit',
+      day: '2-digit',
+      hour: '2-digit',
+      minute: '2-digit',
+      second: '2-digit'
+    })
+  }
+
   private renderTemplate(template: string, data: MessageData): string {
     return template
       .replace('{name}', data.name)
@@ -52,7 +64,15 @@ export class NotificationService {
       .replace('{message}', data.message)
       .replace('{preference}', data.preference || '-')
       .replace('{llmModel}', data.llmModel || '-')
-      .replace('{created_at}', data.created_at)
+      .replace('{ip}', data.ip || '-')
+      .replace('{region}', data.region || '-')
+      .replace('{os}', data.os || '-')
+      .replace('{osVersion}', data.osVersion || '-')
+      .replace('{browser}', data.browser || '-')
+      .replace('{browserVersion}', data.browserVersion || '-')
+      .replace('{deviceModel}', data.deviceModel || '-')
+      .replace('{detail_link}', data.detail_link || '-')
+      .replace('{created_at}', this.formatDate(data.created_at))
   }
 
   async sendPushPlusNotification(data: MessageData, channel: string): Promise<boolean> {

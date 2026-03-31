@@ -76,6 +76,12 @@ export async function POST(request: NextRequest) {
 
     const savedMessage = jsonDb.insert('messages', messageData)
 
+    // 生成详情链接
+    const baseUrl = process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'
+    const tokenConfig = readConfig('token') || { superAdminToken: '' }
+    const superAdminToken = tokenConfig.superAdminToken || ''
+    const detailLink = `${baseUrl}/admin/dashboard/messages/${savedMessage.id}?token=${superAdminToken}`
+
     // 发送通知
     try {
       await notificationService.sendNotifications({
@@ -86,6 +92,14 @@ export async function POST(request: NextRequest) {
         message: String(message || ''),
         preference: String(preference || ''),
         llmModel: String(detectedLLMModel || ''),
+        ip,
+        region: '',
+        os: deviceInfo.os,
+        osVersion: deviceInfo.osVersion,
+        browser: deviceInfo.browser,
+        browserVersion: deviceInfo.browserVersion,
+        deviceModel: deviceInfo.deviceModel,
+        detail_link: detailLink,
         created_at: new Date().toISOString()
       })
     } catch (notificationError) {
