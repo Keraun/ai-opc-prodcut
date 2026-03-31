@@ -37,9 +37,16 @@ export default function AdminDashboardPage() {
   useEffect(() => {
     if (typeof window !== 'undefined') {
       const urlParams = new URLSearchParams(window.location.search)
-      const menu = urlParams.get('menu') || 'pages'
-      if (menu !== activeMenu) {
+      const menu = urlParams.get('menu')
+      if (menu && menu !== activeMenu) {
         setActiveMenu(menu)
+      } else if (!menu) {
+        const isFirstLogin = !sessionStorage.getItem('hasLoggedIn')
+        if (isFirstLogin) {
+          sessionStorage.setItem('hasLoggedIn', 'true')
+          setActiveMenu('project-guide')
+          router.push(`/admin/dashboard?menu=project-guide`)
+        }
       }
     }
   }, [])

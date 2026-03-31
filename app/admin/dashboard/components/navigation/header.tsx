@@ -35,18 +35,20 @@ export function Header({ currentUser, onLogout, onChangePassword }: HeaderProps)
                 <div className={styles.qrDropdown}>
                   <div className={styles.qrContainer}>
                     <div className={styles.qrInner}>
-                      <div className={styles.qrPlaceholder}>
-                        <span className={styles.qrPlaceholderText}>客服二维码</span>
-                      </div>
+                      <img 
+                        src="/images/admin_qrcode_wuly.jpg" 
+                        alt="客服二维码"
+                        style={{ width: '100%', height: 'auto', display: 'block' }}
+                      />
                     </div>
                   </div>
-                  <p className={styles.qrHint}>联系客服获取帮助</p>
+                  <p className={styles.qrHint}>微信扫码</p>
                 </div>
               }
               position="br"
             >
               <Button type="text" icon={<IconCustomerService />}>
-                联系客服
+                技术支持
               </Button>
             </Dropdown>
 
