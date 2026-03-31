@@ -81,15 +81,15 @@
   },
   {
     "module_id": "news-list",
-    "module_name": "新闻列表",
-    "schema": "{\"type\":\"object\",\"title\":\"News List Configuration\",\"description\":\"配置新闻列表页面的外观和功能\",\"properties\":{\"title\":{\"type\":\"string\",\"title\":\"页面标题\",\"description\":\"新闻列表页面的主标题\"},\"subtitle\":{\"type\":\"string\",\"title\":\"页面副标题\",\"description\":\"在标题下方的说明文字\"},\"showDate\":{\"type\":\"boolean\",\"title\":\"显示日期\",\"description\":\"是否在新闻卡片中显示发布日期\"},\"showSummary\":{\"type\":\"boolean\",\"title\":\"显示摘要\",\"description\":\"是否在新闻卡片中显示文章摘要\"},\"itemsPerPage\":{\"type\":\"number\",\"title\":\"每页显示数量\",\"description\":\"每页显示的新闻文章数量\"}}}",
+    "module_name": "资讯列表",
+    "schema": "{\"type\":\"object\",\"title\":\"News List Configuration\",\"description\":\"配置资讯列表页面的外观和功能\",\"properties\":{\"title\":{\"type\":\"string\",\"title\":\"页面标题\",\"description\":\"资讯列表页面的主标题\"},\"subtitle\":{\"type\":\"string\",\"title\":\"页面副标题\",\"description\":\"在标题下方的说明文字\"},\"showDate\":{\"type\":\"boolean\",\"title\":\"显示日期\",\"description\":\"是否在资讯卡片中显示发布日期\"},\"showSummary\":{\"type\":\"boolean\",\"title\":\"显示摘要\",\"description\":\"是否在资讯卡片中显示文章摘要\"},\"itemsPerPage\":{\"type\":\"number\",\"title\":\"每页显示数量\",\"description\":\"每页显示的资讯文章数量\"}}}",
     "default_data": "{\"title\":\"资讯中心\",\"subtitle\":\"最新行业动态、深度分析与实战案例\",\"showDate\":true,\"showSummary\":true,\"itemsPerPage\":10}",
     "id": 28
   },
   {
     "module_id": "news-detail",
-    "module_name": "新闻详情",
-    "schema": "{\"type\":\"object\",\"title\":\"News Detail Configuration\",\"description\":\"配置新闻详情页面的外观和功能\",\"properties\":{\"showAuthor\":{\"type\":\"boolean\",\"title\":\"显示作者\",\"description\":\"是否显示文章作者信息\"},\"showDate\":{\"type\":\"boolean\",\"title\":\"显示日期\",\"description\":\"是否显示文章发布日期\"},\"showRelated\":{\"type\":\"boolean\",\"title\":\"显示相关文章\",\"description\":\"是否在页面底部显示相关文章推荐\"},\"relatedCount\":{\"type\":\"number\",\"title\":\"相关文章数量\",\"description\":\"显示的相关文章数量\"},\"showShare\":{\"type\":\"boolean\",\"title\":\"显示分享按钮\",\"description\":\"是否显示社交分享按钮\"},\"showComments\":{\"type\":\"boolean\",\"title\":\"显示评论\",\"description\":\"是否显示评论区域\"}}}",
+    "module_name": "资讯详情",
+    "schema": "{\"type\":\"object\",\"title\":\"News Detail Configuration\",\"description\":\"配置资讯详情页面的外观和功能\",\"properties\":{\"showAuthor\":{\"type\":\"boolean\",\"title\":\"显示作者\",\"description\":\"是否显示文章作者信息\"},\"showDate\":{\"type\":\"boolean\",\"title\":\"显示日期\",\"description\":\"是否显示文章发布日期\"},\"showRelated\":{\"type\":\"boolean\",\"title\":\"显示相关文章\",\"description\":\"是否在页面底部显示相关文章推荐\"},\"relatedCount\":{\"type\":\"number\",\"title\":\"相关文章数量\",\"description\":\"显示的相关文章数量\"},\"showShare\":{\"type\":\"boolean\",\"title\":\"显示分享按钮\",\"description\":\"是否显示社交分享按钮\"},\"showComments\":{\"type\":\"boolean\",\"title\":\"显示评论\",\"description\":\"是否显示评论区域\"}}}",
     "default_data": "{\"showAuthor\":true,\"showDate\":true,\"showRelated\":true,\"relatedCount\":3,\"showShare\":true,\"showComments\":false}",
     "id": 29
   },

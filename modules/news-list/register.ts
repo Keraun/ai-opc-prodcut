@@ -5,7 +5,7 @@ import defaultData from "./default.json"
 
 export function registerNewsListModule() {
   registerModule({
-    moduleName: "新闻列表",
+    moduleName: "资讯列表",
     moduleId: "news-list",
     component: NewsListModule,
     schema,

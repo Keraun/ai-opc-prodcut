@@ -80,14 +80,34 @@ export function ProductDetailModule({ data }: ModuleProps) {
 
   useEffect(() => {
     const fetchProduct = async () => {
-      // 检测是否在预览模式
-      const isPreviewMode = window.location.pathname.includes('/admin/module-preview/')
+      const isPreviewMode = window.location.pathname.includes('/admin/module-preview/') || window.location.pathname.includes('/admin/page-preview/')
       setIsPreview(isPreviewMode)
       
       if (isPreviewMode) {
-        // 预览模式：使用模拟数据
-        setProduct(previewProduct)
-        setRelatedProducts([])
+        try {
+          const response = await fetch('/api/products?id=1')
+          const result = await response.json()
+          if (result.success && result.data) {
+            setProduct(result.data)
+            if (config.showRelated && result.data.category) {
+              const relatedResponse = await fetch(`/api/products?category=${result.data.category}`)
+              const relatedResult = await relatedResponse.json()
+              if (relatedResult.success && relatedResult.data) {
+                setRelatedProducts(
+                  relatedResult.data
+                    .filter((p: Product) => p.id !== result.data.id)
+                    .slice(0, config.relatedCount || 4)
+                )
+              }
+            }
+          } else {
+            setProduct(previewProduct)
+            setRelatedProducts([])
+          }
+        } catch {
+          setProduct(previewProduct)
+          setRelatedProducts([])
+        }
         setLoading(false)
         return
       }

@@ -59,16 +59,42 @@ export function NewsDetailModule({ data }: ModuleProps) {
 
   useEffect(() => {
     const fetchArticle = async () => {
-      // 检测是否在预览模式
-      const isPreviewMode = window.location.pathname.includes('/admin/module-preview/')
+      const isPreviewMode = window.location.pathname.includes('/admin/module-preview/') || window.location.pathname.includes('/admin/page-preview/')
       setIsPreview(isPreviewMode)
       
       if (isPreviewMode) {
-        // 预览模式：使用模拟数据
-        setArticle(previewArticle)
-        setRelatedArticles([])
-        setPrevArticle(null)
-        setNextArticle(null)
+        try {
+          const response = await fetch('/api/articles?id=1')
+          const result = await response.json()
+          if (result.success && result.data) {
+            setArticle(result.data)
+            const listResponse = await fetch('/api/articles')
+            const listResult = await listResponse.json()
+            if (listResult.success && listResult.data) {
+              const allArticles = listResult.data
+              const currentIndex = allArticles.findIndex((a: Article) => a.id === result.data.id)
+              if (config.showRelated) {
+                setRelatedArticles(
+                  allArticles
+                    .filter((a: Article) => a.id !== result.data.id)
+                    .slice(0, config.relatedCount || 4)
+                )
+              }
+              setPrevArticle(currentIndex > 0 ? allArticles[currentIndex - 1] : null)
+              setNextArticle(currentIndex < allArticles.length - 1 ? allArticles[currentIndex + 1] : null)
+            }
+          } else {
+            setArticle(previewArticle)
+            setRelatedArticles([])
+            setPrevArticle(null)
+            setNextArticle(null)
+          }
+        } catch {
+          setArticle(previewArticle)
+          setRelatedArticles([])
+          setPrevArticle(null)
+          setNextArticle(null)
+        }
         setLoading(false)
         return
       }

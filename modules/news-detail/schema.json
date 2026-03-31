@@ -1,7 +1,7 @@
 {
   "type": "object",
   "title": "News Detail Configuration",
-  "description": "配置新闻详情页面的外观和功能",
+  "description": "配置资讯详情页面的外观和功能",
   "properties": {
     "showAuthor": {
       "type": "boolean",

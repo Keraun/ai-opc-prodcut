@@ -25,7 +25,7 @@ export function ArticlesManagement() {
         options: [
           { value: "tech", label: "技术" },
           { value: "product", label: "产品" },
-          { value: "news", label: "新闻" },
+          { value: "news", label: "资讯" },
           { value: "tutorial", label: "教程" },
           { value: "other", label: "其他" }
         ],
