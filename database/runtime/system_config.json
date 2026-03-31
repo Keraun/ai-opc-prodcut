@@ -23,9 +23,9 @@
   {
     "id": 5,
     "config_key": "site_footer_config",
-    "config_value": "{\"description\":\"123333\",\"address\":\"\",\"phone\":\"\",\"email\":\"\",\"wechatQrCode\":\"http://localhost:3000/uploads/editor/1774916694572_c0j01b.webp\",\"officialAccountQrCode\":\"http://localhost:3000/uploads/editor/1774916877497_t0gjjs.webp\",\"showAdminLink\":true}",
+    "config_value": "{\"description\":\"\",\"address\":\"\",\"phone\":\"\",\"email\":\"\",\"wechatQrCode\":\"http://localhost:3000/uploads/editor/1774916694572_c0j01b.webp\",\"officialAccountQrCode\":\"http://localhost:3000/uploads/editor/1774916877497_t0gjjs.webp\",\"showAdminLink\":true}",
     "created_at": "2026-03-29T17:50:07.138Z",
-    "updated_at": "2026-03-31T00:27:59.599Z"
+    "updated_at": "2026-03-31T01:17:55.199Z"
   },
   {
     "config_key": "product_categories",

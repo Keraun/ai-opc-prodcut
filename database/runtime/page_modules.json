@@ -41,7 +41,7 @@
     "module_order": 3,
     "data": null,
     "created_at": "2026-03-27T20:18:12.903Z",
-    "updated_at": "2026-03-31T00:27:59.603Z"
+    "updated_at": "2026-03-31T01:17:55.200Z"
   },
   {
     "id": 15,
@@ -129,7 +129,7 @@
     "module_order": 3,
     "data": null,
     "created_at": "2026-03-27T20:18:12.903Z",
-    "updated_at": "2026-03-31T00:27:59.605Z"
+    "updated_at": "2026-03-31T01:17:55.202Z"
   },
   {
     "page_id": "product-detail",
@@ -172,7 +172,7 @@
     "module_order": 3,
     "data": null,
     "created_at": "2026/03/31 08:32:30",
-    "updated_at": "2026/03/31 08:32:30",
+    "updated_at": "2026-03-31T01:17:55.202Z",
     "id": 55
   },
   {
@@ -216,7 +216,7 @@
     "module_order": 3,
     "data": null,
     "created_at": "2026/03/31 08:33:13",
-    "updated_at": "2026/03/31 08:33:13",
+    "updated_at": "2026-03-31T01:17:55.203Z",
     "id": 59
   },
   {
@@ -326,7 +326,7 @@
     "module_order": 9,
     "data": null,
     "created_at": "2026/03/31 08:36:35",
-    "updated_at": "2026/03/31 08:36:35",
+    "updated_at": "2026-03-31T01:17:55.204Z",
     "id": 69
   }
 ]

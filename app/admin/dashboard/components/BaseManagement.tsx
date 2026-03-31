@@ -794,34 +794,34 @@ function ItemForm({
         </button>
         <div className={styles.formActions}>
           <button 
-            type="button" 
-            onClick={() => onSubmit({ ...formData, status: 'draft', saveOnly: true })} 
-            disabled={loading}
-            className={styles.draftButton}
-          >
-            {loading ? '保存中...' : '保存草稿'}
-          </button>
-          <button 
-            type="button" 
-            onClick={() => onSubmit({ ...formData, status: 'draft' })} 
-            disabled={loading}
-            className={styles.draftButton}
-          >
-            {loading ? '保存中...' : '保存并返回'}
-          </button>
-          <button 
-            type="button" 
-            onClick={() => onSubmit({ ...formData, status: 'published' })} 
-            disabled={loading}
-            className={styles.publishButton}
-          >
-            {loading ? '发布中...' : (
-              <>
-                <Save size={16} />
-                发布
-              </>
-            )}
-          </button>
+                    type="button" 
+                    onClick={() => onSubmit({ ...formData, status: 'draft' })} 
+                    disabled={loading}
+                    className={styles.draftButton}
+                  >
+                    {loading ? '保存中...' : '保存草稿'}
+                  </button>
+                  <button 
+                    type="button" 
+                    onClick={() => onSubmit({ ...formData, status: 'draft', saveOnly: true })} 
+                    disabled={loading}
+                    className={styles.draftButton}
+                  >
+                    {loading ? '保存中...' : '保存并返回'}
+                  </button>
+                  <button 
+                    type="button" 
+                    onClick={() => onSubmit({ ...formData, status: 'published' })} 
+                    disabled={loading}
+                    className={styles.publishButton}
+                  >
+                    {loading ? '发布中...' : (
+                      <>
+                        <Save size={16} />
+                        发布
+                      </>
+                    )}
+                  </button>
         </div>
       </div>
     </form>
@@ -834,6 +834,8 @@ export function BaseManagement({ config }: BaseManagementProps) {
   const [viewMode, setViewMode] = useState<ViewMode>('list')
   const [currentItem, setCurrentItem] = useState<any>(null)
   const [submitting, setSubmitting] = useState(false)
+  const [showDeleteConfirm, setShowDeleteConfirm] = useState(false)
+  const [itemToDelete, setItemToDelete] = useState<number | null>(null)
 
   useEffect(() => {
     fetchItems()
@@ -866,16 +868,20 @@ export function BaseManagement({ config }: BaseManagementProps) {
       })
       const result = await response.json()
       if (result.success) {
-        toast.success(`${config.title}创建成功`)
+        if (submitData.status === 'published') {
+          toast.success(`${config.title}发布成功`)
+        } else if (submitData.status === 'draft') {
+          toast.success(`${config.title}保存成功`)
+        }
         // 保存后都返回上一级页面
         setViewMode('list')
         fetchItems()
       } else {
-        toast.error(result.message || '创建失败')
+        toast.error(result.message || '操作失败')
       }
     } catch (error) {
-      console.error(`创建${config.title}失败:`, error)
-      toast.error(`创建${config.title}失败`)
+      console.error(`操作${config.title}失败:`, error)
+      toast.error(`操作${config.title}失败`)
     } finally {
       setSubmitting(false)
     }
@@ -893,25 +899,34 @@ export function BaseManagement({ config }: BaseManagementProps) {
       })
       const result = await response.json()
       if (result.success) {
-        toast.success(`${config.title}更新成功`)
+        if (submitData.status === 'published') {
+          toast.success(`${config.title}发布成功`)
+        } else if (submitData.status === 'draft') {
+          toast.success(`${config.title}保存成功`)
+        }
         // 保存后都返回上一级页面
         setViewMode('list')
         fetchItems()
       } else {
-        toast.error(result.message || '更新失败')
+        toast.error(result.message || '操作失败')
       }
     } catch (error) {
-      console.error(`更新${config.title}失败:`, error)
-      toast.error(`更新${config.title}失败`)
+      console.error(`操作${config.title}失败:`, error)
+      toast.error(`操作${config.title}失败`)
     } finally {
       setSubmitting(false)
     }
   }
 
-  const handleDelete = async (id: number) => {
-    if (!confirm(`确定要删除这个${config.title}吗？`)) return
+  const handleDelete = (id: number) => {
+    setItemToDelete(id)
+    setShowDeleteConfirm(true)
+  }
+
+  const confirmDelete = async () => {
+    if (itemToDelete === null) return
     try {
-      const response = await fetch(`${config.apiEndpoint}?id=${id}`, {
+      const response = await fetch(`${config.apiEndpoint}?id=${itemToDelete}`, {
         method: 'DELETE'
       })
       const result = await response.json()
@@ -924,6 +939,9 @@ export function BaseManagement({ config }: BaseManagementProps) {
     } catch (error) {
       console.error(`删除${config.title}失败:`, error)
       toast.error(`删除${config.title}失败`)
+    } finally {
+      setShowDeleteConfirm(false)
+      setItemToDelete(null)
     }
   }
 
@@ -1027,94 +1045,118 @@ export function BaseManagement({ config }: BaseManagementProps) {
   }
 
   return (
-    <div className={styles.container}>
-      <ManagementHeader
-        title={`${config.title}管理`}
-        description={config.description || ''}
-        buttonText={`新建${config.title}`}
-        buttonIcon={<Plus size={20} />}
-        onButtonClick={() => setViewMode('new')}
-      />
+    <>
+      <div className={styles.container}>
+        <ManagementHeader
+          title={`${config.title}管理`}
+          description={config.description || ''}
+          buttonText={`新建${config.title}`}
+          buttonIcon={<Plus size={20} />}
+          onButtonClick={() => setViewMode('new')}
+        />
 
-      <CommonTable
-        columns={[
-          ...config.columns.map(col => ({
-            title: col.label,
-            dataIndex: col.key,
-            key: col.key,
-            width: typeof col.width === 'string' ? parseInt(col.width, 10) : col.width,
-            render: col.render ? (_: any, record: any) => col.render!(record) : undefined,
-          })),
-          {
-            title: '操作',
-            key: 'actions',
-            width: config.actionsColumnWidth ?? (config.statusConfig ? 180 : 120),
-            render: (_: any, record: any) => (
-              <div className={styles.actions}>
-                {config.statusConfig && (
-                  <>
-                    {config.statusConfig.states.map(state => {
-                      if (record[config.statusConfig!.field] === state.value) {
-                        return (
-                          <Tooltip key={state.value} content={state.action}>
-                            <ActionButton
-                              type={state.type}
-                              onClick={() => handleStatusChange(record, state.target || state.value)}
-                            >
-                              {state.label}
-                            </ActionButton>
-                          </Tooltip>
-                        )
-                      }
-                      return null
-                    })}
-                  </>
-                )}
-                <Tooltip content="查看">
-                  <ActionButton
-                    type="default"
-                    icon={<Eye size={18} />}
-                    onClick={() => {
-                      // 打开对应的详情页面
-                      if (config.apiEndpoint === '/api/products' && record.id) {
-                        window.open(`/product/${record.id}`, '_blank')
-                      } else if (config.apiEndpoint === '/api/articles' && record.id) {
-                        window.open(`/news/${record.id}`, '_blank')
-                      } else {
-                        // 保持原有行为
+        <CommonTable
+          columns={[
+            ...config.columns.map(col => ({
+              title: col.label,
+              dataIndex: col.key,
+              key: col.key,
+              width: typeof col.width === 'string' ? parseInt(col.width, 10) : col.width,
+              render: col.render ? (_: any, record: any) => col.render!(record) : undefined,
+            })),
+            {
+              title: '操作',
+              key: 'actions',
+              width: config.actionsColumnWidth ?? (config.statusConfig ? 180 : 120),
+              render: (_: any, record: any) => (
+                <div className={styles.actions}>
+                  {config.statusConfig && (
+                    <>
+                      {config.statusConfig.states.map(state => {
+                        if (record[config.statusConfig!.field] === state.value) {
+                          return (
+                            <Tooltip key={state.value} content={state.action}>
+                              <ActionButton
+                                type={state.type}
+                                onClick={() => handleStatusChange(record, state.target || state.value)}
+                              >
+                                {state.label}
+                              </ActionButton>
+                            </Tooltip>
+                          )
+                        }
+                        return null
+                      })}
+                    </>
+                  )}
+                  <Tooltip content="查看">
+                    <ActionButton
+                      type="default"
+                      icon={<Eye size={18} />}
+                      onClick={() => {
+                        // 打开对应的详情页面
+                        if (config.apiEndpoint === '/api/products' && record.id) {
+                          window.open(`/product/${record.id}`, '_blank')
+                        } else if (config.apiEndpoint === '/api/articles' && record.id) {
+                          window.open(`/news/${record.id}`, '_blank')
+                        } else {
+                          // 保持原有行为
+                          setCurrentItem(record)
+                          setViewMode('view')
+                        }
+                      }}
+                    />
+                  </Tooltip>
+                  <Tooltip content="编辑">
+                    <ActionButton
+                      type="primary"
+                      icon={<Edit3 size={18} />}
+                      onClick={() => {
                         setCurrentItem(record)
-                        setViewMode('view')
-                      }
-                    }}
-                  />
-                </Tooltip>
-                <Tooltip content="编辑">
-                  <ActionButton
-                    type="primary"
-                    icon={<Edit3 size={18} />}
-                    onClick={() => {
-                      setCurrentItem(record)
-                      setViewMode('edit')
-                    }}
-                  />
-                </Tooltip>
-                <Tooltip content="删除">
-                  <ActionButton
-                    type="danger"
-                    icon={<Trash2 size={18} />}
-                    onClick={() => record.id && handleDelete(record.id)}
-                  />
-                </Tooltip>
-              </div>
-            ),
-          },
-        ]}
-        data={items}
-        loading={loading}
-        emptyText={config.emptyText}
-        emptyIcon={config.emptyIcon}
-        scroll={{ x: 1000 }}
-      />
-    </div>
+                        setViewMode('edit')
+                      }}
+                    />
+                  </Tooltip>
+                  <Tooltip content="删除">
+                    <ActionButton
+                      type="danger"
+                      icon={<Trash2 size={18} />}
+                      onClick={() => record.id && handleDelete(record.id)}
+                    />
+                  </Tooltip>
+                </div>
+              ),
+            },
+          ]}
+          data={items}
+          loading={loading}
+          emptyText={config.emptyText}
+          emptyIcon={config.emptyIcon}
+          scroll={{ x: 1000 }}
+        />
+      </div>
+
+      <Modal
+        title="确认删除"
+        visible={showDeleteConfirm}
+        onCancel={() => {
+          setShowDeleteConfirm(false)
+          setItemToDelete(null)
+        }}
+        footer={
+          <div style={{ display: 'flex', justifyContent: 'flex-end', gap: 8 }}>
+            <Button onClick={() => {
+              setShowDeleteConfirm(false)
+              setItemToDelete(null)
+            }}>取消</Button>
+            <Button type="primary" status="danger" onClick={confirmDelete}>确认删除</Button>
+          </div>
+        }
+      >
+        <div style={{ padding: '16px 0' }}>
+          <p>确定要删除这个{config.title}吗？此操作不可撤销。</p>
+        </div>
+      </Modal>
+    </>
   )
 }
