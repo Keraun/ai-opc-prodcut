@@ -2,6 +2,7 @@
 
 import { IconLocation, IconPhone, IconEmail, IconSettings } from "@arco-design/web-react/icon"
 import { Logo } from "@/components/common/logo"
+import { WebPImage } from "@/components/WebPImage"
 import { useConfig } from "@/components/initial-data-provider"
 import type { FooterData, SiteRootData } from "@/modules/module-types"
 import styles from "./footer.module.css"
@@ -9,6 +10,10 @@ import styles from "./footer.module.css"
 interface FooterProps {
   footerData?: FooterData
   siteData?: SiteRootData
+}
+
+const isValidString = (value: unknown): value is string => {
+  return typeof value === 'string' && value.trim() !== ''
 }
 
 export function Footer({ footerData, siteData }: FooterProps) {
@@ -70,22 +75,70 @@ export function Footer({ footerData, siteData }: FooterProps) {
           <div>
             <h4 className={styles.sectionTitle}>关注我们</h4>
             <div className={styles.qrSection}>
-              <div className={styles.qrItem}>
-                <div className={styles.qrContainer}>
-                  <div className={styles.qrPlaceholder}>
-                    <span className={styles.qrText}>微信二维码</span>
+              {isValidString(footerConfig?.wechatQrCode) ? (
+                <div className={styles.qrItem}>
+                  <div className={styles.qrContainer}>
+                    <WebPImage
+                      src={footerConfig.wechatQrCode}
+                      alt="微信二维码"
+                      width={120}
+                      height={120}
+                      className={styles.qrImage}
+                    />
                   </div>
+                  <p className={styles.qrLabel}>微信二维码</p>
                 </div>
-                <p className={styles.qrLabel}>扫码关注</p>
-              </div>
-              <div className={styles.qrItem}>
-                <div className={styles.qrContainer}>
-                  <div className={styles.qrPlaceholder}>
-                    <span className={styles.qrText}>公众号二维码</span>
+              ) : null}
+              {isValidString(footerConfig?.officialAccountQrCode) ? (
+                <div className={styles.qrItem}>
+                  <div className={styles.qrContainer}>
+                    <WebPImage
+                      src={footerConfig.officialAccountQrCode}
+                      alt="公众号二维码"
+                      width={120}
+                      height={120}
+                      className={styles.qrImage}
+                    />
                   </div>
+                  <p className={styles.qrLabel}>公众号二维码</p>
                 </div>
-                <p className={styles.qrLabel}>扫码关注</p>
-              </div>
+              ) : null}
+              {isValidString(siteConfig?.support?.customerServiceQRCode) ? (
+                <div className={styles.qrItem}>
+                  <div className={styles.qrContainer}>
+                    <WebPImage
+                      src={siteConfig.support.customerServiceQRCode}
+                      alt="客服二维码"
+                      width={120}
+                      height={120}
+                      className={styles.qrImage}
+                    />
+                  </div>
+                  <p className={styles.qrLabel}>客服二维码</p>
+                </div>
+              ) : null}
+              {!isValidString(footerConfig?.wechatQrCode) && 
+               !isValidString(footerConfig?.officialAccountQrCode) && 
+               !isValidString(siteConfig?.support?.customerServiceQRCode) && (
+                <>
+                  <div className={styles.qrItem}>
+                    <div className={styles.qrContainer}>
+                      <div className={styles.qrPlaceholder}>
+                        <span className={styles.qrText}>微信二维码</span>
+                      </div>
+                    </div>
+                    <p className={styles.qrLabel}>扫码关注</p>
+                  </div>
+                  <div className={styles.qrItem}>
+                    <div className={styles.qrContainer}>
+                      <div className={styles.qrPlaceholder}>
+                        <span className={styles.qrText}>公众号二维码</span>
+                      </div>
+                    </div>
+                    <p className={styles.qrLabel}>扫码关注</p>
+                  </div>
+                </>
+              )}
             </div>
           </div>
         </div>

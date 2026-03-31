@@ -139,6 +139,13 @@
   justify-content: center;
   border: 2px solid #e5e7eb;
   margin-bottom: 0.5rem;
+  overflow: hidden;
+}
+
+.qrImage {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
 }
 
 .qrPlaceholder {
