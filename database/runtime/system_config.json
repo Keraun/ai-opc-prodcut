@@ -43,7 +43,7 @@
   },
   {
     "config_key": "notification",
-    "config_value": "{\"pushplus\":{}}",
+    "config_value": "{\"pushplus\":{\"enabled\":false,\"token\":\"\",\"wechatEnabled\":false,\"feishuEnabled\":false},\"notificationTemplate\":\"【新留言通知】\\n\\n用户信息：\\n姓名：{name}\\n电话：{phone || '-'}\\n微信：{wechat || '-'}\\n邮箱：{email || '-'}\\n\\n留言内容：\\n{message}\\n\\n设备信息：\\nIP地址：{ip}\\n地区：{region || '-'}\\n操作系统：{os} {osVersion}\\n浏览器：{browser} {browserVersion}\\n设备机型：{deviceModel}\\n\\n提交时间：{created_at}\\n\\n请及时处理！\"}",
     "created_at": "2026-03-31T03:50:40.707Z",
     "updated_at": "2026-03-31T03:50:40.707Z",
     "id": 8

@@ -86,6 +86,7 @@ export function getDefaultWidget(fieldSchema: FieldSchema): string {
     case 'string':
       if (fieldSchema.enum) return 'select'
       if (fieldSchema.format === 'date') return 'date'
+      if (fieldSchema.format === 'textarea') return 'textarea'
       return 'input'
     case 'number':
     case 'integer':
