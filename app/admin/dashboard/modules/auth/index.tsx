@@ -216,11 +216,11 @@ export function PasswordBanner({ onChangePassword }: { onChangePassword: () => v
               为了账户安全,您需要立即修改密码
             </div>
           </div>
-        </div>
-        <div className={styles.passwordBannerButton}>
-          <button onClick={onChangePassword} className={styles.changePasswordButton}>
-            立即修改
-          </button>
+          <div className={styles.passwordBannerButton}>
+            <button onClick={onChangePassword} className={styles.changePasswordButton}>
+              立即修改
+            </button>
+          </div>
         </div>
       </div>
     </div>
