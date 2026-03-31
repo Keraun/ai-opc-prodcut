@@ -77,15 +77,15 @@ const statusColorMap: Record<string, string> = {
 const templateOptions = [
   {
     name: '默认模板',
-    content: '【新留言通知】\n\n用户信息：\n姓名：{name}\n电话：{phone || \'\'}\n微信：{wechat || \'\'}\n邮箱：{email || \'\'}\n\n留言内容：\n{message}\n\n设备信息：\nIP地址：{ip}\n地区：{region || \'\'}\n操作系统：{os} {osVersion}\n浏览器：{browser} {browserVersion}\n设备机型：{deviceModel}\n\n提交时间：{created_at}\n\n查看详情：{detail_link}\n\n请及时处理！'
+    content: '【新留言通知】\n\n用户信息：\n姓名：{name}\n电话：{phone}\n微信：{wechat}\n邮箱：{email}\n\n留言内容：\n{message}\n\n设备信息：\nIP地址：{ip}\n地区：{region}\n操作系统：{os} {osVersion}\n浏览器：{browser} {browserVersion}\n设备机型：{deviceModel}\n\n提交时间：{created_at}\n\n查看详情：{detail_link}\n\n请及时处理！'
   },
   {
     name: '简洁模板',
-    content: '【新留言】\n\n姓名：{name}\n电话：{phone || \'\'}\n内容：{message}\n\n提交时间：{created_at}\n\n查看详情：{detail_link}'
+    content: '【新留言】\n\n姓名：{name}\n电话：{phone}\n内容：{message}\n\n提交时间：{created_at}\n\n查看详情：{detail_link}'
   },
   {
     name: '详细模板',
-    content: '【重要通知】新留言提醒\n\n尊敬的管理员：\n\n您收到了一条新的用户留言，详情如下：\n\n用户信息\n姓名：{name}\n联系电话：{phone || \'未提供\'}\n微信：{wechat || \'未提供\'}\n邮箱：{email || \'未提供\'}\n\n留言内容\n{message}\n\n设备信息\nIP地址：{ip}\n地区：{region || \'未知\'}\n操作系统：{os} {osVersion}\n浏览器：{browser} {browserVersion}\n设备：{deviceModel}\n\n提交时间：{created_at}\n\n查看详情：{detail_link}\n\n请及时处理此留言。\n\n系统自动发送，请勿回复。'
+    content: '【重要通知】新留言提醒\n\n尊敬的管理员：\n\n您收到了一条新的用户留言，详情如下：\n\n用户信息\n姓名：{name}\n联系电话：{phone}\n微信：{wechat}\n邮箱：{email}\n\n留言内容\n{message}\n\n设备信息\nIP地址：{ip}\n地区：{region}\n操作系统：{os} {osVersion}\n浏览器：{browser} {browserVersion}\n设备：{deviceModel}\n\n提交时间：{created_at}\n\n查看详情：{detail_link}\n\n请及时处理此留言。\n\n系统自动发送，请勿回复。'
   }
 ]
 
@@ -153,10 +153,6 @@ export function MessagesManagement() {
         emailEnabled: configs.notification?.email?.enabled || false,
         smsEnabled: configs.notification?.sms?.enabled || false,
         clawbotEnabled: configs.notification?.clawbot?.enabled || false,
-        clawbotAppId: configs.notification?.clawbot?.appId || '',
-        clawbotAppSecret: configs.notification?.clawbot?.appSecret || '',
-        clawbotTemplateId: configs.notification?.clawbot?.templateId || '',
-        clawbotOpenId: configs.notification?.clawbot?.openId || '',
         notificationTemplate: configs.notification?.notificationTemplate || ''
       })
     }
@@ -275,11 +271,7 @@ export function MessagesManagement() {
           enabled: values.smsEnabled
         },
         clawbot: {
-          enabled: values.clawbotEnabled,
-          appId: values.clawbotAppId,
-          appSecret: values.clawbotAppSecret,
-          templateId: values.clawbotTemplateId,
-          openId: values.clawbotOpenId
+          enabled: values.clawbotEnabled
         },
         notificationTemplate: values.notificationTemplate
       }
@@ -726,40 +718,21 @@ export function MessagesManagement() {
                     label="启用微信ClawBot通知"
                     field="clawbotEnabled"
                     triggerPropName="checked"
+                    extra={
+                      <div style={{ marginTop: 8 }}>
+                        使用 PushPlus 微信ClawBot渠道发送通知，需要先在 PushPlus 平台绑定微信
+                        <a 
+                          href="https://www.pushplus.plus/doc/channel/clawbot.html#%E6%93%8D%E4%BD%9C%E6%B5%81%E7%A8%8B" 
+                          target="_blank" 
+                          rel="noopener noreferrer"
+                          style={{ marginLeft: 8, color: '#165DFF' }}
+                        >
+                          查看配置教程
+                        </a>
+                      </div>
+                    }
                   >
                     <Switch />
-                  </FormItem>
-
-                  <FormItem
-                    label="App ID"
-                    field="clawbotAppId"
-                    extra="微信公众号的App ID"
-                  >
-                    <Input placeholder="请输入App ID" allowClear style={{ width: '100%' }} />
-                  </FormItem>
-
-                  <FormItem
-                    label="App Secret"
-                    field="clawbotAppSecret"
-                    extra="微信公众号的App Secret"
-                  >
-                    <Input.Password placeholder="请输入App Secret" allowClear style={{ width: '100%' }} />
-                  </FormItem>
-
-                  <FormItem
-                    label="模板ID"
-                    field="clawbotTemplateId"
-                    extra="微信模板消息的模板ID"
-                  >
-                    <Input placeholder="请输入模板ID" allowClear style={{ width: '100%' }} />
-                  </FormItem>
-
-                  <FormItem
-                    label="Open ID"
-                    field="clawbotOpenId"
-                    extra="接收消息的用户Open ID"
-                  >
-                    <Input placeholder="请输入Open ID" allowClear style={{ width: '100%' }} />
                   </FormItem>
                 </div>
 
@@ -835,11 +808,7 @@ export function MessagesManagement() {
                       enabled: values.smsEnabled
                     },
                     clawbot: {
-                      enabled: values.clawbotEnabled,
-                      appId: values.clawbotAppId,
-                      appSecret: values.clawbotAppSecret,
-                      templateId: values.clawbotTemplateId,
-                      openId: values.clawbotOpenId
+                      enabled: values.clawbotEnabled
                     },
                     notificationTemplate: values.notificationTemplate
                   }, null, 2))
@@ -873,11 +842,7 @@ export function MessagesManagement() {
                   enabled: notificationForm.getFieldValue('smsEnabled')
                 },
                 clawbot: {
-                  enabled: notificationForm.getFieldValue('clawbotEnabled'),
-                  appId: notificationForm.getFieldValue('clawbotAppId'),
-                  appSecret: notificationForm.getFieldValue('clawbotAppSecret'),
-                  templateId: notificationForm.getFieldValue('clawbotTemplateId'),
-                  openId: notificationForm.getFieldValue('clawbotOpenId')
+                  enabled: notificationForm.getFieldValue('clawbotEnabled')
                 },
                 notificationTemplate: notificationForm.getFieldValue('notificationTemplate')
               }, null, 2)}

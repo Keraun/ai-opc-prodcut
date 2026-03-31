@@ -168,73 +168,37 @@ export class NotificationService {
 
   async sendClawBotNotification(data: MessageData): Promise<boolean> {
     const config = this.getConfig()
-    if (!config.clawbot?.enabled || !config.clawbot.appId || !config.clawbot.appSecret || !config.clawbot.templateId || !config.clawbot.openId) {
+    if (!config.clawbot?.enabled || !config.pushplus?.enabled || !config.pushplus.token) {
       return false
     }
 
     try {
-      // 获取微信 access_token
-      const tokenResponse = await fetch(`https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid=${config.clawbot.appId}&secret=${config.clawbot.appSecret}`)
-      const tokenData = await tokenResponse.json()
-      
-      if (!tokenData.access_token) {
-        console.warn('获取微信 access_token 失败:', tokenData)
-        return false
-      }
-
-      // 渲染模板
       const template = config.notificationTemplate || '收到新留言：\n姓名：{name}\n电话：{phone}\n内容：{message}'
       const content = this.renderTemplate(template, data)
 
-      // 发送模板消息
-      const messageResponse = await fetch(`https://api.weixin.qq.com/cgi-bin/message/template/send?access_token=${tokenData.access_token}`, {
+      const response = await fetch('https://www.pushplus.plus/send', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
         },
         body: JSON.stringify({
-          touser: config.clawbot.openId,
-          template_id: config.clawbot.templateId,
-          data: {
-            first: {
-              value: '新留言通知',
-              color: '#173177'
-            },
-            keyword1: {
-              value: data.name || '未提供',
-              color: '#173177'
-            },
-            keyword2: {
-              value: data.phone || '未提供',
-              color: '#173177'
-            },
-            keyword3: {
-              value: (data.message || '').substring(0, 50) + ((data.message || '').length > 50 ? '...' : ''),
-              color: '#173177'
-            },
-            keyword4: {
-              value: data.created_at || new Date().toISOString(),
-              color: '#173177'
-            },
-            remark: {
-              value: '请及时处理',
-              color: '#173177'
-            }
-          }
+          token: config.pushplus.token,
+          title: '新留言通知',
+          content: content,
+          template: 'txt',
+          channel: 'clawbot'
         })
       })
 
-      const messageData = await messageResponse.json()
-      
-      if (messageData.errcode !== 0) {
-        console.warn('发送微信模板消息失败:', messageData)
+      if (!response.ok) {
+        console.warn('PushPlus微信ClawBot通知发送失败:', await response.text())
         return false
       }
 
-      console.log('微信ClawBot通知发送成功')
+      console.log('PushPlus微信ClawBot通知发送成功')
       return true
     } catch (error) {
-      console.error('微信ClawBot通知发送失败:', error)
+      console.error('PushPlus微信ClawBot通知发送失败:', error)
       return false
     }
   }

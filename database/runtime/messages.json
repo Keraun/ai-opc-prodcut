@@ -145,5 +145,26 @@
     "created_at": "2026-03-31T05:23:11.703Z",
     "updated_at": "2026-03-31T05:23:11.703Z",
     "id": 7
+  },
+  {
+    "name": "keraun",
+    "phone": "15869165232",
+    "wechat": "1313",
+    "email": "915064510@qq.com",
+    "preference": "wechat",
+    "message": "1231313",
+    "llmModel": "",
+    "ip": "::1",
+    "region": "",
+    "os": "macOS",
+    "osVersion": "10.15.7",
+    "browser": "Chrome",
+    "browserVersion": "146.0.0.0",
+    "deviceModel": "Mac",
+    "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36",
+    "status": "pending",
+    "created_at": "2026-03-31T05:44:25.045Z",
+    "updated_at": "2026-03-31T05:44:25.045Z",
+    "id": 8
   }
 ]
