@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import { toast } from 'sonner'
-import { Modal } from '@arco-design/web-react'
+import { Modal, Input } from '@arco-design/web-react'
 import { useAuth } from '../../common/hooks/useAuth'
 import { useConfig } from '../../common/hooks/useConfig'
 import { handleExportConfig, handleImportConfig, handleResetWebsite } from '../../common/utils/config-utils'
@@ -17,6 +17,9 @@ export function SystemManager() {
   const [systemInfo, setSystemInfo] = useState<any>(null)
   const [restarting, setRestarting] = useState(false)
   const [showRestartConfirm, setShowRestartConfirm] = useState(false)
+  const [showResetConfirm, setShowResetConfirm] = useState(false)
+  const [superAdminToken, setSuperAdminToken] = useState('')
+  const [resetting, setResetting] = useState(false)
 
   useEffect(() => {
     loadSystemInfo()
@@ -75,13 +78,28 @@ export function SystemManager() {
     }
   }
 
-  const handleReset = async () => {
-    if (!currentUser) {
-      toast.error("未找到用户信息,请重新登录")
+  const handleResetClick = () => {
+    setShowResetConfirm(true)
+    setSuperAdminToken('')
+  }
+
+  const confirmReset = async () => {
+    if (!superAdminToken) {
+      toast.error('请输入超级管理员口令')
       return
     }
 
-    await handleResetWebsite(currentUser.username)
+    setResetting(true)
+    try {
+      const success = await handleResetWebsite(superAdminToken)
+      if (success) {
+        setShowResetConfirm(false)
+      }
+    } catch (error) {
+      console.error('还原配置失败:', error)
+    } finally {
+      setResetting(false)
+    }
   }
 
   const handleChangePassword = () => {
@@ -94,7 +112,7 @@ export function SystemManager() {
         siteConfig={configs.site_config}
         onExportConfig={handleExport}
         onImportConfig={handleImport}
-        onResetWebsite={handleReset}
+        onResetWebsite={handleResetClick}
         currentUser={currentUser}
         onChangePassword={handleChangePassword}
         systemInfo={systemInfo}
@@ -115,6 +133,30 @@ export function SystemManager() {
         cancelText="取消"
       >
         <p>确定要重启服务吗？这将终止占用当前端口的进程并重新启动服务。</p>
+      </Modal>
+      <Modal
+        title="确认还原网站配置"
+        visible={showResetConfirm}
+        onOk={confirmReset}
+        onCancel={() => {
+          setShowResetConfirm(false)
+          setSuperAdminToken('')
+        }}
+        okText="确认还原"
+        cancelText="取消"
+        confirmLoading={resetting}
+      >
+        <div style={{ padding: '16px 0' }}>
+          <p style={{ marginBottom: '16px' }}>请输入超级管理员口令以继续：</p>
+          <Input.Password
+            placeholder="请输入超级管理员口令"
+            value={superAdminToken}
+            onChange={(value) => setSuperAdminToken(value)}
+            onPressEnter={confirmReset}
+            size="large"
+            style={{ width: '100%' }}
+          />
+        </div>
       </Modal>
     </>
   )

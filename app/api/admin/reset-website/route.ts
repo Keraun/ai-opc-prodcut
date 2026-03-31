@@ -4,8 +4,10 @@ import {
   successResponse, 
   badRequestResponse, 
   errorResponse,
-  withAuth
+  withAuth,
+  unauthorizedResponse
 } from "@/lib/api-utils"
+import { jsonDb } from "@/lib/json-database"
 import fs from 'fs'
 import path from 'path'
 import AdmZip from 'adm-zip'
@@ -14,10 +16,22 @@ export async function POST(request: NextRequest) {
   return wrapAuthApiHandler(async () => {
     try {
       const body = await request.json()
-      const { username } = body
+      const { superAdminToken } = body
 
-      if (!username) {
-        return badRequestResponse('缺少用户名参数')
+      if (!superAdminToken) {
+        return badRequestResponse('缺少超级管理员口令')
+      }
+
+      jsonDb.reloadTable('system_config')
+      
+      const tokenConfig = jsonDb.findOne('system_config', { config_key: 'super_admin_token' })
+      
+      if (!tokenConfig || !tokenConfig.config_value) {
+        return unauthorizedResponse('超级管理员口令未设置')
+      }
+
+      if (tokenConfig.config_value !== superAdminToken) {
+        return unauthorizedResponse('超级管理员口令错误')
       }
 
       const initDatabaseZipPath = path.join(process.cwd(), 'database', 'init_database.zip')
@@ -34,7 +48,7 @@ export async function POST(request: NextRequest) {
       const zip = new AdmZip(initDatabaseZipPath)
       zip.extractAllTo(runtimeDir, true)
 
-      console.log(`网站配置已由用户 ${username} 还原到初始状态`)
+      console.log(`网站配置已还原到初始状态`)
 
       return successResponse(undefined, '网站配置已成功还原到初始状态')
     } catch (error) {
