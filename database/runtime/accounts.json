@@ -1,7 +1,7 @@
 [
   {
     "username": "superadmin",
-    "password": "sheep902",
+    "password": "admin12345",
     "email": "",
     "remark": "默认管理员账号",
     "must_change_password": true,
@@ -9,8 +9,8 @@
     "last_login_ip": "::1",
     "current_login_ip": "::1",
     "current_login_time": "2026/04/01 06:07:42",
-    "created_at": "2026-03-31T22:50:06.998Z",
-    "updated_at": "2026-03-31T22:50:06.998Z",
+    "created_at": "2026-03-31T22:33:16.809Z",
+    "updated_at": "2026-03-31T22:33:16.809Z",
     "id": 1
   }
 ]
