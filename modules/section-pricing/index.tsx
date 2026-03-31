@@ -16,6 +16,7 @@ export function PricingModule({ data }: ModuleProps) {
 
   const pricingPlans: PricingFeature[] = config?.plans || []
   const popularBadgeText = config?.popularBadgeText || '最受欢迎'
+  const priceUnit = config?.priceUnit || '/ 月'
 
   return (
     <Section
@@ -97,7 +98,7 @@ export function PricingModule({ data }: ModuleProps) {
                   <h3 className={styles.planTitle}>{plan.title}</h3>
                   <div className={styles.planPrice}>
                     {plan.price}
-                    <span className={styles.priceUnit}>/ 月</span>
+                    <span className={styles.priceUnit}>{priceUnit}</span>
                   </div>
                   <p className={styles.planDescription}>{plan.description}</p>
                 </div>

@@ -89,17 +89,17 @@ export default function AdminDashboardPage() {
         return <MessageManager />
       case 'images':
         return <ImageManagement />
-      case 'feishu-app':
+      case 'notification':
           return (
             <ConfigFormEditor
-              configType="feishu-app"
-              title="飞书应用配置"
-              description="配置飞书应用集成"
-              configData={configs.feishu_app}
+              configType="notification"
+              title="通知管理"
+              description="配置消息通知服务"
+              configData={configs.notification}
               onSave={async (data) => {
-                await saveConfig('feishu-app', data)
+                await saveConfig('notification', data)
               }}
-              hasChanges={hasChanges('feishu_app')}
+              hasChanges={hasChanges('notification')}
               loading={configLoading}
             />
           )

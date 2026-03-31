@@ -32,6 +32,7 @@ import { toast } from "sonner"
 import { Tooltip, Modal, Input, Button } from '@arco-design/web-react'
 import { ManagementHeader } from './ManagementHeader'
 import { CommonTable, ActionButton } from './CommonTable'
+import { useConfig } from '../common/hooks/useConfig'
 import styles from "./BaseManagement.module.css"
 
 export interface FieldConfig {
@@ -616,7 +617,8 @@ function ItemForm({
   onSubmit, 
   onCancel, 
   loading,
-  mode
+  mode,
+  siteConfig
 }: { 
   config: ManagementConfig
   initialData?: any
@@ -624,11 +626,16 @@ function ItemForm({
   onCancel: () => void
   loading: boolean
   mode: 'new' | 'edit'
+  siteConfig?: any
 }) {
   const [formData, setFormData] = useState<any>(() => {
     const initial: any = {}
     config.fields.forEach(field => {
-      const value = getNestedValue(initialData, field.name)
+      let value = getNestedValue(initialData, field.name)
+      // 如果是新建模式且字段是作者，使用站点配置的作者字段作为默认值
+      if (mode === 'new' && field.name === 'author' && !value && siteConfig?.creator?.name) {
+        value = siteConfig.creator.name
+      }
       setNestedValue(initial, field.name, value ?? (field.type === 'tags' ? [] : ''))
     })
     return { ...initial, ...initialData }
@@ -891,6 +898,7 @@ export function BaseManagement({ config }: BaseManagementProps) {
   const [submitting, setSubmitting] = useState(false)
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false)
   const [itemToDelete, setItemToDelete] = useState<number | null>(null)
+  const { configs } = useConfig()
 
   useEffect(() => {
     fetchItems()
@@ -1057,6 +1065,7 @@ export function BaseManagement({ config }: BaseManagementProps) {
         onCancel={() => setViewMode('list')}
         loading={submitting}
         mode="new"
+        siteConfig={configs.site}
       />
     )
   }
@@ -1073,6 +1082,7 @@ export function BaseManagement({ config }: BaseManagementProps) {
         }}
         loading={submitting}
         mode="edit"
+        siteConfig={configs.site}
       />
     )
   }
