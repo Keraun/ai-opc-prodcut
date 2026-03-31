@@ -1245,3 +1245,102 @@ async function exportData() {
 5. **数据库相关规则**：JSON 文件存储的数据操作规范
 
 所有开发人员必须严格遵循这些规范，确保项目的一致性、可维护性和安全性。
+
+## 包管理器使用规范
+
+### 核心原则
+
+#### 使用 pnpm 作为包管理器
+
+本项目统一使用 **pnpm** 作为包管理器，禁止使用 npm 或 yarn。
+
+### 安装依赖
+
+```bash
+# 安装所有依赖
+pnpm install
+
+# 安装生产依赖
+pnpm add <package-name>
+
+# 安装开发依赖
+pnpm add -D <package-name>
+
+# 安装全局依赖（谨慎使用）
+pnpm add -g <package-name>
+```
+
+### 移除依赖
+
+```bash
+# 移除依赖
+pnpm remove <package-name>
+```
+
+### 更新依赖
+
+```bash
+# 更新所有依赖
+pnpm update
+
+# 更新指定依赖
+pnpm update <package-name>
+```
+
+### 运行脚本
+
+```bash
+# 运行开发服务器
+pnpm dev
+
+# 构建生产版本
+pnpm build
+
+# 启动生产服务器
+pnpm start
+
+# 运行代码检查
+pnpm lint
+```
+
+### 常见问题
+
+#### 1. 依赖安装失败
+
+如果遇到依赖安装失败，尝试以下步骤：
+
+```bash
+# 清除缓存
+pnpm store prune
+
+# 删除 node_modules 和 lockfile
+rm -rf node_modules pnpm-lock.yaml
+
+# 重新安装
+pnpm install
+```
+
+#### 2. 依赖版本冲突
+
+如果遇到依赖版本冲突，检查 `package.json` 中的版本范围，并使用 `pnpm update` 更新到兼容版本。
+
+#### 3. monorepo 支持
+
+如果项目使用 monorepo 结构，pnpm 原生支持 workspace 功能，无需额外配置。
+
+### package.json 配置
+
+在 `package.json` 中添加 `packageManager` 字段，确保团队使用相同的包管理器版本：
+
+```json
+{
+  "packageManager": "pnpm@10.4.1"
+}
+```
+
+### 注意事项
+
+1. **不要提交 node_modules**：确保 `.gitignore` 中包含 `node_modules/`
+2. **提交 pnpm-lock.yaml**：确保团队成员使用相同版本的依赖
+3. **避免使用 npm 或 yarn**：混用包管理器可能导致依赖冲突
+4. **定期更新依赖**：定期运行 `pnpm update` 保持依赖最新

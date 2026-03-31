@@ -2,6 +2,7 @@
   "name": "my-project",
   "version": "0.1.0",
   "private": true,
+  "packageManager": "pnpm@10.4.1",
   "scripts": {
     "dev": "next dev",
     "build": "next build",
@@ -19,6 +20,7 @@
     "@tiptap/starter-kit": "^3.21.0",
     "@types/nodemailer": "^7.0.11",
     "@vercel/analytics": "1.6.1",
+    "adm-zip": "^0.5.16",
     "clsx": "^2.1.1",
     "lucide-react": "^0.564.0",
     "next": "16.2.0",
@@ -30,6 +32,7 @@
     "sonner": "^1.7.1"
   },
   "devDependencies": {
+    "@types/adm-zip": "^0.5.8",
     "@types/node": "^22",
     "@types/react": "19.2.14",
     "@types/react-dom": "19.2.3",

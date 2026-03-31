@@ -451,14 +451,17 @@ function renderTableField(
           </Button>
         </div>
       </div>
-      <Table
-        columns={columns}
-        data={tableData}
-        pagination={false}
-        size="small"
-        border
-        stripe
-      />
+      <div style={{ overflowX: 'auto', width: '100%' }}>
+        <Table
+          columns={columns}
+          data={tableData}
+          pagination={false}
+          size="small"
+          border
+          stripe
+          style={{ minWidth: '800px' }}
+        />
+      </div>
     </div>
   )
 }
