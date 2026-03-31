@@ -35,11 +35,11 @@ export async function POST(request: NextRequest) {
     // 添加新账号
     const account = {
       ...newAccount,
-      mustChangePassword: false,
-      lastLoginTime: new Date().toLocaleString('zh-CN'),
-      lastLoginIP: request.ip || '',
-      currentLoginIP: request.ip || '',
-      currentLoginTime: new Date().toLocaleString('zh-CN')
+      must_change_password: false,
+      last_login_time: new Date().toLocaleString('zh-CN'),
+      last_login_ip: request.ip || '',
+      current_login_ip: request.ip || '',
+      current_login_time: new Date().toLocaleString('zh-CN')
     }
     
     accounts.push(account)

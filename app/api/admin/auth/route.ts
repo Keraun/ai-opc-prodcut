@@ -20,10 +20,10 @@ export async function GET(request: NextRequest) {
         const user = {
           username: admin.username,
           remark: admin.remark,
-          mustChangePassword: admin.mustChangePassword,
-          lastLoginTime: admin.lastLoginTime,
-          lastLoginIP: admin.lastLoginIP,
-          currentLoginIP: admin.currentLoginIP
+          mustChangePassword: admin.must_change_password,
+          lastLoginTime: admin.last_login_time,
+          lastLoginIP: admin.last_login_ip,
+          currentLoginIP: admin.current_login_ip
         }
         
         return successResponse({

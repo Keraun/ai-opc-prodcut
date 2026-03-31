@@ -36,13 +36,13 @@ export async function POST(request: NextRequest) {
     const currentIP = getClientIP(request)
     const currentTime = formatDateTime()
 
-    const lastLoginTime = admin.currentLoginTime || admin.lastLoginTime || ''
-    const lastLoginIP = admin.currentLoginIP || admin.lastLoginIP || ''
+    const lastLoginTime = admin.current_login_time || admin.last_login_time || ''
+    const lastLoginIP = admin.current_login_ip || admin.last_login_ip || ''
 
-    admins[adminIndex].lastLoginTime = lastLoginTime
-    admins[adminIndex].lastLoginIP = lastLoginIP
-    admins[adminIndex].currentLoginIP = currentIP
-    admins[adminIndex].currentLoginTime = currentTime
+    admins[adminIndex].last_login_time = lastLoginTime
+    admins[adminIndex].last_login_ip = lastLoginIP
+    admins[adminIndex].current_login_ip = currentIP
+    admins[adminIndex].current_login_time = currentTime
 
     let showSuperAdminToken = false
     let superAdminToken = ''
@@ -63,7 +63,7 @@ export async function POST(request: NextRequest) {
     const updatedUserData = {
       username: admin.username,
       remark: admin.remark,
-      mustChangePassword: admin.mustChangePassword,
+      mustChangePassword: admin.must_change_password,
       lastLoginTime: lastLoginTime,
       lastLoginIP: lastLoginIP,
       currentLoginIP: currentIP
