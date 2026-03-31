@@ -2,8 +2,8 @@
 
 import { useState, useEffect } from "react"
 import { useRouter } from "next/navigation"
-import { Button, Input, Modal, Dropdown, Tabs } from "@arco-design/web-react"
-import { IconCustomerService, IconEye, IconEyeInvisible } from "@arco-design/web-react/icon"
+import { Button, Input, Modal, Dropdown, Tabs, Tooltip } from "@arco-design/web-react"
+import { IconCustomerService, IconEye, IconEyeInvisible, IconCopy } from "@arco-design/web-react/icon"
 import { toast } from "sonner"
 import { checkAuthStatus, loginWithResponse, setupEmail as setupEmailApi, sendResetCode, resetPassword } from "@/lib/api-client"
 import styles from "./admin.module.css"
@@ -578,50 +578,160 @@ export default function AdminLoginPage() {
 
         <Modal
           title={
-            <div className={styles.modalTitle}>
-              <svg fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
-              </svg>
-              <span className={styles.modalTitleText}>重要提示</span>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '12px', fontSize: '18px', fontWeight: 600 }}>
+              <span>超级管理员口令</span>
             </div>
           }
           visible={showTokenModal}
           onCancel={handleTokenModalClose}
           footer={
-            <div className={styles.modalFooter}>
-              <Button onClick={handleCopyToken} type="primary">
-                复制口令
+            <div style={{ display: 'flex', gap: '12px', justifyContent: 'flex-end' }}>
+              <Button onClick={handleTokenModalClose} type="secondary" size="large">
+                我已保存
               </Button>
-              <Button onClick={handleTokenModalClose} type="primary">
-                我已保存，继续
+              <Button onClick={handleTokenModalClose} type="primary" size="large" style={{
+                background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+                border: 'none'
+              }}>
+                继续
               </Button>
             </div>
           }
+          style={{ top: '10%' }}
         >
-          <div className={styles.tokenModalContent}>
-            <div className={styles.tokenAlert}>
-              <p className={styles.tokenAlertTitle}>
-                <svg fill="currentColor" viewBox="0 0 20 20">
-                  <path fillRule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clipRule="evenodd" />
-                </svg>
-                这是您的超级管理员口令，请务必妥善保管！
-              </p>
-              <p className={styles.tokenAlertText}>
-                此口令用于忘记密码时重置管理员密码，不会再次显示。如果丢失，将无法找回！
-              </p>
-              <div className={styles.tokenBox}>
-                <p className={styles.tokenLabel}>超级管理员口令：</p>
+          <div style={{ padding: '8px 0 16px 0' }}>
+            <div style={{
+              background: 'linear-gradient(135deg, #FFF7ED 0%, #FFEDD5 100%)',
+              border: '1px solid #FDBA74',
+              borderRadius: '16px',
+              padding: '24px',
+              marginBottom: '20px'
+            }}>
+              <div style={{ display: 'flex', alignItems: 'flex-start', gap: '12px', marginBottom: '16px' }}>
+                <div style={{
+                  width: '40px',
+                  height: '40px',
+                  background: 'linear-gradient(135deg, #F97316 0%, #EA580C 100%)',
+                  borderRadius: '10px',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  color: 'white',
+                  flexShrink: 0
+                }}>
+                  <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                  </svg>
+                </div>
                 <div>
-                  <code className={styles.tokenValue}>{generatedToken}</code>
+                  <h3 style={{
+                    fontSize: '18px',
+                    fontWeight: 600,
+                    color: '#9A3412',
+                    margin: 0,
+                    marginBottom: '8px'
+                  }}>
+                    请妥善保管！
+                  </h3>
+                  <p style={{
+                    fontSize: '14px',
+                    color: '#C2410C',
+                    margin: 0,
+                    lineHeight: '1.6'
+                  }}>
+                    此口令用于忘记密码时重置管理员密码，<strong>不会再次显示</strong>。如果丢失，将无法找回！
+                  </p>
+                </div>
+              </div>
+              
+              <div style={{
+                background: 'white',
+                border: '2px solid #F97316',
+                borderRadius: '12px',
+                padding: '20px',
+                marginTop: '16px'
+              }}>
+                <p style={{
+                  fontSize: '14px',
+                  color: '#78350F',
+                  fontWeight: 500,
+                  margin: 0,
+                  marginBottom: '12px'
+                }}>
+                  超级管理员口令
+                </p>
+                <div style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '12px',
+                  background: '#FEF3C7',
+                  border: '1px solid #FCD34D',
+                  borderRadius: '8px',
+                  padding: '14px 16px'
+                }}>
+                  <code style={{
+                    flex: 1,
+                    fontSize: '18px',
+                    fontWeight: 600,
+                    color: '#78350F',
+                    fontFamily: "'SF Mono', Monaco, 'Cascadia Code', 'Roboto Mono', monospace",
+                    letterSpacing: '2px',
+                    wordBreak: 'break-all'
+                  }}>
+                    {generatedToken}
+                  </code>
+                  <Tooltip content="复制口令">
+                    <Button
+                      type="primary"
+                      shape="circle"
+                      size="small"
+                      icon={<IconCopy />}
+                      onClick={handleCopyToken}
+                      style={{
+                        background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+                        border: 'none',
+                        width: '36px',
+                        height: '36px',
+                        flexShrink: 0
+                      }}
+                    />
+                  </Tooltip>
                 </div>
               </div>
             </div>
-            <div className={styles.tokenInfo}>
-              <p className={styles.tokenInfoText}>
-                <svg fill="currentColor" viewBox="0 0 20 20">
-                  <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clipRule="evenodd" />
+            
+            <div style={{
+              display: 'flex',
+              alignItems: 'center',
+              gap: '12px',
+              background: '#EFF6FF',
+              border: '1px solid #BFDBFE',
+              borderRadius: '12px',
+              padding: '16px 20px'
+            }}>
+              <div style={{
+                width: '36px',
+                height: '36px',
+                background: 'linear-gradient(135deg, #3B82F6 0%, #2563EB 100%)',
+                borderRadius: '50%',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                color: 'white',
+                flexShrink: 0
+              }}>
+                <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                 </svg>
-                <span>建议：将口令复制到安全的地方保存，例如密码管理器或纸质记录</span>
+              </div>
+              <p style={{
+                fontSize: '14px',
+                color: '#1E40AF',
+                margin: 0,
+                fontWeight: 500,
+                lineHeight: '1.5'
+              }}>
+                建议：将口令复制到安全的地方保存，例如密码管理器或纸质记录
               </p>
             </div>
           </div>

@@ -19,7 +19,8 @@ class JsonDatabase {
     articles: 'articles.json',
     products: 'products.json',
     messages: 'messages.json',
-    push_records: 'push_records.json'
+    push_records: 'push_records.json',
+    verification_codes: 'verification_codes.json'
   }
   private options: JsonDatabaseOptions
 

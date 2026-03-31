@@ -1,34 +1,18 @@
 import { NextRequest } from "next/server"
-import fs from "fs"
-import path from "path"
-import { successResponse, errorResponse, badRequestResponse, unauthorizedResponse, notFoundResponse } from "@/lib/api-utils"
-
-function getVerificationCodesPath(): string {
-  return path.join(process.cwd(), "config/json/system-verification-codes.json")
-}
-
-function loadVerificationCodes(): Record<string, { code: string; expiresAt: number }> {
-  const filePath = getVerificationCodesPath()
-  try {
-    if (fs.existsSync(filePath)) {
-      const data = fs.readFileSync(filePath, "utf-8")
-      return JSON.parse(data)
-    }
-  } catch (error) {
-    console.error("Load verification codes error:", error)
-  }
-  return {}
-}
-
-function saveVerificationCodes(codes: Record<string, { code: string; expiresAt: number }>) {
-  const filePath = getVerificationCodesPath()
-  fs.writeFileSync(filePath, JSON.stringify(codes, null, 2))
-}
+import { readConfig, writeConfig } from "@/lib/config-manager"
+import {
+  successResponse,
+  errorResponse,
+  badRequestResponse,
+  unauthorizedResponse,
+  notFoundResponse
+} from "@/lib/api-utils"
 
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json()
-    const { method, superAdminToken, username, email, verificationCode, newPassword } = body
+    const { method, superAdminToken, token, username, email, verificationCode, newPassword } = body
+    const finalSuperAdminToken = superAdminToken || token
 
     if (!newPassword) {
       return badRequestResponse("请输入新密码")
@@ -38,22 +22,19 @@ export async function POST(request: NextRequest) {
       return badRequestResponse("密码长度至少为8位")
     }
 
-    const accountConfigPath = path.join(process.cwd(), "config/json/runtime/account.json")
-    const accountConfig = JSON.parse(fs.readFileSync(accountConfigPath, "utf-8"))
-
+    const accountConfig = readConfig('account')
     const admins = Array.isArray(accountConfig) ? accountConfig : accountConfig.admins || []
 
     let adminIndex = -1
 
     if (method === "token") {
-      if (!superAdminToken || !username) {
+      if (!finalSuperAdminToken || !username) {
         return badRequestResponse("缺少必要参数")
       }
 
-      const tokenConfigPath = path.join(process.cwd(), "config/json/system-token.json")
-      const tokenConfig = JSON.parse(fs.readFileSync(tokenConfigPath, "utf-8"))
+      const tokenConfig = readConfig('token') || { superAdminToken: '' }
 
-      if (!tokenConfig.superAdminToken || tokenConfig.superAdminToken !== superAdminToken) {
+      if (!tokenConfig.superAdminToken || tokenConfig.superAdminToken !== finalSuperAdminToken) {
         return unauthorizedResponse("输入的超级管理员口令不正确")
       }
 
@@ -67,16 +48,16 @@ export async function POST(request: NextRequest) {
         return badRequestResponse("缺少必要参数")
       }
 
-      const verificationCodes = loadVerificationCodes()
-      const storedData = verificationCodes[email]
+      const verificationCodesConfig = readConfig('verificationCodes') || {}
+      const storedData = verificationCodesConfig[email]
       
       if (!storedData) {
         return unauthorizedResponse("验证码已过期，请重新获取")
       }
 
       if (Date.now() > storedData.expiresAt) {
-        delete verificationCodes[email]
-        saveVerificationCodes(verificationCodes)
+        delete verificationCodesConfig[email]
+        writeConfig('verificationCodes', verificationCodesConfig)
         return unauthorizedResponse("验证码已过期，请重新获取")
       }
 
@@ -90,16 +71,16 @@ export async function POST(request: NextRequest) {
         return notFoundResponse("该邮箱未绑定任何管理员账号")
       }
 
-      delete verificationCodes[email]
-      saveVerificationCodes(verificationCodes)
+      delete verificationCodesConfig[email]
+      writeConfig('verificationCodes', verificationCodesConfig)
     } else {
       return badRequestResponse("无效的重置方式")
     }
 
     admins[adminIndex].password = newPassword
-    admins[adminIndex].mustChangePassword = false
+    admins[adminIndex].must_change_password = 0
 
-    fs.writeFileSync(accountConfigPath, JSON.stringify(admins, null, 2))
+    writeConfig('account', admins)
 
     const responseData: any = {
       username: method === "email" ? admins[adminIndex].username : undefined

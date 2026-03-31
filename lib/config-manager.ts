@@ -93,6 +93,18 @@ export function readConfig(configType: string): any {
       return config ? { superAdminToken: config.config_value } : { superAdminToken: '' }
     }
     
+    if (configType === 'verificationCodes') {
+      const codes = jsonDb.getAll('verification_codes')
+      const result: Record<string, { code: string; expiresAt: number }> = {}
+      for (const item of codes) {
+        result[item.email] = {
+          code: item.code,
+          expiresAt: item.expires_at
+        }
+      }
+      return result
+    }
+    
 
     
     if (configType === 'site' || configType === 'site-seo') {
@@ -316,6 +328,22 @@ export function writeConfig(configType: string, data: any): void {
         jsonDb.insert('system_config', {
           config_key: 'super_admin_token',
           config_value: data.superAdminToken || '',
+          created_at: new Date().toISOString(),
+          updated_at: new Date().toISOString()
+        })
+      }
+      return
+    }
+    
+    if (configType === 'verificationCodes') {
+      jsonDb.clearTable('verification_codes')
+      
+      for (const [email, codeData] of Object.entries(data)) {
+        const { code, expiresAt } = codeData as any
+        jsonDb.insert('verification_codes', {
+          email,
+          code,
+          expires_at: expiresAt,
           created_at: new Date().toISOString(),
           updated_at: new Date().toISOString()
         })

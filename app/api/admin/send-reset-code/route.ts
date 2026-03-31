@@ -1,33 +1,10 @@
 import { NextRequest } from "next/server"
-import fs from "fs"
-import path from "path"
+import { readConfig, writeConfig } from "@/lib/config-manager"
 import { sendEmail, generateVerificationCodeEmail } from "@/lib/email"
 import { successResponse, errorResponse, badRequestResponse, notFoundResponse } from "@/lib/api-utils"
 
 function generateVerificationCode(): string {
   return Math.random().toString().slice(2, 8)
-}
-
-function getVerificationCodesPath(): string {
-  return path.join(process.cwd(), "config/json/system-verification-codes.json")
-}
-
-function loadVerificationCodes(): Record<string, { code: string; expiresAt: number }> {
-  const filePath = getVerificationCodesPath()
-  try {
-    if (fs.existsSync(filePath)) {
-      const data = fs.readFileSync(filePath, "utf-8")
-      return JSON.parse(data)
-    }
-  } catch (error) {
-    console.error("Load verification codes error:", error)
-  }
-  return {}
-}
-
-function saveVerificationCodes(codes: Record<string, { code: string; expiresAt: number }>) {
-  const filePath = getVerificationCodesPath()
-  fs.writeFileSync(filePath, JSON.stringify(codes, null, 2))
 }
 
 export async function POST(request: NextRequest) {
@@ -39,9 +16,7 @@ export async function POST(request: NextRequest) {
       return badRequestResponse("请输入有效的邮箱地址")
     }
 
-    const accountConfigPath = path.join(process.cwd(), "config/json/runtime/account.json")
-    const accountConfig = JSON.parse(fs.readFileSync(accountConfigPath, "utf-8"))
-
+    const accountConfig = readConfig('account')
     const admins = Array.isArray(accountConfig) ? accountConfig : accountConfig.admins || []
 
     const admin = admins.find((admin: any) => admin.email === email)
@@ -53,9 +28,9 @@ export async function POST(request: NextRequest) {
     const code = generateVerificationCode()
     const expiresAt = Date.now() + 5 * 60 * 1000
 
-    const verificationCodes = loadVerificationCodes()
-    verificationCodes[email] = { code, expiresAt }
-    saveVerificationCodes(verificationCodes)
+    const verificationCodesConfig = readConfig('verificationCodes') || {}
+    verificationCodesConfig[email] = { code, expiresAt }
+    writeConfig('verificationCodes', verificationCodesConfig)
 
     const emailHtml = generateVerificationCodeEmail(code)
     const emailSent = await sendEmail({
