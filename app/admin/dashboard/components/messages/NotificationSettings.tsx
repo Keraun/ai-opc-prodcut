@@ -265,13 +265,7 @@ export function NotificationSettings() {
                   field: 'webHookEnabled',
                   link: 'https://www.pushplus.plus/doc/extend/webhook.html'
                 },
-                {
-                  id: 'voice',
-                  name: '语音通知',
-                  description: '通过PushPlus发送语音通知',
-                  isFree: true,
-                  field: 'voiceEnabled'
-                },
+
                 {
                   id: 'email',
                   name: '邮件通知',
@@ -283,20 +277,28 @@ export function NotificationSettings() {
                 {
                   id: 'sms',
                   name: '短信通知',
-                  description: '收费使用，1条短信扣减10积分。需要先在 PushPlus 平台个人中心绑定手机号',
+                  description: '1条短信扣减10积分。需要先在 PushPlus 平台个人中心绑定手机号',
                   isFree: false,
                   field: 'smsEnabled',
                   link: 'https://www.pushplus.plus/uc-profile.html'
                 },
                 {
-                  id: 'wxClawBot',
-                  name: '微信ClawBot',
-                  description: '使用 PushPlus 微信ClawBot渠道发送通知，需要先在 PushPlus 平台绑定微信',
+                  id: 'voice',
+                  name: '语音通知',
+                  description: '1条语音扣减30积分。需要先在 PushPlus 平台个人中心绑定手机号',
                   isFree: false,
-                  field: 'wxClawBotEnabled',
-                  link: 'https://www.pushplus.plus/doc/channel/clawbot.html#%E6%93%8D%E4%BD%9C%E6%B5%81%E7%A8%8B',
-                  extraInfo: '• 绑定后需要主动发起一次对话，才能下发消息\n• 每下发10次消息后，需要主动发起一次对话\n• 每隔24小时，也需要有一次主动对话'
-                }
+                  field: 'voiceEnabled',
+                  link: 'https://www.pushplus.plus/uc-profile.html'
+                },
+                // {
+                //   id: 'wxClawBot',
+                //   name: '微信ClawBot',
+                //   description: '使用 PushPlus 微信ClawBot渠道发送通知，需要先在 PushPlus 平台绑定微信',
+                //   isFree: false,
+                //   field: 'wxClawBotEnabled',
+                //   link: 'https://www.pushplus.plus/doc/channel/clawbot.html#%E6%93%8D%E4%BD%9C%E6%B5%81%E7%A8%8B',
+                //   extraInfo: '• 绑定后需要主动发起一次对话，才能下发消息\n• 每下发10次消息后，需要主动发起一次对话\n• 每隔24小时，也需要有一次主动对话'
+                // }
               ]}
               pagination={false}
               emptyText="暂无渠道配置"
@@ -307,8 +309,8 @@ export function NotificationSettings() {
           <div style={{ marginTop: 24, paddingTop: 24, borderTop: '1px solid #e5e7eb' }}>
             <FormItem
               label={<div>
-                <p style={{ fontSize: 16, fontWeight: 'bold' }}>通知模板 <span style={{fontSize: 12 , fontWeight: 'normal'}}>(系统默认使用HTML格式发送通知，支持富文本和链接)</span></p>
-        
+                <p style={{ fontSize: 16, fontWeight: 'bold' }}>通知模板 <span style={{ fontSize: 12, fontWeight: 'normal' }}>(系统默认使用HTML格式发送通知，支持富文本和链接)</span></p>
+
                 <div style={{ display: 'flex', gap: '12px', flexWrap: 'wrap', margin: '12px 0' }}>
                   {templateOptions.map((template, index) => (
                     <Button

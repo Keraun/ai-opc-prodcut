@@ -461,5 +461,26 @@
     "created_at": "2026-03-31T11:44:55.705Z",
     "updated_at": "2026-03-31T11:44:55.705Z",
     "id": 22
+  },
+  {
+    "name": "测试用户",
+    "phone": "13800138000",
+    "wechat": "",
+    "email": "",
+    "preference": "",
+    "message": "测试留言，用于验证推送记录功能",
+    "llmModel": "",
+    "ip": "::1",
+    "region": "",
+    "os": "Unknown",
+    "osVersion": "",
+    "browser": "Unknown",
+    "browserVersion": "",
+    "deviceModel": "Unknown",
+    "userAgent": "curl/8.7.1",
+    "status": "pending",
+    "created_at": "2026-03-31T11:52:48.954Z",
+    "updated_at": "2026-03-31T11:52:48.954Z",
+    "id": 23
   }
 ]

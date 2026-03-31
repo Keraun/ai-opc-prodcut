@@ -100,7 +100,8 @@ export async function POST(request: NextRequest) {
         browserVersion: deviceInfo.browserVersion,
         deviceModel: deviceInfo.deviceModel,
         detail_link: detailLink,
-        created_at: new Date().toISOString()
+        created_at: new Date().toISOString(),
+        messageId: savedMessage.id
       })
     } catch (notificationError) {
       console.warn('发送通知失败:', notificationError)

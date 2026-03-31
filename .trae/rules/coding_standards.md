@@ -750,7 +750,6 @@ database/
 ├── runtime/                    # 运行时数据目录
 │   ├── accounts.json          # 账号数据
 │   ├── system_config.json     # 系统配置
-│   ├── system_logs.json       # 系统日志
 │   ├── theme_config.json      # 主题配置
 │   ├── pages.json             # 页面配置
 │   ├── module_registry.json   # 模块注册表

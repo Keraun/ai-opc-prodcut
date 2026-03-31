@@ -24,6 +24,9 @@ export async function GET(request: NextRequest) {
     const channel = searchParams.get('channel') || ''
     const status = searchParams.get('status') || ''
 
+    // 重新加载数据，确保获取最新的推送记录
+    jsonDb.reload()
+
     let records = jsonDb.getAll('push_records')
 
     // 过滤

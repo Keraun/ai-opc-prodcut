@@ -329,6 +329,7 @@ export function MessageList({ onStatusChange }: MessageListProps) {
   return (
     <div>
       <div className={styles.filterBar}>
+        筛选状态:
         <Select
           placeholder="筛选状态"
           style={{ width: 150 }}

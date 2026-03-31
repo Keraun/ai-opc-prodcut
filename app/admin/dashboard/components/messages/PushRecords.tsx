@@ -222,6 +222,7 @@ export function PushRecords() {
   return (
     <div>
       <div className={styles.filterBar}>
+        筛选渠道:
         <Select
           placeholder="筛选渠道"
           style={{ width: 150, marginRight: 12 }}
@@ -235,6 +236,7 @@ export function PushRecords() {
             </Select.Option>
           ))}
         </Select>
+        筛选状态:
         <Select
           placeholder="筛选状态"
           style={{ width: 150 }}
