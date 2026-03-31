@@ -40,8 +40,6 @@ export function renderField(
           placeholder={ui.placeholder}
           rows={ui.rows || 10}
           style={{ width: '100%', minHeight: '400px' }}
-          value={value}
-          onChange={onChange}
         />
       )
 
