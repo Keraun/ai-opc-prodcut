@@ -1,5 +1,6 @@
 import { NextRequest } from "next/server"
 import { readConfig, writeConfig } from "@/lib/config-manager"
+import { jsonDb } from "@/lib/json-database"
 import {
   successResponse,
   errorResponse,
@@ -33,9 +34,10 @@ export async function POST(request: NextRequest) {
         return badRequestResponse("缺少必要参数")
       }
 
-      const tokenConfig = readConfig('token') || { superAdminToken: '' }
+      jsonDb.reloadTable('system_config')
+      const tokenConfig = jsonDb.findOne('system_config', { config_key: 'super_admin_token' })
 
-      if (!tokenConfig.superAdminToken || tokenConfig.superAdminToken !== finalSuperAdminToken) {
+      if (!tokenConfig || !tokenConfig.config_value || tokenConfig.config_value !== finalSuperAdminToken) {
         return unauthorizedResponse("输入的超级管理员口令不正确")
       }
 

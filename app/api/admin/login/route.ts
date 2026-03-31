@@ -1,5 +1,6 @@
 import { NextRequest } from "next/server"
 import { readConfig, writeConfig } from "@/lib/config-manager"
+import { jsonDb } from "@/lib/json-database"
 import {
   successResponse,
   errorResponse,
@@ -61,15 +62,33 @@ export async function POST(request: NextRequest) {
     let showSuperAdminToken = false
     let superAdminToken = ''
 
-    let tokenConfig = readConfig('token') || { superAdminToken: '' }
+    jsonDb.reloadTable('system_config')
+    
+    let tokenConfig = jsonDb.findOne('system_config', { config_key: 'super_admin_token' })
 
-    if (!tokenConfig.superAdminToken) {
+    if (!tokenConfig || !tokenConfig.config_value || tokenConfig.config_value.trim() === '') {
       superAdminToken = generateRandomToken(12)
-      tokenConfig.superAdminToken = superAdminToken
+      
+      if (!tokenConfig) {
+        jsonDb.insert('system_config', {
+          config_key: 'super_admin_token',
+          config_value: superAdminToken,
+          created_at: new Date().toISOString(),
+          updated_at: new Date().toISOString()
+        })
+      } else {
+        jsonDb.update('system_config', 
+          { config_key: 'super_admin_token' },
+          { 
+            config_value: superAdminToken,
+            updated_at: new Date().toISOString()
+          }
+        )
+      }
+      
       showSuperAdminToken = true
-      writeConfig('token', tokenConfig)
     } else {
-      superAdminToken = tokenConfig.superAdminToken
+      superAdminToken = tokenConfig.config_value
     }
 
     writeConfig('account', admins)

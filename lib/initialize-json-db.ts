@@ -59,9 +59,9 @@ function initializeSystemConfig() {
     jsonDb.insert('system_config', {
       config_key: 'site_config',
       config_value: JSON.stringify({
-        name: 'AI OPC Product',
+        name: '',
         description: 'AI 产品管理系统',
-        url: 'http://localhost:3000',
+        url: '',
         currentTheme: 'modern'
       }),
       created_at: new Date().toISOString(),
@@ -69,6 +69,19 @@ function initializeSystemConfig() {
     })
     
     console.log('Initialized system config')
+  }
+  
+  // 检查是否有 super_admin_token 配置
+  const existingTokenConfig = jsonDb.findOne('system_config', { config_key: 'super_admin_token' })
+  if (!existingTokenConfig) {
+    console.log('Adding super_admin_token config entry...')
+    // 只添加空的配置项，不在初始化时生成，登录时再生成
+    jsonDb.insert('system_config', {
+      config_key: 'super_admin_token',
+      config_value: '',
+      created_at: new Date().toISOString(),
+      updated_at: new Date().toISOString()
+    })
   }
 }
 
