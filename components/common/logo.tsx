@@ -1,4 +1,21 @@
-export function Logo({ className = "" }: { className?: string }) {
+import { useConfig } from "@/components/initial-data-provider"
+
+export function Logo({ className = "", logoUrl }: { className?: string; logoUrl?: string }) {
+  const siteConfig = useConfig('site')
+  const logo = logoUrl || siteConfig?.logo
+
+  if (logo) {
+    return (
+      <img 
+        src={logo} 
+        alt="Logo" 
+        className={className}
+        style={{ width: '40px', height: '40px', objectFit: 'contain' }}
+      />
+    )
+  }
+
+  // 默认SVG Logo
   return (
     <svg
       viewBox="0 0 40 40"
