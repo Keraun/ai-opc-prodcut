@@ -46,10 +46,15 @@ export function ModuleDragEditor({ modules, onChange }: ModuleDragEditorProps) {
   const [dragOverIndex, setDragOverIndex] = useState<number | null>(null)
   const [gridColumns, setGridColumns] = useState<1 | 2 | 3>(3)
   const [previewDevice, setPreviewDevice] = useState<'web' | 'mobile' | 'ipad'>('web')
-  const [editPreviewDevice, setEditPreviewDevice] = useState<'web' | 'mobile' | 'ipad'>('ipad')
+  const [editPreviewDevice, setEditPreviewDevice] = useState<'web' | 'mobile' | 'ipad'>('mobile')
   const [isFullscreen, setIsFullscreen] = useState(false)
+  const [previewPanelWidth, setPreviewPanelWidth] = useState(400)
+  const [isDragging, setIsDragging] = useState(false)
+  const [isConfigPanelVisible, setIsConfigPanelVisible] = useState(true)
   const editPreviewIframeRef = useRef<HTMLIFrameElement>(null)
   const previewPanelRef = useRef<HTMLDivElement>(null)
+  const dragStartXRef = useRef(0)
+  const dragStartWidthRef = useRef(400)
 
   useEffect(() => {
     loadAvailableModules()
@@ -78,6 +83,52 @@ export function ModuleDragEditor({ modules, onChange }: ModuleDragEditorProps) {
       document.removeEventListener('fullscreenchange', handleFullscreenChange)
     }
   }, [])
+
+  const toggleConfigPanel = useCallback(() => {
+    setIsConfigPanelVisible(prev => {
+      const newVisible = !prev
+      if (!newVisible) {
+        setEditPreviewDevice('web')
+        setPreviewPanelWidth(800)
+      } else {
+        setEditPreviewDevice('mobile')
+        setPreviewPanelWidth(400)
+      }
+      return newVisible
+    })
+  }, [])
+
+  const handleResizeStart = useCallback((e: React.MouseEvent) => {
+    setIsDragging(true)
+    dragStartXRef.current = e.clientX
+    dragStartWidthRef.current = previewPanelWidth
+    document.body.style.cursor = 'col-resize'
+    document.body.style.userSelect = 'none'
+  }, [previewPanelWidth])
+
+  const handleResizeMove = useCallback((e: MouseEvent) => {
+    if (!isDragging) return
+    const delta = e.clientX - dragStartXRef.current
+    const newWidth = Math.max(320, Math.min(800, dragStartWidthRef.current + delta))
+    setPreviewPanelWidth(newWidth)
+  }, [isDragging])
+
+  const handleResizeEnd = useCallback(() => {
+    setIsDragging(false)
+    document.body.style.cursor = ''
+    document.body.style.userSelect = ''
+  }, [])
+
+  useEffect(() => {
+    if (isDragging) {
+      window.addEventListener('mousemove', handleResizeMove)
+      window.addEventListener('mouseup', handleResizeEnd)
+      return () => {
+        window.removeEventListener('mousemove', handleResizeMove)
+        window.removeEventListener('mouseup', handleResizeEnd)
+      }
+    }
+  }, [isDragging, handleResizeMove, handleResizeEnd])
 
   const loadAvailableModules = async () => {
     const modules = await getAvailableModules()
@@ -509,38 +560,56 @@ export function ModuleDragEditor({ modules, onChange }: ModuleDragEditorProps) {
             <div 
               className={`${styles.editModulePreviewPanel} ${isFullscreen ? styles.fullscreenPreview : ''}`}
               ref={previewPanelRef}
+              style={{ width: previewPanelWidth }}
             >
               <div className={styles.editModulePreviewHeader}>
                 <h4>实时预览</h4>
                 <div className={styles.editModulePreviewControls}>
                   <div className={styles.editModulePreviewDevices}>
                     <Tooltip content="桌面端">
-                      <Button 
-                        size="mini" 
+                      <Button
+                        size="mini"
                         type={editPreviewDevice === 'web' ? "primary" : "text"}
                         icon={<IconDesktop />}
                         onClick={() => setEditPreviewDevice('web')}
                       />
                     </Tooltip>
                     <Tooltip content="平板端">
-                      <Button 
-                        size="mini" 
+                      <Button
+                        size="mini"
                         type={editPreviewDevice === 'ipad' ? "primary" : "text"}
                         icon={<IconApps />}
                         onClick={() => setEditPreviewDevice('ipad')}
                       />
                     </Tooltip>
                     <Tooltip content="移动端">
-                      <Button 
-                        size="mini" 
+                      <Button
+                        size="mini"
                         type={editPreviewDevice === 'mobile' ? "primary" : "text"}
                         icon={<IconMobile />}
                         onClick={() => setEditPreviewDevice('mobile')}
                       />
                     </Tooltip>
                   </div>
+                  <Tooltip content={isConfigPanelVisible ? "隐藏配置面板" : "显示配置面板"}>
+                    <Button
+                      size="mini"
+                      type="text"
+                      onClick={toggleConfigPanel}
+                    >
+                      {isConfigPanelVisible ? (
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                          <path d="M11 17l-5-5 5-5M18 17l-5-5 5-5" strokeLinecap="round" strokeLinejoin="round"/>
+                        </svg>
+                      ) : (
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                          <path d="M13 17l5-5-5-5M6 17l5-5-5-5" strokeLinecap="round" strokeLinejoin="round"/>
+                        </svg>
+                      )}
+                    </Button>
+                  </Tooltip>
                   <Tooltip content={isFullscreen ? "退出全屏" : "全屏查看"}>
-                    <Button 
+                    <Button
                       size="mini"
                       type="text"
                       icon={isFullscreen ? <IconFullscreenExit /> : <IconFullscreen />}
@@ -566,19 +635,35 @@ export function ModuleDragEditor({ modules, onChange }: ModuleDragEditorProps) {
                 </div>
               </div>
             </div>
-            <div className={styles.editModuleFormPanel}>
-              <div className={styles.editModuleFormHeader}>
-                <h4>模块配置</h4>
-                <span>修改后实时预览</span>
-              </div>
-              <div className={styles.editModuleFormContent}>
-                <ModuleFieldEditor
-                  moduleId={editingModule.moduleId}
-                  data={editingModule.data}
-                  onChange={handleEditModuleChange}
-                />
-              </div>
-            </div>
+            {isConfigPanelVisible && (
+              <>
+                <div
+                  className={styles.editModuleResizeHandle}
+                  onMouseDown={handleResizeStart}
+                  title="拖拽调整宽度"
+                >
+                  <div className={styles.editModuleResizeHandleLine} />
+                  <div className={styles.editModuleResizeHandleDots}>
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                  </div>
+                </div>
+                <div className={styles.editModuleFormPanel}>
+                  <div className={styles.editModuleFormHeader}>
+                    <h4>模块配置</h4>
+                    <span>修改后实时预览</span>
+                  </div>
+                  <div className={styles.editModuleFormContent}>
+                    <ModuleFieldEditor
+                      moduleId={editingModule.moduleId}
+                      data={editingModule.data}
+                      onChange={handleEditModuleChange}
+                    />
+                  </div>
+                </div>
+              </>
+            )}
           </div>
         )}
       </Drawer>

@@ -2838,6 +2838,61 @@
   background: #f5f7fa;
 }
 
+.editModuleResizeHandle {
+  width: 16px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: #f1f5f9;
+  border-left: 1px solid #e5e7eb;
+  border-right: 1px solid #e5e7eb;
+  cursor: col-resize;
+  transition: background 0.2s ease;
+  user-select: none;
+  position: relative;
+}
+
+.editModuleResizeHandle:hover {
+  background: #e2e8f0;
+}
+
+.editModuleResizeHandle:active {
+  background: #cbd5e1;
+}
+
+.editModuleResizeHandleLine {
+  position: absolute;
+  width: 2px;
+  height: 60px;
+  background: #94a3b8;
+  border-radius: 1px;
+  transition: background 0.2s ease;
+}
+
+.editModuleResizeHandle:hover .editModuleResizeHandleLine {
+  background: #64748b;
+}
+
+.editModuleResizeHandleDots {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  z-index: 1;
+}
+
+.editModuleResizeHandleDots span {
+  width: 3px;
+  height: 3px;
+  background: #94a3b8;
+  border-radius: 50%;
+  transition: background 0.2s ease;
+}
+
+.editModuleResizeHandle:hover .editModuleResizeHandleDots span {
+  background: #64748b;
+}
+
 .editModuleFormPanel {
   flex: 5;
   background: #ffffff;
@@ -2922,11 +2977,17 @@
 }
 
 .editModulePreviewPanel {
-  flex: 5;
   display: flex;
   flex-direction: column;
   overflow: hidden;
   background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+  flex-shrink: 0;
+  transition: width 0.1s ease;
+}
+
+.editModulePreviewPanel:only-child {
+  flex: 1;
+  width: 100% !important;
 }
 
 .editModulePreviewHeader {
