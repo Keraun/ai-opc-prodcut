@@ -50,7 +50,7 @@ interface NotificationConfig {
     fromEmail?: string
     toEmail?: string
   }
-  clawbot?: {
+  wxClawBot?: {
     enabled?: boolean
     appId?: string
     appSecret?: string
@@ -149,11 +149,11 @@ export function MessagesManagement() {
         enabled: configs.notification?.pushplus?.enabled || false,
         token: configs.notification?.pushplus?.token || '',
         wechatEnabled: configs.notification?.pushplus?.wechatEnabled || false,
-        webHookEnabled: configs.notification?.pushplus?.webHookEnabled || false,
+        feishuEnabled: configs.notification?.pushplus?.feishuEnabled || false,
         voiceEnabled: configs.notification?.pushplus?.voiceEnabled || false,
         emailEnabled: configs.notification?.email?.enabled || false,
         smsEnabled: configs.notification?.sms?.enabled || false,
-        clawbotEnabled: configs.notification?.clawbot?.enabled || false,
+        wxClawBotEnabled: configs.notification?.wxClawBot?.enabled || false,
         notificationTemplate: configs.notification?.notificationTemplate || ''
       })
     }
@@ -261,11 +261,11 @@ export function MessagesManagement() {
       // 检查启用的渠道数量
       const enabledChannels = [
         values.wechatEnabled,
-        values.webHookEnabled,
+        values.feishuEnabled,
         values.voiceEnabled,
         values.emailEnabled,
         values.smsEnabled,
-        values.clawbotEnabled
+        values.wxClawBotEnabled
       ].filter(Boolean).length
 
       if (enabledChannels === 0) {
@@ -292,8 +292,8 @@ export function MessagesManagement() {
         sms: {
           enabled: values.smsEnabled
         },
-        clawbot: {
-          enabled: values.clawbotEnabled
+        wxClawBot: {
+          enabled: values.wxClawBotEnabled
         },
         notificationTemplate: values.notificationTemplate
       }
@@ -783,11 +783,11 @@ export function MessagesManagement() {
                         link: 'https://www.pushplus.plus/uc-profile.html'
                       },
                       {
-                        id: 'clawbot',
+                        id: 'wxClawBot',
                         name: '微信ClawBot',
                         description: '使用 PushPlus 微信ClawBot渠道发送通知，需要先在 PushPlus 平台绑定微信',
                         isFree: false,
-                        field: 'clawbotEnabled',
+                        field: 'wxClawBotEnabled',
                         link: 'https://www.pushplus.plus/doc/channel/clawbot.html#%E6%93%8D%E4%BD%9C%E6%B5%81%E7%A8%8B',
                         extraInfo: '• 绑定后需要主动发起一次对话，才能下发消息\n• 每下发10次消息后，需要主动发起一次对话\n• 每隔24小时，也需要有一次主动对话'
                       }
@@ -871,8 +871,8 @@ export function MessagesManagement() {
                     sms: {
                       enabled: values.smsEnabled
                     },
-                    clawbot: {
-                      enabled: values.clawbotEnabled
+                    wxClawBot: {
+                      enabled: values.wxClawBotEnabled
                     },
                     notificationTemplate: values.notificationTemplate
                   }, null, 2))
@@ -906,8 +906,8 @@ export function MessagesManagement() {
                 sms: {
                   enabled: notificationForm.getFieldValue('smsEnabled')
                 },
-                clawbot: {
-                  enabled: notificationForm.getFieldValue('clawbotEnabled')
+                wxClawBot: {
+                  enabled: notificationForm.getFieldValue('wxClawBotEnabled')
                 },
                 notificationTemplate: notificationForm.getFieldValue('notificationTemplate')
               }, null, 2)}

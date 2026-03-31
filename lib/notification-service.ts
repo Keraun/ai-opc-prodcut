@@ -21,7 +21,7 @@ export interface NotificationConfig {
   sms?: {
     enabled: boolean
   }
-  clawbot?: {
+  wxClawBot?: {
     enabled: boolean
     appId: string
     appSecret: string
@@ -268,10 +268,10 @@ class SmsChannel extends PushPlusChannel {
   }
 }
 
-// ClawBot通知渠道
-class ClawBotChannel extends PushPlusChannel {
+// WxClawBot通知渠道
+class WxClawBotChannel extends PushPlusChannel {
   isEnabled(): boolean {
-    return this.config.clawbot?.enabled || false
+    return this.config.wxClawBot?.enabled || false
   }
 }
 
@@ -291,7 +291,7 @@ export class NotificationService {
       new VoiceChannel(config, 'voice'),
       new EmailChannel(config, 'mail'),
       new SmsChannel(config, 'sms'),
-      new ClawBotChannel(config, 'clawbot')
+      new WxClawBotChannel(config, 'clawbot')
     ]
 
     // 发送所有启用的通知
