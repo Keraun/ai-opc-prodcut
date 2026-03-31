@@ -73,7 +73,7 @@ export default function MessageDetailPage() {
         if (sessionId) params.set('sessionId', sessionId)
 
         // 检查认证状态
-        const authResult = await checkAuthStatus()
+        const authResult = await checkAuthStatus(token, sessionId)
         
         if (!authResult.authenticated) {
           setAuthError('认证失败，请登录后访问')

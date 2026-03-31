@@ -52,11 +52,17 @@ export async function checkAuth(): Promise<boolean> {
 
 /**
  * 检查用户认证状态（详细信息）
+ * @param token - 认证token
+ * @param sessionId - 会话ID
  * @returns 认证结果，包含 authenticated 和 user 信息
  */
-export async function checkAuthStatus(): Promise<AuthResult> {
+export async function checkAuthStatus(token?: string, sessionId?: string): Promise<AuthResult> {
   try {
-    const result = await request<AuthResult>('/api/admin/auth')
+    const params = new URLSearchParams()
+    if (token) params.set('token', token)
+    if (sessionId) params.set('sessionId', sessionId)
+    
+    const result = await request<AuthResult>(`/api/admin/auth${params.toString() ? `?${params.toString()}` : ''}`)
     return result.success && result.data ? result.data : { authenticated: false }
   } catch (error) {
     console.error('Error checking auth status:', error)

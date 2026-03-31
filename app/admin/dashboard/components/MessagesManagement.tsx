@@ -150,6 +150,7 @@ export function MessagesManagement() {
         token: configs.notification?.pushplus?.token || '',
         wechatEnabled: configs.notification?.pushplus?.wechatEnabled || false,
         feishuEnabled: configs.notification?.pushplus?.feishuEnabled || false,
+        voiceEnabled: configs.notification?.pushplus?.voiceEnabled || false,
         emailEnabled: configs.notification?.email?.enabled || false,
         smsEnabled: configs.notification?.sms?.enabled || false,
         clawbotEnabled: configs.notification?.clawbot?.enabled || false,
@@ -257,12 +258,29 @@ export function MessagesManagement() {
   const handleNotificationSubmit = async (values: any) => {
     setNotificationSubmitting(true)
     try {
+      // 检查启用的渠道数量
+      const enabledChannels = [
+        values.wechatEnabled,
+        values.feishuEnabled,
+        values.voiceEnabled,
+        values.emailEnabled,
+        values.smsEnabled,
+        values.clawbotEnabled
+      ].filter(Boolean).length
+      
+      if (enabledChannels > 3) {
+        toast.error('最多只能配置3个通知渠道')
+        setNotificationSubmitting(false)
+        return
+      }
+
       const configData = {
         pushplus: {
           enabled: values.enabled,
           token: values.token,
           wechatEnabled: values.wechatEnabled,
-          feishuEnabled: values.feishuEnabled
+          feishuEnabled: values.feishuEnabled,
+          voiceEnabled: values.voiceEnabled
         },
         email: {
           enabled: values.emailEnabled
@@ -590,7 +608,7 @@ export function MessagesManagement() {
           <div style={{ padding: '24px' }}>
             <ManagementHeader
               title="通知管理"
-              description="配置用户提交留言时的消息通知功能"
+              description="配置用户提交留言时的消息通知功能（最多配置3个渠道）"
               actions={
                 <>
                   <Button
@@ -619,41 +637,16 @@ export function MessagesManagement() {
                 onSubmit={handleNotificationSubmit}
                 autoComplete="off"
               >
-                {/* PushPlus 配置区域 */}
+                {/* 基础配置 */}
                 <div style={{ marginBottom: 24 }}>
-                  <h4 style={{ marginBottom: 16, fontSize: 16, fontWeight: 600 }}>PushPlus配置</h4>
+                  <h4 style={{ marginBottom: 16, fontSize: 16, fontWeight: 600 }}>基础配置</h4>
                   <div>需要你在 <a href="https://www.pushplus.plus/" style={{ color: '#165DFF' }} target="_blank">pushplus </a> 网站注册账号,并在微信服务号 <b style={{ color: 'red' }}>pushplus推送加</b> 绑定你个人微信,完成 <b style={{ color: 'red' }}>实名验证</b>(3块钱费用)才可正常推送消息</div>
+                  
                   <FormItem
-                    label="启用飞书通知"
-                    field="feishuEnabled"
+                    label="启用PushPlus通知"
+                    field="enabled"
                     triggerPropName="checked"
-                    extra={
-                      <div style={{ marginTop: 8, lineHeight: 1.5 }}>
-                        使用 PushPlus 飞书渠道发送通知，需要先在 PushPlus 平台配置 webhook
-                        <div style={{ marginTop: 8, fontSize: 12, color: '#666' }}>
-                          <div>• 配置教程：
-                            <a
-                              href="https://www.pushplus.plus/doc/extend/webhook.html"
-                              target="_blank"
-                              rel="noopener noreferrer"
-                              style={{ marginLeft: 4, color: '#165DFF' }}
-                            >
-                              飞书webhook配置说明
-                            </a>
-                          </div>
-                          <div>• 配置链接：
-                            <a
-                              href="https://www.pushplus.plus/uc-channel.html"
-                              target="_blank"
-                              rel="noopener noreferrer"
-                              style={{ marginLeft: 4, color: '#165DFF' }}
-                            >
-                              PushPlus个人中心-渠道配置
-                            </a>
-                          </div>
-                        </div>
-                      </div>
-                    }
+                    extra="启用后才能使用PushPlus相关的通知渠道"
                   >
                     <Switch />
                   </FormItem>
@@ -665,119 +658,138 @@ export function MessagesManagement() {
                   >
                     <Input.Password placeholder="请输入PushPlus Token" allowClear style={{ width: '100%' }} />
                   </FormItem>
-
-                  <FormItem
-                    label="启用 PushPlus 微信通知"
-                    field="wechatEnabled"
-                    triggerPropName="checked"
-                    extra={
-                      <div>
-                        <div>是否通过PushPlus发送微信通知</div>
-                        <div>pushplus推送加 消息推送在 <b style={{ color: 'red' }}>pushplus推送加</b> 服务号</div>
-                      </div>
-                    }
-                  >
-                    <Switch />
-                  </FormItem>
-
-                  <FormItem
-                    label="启用飞书通知"
-                    field="feishuEnabled"
-                    triggerPropName="checked"
-                    extra="是否通过PushPlus发送飞书通知"
-                  >
-                    <Switch />
-                  </FormItem>
                 </div>
 
-                {/* 邮件配置区域 */}
+                {/* 通知渠道配置 */}
                 <div style={{ marginTop: 24, paddingTop: 24, borderTop: '1px solid #e5e7eb' }}>
-                  <h4 style={{ marginBottom: 16, fontSize: 16, fontWeight: 600 }}>邮件配置</h4>
+                  <h4 style={{ marginBottom: 16, fontSize: 16, fontWeight: 600 }}>通知渠道配置 <span style={{ fontSize: 12, color: '#666', fontWeight: 400 }}>(最多选择3个渠道)</span></h4>
+                  
+                  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '24px' }}>
+                    {/* 免费渠道 */}
+                    <div>
+                      <h5 style={{ marginBottom: 12, fontSize: 14, fontWeight: 500, color: '#165DFF' }}>免费渠道</h5>
+                      
+                      <FormItem
+                        label="微信通知"
+                        field="wechatEnabled"
+                        triggerPropName="checked"
+                        extra={
+                          <div>
+                            <div>通过PushPlus发送微信通知</div>
+                            <div>消息推送在 <b style={{ color: 'red' }}>pushplus推送加</b> 服务号</div>
+                          </div>
+                        }
+                      >
+                        <Switch />
+                      </FormItem>
 
-                  <FormItem
-                    label="启用邮件通知"
-                    field="emailEnabled"
-                    triggerPropName="checked"
-                    extra={
-                      <div style={{ marginTop: 8 }}>
-                        使用 PushPlus 邮件渠道发送通知，需要先在 PushPlus 平台配置邮箱
-                        <a
-                          href="https://www.pushplus.plus/doc/extend/mail.html"
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          style={{ marginLeft: 8, color: '#165DFF' }}
-                        >
-                          查看配置教程
-                        </a>
-                      </div>
-                    }
-                  >
-                    <Switch />
-                  </FormItem>
-                </div>
-
-                {/* 短信配置区域 */}
-                <div style={{ marginTop: 24, paddingTop: 24, borderTop: '1px solid #e5e7eb' }}>
-                  <h4 style={{ marginBottom: 16, fontSize: 16, fontWeight: 600 }}>短信配置</h4>
-
-                  <FormItem
-                    label="启用短信通知"
-                    field="smsEnabled"
-                    triggerPropName="checked"
-                    extra={
-                      <div style={{ marginTop: 8, lineHeight: 1.5 }}>
-                        使用 PushPlus 短信渠道发送通知
-                        <div style={{ marginTop: 8, fontSize: 12, color: '#666' }}>
-                          <div>• 需要先在 PushPlus 平台个人中心绑定手机号：
+                      <FormItem
+                        label="飞书通知"
+                        field="feishuEnabled"
+                        triggerPropName="checked"
+                        extra={
+                          <div style={{ marginTop: 8, lineHeight: 1.5 }}>
+                            通过PushPlus发送飞书通知，需要先在PushPlus平台配置webhook
                             <a
-                              href="https://www.pushplus.plus/uc-profile.html"
+                              href="https://www.pushplus.plus/doc/extend/webhook.html"
                               target="_blank"
                               rel="noopener noreferrer"
                               style={{ marginLeft: 4, color: '#165DFF' }}
                             >
-                              PushPlus个人中心
+                              查看配置教程
                             </a>
                           </div>
-                        </div>
-                        <div style={{ marginTop: 8, fontSize: 12, color: '#ff4d4f' }}>
-                          • 收费使用，1条短信扣减10积分
-                        </div>
-                      </div>
-                    }
-                  >
-                    <Switch />
-                  </FormItem>
-                </div>
+                        }
+                      >
+                        <Switch />
+                      </FormItem>
 
-                {/* 微信ClawBot配置区域 */}
-                <div style={{ marginTop: 24, paddingTop: 24, borderTop: '1px solid #e5e7eb' }}>
-                  <h4 style={{ marginBottom: 16, fontSize: 16, fontWeight: 600 }}>微信ClawBot配置</h4>
+                      <FormItem
+                        label="语音通知"
+                        field="voiceEnabled"
+                        triggerPropName="checked"
+                        extra="通过PushPlus发送语音通知"
+                      >
+                        <Switch />
+                      </FormItem>
 
-                  <FormItem
-                    label="启用微信ClawBot通知"
-                    field="clawbotEnabled"
-                    triggerPropName="checked"
-                    extra={
-                      <div style={{ marginTop: 8, lineHeight: 1.5 }}>
-                        使用 PushPlus 微信ClawBot渠道发送通知，需要先在 PushPlus 平台绑定微信
-                        <a
-                          href="https://www.pushplus.plus/doc/channel/clawbot.html#%E6%93%8D%E4%BD%9C%E6%B5%81%E7%A8%8B"
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          style={{ marginLeft: 8, color: '#165DFF' }}
-                        >
-                          查看配置教程
-                        </a>
-                        <div style={{ marginTop: 8, fontSize: 12, color: '#666' }}>
-                          <div>• 绑定后需要主动发起一次对话，才能下发消息</div>
-                          <div>• 每下发10次消息后，需要主动发起一次对话</div>
-                          <div>• 每隔24小时，也需要有一次主动对话</div>
-                        </div>
-                      </div>
-                    }
-                  >
-                    <Switch />
-                  </FormItem>
+                      <FormItem
+                        label="邮件通知"
+                        field="emailEnabled"
+                        triggerPropName="checked"
+                        extra={
+                          <div style={{ marginTop: 8 }}>
+                            通过PushPlus邮件渠道发送通知，需要先在PushPlus平台配置邮箱
+                            <a
+                              href="https://www.pushplus.plus/doc/extend/mail.html"
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              style={{ marginLeft: 8, color: '#165DFF' }}
+                            >
+                              查看配置教程
+                            </a>
+                          </div>
+                        }
+                      >
+                        <Switch />
+                      </FormItem>
+                    </div>
+
+                    {/* 付费/特殊渠道 */}
+                    <div>
+                      <h5 style={{ marginBottom: 12, fontSize: 14, fontWeight: 500, color: '#ff4d4f' }}>付费/特殊渠道</h5>
+                      
+                      <FormItem
+                        label="短信通知"
+                        field="smsEnabled"
+                        triggerPropName="checked"
+                        extra={
+                          <div style={{ marginTop: 8, lineHeight: 1.5 }}>
+                            <div style={{ color: '#ff4d4f' }}>• 收费使用，1条短信扣减10积分</div>
+                            <div style={{ marginTop: 8, fontSize: 12, color: '#666' }}>
+                              • 需要先在 PushPlus 平台个人中心绑定手机号：
+                              <a
+                                href="https://www.pushplus.plus/uc-profile.html"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                style={{ marginLeft: 4, color: '#165DFF' }}
+                              >
+                                PushPlus个人中心
+                              </a>
+                            </div>
+                          </div>
+                        }
+                      >
+                        <Switch />
+                      </FormItem>
+
+                      <FormItem
+                        label="微信ClawBot通知"
+                        field="clawbotEnabled"
+                        triggerPropName="checked"
+                        extra={
+                          <div style={{ marginTop: 8, lineHeight: 1.5 }}>
+                            使用 PushPlus 微信ClawBot渠道发送通知，需要先在 PushPlus 平台绑定微信
+                            <a
+                              href="https://www.pushplus.plus/doc/channel/clawbot.html#%E6%93%8D%E4%BD%9C%E6%B5%81%E7%A8%8B"
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              style={{ marginLeft: 8, color: '#165DFF' }}
+                            >
+                              查看配置教程
+                            </a>
+                            <div style={{ marginTop: 8, fontSize: 12, color: '#666' }}>
+                              <div>• 绑定后需要主动发起一次对话，才能下发消息</div>
+                              <div>• 每下发10次消息后，需要主动发起一次对话</div>
+                              <div>• 每隔24小时，也需要有一次主动对话</div>
+                            </div>
+                          </div>
+                        }
+                      >
+                        <Switch />
+                      </FormItem>
+                    </div>
+                  </div>
                 </div>
 
                 {/* 通知模板区域 */}
@@ -843,7 +855,8 @@ export function MessagesManagement() {
                       enabled: values.enabled,
                       token: values.token,
                       wechatEnabled: values.wechatEnabled,
-                      feishuEnabled: values.feishuEnabled
+                      feishuEnabled: values.feishuEnabled,
+                      voiceEnabled: values.voiceEnabled
                     },
                     email: {
                       enabled: values.emailEnabled
@@ -877,7 +890,8 @@ export function MessagesManagement() {
                   enabled: notificationForm.getFieldValue('enabled'),
                   token: notificationForm.getFieldValue('token'),
                   wechatEnabled: notificationForm.getFieldValue('wechatEnabled'),
-                  feishuEnabled: notificationForm.getFieldValue('feishuEnabled')
+                  feishuEnabled: notificationForm.getFieldValue('feishuEnabled'),
+                  voiceEnabled: notificationForm.getFieldValue('voiceEnabled')
                 },
                 email: {
                   enabled: notificationForm.getFieldValue('emailEnabled')

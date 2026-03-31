@@ -19,12 +19,10 @@ export async function POST() {
 setlocal enabledelayedexpansion
 cd /d "${projectRoot}"
 set PORT=${port}
-echo [%date% %time%] 开始重启服务，端口: %PORT% > restart-server.log
 
 REM 杀掉占用端口的进程
 for /f "tokens=5" %%a in ('netstat -ano ^| findstr :%PORT%') do (
-    echo [%date% %time%] 正在终止进程 PID: %%a >> restart-server.log
-    taskkill /F /PID %%a >> restart-server.log 2>&1
+    taskkill /F /PID %%a >nul 2>&1
 )
 
 timeout /t 1 /nobreak >nul
@@ -36,11 +34,7 @@ if "%NODE_ENV%"=="production" (
     set RUN_CMD=npm run dev
 )
 
-echo [%date% %time%] 启动服务: !RUN_CMD! >> restart-server.log
-
-start "" cmd /c "cd /d \"${projectRoot}\" && !RUN_CMD! >> restart-server.log 2>&1"
-
-echo [%date% %time%] 服务已启动 >> restart-server.log
+start "" cmd /c "cd /d \"${projectRoot}\" && !RUN_CMD!"
 `
       fs.writeFileSync(batPath, batContent)
       
