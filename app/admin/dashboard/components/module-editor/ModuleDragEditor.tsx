@@ -424,6 +424,9 @@ export function ModuleDragEditor({ modules, onChange }: ModuleDragEditorProps) {
                         <Tag size="small" color="gray">
                           {module.moduleId}
                         </Tag>
+                        {(module.moduleId === 'site-root' || module.moduleId === 'site-footer' || module.moduleId === 'site-header') && (
+                          <Tag color="orange" size="small" style={{ marginLeft: '8px' }}>全局配置</Tag>
+                        )}
                       </div>
                     </div>
                     <div className={styles.moduleItemActionsV2}>
@@ -439,20 +442,17 @@ export function ModuleDragEditor({ modules, onChange }: ModuleDragEditorProps) {
                       )}
                      
                       {(module.moduleId === 'site-root' || module.moduleId === 'site-footer' || module.moduleId === 'site-header') && (
-                        <>
-                          <Button
-                            type="text"
-                            size="small"
-                            icon={<IconEye />}
-                            onClick={() => setPreviewingModule({ 
-                              moduleId: module.moduleId, 
-                              moduleName: module.moduleName 
-                            })}
-                          >
-                            预览
-                          </Button>
-                          <Tag color="orange" size="small">全局配置</Tag>
-                        </>
+                        <Button
+                          type="text"
+                          size="small"
+                          icon={<IconEye />}
+                          onClick={() => setPreviewingModule({ 
+                            moduleId: module.moduleId, 
+                            moduleName: module.moduleName 
+                          })}
+                        >
+                          预览
+                        </Button>
                       )}
                        {(module.moduleId !== 'site-root') && (
                         <Button

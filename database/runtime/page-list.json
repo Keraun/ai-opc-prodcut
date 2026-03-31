@@ -11,7 +11,7 @@
       "route": "/",
       "dynamicParam": null,
       "createdAt": null,
-      "updatedAt": "2026/03/31 10:05:55",
+      "updatedAt": "2026/03/31 10:22:19",
       "publishedAt": null,
       "modules": []
     },
@@ -96,6 +96,6 @@
     "404"
   ],
   "dynamicRoutePattern": "[param]",
-  "createdAt": "2026-03-31T02:05:55.619Z",
-  "updatedAt": "2026-03-31T02:05:55.619Z"
+  "createdAt": "2026-03-31T02:22:19.408Z",
+  "updatedAt": "2026-03-31T02:22:19.408Z"
 }

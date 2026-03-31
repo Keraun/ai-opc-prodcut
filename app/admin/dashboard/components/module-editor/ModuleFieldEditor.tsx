@@ -175,8 +175,11 @@ function TableImageUploadField({
     const randomHeight = 600
     const randomId = Math.floor(Math.random() * 1000)
     const randomImageUrl = `https://picsum.photos/id/${randomId}/${randomWidth}/${randomHeight}`
-    onChange(randomImageUrl)
-    toast.success('随机图片生成成功')
+    // 使用 setTimeout 延迟调用，确保状态更新和预览功能正常工作
+    setTimeout(() => {
+      onChange(randomImageUrl)
+      toast.success('随机图片生成成功')
+    }, 0)
   }
 
   return (
@@ -532,8 +535,11 @@ function ImageUploadField({
     const randomHeight = 600
     const randomId = Math.floor(Math.random() * 1000)
     const randomImageUrl = `https://picsum.photos/id/${randomId}/${randomWidth}/${randomHeight}`
-    onChange(randomImageUrl)
-    toast.success('随机图片生成成功')
+    // 使用 setTimeout 延迟调用，确保状态更新和预览功能正常工作
+    setTimeout(() => {
+      onChange(randomImageUrl)
+      toast.success('随机图片生成成功')
+    }, 0)
   }
 
   // 获取用于预览的完整 URL
