@@ -31,7 +31,6 @@ export default function AdminDashboardPage() {
   const [activeMenu, setActiveMenu] = useState('pages')
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false)
   const [showChangePassword, setShowChangePassword] = useState(false)
-  const [mustChangePassword, setMustChangePassword] = useState(false)
   const [loading, setLoading] = useState(false)
 
   useEffect(() => {
@@ -48,18 +47,6 @@ export default function AdminDashboardPage() {
     const init = async () => {
       const authenticated = await checkAuth()
       if (authenticated) {
-        const userStr = sessionStorage.getItem('currentUser')
-        let user = currentUser
-        if (!user && userStr) {
-          try {
-            user = JSON.parse(userStr)
-          } catch {}
-        }
-        if (user) {
-          if ((user as any)?.mustChangePassword) {
-            setMustChangePassword(true)
-          }
-        }
         await fetchConfigs()
         await fetchSchema()
       }
@@ -67,6 +54,8 @@ export default function AdminDashboardPage() {
     
     init()
   }, [])
+
+  const mustChangePassword = (currentUser as any)?.mustChangePassword || false
 
   const handleMenuClick = (menu: string) => {
     setActiveMenu(menu)
@@ -146,7 +135,6 @@ export default function AdminDashboardPage() {
           visible={showChangePassword}
           onClose={() => {
             setShowChangePassword(false)
-            setMustChangePassword(false)
           }}
           mustChange={mustChangePassword}
         />
