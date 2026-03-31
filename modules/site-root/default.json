@@ -38,11 +38,8 @@
         "maxImagePreview": "large",
         "maxSnippet": -1
       }
-    },
-    "analytics": {
-      "baiduAnalytics": "",
-      "googleAnalytics": ""
     }
   },
-  "currentTheme": "nature"
+  "currentTheme": "nature",
+  "logo": "http://localhost:3000/uploads/editor/1774925723791_tpl25k.webp"
 }

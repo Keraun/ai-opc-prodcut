@@ -2,13 +2,11 @@ import { readConfig } from './config-manager'
 
 interface NotificationConfig {
   enabled: boolean
-  wechat?: {
+  pushplus?: {
     enabled: boolean
-    webhookUrl: string
-  }
-  feishu?: {
-    enabled: boolean
-    webhookUrl: string
+    token: string
+    wechatEnabled: boolean
+    feishuEnabled: boolean
   }
   notificationTemplate?: string
 }
@@ -41,8 +39,8 @@ export class NotificationService {
       .replace('{created_at}', data.created_at)
   }
 
-  async sendWechatNotification(data: MessageData): Promise<boolean> {
-    if (!this.config.enabled || !this.config.wechat?.enabled || !this.config.wechat.webhookUrl) {
+  async sendPushPlusNotification(data: MessageData, channel: string): Promise<boolean> {
+    if (!this.config.enabled || !this.config.pushplus?.enabled || !this.config.pushplus.token) {
       return false
     }
 
@@ -50,72 +48,49 @@ export class NotificationService {
       const template = this.config.notificationTemplate || '收到新留言：\n姓名：{name}\n电话：{phone}\n内容：{message}'
       const content = this.renderTemplate(template, data)
 
-      const response = await fetch(this.config.wechat.webhookUrl, {
+      const response = await fetch('https://www.pushplus.plus/send', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
         },
         body: JSON.stringify({
-          msgtype: 'text',
-          text: {
-            content
-          }
+          token: this.config.pushplus.token,
+          title: '新留言通知',
+          content: content,
+          template: 'txt',
+          channel: channel
         })
       })
 
       if (!response.ok) {
-        console.warn('微信通知发送失败:', await response.text())
+        console.warn('PushPlus通知发送失败:', await response.text())
         return false
       }
 
-      console.log('微信通知发送成功')
+      console.log(`PushPlus ${channel}通知发送成功`)
       return true
     } catch (error) {
-      console.error('微信通知发送失败:', error)
-      return false
-    }
-  }
-
-  async sendFeishuNotification(data: MessageData): Promise<boolean> {
-    if (!this.config.enabled || !this.config.feishu?.enabled || !this.config.feishu.webhookUrl) {
-      return false
-    }
-
-    try {
-      const template = this.config.notificationTemplate || '收到新留言：\n姓名：{name}\n电话：{phone}\n内容：{message}'
-      const content = this.renderTemplate(template, data)
-
-      const response = await fetch(this.config.feishu.webhookUrl, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-          msg_type: 'text',
-          content: {
-            text: content
-          }
-        })
-      })
-
-      if (!response.ok) {
-        console.warn('飞书通知发送失败:', await response.text())
-        return false
-      }
-
-      console.log('飞书通知发送成功')
-      return true
-    } catch (error) {
-      console.error('飞书通知发送失败:', error)
+      console.error('PushPlus通知发送失败:', error)
       return false
     }
   }
 
   async sendNotifications(data: MessageData): Promise<void> {
-    await Promise.all([
-      this.sendWechatNotification(data),
-      this.sendFeishuNotification(data)
-    ])
+    if (!this.config.enabled || !this.config.pushplus?.enabled) {
+      return
+    }
+
+    const notifications = []
+
+    if (this.config.pushplus.wechatEnabled) {
+      notifications.push(this.sendPushPlusNotification(data, 'wechat'))
+    }
+
+    if (this.config.pushplus.feishuEnabled) {
+      notifications.push(this.sendPushPlusNotification(data, 'feishu'))
+    }
+
+    await Promise.all(notifications)
   }
 }
 

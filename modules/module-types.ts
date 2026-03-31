@@ -209,6 +209,7 @@ export interface SiteRootData {
   name?: string
   description?: string
   url?: string
+  logo?: string
   ogImage?: string
   links?: SiteLinks
   creator?: SiteCreator

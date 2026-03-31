@@ -21,6 +21,16 @@
       "description": "网站的完整URL地址",
       "default": ""
     },
+    "logo": {
+      "type": "string",
+      "title": "站点Logo",
+      "description": "网站的Logo图标，用于显示在页面头部和favicon",
+      "default": "/logo.png",
+      "ui": {
+        "widget": "image",
+        "placeholder": "请输入Logo图片链接或点击上传"
+      }
+    },
     "ogImage": {
       "type": "string",
       "title": "OG图片",

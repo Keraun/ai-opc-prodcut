@@ -9,39 +9,33 @@
       "description": "是否启用留言通知功能",
       "default": false
     },
-    "wechat": {
+    "pushplus": {
       "type": "object",
-      "title": "微信通知配置",
-      "description": "配置微信消息通知",
+      "title": "PushPlus配置",
+      "description": "配置PushPlus消息推送服务",
       "properties": {
         "enabled": {
+          "type": "boolean",
+          "title": "启用PushPlus",
+          "description": "是否启用PushPlus消息推送",
+          "default": false
+        },
+        "token": {
+          "type": "string",
+          "title": "PushPlus Token",
+          "description": "PushPlus的Token，用于发送消息"
+        },
+        "wechatEnabled": {
           "type": "boolean",
           "title": "启用微信通知",
-          "description": "是否启用微信消息通知",
+          "description": "是否通过PushPlus发送微信通知",
           "default": false
         },
-        "webhookUrl": {
-          "type": "string",
-          "title": "微信机器人Webhook",
-          "description": "企业微信机器人的Webhook地址"
-        }
-      }
-    },
-    "feishu": {
-      "type": "object",
-      "title": "飞书通知配置",
-      "description": "配置飞书消息通知",
-      "properties": {
-        "enabled": {
+        "feishuEnabled": {
           "type": "boolean",
           "title": "启用飞书通知",
-          "description": "是否启用飞书消息通知",
+          "description": "是否通过PushPlus发送飞书通知",
           "default": false
-        },
-        "webhookUrl": {
-          "type": "string",
-          "title": "飞书机器人Webhook",
-          "description": "飞书机器人的Webhook地址"
         }
       }
     },
