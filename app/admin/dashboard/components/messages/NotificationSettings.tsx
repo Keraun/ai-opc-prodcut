@@ -153,8 +153,8 @@ export function NotificationSettings() {
                 <div>启用后才能使用PushPlus相关的通知渠道,需要你在 <a href="https://www.pushplus.plus/" style={{ color: '#165DFF' }} target="_blank">pushplus </a> 网站注册账号,并在微信服务号 <b style={{ color: 'red' }}>pushplus推送加</b> 绑定你个人微信,完成 <b style={{ color: 'red' }}>实名验证</b>(3块钱费用)才可正常推送消息</div>
               }
               layout="horizontal"
-              labelCol={{ span: 8 }}
-              wrapperCol={{ span: 16 }}
+              labelCol={{ span: 3 }}
+              wrapperCol={{ span: 18 }}
             >
               <Switch />
             </FormItem>
@@ -164,8 +164,8 @@ export function NotificationSettings() {
               field="token"
               extra={<div>PushPlus的Token，用于发送消息。获取方式：登录PushPlus官网(<a style={{ color: 'blue' }} href='https://www.pushplus.plus/' target='_blank'>https://www.pushplus.plus/</a>)，注册账号后在个人中心获取Token。</div>}
               layout="horizontal"
-              labelCol={{ span: 8 }}
-              wrapperCol={{ span: 16 }}
+              labelCol={{ span: 3 }}
+              wrapperCol={{ span: 18 }}
             >
               <Input.Password placeholder="请输入PushPlus Token" allowClear style={{ width: '100%' }} />
             </FormItem>
@@ -306,7 +306,21 @@ export function NotificationSettings() {
           {/* 通知模板区域 */}
           <div style={{ marginTop: 24, paddingTop: 24, borderTop: '1px solid #e5e7eb' }}>
             <FormItem
-              label="通知模板"
+              label={<div>
+                <p style={{ fontSize: 16, fontWeight: 'bold' }}>通知模板 <span style={{fontSize: 12 , fontWeight: 'normal'}}>(系统默认使用HTML格式发送通知，支持富文本和链接)</span></p>
+        
+                <div style={{ display: 'flex', gap: '12px', flexWrap: 'wrap', margin: '12px 0' }}>
+                  {templateOptions.map((template, index) => (
+                    <Button
+                      key={index}
+                      onClick={() => handleSelectTemplate(template.content)}
+                      style={{ flex: '1 1 calc(33.333% - 8px)', minWidth: '200px' }}
+                    >
+                      {template.name}
+                    </Button>
+                  ))}
+                </div>
+              </div>}
               field="notificationTemplate"
               extra={
                 <div style={{ marginTop: 8 }}>
@@ -316,8 +330,6 @@ export function NotificationSettings() {
                   {'{os}'} - 操作系统 {'{osVersion}'} - 操作系统版本 {'{browser}'} - 浏览器<br />
                   {'{browserVersion}'} - 浏览器版本 {'{deviceModel}'} - 设备机型 {'{created_at}'} - 提交时间<br />
                   {'{detail_link}'} - 留言详情链接（带会话验证）<br />
-                  <br />
-                  <span style={{ color: '#165DFF' }}>系统默认使用HTML格式发送通知，支持富文本和链接。</span>
                 </div>
               }
             >
@@ -329,21 +341,7 @@ export function NotificationSettings() {
               />
             </FormItem>
 
-            {/* 模板选择 */}
-            <div style={{ marginTop: 16 }}>
-              <h4 style={{ marginBottom: 12, fontSize: 14, fontWeight: 500 }}>模板选择</h4>
-              <div style={{ display: 'flex', gap: '12px', flexWrap: 'wrap' }}>
-                {templateOptions.map((template, index) => (
-                  <Button
-                    key={index}
-                    onClick={() => handleSelectTemplate(template.content)}
-                    style={{ flex: '1 1 calc(33.333% - 8px)', minWidth: '200px' }}
-                  >
-                    {template.name}
-                  </Button>
-                ))}
-              </div>
-            </div>
+
           </div>
         </Form>
       </Card>
