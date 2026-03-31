@@ -213,6 +213,25 @@
               }
             }
           }
+        },
+        "analytics": {
+          "type": "object",
+          "title": "统计分析",
+          "description": "配置网站统计分析工具",
+          "properties": {
+            "baiduAnalytics": {
+              "type": "string",
+              "title": "百度统计ID",
+              "description": "百度统计的站点ID，格式为：hm.xxxxxx",
+              "default": ""
+            },
+            "googleAnalytics": {
+              "type": "string",
+              "title": "谷歌统计ID",
+              "description": "谷歌统计的跟踪ID，格式为：UA-xxxxxx-x 或 G-xxxxxxxxxx",
+              "default": ""
+            }
+          }
         }
       }
     }

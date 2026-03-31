@@ -24,7 +24,7 @@ function getThemeConfig() {
 
 function getSiteConfig() {
   try {
-    return readConfig('site') || {}
+    return readConfig('site-root') || {}
   } catch (error) {
     console.error('Failed to read site config:', error)
     return {}
@@ -33,7 +33,8 @@ function getSiteConfig() {
 
 function getSeoConfig() {
   try {
-    return readConfig('site-seo') || {}
+    const siteConfig = readConfig('site-root') || {}
+    return siteConfig.seo || {}
   } catch (error) {
     console.error('Failed to read seo config:', error)
     return {}
@@ -167,6 +168,41 @@ export default function RootLayout({
             __html: initialDataScript,
           }}
         />
+        {/* 百度统计 */}
+        {seoConfig?.analytics?.baiduAnalytics && (
+          <script
+            dangerouslySetInnerHTML={{
+              __html: `
+                var _hmt = _hmt || [];
+                (function() {
+                  var hm = document.createElement("script");
+                  hm.src = "https://hm.baidu.com/hm.js?${seoConfig.analytics.baiduAnalytics}";
+                  var s = document.getElementsByTagName("script")[0]; 
+                  s.parentNode.insertBefore(hm, s);
+                })();
+              `
+            }}
+          />
+        )}
+        {/* 谷歌统计 */}
+        {seoConfig?.analytics?.googleAnalytics && (
+          <>
+            <script
+              async
+              src={`https://www.googletagmanager.com/gtag/js?id=${seoConfig.analytics.googleAnalytics}`}
+            />
+            <script
+              dangerouslySetInnerHTML={{
+                __html: `
+                  window.dataLayer = window.dataLayer || [];
+                  function gtag(){dataLayer.push(arguments);}
+                  gtag('js', new Date());
+                  gtag('config', '${seoConfig.analytics.googleAnalytics}');
+                `
+              }}
+            />
+          </>
+        )}
       </head>
       <body style={{ fontFamily: 'var(--font-sans)', WebkitFontSmoothing: 'antialiased', MozOsxFontSmoothing: 'grayscale' }}>
         <ToasterProvider />

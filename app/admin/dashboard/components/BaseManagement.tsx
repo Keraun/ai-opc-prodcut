@@ -366,6 +366,16 @@ function FormField({
     }
   }
 
+  const handleGenerateRandomImage = () => {
+    // 使用 picsum.photos 生成随机图片
+    const randomWidth = 800
+    const randomHeight = 600
+    const randomId = Math.floor(Math.random() * 1000)
+    const randomImageUrl = `https://picsum.photos/id/${randomId}/${randomWidth}/${randomHeight}`
+    onChange(randomImageUrl)
+    toast.success('随机主图生成成功')
+  }
+
   const handleFileSelect = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0]
     if (file) {
@@ -524,13 +534,22 @@ function FormField({
               </button>
             </div>
           ) : (
-            <div 
-              className={styles.imageUploadPlaceholder}
-              onClick={() => fileInputRef.current?.click()}
-            >
-              <ImageIcon size={40} />
-              <span>点击上传图片</span>
-              {field.hint && <span className={styles.imageHint}>{field.hint}</span>}
+            <div className={styles.imageUploadPlaceholder}>
+              <div 
+                style={{ cursor: 'pointer' }}
+                onClick={() => fileInputRef.current?.click()}
+              >
+                <ImageIcon size={40} />
+                <span>点击上传图片</span>
+                {field.hint && <span className={styles.imageHint}>{field.hint}</span>}
+              </div>
+              <button 
+                type="button" 
+                onClick={handleGenerateRandomImage}
+                className={styles.generateImageButton}
+              >
+                随机生成主图
+              </button>
             </div>
           )}
           <input

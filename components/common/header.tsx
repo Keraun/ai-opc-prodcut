@@ -139,9 +139,17 @@ export function Header({
                   <div className={styles.dropdownContent}>
                     <div className={styles.dropdownQrContainer}>
                       <div className={styles.dropdownQrInner}>
-                        <div className={styles.dropdownQrPlaceholder}>
-                          <span className={styles.dropdownQrText}>{qrText}</span>
-                        </div>
+                        {siteConfig?.support?.customerServiceQRCode ? (
+                          <img 
+                            src={siteConfig.support.customerServiceQRCode} 
+                            alt="客服二维码" 
+                            style={{ width: '120px', height: '120px', borderRadius: '8px' }}
+                          />
+                        ) : (
+                          <div className={styles.dropdownQrPlaceholder}>
+                            <span className={styles.dropdownQrText}>{qrText}</span>
+                          </div>
+                        )}
                       </div>
                     </div>
                     <p className={styles.dropdownHint}>{hintText}</p>

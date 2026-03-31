@@ -22,7 +22,9 @@ export async function GET() {
   return wrapApiHandler(async () => {
     const registeredModules = getAllModules()
     
-    const modules: ModuleInfo[] = registeredModules.map((mod: ModuleRegistration) => {
+    const modules: ModuleInfo[] = registeredModules
+      .filter((mod: ModuleRegistration) => mod.moduleId !== 'site-root') // 过滤掉站点容器模块
+      .map((mod: ModuleRegistration) => {
       let category = '其他'
       
       if (mod.moduleId.startsWith('section-')) {

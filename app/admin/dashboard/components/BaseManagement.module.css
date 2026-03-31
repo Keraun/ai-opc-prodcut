@@ -769,6 +769,25 @@
   margin-top: 4px;
 }
 
+.generateImageButton {
+  margin-top: 12px;
+  padding: 6px 12px;
+  background: #f7f8fa;
+  border: 1px solid #e5e7eb;
+  border-radius: 4px;
+  font-size: 12px;
+  color: #4b5563;
+  cursor: pointer;
+  transition: all 0.2s;
+  align-self: center;
+}
+
+.generateImageButton:hover {
+  background: #e5e7eb;
+  border-color: #165dff;
+  color: #165dff;
+}
+
 .listImage {
   width: 60px;
   height: 60px;

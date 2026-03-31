@@ -41,7 +41,7 @@
       "route": "/news",
       "dynamicParam": null,
       "createdAt": null,
-      "updatedAt": null,
+      "updatedAt": "2026/03/31 09:41:46",
       "publishedAt": null,
       "modules": []
     },
@@ -61,21 +61,6 @@
       "modules": []
     },
     {
-      "id": "404",
-      "name": "404页面",
-      "slug": "404",
-      "type": "static",
-      "status": "published",
-      "isSystem": true,
-      "isDeletable": false,
-      "route": "/404",
-      "dynamicParam": null,
-      "createdAt": null,
-      "updatedAt": null,
-      "publishedAt": null,
-      "modules": []
-    },
-    {
       "id": "product-detail",
       "name": "产品详情",
       "slug": "product-detail",
@@ -89,6 +74,21 @@
       "updatedAt": "2026/03/31 08:32:30",
       "publishedAt": null,
       "modules": []
+    },
+    {
+      "id": "404",
+      "name": "404页面",
+      "slug": "404",
+      "type": "static",
+      "status": "published",
+      "isSystem": true,
+      "isDeletable": false,
+      "route": "/404",
+      "dynamicParam": null,
+      "createdAt": null,
+      "updatedAt": null,
+      "publishedAt": null,
+      "modules": []
     }
   ],
   "systemPages": [
@@ -96,6 +96,6 @@
     "404"
   ],
   "dynamicRoutePattern": "[param]",
-  "createdAt": "2026-03-31T00:36:35.122Z",
-  "updatedAt": "2026-03-31T00:36:35.122Z"
+  "createdAt": "2026-03-31T01:41:46.937Z",
+  "updatedAt": "2026-03-31T01:41:46.937Z"
 }

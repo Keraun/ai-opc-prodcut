@@ -38,6 +38,10 @@
         "maxImagePreview": "large",
         "maxSnippet": -1
       }
+    },
+    "analytics": {
+      "baiduAnalytics": "",
+      "googleAnalytics": ""
     }
   },
   "currentTheme": "nature"

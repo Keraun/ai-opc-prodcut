@@ -427,7 +427,7 @@ export function ModuleDragEditor({ modules, onChange }: ModuleDragEditorProps) {
                       </div>
                     </div>
                     <div className={styles.moduleItemActionsV2}>
-                      {module.moduleId !== 'site-root' && (
+                      {(module.moduleId !== 'site-root' && module.moduleId !== 'site-header' && module.moduleId !== 'site-footer') && (
                         <Button
                           type="primary"
                           size="small"
@@ -437,7 +437,7 @@ export function ModuleDragEditor({ modules, onChange }: ModuleDragEditorProps) {
                           编辑
                         </Button>
                       )}
-                      {module.moduleId !== 'site-root' && (
+                      {(module.moduleId !== 'site-root' && module.moduleId !== 'site-header' && module.moduleId !== 'site-footer') && (
                         <Button
                           type="text"
                           size="small"

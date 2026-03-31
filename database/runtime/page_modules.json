@@ -44,50 +44,6 @@
     "updated_at": "2026-03-31T01:17:55.200Z"
   },
   {
-    "id": 15,
-    "module_instance_id": "site-root-1774642141717-1774642692903",
-    "page_id": "news",
-    "module_id": "site-root",
-    "module_name": "站点容器",
-    "module_order": 0,
-    "data": null,
-    "created_at": "2026-03-27T20:18:12.903Z",
-    "updated_at": "2026-03-31T00:28:28.999Z"
-  },
-  {
-    "id": 16,
-    "module_instance_id": "site-header-1774642142718-1774642693903",
-    "page_id": "news",
-    "module_id": "site-header",
-    "module_name": "站点导航",
-    "module_order": 1,
-    "data": null,
-    "created_at": "2026-03-27T20:18:12.903Z",
-    "updated_at": "2026-03-30T22:27:50.284Z"
-  },
-  {
-    "id": 17,
-    "module_instance_id": "news-list-1774642143719-1774642694903",
-    "page_id": "news",
-    "module_id": "news-list",
-    "module_name": "资讯列表",
-    "module_order": 2,
-    "data": "{\"title\":\"资讯中心\",\"subtitle\":\"最新行业动态、深度分析与实战案例\",\"showDate\":true,\"showSummary\":true,\"itemsPerPage\":10}",
-    "created_at": "2026-03-27T20:18:12.903Z",
-    "updated_at": "2026-03-29T15:00:00.000Z"
-  },
-  {
-    "id": 18,
-    "module_instance_id": "site-header-1774642144720-1774642695903",
-    "page_id": "news",
-    "module_id": "site-header",
-    "module_name": "站点导航",
-    "module_order": 3,
-    "data": null,
-    "created_at": "2026-03-27T20:18:12.903Z",
-    "updated_at": "2026-03-30T22:27:50.285Z"
-  },
-  {
     "id": 23,
     "module_instance_id": "site-root-1774642149717-1774642692903",
     "page_id": "404",
@@ -328,5 +284,49 @@
     "created_at": "2026/03/31 08:36:35",
     "updated_at": "2026-03-31T01:17:55.204Z",
     "id": 69
+  },
+  {
+    "page_id": "news",
+    "module_id": "site-root",
+    "module_instance_id": "site-root-1774642141717-1774642692903",
+    "module_name": "站点容器",
+    "module_order": 0,
+    "data": null,
+    "created_at": "2026/03/31 09:41:46",
+    "updated_at": "2026/03/31 09:41:46",
+    "id": 70
+  },
+  {
+    "page_id": "news",
+    "module_id": "site-header",
+    "module_instance_id": "site-header-1774642142718-1774642693903",
+    "module_name": "站点导航",
+    "module_order": 1,
+    "data": "{\"navItems\":[{\"label\":\"首页123\",\"href\":\"/\"},{\"label\":\"产品\",\"href\":\"/product\"},{\"label\":\"资讯\",\"href\":\"/news\"}],\"showContactButton\":true,\"showCtaButton\":true,\"ctaButtonText\":\"开始使用\",\"ctaButtonLink\":\"/product\"}",
+    "created_at": "2026/03/31 09:41:46",
+    "updated_at": "2026/03/31 09:41:46",
+    "id": 71
+  },
+  {
+    "page_id": "news",
+    "module_id": "news-list",
+    "module_instance_id": "news-list-1774642143719-1774642694903",
+    "module_name": "资讯列表",
+    "module_order": 2,
+    "data": "{\"title\":\"资讯中心\",\"subtitle\":\"最新行业动态、深度分析与实战案例\",\"showDate\":true,\"showSummary\":true,\"itemsPerPage\":10}",
+    "created_at": "2026/03/31 09:41:46",
+    "updated_at": "2026/03/31 09:41:46",
+    "id": 72
+  },
+  {
+    "page_id": "news",
+    "module_id": "site-footer",
+    "module_instance_id": "site-footer-1774921253922",
+    "module_name": "站点页脚",
+    "module_order": 3,
+    "data": null,
+    "created_at": "2026/03/31 09:41:46",
+    "updated_at": "2026/03/31 09:41:46",
+    "id": 73
   }
 ]

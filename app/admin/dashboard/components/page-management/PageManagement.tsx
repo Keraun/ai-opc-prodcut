@@ -155,7 +155,11 @@ export function PageManagement({ onEditPage }: PageManagementProps) {
 
   const handlePreviewPage = (slug: string, type?: string, dynamicParam?: string, route?: string) => {
     if (type === 'dynamic') {
-      const previewRoute = route ? route.replace(/\[.*?\]/, '0') : `/${slug}/0`
+      // 对于资讯详情和产品详情页面，默认使用 id 为 1
+      const isNewsDetail = slug === 'news' || route?.includes('news')
+      const isProductDetail = slug === 'product' || route?.includes('product')
+      const defaultId = (isNewsDetail || isProductDetail) ? '1' : '0'
+      const previewRoute = route ? route.replace(/\[.*?\]/, defaultId) : `/${slug}/${defaultId}`
       window.open(previewRoute, "_blank")
     } else {
       window.open(`/${slug}`, "_blank")

@@ -1,4 +1,5 @@
-[{
+[
+  {
     "id": 1,
     "page_id": "home",
     "name": "首页",
@@ -44,9 +45,9 @@
     "is_deletable": 0,
     "route": "/news",
     "dynamic_param": null,
-    "module_instance_ids": "[\"site-root-1774642141717-1774642692903\",\"site-header-1774642142718-1774642693903\",\"news-list-1774642143719-1774642694903\",\"site-header-1774642144720-1774642695903\"]",
+    "module_instance_ids": "[\"site-root-1774642141717-1774642692903\",\"site-header-1774642142718-1774642693903\",\"news-list-1774642143719-1774642694903\",\"site-footer-1774921253922\"]",
     "created_at": null,
-    "updated_at": null,
+    "updated_at": "2026/03/31 09:41:46",
     "published_at": null
   },
   {
