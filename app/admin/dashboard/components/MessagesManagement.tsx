@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react"
 import { ManagementHeader, CommonTable, ActionButton } from "./index"
 import { MessageSquare, User, Phone, Mail, CheckCircle, XCircle, Eye, Settings, Bell, Save, Code } from "lucide-react"
-import { Tag as ArcoTag, Modal, Input, Select, Space, Popconfirm, Tabs, Form, Switch, Button, Card } from '@arco-design/web-react'
+import { Tag as ArcoTag, Modal, Input, Select, Space, Popconfirm, Tabs, Form, Switch, Button, Card, Tooltip } from '@arco-design/web-react'
 import styles from "./BaseManagement.module.css"
 import { toast } from "sonner"
 import { useRouter, useSearchParams } from "next/navigation"
@@ -61,15 +61,15 @@ const statusColorMap: Record<string, string> = {
 const templateOptions = [
   {
     name: '默认模板',
-    content: '【新留言通知】\n\n用户信息：\n姓名：{name}\n电话：{phone || \'\'}\n微信：{wechat || \'\'}\n邮箱：{email || \'\'}\n\n留言内容：\n{message}\n\n设备信息：\nIP地址：{ip}\n地区：{region || \'\'}\n操作系统：{os} {osVersion}\n浏览器：{browser} {browserVersion}\n设备机型：{deviceModel}\n\n提交时间：{created_at}\n\n请及时处理！'
+    content: '【新留言通知】\n\n用户信息：\n姓名：{name}\n电话：{phone || \'\'}\n微信：{wechat || \'\'}\n邮箱：{email || \'\'}\n\n留言内容：\n{message}\n\n设备信息：\nIP地址：{ip}\n地区：{region || \'\'}\n操作系统：{os} {osVersion}\n浏览器：{browser} {browserVersion}\n设备机型：{deviceModel}\n\n提交时间：{created_at}\n\n查看详情：{detail_link}\n\n请及时处理！'
   },
   {
     name: '简洁模板',
-    content: '【新留言】\n\n姓名：{name}\n电话：{phone || \'\'}\n内容：{message}\n\n提交时间：{created_at}'
+    content: '【新留言】\n\n姓名：{name}\n电话：{phone || \'\'}\n内容：{message}\n\n提交时间：{created_at}\n\n查看详情：{detail_link}'
   },
   {
     name: '详细模板',
-    content: '【重要通知】新留言提醒\n\n尊敬的管理员：\n\n您收到了一条新的用户留言，详情如下：\n\n用户信息\n姓名：{name}\n联系电话：{phone || \'未提供\'}\n微信：{wechat || \'未提供\'}\n邮箱：{email || \'未提供\'}\n\n留言内容\n{message}\n\n设备信息\nIP地址：{ip}\n地区：{region || \'未知\'}\n操作系统：{os} {osVersion}\n浏览器：{browser} {browserVersion}\n设备：{deviceModel}\n\n提交时间：{created_at}\n\n请及时登录管理后台处理此留言。\n\n系统自动发送，请勿回复。'
+    content: '【重要通知】新留言提醒\n\n尊敬的管理员：\n\n您收到了一条新的用户留言，详情如下：\n\n用户信息\n姓名：{name}\n联系电话：{phone || \'未提供\'}\n微信：{wechat || \'未提供\'}\n邮箱：{email || \'未提供\'}\n\n留言内容\n{message}\n\n设备信息\nIP地址：{ip}\n地区：{region || \'未知\'}\n操作系统：{os} {osVersion}\n浏览器：{browser} {browserVersion}\n设备：{deviceModel}\n\n提交时间：{created_at}\n\n查看详情：{detail_link}\n\n请及时处理此留言。\n\n系统自动发送，请勿回复。'
   }
 ]
 
@@ -311,18 +311,21 @@ export function MessagesManagement() {
       key: 'message',
       width: 220,
       render: (text: string) => (
-        <div style={{ 
-          maxWidth: 220, 
-          display: '-webkit-box',
-          WebkitLineClamp: 3,
-          WebkitBoxOrient: 'vertical',
-          overflow: 'hidden',
-          textOverflow: 'ellipsis',
-          lineHeight: '1.5',
-          fontSize: '13px'
-        }}>
-          {text}
-        </div>
+        <Tooltip content={text} position="top">
+          <div style={{ 
+            maxWidth: 220, 
+            display: '-webkit-box',
+            WebkitLineClamp: 3,
+            WebkitBoxOrient: 'vertical',
+            overflow: 'hidden',
+            textOverflow: 'ellipsis',
+            lineHeight: '1.5',
+            fontSize: '13px',
+            cursor: 'pointer'
+          }}>
+            {text}
+          </div>
+        </Tooltip>
       ),
     },
     {
@@ -638,7 +641,8 @@ export function MessagesManagement() {
                         {'{name}'} - 姓名 {'{phone}'} - 电话 {'{wechat}'} - 微信 {'{email}'} - 邮箱<br/>
                         {'{message}'} - 留言内容 {'{ip}'} - IP地址 {'{region}'} - 地区<br/>
                         {'{os}'} - 操作系统 {'{osVersion}'} - 操作系统版本 {'{browser}'} - 浏览器<br/>
-                        {'{browserVersion}'} - 浏览器版本 {'{deviceModel}'} - 设备机型 {'{created_at}'} - 提交时间
+                        {'{browserVersion}'} - 浏览器版本 {'{deviceModel}'} - 设备机型 {'{created_at}'} - 提交时间<br/>
+                        {'{detail_link}'} - 留言详情链接（带会话验证）
                       </div>
                     }
                   >

@@ -9,10 +9,23 @@ import {
 export async function GET(request: NextRequest) {
   try {
     const { searchParams } = new URL(request.url)
+    const id = searchParams.get('id')
     const page = parseInt(searchParams.get('page') || '1')
     const pageSize = parseInt(searchParams.get('pageSize') || '20')
     const status = searchParams.get('status') || ''
 
+    // 处理单个留言详情请求
+    if (id) {
+      const message = jsonDb.findOne('messages', { id: parseInt(id) })
+      
+      if (!message) {
+        return badRequestResponse("留言不存在")
+      }
+
+      return successResponse(message)
+    }
+
+    // 处理留言列表请求
     let messages = jsonDb.getAll('messages')
     
     if (status) {
