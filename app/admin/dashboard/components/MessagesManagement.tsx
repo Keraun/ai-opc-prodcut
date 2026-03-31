@@ -326,20 +326,9 @@ export function MessagesManagement() {
       ),
     },
     {
-      title: '设备信息',
-      key: 'device',
-      width: 130,
-      render: (_: any, record: Message) => (
-        <div className={styles.productInfo}>
-          <div className={styles.productName} style={{ fontSize: 12 }}>{record.os} {record.osVersion}</div>
-          <div className={styles.productDesc} style={{ fontSize: 11 }}>{record.deviceModel}</div>
-        </div>
-      ),
-    },
-    {
       title: '大模型',
       key: 'llmModel',
-      width: 100,
+      width: 80,
       render: (_: any, record: Message) => (
         <div className={styles.productInfo}>
           <div className={styles.productName} style={{ fontSize: 12 }}>{record.llmModel || '-'}</div>
@@ -355,6 +344,7 @@ export function MessagesManagement() {
         <Select
           value={status}
           onChange={(newStatus) => handleStatusChange(record, newStatus)}
+          allowClear
           style={{ width: 110 }}
         >
           {statusOptions.map(opt => (
@@ -369,10 +359,10 @@ export function MessagesManagement() {
       title: '备注',
       dataIndex: 'note',
       key: 'note',
-      width: 180,
+      width: 160,
       render: (text: string) => (
         <div style={{ 
-          maxWidth: 180, 
+          maxWidth: 160, 
           display: '-webkit-box',
           WebkitLineClamp: 3,
           WebkitBoxOrient: 'vertical',
@@ -533,6 +523,7 @@ export function MessagesManagement() {
                       <Select
                         value={editStatus}
                         onChange={setEditStatus}
+                        allowClear
                         style={{ width: '100%' }}
                       >
                         {statusOptions.map(opt => (
@@ -549,6 +540,7 @@ export function MessagesManagement() {
                         onChange={setEditNote}
                         placeholder="添加处理备注..."
                         rows={3}
+                        allowClear
                       />
                     </div>
                     <div className={styles.detailItem}>
@@ -611,9 +603,9 @@ export function MessagesManagement() {
                   <FormItem
                     label="PushPlus Token"
                     field="token"
-                    extra="PushPlus的Token，用于发送消息。获取方式：登录PushPlus官网(https://www.pushplus.plus/)，注册账号后在个人中心获取Token。"
+                    extra={<div>PushPlus的Token，用于发送消息。获取方式：登录PushPlus官网(<a style={{ color: 'blue' }}  href='https://www.pushplus.plus/' target='_blank'>https://www.pushplus.plus/</a>)，注册账号后在个人中心获取Token。</div>}
                   >
-                    <Input.Password placeholder="请输入PushPlus Token" style={{ width: '100%' }} />
+                    <Input.Password placeholder="请输入PushPlus Token" allowClear style={{ width: '100%' }} />
                   </FormItem>
 
                   <FormItem
@@ -653,6 +645,7 @@ export function MessagesManagement() {
                     <Input.TextArea
                       placeholder="请输入通知模板"
                       rows={15}
+                      allowClear
                       style={{ width: '100%', minHeight: '400px', fontFamily: 'monospace' }}
                     />
                   </FormItem>

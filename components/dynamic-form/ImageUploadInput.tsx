@@ -75,6 +75,7 @@ export function ImageUploadInput({
           onChange={handleInputChange}
           placeholder={placeholder}
           disabled={disabled || uploading}
+          allowClear
           className={styles.input}
           prefix={<ImageIcon size={16} className={styles.inputIcon} />}
         />

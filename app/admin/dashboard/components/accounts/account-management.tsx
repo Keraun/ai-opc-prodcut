@@ -113,6 +113,7 @@ export function AccountManagement() {
               value={newAccount.username} 
               onChange={(value) => setNewAccount({...newAccount, username: value})}
               placeholder="请输入用户名"
+              allowClear
             />
           </Form.Item>
           <Form.Item label="密码" required>
@@ -121,6 +122,7 @@ export function AccountManagement() {
               value={newAccount.password} 
               onChange={(value) => setNewAccount({...newAccount, password: value})}
               placeholder="请输入密码"
+              allowClear
             />
           </Form.Item>
           <Form.Item label="邮箱">
@@ -128,6 +130,7 @@ export function AccountManagement() {
               value={newAccount.email} 
               onChange={(value) => setNewAccount({...newAccount, email: value})}
               placeholder="请输入邮箱"
+              allowClear
             />
           </Form.Item>
           <Form.Item label="备注">
@@ -135,6 +138,7 @@ export function AccountManagement() {
               value={newAccount.remark} 
               onChange={(value) => setNewAccount({...newAccount, remark: value})}
               placeholder="请输入备注"
+              allowClear
             />
           </Form.Item>
         </Form>
@@ -162,6 +166,7 @@ export function AccountManagement() {
               value={editedAccount?.password} 
               onChange={(value) => setEditedAccount({...editedAccount, password: value})}
               placeholder="请输入新密码"
+              allowClear
             />
           </Form.Item>
           <Form.Item label="邮箱">
@@ -169,6 +174,7 @@ export function AccountManagement() {
               value={editedAccount?.email} 
               onChange={(value) => setEditedAccount({...editedAccount, email: value})}
               placeholder="请输入邮箱"
+              allowClear
             />
           </Form.Item>
           <Form.Item label="备注">
@@ -176,6 +182,7 @@ export function AccountManagement() {
               value={editedAccount?.remark} 
               onChange={(value) => setEditedAccount({...editedAccount, remark: value})}
               placeholder="请输入备注"
+              allowClear
             />
           </Form.Item>
         </Form>
@@ -210,6 +217,7 @@ export function AccountManagement() {
               value={superAdminPasswordForAction} 
               onChange={(value) => setSuperAdminPasswordForAction(value)}
               placeholder="请输入超级管理员密码进行验证"
+              allowClear
             />
           </Form.Item>
         </Form>

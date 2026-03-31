@@ -30,6 +30,7 @@ export function renderField(
         <Input
           placeholder={ui.placeholder}
           disabled={ui.readonly}
+          allowClear
           style={{ width: '100%' }}
         />
       )
@@ -39,6 +40,7 @@ export function renderField(
         <Input.TextArea
           placeholder={ui.placeholder}
           rows={ui.rows || 10}
+          allowClear
           style={{ width: '100%', minHeight: '400px' }}
         />
       )
@@ -55,6 +57,7 @@ export function renderField(
       return (
         <Select
           placeholder={ui.placeholder}
+          allowClear
           style={{ width: '100%' }}
         >
           {(ui.options || fieldSchema.enum || []).map(item => (
@@ -161,6 +164,7 @@ export function renderField(
         <Input
           type="color"
           placeholder={ui.placeholder}
+          allowClear
           style={{ width: '100%', height: '40px' }}
         />
       )
@@ -176,6 +180,7 @@ export function renderField(
       return (
         <Input
           placeholder={ui.placeholder}
+          allowClear
           style={{ width: '100%' }}
         />
       )
@@ -198,6 +203,7 @@ function renderArraySubField(
           value={value || ''}
           onChange={onChange}
           disabled={ui.readonly}
+          allowClear
           style={{ width: '100%' }}
         />
       )
@@ -209,6 +215,7 @@ function renderArraySubField(
           value={value || ''}
           onChange={onChange}
           rows={ui.rows || 4}
+          allowClear
           style={{ width: '100%' }}
         />
       )
@@ -219,6 +226,7 @@ function renderArraySubField(
           placeholder={ui.placeholder || `选择 ${subField.title}`}
           value={value}
           onChange={onChange}
+          allowClear
           style={{ width: '100%' }}
         >
           {(ui.options || subField.enum || []).map(item => (
@@ -268,6 +276,7 @@ function renderArraySubField(
           placeholder={ui.placeholder}
           value={value || ''}
           onChange={onChange}
+          allowClear
           style={{ width: '100%', height: '40px' }}
         />
       )
@@ -287,6 +296,7 @@ function renderArraySubField(
           placeholder={ui.placeholder || `输入 ${subField.title}`}
           value={value || ''}
           onChange={onChange}
+          allowClear
           style={{ width: '100%' }}
         />
       )
@@ -332,6 +342,7 @@ export function renderArrayField(
               value={typeof item === 'string' ? item : ''}
               onChange={(value) => updateArrayItem(fieldName, index, value)}
               placeholder={`输入第 ${index + 1} 项`}
+              allowClear
               style={{ flex: 1 }}
             />
           )}
