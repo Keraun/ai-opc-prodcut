@@ -43,9 +43,9 @@
   },
   {
     "config_key": "notification",
-    "config_value": "{\"pushplus\":{\"enabled\":true,\"token\":\"232131\",\"wechatEnabled\":true,\"feishuEnabled\":true},\"notificationTemplate\":\"【重要通知】新留言提醒\\n\\n尊敬的管理员：\\n\\n您收到了一条新的用户留言，详情如下：\\n\\n用户信息\\n姓名：{name}\\n联系电话：{phone || '未提供'}\\n微信：{wechat || '未提供'}\\n邮箱：{email || '未提供'}\\n\\n留言内容\\n{message}\\n\\n设备信息\\nIP地址：{ip}\\n地区：{region || '未知'}\\n操作系统：{os} {osVersion}\\n浏览器：{browser} {browserVersion}\\n设备：{deviceModel}\\n\\n提交时间：{created_at}\\n\\n请及时登录管理后台处理此留言。\\n\\n系统自动发送，请勿回复。\"}",
+    "config_value": "{\"pushplus\":{\"enabled\":true,\"token\":\"20169976d69346eb8c82162c74e0df10\",\"wechatEnabled\":true,\"feishuEnabled\":true},\"email\":{\"enabled\":true},\"sms\":{\"enabled\":false},\"clawbot\":{\"enabled\":false,\"appId\":\"\",\"appSecret\":\"\",\"templateId\":\"\",\"openId\":\"\"},\"notificationTemplate\":\"【新留言通知】\\n\\n用户信息：\\n姓名：{name}\\n电话：{phone}\\n微信：{wechat}\\n邮箱：{email}\\n\\n留言内容：\\n{message}\\n\\n设备信息：\\nIP地址：{ip}\\n地区：{region || ''}\\n操作系统：{os} {osVersion}\\n浏览器：{browser} {browserVersion}\\n设备机型：{deviceModel}\\n\\n提交时间：{created_at}\\n\\n查看详情：{detail_link}\\n\\n请及时处理！\"}",
     "created_at": "2026-03-31T03:50:40.707Z",
-    "updated_at": "2026-03-31T04:39:51.026Z",
+    "updated_at": "2026-03-31T05:37:25.387Z",
     "id": 8
   }
 ]

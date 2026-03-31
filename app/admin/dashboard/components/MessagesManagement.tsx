@@ -41,6 +41,22 @@ interface NotificationConfig {
     wechatEnabled?: boolean
     feishuEnabled?: boolean
   }
+  email?: {
+    enabled?: boolean
+    smtpHost?: string
+    smtpPort?: number
+    smtpUsername?: string
+    smtpPassword?: string
+    fromEmail?: string
+    toEmail?: string
+  }
+  clawbot?: {
+    enabled?: boolean
+    appId?: string
+    appSecret?: string
+    templateId?: string
+    openId?: string
+  }
   notificationTemplate?: string
 }
 
@@ -134,6 +150,13 @@ export function MessagesManagement() {
         token: configs.notification?.pushplus?.token || '',
         wechatEnabled: configs.notification?.pushplus?.wechatEnabled || false,
         feishuEnabled: configs.notification?.pushplus?.feishuEnabled || false,
+        emailEnabled: configs.notification?.email?.enabled || false,
+        smsEnabled: configs.notification?.sms?.enabled || false,
+        clawbotEnabled: configs.notification?.clawbot?.enabled || false,
+        clawbotAppId: configs.notification?.clawbot?.appId || '',
+        clawbotAppSecret: configs.notification?.clawbot?.appSecret || '',
+        clawbotTemplateId: configs.notification?.clawbot?.templateId || '',
+        clawbotOpenId: configs.notification?.clawbot?.openId || '',
         notificationTemplate: configs.notification?.notificationTemplate || ''
       })
     }
@@ -244,6 +267,19 @@ export function MessagesManagement() {
           token: values.token,
           wechatEnabled: values.wechatEnabled,
           feishuEnabled: values.feishuEnabled
+        },
+        email: {
+          enabled: values.emailEnabled
+        },
+        sms: {
+          enabled: values.smsEnabled
+        },
+        clawbot: {
+          enabled: values.clawbotEnabled,
+          appId: values.clawbotAppId,
+          appSecret: values.clawbotAppSecret,
+          templateId: values.clawbotTemplateId,
+          openId: values.clawbotOpenId
         },
         notificationTemplate: values.notificationTemplate
       }
@@ -630,6 +666,103 @@ export function MessagesManagement() {
                   </FormItem>
                 </div>
 
+                {/* 邮件配置区域 */}
+                <div style={{ marginTop: 24, paddingTop: 24, borderTop: '1px solid #e5e7eb' }}>
+                  <h4 style={{ marginBottom: 16, fontSize: 16, fontWeight: 600 }}>邮件配置</h4>
+                  
+                  <FormItem
+                    label="启用邮件通知"
+                    field="emailEnabled"
+                    triggerPropName="checked"
+                    extra={
+                      <div style={{ marginTop: 8 }}>
+                        使用 PushPlus 邮件渠道发送通知，需要先在 PushPlus 平台配置邮箱
+                        <a 
+                          href="https://www.pushplus.plus/doc/extend/mail.html" 
+                          target="_blank" 
+                          rel="noopener noreferrer"
+                          style={{ marginLeft: 8, color: '#165DFF' }}
+                        >
+                          查看配置教程
+                        </a>
+                      </div>
+                    }
+                  >
+                    <Switch />
+                  </FormItem>
+                </div>
+
+                {/* 短信配置区域 */}
+                <div style={{ marginTop: 24, paddingTop: 24, borderTop: '1px solid #e5e7eb' }}>
+                  <h4 style={{ marginBottom: 16, fontSize: 16, fontWeight: 600 }}>短信配置</h4>
+                  
+                  <FormItem
+                    label="启用短信通知"
+                    field="smsEnabled"
+                    triggerPropName="checked"
+                    extra={
+                      <div style={{ marginTop: 8 }}>
+                        使用 PushPlus 短信渠道发送通知，需要先在 PushPlus 平台配置手机号
+                        <a 
+                          href="https://www.pushplus.plus/doc/extend/mail.html" 
+                          target="_blank" 
+                          rel="noopener noreferrer"
+                          style={{ marginLeft: 8, color: '#165DFF' }}
+                        >
+                          查看配置教程
+                        </a>
+                      </div>
+                    }
+                  >
+                    <Switch />
+                  </FormItem>
+                </div>
+
+                {/* 微信ClawBot配置区域 */}
+                <div style={{ marginTop: 24, paddingTop: 24, borderTop: '1px solid #e5e7eb' }}>
+                  <h4 style={{ marginBottom: 16, fontSize: 16, fontWeight: 600 }}>微信ClawBot配置</h4>
+                  
+                  <FormItem
+                    label="启用微信ClawBot通知"
+                    field="clawbotEnabled"
+                    triggerPropName="checked"
+                  >
+                    <Switch />
+                  </FormItem>
+
+                  <FormItem
+                    label="App ID"
+                    field="clawbotAppId"
+                    extra="微信公众号的App ID"
+                  >
+                    <Input placeholder="请输入App ID" allowClear style={{ width: '100%' }} />
+                  </FormItem>
+
+                  <FormItem
+                    label="App Secret"
+                    field="clawbotAppSecret"
+                    extra="微信公众号的App Secret"
+                  >
+                    <Input.Password placeholder="请输入App Secret" allowClear style={{ width: '100%' }} />
+                  </FormItem>
+
+                  <FormItem
+                    label="模板ID"
+                    field="clawbotTemplateId"
+                    extra="微信模板消息的模板ID"
+                  >
+                    <Input placeholder="请输入模板ID" allowClear style={{ width: '100%' }} />
+                  </FormItem>
+
+                  <FormItem
+                    label="Open ID"
+                    field="clawbotOpenId"
+                    extra="接收消息的用户Open ID"
+                  >
+                    <Input placeholder="请输入Open ID" allowClear style={{ width: '100%' }} />
+                  </FormItem>
+                </div>
+
                 {/* 通知模板区域 */}
                 <div style={{ marginTop: 24, paddingTop: 24, borderTop: '1px solid #e5e7eb' }}>
                   <FormItem
@@ -695,6 +828,19 @@ export function MessagesManagement() {
                       wechatEnabled: values.wechatEnabled,
                       feishuEnabled: values.feishuEnabled
                     },
+                    email: {
+                      enabled: values.emailEnabled
+                    },
+                    sms: {
+                      enabled: values.smsEnabled
+                    },
+                    clawbot: {
+                      enabled: values.clawbotEnabled,
+                      appId: values.clawbotAppId,
+                      appSecret: values.clawbotAppSecret,
+                      templateId: values.clawbotTemplateId,
+                      openId: values.clawbotOpenId
+                    },
                     notificationTemplate: values.notificationTemplate
                   }, null, 2))
                   toast.success('已复制到剪贴板')
@@ -719,6 +865,19 @@ export function MessagesManagement() {
                   token: notificationForm.getFieldValue('token'),
                   wechatEnabled: notificationForm.getFieldValue('wechatEnabled'),
                   feishuEnabled: notificationForm.getFieldValue('feishuEnabled')
+                },
+                email: {
+                  enabled: notificationForm.getFieldValue('emailEnabled')
+                },
+                sms: {
+                  enabled: notificationForm.getFieldValue('smsEnabled')
+                },
+                clawbot: {
+                  enabled: notificationForm.getFieldValue('clawbotEnabled'),
+                  appId: notificationForm.getFieldValue('clawbotAppId'),
+                  appSecret: notificationForm.getFieldValue('clawbotAppSecret'),
+                  templateId: notificationForm.getFieldValue('clawbotTemplateId'),
+                  openId: notificationForm.getFieldValue('clawbotOpenId')
                 },
                 notificationTemplate: notificationForm.getFieldValue('notificationTemplate')
               }, null, 2)}
