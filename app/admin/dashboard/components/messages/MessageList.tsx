@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react"
 import { CommonTable, ActionButton } from "../index"
 import { MessageSquare, Phone, Mail, Eye } from "lucide-react"
-import { Select, Space, Popconfirm, Modal, Input, Tooltip } from '@arco-design/web-react'
+import { Select, Space, Popconfirm, Modal, Input, Tooltip, Tag } from '@arco-design/web-react'
 import styles from "../BaseManagement.module.css"
 import { toast } from "sonner"
 
@@ -256,20 +256,40 @@ export function MessageList({ onStatusChange }: MessageListProps) {
       dataIndex: 'status',
       key: 'status',
       width: 130,
-      render: (status: string, record: Message) => (
-        <Select
-          value={status}
-          onChange={(newStatus) => handleStatusChange(record, newStatus)}
-          allowClear
-          style={{ width: 110 }}
-        >
-          {statusOptions.map(opt => (
-            <Select.Option key={opt.value} value={opt.value}>
-              {opt.label}
-            </Select.Option>
-          ))}
-        </Select>
-      ),
+      render: (status: string, record: Message) => {
+        const statusColorMap = {
+          pending: 'warning',
+          processing: 'arcoblue',
+          completed: 'success',
+          ignored: 'gray'
+        }
+        const statusLabelMap = {
+          pending: '待处理',
+          processing: '处理中',
+          completed: '已完成',
+          ignored: '已忽略'
+        }
+        
+        return (
+          <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+            <Tag color={statusColorMap[status as keyof typeof statusColorMap] || 'gray'}>
+              {statusLabelMap[status as keyof typeof statusLabelMap] || status}
+            </Tag>
+            <Select
+              value={status}
+              onChange={(newStatus) => handleStatusChange(record, newStatus)}
+              allowClear
+              style={{ width: 110 }}
+            >
+              {statusOptions.map(opt => (
+                <Select.Option key={opt.value} value={opt.value}>
+                  {opt.label}
+                </Select.Option>
+              ))}
+            </Select>
+          </div>
+        )
+      },
     },
     {
       title: '备注',

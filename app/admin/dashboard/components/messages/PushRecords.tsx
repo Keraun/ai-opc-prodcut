@@ -50,6 +50,50 @@ const statusIconMap: Record<string, React.ReactNode> = {
   retrying: <Clock size={14} />
 }
 
+const formatHTML = (html: string): string => {
+  let formatted = html
+  let indentLevel = 0
+  let result = ''
+  let inTag = false
+  let currentLine = ''
+
+  for (let i = 0; i < formatted.length; i++) {
+    const char = formatted[i]
+    
+    if (char === '<' && !inTag) {
+      inTag = true
+      if (currentLine.trim()) {
+        result += '  '.repeat(indentLevel) + currentLine + '\n'
+        currentLine = ''
+      }
+      currentLine += char
+    } else if (char === '>' && inTag) {
+      inTag = false
+      currentLine += char
+      const lineContent = currentLine
+      result += '  '.repeat(indentLevel) + currentLine + '\n'
+      currentLine = ''
+      
+      // Check if this is a closing tag
+      if (lineContent.includes('</')) {
+        indentLevel = Math.max(0, indentLevel - 1)
+      }
+      // Check if this is an opening tag that doesn't close itself
+      else if (!lineContent.includes('/>') && !lineContent.includes('</')) {
+        indentLevel++
+      }
+    } else {
+      currentLine += char
+    }
+  }
+  
+  if (currentLine.trim()) {
+    result += '  '.repeat(indentLevel) + currentLine + '\n'
+  }
+  
+  return result
+}
+
 export function PushRecords() {
   const [records, setRecords] = useState<PushRecord[]>([])
   const [loading, setLoading] = useState(true)
@@ -335,14 +379,30 @@ export function PushRecords() {
               {currentRecord?.templateType === 'html' ? (
                 <div>
                   <div style={{ marginBottom: '16px' }}>
-                    <h5 style={{ marginBottom: '8px', fontSize: '14px', fontWeight: '600' }}>原始HTML内容</h5>
-                    <div className={styles.messageContent} style={{ whiteSpace: 'pre-wrap', backgroundColor: '#f5f5f5', padding: '12px', borderRadius: '4px', fontSize: '12px', fontFamily: 'monospace', maxHeight: '200px', overflow: 'auto' }}>
-                      {currentRecord?.content}
+                    <h5 style={{ marginBottom: '8px', fontSize: '14px', fontWeight: '600' }}>格式化HTML内容</h5>
+                    <div className={styles.messageContent} style={{ 
+                      whiteSpace: 'pre-wrap', 
+                      backgroundColor: '#f5f5f5', 
+                      padding: '12px', 
+                      borderRadius: '4px', 
+                      fontSize: '12px', 
+                      fontFamily: 'monospace', 
+                      maxHeight: '300px', 
+                      overflow: 'auto',
+                      lineHeight: '1.5'
+                    }}>
+                      {formatHTML(currentRecord?.content || '')}
                     </div>
                   </div>
                   <div>
                     <h5 style={{ marginBottom: '8px', fontSize: '14px', fontWeight: '600' }}>预览效果</h5>
-                    <div className={styles.messageContent} style={{ border: '1px solid #e8e8e8', borderRadius: '4px', padding: '16px' }}>
+                    <div className={styles.messageContent} style={{ 
+                      border: '1px solid #e8e8e8', 
+                      borderRadius: '4px', 
+                      padding: '16px',
+                      backgroundColor: '#ffffff',
+                      minHeight: '200px'
+                    }}>
                       <div dangerouslySetInnerHTML={{ __html: currentRecord?.content }} />
                     </div>
                   </div>
