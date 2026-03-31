@@ -10,7 +10,8 @@ import {
   Users, 
   Settings,
   Globe,
-  Image
+  Image,
+  BookOpen
 } from "lucide-react"
 import styles from "../../dashboard.module.css"
 
@@ -38,6 +39,7 @@ const MENU_STRUCTURE: MenuItem[] = [
   { id: 'theme', label: '主题管理', icon: Palette },
   { id: 'accounts', label: '账号管理', icon: Users },
   { id: 'system', label: '系统管理', icon: Settings },
+  { id: 'project-guide', label: '项目手册', icon: BookOpen },
 ]
 
 const CATEGORY_ORDER = ['']

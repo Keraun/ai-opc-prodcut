@@ -1,0 +1,181 @@
+.guideContainer {
+  display: flex;
+  gap: 32px;
+  padding: 24px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.toc {
+  flex-shrink: 0;
+  width: 240px;
+  position: sticky;
+  top: 24px;
+  align-self: flex-start;
+  max-height: calc(100vh - 100px);
+  overflow-y: auto;
+  padding: 16px;
+  background: #f8fafc;
+  border-radius: 8px;
+  border: 1px solid #e2e8f0;
+}
+
+.tocTitle {
+  font-size: 1rem;
+  font-weight: 600;
+  color: #1e293b;
+  margin-bottom: 12px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.tocList {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.tocItem {
+  margin-bottom: 4px;
+}
+
+.tocItem button {
+  width: 100%;
+  text-align: left;
+  padding: 6px 8px;
+  border: none;
+  background: none;
+  color: #64748b;
+  font-size: 0.875rem;
+  cursor: pointer;
+  border-radius: 4px;
+  transition: all 0.2s ease;
+}
+
+.tocItem button:hover {
+  color: #1e40af;
+  background: #e0e7ff;
+}
+
+.tocItemLevel3 button {
+  padding-left: 20px;
+  font-size: 0.8125rem;
+}
+
+.tocItemActive button {
+  color: #1e40af;
+  background: #dbeafe;
+  font-weight: 500;
+}
+
+.markdownContent {
+  flex: 1;
+  min-width: 0;
+  line-height: 1.8;
+  color: #1e293b;
+}
+
+.markdownContent h1 {
+  font-size: 2rem;
+  font-weight: 700;
+  margin-top: 0;
+  margin-bottom: 1.5rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 2px solid #e2e8f0;
+  color: #1e40af;
+}
+
+.markdownContent h2 {
+  font-size: 1.5rem;
+  font-weight: 600;
+  margin-top: 2rem;
+  margin-bottom: 1rem;
+  color: #1e40af;
+}
+
+.markdownContent h3 {
+  font-size: 1.25rem;
+  font-weight: 600;
+  margin-top: 1.5rem;
+  margin-bottom: 0.75rem;
+  color: #334155;
+}
+
+.markdownContent p {
+  margin-bottom: 1rem;
+}
+
+.markdownContent ul,
+.markdownContent ol {
+  margin-bottom: 1rem;
+  padding-left: 2rem;
+}
+
+.markdownContent li {
+  margin-bottom: 0.5rem;
+}
+
+.markdownContent code {
+  background: #f1f5f9;
+  padding: 0.2rem 0.4rem;
+  border-radius: 4px;
+  font-family: 'Geist Mono', monospace;
+  font-size: 0.9em;
+  color: #dc2626;
+}
+
+.markdownContent pre {
+  background: #1e293b;
+  color: #e2e8f0;
+  padding: 1rem;
+  border-radius: 8px;
+  overflow-x: auto;
+  margin-bottom: 1rem;
+}
+
+.markdownContent pre code {
+  background: transparent;
+  color: inherit;
+  padding: 0;
+}
+
+.markdownContent a {
+  color: #1e40af;
+  text-decoration: none;
+}
+
+.markdownContent a:hover {
+  text-decoration: underline;
+}
+
+.markdownContent blockquote {
+  border-left: 4px solid #1e40af;
+  padding-left: 1rem;
+  margin: 1rem 0;
+  color: #64748b;
+  font-style: italic;
+}
+
+.markdownContent table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 1rem;
+}
+
+.markdownContent th,
+.markdownContent td {
+  border: 1px solid #e2e8f0;
+  padding: 0.5rem 1rem;
+  text-align: left;
+}
+
+.markdownContent th {
+  background: #f8fafc;
+  font-weight: 600;
+}
+
+.markdownContent img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 8px;
+}

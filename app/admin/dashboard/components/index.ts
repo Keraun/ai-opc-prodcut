@@ -41,3 +41,6 @@ export { ImageManagement } from './ImageManagement'
 
 // Messages Management
 export { MessagesManagement } from './MessagesManagement'
+
+// Project Guide
+export { ProjectGuide } from './ProjectGuide'

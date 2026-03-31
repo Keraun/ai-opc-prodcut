@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation"
 import { toast } from "sonner"
 import { useAuth } from "./common/hooks/useAuth"
 import { useConfig } from "./common/hooks/useConfig"
-import { Sidebar, Header } from "./components"
+import { Sidebar, Header, ProjectGuide } from "./components"
 import { ConfigFormEditor } from './components/config-editor/ConfigFormEditor'
 import { ConfigEditor } from './modules/config/config-editor'
 import { 
@@ -111,6 +111,8 @@ export default function AdminDashboardPage() {
         return <AccountManager />
       case 'system':
         return <SystemManager />
+      case 'project-guide':
+        return <ProjectGuide />
       default:
         return <PageManager />
     }
