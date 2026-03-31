@@ -27,7 +27,7 @@ interface PageListData {
 }
 
 export function getPageListData(): PageListData {
-  const pageListPath = path.join(process.cwd(), 'database', 'runtime', 'page-list.json')
+  const pageListPath = path.join(process.cwd(), 'database', 'runtime', 'page_list.json')
   
   try {
     if (fs.existsSync(pageListPath)) {

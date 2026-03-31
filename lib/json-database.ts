@@ -12,14 +12,14 @@ class JsonDatabase {
   private fileMap: Record<string, string> = {
     accounts: 'accounts.json',
     system_config: 'system_config.json',
-    system_logs: 'system_logs.json',
     theme_config: 'theme_config.json',
     pages: 'pages.json',
     module_registry: 'module_registry.json',
     page_modules: 'page_modules.json',
     articles: 'articles.json',
     products: 'products.json',
-    messages: 'messages.json'
+    messages: 'messages.json',
+    push_records: 'push_records.json'
   }
   private options: JsonDatabaseOptions
 

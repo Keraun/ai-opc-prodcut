@@ -43,7 +43,7 @@ function getPathMapping(configType: string): PathMapping {
     'theme': { dir: 'theme', prefix: 'theme-config' },
     'account': { dir: 'system', prefix: 'system-account' },
     'token': { dir: 'system', prefix: 'system-token' },
-    'system-logs': { dir: 'system', prefix: 'system-logs' },
+
     'verification-codes': { dir: 'system', prefix: 'system-verification-codes' },
     'feishu-app': { dir: 'system', prefix: 'system-feishu-app' },
     'page-list': { dir: '', prefix: 'page-list' },
@@ -99,20 +99,7 @@ export function readConfig(configType: string): any {
       return config ? { superAdminToken: config.config_value } : { superAdminToken: '' }
     }
     
-    if (configType === 'system-logs') {
-      const logs = jsonDb.getAll('system_logs')
-      return logs
-        .sort((a: any, b: any) => b.id - a.id)
-        .map((log: any) => ({
-          id: log.log_id,
-          username: log.username,
-          type: log.type,
-          description: log.description,
-          ip: log.ip,
-          timestamp: log.timestamp,
-          details: log.details ? JSON.parse(log.details) : null
-        }))
-    }
+
     
     if (configType === 'site' || configType === 'site-seo') {
       const config = jsonDb.findOne('system_config', { config_key: 'site_config' })
@@ -360,23 +347,7 @@ export function writeConfig(configType: string, data: any): void {
       return
     }
     
-    if (configType === 'system-logs') {
-      jsonDb.clearTable('system_logs')
-      
-      for (const log of data) {
-        jsonDb.insert('system_logs', {
-          log_id: log.id,
-          username: log.username || null,
-          type: log.type,
-          description: log.description || null,
-          ip: log.ip || null,
-          timestamp: log.timestamp || null,
-          details: log.details ? JSON.stringify(log.details) : null,
-          created_at: new Date().toISOString()
-        })
-      }
-      return
-    }
+
     
     if (configType === 'site' || configType === 'site-seo') {
       const existing = jsonDb.findOne('system_config', { config_key: 'site_config' })
@@ -716,7 +687,7 @@ export function writeSystemConfig(configName: string, data: any): void {
 }
 
 export function listSystemConfigs(): string[] {
-  return ['account', 'token', 'feishu-app', 'system-logs', 'theme', 'notification']
+  return ['account', 'token', 'feishu-app', 'theme', 'notification']
 }
 
 export function readAllConfigs(): Record<string, any> {

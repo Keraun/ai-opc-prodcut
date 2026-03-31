@@ -19,7 +19,7 @@ interface PageInfo {
 }
 
 function getPageList(): PageInfo[] {
-  const pageListPath = getRuntimePath('page-list.json')
+  const pageListPath = getRuntimePath('page_list.json')
   
   try {
     if (fs.existsSync(pageListPath)) {
@@ -27,7 +27,7 @@ function getPageList(): PageInfo[] {
       return pageListData.pages || []
     }
   } catch (error) {
-    console.error('Error reading page-list.json:', error)
+    console.error('Error reading page_list.json:', error)
   }
   
   return []

@@ -37,10 +37,10 @@ function syncPageListJson() {
       updatedAt: new Date().toISOString()
     }
     
-    const pageListPath = path.join(process.cwd(), 'database', 'runtime', 'page-list.json')
+    const pageListPath = path.join(process.cwd(), 'database', 'runtime', 'page_list.json')
     fs.writeFileSync(pageListPath, JSON.stringify(pageListData, null, 2), 'utf-8')
   } catch (error) {
-    console.error('Error syncing page-list.json:', error)
+    console.error('Error syncing page_list.json:', error)
   }
 }
 

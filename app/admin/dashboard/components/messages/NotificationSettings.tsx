@@ -152,7 +152,9 @@ export function NotificationSettings() {
               extra={
                 <div>启用后才能使用PushPlus相关的通知渠道,需要你在 <a href="https://www.pushplus.plus/" style={{ color: '#165DFF' }} target="_blank">pushplus </a> 网站注册账号,并在微信服务号 <b style={{ color: 'red' }}>pushplus推送加</b> 绑定你个人微信,完成 <b style={{ color: 'red' }}>实名验证</b>(3块钱费用)才可正常推送消息</div>
               }
-
+              layout="horizontal"
+              labelCol={{ span: 8 }}
+              wrapperCol={{ span: 16 }}
             >
               <Switch />
             </FormItem>
@@ -161,6 +163,9 @@ export function NotificationSettings() {
               label="PushPlus Token"
               field="token"
               extra={<div>PushPlus的Token，用于发送消息。获取方式：登录PushPlus官网(<a style={{ color: 'blue' }} href='https://www.pushplus.plus/' target='_blank'>https://www.pushplus.plus/</a>)，注册账号后在个人中心获取Token。</div>}
+              layout="horizontal"
+              labelCol={{ span: 8 }}
+              wrapperCol={{ span: 16 }}
             >
               <Input.Password placeholder="请输入PushPlus Token" allowClear style={{ width: '100%' }} />
             </FormItem>
