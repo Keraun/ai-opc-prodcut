@@ -1,5 +1,6 @@
 "use client"
 
+import React from 'react'
 import { Card, Table, Spin, Empty } from "@arco-design/web-react"
 import type { TableColumnProps } from "@arco-design/web-react"
 import styles from "./CommonTable.module.css"
@@ -64,21 +65,21 @@ export function CommonTable<T extends Record<string, any> = any>({
   )
 }
 
-export function ActionButton({ 
-  children,
-  type = 'default',
-  onClick,
-  disabled = false,
-  icon,
-  className = ''
-}: { 
+export const ActionButton = React.forwardRef<HTMLButtonElement, {
   children?: React.ReactNode
   type?: 'default' | 'primary' | 'success' | 'warning' | 'danger'
   onClick?: () => void
   disabled?: boolean
   icon?: React.ReactNode
   className?: string
-}) {
+}>(({ 
+  children,
+  type = 'default',
+  onClick,
+  disabled = false,
+  icon,
+  className = ''
+}, ref) => {
   const typeClass = {
     default: '',
     primary: styles.actionButtonPrimary,
@@ -89,6 +90,7 @@ export function ActionButton({
 
   return (
     <button
+      ref={ref}
       onClick={onClick}
       disabled={disabled}
       className={`${styles.actionButton} ${typeClass} ${disabled ? styles.actionButtonDisabled : ''} ${className}`}
@@ -97,4 +99,6 @@ export function ActionButton({
       {children}
     </button>
   )
-}
+})
+
+ActionButton.displayName = 'ActionButton'

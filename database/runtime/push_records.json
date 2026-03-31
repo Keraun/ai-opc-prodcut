@@ -31,5 +31,38 @@
     "created_at": "2026-03-31T11:52:49.043Z",
     "updated_at": "2026-03-31T11:52:49.043Z",
     "id": 3
+  },
+  {
+    "messageId": 24,
+    "channel": "sms",
+    "status": "success",
+    "content": "<div style=\"font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif; line-height: 1.6; color: #333; background-color: #f8f9fa; border-radius: 8px; padding: 20px; border: 1px solid #e9ecef;\">\n<p>【新留言通知】</p><p>用户信息：<br/>姓名：keraun<br/>电话：15869165232<br/>微信：1313<br/>邮箱：915064510@qq.com<br/>偏好联系方式：wechat</p><p>留言内容：<br/>e131</p><p>大模型信息：<br/>使用模型：-</p><p>设备信息：<br/>IP地址：::1<br/>地区：-<br/>操作系统：macOS 10.15.7<br/>浏览器：Chrome 146.0.0.0<br/>设备机型：Mac</p><p>提交时间：2026/03/31 20:08:00</p><p><a href=\"http://localhost:3000/admin/dashboard/messages/24?token=123456\" style=\"color: #165DFF; text-decoration: underline;\">查看详情</a></p><p>请及时处理！</p>\n</div>",
+    "response": "{\"code\":888,\"msg\":\"积分不足\",\"data\":\"积分不足\"}",
+    "error": "",
+    "created_at": "2026-03-31T12:08:00.258Z",
+    "updated_at": "2026-03-31T12:08:00.258Z",
+    "id": 4
+  },
+  {
+    "messageId": 24,
+    "channel": "mail",
+    "status": "success",
+    "content": "<div style=\"font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif; line-height: 1.6; color: #333; background-color: #f8f9fa; border-radius: 8px; padding: 20px; border: 1px solid #e9ecef;\">\n<p>【新留言通知】</p><p>用户信息：<br/>姓名：keraun<br/>电话：15869165232<br/>微信：1313<br/>邮箱：915064510@qq.com<br/>偏好联系方式：wechat</p><p>留言内容：<br/>e131</p><p>大模型信息：<br/>使用模型：-</p><p>设备信息：<br/>IP地址：::1<br/>地区：-<br/>操作系统：macOS 10.15.7<br/>浏览器：Chrome 146.0.0.0<br/>设备机型：Mac</p><p>提交时间：2026/03/31 20:08:00</p><p><a href=\"http://localhost:3000/admin/dashboard/messages/24?token=123456\" style=\"color: #165DFF; text-decoration: underline;\">查看详情</a></p><p>请及时处理！</p>\n</div>",
+    "response": "{\"code\":200,\"msg\":\"执行成功\",\"data\":\"6ed4c626d6294455b25e0a683a6e99bc\"}",
+    "error": "",
+    "created_at": "2026-03-31T12:08:00.261Z",
+    "updated_at": "2026-03-31T12:08:00.261Z",
+    "id": 5
+  },
+  {
+    "messageId": 24,
+    "channel": "wechat",
+    "status": "success",
+    "content": "<div style=\"font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif; line-height: 1.6; color: #333; background-color: #f8f9fa; border-radius: 8px; padding: 20px; border: 1px solid #e9ecef;\">\n<p>【新留言通知】</p><p>用户信息：<br/>姓名：keraun<br/>电话：15869165232<br/>微信：1313<br/>邮箱：915064510@qq.com<br/>偏好联系方式：wechat</p><p>留言内容：<br/>e131</p><p>大模型信息：<br/>使用模型：-</p><p>设备信息：<br/>IP地址：::1<br/>地区：-<br/>操作系统：macOS 10.15.7<br/>浏览器：Chrome 146.0.0.0<br/>设备机型：Mac</p><p>提交时间：2026/03/31 20:08:00</p><p><a href=\"http://localhost:3000/admin/dashboard/messages/24?token=123456\" style=\"color: #165DFF; text-decoration: underline;\">查看详情</a></p><p>请及时处理！</p>\n</div>",
+    "response": "{\"code\":200,\"msg\":\"执行成功\",\"data\":\"8420b663a6704bb4abeb373ef189f214\"}",
+    "error": "",
+    "created_at": "2026-03-31T12:08:00.261Z",
+    "updated_at": "2026-03-31T12:08:00.261Z",
+    "id": 6
   }
 ]

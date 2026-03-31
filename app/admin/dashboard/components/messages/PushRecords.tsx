@@ -13,6 +13,7 @@ interface PushRecord {
   channel: string
   status: string
   content: string
+  templateType: 'txt' | 'html'
   response: string
   error: string
   created_at: string
@@ -170,12 +171,28 @@ export function PushRecords() {
       },
     },
     {
+      title: '推送类型',
+      dataIndex: 'templateType',
+      key: 'templateType',
+      width: 100,
+      render: (templateType: string) => (
+        <span style={{ 
+          padding: '2px 8px', 
+          borderRadius: 10, 
+          backgroundColor: templateType === 'html' ? '#e6f7ff' : '#f6ffed',
+          color: templateType === 'html' ? '#1890ff' : '#52c41a'
+        }}>
+          {templateType?.toUpperCase()}
+        </span>
+      ),
+    },
+    {
       title: '推送内容',
       dataIndex: 'content',
       key: 'content',
       width: 300,
-      render: (text: string) => (
-        <Tooltip content={text} position="top">
+      render: (_: any, record: PushRecord) => (
+        <Tooltip content={record.content} position="top">
           <div style={{
             maxWidth: 300,
             display: '-webkit-box',
@@ -187,7 +204,7 @@ export function PushRecords() {
             fontSize: '13px',
             cursor: 'pointer'
           }}>
-            {text}
+            {record.templateType === 'html' ? 'HTML格式内容' : record.content}
           </div>
         </Tooltip>
       ),
@@ -299,14 +316,42 @@ export function PushRecords() {
                     {statusOptions.find(opt => opt.value === currentRecord.status)?.label || currentRecord.status}
                   </span>
                 </div>
+                <div className={styles.detailItem}>
+                  <span className={styles.detailLabel}>推送类型:</span>
+                  <span className={styles.detailValue} style={{ 
+                    padding: '2px 8px', 
+                    borderRadius: 10, 
+                    backgroundColor: currentRecord?.templateType === 'html' ? '#e6f7ff' : '#f6ffed',
+                    color: currentRecord?.templateType === 'html' ? '#1890ff' : '#52c41a'
+                  }}>
+                    {currentRecord?.templateType?.toUpperCase()}
+                  </span>
+                </div>
               </div>
             </div>
 
             <div className={styles.detailSection}>
               <h4 className={styles.detailTitle}>推送内容</h4>
-              <div className={styles.messageContent} style={{ whiteSpace: 'pre-wrap' }}>
-                {currentRecord.content}
-              </div>
+              {currentRecord?.templateType === 'html' ? (
+                <div>
+                  <div style={{ marginBottom: '16px' }}>
+                    <h5 style={{ marginBottom: '8px', fontSize: '14px', fontWeight: '600' }}>原始HTML内容</h5>
+                    <div className={styles.messageContent} style={{ whiteSpace: 'pre-wrap', backgroundColor: '#f5f5f5', padding: '12px', borderRadius: '4px', fontSize: '12px', fontFamily: 'monospace', maxHeight: '200px', overflow: 'auto' }}>
+                      {currentRecord?.content}
+                    </div>
+                  </div>
+                  <div>
+                    <h5 style={{ marginBottom: '8px', fontSize: '14px', fontWeight: '600' }}>预览效果</h5>
+                    <div className={styles.messageContent} style={{ border: '1px solid #e8e8e8', borderRadius: '4px', padding: '16px' }}>
+                      <div dangerouslySetInnerHTML={{ __html: currentRecord?.content }} />
+                    </div>
+                  </div>
+                </div>
+              ) : (
+                <div className={styles.messageContent} style={{ whiteSpace: 'pre-wrap' }}>
+                  {currentRecord.content}
+                </div>
+              )}
             </div>
 
             {currentRecord.response && (

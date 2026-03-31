@@ -1,6 +1,7 @@
 import type { Metadata } from 'next'
 import { Geist, Geist_Mono } from 'next/font/google'
 import { Analytics } from '@vercel/analytics/next'
+import Script from 'next/script'
 import '@arco-design/web-react/dist/css/arco.css'
 import './globals.css'
 import { ClientLayout } from '@/components/client-layout'
@@ -163,14 +164,16 @@ export default function RootLayout({
         <link rel="manifest" href="/manifest.json" />
         <style dangerouslySetInnerHTML={{ __html: `:root { ${styleString} }` }} />
         {/* 注入首屏初始数据到 window 对象 */}
-        <script
+        <Script
+          strategy="beforeInteractive"
           dangerouslySetInnerHTML={{
             __html: initialDataScript,
           }}
         />
         {/* 百度统计 */}
         {seoConfig?.analytics?.baiduAnalytics && (
-          <script
+          <Script
+            strategy="afterInteractive"
             dangerouslySetInnerHTML={{
               __html: `
                 var _hmt = _hmt || [];
@@ -187,11 +190,12 @@ export default function RootLayout({
         {/* 谷歌统计 */}
         {seoConfig?.analytics?.googleAnalytics && (
           <>
-            <script
-              async
+            <Script
+              strategy="afterInteractive"
               src={`https://www.googletagmanager.com/gtag/js?id=${seoConfig.analytics.googleAnalytics}`}
             />
-            <script
+            <Script
+              strategy="afterInteractive"
               dangerouslySetInnerHTML={{
                 __html: `
                   window.dataLayer = window.dataLayer || [];

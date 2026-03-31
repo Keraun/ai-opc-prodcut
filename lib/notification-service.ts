@@ -184,8 +184,8 @@ class PushPlusChannel implements NotificationChannel {
     // 将连续的 <br/><br/> 转换为段落
     html = html.replace(/<br\/><br\/>/g, '</p><p>')
     
-    // 包装在段落标签中
-    html = `<div style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif; line-height: 1.6; color: #333;">
+    // 包装在美观的容器中
+    html = `<div style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif; line-height: 1.6; color: #333; background-color: #f8f9fa; border-radius: 8px; padding: 20px; border: 1px solid #e9ecef;">
 <p>${html}</p>
 </div>`
     
@@ -324,6 +324,7 @@ export class NotificationService {
             channel: channel.getChannelName(),
             status: result.success ? 'success' : 'failed',
             content: content,
+            templateType: templateType,
             response: result.response || '',
             error: result.error || '',
             created_at: new Date().toISOString(),
@@ -398,8 +399,8 @@ export class NotificationService {
     // 将连续的 <br/><br/> 转换为段落
     html = html.replace(/<br\/><br\/>/g, '</p><p>')
     
-    // 包装在段落标签中
-    html = `<div style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif; line-height: 1.6; color: #333;">
+    // 包装在美观的容器中
+    html = `<div style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif; line-height: 1.6; color: #333; background-color: #f8f9fa; border-radius: 8px; padding: 20px; border: 1px solid #e9ecef;">
 <p>${html}</p>
 </div>`
     
