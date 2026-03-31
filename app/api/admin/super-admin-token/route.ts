@@ -11,45 +11,19 @@ export async function POST(request: NextRequest) {
       return badRequestResponse('密码不能为空')
     }
 
-    jsonDb.reloadTable('accounts')
     jsonDb.reloadTable('system_config')
     
-    const admin = jsonDb.findOne('accounts', { username: authResult.username })
+    const tokenConfig = jsonDb.findOne('system_config', { config_key: 'super_admin_token' })
     
-    if (!admin) {
-      return unauthorizedResponse('用户不存在')
+    if (!tokenConfig || !tokenConfig.config_value) {
+      return unauthorizedResponse('超级管理员口令未设置')
     }
 
-    if (admin.password !== password) {
+    if (tokenConfig.config_value !== password) {
       return unauthorizedResponse('密码错误')
     }
 
-    const tokenConfig = jsonDb.findOne('system_config', { config_key: 'super_admin_token' })
-    
-    let superAdminToken = tokenConfig?.config_value || ''
-    
-    if (!superAdminToken) {
-      const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789'
-      let result = ''
-      for (let i = 0; i < 12; i++) {
-        result += chars.charAt(Math.floor(Math.random() * chars.length))
-      }
-      superAdminToken = result
-      
-      if (tokenConfig) {
-        jsonDb.update('system_config', tokenConfig.id, {
-          config_value: superAdminToken,
-          updated_at: new Date().toISOString()
-        })
-      } else {
-        jsonDb.insert('system_config', {
-          config_key: 'super_admin_token',
-          config_value: superAdminToken,
-          created_at: new Date().toISOString(),
-          updated_at: new Date().toISOString()
-        })
-      }
-    }
+    const superAdminToken = tokenConfig.config_value
 
     return successResponse({ token: superAdminToken })
   })

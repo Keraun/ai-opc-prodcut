@@ -72,7 +72,7 @@ export async function updateAdminConfig(config: Record<string, unknown>): Promis
  */
 export async function exportConfig(): Promise<Blob | null> {
   try {
-    const response = await fetch('/api/admin/config/export')
+    const response = await fetch('/api/admin/config?action=export')
     if (response.ok) {
       return await response.blob()
     }
@@ -93,7 +93,7 @@ export async function importConfig(file: File): Promise<boolean> {
     const formData = new FormData()
     formData.append('file', file)
     
-    const result = await request<void>('/api/admin/config/import', {
+    const result = await request<void>('/api/admin/config?action=import', {
       method: 'POST',
       body: formData,
     })
