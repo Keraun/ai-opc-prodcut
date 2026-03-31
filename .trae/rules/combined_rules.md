@@ -1330,7 +1330,15 @@ pnpm install
 
 ### package.json 配置
 
-在 `package.json` 中添加 `packageManager` 字段，确保团队使用相同的包管理器版本：
+在 `package.json` 中添加 `packageManager` 字段，指定使用 pnpm：
+
+```json
+{
+  "packageManager": "pnpm"
+}
+```
+
+也可以指定具体版本以确保团队使用相同版本：
 
 ```json
 {
