@@ -243,7 +243,7 @@ export default function AdminLoginPage() {
                 </span>
               </h1>
               <p className={styles.description}>
-                专注AI一人公司服务，让配置管理更简单高效
+                让配置管理更简单高效
               </p>
             </div>
 
