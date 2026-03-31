@@ -2900,6 +2900,12 @@
   display: flex;
   flex-direction: column;
   overflow: hidden;
+  transition: flex 0.2s ease;
+}
+
+.editModuleFormPanelFull {
+  flex: 1;
+  border-left: none;
 }
 
 .editModuleFormHeader {
@@ -2910,6 +2916,12 @@
   justify-content: space-between;
   align-items: center;
   position: relative;
+}
+
+.editModuleFormHeaderActions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
 }
 
 .editModuleFormHeader::before {
@@ -2965,10 +2977,7 @@
   letter-spacing: 0.2px;
 }
 
-.editModuleFormHeader span::before {
-  content: '💡';
-  font-size: 12px;
-}
+
 
 .editModuleFormContent {
   flex: 1;

@@ -16,7 +16,7 @@
     "items": {
       "type": "array",
       "title": "合作伙伴列表",
-      "description": "添加和管理合作伙伴Logo",
+      "description": "添加和管理合作伙伴Logo(最多10个,建议尺寸为200x100像素)",
       "items": {
         "type": "object",
         "title": "合作伙伴",

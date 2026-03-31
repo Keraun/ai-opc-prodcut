@@ -51,6 +51,7 @@ export function ModuleDragEditor({ modules, onChange }: ModuleDragEditorProps) {
   const [previewPanelWidth, setPreviewPanelWidth] = useState(400)
   const [isDragging, setIsDragging] = useState(false)
   const [isConfigPanelVisible, setIsConfigPanelVisible] = useState(true)
+  const [isPreviewPanelVisible, setIsPreviewPanelVisible] = useState(true)
   const editPreviewIframeRef = useRef<HTMLIFrameElement>(null)
   const previewPanelRef = useRef<HTMLDivElement>(null)
   const dragStartXRef = useRef(0)
@@ -96,6 +97,10 @@ export function ModuleDragEditor({ modules, onChange }: ModuleDragEditorProps) {
       }
       return newVisible
     })
+  }, [])
+
+  const togglePreviewPanel = useCallback(() => {
+    setIsPreviewPanelVisible(prev => !prev)
   }, [])
 
   const handleResizeStart = useCallback((e: React.MouseEvent) => {
@@ -557,112 +562,137 @@ export function ModuleDragEditor({ modules, onChange }: ModuleDragEditorProps) {
       >
         {editingModule && (
           <div className={styles.editModuleSplitLayout}>
-            <div 
-              className={`${styles.editModulePreviewPanel} ${isFullscreen ? styles.fullscreenPreview : ''}`}
-              ref={previewPanelRef}
-              style={{ width: previewPanelWidth }}
-            >
-              <div className={styles.editModulePreviewHeader}>
-                <h4>实时预览</h4>
-                <div className={styles.editModulePreviewControls}>
-                  <div className={styles.editModulePreviewDevices}>
-                    <Tooltip content="桌面端">
-                      <Button
-                        size="mini"
-                        type={editPreviewDevice === 'web' ? "primary" : "text"}
-                        icon={<IconDesktop />}
-                        onClick={() => setEditPreviewDevice('web')}
-                      />
-                    </Tooltip>
-                    <Tooltip content="平板端">
-                      <Button
-                        size="mini"
-                        type={editPreviewDevice === 'ipad' ? "primary" : "text"}
-                        icon={<IconApps />}
-                        onClick={() => setEditPreviewDevice('ipad')}
-                      />
-                    </Tooltip>
-                    <Tooltip content="移动端">
-                      <Button
-                        size="mini"
-                        type={editPreviewDevice === 'mobile' ? "primary" : "text"}
-                        icon={<IconMobile />}
-                        onClick={() => setEditPreviewDevice('mobile')}
-                      />
-                    </Tooltip>
+            {isPreviewPanelVisible && (
+              <>
+                <div 
+                  className={`${styles.editModulePreviewPanel} ${isFullscreen ? styles.fullscreenPreview : ''}`}
+                  ref={previewPanelRef}
+                  style={{ width: previewPanelWidth }}
+                >
+                  <div className={styles.editModulePreviewHeader}>
+                    <h4>实时预览</h4>
+                    <div className={styles.editModulePreviewControls}>
+                      <div className={styles.editModulePreviewDevices}>
+                        <Tooltip content="桌面端">
+                          <Button
+                            size="mini"
+                            type={editPreviewDevice === 'web' ? "primary" : "text"}
+                            icon={<IconDesktop />}
+                            onClick={() => setEditPreviewDevice('web')}
+                          />
+                        </Tooltip>
+                        <Tooltip content="平板端">
+                          <Button
+                            size="mini"
+                            type={editPreviewDevice === 'ipad' ? "primary" : "text"}
+                            icon={<IconApps />}
+                            onClick={() => setEditPreviewDevice('ipad')}
+                          />
+                        </Tooltip>
+                        <Tooltip content="移动端">
+                          <Button
+                            size="mini"
+                            type={editPreviewDevice === 'mobile' ? "primary" : "text"}
+                            icon={<IconMobile />}
+                            onClick={() => setEditPreviewDevice('mobile')}
+                          />
+                        </Tooltip>
+                      </div>
+                      <Tooltip content={isConfigPanelVisible ? "隐藏配置面板" : "显示配置面板"}>
+                        <Button
+                          size="mini"
+                          type="text"
+                          onClick={toggleConfigPanel}
+                        >
+                          {isConfigPanelVisible ? (
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                              <path d="M11 17l-5-5 5-5M18 17l-5-5 5-5" strokeLinecap="round" strokeLinejoin="round"/>
+                            </svg>
+                          ) : (
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                              <path d="M13 17l5-5-5-5M6 17l5-5-5-5" strokeLinecap="round" strokeLinejoin="round"/>
+                            </svg>
+                          )}
+                        </Button>
+                      </Tooltip>
+                      <Tooltip content={isFullscreen ? "退出全屏" : "全屏查看"}>
+                        <Button
+                          size="mini"
+                          type="text"
+                          icon={isFullscreen ? <IconFullscreenExit /> : <IconFullscreen />}
+                          onClick={toggleFullscreen}
+                        />
+                      </Tooltip>
+                    </div>
                   </div>
-                  <Tooltip content={isConfigPanelVisible ? "隐藏配置面板" : "显示配置面板"}>
+                  <div className={styles.editModulePreviewContent}>
+                    <div 
+                      className={styles.editModulePreviewFrame}
+                      style={{
+                        width: editPreviewDevice === 'web' ? '100%' : editPreviewDevice === 'mobile' ? '375px' : '768px'
+                      }}
+                    >
+                      <iframe
+                        ref={editPreviewIframeRef}
+                        src={`/admin/module-preview/${editingModule.moduleId}`}
+                        className={styles.editModulePreviewIframe}
+                        title={`${editingModule.moduleName} 预览`}
+                        sandbox="allow-scripts allow-same-origin"
+                      />
+                    </div>
+                  </div>
+                </div>
+                {isConfigPanelVisible && (
+                  <div
+                    className={styles.editModuleResizeHandle}
+                    onMouseDown={handleResizeStart}
+                    title="拖拽调整宽度"
+                  >
+                    <div className={styles.editModuleResizeHandleLine} />
+                    <div className={styles.editModuleResizeHandleDots}>
+                      <span></span>
+                      <span></span>
+                      <span></span>
+                    </div>
+                  </div>
+                )}
+              </>
+            )}
+            {isConfigPanelVisible && (
+              <div className={`${styles.editModuleFormPanel} ${!isPreviewPanelVisible ? styles.editModuleFormPanelFull : ''}`}>
+                <div className={styles.editModuleFormHeader}>
+                  <h4>模块配置</h4>
+                  <div className={styles.editModuleFormHeaderActions}>
                     <Button
                       size="mini"
                       type="text"
-                      onClick={toggleConfigPanel}
+                      onClick={togglePreviewPanel}
                     >
-                      {isConfigPanelVisible ? (
+                      <span style={{ marginLeft: '4px' }}>
+                        {isPreviewPanelVisible ? (
                         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                          <path d="M11 17l-5-5 5-5M18 17l-5-5 5-5" strokeLinecap="round" strokeLinejoin="round"/>
+                          <path d="M17.94 17.94A10.07 10.07 0 0112 20c-7 0-11-8-11-8a18.45 18.45 0 015.06-5.94M9.9 4.24A9.12 9.12 0 0112 4c7 0 11 8 11 8a18.5 18.5 0 01-2.16 3.19m-6.72-1.07a3 3 0 11-4.24-4.24" strokeLinecap="round" strokeLinejoin="round"/>
+                          <line x1="1" y1="1" x2="23" y2="23" strokeLinecap="round" strokeLinejoin="round"/>
                         </svg>
                       ) : (
                         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                          <path d="M13 17l5-5-5-5M6 17l5-5-5-5" strokeLinecap="round" strokeLinejoin="round"/>
+                          <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" strokeLinecap="round" strokeLinejoin="round"/>
+                          <circle cx="12" cy="12" r="3" strokeLinecap="round" strokeLinejoin="round"/>
                         </svg>
                       )}
+                        {isPreviewPanelVisible ? '隐藏预览' : '显示预览'}
+                      </span>
                     </Button>
-                  </Tooltip>
-                  <Tooltip content={isFullscreen ? "退出全屏" : "全屏查看"}>
-                    <Button
-                      size="mini"
-                      type="text"
-                      icon={isFullscreen ? <IconFullscreenExit /> : <IconFullscreen />}
-                      onClick={toggleFullscreen}
-                    />
-                  </Tooltip>
+                  </div>
                 </div>
-              </div>
-              <div className={styles.editModulePreviewContent}>
-                <div 
-                  className={styles.editModulePreviewFrame}
-                  style={{
-                    width: editPreviewDevice === 'web' ? '100%' : editPreviewDevice === 'mobile' ? '375px' : '768px'
-                  }}
-                >
-                  <iframe
-                    ref={editPreviewIframeRef}
-                    src={`/admin/module-preview/${editingModule.moduleId}`}
-                    className={styles.editModulePreviewIframe}
-                    title={`${editingModule.moduleName} 预览`}
-                    sandbox="allow-scripts allow-same-origin"
+                <div className={styles.editModuleFormContent}>
+                  <ModuleFieldEditor
+                    moduleId={editingModule.moduleId}
+                    data={editingModule.data}
+                    onChange={handleEditModuleChange}
                   />
                 </div>
               </div>
-            </div>
-            {isConfigPanelVisible && (
-              <>
-                <div
-                  className={styles.editModuleResizeHandle}
-                  onMouseDown={handleResizeStart}
-                  title="拖拽调整宽度"
-                >
-                  <div className={styles.editModuleResizeHandleLine} />
-                  <div className={styles.editModuleResizeHandleDots}>
-                    <span></span>
-                    <span></span>
-                    <span></span>
-                  </div>
-                </div>
-                <div className={styles.editModuleFormPanel}>
-                  <div className={styles.editModuleFormHeader}>
-                    <h4>模块配置</h4>
-                    <span>修改后实时预览</span>
-                  </div>
-                  <div className={styles.editModuleFormContent}>
-                    <ModuleFieldEditor
-                      moduleId={editingModule.moduleId}
-                      data={editingModule.data}
-                      onChange={handleEditModuleChange}
-                    />
-                  </div>
-                </div>
-              </>
             )}
           </div>
         )}
