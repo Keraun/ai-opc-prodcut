@@ -45,7 +45,6 @@ function getPathMapping(configType: string): PathMapping {
     'token': { dir: 'system', prefix: 'system-token' },
 
     'verification-codes': { dir: 'system', prefix: 'system-verification-codes' },
-    'feishu-app': { dir: 'system', prefix: 'system-feishu-app' },
     'page-list': { dir: '', prefix: 'page-list' },
   }
   
@@ -82,11 +81,6 @@ export function readConfig(configType: string): any {
         currentLoginIP: acc.current_login_ip,
         currentLoginTime: acc.current_login_time
       }))
-    }
-    
-    if (configType === 'feishu-app') {
-      const config = jsonDb.findOne('system_config', { config_key: 'feishu_app' })
-      return config ? JSON.parse(config.config_value) : {}
     }
     
     if (configType === 'notification') {
@@ -286,24 +280,6 @@ export function writeConfig(configType: string, data: any): void {
           last_login_ip: account.lastLoginIP || null,
           current_login_ip: account.currentLoginIP || null,
           current_login_time: account.currentLoginTime || null,
-          created_at: new Date().toISOString(),
-          updated_at: new Date().toISOString()
-        })
-      }
-      return
-    }
-    
-    if (configType === 'feishu-app') {
-      const existing = jsonDb.findOne('system_config', { config_key: 'feishu_app' })
-      if (existing) {
-        jsonDb.update('system_config', existing.id, {
-          config_value: JSON.stringify(data),
-          updated_at: new Date().toISOString()
-        })
-      } else {
-        jsonDb.insert('system_config', {
-          config_key: 'feishu_app',
-          config_value: JSON.stringify(data),
           created_at: new Date().toISOString(),
           updated_at: new Date().toISOString()
         })
@@ -687,7 +663,7 @@ export function writeSystemConfig(configName: string, data: any): void {
 }
 
 export function listSystemConfigs(): string[] {
-  return ['account', 'token', 'feishu-app', 'theme', 'notification']
+  return ['account', 'token', 'theme', 'notification']
 }
 
 export function readAllConfigs(): Record<string, any> {

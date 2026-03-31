@@ -9,23 +9,29 @@ import {
 
 export interface Configs {
   site_config: any
-  feishu_app: any
   super_admin_token: string
   notification: any
+  site_footer_config:any
+  product_categories: any
+  site_header_config: any
 }
 
 export function useConfig() {
   const [configs, setConfigs] = useState<Configs>({
     site_config: {},
-    feishu_app: {},
     super_admin_token: '',
-    notification: {}
+    notification: {},
+    site_footer_config:{},
+    product_categories: {},
+    site_header_config: {}
   })
   const [originalConfigs, setOriginalConfigs] = useState<Configs>({
     site_config: {},
-    feishu_app: {},
     super_admin_token: '',
-    notification: {}
+    notification: {},
+    site_footer_config:{},
+    product_categories: {},
+    site_header_config: {}
   })
   const [loading, setLoading] = useState(false)
   const [schema, setSchema] = useState<any>({})

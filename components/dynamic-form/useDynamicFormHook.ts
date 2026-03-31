@@ -1,7 +1,6 @@
 import { useState, useEffect, useCallback } from "react"
 import { Form } from "@arco-design/web-react"
 import { toast } from "sonner"
-import { extractTableId, extractAppToken } from "@/lib/feishu-utils"
 
 export interface FormSchema {
   title: string
@@ -158,18 +157,8 @@ export function useDynamicForm(
     try {
       const values = await form.validate()
 
-      const processedValues = { ...values }
-
-      if ('tableId' in processedValues && processedValues.tableId) {
-        processedValues.tableId = extractTableId(processedValues.tableId)
-      }
-
-      if ('baseLink' in processedValues && processedValues.baseLink) {
-        processedValues.appToken = extractAppToken(processedValues.baseLink)
-      }
-
       const finalValues = {
-        ...processedValues,
+        ...values,
         ...tags,
         ...arrayFields
       }

@@ -12,33 +12,5 @@
     "created_at": "2026-03-31T20:58:04.490Z",
     "updated_at": "2026-03-31T20:58:04.490Z",
     "id": 1
-  },
-  {
-    "username": "admin2",
-    "password": "qwer1234",
-    "email": "wuly93@163.com",
-    "remark": "默认管理员账号2",
-    "must_change_password": 0,
-    "last_login_time": "2026/03/25 06:17:27",
-    "last_login_ip": "::1",
-    "current_login_ip": "::1",
-    "current_login_time": "2026/03/25 06:36:38",
-    "created_at": "2026-03-31T20:58:04.490Z",
-    "updated_at": "2026-03-31T20:58:04.490Z",
-    "id": 2
-  },
-  {
-    "username": "测试账号",
-    "password": "sheep902",
-    "email": "wuly93@163.com",
-    "remark": null,
-    "must_change_password": 0,
-    "last_login_time": "2026/4/1 04:58:04",
-    "last_login_ip": null,
-    "current_login_ip": null,
-    "current_login_time": "2026/4/1 04:58:04",
-    "created_at": "2026-03-31T20:58:04.490Z",
-    "updated_at": "2026-03-31T20:58:04.490Z",
-    "id": 3
   }
 ]

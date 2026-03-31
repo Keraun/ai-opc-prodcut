@@ -3,7 +3,7 @@
   "address": "",
   "phone": "",
   "email": "",
-  "wechatQrCode": "http://localhost:3000/uploads/editor/1774916694572_c0j01b.webp",
-  "officialAccountQrCode": "http://localhost:3000/uploads/editor/1774916877497_t0gjjs.webp",
+  "wechatQrCode": "",
+  "officialAccountQrCode": "",
   "showAdminLink": true
 }

@@ -5,7 +5,7 @@ import { Button, Card, Modal, Message, Spin, Alert } from "@arco-design/web-reac
 import { IconSave, IconEye, IconCode, IconRefresh, IconPlus } from "@arco-design/web-react/icon"
 import { toast } from "sonner"
 import { DynamicForm } from "@/components/dynamic-form"
-import { getSchema, getFeishuSchema, createFeishuTable } from "@/lib/api-client"
+import { getSchema } from "@/lib/api-client"
 import { ManagementHeader } from "../ManagementHeader"
 import styles from "./ConfigFormEditor.module.css"
 
@@ -41,13 +41,7 @@ export function ConfigFormEditor({
   const [showPreview, setShowPreview] = useState(false)
   const [previewData, setPreviewData] = useState<any>(null)
   const [submitting, setSubmitting] = useState(false)
-  const [tableFields, setTableFields] = useState<any[]>([])
-  const [showFieldsModal, setShowFieldsModal] = useState(false)
-  const [loadingFields, setLoadingFields] = useState(false)
-  const [creatingTable, setCreatingTable] = useState(false)
-  const [tableLink, setTableLink] = useState<string>('')
 
-  const isFeishuConfig = configType === 'feishu-app'
   const isNotificationConfig = configType === 'notification'
 
   useEffect(() => {
@@ -85,83 +79,8 @@ export function ConfigFormEditor({
     setShowPreview(true)
   }
 
-  const handleFetchTableFields = async () => {
-    if (!configData?.tableId) {
-      toast.error('请先配置表格ID')
-      return
-    }
-
-    setLoadingFields(true)
-    try {
-      const result = await getFeishuSchema()
-      
-      if (result.success && result.data) {
-        setTableFields(result.data)
-        setShowFieldsModal(true)
-        toast.success('获取表格字段成功')
-      } else {
-        toast.error(result.message || '获取表格字段失败')
-      }
-    } catch (error) {
-      console.error('Failed to fetch table fields:', error)
-      toast.error('获取表格字段失败')
-    } finally {
-      setLoadingFields(false)
-    }
-  }
-
-  const handleCreateTable = async () => {
-    if (!configData?.appId || !configData?.appSecret || !configData?.baseLink) {
-      toast.error('请先配置App ID、App Secret和飞书多维表格链接')
-      return
-    }
-
-    setCreatingTable(true)
-    try {
-      const result = await createFeishuTable()
-      
-      if (result.success && result.data) {
-        toast.success('飞书数据表生成成功')
-        setTableLink(result.data.tableLink)
-        
-        const updatedConfig = {
-          ...configData,
-          tableId: result.data.tableId,
-          tableLink: result.data.tableLink
-        }
-        
-        await onSave(updatedConfig)
-      } else {
-        toast.error(result.message || '生成飞书数据表失败')
-      }
-    } catch (error) {
-      console.error('Failed to create table:', error)
-      toast.error('生成飞书数据表失败')
-    } finally {
-      setCreatingTable(false)
-    }
-  }
-
   const renderActions = () => (
     <>
-      {isFeishuConfig && (
-        <>
-          <Button
-            icon={<IconRefresh />}
-            loading={loadingFields}
-            onClick={handleFetchTableFields}
-          >
-            查看表格字段
-          </Button>
-          <Button
-            icon={<IconPlus />}
-            loading={creatingTable}
-            onClick={handleCreateTable}
-          >
-            生成数据表
-          </Button>
-        </>
-      )}
       <Button
         icon={<IconCode />}
         onClick={handlePreview}
@@ -250,48 +169,6 @@ export function ConfigFormEditor({
         )}
       </Card>
 
-      {isFeishuConfig && tableLink && (
-        <Card className={styles.formCard} style={{ marginTop: '16px' }}>
-          <div style={{ marginBottom: '12px' }}>
-            <h3 style={{ fontSize: '16px', fontWeight: 'bold', marginBottom: '8px' }}>
-              飞书数据表链接
-            </h3>
-            <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
-              <input
-                type="text"
-                value={tableLink}
-                readOnly
-                style={{
-                  flex: 1,
-                  padding: '8px 12px',
-                  border: '1px solid #e5e7eb',
-                  borderRadius: '4px',
-                  backgroundColor: '#f9fafb',
-                  fontSize: '14px',
-                  color: '#374151'
-                }}
-              />
-              <Button
-                type="primary"
-                onClick={() => {
-                  navigator.clipboard.writeText(tableLink)
-                  toast.success('链接已复制到剪贴板')
-                }}
-              >
-                复制链接
-              </Button>
-              <Button
-                onClick={() => {
-                  window.open(tableLink, '_blank')
-                }}
-              >
-                打开表格
-              </Button>
-            </div>
-          </div>
-        </Card>
-      )}
-
       <Modal
         title="JSON预览"
         visible={showPreview}
@@ -316,41 +193,6 @@ export function ConfigFormEditor({
         <pre className={styles.jsonPreview}>
           {JSON.stringify(previewData, null, 2)}
         </pre>
-      </Modal>
-
-      <Modal
-        title="飞书表格字段"
-        visible={showFieldsModal}
-        onCancel={() => setShowFieldsModal(false)}
-        footer={[
-          <Button key="close" onClick={() => setShowFieldsModal(false)}>
-            关闭
-          </Button>
-        ]}
-        style={{ width: 800 }}
-      >
-        {tableFields.length > 0 ? (
-          <div style={{ maxHeight: '400px', overflowY: 'auto' }}>
-            {tableFields.map((field: any) => (
-              <div key={field.field_id} style={{ 
-                padding: '12px', 
-                borderBottom: '1px solid #e5e7eb',
-                backgroundColor: '#f9fafb'
-              }}>
-                <div style={{ fontWeight: 'bold', marginBottom: '4px' }}>
-                  {field.field_name}
-                </div>
-                <div style={{ fontSize: '12px', color: '#6b7280' }}>
-                  字段ID: {field.field_id} | 类型: {field.field_type}
-                </div>
-              </div>
-            ))}
-          </div>
-        ) : (
-          <div style={{ padding: '24px', textAlign: 'center', color: '#6b7280' }}>
-            暂无字段数据
-          </div>
-        )}
       </Modal>
     </div>
   )

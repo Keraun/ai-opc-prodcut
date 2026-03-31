@@ -19,7 +19,7 @@
     "email": ""
   },
   "support": {
-    "customerServiceQRCode": "http://localhost:3000/uploads/editor/1774916907089_tziw16.webp",
+    "customerServiceQRCode": "",
     "helpDocUrl": ""
   },
   "icp": "",
@@ -41,5 +41,5 @@
     }
   },
   "currentTheme": "nature",
-  "logo": "http://localhost:3000/uploads/editor/1774925723791_tpl25k.webp"
+  "logo": ""
 }

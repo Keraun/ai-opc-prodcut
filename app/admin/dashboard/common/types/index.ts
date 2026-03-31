@@ -42,7 +42,6 @@ export interface Configs {
   'section-pricing': any
   'section-about': any
   'section-contact': any
-  'feishu-app': any
 }
 
 export interface ConfigVersionInfo {

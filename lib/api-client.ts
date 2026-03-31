@@ -102,11 +102,6 @@ export {
 } from './api/articles'
 
 export {
-  getFeishuSchema,
-  createFeishuTable
-} from './api/feishu'
-
-export {
   importDatabase,
   resetWebsite,
   checkDefaultDb,

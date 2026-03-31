@@ -1,17 +1,10 @@
 [
   {
-    "id": 1,
-    "config_key": "feishu_app",
-    "config_value": "{\"appId\":\"cli_a937c3189c78dbb5\",\"appSecret\":\"kDDziXTlnTLYTXIazS8cFgRlHIwO5mZi\",\"baseLink\":\"https://my.feishu.cn/base/MHcEb9GKxanuZismlBfceJ4AnIf?from=from_copylink\",\"appToken\":\"MHcEb9GKxanuZismlBfceJ4AnIf\"}",
-    "created_at": "2026-03-27 20:01:32",
-    "updated_at": "2026-03-28T20:48:01.675Z"
-  },
-  {
     "id": 3,
     "config_key": "site_config",
-    "config_value": "{\"name\":\"\",\"description\":\"\",\"url\":\"\",\"ogImage\":\"\",\"links\":{\"email\":\"\",\"wechat\":\"\",\"github\":\"\",\"twitter\":\"\"},\"creator\":{\"name\":\"\",\"url\":\"\"},\"contact\":{\"address\":\"\",\"phone\":\"\",\"email\":\"\"},\"support\":{\"customerServiceQRCode\":\"http://localhost:3000/uploads/editor/1774916907089_tziw16.webp\",\"helpDocUrl\":\"\"},\"icp\":\"\",\"features\":{\"enableSearch\":false},\"seo\":{\"keywords\":[],\"robots\":{\"index\":true,\"follow\":true,\"googleBot\":{\"index\":true,\"follow\":true,\"maxVideoPreview\":-1,\"maxImagePreview\":\"large\",\"maxSnippet\":-1}}},\"currentTheme\":\"nature\",\"logo\":\"http://localhost:3000/uploads/editor/1774925723791_tpl25k.webp\"}",
+    "config_value": "{\"name\":\"\",\"description\":\"\",\"url\":\"\",\"ogImage\":\"\",\"links\":{\"email\":\"\",\"wechat\":\"\",\"github\":\"\",\"twitter\":\"\"},\"creator\":{\"name\":\"\",\"url\":\"\"},\"contact\":{\"address\":\"\",\"phone\":\"\",\"email\":\"\"},\"support\":{\"customerServiceQRCode\":\"\",\"helpDocUrl\":\"\"},\"icp\":\"\",\"features\":{\"enableSearch\":false},\"seo\":{\"keywords\":[],\"robots\":{\"index\":true,\"follow\":true,\"googleBot\":{\"index\":true,\"follow\":true,\"maxVideoPreview\":-1,\"maxImagePreview\":\"large\",\"maxSnippet\":-1}}},\"currentTheme\":\"nature\",\"logo\":\"\"}",
     "created_at": "2026-03-27 21:36:34",
-    "updated_at": "2026-03-31T02:55:26.668Z"
+    "updated_at": "2026-03-31T21:13:16.440Z"
   },
   {
     "id": 4,
@@ -23,9 +16,9 @@
   {
     "id": 5,
     "config_key": "site_footer_config",
-    "config_value": "{\"description\":\"\",\"address\":\"\",\"phone\":\"\",\"email\":\"\",\"wechatQrCode\":\"http://localhost:3000/uploads/editor/1774916694572_c0j01b.webp\",\"officialAccountQrCode\":\"http://localhost:3000/uploads/editor/1774916877497_t0gjjs.webp\",\"showAdminLink\":true}",
+    "config_value": "{\"description\":\"\",\"address\":\"\",\"phone\":\"\",\"email\":\"\",\"wechatQrCode\":\"\",\"officialAccountQrCode\":\"\",\"showAdminLink\":true}",
     "created_at": "2026-03-29T17:50:07.138Z",
-    "updated_at": "2026-03-31T01:17:55.199Z"
+    "updated_at": "2026-03-31T21:13:43.912Z"
   },
   {
     "config_key": "product_categories",
@@ -36,9 +29,9 @@
   },
   {
     "config_key": "site_header_config",
-    "config_value": "{\"navItems\":[{\"label\":\"首页123\",\"href\":\"/\"},{\"label\":\"产品\",\"href\":\"/product\"},{\"label\":\"资讯\",\"href\":\"/news\"}],\"showContactButton\":true,\"showCtaButton\":true,\"ctaButtonText\":\"开始使用\",\"ctaButtonLink\":\"/product\"}",
+    "config_value": "{\"navItems\":[{\"label\":\"首页\",\"href\":\"/\"},{\"label\":\"产品\",\"href\":\"/product\"},{\"label\":\"资讯\",\"href\":\"/news\"}],\"showContactButton\":true,\"showCtaButton\":true,\"ctaButtonText\":\"开始使用\",\"ctaButtonLink\":\"/product\"}",
     "created_at": "2026-03-30T22:26:00.456Z",
-    "updated_at": "2026-03-30T22:27:50.282Z",
+    "updated_at": "2026-03-31T21:13:58.174Z",
     "id": 7
   },
   {
