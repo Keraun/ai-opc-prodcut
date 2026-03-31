@@ -39,11 +39,6 @@ export function CommonTable<T extends Record<string, any> = any>({
             <Spin size={40} />
             <p className={styles.loadingText}>加载中...</p>
           </div>
-        ) : data.length === 0 ? (
-          <div className={styles.emptyContainer}>
-            {emptyIcon && <div className={styles.emptyIcon}>{emptyIcon}</div>}
-            <p className={styles.emptyText}>{emptyText}</p>
-          </div>
         ) : (
           <Table
             columns={columns}
@@ -54,6 +49,14 @@ export function CommonTable<T extends Record<string, any> = any>({
             border={bordered}
             stripe={stripe}
             className={styles.table}
+            locale={{
+              emptyText: (
+                <div className={styles.emptyContainer}>
+                  {emptyIcon && <div className={styles.emptyIcon}>{emptyIcon}</div>}
+                  <p className={styles.emptyText}>{emptyText}</p>
+                </div>
+              )
+            }}
           />
         )}
       </Card>
