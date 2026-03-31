@@ -11,8 +11,9 @@ import {
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json()
-    const { method, superAdminToken, token, username, email, verificationCode, newPassword } = body
+    const { method, superAdminToken, token, username, email, verificationCode, code, newPassword } = body
     const finalSuperAdminToken = superAdminToken || token
+    const finalVerificationCode = verificationCode || code
 
     if (!newPassword) {
       return badRequestResponse("请输入新密码")
@@ -44,7 +45,7 @@ export async function POST(request: NextRequest) {
         return notFoundResponse("用户不存在")
       }
     } else if (method === "email") {
-      if (!email || !verificationCode) {
+      if (!email || !finalVerificationCode) {
         return badRequestResponse("缺少必要参数")
       }
 
@@ -61,7 +62,7 @@ export async function POST(request: NextRequest) {
         return unauthorizedResponse("验证码已过期，请重新获取")
       }
 
-      if (storedData.code !== verificationCode) {
+      if (storedData.code !== finalVerificationCode) {
         return unauthorizedResponse("验证码错误")
       }
 
