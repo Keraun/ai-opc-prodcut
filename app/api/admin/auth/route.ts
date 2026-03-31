@@ -20,10 +20,10 @@ export async function GET(request: NextRequest) {
         const user = {
           username: admin.username,
           remark: admin.remark,
-          mustChangePassword: admin.must_change_password,
-          lastLoginTime: admin.last_login_time,
-          lastLoginIP: admin.last_login_ip,
-          currentLoginIP: admin.current_login_ip
+          mustChangePassword: admin.mustChangePassword,
+          lastLoginTime: admin.lastLoginTime,
+          lastLoginIP: admin.lastLoginIP,
+          currentLoginIP: admin.currentLoginIP
         }
         
         return successResponse({
@@ -32,9 +32,18 @@ export async function GET(request: NextRequest) {
         })
       }
       
+      const user = {
+        username: adminUserFromCookie.username,
+        remark: adminUserFromCookie.remark,
+        mustChangePassword: adminUserFromCookie.mustChangePassword || false,
+        lastLoginTime: adminUserFromCookie.lastLoginTime,
+        lastLoginIP: adminUserFromCookie.lastLoginIP,
+        currentLoginIP: adminUserFromCookie.currentLoginIP
+      }
+      
       return successResponse({
         authenticated: true,
-        user: adminUserFromCookie
+        user
       })
     }
 
@@ -47,7 +56,8 @@ export async function GET(request: NextRequest) {
         authenticated: true,
         user: {
           username: 'admin',
-          role: 'admin'
+          role: 'admin',
+          mustChangePassword: false
         }
       })
     }
