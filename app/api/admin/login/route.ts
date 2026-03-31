@@ -78,7 +78,7 @@ export async function POST(request: NextRequest) {
         })
       } else {
         jsonDb.update('system_config', 
-          { config_key: 'super_admin_token' },
+          tokenConfig.id,
           { 
             config_value: superAdminToken,
             updated_at: new Date().toISOString()
