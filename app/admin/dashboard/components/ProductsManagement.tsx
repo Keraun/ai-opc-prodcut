@@ -306,9 +306,7 @@ export function ProductsManagement() {
       field: "status",
       states: [
         { value: "active", label: "下架", action: "下架产品", type: "warning", target: "inactive" },
-        { value: "inactive", label: "上架", action: "上架产品", type: "success", target: "active" },
-        { value: "draft", label: "上架", action: "上架产品", type: "success", target: "active" },
-        { value: "published", label: "下架", action: "下架产品", type: "warning", target: "inactive" }
+        { value: "inactive", label: "上架", action: "上架产品", type: "success", target: "active" }
       ]
     }
   }

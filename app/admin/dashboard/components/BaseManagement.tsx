@@ -793,35 +793,71 @@ function ItemForm({
           取消
         </button>
         <div className={styles.formActions}>
-          <button 
-                    type="button" 
-                    onClick={() => onSubmit({ ...formData, status: 'draft' })} 
-                    disabled={loading}
-                    className={styles.draftButton}
-                  >
-                    {loading ? '保存中...' : '保存草稿'}
-                  </button>
-                  <button 
-                    type="button" 
-                    onClick={() => onSubmit({ ...formData, status: 'draft', saveOnly: true })} 
-                    disabled={loading}
-                    className={styles.draftButton}
-                  >
-                    {loading ? '保存中...' : '保存并返回'}
-                  </button>
-                  <button 
-                    type="button" 
-                    onClick={() => onSubmit({ ...formData, status: 'published' })} 
-                    disabled={loading}
-                    className={styles.publishButton}
-                  >
-                    {loading ? '发布中...' : (
-                      <>
-                        <Save size={16} />
-                        发布
-                      </>
-                    )}
-                  </button>
+          {config.apiEndpoint === '/api/products' ? (
+            <>
+              <button 
+                        type="button" 
+                        onClick={() => onSubmit({ ...formData, status: 'inactive' })} 
+                        disabled={loading}
+                        className={styles.draftButton}
+                      >
+                        {loading ? '保存中...' : '保存草稿'}
+                      </button>
+                      <button 
+                        type="button" 
+                        onClick={() => onSubmit({ ...formData, status: 'inactive', saveOnly: true })} 
+                        disabled={loading}
+                        className={styles.draftButton}
+                      >
+                        {loading ? '保存中...' : '保存并返回'}
+                      </button>
+                      <button 
+                        type="button" 
+                        onClick={() => onSubmit({ ...formData, status: 'active' })} 
+                        disabled={loading}
+                        className={styles.publishButton}
+                      >
+                        {loading ? '发布中...' : (
+                          <>
+                            <Save size={16} />
+                            上架
+                          </>
+                        )}
+                      </button>
+            </>
+          ) : (
+            <>
+              <button 
+                        type="button" 
+                        onClick={() => onSubmit({ ...formData, status: 'draft' })} 
+                        disabled={loading}
+                        className={styles.draftButton}
+                      >
+                        {loading ? '保存中...' : '保存草稿'}
+                      </button>
+                      <button 
+                        type="button" 
+                        onClick={() => onSubmit({ ...formData, status: 'draft', saveOnly: true })} 
+                        disabled={loading}
+                        className={styles.draftButton}
+                      >
+                        {loading ? '保存中...' : '保存并返回'}
+                      </button>
+                      <button 
+                        type="button" 
+                        onClick={() => onSubmit({ ...formData, status: 'published' })} 
+                        disabled={loading}
+                        className={styles.publishButton}
+                      >
+                        {loading ? '发布中...' : (
+                          <>
+                            <Save size={16} />
+                            发布
+                          </>
+                        )}
+                      </button>
+            </>
+          )}
         </div>
       </div>
     </form>
@@ -868,10 +904,18 @@ export function BaseManagement({ config }: BaseManagementProps) {
       })
       const result = await response.json()
       if (result.success) {
-        if (submitData.status === 'published') {
-          toast.success(`${config.title}发布成功`)
-        } else if (submitData.status === 'draft') {
-          toast.success(`${config.title}保存成功`)
+        if (config.apiEndpoint === '/api/products') {
+          if (submitData.status === 'active') {
+            toast.success(`${config.title}上架成功`)
+          } else if (submitData.status === 'inactive') {
+            toast.success(`${config.title}保存成功`)
+          }
+        } else {
+          if (submitData.status === 'published') {
+            toast.success(`${config.title}发布成功`)
+          } else if (submitData.status === 'draft') {
+            toast.success(`${config.title}保存成功`)
+          }
         }
         // 保存后都返回上一级页面
         setViewMode('list')
@@ -899,10 +943,18 @@ export function BaseManagement({ config }: BaseManagementProps) {
       })
       const result = await response.json()
       if (result.success) {
-        if (submitData.status === 'published') {
-          toast.success(`${config.title}发布成功`)
-        } else if (submitData.status === 'draft') {
-          toast.success(`${config.title}保存成功`)
+        if (config.apiEndpoint === '/api/products') {
+          if (submitData.status === 'active') {
+            toast.success(`${config.title}上架成功`)
+          } else if (submitData.status === 'inactive') {
+            toast.success(`${config.title}保存成功`)
+          }
+        } else {
+          if (submitData.status === 'published') {
+            toast.success(`${config.title}发布成功`)
+          } else if (submitData.status === 'draft') {
+            toast.success(`${config.title}保存成功`)
+          }
         }
         // 保存后都返回上一级页面
         setViewMode('list')
