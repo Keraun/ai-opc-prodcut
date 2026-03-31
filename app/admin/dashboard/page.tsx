@@ -58,8 +58,6 @@ export default function AdminDashboardPage() {
         if (user) {
           if ((user as any)?.mustChangePassword) {
             setMustChangePassword(true)
-          } else {
-            setMustChangePassword(false)
           }
         }
         await fetchConfigs()
@@ -68,7 +66,7 @@ export default function AdminDashboardPage() {
     }
     
     init()
-  }, [currentUser])
+  }, [])
 
   const handleMenuClick = (menu: string) => {
     setActiveMenu(menu)
