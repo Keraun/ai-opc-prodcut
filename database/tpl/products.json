@@ -1,0 +1,31 @@
+[
+  {
+    "id": 1,
+    "title": "(测试数据)AI 技术发展趋势AI 智能助手",
+    "description": "一款功能强大的 AI 智能助手，能够帮助您完成各种任务",
+    "content": "AI 智能助手是一款基于最新人工智能技术开发的智能工具，它能够理解自然语言，执行各种任务，如信息查询、日程安排、邮件处理等。它采用先进的深度学习算法，能够不断学习和适应您的使用习惯，为您提供个性化的服务。",
+    "price": 999,
+    "originalPrice": 1299,
+    "image": "https://picsum.photos/id/974/800/600",
+    "tags": [
+      "AI",
+      "智能助手",
+      " productivity"
+    ],
+    "category": "AI工具",
+    "categoryName": "AI工具",
+    "link": "/product/1",
+    "buyLink": "#",
+    "features": [
+      "自然语言处理",
+      "智能学习",
+      "多平台支持",
+      "个性化服务"
+    ],
+    "salesCount": 1000,
+    "rating": 4.8,
+    "status": "active",
+    "created_at": "2026-03-31T00:00:00.000Z",
+    "updated_at": "2026-03-31T21:34:25.867Z"
+  }
+]
