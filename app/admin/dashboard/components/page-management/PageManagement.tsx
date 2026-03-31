@@ -25,6 +25,7 @@ interface PageInfo {
   modules: any[]
   type?: 'static' | 'dynamic'
   dynamicParam?: string
+  route?: string
   status?: 'draft' | 'published' | 'offline'
   createdAt?: string
   updatedAt?: string
@@ -152,10 +153,10 @@ export function PageManagement({ onEditPage }: PageManagementProps) {
     }
   }
 
-  const handlePreviewPage = (slug: string, type?: string, dynamicParam?: string) => {
+  const handlePreviewPage = (slug: string, type?: string, dynamicParam?: string, route?: string) => {
     if (type === 'dynamic') {
-      toast.info("动态路由页面需要在实际访问时才能预览，例如：/" + slug + "/123")
-      window.open(`/${slug}/example-id`, "_blank")
+      const previewRoute = route ? route.replace(/\[.*?\]/, '0') : `/${slug}/0`
+      window.open(previewRoute, "_blank")
     } else {
       window.open(`/${slug}`, "_blank")
     }
@@ -285,7 +286,7 @@ export function PageManagement({ onEditPage }: PageManagementProps) {
             <ActionButton
               type="default"
               icon={<IconEye size={16} />}
-              onClick={() => handlePreviewPage(record.slug, record.type, record.dynamicParam)}
+              onClick={() => handlePreviewPage(record.slug, record.type, record.dynamicParam, record.route)}
             >
               预览
             </ActionButton>

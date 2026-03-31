@@ -64,7 +64,7 @@ export function NewsDetailModule({ data }: ModuleProps) {
       
       if (isPreviewMode) {
         try {
-          const response = await fetch('/api/articles?id=1')
+            const response = await fetch('/api/articles?id=0')
           const result = await response.json()
           if (result.success && result.data) {
             setArticle(result.data)

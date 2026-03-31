@@ -160,5 +160,24 @@
     "status": "active",
     "created_at": "2024-03-09 10:00:00",
     "updated_at": "2024-03-28 10:00:00"
+  },
+  {
+    "id": 0,
+    "title": "产品详情预览模版",
+    "description": "这是一款示例产品，用于预览产品详情模块的样式和布局效果。展示了价格、特性、评分、销量等完整信息。",
+    "price": 99,
+    "originalPrice": 199,
+    "image": "",
+    "tags": ["预览", "模版"],
+    "category": "preview",
+    "categoryName": "预览模版",
+    "link": "#",
+    "buyLink": "#",
+    "features": ["特性一：高效便捷", "特性二：安全可靠", "特性三：易于使用", "特性四：专业支持"],
+    "salesCount": 1000,
+    "rating": 4.8,
+    "status": "draft",
+    "created_at": "2026-03-31T00:00:00.000Z",
+    "updated_at": "2026-03-31T00:00:00.000Z"
   }
 ]

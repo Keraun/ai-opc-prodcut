@@ -85,7 +85,7 @@ export function ProductDetailModule({ data }: ModuleProps) {
       
       if (isPreviewMode) {
         try {
-          const response = await fetch('/api/products?id=1')
+          const response = await fetch('/api/products?id=0')
           const result = await response.json()
           if (result.success && result.data) {
             setProduct(result.data)
