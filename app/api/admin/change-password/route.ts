@@ -31,7 +31,7 @@ export async function POST(request: NextRequest) {
 
     jsonDb.update('accounts', admin.id, {
       password: newPassword,
-      must_change_password: 0,
+      must_change_password: false,
       updated_at: new Date().toISOString()
     })
 

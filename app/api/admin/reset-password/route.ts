@@ -78,7 +78,7 @@ export async function POST(request: NextRequest) {
     }
 
     admins[adminIndex].password = newPassword
-    admins[adminIndex].must_change_password = 0
+    admins[adminIndex].must_change_password = false
 
     writeConfig('account', admins)
 

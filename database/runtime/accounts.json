@@ -4,13 +4,13 @@
     "password": "qwer12345",
     "email": null,
     "remark": "默认管理员账号",
-    "must_change_password": 1,
+    "must_change_password": true,
     "last_login_time": "2026/04/01 05:50:56",
     "last_login_ip": "::1",
     "current_login_ip": "::1",
     "current_login_time": "2026/04/01 05:54:39",
-    "created_at": "2026-03-31T21:57:11.554Z",
-    "updated_at": "2026-03-31T21:57:11.554Z",
+    "created_at": "2026-03-31T21:59:18.624Z",
+    "updated_at": "2026-03-31T21:59:18.624Z",
     "id": 1
   }
 ]

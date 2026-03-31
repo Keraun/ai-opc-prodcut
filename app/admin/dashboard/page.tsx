@@ -44,16 +44,23 @@ export default function AdminDashboardPage() {
     }
   }, [])
 
+  const checkMustChangePassword = async () => {
+    try {
+      const checkAuthRes = await fetch('/api/admin/auth')
+      const authResult = await checkAuthRes.json()
+      if (authResult.success && authResult.user) {
+        setMustChangePassword(authResult.user.mustChangePassword || false)
+      }
+    } catch (error) {
+      console.error('Failed to check must change password:', error)
+    }
+  }
+
   useEffect(() => {
     const init = async () => {
       const authenticated = await checkAuth()
       if (authenticated) {
-        const checkAuthRes = await fetch('/api/admin/auth')
-        const authResult = await checkAuthRes.json()
-        if (authResult.success && authResult.user) {
-          setMustChangePassword(authResult.user.mustChangePassword || false)
-        }
-        
+        await checkMustChangePassword()
         await fetchConfigs()
         await fetchSchema()
       }
@@ -61,6 +68,12 @@ export default function AdminDashboardPage() {
     
     init()
   }, [])
+
+  useEffect(() => {
+    if (!showChangePassword) {
+      checkMustChangePassword()
+    }
+  }, [showChangePassword])
 
   const handleMenuClick = (menu: string) => {
     setActiveMenu(menu)
