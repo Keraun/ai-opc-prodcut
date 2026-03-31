@@ -1,8 +1,8 @@
 {
-  "description": "",
-  "address": "",
-  "phone": "",
-  "email": "",
+  "description": "页脚描述文案页脚描述文案页脚描述文案",
+  "address": "xxx省xxx市xxx区xxxxxxx",
+  "phone": "xxxx-xxxx-xxxx",
+  "email": "xxxx@xxx.xx",
   "wechatQrCode": "",
   "officialAccountQrCode": "",
   "showAdminLink": true
