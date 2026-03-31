@@ -57,7 +57,7 @@ export function MessagesManagement() {
   const [currentMessage, setCurrentMessage] = useState<Message | null>(null)
   const [editNote, setEditNote] = useState('')
   const [editStatus, setEditStatus] = useState('')
-  const { configs, loading: configLoading, saveConfig, hasChanges } = useConfig()
+  const { configs, loading: configLoading, saveConfig, hasChanges, fetchConfigs } = useConfig()
   const router = useRouter()
 
   const loadMessages = async (page = 1, status = '') => {
@@ -91,6 +91,7 @@ export function MessagesManagement() {
 
   useEffect(() => {
     loadMessages(pagination.page, statusFilter)
+    fetchConfigs()
   }, [])
 
   const handleStatusFilterChange = (value: string) => {

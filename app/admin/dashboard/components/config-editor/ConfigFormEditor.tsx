@@ -224,6 +224,7 @@ export function ConfigFormEditor({
         ) : (
           <>
             <DynamicForm
+              key={configType + JSON.stringify(configData)}
               schema={schema}
               initialValues={configData}
               onSubmit={handleSubmit}

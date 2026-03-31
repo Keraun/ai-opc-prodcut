@@ -43,9 +43,9 @@
   },
   {
     "config_key": "notification",
-    "config_value": "{\"pushplus\":{},\"notificationTemplate\":\"【新留言】\\n\\n姓名：{name}\\n电话：{phone || ''}\\n内容：{message}\\n\\n提交时间：{created_at}\"}",
+    "config_value": "{\"notificationTemplate\":\"【新留言】\\n\\n姓名：{name}\\n电话：{phone || ''}\\n内容：{message}\\n\\n提交时间：{created_at}\"}",
     "created_at": "2026-03-31T03:50:40.707Z",
-    "updated_at": "2026-03-31T04:23:21.028Z",
+    "updated_at": "2026-03-31T04:32:30.837Z",
     "id": 8
   }
 ]
