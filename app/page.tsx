@@ -5,7 +5,7 @@ import styles from './home.module.css'
 export const dynamic = 'force-dynamic'
 
 export default function Home() {
-  return <GenericPage 
+   return <GenericPage 
     pageId="home" 
     wrapperClassName={styles.homeContainer}
   />

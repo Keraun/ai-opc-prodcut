@@ -87,6 +87,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 }
 
 export default async function DynamicPage({ params }: PageProps) {
+ 
   const { slug } = await params
   const page = getPageBySlug(slug)
   
