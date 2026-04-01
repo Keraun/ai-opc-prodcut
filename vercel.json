@@ -1,12 +1,8 @@
 {
   "git": {
-    "deploymentEnabled": false
+    "deploymentEnabled": true
   },
   "buildCommand": "npm run build",
   "installCommand": "npm install",
-  "framework": "nextjs",
-  "rewrites": [{
-    "source": "/(.*)",
-    "destination": "/"
-  }]
+  "framework": "nextjs"
 }
