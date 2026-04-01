@@ -1,9 +1,18 @@
-{"timestamp":"2026-04-01T22:57:15.628Z","level":"INFO","message":"loadInitialData called","meta":{}}
-{"timestamp":"2026-04-01T22:57:15.632Z","level":"INFO","message":"loadInitialData completed","meta":{"hasSite":true,"hasHeader":true,"hasFooter":true}}
-{"timestamp":"2026-04-01T22:57:15.632Z","level":"INFO","message":"loadInitialData called","meta":{}}
-{"timestamp":"2026-04-01T22:57:15.634Z","level":"INFO","message":"loadInitialData completed","meta":{"hasSite":true,"hasHeader":true,"hasFooter":true}}
-{"timestamp":"2026-04-01T22:57:15.661Z","level":"INFO","message":"GenericPage rendering started","meta":{"pageId":"home","deviceInfo":{"os":"iOS","osVersion":"16.1","browser":"Safari","browserVersion":"16.1","deviceModel":"iPhone"},"userAgent":"Mozilla/5.0 (iPhone; CPU iPhone OS 16_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/16.1 Mobile/15E148 Safari/604.1"}}
-{"timestamp":"2026-04-01T22:57:15.662Z","level":"INFO","message":"loadPageData called","meta":{"pageId":"home","hasExtraConfig":false}}
-{"timestamp":"2026-04-01T22:57:15.664Z","level":"INFO","message":"loadPageData got response","meta":{"pageId":"home","moduleCount":10,"modules":["site-root","site-header","section-hero","section-partner","section-products","section-services","section-pricing","section-about","section-contact","site-footer"]}}
-{"timestamp":"2026-04-01T22:57:15.665Z","level":"INFO","message":"GenericPage pageData loaded","meta":{"pageId":"home","moduleCount":10,"moduleIds":["site-root","site-header","section-hero","section-partner","section-products","section-services","section-pricing","section-about","section-contact","site-footer"]}}
-{"timestamp":"2026-04-01T22:57:15.665Z","level":"INFO","message":"GenericPage rendering completed","meta":{"pageId":"home"}}
+{"timestamp":"2026-04-01T23:11:25.237Z","level":"INFO","message":"loadInitialData called","meta":{}}
+{"timestamp":"2026-04-01T23:11:25.246Z","level":"INFO","message":"loadInitialData completed","meta":{"hasSite":true,"hasHeader":true,"hasFooter":true}}
+{"timestamp":"2026-04-01T23:11:25.246Z","level":"INFO","message":"loadInitialData called","meta":{}}
+{"timestamp":"2026-04-01T23:11:25.249Z","level":"INFO","message":"loadInitialData completed","meta":{"hasSite":true,"hasHeader":true,"hasFooter":true}}
+{"timestamp":"2026-04-01T23:11:25.275Z","level":"INFO","message":"GenericPage rendering started","meta":{"pageId":"home","deviceInfo":{"os":"iOS","osVersion":"16.1","browser":"Safari","browserVersion":"16.1","deviceModel":"iPhone"},"userAgent":"Mozilla/5.0 (iPhone; CPU iPhone OS 16_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/16.1 Mobile/15E148 Safari/604.1"}}
+{"timestamp":"2026-04-01T23:11:25.275Z","level":"INFO","message":"loadPageData called","meta":{"pageId":"home","hasExtraConfig":false}}
+{"timestamp":"2026-04-01T23:11:25.278Z","level":"INFO","message":"loadPageData got response","meta":{"pageId":"home","moduleCount":10,"modules":["site-root","site-header","section-hero","section-partner","section-products","section-services","section-pricing","section-about","section-contact","site-footer"]}}
+{"timestamp":"2026-04-01T23:11:25.279Z","level":"INFO","message":"GenericPage pageData loaded","meta":{"pageId":"home","moduleCount":10,"moduleIds":["site-root","site-header","section-hero","section-partner","section-products","section-services","section-pricing","section-about","section-contact","site-footer"]}}
+{"timestamp":"2026-04-01T23:11:25.279Z","level":"INFO","message":"GenericPage rendering completed","meta":{"pageId":"home"}}
+{"timestamp":"2026-04-01T23:11:36.669Z","level":"INFO","message":"loadInitialData called","meta":{}}
+{"timestamp":"2026-04-01T23:11:36.677Z","level":"INFO","message":"loadInitialData completed","meta":{"hasSite":true,"hasHeader":true,"hasFooter":true}}
+{"timestamp":"2026-04-01T23:11:36.677Z","level":"INFO","message":"loadInitialData called","meta":{}}
+{"timestamp":"2026-04-01T23:11:36.680Z","level":"INFO","message":"loadInitialData completed","meta":{"hasSite":true,"hasHeader":true,"hasFooter":true}}
+{"timestamp":"2026-04-01T23:11:36.707Z","level":"INFO","message":"GenericPage rendering started","meta":{"pageId":"home","deviceInfo":{"os":"iOS","osVersion":"16.1","browser":"Safari","browserVersion":"16.1","deviceModel":"iPhone"},"userAgent":"Mozilla/5.0 (iPhone; CPU iPhone OS 16_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/16.1 Mobile/15E148 Safari/604.1"}}
+{"timestamp":"2026-04-01T23:11:36.708Z","level":"INFO","message":"loadPageData called","meta":{"pageId":"home","hasExtraConfig":false}}
+{"timestamp":"2026-04-01T23:11:36.710Z","level":"INFO","message":"loadPageData got response","meta":{"pageId":"home","moduleCount":10,"modules":["site-root","site-header","section-hero","section-partner","section-products","section-services","section-pricing","section-about","section-contact","site-footer"]}}
+{"timestamp":"2026-04-01T23:11:36.711Z","level":"INFO","message":"GenericPage pageData loaded","meta":{"pageId":"home","moduleCount":10,"moduleIds":["site-root","site-header","section-hero","section-partner","section-products","section-services","section-pricing","section-about","section-contact","site-footer"]}}
+{"timestamp":"2026-04-01T23:11:36.711Z","level":"INFO","message":"GenericPage rendering completed","meta":{"pageId":"home"}}

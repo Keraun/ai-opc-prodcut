@@ -4,6 +4,36 @@ import { useEffect, useState, ComponentType, ReactNode } from "react"
 import { getModuleComponent } from "./registry"
 import type { ModuleData, ModuleProps } from "./types"
 
+let modulesInitialized = false
+let initializationPromise: Promise<void> | null = null
+
+async function ensureModulesInitialized(): Promise<void> {
+  if (modulesInitialized) {
+    return
+  }
+  
+  if (initializationPromise) {
+    return initializationPromise
+  }
+  
+  initializationPromise = (async () => {
+    if (typeof window !== "undefined" && !modulesInitialized) {
+      try {
+        console.log('[ModuleRenderer] Initializing modules')
+        const { initializeModules } = await import('./init')
+        initializeModules()
+        modulesInitialized = true
+        console.log('[ModuleRenderer] Modules initialized successfully')
+      } catch (error) {
+        console.error('[ModuleRenderer] Failed to initialize modules:', error)
+        throw error
+      }
+    }
+  })()
+  
+  return initializationPromise
+}
+
 
 
 interface ModuleErrorBoundaryProps {
@@ -137,6 +167,40 @@ interface ModuleRendererProps {
 }
 
 export function ModuleRenderer({ modules }: ModuleRendererProps) {
+  const [isInitialized, setIsInitialized] = useState(false)
+  const [initError, setInitError] = useState<Error | null>(null)
+
+  useEffect(() => {
+    ensureModulesInitialized()
+      .then(() => setIsInitialized(true))
+      .catch((err) => {
+        console.error('[ModuleRenderer] Initialization error:', err)
+        setInitError(err)
+      })
+  }, [])
+
+  if (initError) {
+    return (
+      <div style={{ 
+        padding: '20px', 
+        background: '#fee', 
+        border: '1px solid #f00',
+        borderRadius: '4px',
+        margin: '10px 0'
+      }}>
+        <p style={{ color: '#c00', margin: 0 }}>
+          模块初始化失败
+        </p>
+        <p style={{ color: '#666', margin: '5px 0 0', fontSize: '12px' }}>
+          {initError.message}
+        </p>
+      </div>
+    )
+  }
+
+  if (!isInitialized) {
+    return null
+  }
 
   return (
     <>
@@ -144,11 +208,29 @@ export function ModuleRenderer({ modules }: ModuleRendererProps) {
         const Component = getModuleComponent(module?.moduleId)
         
         if (!Component) {
-          console.warn('[ModuleRenderer] Module not registered:', {
+          console.warn('[ModuleRenderer] Module not found:', {
             moduleId: module.moduleId,
             moduleInstanceId: module.moduleInstanceId
           })
-          return null
+          return (
+            <div 
+              key={module.moduleInstanceId}
+              style={{ 
+                padding: '20px', 
+                background: '#fff3cd', 
+                border: '1px solid #ffc107',
+                borderRadius: '4px',
+                margin: '10px 0'
+              }}
+            >
+              <p style={{ color: '#856404', margin: 0, fontWeight: 'bold' }}>
+                模块未找到: {module.moduleId}
+              </p>
+              <p style={{ color: '#856404', margin: '5px 0 0', fontSize: '12px' }}>
+                请检查模块是否已正确安装
+              </p>
+            </div>
+          )
         }
 
         return (
