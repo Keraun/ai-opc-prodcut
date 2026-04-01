@@ -1,0 +1,37 @@
+# 源代码和开发文件
+src/
+components/
+lib/
+app/
+*.tsx
+*.ts
+*.jsx
+!*.js
+node_modules/
+.git/
+.gitignore
+README*.md
+PROJECT_GUIDE.md
+项目卖点说明.md
+VERCEL_DEPLOY_GUIDE.md
+.trae/
+.env.example
+content/
+database/init_database.zip
+*.test.*
+*.spec.*
+.eslintrc*
+.prettierrc*
+tsconfig.json
+components.json
+.DS_Store
+.next/cache/
+
+# 保留的构建产物和必要文件
+!.next/
+!public/
+!package.json
+!pnpm-lock.yaml
+!.env
+!database/runtime/
+!vercel.json
