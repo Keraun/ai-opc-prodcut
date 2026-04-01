@@ -54,3 +54,7 @@ export async function getConfig(type?: string): Promise<ApiResponse<SiteConfig>>
 export async function getProductCategories(): Promise<ApiResponse<string[]>> {
   return request<string[]>('/api/client/product-categories')
 }
+
+export async function getThemeConfig(): Promise<ApiResponse<any>> {
+  return request<any>('/api/client/themes')
+}

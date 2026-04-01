@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import type { ModuleProps } from '@/modules/types'
 import type { NewsListData, Article } from './types'
+import { getArticles } from '@/lib/client-api'
 import styles from './index.module.css'
 
 function ArticleImage({ article, onImageError }: { article: Article; onImageError: (id: number) => void }) {
@@ -52,8 +53,7 @@ export function NewsListModule({ data }: ModuleProps) {
   useEffect(() => {
     const fetchArticles = async () => {
       try {
-        const response = await fetch('/api/articles')
-        const result = await response.json()
+        const result = await getArticles()
         if (result.success && result.data) {
           setArticles(result.data)
         }

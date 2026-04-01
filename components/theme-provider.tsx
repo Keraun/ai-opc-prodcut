@@ -6,7 +6,7 @@ import {
   applyThemeToElement,
   type ThemeConfig 
 } from "@/lib/theme-utils"
-import { getThemeConfig } from "@/lib/api-client"
+import { getThemeConfig as getClientThemeConfig } from "@/lib/client-api"
 
 interface ThemeContextType {
   currentTheme: string
@@ -58,16 +58,24 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
     
     async function fetchThemeConfig() {
       try {
-        const themeConfig = await getThemeConfig()
-        if (themeConfig && themeConfig.themes) {
-          setThemes(themeConfig.themes)
-          const themeId = savedTheme || themeConfig.currentTheme || "modern"
-          if (themeConfig.themes[themeId]) {
-            setCurrentTheme(themeId)
-            setThemeConfig(themeConfig.themes[themeId])
-          } else if (themeConfig.themes["modern"]) {
-            setCurrentTheme("modern")
-            setThemeConfig(themeConfig.themes["modern"])
+        const response = await getClientThemeConfig()
+        if (response.success && response.data) {
+          const themeConfig = response.data
+          if (themeConfig.themes) {
+            setThemes(themeConfig.themes)
+            const themeId = savedTheme || themeConfig.currentTheme || "modern"
+            if (themeConfig.themes[themeId]) {
+              setCurrentTheme(themeId)
+              setThemeConfig(themeConfig.themes[themeId])
+            } else if (themeConfig.themes["modern"]) {
+              setCurrentTheme("modern")
+              setThemeConfig(themeConfig.themes["modern"])
+            } else {
+              const defaultTheme = getDefaultThemeConfig(savedTheme)
+              setThemes({ [defaultTheme.id]: defaultTheme })
+              setCurrentTheme(defaultTheme.id)
+              setThemeConfig(defaultTheme)
+            }
           } else {
             const defaultTheme = getDefaultThemeConfig(savedTheme)
             setThemes({ [defaultTheme.id]: defaultTheme })

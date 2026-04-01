@@ -6,6 +6,7 @@ import type { ModuleProps } from '@/modules/types'
 import type { ProductListData, Product } from './types'
 import { QrcodeModal } from '@/components/QrcodeModal'
 import { useTheme } from '@/components/theme-provider'
+import { getProducts, getProductCategories } from '@/lib/client-api'
 import styles from './index.module.css'
 
 function ProductImage({ product, onImageError }: { product: Product; onImageError: (id: number) => void }) {
@@ -71,22 +72,20 @@ export function ProductListModule({ data }: ModuleProps) {
     const fetchData = async () => {
       try {
         const [productsRes, categoriesRes] = await Promise.all([
-          fetch('/api/products'),
-          fetch('/api/product-categories')
+          getProducts(),
+          getProductCategories()
         ])
         
-        const productsResult = await productsRes.json()
-        if (productsResult.success && productsResult.data) {
-          setProducts(productsResult.data)
+        if (productsRes.success && productsRes.data) {
+          setProducts(productsRes.data)
         }
         
-        const categoriesResult = await categoriesRes.json()
-        if (categoriesResult.success && categoriesResult.data) {
+        if (categoriesRes.success && categoriesRes.data) {
           const formattedCategories = [
             { key: 'all', title: '全部产品' },
-            ...categoriesResult.data.map((cat: any) => ({
-              key: cat.value,
-              title: cat.label
+            ...categoriesRes.data.map((cat: any) => ({
+              key: cat.value || cat,
+              title: cat.label || cat
             }))
           ]
           setCategories(formattedCategories)
