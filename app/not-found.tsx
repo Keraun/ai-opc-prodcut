@@ -8,7 +8,6 @@ import styles from "./not-found.module.css"
 
 export default function NotFoundPage() {
   const [modules, setModules] = useState<ModuleData[]>([])
-  const [loaded, setLoaded] = useState(false)
 
   useEffect(() => {
     setModules([
@@ -31,12 +30,7 @@ export default function NotFoundPage() {
         data: {}
       }
     ])
-    setLoaded(true)
   }, [])
-
-  if (!loaded) {
-    return null
-  }
 
   const headerModule = modules.find(m => m.moduleId === 'site-header')
   const footerModule = modules.find(m => m.moduleId === 'site-footer')

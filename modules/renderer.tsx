@@ -175,15 +175,13 @@ interface ModuleRendererProps {
 }
 
 export function ModuleRenderer({ modules }: ModuleRendererProps) {
-  const [isInitialized, setIsInitialized] = useState(false)
   const [initError, setInitError] = useState<Error | null>(null)
 
   useEffect(() => {
-    console.log('[ModuleRenderer] useEffect triggered, starting initialization...')
+    console.log('[ModuleRenderer] useEffect triggered, ensuring modules are initialized...')
     ensureModulesInitialized()
       .then(() => {
-        console.log('[ModuleRenderer] Initialization completed successfully')
-        setIsInitialized(true)
+        console.log('[ModuleRenderer] Modules initialized successfully')
       })
       .catch((err) => {
         console.error('[ModuleRenderer] Initialization error:', err)
@@ -208,11 +206,6 @@ export function ModuleRenderer({ modules }: ModuleRendererProps) {
         </p>
       </div>
     )
-  }
-
-  if (!isInitialized) {
-    console.log('[ModuleRenderer] Not initialized yet, returning null')
-    return null
   }
 
   console.log('[ModuleRenderer] Rendering modules, count:', modules.length)
