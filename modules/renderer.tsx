@@ -31,24 +31,29 @@ export function ModuleRenderer({ modules }: ModuleRendererProps) {
   useEffect(() => {
     if (!isClient) return
 
+    console.log('[ModuleRenderer] Starting to load modules:', moduleIds)
+
     const loadModules = async () => {
       const loadPromises = moduleIds.map(async (moduleId) => {
         const existingComponent = getModuleComponent(moduleId)
         if (existingComponent) {
+          console.log(`[ModuleRenderer] Module "${moduleId}" already registered`)
           return moduleId
         }
 
         const validation = validateModuleId(moduleId)
         if (!validation.valid) {
-          console.warn(validation.error)
+          console.warn(`[ModuleRenderer] Validation failed for "${moduleId}":`, validation.error)
           return null
         }
 
         const loader = loaders[moduleId]
         if (!loader) {
+          console.warn(`[ModuleRenderer] No loader found for "${moduleId}"`)
           return null
         }
 
+        console.log(`[ModuleRenderer] Loading module "${moduleId}"...`)
         try {
           const moduleExports = await loader()
           const componentName = componentNames[moduleId]
@@ -62,22 +67,31 @@ export function ModuleRenderer({ modules }: ModuleRendererProps) {
               schema: moduleExports.schema,
               defaultData: moduleExports.defaultData
             })
+            console.log(`[ModuleRenderer] Module "${moduleId}" loaded successfully`)
             return moduleId
           } else {
-            console.error(`Component "${componentName}" not found in module "${moduleId}"`)
+            console.error(`[ModuleRenderer] Component "${componentName}" not found in module "${moduleId}"`)
             return null
           }
         } catch (error) {
-          console.error(`Failed to load module "${moduleId}":`, error)
+          console.error(`[ModuleRenderer] Failed to load module "${moduleId}":`, error)
           return null
         }
       })
 
+      console.log('[ModuleRenderer] Waiting for all modules to load...')
       const results = await Promise.allSettled(loadPromises)
       const successfullyLoaded = results
         .filter((result): result is PromiseFulfilledResult<string | null> => result.status === 'fulfilled')
         .map(result => result.value)
         .filter((id): id is string => id !== null)
+      
+      console.log('[ModuleRenderer] Modules loaded:', {
+        total: moduleIds.length,
+        success: successfullyLoaded.length,
+        failed: moduleIds.length - successfullyLoaded.length,
+        loadedModules: successfullyLoaded
+      })
       
       setLoadedModules(new Set(successfullyLoaded))
     }
