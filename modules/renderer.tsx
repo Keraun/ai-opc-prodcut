@@ -8,24 +8,32 @@ let modulesInitialized = false
 let initializationPromise: Promise<void> | null = null
 
 async function ensureModulesInitialized(): Promise<void> {
+  console.log('[ensureModulesInitialized] Called, modulesInitialized:', modulesInitialized)
+  
   if (modulesInitialized) {
+    console.log('[ensureModulesInitialized] Already initialized, returning early')
     return
   }
   
   if (initializationPromise) {
+    console.log('[ensureModulesInitialized] Initialization in progress, waiting...')
     return initializationPromise
   }
+  
+  console.log('[ensureModulesInitialized] Starting initialization...')
   
   initializationPromise = (async () => {
     if (typeof window !== "undefined" && !modulesInitialized) {
       try {
-        console.log('[ModuleRenderer] Initializing modules')
+        console.log('[ensureModulesInitialized] Dynamic importing initializeModules...')
         const { initializeModules } = await import('./init')
+        console.log('[ensureModulesInitialized] Calling initializeModules()')
         initializeModules()
         modulesInitialized = true
-        console.log('[ModuleRenderer] Modules initialized successfully')
+        console.log('[ensureModulesInitialized] Modules initialized successfully')
       } catch (error) {
-        console.error('[ModuleRenderer] Failed to initialize modules:', error)
+        console.error('[ensureModulesInitialized] Failed to initialize modules:', error)
+        initializationPromise = null
         throw error
       }
     }
@@ -171,8 +179,12 @@ export function ModuleRenderer({ modules }: ModuleRendererProps) {
   const [initError, setInitError] = useState<Error | null>(null)
 
   useEffect(() => {
+    console.log('[ModuleRenderer] useEffect triggered, starting initialization...')
     ensureModulesInitialized()
-      .then(() => setIsInitialized(true))
+      .then(() => {
+        console.log('[ModuleRenderer] Initialization completed successfully')
+        setIsInitialized(true)
+      })
       .catch((err) => {
         console.error('[ModuleRenderer] Initialization error:', err)
         setInitError(err)
@@ -199,12 +211,16 @@ export function ModuleRenderer({ modules }: ModuleRendererProps) {
   }
 
   if (!isInitialized) {
+    console.log('[ModuleRenderer] Not initialized yet, returning null')
     return null
   }
 
+  console.log('[ModuleRenderer] Rendering modules, count:', modules.length)
+  
   return (
     <>
       {modules.map((module) => {
+        console.log('[ModuleRenderer] Processing module:', module.moduleId, module.moduleInstanceId)
         const Component = getModuleComponent(module?.moduleId)
         
         if (!Component) {

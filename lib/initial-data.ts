@@ -46,11 +46,7 @@ export function loadPageData(
 
   const pageResponse = getPageResponse(pageId)
   
-  serverLogger.info("loadPageData got response", { 
-    pageId, 
-    moduleCount: pageResponse.data?.length || 0,
-    modules: pageResponse.data?.map((m: any) => m.moduleId) || []
-  })
+  serverLogger.info("loadPageData got response", pageResponse)
   
   // 应用 extraConfig 到模块数据中
   if (extraConfig) {
