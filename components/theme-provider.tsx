@@ -51,7 +51,19 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
           } else if (themeConfig.themes["modern"]) {
             setCurrentTheme("modern")
             setThemeConfig(themeConfig.themes["modern"])
+          } else {
+            // No themes available, use default
+            const defaultTheme = getDefaultThemeConfig(savedTheme)
+            setThemes({ [defaultTheme.id]: defaultTheme })
+            setCurrentTheme(defaultTheme.id)
+            setThemeConfig(defaultTheme)
           }
+        } else {
+          // API call failed or returned null, use default theme
+          const defaultTheme = getDefaultThemeConfig(savedTheme)
+          setThemes({ [defaultTheme.id]: defaultTheme })
+          setCurrentTheme(defaultTheme.id)
+          setThemeConfig(defaultTheme)
         }
       } catch (error) {
         console.error('Failed to fetch theme config:', error)
