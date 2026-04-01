@@ -43,7 +43,6 @@ export function loadPageData(
     }))
   }
   
-  console.log('pageResponse', pageResponse)
   
   // 直接返回 pageResponse，不进行额外的转化
   return pageResponse
