@@ -15,6 +15,8 @@ interface PageInfo {
 
 function getAllPages(): PageInfo[] {
   try {
+    // 每次都重新加载数据，确保获取到最新的数据
+    jsonDb.reload()
     const pages = jsonDb.getAll('pages')
     return pages
       .filter((page: any) => page.status === 'published')
@@ -48,6 +50,8 @@ function getSiteConfig() {
 
 function pageModuleExists(pageId: string): boolean {
   try {
+    // 每次都重新加载数据，确保获取到最新的数据
+    jsonDb.reload()
     const page = jsonDb.findOne('pages', { page_id: pageId })
     if (!page) return false
     
@@ -62,14 +66,7 @@ interface PageProps {
   params: Promise<{ slug: string }>
 }
 
-export async function generateStaticParams() {
-  const pages = getAllPages()
-  return pages
-    .filter(page => page.slug !== 'home')
-    .map((page) => ({
-      slug: page.slug,
-    }))
-}
+// 移除静态生成，使用服务器端渲染，确保每次请求都获取最新数据
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const { slug } = await params

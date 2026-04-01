@@ -42,72 +42,74 @@ function getSeoConfig() {
   }
 }
 
-const siteConfig = getSiteConfig()
-const seoConfig = getSeoConfig()
-
-export const metadata: Metadata = {
-  metadataBase: new URL(siteConfig?.url || 'https://makerai.com'),
-  title: {
-    default: `${siteConfig?.name || ''} - ${siteConfig?.description || ''}`,
-    template: `%s | ${siteConfig?.name || ''}`,
-  },
-  description: siteConfig?.description,
-  keywords: seoConfig?.keywords,
-  authors: [{ name: siteConfig?.name }],
-  creator: siteConfig?.name,
-  publisher: siteConfig?.name,
-  formatDetection: {
-    email: false,
-    address: false,
-    telephone: false,
-  },
-  openGraph: {
-    type: (seoConfig?.openGraph?.type || 'website') as 'website',
-    locale: seoConfig?.openGraph?.locale,
-    url: siteConfig?.url,
-    siteName: seoConfig?.openGraph?.siteName,
-    title: `${siteConfig?.name || ''} - ${siteConfig?.description || ''}`,
+export async function generateMetadata(): Promise<Metadata> {
+  const siteConfig = getSiteConfig()
+  const seoConfig = getSeoConfig()
+  
+  return {
+    metadataBase: new URL(siteConfig?.url || 'https://makerai.com'),
+    title: {
+      default: `${siteConfig?.name || ''} - ${siteConfig?.description || ''}`,
+      template: `%s | ${siteConfig?.name || ''}`,
+    },
     description: siteConfig?.description,
-    images: seoConfig?.openGraph?.images,
-  },
-  twitter: {
-    card: (seoConfig?.twitter?.card || 'summary_large_image') as 'summary_large_image',
-    title: `${siteConfig?.name || ''} - ${siteConfig?.description || ''}`,
-    description: siteConfig?.description,
-    images: seoConfig?.openGraph?.images?.map((img: any) => img.url),
-    creator: seoConfig?.twitter?.creator,
-  },
-  robots: {
-    index: seoConfig?.robots?.index,
-    follow: seoConfig?.robots?.follow,
-    googleBot: {
+    keywords: seoConfig?.keywords,
+    authors: [{ name: siteConfig?.name }],
+    creator: siteConfig?.name,
+    publisher: siteConfig?.name,
+    formatDetection: {
+      email: false,
+      address: false,
+      telephone: false,
+    },
+    openGraph: {
+      type: (seoConfig?.openGraph?.type || 'website') as 'website',
+      locale: seoConfig?.openGraph?.locale,
+      url: siteConfig?.url,
+      siteName: seoConfig?.openGraph?.siteName,
+      title: `${siteConfig?.name || ''} - ${siteConfig?.description || ''}`,
+      description: siteConfig?.description,
+      images: seoConfig?.openGraph?.images,
+    },
+    twitter: {
+      card: (seoConfig?.twitter?.card || 'summary_large_image') as 'summary_large_image',
+      title: `${siteConfig?.name || ''} - ${siteConfig?.description || ''}`,
+      description: siteConfig?.description,
+      images: seoConfig?.openGraph?.images?.map((img: any) => img.url),
+      creator: seoConfig?.twitter?.creator,
+    },
+    robots: {
       index: seoConfig?.robots?.index,
       follow: seoConfig?.robots?.follow,
-      'max-video-preview': -1,
-      'max-image-preview': 'large',
-      'max-snippet': -1,
+      googleBot: {
+        index: seoConfig?.robots?.index,
+        follow: seoConfig?.robots?.follow,
+        'max-video-preview': -1,
+        'max-image-preview': 'large',
+        'max-snippet': -1,
+      },
     },
-  },
-  icons: {
-    icon: [
-      {
-        url: siteConfig?.logo || '/icon-light-32x32.png',
-        media: '(prefers-color-scheme: light)',
-      },
-      {
-        url: siteConfig?.logo || '/icon-dark-32x32.png',
-        media: '(prefers-color-scheme: dark)',
-      },
-      {
-        url: siteConfig?.logo || '/icon.svg',
-        type: 'image/svg+xml',
-      },
-    ],
-    apple: siteConfig?.logo || '/apple-icon.png',
-  },
-  alternates: {
-    canonical: siteConfig?.url,
-  },
+    icons: {
+      icon: [
+        {
+          url: siteConfig?.logo || '/icon-light-32x32.png',
+          media: '(prefers-color-scheme: light)',
+        },
+        {
+          url: siteConfig?.logo || '/icon-dark-32x32.png',
+          media: '(prefers-color-scheme: dark)',
+        },
+        {
+          url: siteConfig?.logo || '/icon.svg',
+          type: 'image/svg+xml',
+        },
+      ],
+      apple: siteConfig?.logo || '/apple-icon.png',
+    },
+    alternates: {
+      canonical: siteConfig?.url,
+    },
+  }
 }
 
 export default function RootLayout({
@@ -119,6 +121,8 @@ export default function RootLayout({
   const initialData = loadInitialData()
   const initialDataScript = generateInitialDataScript()
 
+  const siteConfig = getSiteConfig()
+  const seoConfig = getSeoConfig()
   const themeConfig = getThemeConfig()
   const colors = themeConfig?.colors || {}
   const effects = themeConfig?.effects || {}
