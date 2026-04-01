@@ -120,9 +120,13 @@ export default function AdminLoginPage() {
     router.push("/admin/dashboard?menu=pages")
   }
 
-  const handleCopyToken = (): void => {
-    navigator.clipboard.writeText(generatedToken)
-    toast.success("超级管理员口令已复制到剪贴板")
+  const handleCopyToken = async (): Promise<void> => {
+    try {
+      await navigator.clipboard.writeText(generatedToken)
+      toast.success("超级管理员口令已复制到剪贴板")
+    } catch {
+      toast.error("复制失败，请手动复制")
+    }
   }
 
   const handleSendCode = async (): Promise<void> => {
