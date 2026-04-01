@@ -37,17 +37,22 @@ class JsonDatabase {
   }
 
   private loadAllData() {
+    console.log('[JsonDatabase] Loading all data...')
+    console.log('[JsonDatabase] Data directory:', DATA_DIR)
     for (const [table, file] of Object.entries(this.fileMap)) {
       const filePath = path.join(DATA_DIR, file)
+      console.log('[JsonDatabase] Loading', table, 'from', filePath)
       if (fs.existsSync(filePath)) {
         try {
           const content = fs.readFileSync(filePath, 'utf-8')
           this.data[table] = JSON.parse(content)
+          console.log('[JsonDatabase] Loaded', table, ':', this.data[table].length, 'items')
         } catch (error) {
           console.error(`Error loading ${table} data:`, error)
           this.data[table] = []
         }
       } else {
+        console.log('[JsonDatabase] File not found:', filePath)
         this.data[table] = []
       }
     }
