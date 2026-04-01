@@ -13,7 +13,7 @@ export function ModuleRenderer({ modules }: ModuleRendererProps) {
   const [isClient, setIsClient] = useState(false)
   const [allLoaded, setAllLoaded] = useState(false)
   const moduleIds = useMemo(() => [...new Set(modules.map(m => m.moduleId))], [modules])
-  const { loaders, componentNames } = getModuleLoaderConfig()
+  const { loaders, componentNames } = useMemo(() => getModuleLoaderConfig(), [])
 
   useEffect(() => {
     setIsClient(true)
