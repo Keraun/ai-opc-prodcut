@@ -1,7 +1,7 @@
 "use client"
 
 import { Button, Dropdown } from "@arco-design/web-react"
-import { IconUser, IconSettings, IconExport, IconCustomerService } from "@arco-design/web-react/icon"
+import { IconUser, IconSettings, IconExport, IconCustomerService, IconHome } from "@arco-design/web-react/icon"
 import styles from "../../dashboard.module.css"
 
 interface HeaderProps {
@@ -30,13 +30,21 @@ export function Header({ currentUser, onLogout, onChangePassword }: HeaderProps)
           </div>
 
           <div className={styles.headerActions}>
+            <Button
+              type="text"
+              icon={<IconHome />}
+              onClick={() => window.open('/', '_blank')}
+            >
+              打开官网
+            </Button>
+
             <Dropdown
               droplist={
                 <div className={styles.qrDropdown}>
                   <div className={styles.qrContainer}>
                     <div className={styles.qrInner}>
-                      <img 
-                        src="/images/admin_qrcode_wuly.jpg" 
+                      <img
+                        src="/images/admin_qrcode_wuly.jpg"
                         alt="客服二维码"
                         style={{ width: '100%', height: 'auto', display: 'block' }}
                       />
