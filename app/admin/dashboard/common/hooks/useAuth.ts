@@ -10,19 +10,24 @@ export function useAuth() {
 
   const checkAuth = useCallback(async () => {
     try {
+      console.log('[Dashboard CheckAuth] Checking auth status...')
       const authResult = await checkAuthStatus()
+      console.log('[Dashboard CheckAuth] Auth result:', authResult)
 
       if (!authResult.authenticated) {
+        console.log('[Dashboard CheckAuth] Not authenticated, redirecting to login')
         await logoutApi()
         sessionStorage.removeItem('currentUser')
         router.push("/admin")
         return false
       }
 
+      console.log('[Dashboard CheckAuth] Authenticated, user:', authResult.user)
       setCurrentUser(authResult.user || null)
       sessionStorage.setItem('currentUser', JSON.stringify(authResult.user))
       return true
     } catch (error) {
+      console.error('[Dashboard CheckAuth] Error:', error)
       await logoutApi()
       sessionStorage.removeItem('currentUser')
       router.push("/admin")

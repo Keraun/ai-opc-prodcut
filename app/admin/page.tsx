@@ -55,20 +55,25 @@ export default function AdminLoginPage() {
     }
 
     setLoading(true)
+    console.log('[Login Page] Attempting login...')
     
     const data = await loginWithResponse(username, password)
+    console.log('[Login Page] Login response:', data)
 
     if (data.success) {
       if (data.user) {
         sessionStorage.setItem('currentUser', JSON.stringify(data.user))
+        console.log('[Login Page] User saved to sessionStorage')
       }
       
       if (data.requireEmailSetup) {
+        console.log('[Login Page] Showing email setup')
         setShowEmailSetup(true)
       } else if (data.showSuperAdminToken && data.superAdminToken) {
         setGeneratedToken(data.superAdminToken)
         setShowTokenModal(true)
       } else {
+        console.log('[Login Page] Login successful, redirecting to dashboard')
         toast.success("登录成功")
         router.push("/admin/dashboard?menu=pages")
       }
@@ -91,7 +96,11 @@ export default function AdminLoginPage() {
 
     setLoading(true)
     
-    const data = await setupEmailApi(setupEmail)
+    const currentUserStr = sessionStorage.getItem('currentUser')
+    const currentUser = currentUserStr ? JSON.parse(currentUserStr) : null
+    const targetUsername = currentUser?.username || username
+    
+    const data = await setupEmailApi(setupEmail, targetUsername)
 
     if (data.success) {
       toast.success("邮箱设置成功")

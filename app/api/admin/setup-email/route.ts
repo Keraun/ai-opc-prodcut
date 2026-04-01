@@ -1,35 +1,53 @@
 import { NextRequest } from "next/server"
 import { readConfig, writeConfig } from "@/lib/config-manager"
+import { jsonDb } from "@/lib/json-database"
 import {
   successResponse,
   errorResponse,
   badRequestResponse,
-  wrapAuthApiHandler,
+  wrapApiHandler,
   setCookie,
   getClientIP,
   formatDateTime,
-  generateRandomToken
+  generateRandomToken,
+  checkAdminAuth
 } from "@/lib/api-utils"
 
 export async function POST(request: NextRequest) {
-  return wrapAuthApiHandler(async (authResult) => {
+  return wrapApiHandler(async () => {
     const body = await request.json()
-    const { email } = body
+    const { email, username } = body
 
     if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
       return badRequestResponse("请输入有效的邮箱地址")
     }
 
+    const authResult = await checkAdminAuth()
+    
+    let targetUsername: string
+    
+    if (authResult.isAuthenticated) {
+      targetUsername = authResult.username!
+    } else if (username) {
+      targetUsername = username
+    } else {
+      return errorResponse("未登录", 401)
+    }
+
     const accountConfig = readConfig('account')
     const admins = Array.isArray(accountConfig) ? accountConfig : accountConfig.admins || []
 
-    const adminIndex = admins.findIndex((admin: any) => admin.username === authResult.username)
+    const adminIndex = admins.findIndex((admin: any) => admin.username === targetUsername)
 
     if (adminIndex === -1) {
       return errorResponse("用户不存在", 404)
     }
 
     const admin = admins[adminIndex]
+    
+    if (!authResult.isAuthenticated && admin.email) {
+      return errorResponse("未登录", 401)
+    }
 
     admins[adminIndex].email = email
 
@@ -47,15 +65,33 @@ export async function POST(request: NextRequest) {
     let showSuperAdminToken = false
     let superAdminToken = ''
 
-    const tokenConfig = readConfig('token') || { superAdminToken: '' }
+    jsonDb.reloadTable('system_config')
+    
+    let tokenConfig = jsonDb.findOne('system_config', { config_key: 'super_admin_token' })
 
-    if (!tokenConfig.superAdminToken) {
+    if (!tokenConfig || !tokenConfig.config_value || tokenConfig.config_value.trim() === '') {
       superAdminToken = generateRandomToken(12)
-      tokenConfig.superAdminToken = superAdminToken
+      
+      if (!tokenConfig) {
+        jsonDb.insert('system_config', {
+          config_key: 'super_admin_token',
+          config_value: superAdminToken,
+          created_at: new Date().toISOString(),
+          updated_at: new Date().toISOString()
+        })
+      } else {
+        jsonDb.update('system_config', 
+          tokenConfig.id,
+          { 
+            config_value: superAdminToken,
+            updated_at: new Date().toISOString()
+          }
+        )
+      }
+      
       showSuperAdminToken = true
-      writeConfig('token', tokenConfig)
     } else {
-      superAdminToken = tokenConfig.superAdminToken
+      superAdminToken = tokenConfig.config_value
     }
 
     writeConfig('account', admins)
@@ -69,7 +105,9 @@ export async function POST(request: NextRequest) {
       currentLoginIP: currentIP
     }
 
+    console.log('[Setup Email] Setting cookie:', updatedUserData)
     await setCookie('adminUser', JSON.stringify(updatedUserData))
+    console.log('[Setup Email] Cookie set successfully')
 
     return successResponse({
       showSuperAdminToken,

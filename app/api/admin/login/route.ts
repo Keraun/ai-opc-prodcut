@@ -16,22 +16,27 @@ export async function POST(request: NextRequest) {
     const body = await request.json()
     const { username, password } = body
 
+    console.log('[Login] Attempting login for user:', username)
+
     const accountConfig = readConfig('account')
     const admins = Array.isArray(accountConfig) ? accountConfig : accountConfig.admins || []
 
     const adminIndex = admins.findIndex((admin: any) => admin.username === username)
 
     if (adminIndex === -1) {
+      console.log('[Login] User not found:', username)
       return errorResponse("用户名不存在", 401)
     }
 
     const admin = admins[adminIndex]
 
     if (admin.password !== password) {
+      console.log('[Login] Password mismatch for user:', username)
       return errorResponse("密码错误", 401)
     }
 
     const requireEmailSetup = !admin.email
+    console.log('[Login] requireEmailSetup:', requireEmailSetup)
 
     if (requireEmailSetup) {
       const userData = {
@@ -40,7 +45,9 @@ export async function POST(request: NextRequest) {
         mustChangePassword: admin.must_change_password
       }
       
+      console.log('[Login] Setting cookie for email setup:', userData)
       await setCookie('adminUser', JSON.stringify(userData))
+      console.log('[Login] Cookie set successfully')
 
       return successResponse({
         requireEmailSetup: true,
@@ -102,7 +109,9 @@ export async function POST(request: NextRequest) {
       currentLoginIP: currentIP
     }
     
+    console.log('[Login] Setting cookie for normal login:', userData)
     await setCookie('adminUser', JSON.stringify(userData))
+    console.log('[Login] Cookie set successfully for normal login')
 
     return successResponse({
       mustChangePassword: admin.must_change_password,

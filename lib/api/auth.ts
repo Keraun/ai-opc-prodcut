@@ -99,13 +99,14 @@ export async function loginWithResponse(username: string, password: string): Pro
 /**
  * 设置用户邮箱
  * @param email - 邮箱地址
+ * @param username - 用户名（首次登录时需要）
  * @returns 设置结果，包含 success 和 message
  */
-export async function setupEmail(email: string): Promise<{ success: boolean; message?: string }> {
+export async function setupEmail(email: string, username?: string): Promise<{ success: boolean; message?: string }> {
   try {
     const result = await request<void>('/api/admin/setup-email', {
       method: 'POST',
-      body: JSON.stringify({ email }),
+      body: JSON.stringify({ email, username }),
     })
     return { success: result.success, message: result.message }
   } catch (error) {

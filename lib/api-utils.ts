@@ -115,13 +115,15 @@ export async function setCookie(
     httpOnly?: boolean
     secure?: boolean
     sameSite?: 'strict' | 'lax' | 'none'
+    path?: string
   }
 ): Promise<void> {
   const cookieStore = await cookies()
   cookieStore.set(name, value, {
     httpOnly: true,
-    secure: process.env.NODE_ENV === 'production',
+    secure: false,
     sameSite: 'lax',
+    path: '/',
     maxAge: 60 * 60 * 24 * 7,
     ...options
   })
