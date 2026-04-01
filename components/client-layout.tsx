@@ -1,8 +1,10 @@
 "use client"
 
+import { useEffect } from "react"
 import { ThemeProvider } from "@/components/theme-provider"
 import { InitialDataProvider } from "@/components/initial-data-provider"
 import { initializeModules } from "@/modules/init"
+import { initClientErrorHandler, logClientError } from "@/lib/client-error-handler"
 
 // 立即初始化模块，确保在应用加载时就有模块可用
 let modulesInitialized = false
@@ -14,10 +16,15 @@ if (typeof window !== "undefined") {
     console.log('[ClientLayout] Modules initialized successfully')
   } catch (error) {
     console.error('[ClientLayout] Failed to initialize modules:', error)
+    logClientError(error as Error, { source: 'module-initialization' })
   }
 }
 
 export function ClientLayout({ children }: { children: React.ReactNode }) {
+  useEffect(() => {
+    initClientErrorHandler()
+  }, [])
+
   return (
     <InitialDataProvider>
       <ThemeProvider>{children}</ThemeProvider>
