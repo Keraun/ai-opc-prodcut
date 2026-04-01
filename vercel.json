@@ -1,14 +1,7 @@
 {
-  "buildCommand": "pnpm build",
-  "outputDirectory": ".next",
-  "framework": "nextjs",
-  "installCommand": "pnpm install",
-  "regions": ["hkg1"],
-  "functions": {
-    "app/api/**/*.ts": {
-      "runtime": "nodejs20.x"
-    }
+  "git": {
+    "deploymentEnabled": false
   },
-  "trailingSlash": false,
-  "cleanUrls": true
+  "buildCommand": null,  
+  "installCommand": "npm install"
 }
