@@ -10,12 +10,11 @@ interface GenericPageProps {
 
 export async function GenericPage({ 
   pageId, 
-  orderConfigKey, 
   extraConfig,
   wrapperClassName 
 }: GenericPageProps) {
-  const pageData = loadPageData(pageId, orderConfigKey, extraConfig)
-  const modules = pageData.data.modules || []
+  const pageData = loadPageData(pageId, extraConfig)
+  const modules = pageData.data || []
   const content = <ModuleRenderer modules={modules} />
   if (wrapperClassName) {
     return <div className={wrapperClassName}>{content}</div>

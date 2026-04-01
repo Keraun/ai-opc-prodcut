@@ -1,10 +1,12 @@
 import "server-only"
 import type { ModuleData } from "@/modules/types"
 import { readConfig, getPageResponse } from "./config-manager"
-import { jsonDb } from "./json-database"
+import { getJsonDb } from "./json-database"
+
+// 每次操作数据库时都获取最新的实例
+const jsonDb = getJsonDb()
 
 let initialDataCache: Record<string, any> | null = null
-let pageDataCache: Record<string, Record<string, any>> = {}
 
 const isDev = process.env.NODE_ENV === 'development'
 
@@ -25,37 +27,26 @@ export function loadInitialData(): Record<string, any> {
 
 export function loadPageData(
   pageId: string,
-  orderConfigKey?: string,
   extraConfig?: Record<string, any>
 ): Record<string, any> {
-  const cacheKey = `${pageId}-${orderConfigKey || 'default'}`
-  
   // 每次都重新加载数据，确保获取到最新的数据
   jsonDb.reload()
   clearInitialDataCache()
 
   const pageResponse = getPageResponse(pageId)
-
-  const pageData = {
-    data: {
-      theme: pageResponse.common.theme || {},
-      layout: 'default',
-      modules: pageResponse.data.map((item: any) => ({
-        moduleName: item.moduleId,
-        moduleId: item.moduleId,
-        moduleInstanceId: `${item.moduleId}-${pageId}-${Date.now()}`,
-        data: { ...item.data, ...extraConfig }
-      })),
-      common: {
-        site: pageResponse.common.site || {},
-        theme: pageResponse.common.theme || {}
-      }
-    }
+  
+  // 应用 extraConfig 到模块数据中
+  if (extraConfig) {
+    pageResponse.data = pageResponse.data.map((item: any) => ({
+      ...item,
+      data: { ...(item?.data || {}), ...extraConfig }
+    }))
   }
-
-  // 仍然更新缓存，以便其他地方可以使用
-  pageDataCache[cacheKey] = pageData
-  return pageData
+  
+  console.log('pageResponse', pageResponse)
+  
+  // 直接返回 pageResponse，不进行额外的转化
+  return pageResponse
 }
 
 export function getInitialData(): Record<string, any> | null {
@@ -64,7 +55,6 @@ export function getInitialData(): Record<string, any> | null {
 
 export function clearInitialDataCache(): void {
   initialDataCache = null
-  pageDataCache = {}
 }
 
 export function generateInitialDataScript(): string {

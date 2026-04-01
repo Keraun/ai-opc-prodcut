@@ -185,5 +185,12 @@ class JsonDatabase {
   }
 }
 
-export const jsonDb = new JsonDatabase()
+// 每次需要数据库实例时都创建一个新的实例，确保获取最新的数据
+export function getJsonDb(): JsonDatabase {
+  const db = new JsonDatabase()
+  db.reload()
+  return db
+}
+
+export const jsonDb = getJsonDb()
 export default JsonDatabase

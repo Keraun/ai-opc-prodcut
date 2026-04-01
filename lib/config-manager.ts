@@ -1,7 +1,10 @@
 import "server-only"
-import { jsonDb } from './json-database'
+import { getJsonDb } from './json-database'
 import fs from 'fs'
 import path from 'path'
+
+// 每次操作数据库时都获取最新的实例
+const jsonDb = getJsonDb()
 
 export function clearCache(): void {
    jsonDb.reload()
