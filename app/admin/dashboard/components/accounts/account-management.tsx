@@ -1,13 +1,30 @@
 "use client"
 
 import { Typography, Modal, Input, Popconfirm, Form } from "@arco-design/web-react"
-import { User as IconUser, Plus as IconPlus, Trash2 as IconTrash2, Edit as IconEdit } from "lucide-react"
+import { User as IconUser, Plus as IconPlus, Trash2 as IconTrash2, Edit as IconEdit, Eye as IconEye } from "lucide-react"
 import { useAccountManagement } from "./useAccountManagementHook"
 import { ManagementHeader } from "../ManagementHeader"
 import { CommonTable, ActionButton } from "../CommonTable"
 import styles from "../../dashboard.module.css"
 
+// Get current user role from session storage
+const getCurrentUserRole = (): string => {
+  const userStr = sessionStorage.getItem('currentUser')
+  if (userStr) {
+    try {
+      const user = JSON.parse(userStr)
+      return user.role || 'operator'
+    } catch {
+      return 'operator'
+    }
+  }
+  return 'operator'
+}
+
 export function AccountManagement() {
+  const currentUserRole = getCurrentUserRole()
+  const isOperator = currentUserRole === 'operator'
+  
   const {
     accounts,
     loadingAccounts,
@@ -19,20 +36,19 @@ export function AccountManagement() {
     showEditAccountModal,
     editedAccount,
     setEditedAccount,
-    showSuperAdminPasswordModal,
-    superAdminPasswordForAction,
-    setSuperAdminPasswordForAction,
     handleAddAccount,
     handleDeleteAccount,
     handleEditAccount,
     openAddAccountModal,
     openDeleteAccountModal,
     openEditAccountModal,
-    handleSuperAdminPasswordConfirm,
-    closeSuperAdminPasswordModal,
+    openViewPasswordModal,
     closeAddAccountModal,
     closeEditAccountModal,
-    closeDeleteAccountModal
+    closeDeleteAccountModal,
+    closeViewPasswordModal,
+    showViewPasswordModal,
+    accountToView
   } = useAccountManagement()
 
   return (
@@ -43,6 +59,7 @@ export function AccountManagement() {
         buttonText="新增账号"
         buttonIcon={<IconPlus />}
         onButtonClick={openAddAccountModal}
+        buttonDisabled={isOperator}
       />
 
       <CommonTable
@@ -60,6 +77,21 @@ export function AccountManagement() {
             key: 'email',
           },
           {
+            title: '角色',
+            dataIndex: 'role',
+            key: 'role',
+            render: (role: string) => {
+              switch (role) {
+                case 'admin':
+                  return '管理员';
+                case 'operator':
+                  return '操作员';
+                default:
+                  return role;
+              }
+            }
+          },
+          {
             title: '备注',
             dataIndex: 'remark',
             key: 'remark',
@@ -73,19 +105,28 @@ export function AccountManagement() {
                   type="primary"
                   icon={<IconEdit size={16} />}
                   onClick={() => openEditAccountModal(record)}
+                  disabled={isOperator}
                 >
                   修改
+                </ActionButton>
+                <ActionButton
+                  type="default"
+                  icon={<IconEye size={16} />}
+                  onClick={() => openViewPasswordModal(record)}
+                  disabled={isOperator}
+                >
+                  查看密码
                 </ActionButton>
                 <Popconfirm
                   title={`确定要删除账号 ${record.username} 吗？`}
                   onConfirm={() => openDeleteAccountModal(record)}
-                  disabled={record.username === 'admin' || record.username === 'superadmin'}
+                  disabled={isOperator || record.username === 'admin'}
                 >
                   <ActionButton
                     type="danger"
                     icon={<IconTrash2 size={16} />}
                     onClick={() => openDeleteAccountModal(record)}
-                    disabled={record.username === 'admin' || record.username === 'superadmin'}
+                    disabled={isOperator || record.username === 'admin'}
                   >
                     删除
                   </ActionButton>
@@ -141,6 +182,22 @@ export function AccountManagement() {
               allowClear
             />
           </Form.Item>
+          <Form.Item label="角色" required>
+            <select
+              value={newAccount.role}
+              onChange={(e) => setNewAccount({...newAccount, role: e.target.value})}
+              style={{
+                width: '100%',
+                padding: '8px 12px',
+                borderRadius: '4px',
+                border: '1px solid #d9d9d9',
+                fontSize: '14px'
+              }}
+            >
+              <option value="admin">管理员</option>
+              <option value="operator">操作员</option>
+            </select>
+          </Form.Item>
         </Form>
       </Modal>
 
@@ -185,6 +242,22 @@ export function AccountManagement() {
               allowClear
             />
           </Form.Item>
+          <Form.Item label="角色" required>
+            <select
+              value={editedAccount?.role}
+              onChange={(e) => setEditedAccount({...editedAccount, role: e.target.value})}
+              style={{
+                width: '100%',
+                padding: '8px 12px',
+                borderRadius: '4px',
+                border: '1px solid #d9d9d9',
+                fontSize: '14px'
+              }}
+            >
+              <option value="admin">管理员</option>
+              <option value="operator">操作员</option>
+            </select>
+          </Form.Item>
         </Form>
       </Modal>
 
@@ -201,27 +274,31 @@ export function AccountManagement() {
         <Typography.Text>确定要删除账号 {accountToDelete?.username} 吗？此操作不可恢复。</Typography.Text>
       </Modal>
 
-      {/* 超级管理员密码确认弹窗 */}
+      {/* 查看密码弹窗 */}
       <Modal
-        title="安全验证"
-        visible={showSuperAdminPasswordModal}
-        onOk={handleSuperAdminPasswordConfirm}
-        onCancel={closeSuperAdminPasswordModal}
-        okText="确认"
+        title="查看密码"
+        visible={showViewPasswordModal}
+        onCancel={closeViewPasswordModal}
+        okText="关闭"
         cancelText="取消"
       >
         <Form layout="vertical">
-          <Form.Item label="请输入超级管理员密码" required>
+          <Form.Item label="用户名">
             <Input 
-              type="password"
-              value={superAdminPasswordForAction} 
-              onChange={(value) => setSuperAdminPasswordForAction(value)}
-              placeholder="请输入超级管理员密码进行验证"
-              allowClear
+              value={accountToView?.username} 
+              disabled
+            />
+          </Form.Item>
+          <Form.Item label="密码">
+            <Input 
+              value={accountToView?.password} 
+              disabled
             />
           </Form.Item>
         </Form>
       </Modal>
+
+
     </div>
   )
 }

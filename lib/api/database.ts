@@ -35,10 +35,9 @@ export async function importDatabase(file: File): Promise<{
 
 /**
  * 一键恢复网站到默认状态
- * @param superAdminToken - 超级管理员口令
  * @returns 恢复结果，包含 success、message、backupCreated 和 tables
  */
-export async function resetWebsite(superAdminToken: string): Promise<{
+export async function resetWebsite(): Promise<{
   success: boolean
   message?: string
   backupCreated?: BackupInfo
@@ -51,7 +50,7 @@ export async function resetWebsite(superAdminToken: string): Promise<{
       tables: string[]
     }>('/api/admin/reset-website', {
       method: 'POST',
-      body: JSON.stringify({ superAdminToken })
+      body: JSON.stringify({})
     })
     return {
       success: result.success,

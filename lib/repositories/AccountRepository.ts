@@ -7,6 +7,7 @@ export interface Account {
   password: string
   email?: string | null
   remark?: string | null
+  role: string
   mustChangePassword: boolean
   lastLoginTime?: string | null
   lastLoginIP?: string | null
@@ -28,6 +29,7 @@ export class AccountRepository extends BaseRepository<Account> {
       password: row.password,
       email: row.email,
       remark: row.remark,
+      role: row.role,
       mustChangePassword: Boolean(row.must_change_password),
       lastLoginTime: row.last_login_time,
       lastLoginIP: row.last_login_ip,
@@ -44,6 +46,7 @@ export class AccountRepository extends BaseRepository<Account> {
       password: entity.password,
       email: entity.email || null,
       remark: entity.remark || null,
+      role: entity.role || 'operator',
       must_change_password: Boolean(entity.mustChangePassword),
       last_login_time: entity.lastLoginTime || null,
       last_login_ip: entity.lastLoginIP || null,

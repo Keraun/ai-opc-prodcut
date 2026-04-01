@@ -83,7 +83,6 @@ export {
   sendResetCode,
   resetPassword,
   changePassword,
-  getSuperAdminToken
 } from './api/auth'
 
 export {

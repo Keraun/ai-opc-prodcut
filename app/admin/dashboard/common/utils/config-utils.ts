@@ -45,7 +45,7 @@ export async function handleImportConfig(file: File): Promise<boolean> {
   }
 }
 
-export async function handleResetWebsite(superAdminToken: string): Promise<boolean> {
+export async function handleResetWebsite(): Promise<boolean> {
   const backupConfirmed = window.confirm(
     "⚠️ 一键还原网站配置\n\n" +
     "此操作将把所有配置还原到模版文件状态,建议先备份当前配置。\n\n" +
@@ -70,7 +70,7 @@ export async function handleResetWebsite(superAdminToken: string): Promise<boole
   }
 
   try {
-    const success = await resetWebsite(superAdminToken)
+    const success = await resetWebsite()
 
     if (success) {
       toast.success("网站配置已成功还原到初始状态,正在退出登录...")

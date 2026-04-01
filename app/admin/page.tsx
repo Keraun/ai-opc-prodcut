@@ -18,15 +18,10 @@ export default function AdminLoginPage() {
   const [loading, setLoading] = useState<boolean>(false)
   const [checkingAuth, setCheckingAuth] = useState<boolean>(true)
   const [showForgotPassword, setShowForgotPassword] = useState<boolean>(false)
-  const [resetMethod, setResetMethod] = useState<string>("token")
-  const [superAdminToken, setSuperAdminToken] = useState<string>("")
-  const [newUsername, setNewUsername] = useState<string>("")
-  const [newPassword, setNewPassword] = useState<string>("")
-  const [confirmPassword, setConfirmPassword] = useState<string>("")
   const [email, setEmail] = useState<string>("")
   const [verificationCode, setVerificationCode] = useState<string>("")
-  const [showTokenModal, setShowTokenModal] = useState<boolean>(false)
-  const [generatedToken, setGeneratedToken] = useState<string>("")
+  const [newPassword, setNewPassword] = useState<string>("")
+  const [confirmPassword, setConfirmPassword] = useState<string>("")
   const [showEmailSetup, setShowEmailSetup] = useState<boolean>(false)
   const [setupEmail, setSetupEmail] = useState<string>("")
   const [countdown, setCountdown] = useState<number>(0)
@@ -114,20 +109,7 @@ export default function AdminLoginPage() {
     setLoading(false)
   }
 
-  const handleTokenModalClose = (): void => {
-    setShowTokenModal(false)
-    toast.success("登录成功")
-    router.push("/admin/dashboard?menu=pages")
-  }
 
-  const handleCopyToken = async (): Promise<void> => {
-    try {
-      await navigator.clipboard.writeText(generatedToken)
-      toast.success("超级管理员口令已复制到剪贴板")
-    } catch {
-      toast.error("复制失败，请手动复制")
-    }
-  }
 
   const handleSendCode = async (): Promise<void> => {
     if (!email) {
@@ -159,24 +141,13 @@ export default function AdminLoginPage() {
   }
 
   const handleForgotPassword = async (): Promise<void> => {
-    if (resetMethod === "token") {
-      if (!superAdminToken) {
-        toast.error("请输入超级管理员口令")
-        return
-      }
-      if (!newUsername) {
-        toast.error("请输入用户名")
-        return
-      }
-    } else {
-      if (!email) {
-        toast.error("请输入邮箱地址")
-        return
-      }
-      if (!verificationCode) {
-        toast.error("请输入验证码")
-        return
-      }
+    if (!email) {
+      toast.error("请输入邮箱地址")
+      return
+    }
+    if (!verificationCode) {
+      toast.error("请输入验证码")
+      return
     }
     
     if (!newPassword) {
@@ -195,18 +166,16 @@ export default function AdminLoginPage() {
     setLoading(true)
     
     const data = await resetPassword({
-      method: resetMethod,
-      token: resetMethod === "token" ? superAdminToken : undefined,
-      username: resetMethod === "token" ? newUsername : undefined,
-      email: resetMethod === "email" ? email : undefined,
-      code: resetMethod === "email" ? verificationCode : undefined,
+      method: "email",
+      email: email,
+      code: verificationCode,
       newPassword 
     })
 
     if (data.success) {
       toast.success("密码修改成功，正在登录...")
       
-      const loginUsername = resetMethod === "token" ? newUsername : data.username
+      const loginUsername = data.username
       const loginPassword = newPassword
       
       const loginData = await loginWithResponse(loginUsername!, loginPassword)
@@ -437,76 +406,41 @@ export default function AdminLoginPage() {
                 <>
                   <div className={styles.formHeader}>
                     <h2 className={styles.formTitle}>找回密码</h2>
-                    <p className={styles.formSubtitle}>选择一种方式重置您的密码</p>
+                    <p className={styles.formSubtitle}>通过邮箱验证重置您的密码</p>
                   </div>
 
-                  <Tabs activeTab={resetMethod} onChange={setResetMethod}>
-                    <TabPane key="token" title="口令找回" />
-                    <TabPane key="email" title="邮箱找回" />
-                  </Tabs>
-
                   <div className={styles.formFields}>
-                    {resetMethod === "token" && (
-                      <>
-                        <div>
-                          <label className={styles.formLabel}>
-                            超级管理员口令
-                          </label>
-                          <Input
-                            placeholder="请输入超级管理员口令"
-                            value={superAdminToken}
-                            onChange={setSuperAdminToken}
-                          />
-                        </div>
+                    <div>
+                      <label className={styles.formLabel}>
+                        邮箱地址
+                      </label>
+                      <Input
+                        placeholder="请输入注册时的邮箱"
+                        value={email}
+                        onChange={setEmail}
+                      />
+                    </div>
 
-                        <div>
-                          <label className={styles.formLabel}>
-                            用户名
-                          </label>
-                          <Input
-                            placeholder="请输入要重置密码的用户名"
-                            value={newUsername}
-                            onChange={setNewUsername}
-                          />
-                        </div>
-                      </>
-                    )}
-
-                    {resetMethod === "email" && (
-                      <>
-                        <div>
-                          <label className={styles.formLabel}>
-                            邮箱地址
-                          </label>
-                          <Input
-                            placeholder="请输入注册时的邮箱"
-                            value={email}
-                            onChange={setEmail}
-                          />
-                        </div>
-
-                        <div>
-                          <label className={styles.formLabel}>
-                            验证码
-                          </label>
-                          <div style={{ display: 'flex', gap: '0.75rem' }}>
-                            <Input
-                              placeholder="请输入验证码"
-                              value={verificationCode}
-                              onChange={setVerificationCode}
-                              style={{ flex: 1 }}
-                            />
-                            <Button
-                              type="primary"
-                              disabled={countdown > 0}
-                              onClick={handleSendCode}
-                            >
-                              {countdown > 0 ? `${countdown}秒后重试` : '发送验证码'}
-                            </Button>
-                          </div>
-                        </div>
-                      </>
-                    )}
+                    <div>
+                      <label className={styles.formLabel}>
+                        验证码
+                      </label>
+                      <div style={{ display: 'flex', gap: '0.75rem' }}>
+                        <Input
+                          placeholder="请输入验证码"
+                          value={verificationCode}
+                          onChange={setVerificationCode}
+                          style={{ flex: 1 }}
+                        />
+                        <Button
+                          type="primary"
+                          disabled={countdown > 0}
+                          onClick={handleSendCode}
+                        >
+                          {countdown > 0 ? `${countdown}秒后重试` : '发送验证码'}
+                        </Button>
+                      </div>
+                    </div>
 
                     <div>
                       <label className={styles.formLabel}>
@@ -566,8 +500,6 @@ export default function AdminLoginPage() {
                         type="button"
                         onClick={() => {
                           setShowForgotPassword(false)
-                          setSuperAdminToken("")
-                          setNewUsername("")
                           setNewPassword("")
                           setConfirmPassword("")
                           setEmail("")
@@ -589,166 +521,7 @@ export default function AdminLoginPage() {
           </div>
         </div>
 
-        <Modal
-          title={
-            <div style={{ display: 'flex', alignItems: 'center', gap: '12px', fontSize: '18px', fontWeight: 600 }}>
-              <span>超级管理员口令</span>
-            </div>
-          }
-          visible={showTokenModal}
-          onCancel={handleTokenModalClose}
-          footer={
-            <div style={{ display: 'flex', gap: '12px', justifyContent: 'flex-end' }}>
-              <Button onClick={handleTokenModalClose} type="secondary" size="large">
-                我已保存
-              </Button>
-              <Button onClick={handleTokenModalClose} type="primary" size="large" style={{
-                background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
-                border: 'none'
-              }}>
-                继续
-              </Button>
-            </div>
-          }
-          style={{ top: '10%' }}
-        >
-          <div style={{ padding: '8px 0 16px 0' }}>
-            <div style={{
-              background: 'linear-gradient(135deg, #FFF7ED 0%, #FFEDD5 100%)',
-              border: '1px solid #FDBA74',
-              borderRadius: '16px',
-              padding: '24px',
-              marginBottom: '20px'
-            }}>
-              <div style={{ display: 'flex', alignItems: 'flex-start', gap: '12px', marginBottom: '16px' }}>
-                <div style={{
-                  width: '40px',
-                  height: '40px',
-                  background: 'linear-gradient(135deg, #F97316 0%, #EA580C 100%)',
-                  borderRadius: '10px',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  color: 'white',
-                  flexShrink: 0
-                }}>
-                  <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
-                  </svg>
-                </div>
-                <div>
-                  <h3 style={{
-                    fontSize: '18px',
-                    fontWeight: 600,
-                    color: '#9A3412',
-                    margin: 0,
-                    marginBottom: '8px'
-                  }}>
-                    请妥善保管！
-                  </h3>
-                  <p style={{
-                    fontSize: '14px',
-                    color: '#C2410C',
-                    margin: 0,
-                    lineHeight: '1.6'
-                  }}>
-                    此口令用于忘记密码时重置管理员密码，<strong>不会再次显示</strong>。如果丢失，将无法找回！
-                  </p>
-                </div>
-              </div>
-              
-              <div style={{
-                background: 'white',
-                border: '2px solid #F97316',
-                borderRadius: '12px',
-                padding: '20px',
-                marginTop: '16px'
-              }}>
-                <p style={{
-                  fontSize: '14px',
-                  color: '#78350F',
-                  fontWeight: 500,
-                  margin: 0,
-                  marginBottom: '12px'
-                }}>
-                  超级管理员口令
-                </p>
-                <div style={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: '12px',
-                  background: '#FEF3C7',
-                  border: '1px solid #FCD34D',
-                  borderRadius: '8px',
-                  padding: '14px 16px'
-                }}>
-                  <code style={{
-                    flex: 1,
-                    fontSize: '18px',
-                    fontWeight: 600,
-                    color: '#78350F',
-                    fontFamily: "'SF Mono', Monaco, 'Cascadia Code', 'Roboto Mono', monospace",
-                    letterSpacing: '2px',
-                    wordBreak: 'break-all'
-                  }}>
-                    {generatedToken}
-                  </code>
-                  <Tooltip content="复制口令">
-                    <Button
-                      type="primary"
-                      shape="circle"
-                      size="small"
-                      icon={<IconCopy />}
-                      onClick={handleCopyToken}
-                      style={{
-                        background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
-                        border: 'none',
-                        width: '36px',
-                        height: '36px',
-                        flexShrink: 0
-                      }}
-                    />
-                  </Tooltip>
-                </div>
-              </div>
-            </div>
-            
-            <div style={{
-              display: 'flex',
-              alignItems: 'center',
-              gap: '12px',
-              background: '#EFF6FF',
-              border: '1px solid #BFDBFE',
-              borderRadius: '12px',
-              padding: '16px 20px'
-            }}>
-              <div style={{
-                width: '36px',
-                height: '36px',
-                background: 'linear-gradient(135deg, #3B82F6 0%, #2563EB 100%)',
-                borderRadius: '50%',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                color: 'white',
-                flexShrink: 0
-              }}>
-                <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                </svg>
-              </div>
-              <p style={{
-                fontSize: '14px',
-                color: '#1E40AF',
-                margin: 0,
-                fontWeight: 500,
-                lineHeight: '1.5'
-              }}>
-                建议：将口令复制到安全的地方保存，例如密码管理器或纸质记录
-              </p>
-            </div>
-          </div>
-        </Modal>
+
       </div>
     </>
   )

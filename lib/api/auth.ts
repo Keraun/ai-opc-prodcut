@@ -136,26 +136,25 @@ export async function sendResetCode(email: string): Promise<{ success: boolean; 
 /**
  * 重置密码
  * @param data - 重置密码参数
- * @param data.method - 重置方式（'token' 或 'code'）
- * @param data.username - 用户名（可选）
- * @param data.token - 重置令牌（可选）
- * @param data.email - 邮箱地址（可选）
- * @param data.code - 验证码（可选）
+ * @param data.email - 邮箱地址
+ * @param data.code - 验证码
  * @param data.newPassword - 新密码
  * @returns 重置结果，包含 success、username 和 message
  */
 export async function resetPassword(data: {
-  method: string
-  username?: string
-  token?: string
-  email?: string
-  code?: string
+  email: string
+  code: string
   newPassword: string
 }): Promise<{ success: boolean; username?: string; message?: string }> {
   try {
     const result = await request<{ username?: string }>('/api/admin/reset-password', {
       method: 'POST',
-      body: JSON.stringify(data),
+      body: JSON.stringify({
+        method: 'email',
+        email: data.email,
+        code: data.code,
+        newPassword: data.newPassword
+      }),
     })
     return {
       success: result.success,
@@ -197,28 +196,3 @@ export async function changePassword(data: {
   }
 }
 
-/**
- * 获取超级管理员令牌
- * @param password - 超级管理员密码
- * @returns 获取结果，包含 success、token 和 message
- */
-export async function getSuperAdminToken(password: string): Promise<{
-  success: boolean
-  token?: string
-  message?: string
-}> {
-  try {
-    const result = await request<{ token: string }>('/api/admin/super-admin-token', {
-      method: 'POST',
-      body: JSON.stringify({ password }),
-    })
-    return {
-      success: result.success,
-      token: result.data?.token,
-      message: result.message,
-    }
-  } catch (error) {
-    console.error('Error getting super admin token:', error)
-    return { success: false, message: '获取口令失败' }
-  }
-}

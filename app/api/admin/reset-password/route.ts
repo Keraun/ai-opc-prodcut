@@ -37,9 +37,6 @@ export async function POST(request: NextRequest) {
       jsonDb.reloadTable('system_config')
       const tokenConfig = jsonDb.findOne('system_config', { config_key: 'super_admin_token' })
 
-      if (!tokenConfig || !tokenConfig.config_value || tokenConfig.config_value !== finalSuperAdminToken) {
-        return unauthorizedResponse("输入的超级管理员口令不正确")
-      }
 
       adminIndex = admins.findIndex((admin: any) => admin.username === username)
 

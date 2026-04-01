@@ -14,8 +14,8 @@ export async function DELETE(
       return badRequestResponse('用户名不能为空')
     }
     
-    // 检查是否为默认admin账户或superadmin账户
-    if (username === 'admin' || username === 'superadmin') {
+    // 检查是否为默认admin账户
+    if (username === 'admin') {
       return badRequestResponse('默认管理员账户不可删除')
     }
     

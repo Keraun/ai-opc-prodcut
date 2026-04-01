@@ -15,11 +15,14 @@ import {
 } from "lucide-react"
 import styles from "../../dashboard.module.css"
 
+import { User } from '../../common/types'
+
 interface SidebarProps {
   collapsed: boolean
   activeMenu: string
   onMenuClick: (menu: string) => void
   onToggleCollapse: () => void
+  currentUser?: User | null
 }
 
 interface MenuItem {
@@ -48,12 +51,18 @@ export function Sidebar({
   collapsed,
   activeMenu,
   onMenuClick,
-  onToggleCollapse
+  onToggleCollapse,
+  currentUser
 }: SidebarProps) {
   const menuByCategory = useMemo(() => {
     const categories: Record<string, MenuItem[]> = {}
 
     MENU_STRUCTURE.forEach(item => {
+      // 只有管理员才能看到账号管理菜单
+      if (item.id === 'accounts' && currentUser?.role !== 'admin') {
+        return
+      }
+      
       const category = item.category || ''
       if (!categories[category]) {
         categories[category] = []
@@ -62,12 +71,12 @@ export function Sidebar({
     })
 
     return CATEGORY_ORDER
-      .filter(cat => categories[cat])
+      .filter(cat => categories[cat] && categories[cat].length > 0)
       .map(cat => ({
         name: cat,
         items: categories[cat]
       }))
-  }, [])
+  }, [currentUser])
 
   return (
     <div className={`${styles.sidebar} ${collapsed ? styles.sidebarCollapsed : styles.sidebarExpanded}`}>

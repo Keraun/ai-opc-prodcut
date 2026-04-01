@@ -18,8 +18,11 @@ export function SystemManager() {
   const [restarting, setRestarting] = useState(false)
   const [showRestartConfirm, setShowRestartConfirm] = useState(false)
   const [showResetConfirm, setShowResetConfirm] = useState(false)
-  const [superAdminToken, setSuperAdminToken] = useState('')
   const [resetting, setResetting] = useState(false)
+  
+  // Get current user role
+  const currentUserRole = currentUser?.role || 'operator'
+  const isOperator = currentUserRole === 'operator'
 
   useEffect(() => {
     loadSystemInfo()
@@ -80,18 +83,12 @@ export function SystemManager() {
 
   const handleResetClick = () => {
     setShowResetConfirm(true)
-    setSuperAdminToken('')
   }
 
   const confirmReset = async () => {
-    if (!superAdminToken) {
-      toast.error('请输入超级管理员口令')
-      return
-    }
-
     setResetting(true)
     try {
-      const success = await handleResetWebsite(superAdminToken)
+      const success = await handleResetWebsite()
       if (success) {
         setShowResetConfirm(false)
       }
@@ -118,6 +115,7 @@ export function SystemManager() {
         systemInfo={systemInfo}
         onRestartSystem={handleRestart}
         restarting={restarting}
+        isOperator={isOperator}
       />
       <ChangePasswordModal
         visible={showChangePassword}
@@ -140,22 +138,13 @@ export function SystemManager() {
         onOk={confirmReset}
         onCancel={() => {
           setShowResetConfirm(false)
-          setSuperAdminToken('')
         }}
         okText="确认还原"
         cancelText="取消"
         confirmLoading={resetting}
       >
         <div style={{ padding: '16px 0' }}>
-          <p style={{ marginBottom: '16px' }}>请输入超级管理员口令以继续：</p>
-          <Input.Password
-            placeholder="请输入超级管理员口令"
-            value={superAdminToken}
-            onChange={(value) => setSuperAdminToken(value)}
-            onPressEnter={confirmReset}
-            size="large"
-            style={{ width: '100%' }}
-          />
+          <p style={{ marginBottom: '16px' }}>确定要还原网站配置吗？此操作将把所有配置还原到模版文件状态，无法恢复！</p>
         </div>
       </Modal>
     </>

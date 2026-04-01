@@ -30,9 +30,7 @@ export async function POST(request: NextRequest) {
     
     const tokenConfig = jsonDb.findOne('system_config', { config_key: 'super_admin_token' })
     
-    if (!tokenConfig || !tokenConfig.config_value) {
-      return unauthorizedResponse('超级管理员口令未设置')
-    }
+   
 
     const superAdminToken = tokenConfig.config_value
 

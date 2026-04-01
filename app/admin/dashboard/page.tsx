@@ -143,6 +143,7 @@ export default function AdminDashboardPage() {
           collapsed={sidebarCollapsed}
           onMenuClick={handleMenuClick}
           onToggleCollapse={() => setSidebarCollapsed(!sidebarCollapsed)}
+          currentUser={currentUser}
         />
 
         <div className={styles.contentArea}>

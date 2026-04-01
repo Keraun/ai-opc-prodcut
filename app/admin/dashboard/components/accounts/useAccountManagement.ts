@@ -5,7 +5,6 @@ import {
   addAccount, 
   deleteAccount, 
   updateAccount,
-  getSuperAdminToken 
 } from "@/lib/api-client"
 
 export interface Account {
@@ -65,25 +64,12 @@ export function useAccountManagement() {
     }
   }, [])
 
-  const verifySuperAdminPassword = useCallback(async (password: string) => {
-    const result = await getSuperAdminToken(password)
-    return result.success
-  }, [])
 
   const handleActionWithSuperAdmin = useCallback(async (action: () => Promise<void>) => {
     if (hasValidSuperAdminToken) {
       await action()
       return
     }
-
-    const isValid = await verifySuperAdminPassword(superAdminPasswordForAction)
-    if (isValid) {
-      setHasValidSuperAdminToken(true)
-      await action()
-    } else {
-      toast.error("超级管理员密码错误")
-    }
-  }, [hasValidSuperAdminToken, superAdminPasswordForAction, verifySuperAdminPassword])
 
   const handleAddAccount = useCallback(async () => {
     if (!newAccount.username || !newAccount.password) {
@@ -199,24 +185,6 @@ export function useAccountManagement() {
       toast.error("请输入当前账户密码")
       return
     }
-
-    const isValid = await verifySuperAdminPassword(superAdminPasswordForAction)
-    if (isValid) {
-      setHasValidSuperAdminToken(true)
-      setShowSuperAdminPasswordModal(false)
-
-      if (actionType === "add") {
-        setShowAddAccountModal(true)
-      } else if (actionType === "delete" && accountToDelete) {
-        setShowDeleteAccountModal(true)
-      } else if (actionType === "edit" && accountToEdit) {
-        setShowEditAccountModal(true)
-      }
-    } else {
-      console.error("密码错误")
-      toast.error("密码错误")
-    }
-  }, [superAdminPasswordForAction, verifySuperAdminPassword, actionType, accountToDelete, accountToEdit])
 
   const closeSuperAdminPasswordModal = useCallback(() => {
     setShowSuperAdminPasswordModal(false)

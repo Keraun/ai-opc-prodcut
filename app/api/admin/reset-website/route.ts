@@ -19,21 +19,11 @@ export async function POST(request: NextRequest) {
       const body = await request.json()
       const { superAdminToken } = body
 
-      if (!superAdminToken) {
-        return badRequestResponse('缺少超级管理员口令')
-      }
 
       jsonDb.reloadTable('system_config')
       
       const tokenConfig = jsonDb.findOne('system_config', { config_key: 'super_admin_token' })
-      
-      if (!tokenConfig || !tokenConfig.config_value) {
-        return unauthorizedResponse('超级管理员口令未设置')
-      }
-
-      if (tokenConfig.config_value !== superAdminToken) {
-        return unauthorizedResponse('超级管理员口令错误')
-      }
+     
 
       const initDatabaseZipPath = path.join(process.cwd(), 'database', 'init_database.zip')
       const runtimeDir = path.join(process.cwd(), 'database', 'runtime')

@@ -2,16 +2,9 @@
   {
     "id": 3,
     "config_key": "site_config",
-    "config_value": "{\"name\":\"你的站点名称\",\"description\":\"\",\"url\":\"\",\"ogImage\":\"\",\"links\":{\"email\":\"\",\"wechat\":\"\",\"github\":\"\",\"twitter\":\"\"},\"creator\":{\"name\":\"\",\"url\":\"\"},\"contact\":{\"address\":\"\",\"phone\":\"\",\"email\":\"\"},\"support\":{\"customerServiceQRCode\":\"\",\"helpDocUrl\":\"\"},\"icp\":\"\",\"features\":{\"enableSearch\":false},\"seo\":{\"keywords\":[],\"robots\":{\"index\":true,\"follow\":true,\"googleBot\":{\"index\":true,\"follow\":true,\"maxVideoPreview\":-1,\"maxImagePreview\":\"large\",\"maxSnippet\":-1}}},\"currentTheme\":\"nature\",\"logo\":\"\"}",
+    "config_value": "{\"name\":\"你的站点名称112312\",\"description\":\"\",\"url\":\"\",\"ogImage\":\"\",\"links\":{\"email\":\"\",\"wechat\":\"\",\"github\":\"\",\"twitter\":\"\"},\"creator\":{\"name\":\"\",\"url\":\"\"},\"contact\":{\"address\":\"\",\"phone\":\"\",\"email\":\"\"},\"support\":{\"customerServiceQRCode\":\"\",\"helpDocUrl\":\"\"},\"icp\":\"\",\"features\":{\"enableSearch\":false},\"seo\":{\"keywords\":[],\"robots\":{\"index\":true,\"follow\":true,\"googleBot\":{\"index\":true,\"follow\":true,\"maxVideoPreview\":-1,\"maxImagePreview\":\"large\",\"maxSnippet\":-1}}},\"currentTheme\":\"nature\",\"logo\":\"\"}",
     "created_at": "2026-03-27 21:36:34",
-    "updated_at": "2026-04-01T07:49:37.398Z"
-  },
-  {
-    "id": 4,
-    "config_key": "super_admin_token",
-    "config_value": "d0xtOXRGOXluRnBU",
-    "created_at": "2026-03-27 21:36:34",
-    "updated_at": "2026-04-01T05:00:07.406Z"
+    "updated_at": "2026-04-01T08:17:43.212Z"
   },
   {
     "id": 5,
@@ -40,5 +33,12 @@
     "created_at": "2026-03-31T03:50:40.707Z",
     "updated_at": "2026-03-31T12:08:05.794Z",
     "id": 8
+  },
+  {
+    "config_key": "super_admin_token",
+    "config_value": "c2swd2F3eERGNGx3",
+    "created_at": "2026-04-01T09:48:28.683Z",
+    "updated_at": "2026-04-01T09:48:28.683Z",
+    "id": 9
   }
 ]

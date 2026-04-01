@@ -39,6 +39,7 @@ export async function POST(request: NextRequest) {
     
     const user = {
       username: updatedAdmin.username,
+      role: updatedAdmin.role || 'operator',
       remark: updatedAdmin.remark,
       mustChangePassword: false,
       lastLoginTime: updatedAdmin.last_login_time,

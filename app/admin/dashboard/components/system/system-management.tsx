@@ -20,7 +20,7 @@ import {
   IconCopy
 } from "@arco-design/web-react/icon"
 import { toast } from "sonner"
-import { getSuperAdminToken } from "@/lib/api-client"
+
 import { ManagementHeader } from "../ManagementHeader"
 import styles from "../../dashboard.module.css"
 
@@ -34,6 +34,7 @@ interface SystemManagementProps {
   systemInfo?: any
   onRestartSystem?: () => void
   restarting?: boolean
+  isOperator?: boolean
 }
 
 export function SystemManagement({
@@ -45,13 +46,10 @@ export function SystemManagement({
   onChangePassword,
   systemInfo,
   onRestartSystem,
-  restarting
+  restarting,
+  isOperator = false
 }: SystemManagementProps) {
-  const [showSuperAdminTokenModal, setShowSuperAdminTokenModal] = useState(false)
-  const [superAdminPassword, setSuperAdminPassword] = useState("")
-  const [superAdminToken, setSuperAdminToken] = useState("")
-  const [loadingToken, setLoadingToken] = useState(false)
-  const [passwordError, setPasswordError] = useState("")
+
 
   function formatUptime(seconds: number): string {
     const hours = Math.floor(seconds / 3600)
@@ -110,19 +108,6 @@ export function SystemManagement({
             <div className={styles.accountCardActions} style={{ display: 'flex', gap: 8 }}>
               <Button type="primary" onClick={onChangePassword} icon={<IconLock />} style={{ flex: 1 }}>
                 修改密码
-              </Button>
-              <Button 
-                type="secondary" 
-                onClick={() => {
-                  setShowSuperAdminTokenModal(true)
-                  setSuperAdminPassword("")
-                  setSuperAdminToken("")
-                  setPasswordError("")
-                }} 
-                icon={<IconEye />}
-                style={{ flex: 1 }}
-              >
-                查看口令
               </Button>
             </div>
           </Card>
@@ -276,14 +261,15 @@ export function SystemManagement({
                   </div>
                   <Tooltip content="重启服务">
                     <Button 
-                      type="primary" 
-                      status="warning"
-                      icon={<IconSync />}
-                      onClick={onRestartSystem}
-                      loading={restarting}
-                    >
-                      重启服务
-                    </Button>
+                    type="primary" 
+                    status="warning"
+                    icon={<IconSync />}
+                    onClick={onRestartSystem}
+                    loading={restarting}
+                    disabled={isOperator}
+                  >
+                    重启服务
+                  </Button>
                   </Tooltip>
                 </div>
               )}
@@ -301,6 +287,7 @@ export function SystemManagement({
                     status="danger"
                     icon={<IconSync />}
                     onClick={onResetWebsite}
+                    disabled={isOperator}
                   >
                     还原配置
                   </Button>
@@ -311,178 +298,7 @@ export function SystemManagement({
         </div>
       </div>
 
-      {/* 查看超级管理员口令弹窗 */}
-      <Modal
-        title={
-          <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-            <IconSafe style={{ color: '#165DFF' }} />
-            查看超级管理员口令
-          </div>
-        }
-        visible={showSuperAdminTokenModal}
-        onCancel={() => {
-          setShowSuperAdminTokenModal(false)
-          setSuperAdminPassword("")
-          setSuperAdminToken("")
-          setPasswordError("")
-        }}
-        footer={
-          superAdminToken ? (
-            <Button onClick={() => setShowSuperAdminTokenModal(false)}>
-              关闭
-            </Button>
-          ) : (
-            <>
-              <Button 
-                onClick={() => {
-                  setShowSuperAdminTokenModal(false)
-                  setSuperAdminPassword("")
-                  setPasswordError("")
-                }}
-              >
-                取消
-              </Button>
-              <Button
-                type="primary"
-                loading={loadingToken}
-                onClick={async () => {
-                  if (!superAdminPassword) {
-                    setPasswordError("请输入当前账户密码")
-                    return
-                  }
-                  setLoadingToken(true)
-                  setPasswordError("")
-                  try {
-                    const result = await getSuperAdminToken(superAdminPassword)
-                    if (result.success && result.token) {
-                      setSuperAdminToken(result.token)
-                    } else {
-                      setPasswordError(result.message || "密码错误")
-                    }
-                  } catch (error) {
-                    setPasswordError("获取口令失败")
-                  } finally {
-                    setLoadingToken(false)
-                  }
-                }}
-              >
-                确认
-              </Button>
-            </>
-          )
-        }
-        style={{ top: '15%' }}
-      >
-        {superAdminToken ? (
-          <div style={{ padding: '24px 0' }}>
-            <div style={{
-              background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
-              padding: '24px',
-              borderRadius: '12px',
-              marginBottom: '20px',
-              textAlign: 'center'
-            }}>
-              <Typography.Text style={{ color: 'rgba(255,255,255,0.8)', display: 'block', marginBottom: '12px', fontSize: '14px' }}>
-                您的超级管理员口令
-              </Typography.Text>
-              <div style={{
-                background: 'rgba(255,255,255,0.95)',
-                padding: '16px 20px',
-                borderRadius: '8px',
-                fontFamily: "'SF Mono', Monaco, 'Cascadia Code', 'Roboto Mono', monospace",
-                fontSize: '15px',
-                wordBreak: 'break-all',
-                color: '#1d2129',
-                fontWeight: 500,
-                letterSpacing: '0.5px',
-                boxShadow: '0 4px 12px rgba(0,0,0,0.1)',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'space-between',
-                gap: '12px'
-              }}>
-                <span style={{ flex: 1, textAlign: 'left' }}>{superAdminToken}</span>
-                <Tooltip content="复制口令">
-                  <Button 
-                    type="text" 
-                    size="small"
-                    icon={<IconCopy />}
-                    onClick={async () => {
-                      try {
-                        await navigator.clipboard.writeText(superAdminToken)
-                        toast.success('口令已成功复制到剪贴板')
-                      } catch {
-                        toast.error('复制失败，请手动复制')
-                      }
-                    }}
-                    style={{ flexShrink: 0 }}
-                  />
-                </Tooltip>
-              </div>
-            </div>
-          </div>
-        ) : (
-          <div style={{ padding: '20px 0' }}>
-            <Typography.Paragraph style={{ 
-              marginBottom: '24px', 
-              fontSize: '14px', 
-              color: '#4e5969',
-              lineHeight: '1.6'
-            }}>
-              请输入当前账户密码以验证身份，查看超级管理员口令
-            </Typography.Paragraph>
-            <div style={{ marginBottom: '16px' }}>
-              <Input.Password
-                placeholder="请输入当前账户密码"
-                value={superAdminPassword}
-                onChange={(value) => {
-                  setSuperAdminPassword(value)
-                  setPasswordError("")
-                }}
-                onPressEnter={async () => {
-                  if (!superAdminPassword) {
-                    setPasswordError("请输入当前账户密码")
-                    return
-                  }
-                  setLoadingToken(true)
-                  setPasswordError("")
-                  try {
-                    const result = await getSuperAdminToken(superAdminPassword)
-                    if (result.success && result.token) {
-                      setSuperAdminToken(result.token)
-                    } else {
-                      setPasswordError(result.message || "密码错误")
-                    }
-                  } catch (error) {
-                    setPasswordError("获取口令失败")
-                  } finally {
-                    setLoadingToken(false)
-                  }
-                }}
-                error={!!passwordError}
-                size="large"
-                style={{ borderRadius: '8px' }}
-              />
-            </div>
-            {passwordError && (
-              <div style={{
-                display: 'flex',
-                alignItems: 'center',
-                gap: '6px',
-                padding: '10px 12px',
-                background: '#fff2f0',
-                border: '1px solid #ffccc7',
-                borderRadius: '6px',
-                color: '#f53f3f',
-                fontSize: '13px'
-              }}>
-                <IconCloseCircle />
-                {passwordError}
-              </div>
-            )}
-          </div>
-        )}
-      </Modal>
+
     </div>
   )
 }

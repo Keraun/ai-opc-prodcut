@@ -52,6 +52,7 @@ export interface ConfigVersionInfo {
 
 export interface User {
   username: string
+  role: string
   lastLoginTime?: string
   currentLoginIP?: string
   mustChangePassword?: boolean
