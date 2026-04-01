@@ -205,7 +205,48 @@ export default function RootLayout({
                   window.dataLayer = window.dataLayer || [];
                   function gtag(){dataLayer.push(arguments);}
                   gtag('js', new Date());
-                  gtag('config', '${seoConfig.analytics.googleAnalytics}');
+                  gtag('config', '${seoConfig?.analytics?.googleAnalytics}');
+                `
+              }}
+            />
+          </>
+        )}
+        {/* vConsole 调试工具 */}
+        {process.env.NODE_ENV === 'development' && (
+          <>
+            <Script
+              id="vconsole-script"
+              strategy="afterInteractive"
+              src="https://unpkg.com/vconsole@latest/dist/vconsole.min.js"
+            />
+            <Script
+              strategy="afterInteractive"
+              dangerouslySetInnerHTML={{
+                __html: `
+                  (function() {
+                    var vconsoleScript = document.getElementById('vconsole-script');
+                    if (vconsoleScript) {
+                      vconsoleScript.onload = function() {
+                        if (typeof VConsole !== 'undefined') {
+                          new VConsole();
+                          console.log('vConsole initialized successfully');
+                        }
+                      };
+                      if (vconsoleScript.readyState === 'complete') {
+                        vconsoleScript.onload();
+                      }
+                    } else {
+                      function checkVConsole() {
+                        if (typeof VConsole !== 'undefined') {
+                          new VConsole();
+                          console.log('vConsole initialized successfully');
+                        } else {
+                          setTimeout(checkVConsole, 50);
+                        }
+                      }
+                      checkVConsole();
+                    }
+                  })();
                 `
               }}
             />
