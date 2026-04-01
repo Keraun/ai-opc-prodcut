@@ -1,6 +1,6 @@
 "use client"
 
-import { createContext, useContext, ReactNode, useEffect, useMemo } from "react"
+import { createContext, useContext, ReactNode, useEffect, useMemo, useState } from "react"
 
 // 全局初始数据类型
 interface InitialData {
@@ -9,35 +9,50 @@ interface InitialData {
   'site-footer': any
 }
 
-// 从 window 对象获取初始数据
-function getWindowInitialData(): InitialData | null {
-  if (typeof window === "undefined") {
-    return null
-  }
-  return (window as any).__INITIAL_DATA__ || null
+// 默认初始数据
+const defaultInitialData: InitialData = {
+  site: {},
+  'site-header': {},
+  'site-footer': {}
 }
 
-// 创建 Context，默认值直接从 window 读取
+// 从 window 对象获取初始数据
+function getWindowInitialData(): InitialData {
+  if (typeof window === "undefined") {
+    return defaultInitialData
+  }
+  const data = (window as any).__INITIAL_DATA__
+  if (data) {
+    console.log('[InitialDataProvider] Got initial data from window:', {
+      hasSite: !!data.site,
+      hasHeader: !!data['site-header'],
+      hasFooter: !!data['site-footer']
+    })
+  }
+  return data || defaultInitialData
+}
+
+// 创建 Context
 const InitialDataContext = createContext<{
-  data: InitialData | null
+  data: InitialData
   isClient: boolean
 }>({
-  data: null,
+  data: defaultInitialData,
   isClient: false,
 })
 
 // Provider 组件
 export function InitialDataProvider({ children }: { children: ReactNode }) {
-  // 使用 useMemo 确保数据在客户端渲染时立即可用
+  const [isClient, setIsClient] = useState(false)
+
   const data = useMemo(() => {
-    if (typeof window !== "undefined") {
-      return getWindowInitialData()
-    }
-    return null
+    return getWindowInitialData()
   }, [])
 
-  // isClient 状态
-  const isClient = typeof window !== "undefined"
+  useEffect(() => {
+    setIsClient(true)
+    console.log('[InitialDataProvider] Client-side initialized')
+  }, [])
 
   return (
     <InitialDataContext.Provider value={{ data, isClient }}>
@@ -56,7 +71,7 @@ export function useInitialData() {
 }
 
 // Hook 用于获取特定配置
-export function useConfig<K extends keyof InitialData>(key: K): InitialData[K] | null {
+export function useConfig<K extends keyof InitialData>(key: K): InitialData[K] {
   const { data } = useInitialData()
-  return data?.[key] || null
+  return data?.[key] || defaultInitialData[key]
 }

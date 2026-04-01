@@ -1,6 +1,6 @@
 "use client"
 
-import { createContext, useContext, useEffect, useState, ReactNode } from "react"
+import { createContext, useContext, useEffect, useState, ReactNode, useMemo } from "react"
 import { 
   getDefaultThemeConfig, 
   applyThemeToElement,
@@ -10,9 +10,10 @@ import { getThemeConfig } from "@/lib/api-client"
 
 interface ThemeContextType {
   currentTheme: string
-  themeConfig: ThemeConfig | null
+  themeConfig: ThemeConfig
   themes: Record<string, ThemeConfig>
   setTheme: (themeId: string) => void
+  isLoading: boolean
 }
 
 const ThemeContext = createContext<ThemeContextType | undefined>(undefined)
@@ -22,12 +23,38 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
   const [currentTheme, setCurrentTheme] = useState<string>("modern")
   const [themeConfig, setThemeConfig] = useState<ThemeConfig | null>(null)
   const [themes, setThemes] = useState<Record<string, ThemeConfig>>({})
+  const [isLoading, setIsLoading] = useState(true)
+
+  const defaultTheme = useMemo(() => getDefaultThemeConfig(), [])
+  
+  const defaultThemes = useMemo(() => ({
+    [defaultTheme.id]: defaultTheme
+  }), [defaultTheme])
+
+  const contextValue = useMemo<ThemeContextType>(() => ({
+    currentTheme,
+    themeConfig: themeConfig || defaultTheme,
+    themes: Object.keys(themes).length > 0 ? themes : defaultThemes,
+    setTheme: (themeId: string) => {
+      const allThemes = Object.keys(themes).length > 0 ? themes : defaultThemes
+      if (allThemes[themeId]) {
+        console.log('Setting theme to:', themeId, 'with primary color:', allThemes[themeId].colors.primary)
+        setCurrentTheme(themeId)
+        setThemeConfig(allThemes[themeId])
+        if (typeof window !== 'undefined') {
+          localStorage.setItem("theme", themeId)
+        }
+      } else {
+        console.error('Theme not found:', themeId)
+      }
+    },
+    isLoading
+  }), [currentTheme, themeConfig, themes, defaultTheme, defaultThemes, isLoading])
 
   useEffect(() => {
     setMounted(true)
     
-    const savedTheme = localStorage.getItem("theme")
-    
+    const savedTheme = typeof window !== 'undefined' ? localStorage.getItem("theme") : null
     
     async function fetchThemeConfig() {
       try {
@@ -42,14 +69,12 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
             setCurrentTheme("modern")
             setThemeConfig(themeConfig.themes["modern"])
           } else {
-            // No themes available, use default
             const defaultTheme = getDefaultThemeConfig(savedTheme)
             setThemes({ [defaultTheme.id]: defaultTheme })
             setCurrentTheme(defaultTheme.id)
             setThemeConfig(defaultTheme)
           }
         } else {
-          // API call failed or returned null, use default theme
           const defaultTheme = getDefaultThemeConfig(savedTheme)
           setThemes({ [defaultTheme.id]: defaultTheme })
           setCurrentTheme(defaultTheme.id)
@@ -61,6 +86,8 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
         setThemes({ [defaultTheme.id]: defaultTheme })
         setCurrentTheme(defaultTheme.id)
         setThemeConfig(defaultTheme)
+      } finally {
+        setIsLoading(false)
       }
     }
     
@@ -75,20 +102,8 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
     }
   }, [currentTheme, themeConfig, mounted])
 
-  const setTheme = (themeId: string) => {
-    if (themes[themeId]) {
-      console.log('Setting theme to:', themeId, 'with primary color:', themes[themeId].colors.primary)
-      setCurrentTheme(themeId)
-      setThemeConfig(themes[themeId])
-      localStorage.setItem("theme", themeId)
-    } else {
-      console.error('Theme not found:', themeId)
-    }
-  }
-
-
   return (
-    <ThemeContext.Provider value={{ currentTheme, themeConfig, themes, setTheme }}>
+    <ThemeContext.Provider value={contextValue}>
       {children}
     </ThemeContext.Provider>
   )

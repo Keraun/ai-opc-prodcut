@@ -7,24 +7,45 @@ export const moduleRegistry: ModuleRegistry = {
     if (moduleMap.has(module.moduleId)) {
       console.warn(`Module with ID "${module.moduleId}" is already registered. Overwriting.`)
     }
+    console.log(`[ModuleRegistry] Registering module:`, {
+      moduleId: module.moduleId,
+      moduleName: module.moduleName,
+      hasComponent: !!module.component,
+      hasSchema: !!module.schema,
+      hasDefaultData: !!module.defaultData
+    })
     moduleMap.set(module.moduleId, module)
   },
 
   unregister: (moduleId: string) => {
+    console.log(`[ModuleRegistry] Unregistering module:`, moduleId)
     moduleMap.delete(moduleId)
   },
 
   getModule: (moduleId: string) => {
-    return moduleMap.get(moduleId)
+    const module = moduleMap.get(moduleId)
+    if (!module) {
+      console.warn(`[ModuleRegistry] Module not found:`, moduleId)
+    }
+    return module
   },
 
   getAllModules: () => {
+    console.log(`[ModuleRegistry] Getting all modules, count:`, moduleMap.size)
     return Array.from(moduleMap.values())
   },
 
   getModuleComponent: (moduleId: string) => {
     const module = moduleMap.get(moduleId)
-    return module?.component || null
+    if (!module) {
+      console.warn(`[ModuleRegistry] Module component not found:`, moduleId, `Available modules:`, Array.from(moduleMap.keys()))
+      return null
+    }
+    if (!module.component) {
+      console.warn(`[ModuleRegistry] Module has no component:`, moduleId)
+      return null
+    }
+    return module.component
   }
 }
 
