@@ -32,11 +32,6 @@ export function initClientErrorHandler() {
       isScriptError,
       additionalInfo: isScriptError ? {
         hint: '跨域脚本错误，可能是第三方库或外部脚本导致',
-        possibleCauses: [
-          'vConsole 调试工具加载失败',
-          '百度统计/谷歌统计脚本跨域错误',
-          '其他第三方脚本加载失败'
-        ]
       } : undefined
     }
     
