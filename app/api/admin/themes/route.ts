@@ -5,13 +5,14 @@ import {
 } from "@/lib/config-manager"
 import { 
   wrapAuthApiHandler, 
+  wrapApiHandler,
   successResponse, 
   badRequestResponse, 
   errorResponse
 } from "@/lib/api-utils"
 
 export async function GET(request: NextRequest) {
-  return wrapAuthApiHandler(async () => {
+  return wrapApiHandler(async () => {
     const { searchParams } = new URL(request.url)
     const onlyCurrent = searchParams.get('onlyCurrent') === 'true'
     

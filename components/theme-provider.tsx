@@ -2,7 +2,6 @@
 
 import { createContext, useContext, useEffect, useState, ReactNode } from "react"
 import { 
-  validateThemeConfig, 
   getDefaultThemeConfig, 
   applyThemeToElement,
   type ThemeConfig 
@@ -14,8 +13,6 @@ interface ThemeContextType {
   themeConfig: ThemeConfig | null
   themes: Record<string, ThemeConfig>
   setTheme: (themeId: string) => void
-  isDark: boolean
-  toggleDark: () => void
 }
 
 const ThemeContext = createContext<ThemeContextType | undefined>(undefined)
@@ -25,19 +22,12 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
   const [currentTheme, setCurrentTheme] = useState<string>("modern")
   const [themeConfig, setThemeConfig] = useState<ThemeConfig | null>(null)
   const [themes, setThemes] = useState<Record<string, ThemeConfig>>({})
-  const [isDark, setIsDark] = useState(false)
 
   useEffect(() => {
     setMounted(true)
     
     const savedTheme = localStorage.getItem("theme")
-    const savedDarkMode = localStorage.getItem("darkMode")
     
-    if (savedDarkMode) {
-      setIsDark(savedDarkMode === "true")
-    } else {
-      setIsDark(window.matchMedia("(prefers-color-scheme: dark)").matches)
-    }
     
     async function fetchThemeConfig() {
       try {
@@ -79,23 +69,11 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
 
   useEffect(() => {
     if (!mounted) return
-    
-    if (isDark) {
-      document.documentElement.classList.add("dark")
-    } else {
-      document.documentElement.classList.remove("dark")
-    }
-    localStorage.setItem("darkMode", String(isDark))
-    if (themeConfig) {
-      applyThemeToElement(document.documentElement, themeConfig, isDark)
-    }
-  }, [isDark, currentTheme, themeConfig, mounted])
 
-  useEffect(() => {
-    if (mounted && themeConfig) {
-      applyThemeToElement(document.documentElement, themeConfig, isDark)
+    if (themeConfig) {
+      applyThemeToElement(document.documentElement, themeConfig)
     }
-  }, [mounted, themeConfig, isDark])
+  }, [currentTheme, themeConfig, mounted])
 
   const setTheme = (themeId: string) => {
     if (themes[themeId]) {
@@ -108,12 +86,9 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
     }
   }
 
-  const toggleDark = () => {
-    setIsDark(!isDark)
-  }
 
   return (
-    <ThemeContext.Provider value={{ currentTheme, themeConfig, themes, setTheme, isDark, toggleDark }}>
+    <ThemeContext.Provider value={{ currentTheme, themeConfig, themes, setTheme }}>
       {children}
     </ThemeContext.Provider>
   )

@@ -4,10 +4,10 @@ import { useTheme } from "@/components/theme-provider"
 import { getThemeColor, DEFAULT_THEME_COLORS } from "@/lib/theme-utils"
 
 export function useModuleTheme() {
-  const { themeConfig, isDark } = useTheme()
+  const { themeConfig } = useTheme()
 
   const getColor = (colorType: 'primary' | 'secondary' | 'accent' | 'warning' | 'error' | 'success' | 'text' | 'textSecondary' | 'background' | 'backgroundSecondary' | 'border') => {
-    return getThemeColor(themeConfig, colorType, isDark)
+    return getThemeColor(themeConfig, colorType)
   }
 
   const primaryColor = getColor('primary')
@@ -31,7 +31,6 @@ export function useModuleTheme() {
 
   return {
     themeConfig,
-    isDark,
     getColor,
     getColorByType,
     primaryColor,

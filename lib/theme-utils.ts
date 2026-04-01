@@ -108,15 +108,11 @@ export function validateThemeConfig(config: any): config is ThemeConfig {
 export function getThemeColor(
   themeConfig: ThemeConfig | null, 
   colorKey: keyof ThemeColors, 
-  isDark: boolean = false
 ): string {
   if (!themeConfig) {
-    const defaults = isDark ? DEFAULT_DARK_THEME_COLORS : DEFAULT_THEME_COLORS
-    return defaults[colorKey]
+    return DEFAULT_THEME_COLORS?.[colorKey]
   }
-  
-  const colors = isDark ? themeConfig.darkMode.colors : themeConfig.colors
-  return colors[colorKey] || (isDark ? DEFAULT_DARK_THEME_COLORS : DEFAULT_THEME_COLORS)[colorKey]
+  return themeConfig?.colors?.[colorKey] ||  DEFAULT_THEME_COLORS[colorKey]
 }
 
 export function getRadiusValue(effects: ThemeEffects | undefined): string {
@@ -132,9 +128,8 @@ export function getShadowValue(effects: ThemeEffects | undefined): string {
 export function applyThemeToElement(
   element: HTMLElement, 
   themeConfig: ThemeConfig, 
-  isDark: boolean = false
 ): void {
-  const colors = isDark ? themeConfig.darkMode.colors : themeConfig.colors
+  const colors =  themeConfig?.colors || DEFAULT_THEME_COLORS
   const effects = themeConfig.effects || {}
   
   const safeColors = {
