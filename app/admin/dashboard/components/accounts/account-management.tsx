@@ -79,13 +79,13 @@ export function AccountManagement() {
                 <Popconfirm
                   title={`确定要删除账号 ${record.username} 吗？`}
                   onConfirm={() => openDeleteAccountModal(record)}
-                  disabled={record.username === 'admin'}
+                  disabled={record.username === 'admin' || record.username === 'superadmin'}
                 >
                   <ActionButton
                     type="danger"
                     icon={<IconTrash2 size={16} />}
                     onClick={() => openDeleteAccountModal(record)}
-                    disabled={record.username === 'admin'}
+                    disabled={record.username === 'admin' || record.username === 'superadmin'}
                   >
                     删除
                   </ActionButton>
