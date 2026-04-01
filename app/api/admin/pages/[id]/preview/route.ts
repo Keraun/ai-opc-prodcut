@@ -1,10 +1,9 @@
 import { NextRequest } from 'next/server'
-import { initializeModules } from '@/modules/init'
+import {  } from '@/modules/init'
 import { getModuleComponent, getModuleDefaultData } from '@/modules/registry'
 import { readConfig } from '@/lib/config-manager'
 import { successResponse, errorResponse, notFoundResponse } from '@/lib/api-utils'
 
-initializeModules()
 
 interface ModuleInfo {
   moduleId: string

@@ -4,11 +4,8 @@ import { useEffect, useState } from "react"
 import { useParams } from "next/navigation"
 import { Spin } from "@arco-design/web-react"
 import { toast } from "sonner"
-import { initializeModules } from "@/modules/init"
 import { getModuleComponent, getModuleDefaultData } from "@/modules/registry"
 import { getPagePreview } from "@/lib/api-client"
-
-initializeModules()
 
 interface ModuleInfo {
   moduleId: string

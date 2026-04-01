@@ -5,10 +5,8 @@ import { useParams } from "next/navigation"
 import { Spin } from "@arco-design/web-react"
 import { toast } from "sonner"
 import { getModulePreview } from "@/lib/api-client"
-import { initializeModules } from "@/modules/init"
 import { getModuleComponent } from "@/modules/registry"
 
-initializeModules()
 
 export default function ModulePreviewPage() {
   const params = useParams()

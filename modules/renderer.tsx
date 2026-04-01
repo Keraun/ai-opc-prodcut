@@ -2,21 +2,9 @@
 
 import { useEffect, useState, ComponentType, ReactNode } from "react"
 import { getModuleComponent } from "./registry"
-import { initializeModules } from "./init"
 import type { ModuleData, ModuleProps } from "./types"
 
-// 首先立即初始化模块，确保它们在组件渲染前就已经注册
-let modulesInitialized = false
-if (typeof window !== "undefined") {
-  try {
-    console.log('[ModuleRenderer] Initializing modules immediately')
-    initializeModules()
-    modulesInitialized = true
-    console.log('[ModuleRenderer] Modules initialized immediately')
-  } catch (error) {
-    console.error('[ModuleRenderer] Failed to initialize modules immediately:', error)
-  }
-}
+
 
 interface ModuleErrorBoundaryProps {
   children: ReactNode
@@ -149,42 +137,13 @@ interface ModuleRendererProps {
 }
 
 export function ModuleRenderer({ modules }: ModuleRendererProps) {
-  const [isFullyInitialized, setIsFullyInitialized] = useState(modulesInitialized)
-
-  useEffect(() => {
-    if (!modulesInitialized) {
-      try {
-        console.log('[ModuleRenderer] Initializing modules in useEffect')
-        initializeModules()
-        modulesInitialized = true
-        setIsFullyInitialized(true)
-        console.log('[ModuleRenderer] Modules initialized in useEffect')
-      } catch (error: any) {
-        console.error('[ModuleRenderer] Failed to initialize modules:', {
-          error: error?.message || String(error),
-          stack: error?.stack
-        })
-        setIsFullyInitialized(true)
-      }
-    }
-  }, [])
-
-  console.log('[ModuleRenderer] Rendering modules:', {
-    isFullyInitialized,
-    moduleCount: modules.length,
-    modules: modules.map(m => ({
-      moduleId: m.moduleId,
-      moduleInstanceId: m.moduleInstanceId,
-      hasData: !!m.data
-    }))
-  })
 
   return (
     <>
       {modules.map((module) => {
-        const Component = isFullyInitialized ? getModuleComponent(module.moduleId) : null
+        const Component = getModuleComponent(module?.moduleId)
         
-        if (!Component && isFullyInitialized) {
+        if (!Component) {
           console.warn('[ModuleRenderer] Module not registered:', {
             moduleId: module.moduleId,
             moduleInstanceId: module.moduleInstanceId
