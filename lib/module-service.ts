@@ -1,5 +1,6 @@
 import "server-only"
 import { jsonDb } from './json-database'
+import { clearInitialDataCache } from './initial-data'
 import { getModule, getAllModules } from '@/modules/registry'
 import type { ModuleRegistration, ModuleData } from '@/modules/types'
 
@@ -115,6 +116,7 @@ export function updatePageModules(pageId: string, modules: ModuleData[]): boolea
       }
     }
     
+    clearInitialDataCache()
     return true
   } catch (error) {
     console.error('Error updating page modules:', error)

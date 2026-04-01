@@ -7,6 +7,7 @@ import {
   formatDateTime
 } from '@/lib/api-utils'
 import { jsonDb } from '@/lib/json-database'
+import { clearInitialDataCache } from '@/lib/initial-data'
 import fs from 'fs'
 import path from 'path'
 
@@ -220,6 +221,7 @@ export async function POST(request: NextRequest) {
     
     if (result.success) {
       syncPageListJson()
+      clearInitialDataCache()
       return successResponse({ pageId: result.pageId }, '页面创建成功')
     } else {
       return badRequestResponse(result.error || '创建页面失败')

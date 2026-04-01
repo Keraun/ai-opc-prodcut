@@ -6,6 +6,7 @@ import {
   formatDateTime
 } from '@/lib/api-utils'
 import { jsonDb } from '@/lib/json-database'
+import { clearInitialDataCache } from '@/lib/initial-data'
 import fs from 'fs'
 import path from 'path'
 
@@ -204,6 +205,7 @@ export async function PUT(
     }
     
     syncPageListJson()
+    clearInitialDataCache()
     return successResponse(null, '页面更新成功')
   })
 }
@@ -236,6 +238,7 @@ export async function DELETE(
     jsonDb.delete('pages', { page_id: pageId })
     
     syncPageListJson()
+    clearInitialDataCache()
     return successResponse(null, '页面删除成功')
   })
 }
