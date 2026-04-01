@@ -7,9 +7,8 @@ import type { ModuleRegistration, ModuleData } from '@/modules/types'
 const isDev = process.env.NODE_ENV === 'development'
 
 export function getModuleTemplate(moduleId: string): ModuleRegistration | null {
-  if (isDev) {
-    jsonDb.reload()
-  }
+  // 无论在开发环境还是生产环境，都重新加载数据，确保获取到最新的数据
+  jsonDb.reload()
   
   try {
     const module = getModule(moduleId)
@@ -45,9 +44,8 @@ export interface PageConfig {
 }
 
 export function getPageConfig(pageId: string): PageConfig | null {
-  if (isDev) {
-    jsonDb.reload()
-  }
+  // 无论在开发环境还是生产环境，都重新加载数据，确保获取到最新的数据
+  jsonDb.reload()
   
   try {
     const page = jsonDb.findOne('pages', { page_id: pageId })
@@ -131,9 +129,8 @@ export function getAvailableModules(): Array<{
   schema?: Record<string, unknown>
   defaultData?: Record<string, unknown>
 }> {
-  if (isDev) {
-    jsonDb.reload()
-  }
+  // 无论在开发环境还是生产环境，都重新加载数据，确保获取到最新的数据
+  jsonDb.reload()
   
   try {
     const registeredModules = getAllModules()

@@ -715,9 +715,8 @@ export function initializeDatabaseFromTemplates(): void {
 }
 
 export function getPageResponse(pageId: string): any {
-  if (isDev) {
-    jsonDb.reload()
-  }
+  // 无论在开发环境还是生产环境，都重新加载数据，确保获取到最新的数据
+  jsonDb.reload()
   
   try {
     const page = jsonDb.findOne('pages', { page_id: pageId })
