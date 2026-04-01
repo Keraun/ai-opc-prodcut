@@ -56,8 +56,6 @@ export interface LoginResult {
   success: boolean
   user?: User
   requireEmailSetup?: boolean
-  showSuperAdminToken?: boolean
-  superAdminToken?: string
   message?: string
 }
 

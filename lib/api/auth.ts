@@ -74,7 +74,7 @@ export async function checkAuthStatus(token?: string, sessionId?: string): Promi
  * 用户登录（详细响应版）
  * @param username - 用户名
  * @param password - 密码
- * @returns 登录结果，包含 success、user、requireEmailSetup、showSuperAdminToken、superAdminToken 和 message
+ * @returns 登录结果，包含 success、user、requireEmailSetup 和 message
  */
 export async function loginWithResponse(username: string, password: string): Promise<LoginResult> {
   try {
@@ -86,8 +86,6 @@ export async function loginWithResponse(username: string, password: string): Pro
       success: result.success,
       user: result.data?.user,
       requireEmailSetup: result.data?.requireEmailSetup,
-      showSuperAdminToken: result.data?.showSuperAdminToken,
-      superAdminToken: result.data?.superAdminToken,
       message: result.message,
     }
   } catch (error) {

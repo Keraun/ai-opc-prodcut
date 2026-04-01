@@ -78,9 +78,7 @@ export async function POST(request: NextRequest) {
 
     // 生成详情链接
     const baseUrl = process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'
-    const tokenConfig = readConfig('token') || { superAdminToken: '' }
-    const superAdminToken = tokenConfig.superAdminToken || ''
-    const detailLink = `${baseUrl}/admin/dashboard/messages/${savedMessage.id}?token=${superAdminToken}`
+    const detailLink = `${baseUrl}/admin/dashboard/messages/${savedMessage.id}`
 
     // 发送通知
     try {

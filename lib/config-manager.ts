@@ -87,11 +87,6 @@ export function readConfig(configType: string): any {
       return config ? JSON.parse(config.config_value) : {}
     }
     
-    if (configType === 'token') {
-      const config = jsonDb.findOne('system_config', { config_key: 'super_admin_token' })
-      return config ? { superAdminToken: config.config_value } : { superAdminToken: '' }
-    }
-    
     if (configType === 'verificationCodes') {
       const codes = jsonDb.getAll('verification_codes')
       const result: Record<string, { code: string; expiresAt: number }> = {}
@@ -311,24 +306,6 @@ export function writeConfig(configType: string, data: any): void {
         jsonDb.insert('system_config', {
           config_key: 'notification',
           config_value: JSON.stringify(data),
-          created_at: new Date().toISOString(),
-          updated_at: new Date().toISOString()
-        })
-      }
-      return
-    }
-    
-    if (configType === 'token') {
-      const existing = jsonDb.findOne('system_config', { config_key: 'super_admin_token' })
-      if (existing) {
-        jsonDb.update('system_config', existing.id, {
-          config_value: data.superAdminToken || '',
-          updated_at: new Date().toISOString()
-        })
-      } else {
-        jsonDb.insert('system_config', {
-          config_key: 'super_admin_token',
-          config_value: data.superAdminToken || '',
           created_at: new Date().toISOString(),
           updated_at: new Date().toISOString()
         })

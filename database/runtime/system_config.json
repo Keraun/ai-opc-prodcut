@@ -33,12 +33,5 @@
     "created_at": "2026-03-31T03:50:40.707Z",
     "updated_at": "2026-03-31T12:08:05.794Z",
     "id": 8
-  },
-  {
-    "config_key": "super_admin_token",
-    "config_value": "c2swd2F3eERGNGx3",
-    "created_at": "2026-04-01T09:48:28.683Z",
-    "updated_at": "2026-04-01T09:48:28.683Z",
-    "id": 9
   }
 ]
