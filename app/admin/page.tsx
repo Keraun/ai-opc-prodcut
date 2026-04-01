@@ -64,9 +64,6 @@ export default function AdminLoginPage() {
       if (data.requireEmailSetup) {
         console.log('[Login Page] Showing email setup')
         setShowEmailSetup(true)
-      } else if (data.showSuperAdminToken && data.superAdminToken) {
-        setGeneratedToken(data.superAdminToken)
-        setShowTokenModal(true)
       } else {
         console.log('[Login Page] Login successful, redirecting to dashboard')
         toast.success("登录成功")

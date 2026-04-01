@@ -7,22 +7,23 @@ import { ManagementHeader } from "../ManagementHeader"
 import { CommonTable, ActionButton } from "../CommonTable"
 import styles from "../../dashboard.module.css"
 
-// Get current user role from session storage
-const getCurrentUserRole = (): string => {
+// Get current user info from session storage
+const getCurrentUser = (): any => {
   const userStr = sessionStorage.getItem('currentUser')
   if (userStr) {
     try {
-      const user = JSON.parse(userStr)
-      return user.role || 'operator'
+      return JSON.parse(userStr)
     } catch {
-      return 'operator'
+      return null
     }
   }
-  return 'operator'
+  return null
 }
 
 export function AccountManagement() {
-  const currentUserRole = getCurrentUserRole()
+  const currentUser = getCurrentUser()
+  const currentUserRole = currentUser?.role || 'operator'
+  const currentUsername = currentUser?.username || ''
   const isOperator = currentUserRole === 'operator'
   
   const {
@@ -99,40 +100,52 @@ export function AccountManagement() {
           {
             title: '操作',
             key: 'action',
-            render: (_: any, record: any) => (
-              <div style={{ display: 'flex', gap: 8 }}>
-                <ActionButton
-                  type="primary"
-                  icon={<IconEdit size={16} />}
-                  onClick={() => openEditAccountModal(record)}
-                  disabled={isOperator}
-                >
-                  修改
-                </ActionButton>
-                <ActionButton
-                  type="default"
-                  icon={<IconEye size={16} />}
-                  onClick={() => openViewPasswordModal(record)}
-                  disabled={isOperator}
-                >
-                  查看密码
-                </ActionButton>
-                <Popconfirm
-                  title={`确定要删除账号 ${record.username} 吗？`}
-                  onConfirm={() => openDeleteAccountModal(record)}
-                  disabled={isOperator || record.username === 'admin'}
-                >
+            render: (_: any, record: any) => {
+              // 判断是否是超管账号
+              const isSuperAdminAccount = record.isSuperAdmin === true
+              // 判断是否是自己的账号
+              const isSelf = record.username === currentUsername
+              // 超管账号不能被删除
+              const canDelete = !isOperator && !isSuperAdminAccount
+              // 超管账号不能被其他管理员修改密码和查看密码，但是可以修改自己的密码
+              const canEditPassword = !isOperator && (isSelf || !isSuperAdminAccount)
+              const canViewPassword = !isOperator && (isSelf || !isSuperAdminAccount)
+              
+              return (
+                <div style={{ display: 'flex', gap: 8 }}>
                   <ActionButton
-                    type="danger"
-                    icon={<IconTrash2 size={16} />}
-                    onClick={() => openDeleteAccountModal(record)}
-                    disabled={isOperator || record.username === 'admin'}
+                    type="primary"
+                    icon={<IconEdit size={16} />}
+                    onClick={() => openEditAccountModal(record)}
+                    disabled={!canEditPassword}
                   >
-                    删除
+                    修改
                   </ActionButton>
-                </Popconfirm>
-              </div>
-            ),
+                  <ActionButton
+                    type="default"
+                    icon={<IconEye size={16} />}
+                    onClick={() => openViewPasswordModal(record)}
+                    disabled={!canViewPassword}
+                  >
+                    查看密码
+                  </ActionButton>
+                  <Popconfirm
+                    title={`确定要删除账号 ${record.username} 吗？`}
+                    onConfirm={() => openDeleteAccountModal(record)}
+                    disabled={!canDelete}
+                  >
+                    <ActionButton
+                      type="danger"
+                      icon={<IconTrash2 size={16} />}
+                      onClick={() => openDeleteAccountModal(record)}
+                      disabled={!canDelete}
+                    >
+                      删除
+                    </ActionButton>
+                  </Popconfirm>
+                </div>
+              )
+            },
           },
         ]}
         pagination={false}
@@ -193,8 +206,8 @@ export function AccountManagement() {
                 border: '1px solid #d9d9d9',
                 fontSize: '14px'
               }}
+              disabled
             >
-              <option value="admin">管理员</option>
               <option value="operator">操作员</option>
             </select>
           </Form.Item>

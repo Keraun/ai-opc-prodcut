@@ -34,7 +34,7 @@ interface SystemManagementProps {
   systemInfo?: any
   onRestartSystem?: () => void
   restarting?: boolean
-  isOperator?: boolean
+  isAdmin?: boolean
 }
 
 export function SystemManagement({
@@ -47,7 +47,7 @@ export function SystemManagement({
   systemInfo,
   onRestartSystem,
   restarting,
-  isOperator = false
+  isAdmin = false
 }: SystemManagementProps) {
 
 
@@ -266,7 +266,7 @@ export function SystemManagement({
                     icon={<IconSync />}
                     onClick={onRestartSystem}
                     loading={restarting}
-                    disabled={isOperator}
+                    disabled={isAdmin}
                   >
                     重启服务
                   </Button>
@@ -287,7 +287,7 @@ export function SystemManagement({
                     status="danger"
                     icon={<IconSync />}
                     onClick={onResetWebsite}
-                    disabled={isOperator}
+                    disabled={isAdmin}
                   >
                     还原配置
                   </Button>

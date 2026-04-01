@@ -32,7 +32,7 @@ export async function GET(request: NextRequest) {
           currentLoginIP: admin.current_login_ip
         }
         
-        console.log('[Auth Check] Returning authenticated user:', user)
+        console.log('[Auth Check] Returning authenticated user from database:', user)
         
         return successResponse({
           authenticated: true,

@@ -23,6 +23,7 @@ export function useAuth() {
       }
 
       console.log('[Dashboard CheckAuth] Authenticated, user:', authResult.user)
+      console.log('[Dashboard CheckAuth] User role:', authResult.user?.role)
       setCurrentUser(authResult.user || null)
       sessionStorage.setItem('currentUser', JSON.stringify(authResult.user))
       return true

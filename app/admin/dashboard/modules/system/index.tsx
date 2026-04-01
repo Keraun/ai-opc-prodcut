@@ -22,7 +22,7 @@ export function SystemManager() {
   
   // Get current user role
   const currentUserRole = currentUser?.role || 'operator'
-  const isOperator = currentUserRole === 'operator'
+  const isAdmin = currentUserRole === 'admin'
 
   useEffect(() => {
     loadSystemInfo()
@@ -115,7 +115,7 @@ export function SystemManager() {
         systemInfo={systemInfo}
         onRestartSystem={handleRestart}
         restarting={restarting}
-        isOperator={isOperator}
+        isAdmin={isAdmin}
       />
       <ChangePasswordModal
         visible={showChangePassword}
