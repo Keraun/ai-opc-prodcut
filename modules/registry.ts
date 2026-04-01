@@ -15,7 +15,12 @@ export const moduleRegistry: ModuleRegistry = {
       hasDefaultData: !!module.defaultData
     })
     moduleMap.set(module.moduleId, module)
+    
+    if (typeof window !== 'undefined') {
+      (window as any).__MODULE_REGISTRY__ = Array.from(moduleMap.values())
+    }
   },
+
 
   unregister: (moduleId: string) => {
     console.log(`[ModuleRegistry] Unregistering module:`, moduleId)

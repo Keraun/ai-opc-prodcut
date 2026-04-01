@@ -4,19 +4,17 @@ import { useEffect } from "react"
 import { ThemeProvider } from "@/components/theme-provider"
 import { InitialDataProvider } from "@/components/initial-data-provider"
 import { initializeModules } from "@/modules/init"
-import { initClientErrorHandler, logClientError } from "@/lib/client-error-handler"
+import { initClientErrorHandler } from "@/lib/client-error-handler"
 
-// 立即初始化模块，确保在应用加载时就有模块可用
 let modulesInitialized = false
-if (typeof window !== "undefined") {
+if (typeof window !== "undefined" && !modulesInitialized) {
   try {
-    console.log('[ClientLayout] Initializing modules')
+    console.log('[ClientLayout] Initializing modules at top level')
     initializeModules()
     modulesInitialized = true
-    console.log('[ClientLayout] Modules initialized successfully')
+    console.log('[ClientLayout] Modules initialized successfully at top level')
   } catch (error) {
     console.error('[ClientLayout] Failed to initialize modules:', error)
-    logClientError(error as Error, { source: 'module-initialization' })
   }
 }
 

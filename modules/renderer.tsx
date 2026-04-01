@@ -4,46 +4,6 @@ import { useEffect, useState, ComponentType, ReactNode } from "react"
 import { getModuleComponent } from "./registry"
 import type { ModuleData, ModuleProps } from "./types"
 
-let modulesInitialized = false
-let initializationPromise: Promise<void> | null = null
-
-async function ensureModulesInitialized(): Promise<void> {
-  console.log('[ensureModulesInitialized] Called, modulesInitialized:', modulesInitialized)
-  
-  if (modulesInitialized) {
-    console.log('[ensureModulesInitialized] Already initialized, returning early')
-    return
-  }
-  
-  if (initializationPromise) {
-    console.log('[ensureModulesInitialized] Initialization in progress, waiting...')
-    return initializationPromise
-  }
-  
-  console.log('[ensureModulesInitialized] Starting initialization...')
-  
-  initializationPromise = (async () => {
-    if (typeof window !== "undefined" && !modulesInitialized) {
-      try {
-        console.log('[ensureModulesInitialized] Dynamic importing initializeModules...')
-        const { initializeModules } = await import('./init')
-        console.log('[ensureModulesInitialized] Calling initializeModules()')
-        initializeModules()
-        modulesInitialized = true
-        console.log('[ensureModulesInitialized] Modules initialized successfully')
-      } catch (error) {
-        console.error('[ensureModulesInitialized] Failed to initialize modules:', error)
-        initializationPromise = null
-        throw error
-      }
-    }
-  })()
-  
-  return initializationPromise
-}
-
-
-
 interface ModuleErrorBoundaryProps {
   children: ReactNode
   moduleId: string
@@ -104,10 +64,8 @@ interface ModuleWrapperProps extends ModuleProps {
 
 function ModuleWrapper({ Component, ...props }: ModuleWrapperProps) {
   const [error, setError] = useState<Error | null>(null)
-  const [mounted, setMounted] = useState(false)
 
   useEffect(() => {
-    setMounted(true)
     console.log('[ModuleWrapper] Module mounting:', {
       moduleId: props.moduleId,
       moduleInstanceId: props.moduleInstanceId,
@@ -175,39 +133,6 @@ interface ModuleRendererProps {
 }
 
 export function ModuleRenderer({ modules }: ModuleRendererProps) {
-  const [initError, setInitError] = useState<Error | null>(null)
-
-  useEffect(() => {
-    console.log('[ModuleRenderer] useEffect triggered, ensuring modules are initialized...')
-    ensureModulesInitialized()
-      .then(() => {
-        console.log('[ModuleRenderer] Modules initialized successfully')
-      })
-      .catch((err) => {
-        console.error('[ModuleRenderer] Initialization error:', err)
-        setInitError(err)
-      })
-  }, [])
-
-  if (initError) {
-    return (
-      <div style={{ 
-        padding: '20px', 
-        background: '#fee', 
-        border: '1px solid #f00',
-        borderRadius: '4px',
-        margin: '10px 0'
-      }}>
-        <p style={{ color: '#c00', margin: 0 }}>
-          模块初始化失败
-        </p>
-        <p style={{ color: '#666', margin: '5px 0 0', fontSize: '12px' }}>
-          {initError.message}
-        </p>
-      </div>
-    )
-  }
-
   console.log('[ModuleRenderer] Rendering modules, count:', modules.length)
   
   return (
@@ -219,7 +144,8 @@ export function ModuleRenderer({ modules }: ModuleRendererProps) {
         if (!Component) {
           console.warn('[ModuleRenderer] Module not found:', {
             moduleId: module.moduleId,
-            moduleInstanceId: module.moduleInstanceId
+            moduleInstanceId: module.moduleInstanceId,
+            availableModules: Array.from((window as any).__MODULE_REGISTRY__ || []).map((m: any) => m.moduleId)
           })
           return (
             <div 
