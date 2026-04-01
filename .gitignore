@@ -13,3 +13,4 @@ next.user-config.*
 # Common ignores
 node_modules
 .next/
+.vercel
