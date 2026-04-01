@@ -7,7 +7,8 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint ."
+    "lint": "eslint .",
+    "build:vercel-zip": "bash build-vercel-zip.sh"
   },
   "dependencies": {
     "@arco-design/web-react": "^2.66.12",
