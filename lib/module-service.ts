@@ -4,7 +4,6 @@ import { clearInitialDataCache } from './initial-data'
 import { getModule, getAllModules } from '@/modules/registry'
 import type { ModuleRegistration, ModuleData } from '@/modules/types'
 
-const isDev = process.env.NODE_ENV === 'development'
 
 export function getModuleTemplate(moduleId: string): ModuleRegistration | null {
   // 无论在开发环境还是生产环境，都重新加载数据，确保获取到最新的数据

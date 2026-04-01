@@ -3,13 +3,8 @@ import { jsonDb } from './json-database'
 import fs from 'fs'
 import path from 'path'
 
-const TEMPLATES_DIR = path.join(process.cwd(), 'database', 'templates')
-const isDev = process.env.NODE_ENV === 'development'
-
 export function clearCache(): void {
-  if (isDev) {
-    jsonDb.reload()
-  }
+   jsonDb.reload()
 }
 
 
@@ -63,9 +58,8 @@ function getPathMapping(configType: string): PathMapping {
 }
 
 export function readConfig(configType: string): any {
-  if (isDev) {
-    jsonDb.reload()
-  }
+  // 无论在开发环境还是生产环境，都重新加载数据，确保获取到最新的数据
+  jsonDb.reload()
   
   try {
     if (configType === 'account') {
@@ -643,6 +637,9 @@ export function writePageData(moduleId: string, data: any): void {
 }
 
 export function readAllPageData(): Record<string, any> {
+  // 无论在开发环境还是生产环境，都重新加载数据，确保获取到最新的数据
+  jsonDb.reload()
+  
   try {
     const modules = jsonDb.getAll('module_registry')
     const result: Record<string, any> = {}
@@ -664,6 +661,9 @@ export function readSystemConfig(configName: string): any {
 }
 
 export function getThemeList(onlyCurrent: boolean = false): any[] {
+  // 无论在开发环境还是生产环境，都重新加载数据，确保获取到最新的数据
+  jsonDb.reload()
+  
   try {
     let themes = jsonDb.getAll('theme_config')
     
@@ -806,6 +806,9 @@ export function getPageResponse(pageId: string): any {
 }
 
 export function getModuleRegistry(): any[] {
+  // 无论在开发环境还是生产环境，都重新加载数据，确保获取到最新的数据
+  jsonDb.reload()
+  
   try {
     const modules = jsonDb.getAll('module_registry')
     

@@ -9,21 +9,18 @@ let pageDataCache: Record<string, Record<string, any>> = {}
 const isDev = process.env.NODE_ENV === 'development'
 
 export function loadInitialData(): Record<string, any> {
-  if (!isDev && initialDataCache) {
-    return initialDataCache
-  }
+  // 每次都重新加载数据，确保获取到最新的数据
+  jsonDb.reload()
 
-  if (isDev) {
-    jsonDb.reload()
-  }
-
-  initialDataCache = {
+  const data = {
     site: readConfig('site') || {},
     'site-header': readConfig('site-header') || {},
     'site-footer': readConfig('site-footer') || {}
   }
 
-  return initialDataCache
+  // 仍然更新缓存，以便其他地方可以使用
+  initialDataCache = data
+  return data
 }
 
 export function loadPageData(
@@ -33,14 +30,9 @@ export function loadPageData(
 ): Record<string, any> {
   const cacheKey = `${pageId}-${orderConfigKey || 'default'}`
   
-  if (!isDev && pageDataCache[cacheKey]) {
-    return pageDataCache[cacheKey]
-  }
-
-  if (isDev) {
-    jsonDb.reload()
-    clearInitialDataCache()
-  }
+  // 每次都重新加载数据，确保获取到最新的数据
+  jsonDb.reload()
+  clearInitialDataCache()
 
   const pageResponse = getPageResponse(pageId)
 
@@ -61,6 +53,7 @@ export function loadPageData(
     }
   }
 
+  // 仍然更新缓存，以便其他地方可以使用
   pageDataCache[cacheKey] = pageData
   return pageData
 }
