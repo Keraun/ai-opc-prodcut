@@ -6,6 +6,7 @@ import type { ModuleProps } from '@/modules/types'
 import type { ProductListData, Product } from './types'
 import { QrcodeModal } from '@/components/QrcodeModal'
 import { useTheme } from '@/components/theme-provider'
+import { useConfig } from '@/components/initial-data-provider'
 import { getProducts, getProductCategories } from '@/lib/client-api'
 import styles from './index.module.css'
 
@@ -56,7 +57,7 @@ export function ProductListModule({ data }: ModuleProps) {
     categories: []
   }
 
-  const { siteConfig } = useTheme()
+  const siteConfig = useConfig('site')
   const enableSearch = siteConfig?.features?.enableSearch ?? true
 
   const [products, setProducts] = useState<Product[]>([])

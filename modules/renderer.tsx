@@ -145,8 +145,7 @@ export function ModuleRenderer({ modules }: ModuleRendererProps) {
           console.warn('[ModuleRenderer] Module not found:', {
             moduleId: module.moduleId,
             moduleInstanceId: module.moduleInstanceId,
-            availableModules: typeof window !== 'undefined' ? 
-              Array.from((window as any).__MODULE_REGISTRY__ || []).map((m: any) => m.moduleId) : []
+            availableModules: Array.from((window as any).__MODULE_REGISTRY__ || []).map((m: any) => m.moduleId)
           })
           return (
             <div 
