@@ -1,8 +1,0 @@
-{
-  "git": {
-    "deploymentEnabled": true
-  },
-  "buildCommand": "npm run build",
-  "installCommand": "npm install",
-  "framework": "nextjs"
-}
