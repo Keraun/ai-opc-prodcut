@@ -279,13 +279,19 @@ export function SystemManagement({
                 <div className={styles.dangerActionInfo}>
                   <h4 className={styles.dangerActionTitle}>一键还原网站配置</h4>
                   <p className={styles.dangerActionDesc}>将所有配置还原到出厂状态</p>
+                  {!isAdmin && (
+                    <p style={{ color: '#ff4d4f', fontSize: '12px', marginTop: '4px' }}>
+                      只有管理员才能执行此操作
+                    </p>
+                  )}
                 </div>
-                <Tooltip content="请先导出配置备份">
+                <Tooltip content={isAdmin ? "请先导出配置备份" : "只有管理员才能执行此操作"}>
                   <Button 
                     type="primary" 
                     status="danger"
                     icon={<IconSync />}
                     onClick={onResetWebsite}
+                    disabled={!isAdmin}
                   >
                     还原配置
                   </Button>
