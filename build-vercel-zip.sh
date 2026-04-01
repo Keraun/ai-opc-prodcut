@@ -31,7 +31,8 @@ cp -r public $TEMP_DIR/ 2>/dev/null || echo "  [提示] public 目录不存在�
 cp package.json $TEMP_DIR/
 cp pnpm-lock.yaml $TEMP_DIR/ 2>/dev/null || cp package-lock.json $TEMP_DIR/ 2>/dev/null || echo "  [提示] lock 文件不存在，跳过"
 cp vercel.json $TEMP_DIR/ 2>/dev/null || echo "  [提示] vercel.json 不存在，跳过"
-cp -r database/runtime $TEMP_DIR/database/ 2>/dev/null || echo "  [提示] database/runtime 目录不存在，跳过"
+cp -r database $TEMP_DIR/ 2>/dev/null || echo "  [提示] database 目录不存在，跳过"
+cp -r scripts $TEMP_DIR/ 2>/dev/null || echo "  [提示] scripts 目录不存在，跳过"
 
 if [ -f ".env" ]; then
     cp .env $TEMP_DIR/
