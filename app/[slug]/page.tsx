@@ -66,7 +66,8 @@ interface PageProps {
   params: Promise<{ slug: string }>
 }
 
-// 移除静态生成，使用服务器端渲染，确保每次请求都获取最新数据
+// 明确设置为动态渲染，确保每次请求都获取最新数据
+export const dynamic = 'force-dynamic'
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const { slug } = await params
