@@ -2,8 +2,11 @@
   "git": {
     "deploymentEnabled": false
   },
-  "buildCommand": "echo 'Pre-built, skipping build'",
-  "outputDirectory": ".next",
+  "buildCommand": "npm run build",
+  "installCommand": "npm install",
   "framework": "nextjs",
-  "installCommand": "npm install"
+  "rewrites": [{
+    "source": "/(.*)",
+    "destination": "/"
+  }]
 }
