@@ -66,10 +66,8 @@ export function readConfig(configType: string): any {
   
   try {
     if (configType === 'account') {
-      console.log('[ConfigManager] Reading accounts...')
       const accounts = jsonDb.getAll('accounts')
-      console.log('[ConfigManager] Accounts from database:', accounts)
-      const result = accounts.map((acc: any) => ({
+      return accounts.map((acc: any) => ({
         username: acc.username,
         password: acc.password,
         email: acc.email,
@@ -82,8 +80,6 @@ export function readConfig(configType: string): any {
         currentLoginIP: acc.current_login_ip,
         currentLoginTime: acc.current_login_time
       }))
-      console.log('[ConfigManager] Returning accounts:', result)
-      return result
     }
     
     if (configType === 'notification') {

@@ -1,6 +1,6 @@
 import { NextRequest } from 'next/server'
 import { readConfig, writeConfig } from '@/lib/config-manager'
-import { successResponse, errorResponse, badRequestResponse, notFoundResponse } from '@/lib/api-utils'
+import { successResponse, errorResponse, badRequestResponse, notFoundResponse, getCookie } from '@/lib/api-utils'
 
 // 删除账号
 export async function DELETE(
@@ -17,6 +17,22 @@ export async function DELETE(
     // 检查是否为默认admin账户
     if (username === 'admin') {
       return badRequestResponse('默认管理员账户不可删除')
+    }
+    
+    // 获取当前登录用户信息
+    const adminUserCookie = await getCookie('adminUser', request)
+    let currentUser = null
+    if (adminUserCookie) {
+      try {
+        currentUser = JSON.parse(adminUserCookie)
+      } catch (error) {
+        console.error('解析用户信息失败:', error)
+      }
+    }
+    
+    // 检查是否为当前登录用户自己的账号
+    if (currentUser && currentUser.username === username) {
+      return badRequestResponse('不能删除自己的账号')
     }
     
     // 读取现有账号

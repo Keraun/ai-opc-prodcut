@@ -19,7 +19,6 @@ export async function POST(request: NextRequest) {
     console.log('[Login] Attempting login for user:', username)
 
     const accountConfig = readConfig('account')
-    console.log('[Login] Account config:', accountConfig)
     const admins = Array.isArray(accountConfig) ? accountConfig : []
 
     const adminIndex = admins.findIndex((admin: any) => admin.username === username)

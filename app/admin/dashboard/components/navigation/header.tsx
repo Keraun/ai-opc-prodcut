@@ -1,7 +1,7 @@
 "use client"
 
-import { Button, Dropdown } from "@arco-design/web-react"
-import { IconUser, IconSettings, IconExport, IconCustomerService, IconHome } from "@arco-design/web-react/icon"
+import { Button, Dropdown, Alert } from "@arco-design/web-react"
+import { IconUser, IconSettings, IconExport, IconCustomerService, IconHome, IconExclamationCircle } from "@arco-design/web-react/icon"
 import styles from "../../dashboard.module.css"
 
 interface HeaderProps {
@@ -13,6 +13,17 @@ interface HeaderProps {
 export function Header({ currentUser, onLogout, onChangePassword }: HeaderProps) {
   return (
     <header className={styles.headerBar}>
+      {currentUser?.mustChangePassword && (
+        <div style={{ padding: '8px 24px', backgroundColor: '#fff3f3', borderBottom: '1px solid #ffccc7' }}>
+          <Alert
+            type="warning"
+            title="安全提醒"
+            content="您的密码需要修改，请点击右上角的修改密码按钮进行操作。"
+            showIcon
+            style={{ margin: 0 }}
+          />
+        </div>
+      )}
       <div className={styles.headerBarInner}>
         <div className={styles.headerBarContent}>
           <div className={styles.headerLogo}>

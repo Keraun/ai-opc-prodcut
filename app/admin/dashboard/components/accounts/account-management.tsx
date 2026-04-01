@@ -105,8 +105,8 @@ export function AccountManagement() {
               const isSuperAdminAccount = record.isSuperAdmin === true
               // 判断是否是自己的账号
               const isSelf = record.username === currentUsername
-              // 超管账号不能被删除
-              const canDelete = !isOperator && !isSuperAdminAccount
+              // 超管账号不能被删除，且不能删除自己的账号
+              const canDelete = !isOperator && !isSuperAdminAccount && !isSelf
               // 超管账号不能被其他管理员修改密码和查看密码，但是可以修改自己的密码
               const canEditPassword = !isOperator && (isSelf || !isSuperAdminAccount)
               const canViewPassword = !isOperator && (isSelf || !isSuperAdminAccount)

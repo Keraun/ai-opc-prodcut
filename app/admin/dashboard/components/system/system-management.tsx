@@ -266,7 +266,6 @@ export function SystemManagement({
                     icon={<IconSync />}
                     onClick={onRestartSystem}
                     loading={restarting}
-                    disabled={isAdmin}
                   >
                     重启服务
                   </Button>
@@ -287,7 +286,6 @@ export function SystemManagement({
                     status="danger"
                     icon={<IconSync />}
                     onClick={onResetWebsite}
-                    disabled={isAdmin}
                   >
                     还原配置
                   </Button>
