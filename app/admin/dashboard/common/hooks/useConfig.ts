@@ -9,7 +9,6 @@ import {
 
 export interface Configs {
   site_config: any
-  super_admin_token: string
   notification: any
   site_footer_config:any
   product_categories: any
@@ -19,7 +18,6 @@ export interface Configs {
 export function useConfig() {
   const [configs, setConfigs] = useState<Configs>({
     site_config: {},
-    super_admin_token: '',
     notification: {},
     site_footer_config:{},
     product_categories: {},
@@ -27,7 +25,6 @@ export function useConfig() {
   })
   const [originalConfigs, setOriginalConfigs] = useState<Configs>({
     site_config: {},
-    super_admin_token: '',
     notification: {},
     site_footer_config:{},
     product_categories: {},

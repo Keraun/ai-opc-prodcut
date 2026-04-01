@@ -1,6 +1,5 @@
 import { NextRequest } from "next/server"
 import { readConfig, writeConfig } from "@/lib/config-manager"
-import { jsonDb } from "@/lib/json-database"
 import {
   successResponse,
   errorResponse,
@@ -12,8 +11,7 @@ import {
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json()
-    const { method, superAdminToken, token, username, email, verificationCode, code, newPassword } = body
-    const finalSuperAdminToken = superAdminToken || token
+    const { method, email, verificationCode, code, newPassword } = body
     const finalVerificationCode = verificationCode || code
 
     if (!newPassword) {
@@ -29,21 +27,7 @@ export async function POST(request: NextRequest) {
 
     let adminIndex = -1
 
-    if (method === "token") {
-      if (!finalSuperAdminToken || !username) {
-        return badRequestResponse("缺少必要参数")
-      }
-
-      jsonDb.reloadTable('system_config')
-      const tokenConfig = jsonDb.findOne('system_config', { config_key: 'super_admin_token' })
-
-
-      adminIndex = admins.findIndex((admin: any) => admin.username === username)
-
-      if (adminIndex === -1) {
-        return notFoundResponse("用户不存在")
-      }
-    } else if (method === "email") {
+    if (method === "email") {
       if (!email || !finalVerificationCode) {
         return badRequestResponse("缺少必要参数")
       }
@@ -83,7 +67,7 @@ export async function POST(request: NextRequest) {
     writeConfig('account', admins)
 
     const responseData: any = {
-      username: method === "email" ? admins[adminIndex].username : undefined
+      username: admins[adminIndex].username
     }
 
     return successResponse(responseData, "密码修改成功")

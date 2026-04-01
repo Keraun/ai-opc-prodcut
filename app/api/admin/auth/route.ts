@@ -24,6 +24,7 @@ export async function GET(request: NextRequest) {
       if (admin) {
         const user = {
           username: admin.username,
+          role: admin.role || 'operator',
           remark: admin.remark,
           mustChangePassword: admin.must_change_password,
           lastLoginTime: admin.last_login_time,
@@ -41,6 +42,7 @@ export async function GET(request: NextRequest) {
       
       const user = {
         username: adminUserFromCookie.username,
+        role: adminUserFromCookie.role || 'operator',
         remark: adminUserFromCookie.remark,
         mustChangePassword: adminUserFromCookie.mustChangePassword || false,
         lastLoginTime: adminUserFromCookie.lastLoginTime,

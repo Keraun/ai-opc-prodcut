@@ -16,15 +16,6 @@ import AdmZip from 'adm-zip'
 export async function POST(request: NextRequest) {
   return wrapAuthApiHandler(async () => {
     try {
-      const body = await request.json()
-      const { superAdminToken } = body
-
-
-      jsonDb.reloadTable('system_config')
-      
-      const tokenConfig = jsonDb.findOne('system_config', { config_key: 'super_admin_token' })
-     
-
       const initDatabaseZipPath = path.join(process.cwd(), 'database', 'init_database.zip')
       const runtimeDir = path.join(process.cwd(), 'database', 'runtime')
 

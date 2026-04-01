@@ -66,37 +66,7 @@ export async function POST(request: NextRequest) {
     admins[adminIndex].current_login_ip = currentIP
     admins[adminIndex].current_login_time = currentTime
 
-    let showSuperAdminToken = false
-    let superAdminToken = ''
 
-    jsonDb.reloadTable('system_config')
-    
-    let tokenConfig = jsonDb.findOne('system_config', { config_key: 'super_admin_token' })
-
-    if (!tokenConfig || !tokenConfig.config_value || tokenConfig.config_value.trim() === '') {
-      superAdminToken = generateRandomToken(12)
-      
-      if (!tokenConfig) {
-        jsonDb.insert('system_config', {
-          config_key: 'super_admin_token',
-          config_value: superAdminToken,
-          created_at: new Date().toISOString(),
-          updated_at: new Date().toISOString()
-        })
-      } else {
-        jsonDb.update('system_config', 
-          tokenConfig.id,
-          { 
-            config_value: superAdminToken,
-            updated_at: new Date().toISOString()
-          }
-        )
-      }
-      
-      showSuperAdminToken = true
-    } else {
-      superAdminToken = tokenConfig.config_value
-    }
 
     writeConfig('account', admins)
 
@@ -116,9 +86,7 @@ export async function POST(request: NextRequest) {
 
     return successResponse({
       mustChangePassword: admin.must_change_password,
-      user: userData,
-      showSuperAdminToken,
-      superAdminToken: showSuperAdminToken ? superAdminToken : undefined
+      user: userData
     })
   })
 }
