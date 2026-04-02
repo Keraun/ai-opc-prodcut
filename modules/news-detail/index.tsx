@@ -50,11 +50,13 @@ export function NewsDetailModule({ data }: ModuleProps) {
     showComments: false
   }
 
-  const [article, setArticle] = useState<Article | null>(null)
+  const ssrArticle = (data as any)?.ssrArticle as Article | undefined
+
+  const [article, setArticle] = useState<Article | null>(ssrArticle || null)
   const [relatedArticles, setRelatedArticles] = useState<Article[]>([])
   const [prevArticle, setPrevArticle] = useState<Article | null>(null)
   const [nextArticle, setNextArticle] = useState<Article | null>(null)
-  const [loading, setLoading] = useState(true)
+  const [loading, setLoading] = useState(!ssrArticle)
   const [isPreview, setIsPreview] = useState(false)
 
   useEffect(() => {
@@ -99,6 +101,33 @@ export function NewsDetailModule({ data }: ModuleProps) {
         return
       }
 
+      if (ssrArticle) {
+        try {
+          const listResponse = await fetch('/api/articles')
+          const listResult = await listResponse.json()
+          if (listResult.success && listResult.data) {
+            const allArticles = listResult.data
+            const currentIndex = allArticles.findIndex((a: Article) => a.id === ssrArticle.id)
+            
+            if (config.showRelated) {
+              setRelatedArticles(
+                allArticles
+                  .filter((a: Article) => a.id !== ssrArticle.id)
+                  .slice(0, config.relatedCount || 4)
+              )
+            }
+            
+            setPrevArticle(currentIndex > 0 ? allArticles[currentIndex - 1] : null)
+            setNextArticle(currentIndex < allArticles.length - 1 ? allArticles[currentIndex + 1] : null)
+          }
+        } catch (error) {
+          console.error('Failed to fetch related articles:', error)
+        } finally {
+          setLoading(false)
+        }
+        return
+      }
+
       const param = window.location.pathname.split('/').pop()
       if (!param) return
 
@@ -139,7 +168,7 @@ export function NewsDetailModule({ data }: ModuleProps) {
       }
     }
     fetchArticle()
-  }, [config.showRelated, config.relatedCount])
+  }, [config.showRelated, config.relatedCount, ssrArticle])
 
   if (loading) {
     return (

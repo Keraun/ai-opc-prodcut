@@ -1,6 +1,14 @@
 'use client'
 
+function isClientErrorLogEnabled(): boolean {
+  return process.env.NEXT_PUBLIC_CLIENT_ERROR_LOG_ENABLED === 'true'
+}
+
 async function reportError(errorData: any) {
+  if (!isClientErrorLogEnabled()) {
+    return
+  }
+
   try {
     await fetch('/api/client-error', {
       method: 'POST',
@@ -16,6 +24,11 @@ async function reportError(errorData: any) {
 
 export function initClientErrorHandler() {
   if (typeof window === 'undefined') return
+
+  if (!isClientErrorLogEnabled()) {
+    console.log('[ClientError] 客户端错误日志已禁用')
+    return
+  }
 
   window.addEventListener('error', (event) => {
     const isScriptError = event.message === 'Script error.' && event.filename === ''

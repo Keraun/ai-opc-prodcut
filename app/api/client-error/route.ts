@@ -15,7 +15,15 @@ function getTimestamp(): string {
   return new Date().toISOString()
 }
 
+function isClientErrorLogEnabled(): boolean {
+  return process.env.NEXT_PUBLIC_CLIENT_ERROR_LOG_ENABLED === 'true'
+}
+
 export async function POST(request: NextRequest) {
+  if (!isClientErrorLogEnabled()) {
+    return NextResponse.json({ success: true, message: '客户端错误日志已禁用' })
+  }
+
   try {
     const errorData = await request.json()
 

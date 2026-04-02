@@ -133,6 +133,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 }
 
 export default async function NewsDetailPage({ params }: PageProps) {
+  const { id } = await params
   const page = getPageByRoute('/news/[id]')
   
   if (!page) {
@@ -140,7 +141,13 @@ export default async function NewsDetailPage({ params }: PageProps) {
   }
   
   try {
-    return <GenericPage pageId={page.pageId} />
+    const article = getArticle(id)
+    
+    const extraConfig = article ? {
+      ssrArticle: article
+    } : {}
+    
+    return <GenericPage pageId={page.pageId} extraConfig={extraConfig} />
   } catch (error) {
     console.error(`Error loading news detail page:`, error)
     return <GenericPage pageId="404" />
