@@ -1,17 +1,18 @@
 "use client"
 
 import { useMemo } from "react"
-import { 
-  FileText, 
-  Package, 
-  Newspaper, 
-  MessageCircle, 
-  Palette, 
-  Users, 
+import {
+  FileText,
+  Package,
+  Newspaper,
+  MessageCircle,
+  Palette,
+  Users,
   Settings,
   Globe,
   Image,
-  BookOpen
+  BookOpen,
+  Cpu
 } from "lucide-react"
 import styles from "../../dashboard.module.css"
 
@@ -37,6 +38,7 @@ const MENU_STRUCTURE: MenuItem[] = [
   { id: 'pages', label: '页面管理', icon: FileText },
   { id: 'products', label: '产品管理', icon: Package },
   { id: 'articles', label: '资讯管理', icon: Newspaper },
+  { id: 'geo-tools', label: 'GEO工具', icon: Cpu },
   { id: 'messages', label: '留言管理', icon: MessageCircle },
   { id: 'images', label: '图片管理', icon: Image },
   { id: 'theme', label: '主题管理', icon: Palette },
@@ -62,7 +64,7 @@ export function Sidebar({
       if (item.id === 'accounts' && currentUser?.role !== 'admin') {
         return
       }
-      
+
       const category = item.category || ''
       if (!categories[category]) {
         categories[category] = []

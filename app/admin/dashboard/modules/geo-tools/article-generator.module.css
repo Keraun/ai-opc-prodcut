@@ -1,0 +1,235 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.container :global(.arco-collapse) {
+  background: #fff;
+  border-radius: 8px;
+  border: 1px solid #e5e6eb;
+}
+
+.container :global(.arco-collapse-item-header) {
+  padding: 16px 20px;
+  background: #f7f8fa;
+}
+
+.container :global(.arco-collapse-item-content) {
+  padding: 0;
+}
+
+.collapseHeader {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 500;
+  color: #1d2129;
+}
+
+.collapseIcon {
+  font-size: 18px;
+  color: #165dff;
+}
+
+.sectionContent {
+  padding: 20px;
+}
+
+.formRow {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+.formItem {
+  margin-bottom: 16px;
+}
+
+.formItem:last-child {
+  margin-bottom: 0;
+}
+
+.label {
+  display: block;
+  font-size: 14px;
+  font-weight: 500;
+  color: #1d2129;
+  margin-bottom: 8px;
+}
+
+.required {
+  color: #f53f3f;
+  margin-left: 2px;
+}
+
+.actionsSection {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+.actionCard {
+  border-radius: 8px;
+}
+
+.actionCard :global(.arco-card-body) {
+  padding: 16px 20px;
+}
+
+.actionContent {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.actionInfo {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.actionIcon {
+  font-size: 24px;
+  color: #165dff;
+}
+
+.actionTitle {
+  font-size: 14px;
+  font-weight: 500;
+  color: #1d2129;
+  margin-bottom: 4px;
+}
+
+.actionDesc {
+  font-size: 12px;
+  color: #86909c;
+}
+
+.resultCard {
+  border-radius: 8px;
+}
+
+.resultCard :global(.arco-card-body) {
+  padding: 0;
+}
+
+.resultHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px 20px;
+  border-bottom: 1px solid #e5e6eb;
+  background: #f7f8fa;
+}
+
+.resultTitle {
+  font-size: 14px;
+  font-weight: 500;
+  color: #1d2129;
+}
+
+.markdownContent {
+  padding: 20px;
+  max-height: 500px;
+  overflow-y: auto;
+  line-height: 1.8;
+}
+
+.markdownContent :global(h1) {
+  font-size: 1.5rem;
+  font-weight: 600;
+  margin: 1.25rem 0 1rem;
+  color: #1d2129;
+}
+
+.markdownContent :global(h2) {
+  font-size: 1.25rem;
+  font-weight: 600;
+  margin: 1rem 0 0.75rem;
+  color: #1d2129;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid #e5e6eb;
+}
+
+.markdownContent :global(h3) {
+  font-size: 1.125rem;
+  font-weight: 500;
+  margin: 0.875rem 0 0.5rem;
+  color: #1d2129;
+}
+
+.markdownContent :global(p) {
+  margin: 0.625rem 0;
+  color: #4e5969;
+}
+
+.markdownContent :global(ul),
+.markdownContent :global(ol) {
+  margin: 0.625rem 0;
+  padding-left: 1.5rem;
+}
+
+.markdownContent :global(li) {
+  margin: 0.25rem 0;
+  color: #4e5969;
+}
+
+.markdownContent :global(table) {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 1rem 0;
+}
+
+.markdownContent :global(th) {
+  background: #f7f8fa;
+  color: #1d2129;
+  padding: 10px 12px;
+  text-align: left;
+  font-weight: 500;
+  border: 1px solid #e5e6eb;
+}
+
+.markdownContent :global(td) {
+  padding: 10px 12px;
+  border: 1px solid #e5e6eb;
+  color: #4e5969;
+}
+
+.markdownContent :global(tr:nth-child(even)) {
+  background: #f7f8fa;
+}
+
+.markdownContent :global(code) {
+  background: #f2f3f5;
+  padding: 0.125rem 0.375rem;
+  border-radius: 4px;
+  font-family: 'Courier New', monospace;
+  font-size: 0.875rem;
+  color: #c9302c;
+}
+
+.markdownContent :global(pre) {
+  background: #1d2129;
+  color: #f2f3f5;
+  padding: 1rem;
+  border-radius: 6px;
+  overflow-x: auto;
+  margin: 1rem 0;
+}
+
+.markdownContent :global(pre code) {
+  background: transparent;
+  color: inherit;
+  padding: 0;
+}
+
+@media (max-width: 768px) {
+  .formRow {
+    grid-template-columns: 1fr;
+  }
+  
+  .actionsSection {
+    grid-template-columns: 1fr;
+  }
+}

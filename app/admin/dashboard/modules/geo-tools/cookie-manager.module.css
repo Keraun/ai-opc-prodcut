@@ -1,0 +1,147 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.introCard {
+  background: #e8f3ff;
+  border: 1px solid #bedaff;
+  border-radius: 8px;
+  padding: 16px 20px;
+}
+
+.introHeader {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+.introIcon {
+  font-size: 18px;
+  color: #165dff;
+}
+
+.introTitle {
+  font-size: 14px;
+  font-weight: 500;
+  color: #1d2129;
+}
+
+.introText {
+  font-size: 13px;
+  color: #4e5969;
+  margin: 0;
+  line-height: 1.6;
+}
+
+.sitesGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 16px;
+}
+
+.siteCard {
+  border-radius: 8px;
+  transition: all 0.2s;
+}
+
+.siteCard:hover {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.siteCard :global(.arco-card-body) {
+  padding: 16px 20px;
+}
+
+.siteHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 12px;
+}
+
+.siteInfo {
+  flex: 1;
+}
+
+.siteName {
+  font-size: 14px;
+  font-weight: 500;
+  color: #1d2129;
+  margin-bottom: 4px;
+}
+
+.siteDesc {
+  font-size: 12px;
+  color: #86909c;
+}
+
+.siteStatus {
+  flex-shrink: 0;
+}
+
+.siteActions {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+.cookiePreview {
+  background: #f7f8fa;
+  border-radius: 6px;
+  padding: 12px;
+  margin-top: 8px;
+}
+
+.cookieMeta {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.cookieLabel {
+  font-size: 12px;
+  font-weight: 500;
+  color: #1d2129;
+}
+
+.cookieTime {
+  font-size: 11px;
+  color: #86909c;
+}
+
+.cookieText {
+  font-size: 11px;
+  color: #4e5969;
+  font-family: 'Courier New', monospace;
+  word-break: break-all;
+  line-height: 1.5;
+  background: #fff;
+  padding: 8px;
+  border-radius: 4px;
+  border: 1px solid #e5e6eb;
+}
+
+.modalContent {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.modalTip {
+  font-size: 13px;
+  color: #4e5969;
+  background: #f7f8fa;
+  padding: 12px;
+  border-radius: 6px;
+  line-height: 1.6;
+}
+
+@media (max-width: 768px) {
+  .sitesGrid {
+    grid-template-columns: 1fr;
+  }
+}
