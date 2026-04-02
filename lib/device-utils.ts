@@ -4,6 +4,45 @@ export interface DeviceInfo {
   browser: string
   browserVersion: string
   deviceModel: string
+  isCrawler: boolean
+}
+
+export function isCrawler(userAgent: string): boolean {
+  const ua = userAgent.toLowerCase()
+  
+  const crawlerPatterns = [
+    'googlebot',
+    'bingbot',
+    'slurp',
+    'duckduckbot',
+    'baiduspider',
+    'yandexbot',
+    'sogou',
+    'exabot',
+    'facebot',
+    'facebookexternalhit',
+    'ia_archiver',
+    'twitterbot',
+    'linkedinbot',
+    'embedly',
+    'quora link preview',
+    'showyoubot',
+    'outbrain',
+    'pinterest',
+    'applebot',
+    'semrushbot',
+    'mj12bot',
+    'ahrefsbot',
+    'dotbot',
+    'rogerbot',
+    'spbot',
+    'crawler',
+    'bot',
+    'spider',
+    'crawling'
+  ]
+  
+  return crawlerPatterns.some(pattern => ua.includes(pattern))
 }
 
 export function parseUserAgent(userAgent: string): DeviceInfo {
@@ -84,7 +123,8 @@ export function parseUserAgent(userAgent: string): DeviceInfo {
     osVersion,
     browser,
     browserVersion,
-    deviceModel
+    deviceModel,
+    isCrawler: isCrawler(userAgent)
   }
 }
 
