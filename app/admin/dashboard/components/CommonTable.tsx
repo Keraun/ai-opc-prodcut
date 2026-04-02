@@ -17,6 +17,11 @@ export interface CommonTableProps<T = any> {
   className?: string
   bordered?: boolean
   stripe?: boolean
+  rowSelection?: {
+    selectedRowKeys?: (string | number)[]
+    onChange?: (selectedRowKeys: (string | number)[], selectedRows: T[]) => void
+    type?: 'checkbox' | 'radio'
+  }
 }
 
 export function CommonTable<T extends Record<string, any> = any>({
@@ -31,6 +36,7 @@ export function CommonTable<T extends Record<string, any> = any>({
   className = "",
   bordered = false,
   stripe = false,
+  rowSelection,
 }: CommonTableProps<T>) {
   return (
     <div className={`${styles.tableContainer} ${className}`}>
@@ -49,15 +55,9 @@ export function CommonTable<T extends Record<string, any> = any>({
             pagination={pagination}
             border={bordered}
             stripe={stripe}
+            rowSelection={rowSelection}
             className={styles.table}
-            locale={{
-              emptyText: (
-                <div className={styles.emptyContainer}>
-                  {emptyIcon && <div className={styles.emptyIcon}>{emptyIcon}</div>}
-                  <p className={styles.emptyText}>{emptyText}</p>
-                </div>
-              )
-            }}
+
           />
         )}
       </Card>

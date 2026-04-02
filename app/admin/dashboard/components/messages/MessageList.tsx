@@ -2,8 +2,8 @@
 
 import { useState, useEffect } from "react"
 import { CommonTable, ActionButton } from "../index"
-import { MessageSquare, Phone, Mail, Eye, Download } from "lucide-react"
-import { Select, Space, Popconfirm, Modal, Input, Tooltip, Tag, Button } from '@arco-design/web-react'
+import { MessageSquare, Phone, Mail, Eye, Download, Trash2 } from "lucide-react"
+import { Select, Space, Popconfirm, Modal, Input, Tooltip, Tag, Button, Checkbox } from '@arco-design/web-react'
 import styles from "../BaseManagement.module.css"
 import { toast } from "sonner"
 
@@ -49,6 +49,7 @@ export function MessageList({ onStatusChange }: MessageListProps) {
   const [currentMessage, setCurrentMessage] = useState<Message | null>(null)
   const [editNote, setEditNote] = useState('')
   const [editStatus, setEditStatus] = useState('')
+  const [selectedRowKeys, setSelectedRowKeys] = useState<number[]>([])
 
   const loadMessages = async (page = 1, status = '') => {
     try {
@@ -181,41 +182,103 @@ export function MessageList({ onStatusChange }: MessageListProps) {
       const result = await response.json()
 
       if (result.success && result.data && result.data.length > 0) {
-        const headers = ['姓名', '电话', '微信', '邮箱', '留言内容', '大模型', '状态', '备注', 'IP地址', '地区', '操作系统', '浏览器', '设备机型', '提交时间']
-        const rows = result.data.map((msg: Message) => [
-          msg.name,
-          msg.phone || '',
-          msg.wechat || '',
-          msg.email || '',
-          `"${msg.message.replace(/"/g, '""')}"`,
-          msg.llmModel || '',
-          msg.status,
-          `"${(msg.note || '').replace(/"/g, '""')}"`,
-          msg.ip,
-          msg.region,
-          `${msg.os} ${msg.osVersion}`,
-          `${msg.browser} ${msg.browserVersion}`,
-          msg.deviceModel,
-          new Date(msg.created_at).toLocaleString('zh-CN')
-        ])
-
-        const csvContent = [headers.join(','), ...rows.map((row: string[]) => row.join(','))].join('\n')
-        const blob = new Blob(['\ufeff' + csvContent], { type: 'text/csv;charset=utf-8;' })
-        const url = URL.createObjectURL(blob)
-        const link = document.createElement('a')
-        link.href = url
-        link.download = `留言导出_${new Date().toLocaleDateString('zh-CN')}.csv`
-        document.body.appendChild(link)
-        link.click()
-        document.body.removeChild(link)
-        URL.revokeObjectURL(url)
-        toast.success('导出成功')
+        exportToCSV(result.data)
       } else {
         toast.error('没有可导出的数据')
       }
     } catch (error) {
       console.error('导出失败:', error)
       toast.error('导出失败')
+    }
+  }
+
+  const handleBatchExport = () => {
+    if (selectedRowKeys.length === 0) {
+      toast.error('请先选择要导出的留言')
+      return
+    }
+    const selectedMessages = messages.filter(msg => selectedRowKeys.includes(msg.id))
+    exportToCSV(selectedMessages)
+    toast.success(`已导出 ${selectedRowKeys.length} 条留言`)
+  }
+
+  const exportToCSV = (data: Message[]) => {
+    if (data.length === 0) {
+      toast.error('没有可导出的数据')
+      return
+    }
+
+    const headers = ['姓名', '电话', '微信', '邮箱', '留言内容', '大模型', '状态', '备注', 'IP地址', '地区', '操作系统', '浏览器', '设备机型', '提交时间']
+    const rows = data.map((msg: Message) => [
+      msg.name,
+      msg.phone || '',
+      msg.wechat || '',
+      msg.email || '',
+      `"${msg.message.replace(/"/g, '""')}"`,
+      msg.llmModel || '',
+      msg.status,
+      `"${(msg.note || '').replace(/"/g, '""')}"`,
+      msg.ip,
+      msg.region,
+      `${msg.os} ${msg.osVersion}`,
+      `${msg.browser} ${msg.browserVersion}`,
+      msg.deviceModel,
+      new Date(msg.created_at).toLocaleString('zh-CN')
+    ])
+
+    const csvContent = [headers.join(','), ...rows.map((row: string[]) => row.join(','))].join('\n')
+    const blob = new Blob(['\ufeff' + csvContent], { type: 'text/csv;charset=utf-8;' })
+    const url = URL.createObjectURL(blob)
+    const link = document.createElement('a')
+    link.href = url
+    link.download = `留言导出_${new Date().toLocaleDateString('zh-CN')}.csv`
+    document.body.appendChild(link)
+    link.click()
+    document.body.removeChild(link)
+    URL.revokeObjectURL(url)
+    toast.success('导出成功')
+  }
+
+  const handleBatchDelete = async () => {
+    if (selectedRowKeys.length === 0) {
+      toast.error('请先选择要删除的留言')
+      return
+    }
+
+    Modal.confirm({
+      title: '确认批量删除',
+      content: `确定要删除选中的 ${selectedRowKeys.length} 条留言吗？此操作不可恢复！`,
+      okText: '确认删除',
+      cancelText: '取消',
+      okButtonProps: { status: 'danger' },
+      onOk: async () => {
+        try {
+          const response = await fetch('/api/admin/messages/batch', {
+            method: 'DELETE',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ ids: selectedRowKeys })
+          })
+          const result = await response.json()
+
+          if (result.success) {
+            toast.success(`成功删除 ${selectedRowKeys.length} 条留言`)
+            setSelectedRowKeys([])
+            loadMessages(pagination.page, statusFilter)
+          } else {
+            toast.error(result.message || '批量删除失败')
+          }
+        } catch (error) {
+          console.error('批量删除失败:', error)
+          toast.error('批量删除失败')
+        }
+      }
+    })
+  }
+
+  const rowSelection = {
+    selectedRowKeys,
+    onChange: (keys: any[]) => {
+      setSelectedRowKeys(keys as number[])
     }
   }
 
@@ -406,19 +469,56 @@ export function MessageList({ onStatusChange }: MessageListProps) {
             ))}
           </Select>
         </div>
-        <Button
-          type="primary"
-          icon={<Download size={14} />}
-          onClick={handleExport}
-        >
-          导出留言
-        </Button>
+        <Space>
+          <Button
+            type="primary"
+            icon={<Download size={14} />}
+            onClick={handleExport}
+          >
+            导出全部
+          </Button>
+        </Space>
       </div>
+
+      {selectedRowKeys.length > 0 && (
+        <div style={{
+          padding: '12px 16px',
+          marginBottom: 16,
+          backgroundColor: '#f0f9ff',
+          border: '1px solid #bae6fd',
+          borderRadius: 6,
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'space-between'
+        }}>
+          <span style={{ color: '#0369a1', fontSize: 14 }}>
+            已选择 <strong>{selectedRowKeys.length}</strong> 条留言
+          </span>
+          <Space>
+            <Button
+              type="secondary"
+              icon={<Download size={14} />}
+              onClick={handleBatchExport}
+            >
+              导出选中
+            </Button>
+            <Button
+              type="primary"
+              status="danger"
+              icon={<Trash2 size={14} />}
+              onClick={handleBatchDelete}
+            >
+              批量删除
+            </Button>
+          </Space>
+        </div>
+      )}
 
       <CommonTable
         columns={columns}
         data={messages}
         loading={loading}
+        rowSelection={rowSelection}
         pagination={{
           current: pagination.page,
           pageSize: pagination.pageSize,

@@ -1,5 +1,15 @@
 @import '@arco-design/web-react/dist/css/arco.css';
 
+/* 禁用移动端双击缩放 */
+html {
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+}
+
+* {
+  -webkit-touch-callout: none;
+}
+
 :root {
   /* 基础变量 */
   --font-sans: 'Geist', 'Geist Fallback', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;

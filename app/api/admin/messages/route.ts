@@ -98,14 +98,25 @@ export async function PATCH(request: NextRequest) {
 export async function DELETE(request: NextRequest) {
   try {
     const body = await request.json()
-    const { id } = body
-
-    if (!id) {
-      return badRequestResponse("留言ID不能为空")
-    }
+    const { id, ids } = body
 
     // 重新加载数据，确保获取最新的留言信息
     jsonDb.reload()
+
+    // 批量删除
+    if (ids && Array.isArray(ids) && ids.length > 0) {
+      let deletedCount = 0
+      for (const msgId of ids) {
+        const deleted = jsonDb.delete('messages', msgId)
+        if (deleted) deletedCount++
+      }
+      return successResponse({ deletedCount }, `成功删除 ${deletedCount} 条留言`)
+    }
+
+    // 单条删除
+    if (!id) {
+      return badRequestResponse("留言ID不能为空")
+    }
 
     const deleted = jsonDb.delete('messages', id)
     
