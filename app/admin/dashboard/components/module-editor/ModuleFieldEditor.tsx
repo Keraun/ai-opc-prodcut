@@ -93,9 +93,35 @@ function calculateFieldLayout(
 
 function groupFieldsByRow(items: FieldLayoutItem[]): FieldLayoutItem[][] {
   const rows: FieldLayoutItem[][] = []
+  let currentRow: FieldLayoutItem[] = []
+  let currentRowSpan = 0
+
   items.forEach((item) => {
-    rows.push([item])
+    // 对于值和单位字段，尝试将它们放在同一行
+    if (item.key === 'value' || item.key === 'unit') {
+      if (currentRow.length === 0 || (currentRow.length === 1 && (currentRow[0].key === 'value' || currentRow[0].key === 'unit'))) {
+        currentRow.push(item)
+        currentRowSpan += item.colSpan
+      } else {
+        rows.push(currentRow)
+        currentRow = [item]
+        currentRowSpan = item.colSpan
+      }
+    } else {
+      // 其他字段单独占一行
+      if (currentRow.length > 0) {
+        rows.push(currentRow)
+        currentRow = []
+        currentRowSpan = 0
+      }
+      rows.push([item])
+    }
   })
+
+  if (currentRow.length > 0) {
+    rows.push(currentRow)
+  }
+
   return rows
 }
 
