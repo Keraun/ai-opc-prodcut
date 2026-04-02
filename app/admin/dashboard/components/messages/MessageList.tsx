@@ -496,19 +496,19 @@ export function MessageList({ onStatusChange }: MessageListProps) {
           </span>
           <Space>
             <Button
-              type="secondary"
-              icon={<Download size={14} />}
-              onClick={handleBatchExport}
-            >
-              导出选中
-            </Button>
-            <Button
               type="primary"
               status="danger"
               icon={<Trash2 size={14} />}
               onClick={handleBatchDelete}
             >
               批量删除
+            </Button>
+            <Button
+              type="secondary"
+              icon={<Download size={14} />}
+              onClick={handleBatchExport}
+            >
+              导出选中
             </Button>
           </Space>
         </div>
