@@ -63,13 +63,19 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
           const themeConfig = response.data
           if (themeConfig.themes) {
             setThemes(themeConfig.themes)
-            const themeId = savedTheme || themeConfig.currentTheme || "modern"
+            const themeId = themeConfig.currentTheme || savedTheme || "modern"
             if (themeConfig.themes[themeId]) {
               setCurrentTheme(themeId)
               setThemeConfig(themeConfig.themes[themeId])
+              if (typeof window !== 'undefined' && themeConfig.currentTheme) {
+                localStorage.setItem("theme", themeConfig.currentTheme)
+              }
             } else if (themeConfig.themes["modern"]) {
               setCurrentTheme("modern")
               setThemeConfig(themeConfig.themes["modern"])
+              if (typeof window !== 'undefined') {
+                localStorage.setItem("theme", "modern")
+              }
             } else {
               const defaultTheme = getDefaultThemeConfig(savedTheme)
               setThemes({ [defaultTheme.id]: defaultTheme })

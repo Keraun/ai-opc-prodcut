@@ -78,6 +78,7 @@ function getArticle(id: string): Article | undefined {
 
 interface PageProps {
   params: Promise<{ id: string }>
+  searchParams: Promise<{ [key: string]: string | string[] | undefined }>
 }
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
@@ -135,8 +136,9 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   }
 }
 
-export default async function NewsDetailPage({ params }: PageProps) {
+export default async function NewsDetailPage({ params, searchParams }: PageProps) {
   const { id } = await params
+  const searchParamsData = await searchParams
   const page = getPageByRoute('/news/[id]')
   
   if (!page) {
@@ -150,7 +152,9 @@ export default async function NewsDetailPage({ params }: PageProps) {
     
     const article = getArticle(id)
     
-    if (isCrawlerRequest && article) {
+    const isDebugCrawler = searchParamsData.isCrawle === 'true' || searchParamsData.isCrawle === '1'
+    
+    if ((isCrawlerRequest || isDebugCrawler) && article) {
       return <CrawlerArticle article={article} />
     }
     
