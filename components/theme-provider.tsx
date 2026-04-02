@@ -54,8 +54,18 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
   useEffect(() => {
     setMounted(true)
     
+    // 先从localStorage获取主题，提高首屏加载速度
     const savedTheme = typeof window !== 'undefined' ? localStorage.getItem("theme") : null
     
+    // 立即应用本地存储的主题（如果有）
+    if (savedTheme) {
+      const defaultTheme = getDefaultThemeConfig(savedTheme)
+      setThemes({ [defaultTheme.id]: defaultTheme })
+      setCurrentTheme(defaultTheme.id)
+      setThemeConfig(defaultTheme)
+    }
+    
+    // 异步拉取服务端数据并同步
     async function fetchThemeConfig() {
       try {
         const response = await getClientThemeConfig()
@@ -67,8 +77,8 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
             if (themeConfig.themes[themeId]) {
               setCurrentTheme(themeId)
               setThemeConfig(themeConfig.themes[themeId])
-              if (typeof window !== 'undefined' && themeConfig.currentTheme) {
-                localStorage.setItem("theme", themeConfig.currentTheme)
+              if (typeof window !== 'undefined') {
+                localStorage.setItem("theme", themeId)
               }
             } else if (themeConfig.themes["modern"]) {
               setCurrentTheme("modern")
@@ -81,18 +91,27 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
               setThemes({ [defaultTheme.id]: defaultTheme })
               setCurrentTheme(defaultTheme.id)
               setThemeConfig(defaultTheme)
+              if (typeof window !== 'undefined') {
+                localStorage.setItem("theme", defaultTheme.id)
+              }
             }
           } else {
             const defaultTheme = getDefaultThemeConfig(savedTheme)
             setThemes({ [defaultTheme.id]: defaultTheme })
             setCurrentTheme(defaultTheme.id)
             setThemeConfig(defaultTheme)
+            if (typeof window !== 'undefined') {
+              localStorage.setItem("theme", defaultTheme.id)
+            }
           }
         } else {
           const defaultTheme = getDefaultThemeConfig(savedTheme)
           setThemes({ [defaultTheme.id]: defaultTheme })
           setCurrentTheme(defaultTheme.id)
           setThemeConfig(defaultTheme)
+          if (typeof window !== 'undefined') {
+            localStorage.setItem("theme", defaultTheme.id)
+          }
         }
       } catch (error) {
         console.error('Failed to fetch theme config:', error)
@@ -100,6 +119,9 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
         setThemes({ [defaultTheme.id]: defaultTheme })
         setCurrentTheme(defaultTheme.id)
         setThemeConfig(defaultTheme)
+        if (typeof window !== 'undefined') {
+          localStorage.setItem("theme", defaultTheme.id)
+        }
       } finally {
         setIsLoading(false)
       }
