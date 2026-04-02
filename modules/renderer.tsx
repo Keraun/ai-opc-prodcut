@@ -1,131 +1,47 @@
 "use client"
 
-import { useEffect, useState, ComponentType, ReactNode } from "react"
 import { getModuleComponent } from "./registry"
 import type { ModuleData, ModuleProps } from "./types"
 
-interface ModuleErrorBoundaryProps {
-  children: ReactNode
-  moduleId: string
-  moduleInstanceId: string
-  fallback?: ReactNode
-}
+import { registerHeroModule } from "./section-hero/register"
+import { registerServicesModule } from "./section-services/register"
+import { registerPartnerModule } from "./section-partner/register"
+import { registerProductsModule } from "./section-products/register"
+import { registerPricingModule } from "./section-pricing/register"
+import { registerAboutModule } from "./section-about/register"
+import { registerContactModule } from "./section-contact/register"
+import { registerSiteHeaderModule } from "./site-header/register"
+import { registerSiteFooterModule } from "./site-footer/register"
+import { registerSiteRootModule } from "./site-root/register"
+import { registerNewsListModule } from "./news-list/register"
+import { registerNewsDetailModule } from "./news-detail/register"
+import { registerProductListModule } from "./product-list/register"
+import { registerProductDetailModule } from "./product-detail/register"
+import { registerNotFoundModule } from "./section-404/register"
+import { registerContentModule } from "./section-content/register"
+import { registerImageModule } from "./section-image/register"
 
-function ModuleErrorBoundary({ 
-  children, 
-  moduleId, 
-  moduleInstanceId,
-  fallback 
-}: ModuleErrorBoundaryProps) {
-  const [hasError, setHasError] = useState(false)
-  const [error, setError] = useState<Error | null>(null)
+let registered = false
 
-  useEffect(() => {
-    const handleError = (event: ErrorEvent) => {
-      console.error('[ModuleErrorBoundary] Uncaught error:', {
-        moduleId,
-        moduleInstanceId,
-        error: event.error?.message || event.message,
-        stack: event.error?.stack
-      })
-    }
-    
-    window.addEventListener('error', handleError)
-    return () => window.removeEventListener('error', handleError)
-  }, [moduleId, moduleInstanceId])
-
-  if (hasError) {
-    return fallback || (
-      <div style={{ 
-        padding: '20px', 
-        background: '#fee', 
-        border: '1px solid #f00',
-        borderRadius: '4px',
-        margin: '10px 0'
-      }}>
-        <p style={{ color: '#c00', margin: 0 }}>
-          模块渲染错误: {moduleId}
-        </p>
-        {error && (
-          <p style={{ color: '#666', margin: '5px 0 0', fontSize: '12px' }}>
-            {error.message}
-          </p>
-        )}
-      </div>
-    )
-  }
-
-  return <>{children}</>
-}
-
-interface ModuleWrapperProps extends ModuleProps {
-  Component: ComponentType<ModuleProps> | null
-}
-
-function ModuleWrapper({ Component, ...props }: ModuleWrapperProps) {
-  const [error, setError] = useState<Error | null>(null)
-
-  useEffect(() => {
-    console.log('[ModuleWrapper] Module mounting:', {
-      moduleId: props.moduleId,
-      moduleInstanceId: props.moduleInstanceId,
-      hasData: !!props.data,
-      dataKeys: props.data ? Object.keys(props.data) : []
-    })
-    
-    return () => {
-      console.log('[ModuleWrapper] Module unmounting:', {
-        moduleId: props.moduleId,
-        moduleInstanceId: props.moduleInstanceId
-      })
-    }
-  }, [props.moduleId, props.moduleInstanceId, props.data])
-
-  useEffect(() => {
-    if (error) {
-      console.error('[ModuleWrapper] Module render error:', {
-        moduleId: props.moduleId,
-        moduleInstanceId: props.moduleInstanceId,
-        error: error.message,
-        stack: error.stack
-      })
-    }
-  }, [error, props.moduleId, props.moduleInstanceId])
-
-  if (!Component) {
-    console.warn('[ModuleWrapper] Component not found:', props.moduleId)
-    return null
-  }
-
-  if (error) {
-    return (
-      <div style={{ 
-        padding: '20px', 
-        background: '#fee', 
-        border: '1px solid #f00',
-        borderRadius: '4px',
-        margin: '10px 0'
-      }}>
-        <p style={{ color: '#c00', margin: 0 }}>
-          模块渲染错误: {props.moduleId}
-        </p>
-        <p style={{ color: '#666', margin: '5px 0 0', fontSize: '12px' }}>
-          {error.message}
-        </p>
-      </div>
-    )
-  }
-
-  try {
-    return <Component {...props} />
-  } catch (err: any) {
-    console.error('[ModuleWrapper] Sync render error:', {
-      moduleId: props.moduleId,
-      error: err?.message || String(err)
-    })
-    setError(err)
-    return null
-  }
+if (!registered && typeof window !== 'undefined') {
+  registerSiteRootModule()
+  registerSiteHeaderModule()
+  registerHeroModule()
+  registerServicesModule()
+  registerPartnerModule()
+  registerProductsModule()
+  registerPricingModule()
+  registerAboutModule()
+  registerContactModule()
+  registerSiteFooterModule()
+  registerNewsListModule()
+  registerNewsDetailModule()
+  registerProductListModule()
+  registerProductDetailModule()
+  registerNotFoundModule()
+  registerContentModule()
+  registerImageModule()
+  registered = true
 }
 
 interface ModuleRendererProps {
@@ -133,20 +49,12 @@ interface ModuleRendererProps {
 }
 
 export function ModuleRenderer({ modules }: ModuleRendererProps) {
-  console.log('[ModuleRenderer] Rendering modules, count:', modules.length)
-  
   return (
     <>
       {modules.map((module) => {
-        console.log('[ModuleRenderer] Processing module:', module.moduleId, module.moduleInstanceId)
         const Component = getModuleComponent(module?.moduleId)
         
         if (!Component) {
-          console.warn('[ModuleRenderer] Module not found:', {
-            moduleId: module.moduleId,
-            moduleInstanceId: module.moduleInstanceId,
-            availableModules: Array.from((window as any).__MODULE_REGISTRY__ || []).map((m: any) => m.moduleId)
-          })
           return (
             <div 
               key={module.moduleInstanceId}
@@ -170,20 +78,13 @@ export function ModuleRenderer({ modules }: ModuleRendererProps) {
         }
 
         return (
-          <ModuleErrorBoundary
+          <Component
             key={module.moduleInstanceId}
+            moduleName={module.moduleName}
             moduleId={module.moduleId}
             moduleInstanceId={module.moduleInstanceId}
-          >
-            <ModuleWrapper
-              key={module.moduleInstanceId}
-              moduleName={module.moduleName}
-              moduleId={module.moduleId}
-              moduleInstanceId={module.moduleInstanceId}
-              data={module.data}
-              Component={Component}
-            />
-          </ModuleErrorBoundary>
+            data={module.data}
+          />
         )
       })}
     </>
