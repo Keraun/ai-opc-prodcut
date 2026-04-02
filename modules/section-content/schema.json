@@ -22,16 +22,60 @@
       "default": "default"
     },
     "marginTop": {
-      "type": "string",
+      "type": "object",
       "title": "上外边距",
       "description": "设置内容区块的上外边距",
-      "default": "3rem"
+      "properties": {
+        "value": {
+          "type": "number",
+          "title": "值",
+          "default": 3
+        },
+        "unit": {
+          "type": "string",
+          "title": "单位",
+          "enum": ["px", "rem", "em", "%"],
+          "default": "rem"
+        }
+      },
+      "default": {
+        "value": 3,
+        "unit": "rem"
+      },
+      "x-component-props": {
+        "grid": {
+          "columns": 2,
+          "gap": 8
+        }
+      }
     },
     "marginBottom": {
-      "type": "string",
+      "type": "object",
       "title": "下外边距",
       "description": "设置内容区块的下外边距",
-      "default": "3rem"
+      "properties": {
+        "value": {
+          "type": "number",
+          "title": "值",
+          "default": 3
+        },
+        "unit": {
+          "type": "string",
+          "title": "单位",
+          "enum": ["px", "rem", "em", "%"],
+          "default": "rem"
+        }
+      },
+      "default": {
+        "value": 3,
+        "unit": "rem"
+      },
+      "x-component-props": {
+        "grid": {
+          "columns": 2,
+          "gap": 8
+        }
+      }
     }
   }
 }

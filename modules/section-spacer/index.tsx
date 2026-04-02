@@ -8,21 +8,31 @@ import styles from "./index.module.css"
 export function SpacerModule({ data }: ModuleProps) {
   const config: SpacerData = (data as SpacerData) || {}
 
+  const getSpacingValue = (spacingConfig: SpacingConfig | undefined) => {
+    if (!spacingConfig) return '0'
+    return `${spacingConfig.value}${spacingConfig.unit}`
+  }
+
   const containerStyle = {
-    margin: config.margin,
-    marginTop: config.marginTop,
-    marginBottom: config.marginBottom,
-    marginLeft: config.marginLeft,
-    marginRight: config.marginRight,
-    padding: config.padding,
-    paddingTop: config.paddingTop,
-    paddingBottom: config.paddingBottom,
-    paddingLeft: config.paddingLeft,
-    paddingRight: config.paddingRight,
-    height: config.height,
+    margin: getSpacingValue(config.margin),
+    marginTop: getSpacingValue(config.marginTop),
+    marginBottom: getSpacingValue(config.marginBottom),
+    marginLeft: getSpacingValue(config.marginLeft),
+    marginRight: getSpacingValue(config.marginRight),
+    padding: getSpacingValue(config.padding),
+    paddingTop: getSpacingValue(config.paddingTop),
+    paddingBottom: getSpacingValue(config.paddingBottom),
+    paddingLeft: getSpacingValue(config.paddingLeft),
+    paddingRight: getSpacingValue(config.paddingRight),
+    height: getSpacingValue(config.height),
     backgroundColor: config.backgroundColor,
     border: config.border,
     borderRadius: config.borderRadius
+  }
+
+  const sectionStyle = {
+    marginTop: 0,
+    marginBottom: 0
   }
 
   const containerContent = (
@@ -40,6 +50,7 @@ export function SpacerModule({ data }: ModuleProps) {
         padding="none"
         maxWidth="lg"
         className={styles.section}
+        style={sectionStyle}
       >
         {containerContent}
       </Section>
@@ -53,6 +64,7 @@ export function SpacerModule({ data }: ModuleProps) {
       padding="none"
       maxWidth="lg"
       className={styles.section}
+      style={sectionStyle}
     >
       {containerContent}
     </Section>

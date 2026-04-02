@@ -8,6 +8,11 @@ import styles from "./index.module.css"
 export function ContentModule({ data }: ModuleProps) {
   const config: ContentData = (data as ContentData) || {}
 
+  const getMarginValue = (marginConfig: MarginConfig | undefined) => {
+    if (!marginConfig) return '0'
+    return `${marginConfig.value}${marginConfig.unit}`
+  }
+
   return (
     <Section
       id="content-section"
@@ -15,8 +20,8 @@ export function ContentModule({ data }: ModuleProps) {
       padding="lg"
       maxWidth="lg"
       style={{
-        marginTop: config.marginTop || '0',
-        marginBottom: config.marginBottom || '0'
+        marginTop: getMarginValue(config.marginTop),
+        marginBottom: getMarginValue(config.marginBottom)
       }}
     >
       <div className={`${styles.container} ${config.contentLayout === 'article' ? styles.article : ''}`}>

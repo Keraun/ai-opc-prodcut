@@ -1,6 +1,47 @@
 {
   "layout": "default",
-  "margin": "0",
-  "padding": "0",
-  "height": "20px"
+  "margin": {
+    "value": 0,
+    "unit": "px"
+  },
+  "marginTop": {
+    "value": 0,
+    "unit": "px"
+  },
+  "marginBottom": {
+    "value": 0,
+    "unit": "px"
+  },
+  "marginLeft": {
+    "value": 0,
+    "unit": "px"
+  },
+  "marginRight": {
+    "value": 0,
+    "unit": "px"
+  },
+  "padding": {
+    "value": 0,
+    "unit": "px"
+  },
+  "paddingTop": {
+    "value": 0,
+    "unit": "px"
+  },
+  "paddingBottom": {
+    "value": 0,
+    "unit": "px"
+  },
+  "paddingLeft": {
+    "value": 0,
+    "unit": "px"
+  },
+  "paddingRight": {
+    "value": 0,
+    "unit": "px"
+  },
+  "height": {
+    "value": 20,
+    "unit": "px"
+  }
 }

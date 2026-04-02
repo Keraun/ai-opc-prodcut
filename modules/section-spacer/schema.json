@@ -11,70 +11,312 @@
       "default": "default"
     },
     "margin": {
-      "type": "string",
+      "type": "object",
       "title": "外边距",
       "description": "设置空白容器的外边距",
-      "default": "0"
+      "properties": {
+        "value": {
+          "type": "number",
+          "title": "值",
+          "default": 0
+        },
+        "unit": {
+          "type": "string",
+          "title": "单位",
+          "enum": ["px", "rem", "em", "%"],
+          "default": "px"
+        }
+      },
+      "default": {
+        "value": 0,
+        "unit": "px"
+      },
+      "x-component-props": {
+        "grid": {
+          "columns": 2,
+          "gap": 8
+        }
+      }
     },
     "marginTop": {
-      "type": "string",
+      "type": "object",
       "title": "上外边距",
       "description": "设置空白容器的上外边距",
-      "default": ""
+      "properties": {
+        "value": {
+          "type": "number",
+          "title": "值",
+          "default": 0
+        },
+        "unit": {
+          "type": "string",
+          "title": "单位",
+          "enum": ["px", "rem", "em", "%"],
+          "default": "px"
+        }
+      },
+      "default": {
+        "value": 0,
+        "unit": "px"
+      },
+      "x-component-props": {
+        "grid": {
+          "columns": 2,
+          "gap": 8
+        }
+      }
     },
     "marginBottom": {
-      "type": "string",
+      "type": "object",
       "title": "下外边距",
       "description": "设置空白容器的下外边距",
-      "default": ""
+      "properties": {
+        "value": {
+          "type": "number",
+          "title": "值",
+          "default": 0
+        },
+        "unit": {
+          "type": "string",
+          "title": "单位",
+          "enum": ["px", "rem", "em", "%"],
+          "default": "px"
+        }
+      },
+      "default": {
+        "value": 0,
+        "unit": "px"
+      },
+      "x-component-props": {
+        "grid": {
+          "columns": 2,
+          "gap": 8
+        }
+      }
     },
     "marginLeft": {
-      "type": "string",
+      "type": "object",
       "title": "左外边距",
       "description": "设置空白容器的左外边距",
-      "default": ""
+      "properties": {
+        "value": {
+          "type": "number",
+          "title": "值",
+          "default": 0
+        },
+        "unit": {
+          "type": "string",
+          "title": "单位",
+          "enum": ["px", "rem", "em", "%"],
+          "default": "px"
+        }
+      },
+      "default": {
+        "value": 0,
+        "unit": "px"
+      },
+      "x-component-props": {
+        "grid": {
+          "columns": 2,
+          "gap": 8
+        }
+      }
     },
     "marginRight": {
-      "type": "string",
+      "type": "object",
       "title": "右外边距",
       "description": "设置空白容器的右外边距",
-      "default": ""
+      "properties": {
+        "value": {
+          "type": "number",
+          "title": "值",
+          "default": 0
+        },
+        "unit": {
+          "type": "string",
+          "title": "单位",
+          "enum": ["px", "rem", "em", "%"],
+          "default": "px"
+        }
+      },
+      "default": {
+        "value": 0,
+        "unit": "px"
+      },
+      "x-component-props": {
+        "grid": {
+          "columns": 2,
+          "gap": 8
+        }
+      }
     },
     "padding": {
-      "type": "string",
+      "type": "object",
       "title": "内边距",
       "description": "设置空白容器的内边距",
-      "default": "0"
+      "properties": {
+        "value": {
+          "type": "number",
+          "title": "值",
+          "default": 0
+        },
+        "unit": {
+          "type": "string",
+          "title": "单位",
+          "enum": ["px", "rem", "em", "%"],
+          "default": "px"
+        }
+      },
+      "default": {
+        "value": 0,
+        "unit": "px"
+      },
+      "x-component-props": {
+        "grid": {
+          "columns": 2,
+          "gap": 8
+        }
+      }
     },
     "paddingTop": {
-      "type": "string",
+      "type": "object",
       "title": "上内边距",
       "description": "设置空白容器的上内边距",
-      "default": ""
+      "properties": {
+        "value": {
+          "type": "number",
+          "title": "值",
+          "default": 0
+        },
+        "unit": {
+          "type": "string",
+          "title": "单位",
+          "enum": ["px", "rem", "em", "%"],
+          "default": "px"
+        }
+      },
+      "default": {
+        "value": 0,
+        "unit": "px"
+      },
+      "x-component-props": {
+        "grid": {
+          "columns": 2,
+          "gap": 8
+        }
+      }
     },
     "paddingBottom": {
-      "type": "string",
+      "type": "object",
       "title": "下内边距",
       "description": "设置空白容器的下内边距",
-      "default": ""
+      "properties": {
+        "value": {
+          "type": "number",
+          "title": "值",
+          "default": 0
+        },
+        "unit": {
+          "type": "string",
+          "title": "单位",
+          "enum": ["px", "rem", "em", "%"],
+          "default": "px"
+        }
+      },
+      "default": {
+        "value": 0,
+        "unit": "px"
+      },
+      "x-component-props": {
+        "grid": {
+          "columns": 2,
+          "gap": 8
+        }
+      }
     },
     "paddingLeft": {
-      "type": "string",
+      "type": "object",
       "title": "左内边距",
       "description": "设置空白容器的左内边距",
-      "default": ""
+      "properties": {
+        "value": {
+          "type": "number",
+          "title": "值",
+          "default": 0
+        },
+        "unit": {
+          "type": "string",
+          "title": "单位",
+          "enum": ["px", "rem", "em", "%"],
+          "default": "px"
+        }
+      },
+      "default": {
+        "value": 0,
+        "unit": "px"
+      },
+      "x-component-props": {
+        "grid": {
+          "columns": 2,
+          "gap": 8
+        }
+      }
     },
     "paddingRight": {
-      "type": "string",
+      "type": "object",
       "title": "右内边距",
       "description": "设置空白容器的右内边距",
-      "default": ""
+      "properties": {
+        "value": {
+          "type": "number",
+          "title": "值",
+          "default": 0
+        },
+        "unit": {
+          "type": "string",
+          "title": "单位",
+          "enum": ["px", "rem", "em", "%"],
+          "default": "px"
+        }
+      },
+      "default": {
+        "value": 0,
+        "unit": "px"
+      },
+      "x-component-props": {
+        "grid": {
+          "columns": 2,
+          "gap": 8
+        }
+      }
     },
     "height": {
-      "type": "string",
+      "type": "object",
       "title": "高度",
       "description": "设置空白容器的高度",
-      "default": "20px"
+      "properties": {
+        "value": {
+          "type": "number",
+          "title": "值",
+          "default": 20
+        },
+        "unit": {
+          "type": "string",
+          "title": "单位",
+          "enum": ["px", "rem", "em", "%"],
+          "default": "px"
+        }
+      },
+      "default": {
+        "value": 20,
+        "unit": "px"
+      },
+      "x-component-props": {
+        "grid": {
+          "columns": 2,
+          "gap": 8
+        }
+      }
     },
     "backgroundColor": {
       "type": "string",

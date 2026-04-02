@@ -2,6 +2,12 @@
   "title": "关于我们",
   "content": "<p>这是一段示例内容。你可以使用富文本编辑器来编辑这段内容。</p>",
   "contentLayout": "article",
-  "marginTop": "3rem",
-  "marginBottom": "3rem"
+  "marginTop": {
+    "value": 3,
+    "unit": "rem"
+  },
+  "marginBottom": {
+    "value": 3,
+    "unit": "rem"
+  }
 }

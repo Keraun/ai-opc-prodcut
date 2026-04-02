@@ -1,16 +1,21 @@
+export interface SpacingConfig {
+  value: number
+  unit: 'px' | 'rem' | 'em' | '%'
+}
+
 export interface SpacerData {
   layout?: 'default' | 'section' | 'article'
-  margin?: string
-  marginTop?: string
-  marginBottom?: string
-  marginLeft?: string
-  marginRight?: string
-  padding?: string
-  paddingTop?: string
-  paddingBottom?: string
-  paddingLeft?: string
-  paddingRight?: string
-  height?: string
+  margin?: SpacingConfig
+  marginTop?: SpacingConfig
+  marginBottom?: SpacingConfig
+  marginLeft?: SpacingConfig
+  marginRight?: SpacingConfig
+  padding?: SpacingConfig
+  paddingTop?: SpacingConfig
+  paddingBottom?: SpacingConfig
+  paddingLeft?: SpacingConfig
+  paddingRight?: SpacingConfig
+  height?: SpacingConfig
   backgroundColor?: string
   border?: string
   borderRadius?: string
