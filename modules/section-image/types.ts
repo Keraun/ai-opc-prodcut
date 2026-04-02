@@ -5,9 +5,9 @@ export interface ImageData {
   mobileImage?: string
   alt?: string
   caption?: string
-  width?: number
   containerPaddingX?: string
   containerPaddingY?: string
   containerType?: 'section' | 'empty'
   backgroundColor?: string
+  contentLayout?: 'default' | 'section' | 'article'
 }

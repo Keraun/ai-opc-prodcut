@@ -10,6 +10,7 @@
 .content {
   margin: 0 auto;
   padding: 3rem 1rem;
+  max-width: 800px;
 }
 
 @media (min-width: 640px) {
@@ -21,7 +22,24 @@
 @media (min-width: 1024px) {
   .content {
     padding: 4rem 2rem;
+    max-width: 900px;
   }
+}
+
+/* Section 样式 */
+.content.section {
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  margin-bottom: 2rem;
+}
+
+/* Article 样式 */
+.content.article {
+  background: white;
+  border-radius: 4px;
+  border: 1px solid #e5e7eb;
+  margin-bottom: 2rem;
 }
 
 .title {

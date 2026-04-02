@@ -6,6 +6,14 @@
   width: 100%;
 }
 
+.article {
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  padding: 2rem;
+  border: 1px solid #e5e7eb;
+}
+
 /* 白底 + 十字格底图 */
 .whiteBackground {
   position: relative;

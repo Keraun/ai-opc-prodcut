@@ -26,7 +26,7 @@ export function ImageModule({ data }: ModuleProps) {
   const containerType = config.containerType || 'section'
 
   const containerContent = (
-    <div className={`${styles.container} ${isWhiteBackground() ? styles.whiteBackground : ''}`}>
+    <div className={`${styles.container} ${isWhiteBackground() ? styles.whiteBackground : ''} ${config.contentLayout === 'article' ? styles.article : ''}`}>
       {config.title && (
         <div className={styles.header}>
           <h2 className={styles.title}>{config.title}</h2>
@@ -75,9 +75,9 @@ export function ImageModule({ data }: ModuleProps) {
   return (
     <Section
       id="image-section"
-      variant="default"
+      variant={config.contentLayout === 'section' ? 'gradient' : 'default'}
       padding="none"
-      maxWidth="xl"
+      maxWidth="lg"
       className={styles.section}
       style={{
         backgroundColor: config.backgroundColor || "#ffffff",

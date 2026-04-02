@@ -15,6 +15,7 @@ import { registerProductDetailModule } from "./product-detail/register"
 import { registerNotFoundModule } from "./section-404/register"
 import { registerContentModule } from "./section-content/register"
 import { registerImageModule } from "./section-image/register"
+import { registerSpacerModule } from "./section-spacer/register"
 
 export function initializeModules() {
   registerSiteRootModule()
@@ -34,6 +35,7 @@ export function initializeModules() {
   registerNotFoundModule()
   registerContentModule()
   registerImageModule()
+  registerSpacerModule()
 }
 
 export { HeaderModule } from "./site-header/register"

@@ -41,12 +41,6 @@
       "title": "图片说明",
       "description": "图片下方的说明文字"
     },
-    "width": {
-      "type": "number",
-      "title": "图片宽度",
-      "description": "设置图片宽度(像素)",
-      "default": 1200
-    },
     "containerPaddingX": {
       "type": "string",
       "title": "容器左右间距",
@@ -71,6 +65,13 @@
       "title": "区块背景色",
       "description": "选择区块的背景颜色",
       "default": "#ffffff"
+    },
+    "contentLayout": {
+      "type": "string",
+      "title": "布局样式",
+      "description": "选择图片区块的布局样式",
+      "enum": ["default", "section", "article"],
+      "default": "default"
     }
   }
 }

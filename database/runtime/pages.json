@@ -100,5 +100,22 @@
     "created_at": null,
     "updated_at": null,
     "published_at": null
+  },
+  {
+    "page_id": "test",
+    "name": "test",
+    "slug": "test",
+    "type": "static",
+    "description": "新创建的静态页面",
+    "status": "published",
+    "is_system": 0,
+    "is_deletable": 1,
+    "route": "/test",
+    "dynamic_param": null,
+    "module_instance_ids": "[\"site-root-1775094500818-0-br7u0x8ka\",\"site-header-1775094500818-1-52mptzyhm\",\"section-spacer-1775097153544\",\"section-content-1775094809318\",\"section-image-1775095131567\",\"site-footer-1775094500818-2-wheg26nry\"]",
+    "created_at": "2026/04/02 09:48:20",
+    "updated_at": "2026/04/02 10:34:17",
+    "published_at": "2026/04/02 09:53:34",
+    "id": 7
   }
 ]

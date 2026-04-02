@@ -11,11 +11,15 @@ export function ContentModule({ data }: ModuleProps) {
   return (
     <Section
       id="content-section"
-      variant="default"
+      variant={config.contentLayout === 'section' ? 'gradient' : 'default'}
       padding="lg"
-      maxWidth="xl"
+      maxWidth="lg"
+      style={{
+        marginTop: config.marginTop || '0',
+        marginBottom: config.marginBottom || '0'
+      }}
     >
-      <div className={styles.container}>
+      <div className={`${styles.container} ${config.contentLayout === 'article' ? styles.article : ''}`}>
         {config.title && (
           <h2 className={styles.title}>{config.title}</h2>
         )}

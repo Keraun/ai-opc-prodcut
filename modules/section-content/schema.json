@@ -13,6 +13,25 @@
       "title": "富文本内容",
       "description": "主要的富文本内容",
       "x-component": "richtext"
+    },
+    "contentLayout": {
+      "type": "string",
+      "title": "布局样式",
+      "description": "选择内容区块的布局样式",
+      "enum": ["default", "section", "article"],
+      "default": "default"
+    },
+    "marginTop": {
+      "type": "string",
+      "title": "上外边距",
+      "description": "设置内容区块的上外边距",
+      "default": "3rem"
+    },
+    "marginBottom": {
+      "type": "string",
+      "title": "下外边距",
+      "description": "设置内容区块的下外边距",
+      "default": "3rem"
     }
   }
 }

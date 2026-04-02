@@ -328,5 +328,71 @@
     "created_at": "2026/04/02 08:19:31",
     "updated_at": "2026/04/02 08:19:31",
     "id": 111
+  },
+  {
+    "page_id": "test",
+    "module_id": "site-root",
+    "module_instance_id": "site-root-1775094500818-0-br7u0x8ka",
+    "module_name": "站点容器",
+    "module_order": 0,
+    "data": null,
+    "created_at": "2026/04/02 10:34:17",
+    "updated_at": "2026/04/02 10:34:17",
+    "id": 112
+  },
+  {
+    "page_id": "test",
+    "module_id": "site-header",
+    "module_instance_id": "site-header-1775094500818-1-52mptzyhm",
+    "module_name": "站点导航",
+    "module_order": 1,
+    "data": "{\"navItems\":[{\"label\":\"首页\",\"href\":\"/\"},{\"label\":\"产品\",\"href\":\"/product\"},{\"label\":\"资讯\",\"href\":\"/news\"}],\"showContactButton\":true,\"showCtaButton\":true,\"ctaButtonText\":\"开始使用\",\"ctaButtonLink\":\"/product\"}",
+    "created_at": "2026/04/02 10:34:17",
+    "updated_at": "2026/04/02 10:34:17",
+    "id": 113
+  },
+  {
+    "page_id": "test",
+    "module_id": "section-spacer",
+    "module_instance_id": "section-spacer-1775097153544",
+    "module_name": "空白容器",
+    "module_order": 2,
+    "data": "{\"layout\":\"default\",\"margin\":\"10px\",\"padding\":\"10rem\",\"height\":\"20px\",\"marginTop\":\"10px\",\"marginBottom\":\"10px\",\"marginLeft\":\"10px\",\"marginRight\":\"10px\",\"backgroundColor\":\"red\"}",
+    "created_at": "2026/04/02 10:34:17",
+    "updated_at": "2026/04/02 10:34:17",
+    "id": 114
+  },
+  {
+    "page_id": "test",
+    "module_id": "section-content",
+    "module_instance_id": "section-content-1775094809318",
+    "module_name": "内容区块",
+    "module_order": 3,
+    "data": "{\"title\":\"关于我们\",\"content\":\"<p>这是一段示例内容。你可以使用富文本编辑器来编辑这段内容。</p>\",\"contentLayout\":\"article\"}",
+    "created_at": "2026/04/02 10:34:17",
+    "updated_at": "2026/04/02 10:34:17",
+    "id": 115
+  },
+  {
+    "page_id": "test",
+    "module_id": "section-image",
+    "module_instance_id": "section-image-1775095131567",
+    "module_name": "图片区块",
+    "module_order": 4,
+    "data": "{\"title\":\"\",\"description\":\"\",\"webImage\":\"\",\"mobileImage\":\"\",\"alt\":\"图片描述\",\"caption\":\"\",\"width\":1200,\"containerPaddingX\":\"1.5rem\",\"containerPaddingY\":\"0\",\"containerType\":\"section\",\"backgroundColor\":\"#ffffff\"}",
+    "created_at": "2026/04/02 10:34:17",
+    "updated_at": "2026/04/02 10:34:17",
+    "id": 116
+  },
+  {
+    "page_id": "test",
+    "module_id": "site-footer",
+    "module_instance_id": "site-footer-1775094500818-2-wheg26nry",
+    "module_name": "站点页脚",
+    "module_order": 5,
+    "data": null,
+    "created_at": "2026/04/02 10:34:17",
+    "updated_at": "2026/04/02 10:34:17",
+    "id": 117
   }
 ]

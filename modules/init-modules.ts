@@ -15,6 +15,7 @@ import { registerProductDetailModule } from './product-detail/register'
 import { registerNotFoundModule } from './section-404/register'
 import { registerContentModule } from './section-content/register'
 import { registerImageModule } from './section-image/register'
+import { registerSpacerModule } from './section-spacer/register'
 
 let initialized = false
 
@@ -41,6 +42,7 @@ export function initModules() {
     registerNotFoundModule()
     registerContentModule()
     registerImageModule()
+    registerSpacerModule()
     initialized = true
     console.log('[InitModules] All modules initialized successfully')
   } catch (error) {

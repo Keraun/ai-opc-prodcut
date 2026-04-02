@@ -2,6 +2,13 @@
   width: 100%;
 }
 
+.article {
+  background: white;
+  max-width: 800px;
+  margin: 0px auto;
+  padding: 2rem 1rem;
+}
+
 .title {
   font-size: 2rem;
   font-weight: 700;

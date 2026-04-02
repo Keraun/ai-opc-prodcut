@@ -1,0 +1,104 @@
+{
+  "type": "object",
+  "title": "空白容器配置",
+  "description": "用于元素占位的空白容器模块，支持配置布局、margin、padding等样式",
+  "properties": {
+    "layout": {
+      "type": "string",
+      "title": "布局样式",
+      "description": "选择空白容器的布局样式",
+      "enum": ["default", "section", "article"],
+      "default": "default"
+    },
+    "margin": {
+      "type": "string",
+      "title": "外边距",
+      "description": "设置空白容器的外边距",
+      "default": "0"
+    },
+    "marginTop": {
+      "type": "string",
+      "title": "上外边距",
+      "description": "设置空白容器的上外边距",
+      "default": ""
+    },
+    "marginBottom": {
+      "type": "string",
+      "title": "下外边距",
+      "description": "设置空白容器的下外边距",
+      "default": ""
+    },
+    "marginLeft": {
+      "type": "string",
+      "title": "左外边距",
+      "description": "设置空白容器的左外边距",
+      "default": ""
+    },
+    "marginRight": {
+      "type": "string",
+      "title": "右外边距",
+      "description": "设置空白容器的右外边距",
+      "default": ""
+    },
+    "padding": {
+      "type": "string",
+      "title": "内边距",
+      "description": "设置空白容器的内边距",
+      "default": "0"
+    },
+    "paddingTop": {
+      "type": "string",
+      "title": "上内边距",
+      "description": "设置空白容器的上内边距",
+      "default": ""
+    },
+    "paddingBottom": {
+      "type": "string",
+      "title": "下内边距",
+      "description": "设置空白容器的下内边距",
+      "default": ""
+    },
+    "paddingLeft": {
+      "type": "string",
+      "title": "左内边距",
+      "description": "设置空白容器的左内边距",
+      "default": ""
+    },
+    "paddingRight": {
+      "type": "string",
+      "title": "右内边距",
+      "description": "设置空白容器的右内边距",
+      "default": ""
+    },
+    "height": {
+      "type": "string",
+      "title": "高度",
+      "description": "设置空白容器的高度",
+      "default": "20px"
+    },
+    "backgroundColor": {
+      "type": "string",
+      "title": "背景颜色",
+      "description": "设置空白容器的背景颜色",
+      "default": ""
+    },
+    "border": {
+      "type": "string",
+      "title": "边框",
+      "description": "设置空白容器的边框",
+      "default": ""
+    },
+    "borderRadius": {
+      "type": "string",
+      "title": "边框圆角",
+      "description": "设置空白容器的边框圆角",
+      "default": ""
+    },
+    "className": {
+      "type": "string",
+      "title": "自定义类名",
+      "description": "设置空白容器的自定义类名",
+      "default": ""
+    }
+  }
+}

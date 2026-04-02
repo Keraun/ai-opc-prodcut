@@ -11,6 +11,7 @@ interface PageConfig {
   description?: string
   contentType: 'markdown' | 'html'
   content: string
+  contentLayout?: 'default' | 'section' | 'article'
 }
 
 interface DynamicPageContentProps {
@@ -26,7 +27,7 @@ export default function DynamicPageContent({ pageConfig, slug }: DynamicPageCont
       <Header />
       
       <main className={styles.main}>
-        <div className={styles.content}>
+        <div className={`${styles.content} ${pageConfig.contentLayout ? styles[pageConfig.contentLayout] : ''}`}>
           <h1 className={styles.title}>
             {title}
           </h1>
@@ -37,7 +38,7 @@ export default function DynamicPageContent({ pageConfig, slug }: DynamicPageCont
             </p>
           )}
           
-          <article className={styles.article}>
+          <div className={styles.article}>
             {contentType === 'markdown' ? (
               <div>
                 <ReactMarkdown 
@@ -49,7 +50,7 @@ export default function DynamicPageContent({ pageConfig, slug }: DynamicPageCont
             ) : (
               <div dangerouslySetInnerHTML={{ __html: content }} />
             )}
-          </article>
+          </div>
         </div>
       </main>
 

@@ -19,6 +19,7 @@ import { ProductDetailModule } from "./product-detail"
 import { NotFoundModule } from "./section-404"
 import { ContentModule } from "./section-content"
 import { ImageModule } from "./section-image"
+import { SpacerModule } from "./section-spacer"
 
 interface ModuleRendererProps {
   modules: ModuleData[]
@@ -70,6 +71,8 @@ export function ModuleRenderer({ modules }: ModuleRendererProps) {
             return <ContentModule key={module.moduleInstanceId} {...props} />
           case 'section-image':
             return <ImageModule key={module.moduleInstanceId} {...props} />
+          case 'section-spacer':
+            return <SpacerModule key={module.moduleInstanceId} {...props} />
           default:
             return (
               <div 
