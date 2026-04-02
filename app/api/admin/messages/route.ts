@@ -13,11 +13,10 @@ export async function GET(request: NextRequest) {
     const page = parseInt(searchParams.get('page') || '1')
     const pageSize = parseInt(searchParams.get('pageSize') || '20')
     const status = searchParams.get('status') || ''
+    const exportData = searchParams.get('export') === 'true'
 
-    // 重新加载数据，确保获取最新的留言信息
     jsonDb.reload()
 
-    // 处理单个留言详情请求
     if (id) {
       const message = jsonDb.findOne('messages', { id: parseInt(id) })
       
@@ -28,7 +27,6 @@ export async function GET(request: NextRequest) {
       return successResponse(message)
     }
 
-    // 处理留言列表请求
     let messages = jsonDb.getAll('messages')
     
     if (status) {
@@ -36,6 +34,10 @@ export async function GET(request: NextRequest) {
     }
 
     messages.sort((a: any, b: any) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime())
+
+    if (exportData) {
+      return successResponse(messages)
+    }
 
     const total = messages.length
     const startIndex = (page - 1) * pageSize

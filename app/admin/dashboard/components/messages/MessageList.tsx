@@ -2,8 +2,8 @@
 
 import { useState, useEffect } from "react"
 import { CommonTable, ActionButton } from "../index"
-import { MessageSquare, Phone, Mail, Eye } from "lucide-react"
-import { Select, Space, Popconfirm, Modal, Input, Tooltip, Tag } from '@arco-design/web-react'
+import { MessageSquare, Phone, Mail, Eye, Download } from "lucide-react"
+import { Select, Space, Popconfirm, Modal, Input, Tooltip, Tag, Button } from '@arco-design/web-react'
 import styles from "../BaseManagement.module.css"
 import { toast } from "sonner"
 
@@ -172,6 +172,50 @@ export function MessageList({ onStatusChange }: MessageListProps) {
     } catch (error) {
       console.error('更新状态失败:', error)
       toast.error('更新失败')
+    }
+  }
+
+  const handleExport = async () => {
+    try {
+      const response = await fetch(`/api/admin/messages?export=true&status=${statusFilter}`)
+      const result = await response.json()
+
+      if (result.success && result.data && result.data.length > 0) {
+        const headers = ['姓名', '电话', '微信', '邮箱', '留言内容', '大模型', '状态', '备注', 'IP地址', '地区', '操作系统', '浏览器', '设备机型', '提交时间']
+        const rows = result.data.map((msg: Message) => [
+          msg.name,
+          msg.phone || '',
+          msg.wechat || '',
+          msg.email || '',
+          `"${msg.message.replace(/"/g, '""')}"`,
+          msg.llmModel || '',
+          msg.status,
+          `"${(msg.note || '').replace(/"/g, '""')}"`,
+          msg.ip,
+          msg.region,
+          `${msg.os} ${msg.osVersion}`,
+          `${msg.browser} ${msg.browserVersion}`,
+          msg.deviceModel,
+          new Date(msg.created_at).toLocaleString('zh-CN')
+        ])
+
+        const csvContent = [headers.join(','), ...rows.map((row: string[]) => row.join(','))].join('\n')
+        const blob = new Blob(['\ufeff' + csvContent], { type: 'text/csv;charset=utf-8;' })
+        const url = URL.createObjectURL(blob)
+        const link = document.createElement('a')
+        link.href = url
+        link.download = `留言导出_${new Date().toLocaleDateString('zh-CN')}.csv`
+        document.body.appendChild(link)
+        link.click()
+        document.body.removeChild(link)
+        URL.revokeObjectURL(url)
+        toast.success('导出成功')
+      } else {
+        toast.error('没有可导出的数据')
+      }
+    } catch (error) {
+      console.error('导出失败:', error)
+      toast.error('导出失败')
     }
   }
 
@@ -346,20 +390,29 @@ export function MessageList({ onStatusChange }: MessageListProps) {
   return (
     <div>
       <div className={styles.filterBar}>
-        筛选状态:
-        <Select
-          placeholder="筛选状态"
-          style={{ width: 150 }}
-          allowClear
-          value={statusFilter}
-          onChange={handleStatusFilterChange}
+        <div style={{ display: 'flex', alignItems: 'center', gap: 16 }}>
+          <span>筛选状态:</span>
+          <Select
+            placeholder="筛选状态"
+            style={{ width: 150 }}
+            allowClear
+            value={statusFilter}
+            onChange={handleStatusFilterChange}
+          >
+            {statusOptions.map(opt => (
+              <Select.Option key={opt.value} value={opt.value} style={{ color: opt.color === 'arcoblue' ? '#165DFF' : opt.color === 'warning' ? '#F5A623' : opt.color === 'success' ? '#00B42A' : '#86909C' }}>
+                {opt.label}
+              </Select.Option>
+            ))}
+          </Select>
+        </div>
+        <Button
+          type="primary"
+          icon={<Download size={14} />}
+          onClick={handleExport}
         >
-          {statusOptions.map(opt => (
-            <Select.Option key={opt.value} value={opt.value} style={{ color: opt.color === 'arcoblue' ? '#165DFF' : opt.color === 'warning' ? '#F5A623' : opt.color === 'success' ? '#00B42A' : '#86909C' }}>
-              {opt.label}
-            </Select.Option>
-          ))}
-        </Select>
+          导出留言
+        </Button>
       </div>
 
       <CommonTable

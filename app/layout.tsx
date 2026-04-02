@@ -163,7 +163,7 @@ export default function RootLayout({
   return (
     <html lang="zh-CN">
       <head>
-        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
         <meta name="theme-color" content={seoConfig?.themeColor} />
         <link rel="manifest" href="/manifest.json" />
         <style dangerouslySetInnerHTML={{ __html: `:root { ${styleString} }` }} />
