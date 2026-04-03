@@ -3,7 +3,7 @@
 import { useState } from "react"
 import { Tabs } from "@arco-design/web-react"
 import { ArticleGenerator } from "./article-generator"
-import { SessionManager } from "./session-manager"
+import { ApiConfig } from "./api-config"
 import styles from "./geo-tools.module.css"
 
 const TabPane = Tabs.TabPane
@@ -17,7 +17,7 @@ export function GeoTools() {
         <div className={styles.headerInfo}>
           <h2 className={styles.title}>GEO 工具</h2>
           <p className={styles.description}>
-            针对企业的高捕获率内容创作工具集，支持文章生成和大模型 会话管理
+            针对企业的高捕获率内容创作工具集，支持文章生成和 AI 模型配置
           </p>
         </div>
       </div>
@@ -33,9 +33,9 @@ export function GeoTools() {
               <ArticleGenerator />
             </div>
           </TabPane>
-          <TabPane key="session-manager" title="会话管理">
+          <TabPane key="api-config" title="API配置">
             <div className={styles.tabContent}>
-              <SessionManager />
+              <ApiConfig />
             </div>
           </TabPane>
         </Tabs>

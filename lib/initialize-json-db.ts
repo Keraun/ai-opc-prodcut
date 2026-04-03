@@ -11,8 +11,6 @@ export function initializeJsonDb() {
   
   initializeModuleRegistry()
   
-  initializeLlmCookies()
-  
   console.log('JSON database initialized successfully!')
 }
 
@@ -110,14 +108,6 @@ function initializeModuleRegistry() {
     }
     
     console.log('Initialized module registry')
-  }
-}
-
-function initializeLlmCookies() {
-  const cookies = jsonDb.getAll('llm_cookies')
-  if (cookies.length === 0) {
-    console.log('Initializing llm_cookies table...')
-    console.log('llm_cookies table initialized (empty)')
   }
 }
 

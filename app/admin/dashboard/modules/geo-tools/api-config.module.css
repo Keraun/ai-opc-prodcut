@@ -1,0 +1,98 @@
+.container {
+  padding: 16px 0;
+}
+
+.configCard {
+  margin-bottom: 24px;
+}
+
+.cardTitle {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.titleIcon {
+  font-size: 20px;
+  color: var(--color-primary);
+}
+
+.form {
+  max-width: 600px;
+}
+
+.formItem {
+  margin-bottom: 24px;
+}
+
+.label {
+  display: block;
+  margin-bottom: 8px;
+  font-weight: 500;
+  color: var(--color-text-1);
+}
+
+.required {
+  color: var(--color-danger);
+  margin-left: 4px;
+}
+
+.input,
+.select {
+  width: 100%;
+}
+
+.hint {
+  margin-top: 8px;
+  font-size: 12px;
+  color: var(--color-text-3);
+  line-height: 1.5;
+}
+
+.actions {
+  margin-top: 32px;
+  padding-top: 24px;
+  border-top: 1px solid var(--color-border-2);
+}
+
+.saveButton {
+  min-width: 120px;
+}
+
+.helpCard {
+  background: var(--color-fill-1);
+}
+
+.helpContent {
+  color: var(--color-text-2);
+  line-height: 1.8;
+}
+
+.helpContent h4 {
+  margin: 16px 0 12px;
+  color: var(--color-text-1);
+  font-weight: 600;
+}
+
+.helpContent h4:first-child {
+  margin-top: 0;
+}
+
+.helpContent ol,
+.helpContent ul {
+  margin: 8px 0;
+  padding-left: 20px;
+}
+
+.helpContent li {
+  margin: 4px 0;
+}
+
+.helpContent a {
+  color: var(--color-primary);
+  text-decoration: none;
+}
+
+.helpContent a:hover {
+  text-decoration: underline;
+}

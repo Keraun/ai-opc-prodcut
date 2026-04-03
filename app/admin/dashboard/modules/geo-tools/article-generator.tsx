@@ -1,10 +1,10 @@
 "use client"
 
-import { useState, useRef } from "react"
-import { Button, Input, Card, Collapse, Select, Modal } from "@arco-design/web-react"
+import { useState, useRef, useEffect, useCallback } from "react"
+import { Button, Input, Card, Collapse, Select, Progress, Space, Tag } from "@arco-design/web-react"
 import ReactMarkdown from "react-markdown"
 import remarkGfm from "remark-gfm"
-import { IconCopy, IconFile, IconBulb, IconBook, IconRobot } from "@arco-design/web-react/icon"
+import { IconCopy, IconFile, IconBulb, IconBook, IconRobot, IconLoading } from "@arco-design/web-react/icon"
 import { toast } from "sonner"
 
 import styles from "./article-generator.module.css"
@@ -12,21 +12,24 @@ import styles from "./article-generator.module.css"
 const CollapseItem = Collapse.Item
 
 const LLM_OPTIONS = [
-  { label: "DeepSeek", value: "deepseek" },
-  { label: "OpenAI (ChatGPT)", value: "openai" },
-  { label: "豆包", value: "doubao" },
-  { label: "Kimi", value: "kimi" },
-  { label: "通义千问", value: "qwen" },
-  { label: "智谱AI (GLM)", value: "zhipu" },
-  { label: "MiniMax", value: "minimax" },
-  { label: "Claude", value: "claude" },
-  { label: "文心一言", value: "wenxin" },
+  { label: "DeepSeek-V2.5", value: "deepseek-ai/DeepSeek-V2.5" },
+  { label: "Qwen2.5-72B", value: "Qwen/Qwen2.5-72B-Instruct" },
+  { label: "Qwen2.5-32B", value: "Qwen/Qwen2.5-32B-Instruct" },
+  { label: "Qwen2.5-14B", value: "Qwen/Qwen2.5-14B-Instruct" },
+  { label: "Qwen2.5-7B", value: "Qwen/Qwen2.5-7B-Instruct" },
+  { label: "GPT-4o", value: "gpt-4o" },
+  { label: "GPT-4o-mini", value: "gpt-4o-mini" },
+  { label: "Claude-3.5-Sonnet", value: "claude-3-5-sonnet" },
+  { label: "GLM-4", value: "glm-4" },
 ]
 
-interface GenerationSession {
-  status: "idle" | "initializing" | "generating" | "completed" | "error"
-  sessionId: string | null
-  answer: string | null
+type GenerationStatus = "idle" | "connecting" | "generating" | "completed" | "error"
+
+interface GenerationProgress {
+  status: GenerationStatus
+  progress: number
+  message: string
+  content: string
   error: string | null
 }
 
@@ -38,16 +41,47 @@ export function ArticleGenerator() {
   const [strategyResult, setStrategyResult] = useState<string | null>(null)
   const [articleResult, setArticleResult] = useState<string | null>(null)
   const [loadingStrategy, setLoadingStrategy] = useState(false)
-  const [loadingArticle, setLoadingArticle] = useState(false)
-  const [selectedLLM, setSelectedLLM] = useState<string>("deepseek")
+  const [selectedLLM, setSelectedLLM] = useState<string>("")
+  const [defaultLLM, setDefaultLLM] = useState<string>("deepseek-ai/DeepSeek-V2.5")
   const [llmSelectVisible, setLlmSelectVisible] = useState(false)
-  const [generationSession, setGenerationSession] = useState<GenerationSession>({
+  const [generation, setGeneration] = useState<GenerationProgress>({
     status: "idle",
-    sessionId: null,
-    answer: null,
-    error: null
+    progress: 0,
+    message: "",
+    content: "",
+    error: null,
   })
-  const pollingRef = useRef<NodeJS.Timeout | null>(null)
+  const abortControllerRef = useRef<AbortController | null>(null)
+
+  // 获取默认配置
+  useEffect(() => {
+    fetchDefaultConfig()
+  }, [])
+
+  const fetchDefaultConfig = async () => {
+    try {
+      const response = await fetch("/api/admin/geo-tools/api-config")
+      const result = await response.json()
+      if (result.success && result.data) {
+        const modelMap: Record<string, string> = {
+          deepseek: "deepseek-ai/DeepSeek-V2.5",
+          qwen: "Qwen/Qwen2.5-72B-Instruct",
+          "gpt-4": "gpt-4o",
+          "gpt-3.5-turbo": "gpt-4o-mini",
+          claude: "claude-3-5-sonnet",
+          "glm-4": "glm-4",
+          kimi: "Qwen/Qwen2.5-72B-Instruct",
+        }
+        const mappedModel = modelMap[result.data.defaultModel] || result.data.defaultModel
+        setDefaultLLM(mappedModel)
+        if (!selectedLLM) {
+          setSelectedLLM(mappedModel)
+        }
+      }
+    } catch (error) {
+      console.error("获取默认配置失败:", error)
+    }
+  }
 
   const handleGenerateStrategy = () => {
     if (!validateInput()) {
@@ -60,12 +94,12 @@ export function ArticleGenerator() {
         companyName,
         industry,
         companyAdvantages,
-        keyData
+        keyData,
       })
       setStrategyResult(prompt)
       setLoadingStrategy(false)
       toast.success("提示词生成成功！现在可以生成文章了")
-    }, 1000)
+    }, 500)
   }
 
   const handleGenerateArticle = () => {
@@ -78,115 +112,131 @@ export function ArticleGenerator() {
 
   const handleConfirmLLM = async () => {
     setLlmSelectVisible(false)
-    
+
     if (!strategyResult) {
       toast.warning("请先生成提示词")
       return
     }
 
+    const modelToUse = selectedLLM || defaultLLM
+
     try {
-      if (pollingRef.current) {
-        clearInterval(pollingRef.current)
-        pollingRef.current = null
+      // 取消之前的请求
+      if (abortControllerRef.current) {
+        abortControllerRef.current.abort()
       }
 
-      setGenerationSession({
-        status: "initializing",
-        sessionId: null,
-        answer: null,
-        error: null
+      abortControllerRef.current = new AbortController()
+
+      setGeneration({
+        status: "connecting",
+        progress: 10,
+        message: "正在连接大模型服务...",
+        content: "",
+        error: null,
       })
-      setLoadingArticle(true)
+      setArticleResult("")
 
       const response = await fetch("/api/admin/geo-tools/article-generate", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          llmId: selectedLLM,
-          prompt: strategyResult
-        })
+          model: modelToUse,
+          prompt: strategyResult,
+        }),
+        signal: abortControllerRef.current.signal,
       })
 
-      const result = await response.json()
-
-      if (!result.success) {
-        if (response.status === 501) {
-          toast.error("服务器环境不支持浏览器自动化")
-        } else {
-          toast.error(result.message || "启动生成失败")
-        }
-        setGenerationSession({
-          status: "error",
-          sessionId: null,
-          answer: null,
-          error: result.message || "启动生成失败"
-        })
-        setLoadingArticle(false)
-        return
+      if (!response.ok) {
+        const errorData = await response.json()
+        throw new Error(errorData.message || "请求失败")
       }
 
-      const sessionId = result.data.sessionId
+      const reader = response.body?.getReader()
+      if (!reader) {
+        throw new Error("无法读取响应流")
+      }
 
-      setGenerationSession({
-        status: "initializing",
-        sessionId,
-        answer: null,
-        error: null
-      })
+      setGeneration((prev) => ({
+        ...prev,
+        status: "generating",
+        progress: 30,
+        message: "正在生成文章，请稍候...",
+      }))
 
-      toast.success("浏览器已启动，正在生成文章...")
+      const decoder = new TextDecoder()
+      let fullContent = ""
 
-      pollingRef.current = setInterval(async () => {
-        try {
-          const statusResponse = await fetch(
-            `/api/admin/geo-tools/article-generate?sessionId=${sessionId}`
-          )
-          const statusResult = await statusResponse.json()
+      while (true) {
+        const { done, value } = await reader.read()
+        if (done) break
 
-          if (statusResult.success) {
-            const { status, answer, error } = statusResult.data
+        const chunk = decoder.decode(value, { stream: true })
+        const lines = chunk.split("\n")
 
-            setGenerationSession({
-              status,
-              sessionId,
-              answer,
-              error
-            })
+        for (const line of lines) {
+          if (line.startsWith("data: ")) {
+            const data = line.slice(6)
+            if (data === "[DONE]") continue
 
-            if (status === "completed") {
-              clearInterval(pollingRef.current!)
-              pollingRef.current = null
-              setLoadingArticle(false)
-              
-              if (answer) {
-                setArticleResult(answer)
-                toast.success("文章生成成功！")
-              } else {
-                toast.error("未获取到有效答案")
+            try {
+              const parsed = JSON.parse(data)
+              if (parsed.content) {
+                fullContent += parsed.content
+                setArticleResult(fullContent)
+                setGeneration((prev) => ({
+                  ...prev,
+                  progress: Math.min(30 + Math.floor((fullContent.length / 2000) * 60), 90),
+                }))
               }
-            } else if (status === "error") {
-              clearInterval(pollingRef.current!)
-              pollingRef.current = null
-              setLoadingArticle(false)
-              toast.error(error || "生成失败")
+              if (parsed.error) {
+                throw new Error(parsed.error)
+              }
+            } catch (e) {
+              // 忽略解析错误，继续处理
             }
           }
-        } catch (error) {
-          console.error("Poll generation status error:", error)
         }
-      }, 2000)
+      }
 
-    } catch (error) {
-      console.error("Generate article error:", error)
-      toast.error("生成失败")
-      setLoadingArticle(false)
-      setGenerationSession({
-        status: "error",
-        sessionId: null,
-        answer: null,
-        error: "生成失败"
+      setGeneration({
+        status: "completed",
+        progress: 100,
+        message: "文章生成完成！",
+        content: fullContent,
+        error: null,
       })
+      toast.success("文章生成成功！")
+    } catch (error) {
+      if ((error as Error).name === "AbortError") {
+        return
+      }
+      console.error("生成文章错误:", error)
+      const errorMessage = (error as Error).message || "生成失败"
+      setGeneration({
+        status: "error",
+        progress: 0,
+        message: "",
+        content: "",
+        error: errorMessage,
+      })
+      toast.error(errorMessage)
     }
+  }
+
+  const handleCancelGeneration = () => {
+    if (abortControllerRef.current) {
+      abortControllerRef.current.abort()
+      abortControllerRef.current = null
+    }
+    setGeneration({
+      status: "idle",
+      progress: 0,
+      message: "",
+      content: "",
+      error: null,
+    })
+    toast.info("已取消生成")
   }
 
   const handleCopyStrategy = () => {
@@ -195,7 +245,8 @@ export function ArticleGenerator() {
       return
     }
 
-    navigator.clipboard.writeText(strategyResult)
+    navigator.clipboard
+      .writeText(strategyResult)
       .then(() => {
         toast.success("提示词已复制到剪贴板")
       })
@@ -210,7 +261,8 @@ export function ArticleGenerator() {
       return
     }
 
-    navigator.clipboard.writeText(articleResult)
+    navigator.clipboard
+      .writeText(articleResult)
       .then(() => {
         toast.success("文章已复制到剪贴板")
       })
@@ -256,6 +308,23 @@ export function ArticleGenerator() {
 请用中文撰写，确保内容高质量、高权威性。`
   }
 
+  const getStatusDisplay = () => {
+    switch (generation.status) {
+      case "connecting":
+        return { color: "blue", text: "连接中" }
+      case "generating":
+        return { color: "orange", text: "生成中" }
+      case "completed":
+        return { color: "green", text: "已完成" }
+      case "error":
+        return { color: "red", text: "失败" }
+      default:
+        return { color: "gray", text: "就绪" }
+    }
+  }
+
+  const statusDisplay = getStatusDisplay()
+
   return (
     <div className={styles.container}>
       <Collapse defaultActiveKey={["company"]} bordered={false}>
@@ -271,7 +340,9 @@ export function ArticleGenerator() {
           <div className={styles.sectionContent}>
             <div className={styles.formRow}>
               <div className={styles.formItem}>
-                <label className={styles.label}>企业名称 <span className={styles.required}>*</span></label>
+                <label className={styles.label}>
+                  企业名称 <span className={styles.required}>*</span>
+                </label>
                 <Input
                   value={companyName}
                   onChange={setCompanyName}
@@ -279,12 +350,10 @@ export function ArticleGenerator() {
                 />
               </div>
               <div className={styles.formItem}>
-                <label className={styles.label}>所属行业领域 <span className={styles.required}>*</span></label>
-                <Input
-                  value={industry}
-                  onChange={setIndustry}
-                  placeholder="请输入行业领域"
-                />
+                <label className={styles.label}>
+                  所属行业领域 <span className={styles.required}>*</span>
+                </label>
+                <Input value={industry} onChange={setIndustry} placeholder="请输入行业领域" />
               </div>
             </div>
             <div className={styles.formItem}>
@@ -319,11 +388,7 @@ export function ArticleGenerator() {
                 <div className={styles.actionDesc}>根据企业信息生成完整的提示词</div>
               </div>
             </div>
-            <Button
-              type="primary"
-              loading={loadingStrategy}
-              onClick={handleGenerateStrategy}
-            >
+            <Button type="primary" loading={loadingStrategy} onClick={handleGenerateStrategy}>
               生成提示词
             </Button>
           </div>
@@ -342,21 +407,44 @@ export function ArticleGenerator() {
             </div>
             <Button
               type="primary"
-              loading={loadingArticle}
-              disabled={!strategyResult}
+              loading={generation.status === "connecting" || generation.status === "generating"}
+              disabled={!strategyResult || generation.status === "connecting" || generation.status === "generating"}
               onClick={handleGenerateArticle}
             >
-              生成文章
+              {generation.status === "connecting" || generation.status === "generating"
+                ? "生成中..."
+                : "生成文章"}
             </Button>
           </div>
-          {generationSession.sessionId && (
-            <div style={{ marginTop: 12, padding: 12, background: "#f7f8fa", borderRadius: 4 }}>
-              <div style={{ fontSize: 14, color: "#666" }}>
-                {generationSession.status === "initializing" && "正在启动浏览器..."}
-                {generationSession.status === "generating" && "正在生成文章，请稍候..."}
-                {generationSession.status === "completed" && "✓ 文章生成完成"}
-                {generationSession.status === "error" && `生成失败: ${generationSession.error}`}
+
+          {/* 进度展示 */}
+          {(generation.status === "connecting" ||
+            generation.status === "generating" ||
+            generation.status === "completed" ||
+            generation.status === "error") && (
+            <div className={styles.progressSection}>
+              <div className={styles.progressHeader}>
+                <Space>
+                  <Tag color={statusDisplay.color}>{statusDisplay.text}</Tag>
+                  <span className={styles.progressMessage}>{generation.message || generation.error}</span>
+                </Space>
+                {(generation.status === "connecting" || generation.status === "generating") && (
+                  <Button type="text" size="small" onClick={handleCancelGeneration}>
+                    取消
+                  </Button>
+                )}
               </div>
+              <Progress
+                percent={generation.progress}
+                status={generation.status === "error" ? "error" : generation.status === "completed" ? "success" : "normal"}
+                animation
+              />
+              {generation.status === "generating" && articleResult && (
+                <div className={styles.generatingHint}>
+                  <IconLoading className={styles.spinIcon} />
+                  <span>正在接收内容，已生成 {articleResult.length} 字符...</span>
+                </div>
+              )}
             </div>
           )}
         </Card>
@@ -366,19 +454,12 @@ export function ArticleGenerator() {
         <Card className={styles.resultCard}>
           <div className={styles.resultHeader}>
             <div className={styles.resultTitle}>提示词预览</div>
-            <Button
-              type="outline"
-              size="small"
-              icon={<IconCopy />}
-              onClick={handleCopyStrategy}
-            >
+            <Button type="outline" size="small" icon={<IconCopy />} onClick={handleCopyStrategy}>
               复制提示词
             </Button>
           </div>
           <div className={styles.markdownContent}>
-            <ReactMarkdown remarkPlugins={[remarkGfm]}>
-              {strategyResult}
-            </ReactMarkdown>
+            <ReactMarkdown remarkPlugins={[remarkGfm]}>{strategyResult}</ReactMarkdown>
           </div>
         </Card>
       )}
@@ -386,51 +467,57 @@ export function ArticleGenerator() {
       {articleResult && (
         <Card className={styles.resultCard}>
           <div className={styles.resultHeader}>
-            <div className={styles.resultTitle}>高捕获率文章</div>
-            <Button
-              type="outline"
-              size="small"
-              icon={<IconCopy />}
-              onClick={handleCopyArticle}
-            >
+            <div className={styles.resultTitle}>文章生成</div>
+            <Button type="outline" size="small" icon={<IconCopy />} onClick={handleCopyArticle}>
               复制文章
             </Button>
           </div>
           <div className={styles.markdownContent}>
-            <ReactMarkdown remarkPlugins={[remarkGfm]}>
-              {articleResult}
-            </ReactMarkdown>
+            <ReactMarkdown remarkPlugins={[remarkGfm]}>{articleResult}</ReactMarkdown>
           </div>
         </Card>
       )}
 
-      <Modal
-        title="选择大模型"
-        visible={llmSelectVisible}
-        onOk={handleConfirmLLM}
-        onCancel={() => setLlmSelectVisible(false)}
-        autoFocus={false}
-        focusLock={true}
-      >
-        <div style={{ marginBottom: 16 }}>
-          <div style={{ marginBottom: 8, fontWeight: 500 }}>请选择要使用的大模型：</div>
-          <Select
-            value={selectedLLM}
-            onChange={setSelectedLLM}
-            style={{ width: "100%" }}
-            placeholder="请选择大模型"
-          >
-            {LLM_OPTIONS.map(option => (
-              <Select.Option key={option.value} value={option.value}>
-                {option.label}
-              </Select.Option>
-            ))}
-          </Select>
-          <div style={{ marginTop: 8, fontSize: 12, color: "#86909c" }}>
-            注意：请确保已在 Cookie 管理中配置了所选大模型的 Cookie
+      {/* 模型选择弹窗 */}
+      {llmSelectVisible && (
+        <div className={styles.modalOverlay} onClick={() => setLlmSelectVisible(false)}>
+          <div className={styles.modal} onClick={(e) => e.stopPropagation()}>
+            <div className={styles.modalHeader}>
+              <h3>选择大模型</h3>
+              <button className={styles.modalClose} onClick={() => setLlmSelectVisible(false)}>
+                ×
+              </button>
+            </div>
+            <div className={styles.modalBody}>
+              <div className={styles.formItem}>
+                <label className={styles.label}>请选择要使用的大模型：</label>
+                <Select
+                  value={selectedLLM}
+                  onChange={setSelectedLLM}
+                  style={{ width: "100%" }}
+                  placeholder="请选择大模型"
+                >
+                  {LLM_OPTIONS.map((option) => (
+                    <Select.Option key={option.value} value={option.value}>
+                      {option.label}
+                    </Select.Option>
+                  ))}
+                </Select>
+                <div className={styles.hint}>
+                  默认使用配置的模型：
+                  {LLM_OPTIONS.find((o) => o.value === defaultLLM)?.label || defaultLLM}
+                </div>
+              </div>
+            </div>
+            <div className={styles.modalFooter}>
+              <Button onClick={() => setLlmSelectVisible(false)}>取消</Button>
+              <Button type="primary" onClick={handleConfirmLLM}>
+                确认生成
+              </Button>
+            </div>
           </div>
         </div>
-      </Modal>
+      )}
     </div>
   )
 }
