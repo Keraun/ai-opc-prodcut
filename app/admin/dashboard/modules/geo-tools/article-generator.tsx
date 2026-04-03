@@ -11,18 +11,6 @@ import styles from "./article-generator.module.css"
 
 const CollapseItem = Collapse.Item
 
-const LLM_OPTIONS = [
-  { label: "DeepSeek-V2.5", value: "deepseek-ai/DeepSeek-V2.5" },
-  { label: "Qwen2.5-72B", value: "Qwen/Qwen2.5-72B-Instruct" },
-  { label: "Qwen2.5-32B", value: "Qwen/Qwen2.5-32B-Instruct" },
-  { label: "Qwen2.5-14B", value: "Qwen/Qwen2.5-14B-Instruct" },
-  { label: "Qwen2.5-7B", value: "Qwen/Qwen2.5-7B-Instruct" },
-  { label: "GPT-4o", value: "gpt-4o" },
-  { label: "GPT-4o-mini", value: "gpt-4o-mini" },
-  { label: "Claude-3.5-Sonnet", value: "claude-3-5-sonnet" },
-  { label: "GLM-4", value: "glm-4" },
-]
-
 type GenerationStatus = "idle" | "connecting" | "generating" | "completed" | "error"
 
 interface GenerationProgress {
@@ -45,8 +33,9 @@ export function ArticleGenerator() {
   const [articleResult, setArticleResult] = useState<string | null>(null)
   const [loadingStrategy, setLoadingStrategy] = useState(false)
   const [selectedLLM, setSelectedLLM] = useState<string>("")
-  const [defaultLLM, setDefaultLLM] = useState<string>("deepseek-ai/DeepSeek-V2.5")
+  const [defaultLLM, setDefaultLLM] = useState<string>("")
   const [llmSelectVisible, setLlmSelectVisible] = useState(false)
+  const [llmOptions, setLlmOptions] = useState<Array<{ label: string; value: string }>>([])
   const [generation, setGeneration] = useState<GenerationProgress>({
     status: "idle",
     progress: 0,
@@ -60,31 +49,33 @@ export function ArticleGenerator() {
   const abortControllerRef = useRef<AbortController | null>(null)
 
   useEffect(() => {
-    fetchDefaultConfig()
+    fetchLLMModels()
   }, [])
 
-  const fetchDefaultConfig = async () => {
+  const fetchLLMModels = async () => {
     try {
-      const response = await fetch("/api/admin/geo-tools/api-config")
+      // 从API获取所有大模型
+      const response = await fetch("/api/admin/geo-tools/llm-models")
       const result = await response.json()
       if (result.success && result.data) {
-        const modelMap: Record<string, string> = {
-          deepseek: "deepseek-ai/DeepSeek-V2.5",
-          qwen: "Qwen/Qwen2.5-72B-Instruct",
-          "gpt-4": "gpt-4o",
-          "gpt-3.5-turbo": "gpt-4o-mini",
-          claude: "claude-3-5-sonnet",
-          "glm-4": "glm-4",
-          kimi: "Qwen/Qwen2.5-72B-Instruct",
-        }
-        const mappedModel = modelMap[result.data.defaultModel] || result.data.defaultModel
-        setDefaultLLM(mappedModel)
-        if (!selectedLLM) {
-          setSelectedLLM(mappedModel)
+        const options = result.data.map((model: any) => ({
+          label: model.name,
+          value: model.value
+        }))
+        setLlmOptions(options)
+
+        // 获取默认模型
+        const defaultModel = result.data.find((model: any) => model.is_default)
+        if (defaultModel) {
+          setDefaultLLM(defaultModel.value)
+          if (!selectedLLM) {
+            setSelectedLLM(defaultModel.value)
+          }
         }
       }
     } catch (error) {
-      console.error("获取默认配置失败:", error)
+      console.error("获取大模型列表失败:", error)
+      toast.error("获取大模型列表失败")
     }
   }
 
@@ -530,18 +521,34 @@ export function ArticleGenerator() {
               <div className={styles.collapseHeader}>
                 <IconBook className={styles.collapseIcon} />
                 <span>文章生成结果</span>
-                <Button
-                  type="outline"
-                  size="small"
-                  icon={<IconCopy />}
-                  onClick={(e) => {
-                    e.stopPropagation()
-                    handleCopyArticle()
-                  }}
-                  className={styles.collapseButton}
-                >
-                  复制
-                </Button>
+                <div style={{ display: 'flex', gap: '8px' }}>
+                  <Button
+                    type="outline"
+                    size="small"
+                    icon={<IconCopy />}
+                    onClick={(e) => {
+                      e.stopPropagation()
+                      handleCopyArticle()
+                    }}
+                    className={styles.collapseButton}
+                  >
+                    复制
+                  </Button>
+                  <Button
+                    type="primary"
+                    size="small"
+                    onClick={(e) => {
+                      e.stopPropagation()
+                      if (articleResult) {
+                        const encodedContent = encodeURIComponent(articleResult)
+                        window.location.href = `/admin/dashboard?page=articles&content=${encodedContent}`
+                      }
+                    }}
+                    className={styles.collapseButton}
+                  >
+                    新建资讯
+                  </Button>
+                </div>
               </div>
             }
             name="article"
@@ -571,7 +578,7 @@ export function ArticleGenerator() {
                   style={{ width: "100%" }}
                   placeholder="请选择大模型"
                 >
-                  {LLM_OPTIONS.map((option) => (
+                  {llmOptions.map((option) => (
                     <Select.Option key={option.value} value={option.value}>
                       {option.label}
                     </Select.Option>
@@ -579,7 +586,7 @@ export function ArticleGenerator() {
                 </Select>
                 <div className={styles.hint}>
                   默认使用配置的模型：
-                  {LLM_OPTIONS.find((o) => o.value === defaultLLM)?.label || defaultLLM}
+                  {llmOptions.find((o) => o.value === defaultLLM)?.label || defaultLLM}
                 </div>
               </div>
             </div>

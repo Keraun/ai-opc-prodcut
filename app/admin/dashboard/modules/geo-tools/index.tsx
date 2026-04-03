@@ -4,6 +4,7 @@ import { useState } from "react"
 import { Tabs } from "@arco-design/web-react"
 import { ArticleGenerator } from "./article-generator"
 import { ApiConfig } from "./api-config"
+import { LLMModels } from "./llm-models"
 import styles from "./geo-tools.module.css"
 
 const TabPane = Tabs.TabPane
@@ -17,7 +18,7 @@ export function GeoTools() {
         <div className={styles.headerInfo}>
           <h2 className={styles.title}>GEO 工具</h2>
           <p className={styles.description}>
-            针对企业的高捕获率内容创作工具集，支持文章生成和 AI 模型配置
+            针对企业的高捕获率内容创作工具集，支持文章生成和大模型配置
           </p>
         </div>
       </div>
@@ -36,6 +37,11 @@ export function GeoTools() {
           <TabPane key="api-config" title="API配置">
             <div className={styles.tabContent}>
               <ApiConfig />
+            </div>
+          </TabPane>
+          <TabPane key="llm-models" title="大模型管理">
+            <div className={styles.tabContent}>
+              <LLMModels />
             </div>
           </TabPane>
         </Tabs>

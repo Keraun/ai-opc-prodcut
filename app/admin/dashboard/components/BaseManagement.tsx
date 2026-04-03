@@ -636,6 +636,14 @@ function ItemForm({
       if (mode === 'new' && field.name === 'author' && !value && siteConfig?.creator?.name) {
         value = siteConfig.creator.name
       }
+      // 如果是新建模式且字段是content，从URL参数中获取预填数据
+      if (mode === 'new' && field.name === 'content' && !value) {
+        const urlParams = new URLSearchParams(window.location.search)
+        const contentParam = urlParams.get('content')
+        if (contentParam) {
+          value = contentParam
+        }
+      }
       setNestedValue(initial, field.name, value ?? (field.type === 'tags' ? [] : ''))
     })
     return { ...initial, ...initialData }
@@ -899,6 +907,16 @@ export function BaseManagement({ config }: BaseManagementProps) {
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false)
   const [itemToDelete, setItemToDelete] = useState<number | null>(null)
   const { configs } = useConfig()
+  
+  // 从URL参数中获取预填数据
+  useEffect(() => {
+    const urlParams = new URLSearchParams(window.location.search)
+    const content = urlParams.get('content')
+    if (content) {
+      // 如果URL中有content参数，自动进入新建模式并预填数据
+      setViewMode('new')
+    }
+  }, [])
 
   useEffect(() => {
     fetchItems()

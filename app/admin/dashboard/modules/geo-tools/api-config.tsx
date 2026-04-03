@@ -13,13 +13,11 @@ const LLM_OPTIONS = [
 interface ApiConfigData {
   apiKey: string
   baseUrl: string
-  defaultModel: string
 }
 
 const DEFAULT_CONFIG: ApiConfigData = {
   apiKey: "",
   baseUrl: "https://api.siliconflow.cn/v1",
-  defaultModel: "deepseek",
 }
 
 export function ApiConfig() {
@@ -39,7 +37,8 @@ export function ApiConfig() {
       if (result.success && result.data) {
         setConfig({
           ...DEFAULT_CONFIG,
-          ...result.data,
+          apiKey: result.data.apiKey || "",
+          baseUrl: result.data.baseUrl || "https://api.siliconflow.cn/v1",
         })
       }
     } catch (error) {
@@ -61,7 +60,10 @@ export function ApiConfig() {
       const response = await fetch("/api/admin/geo-tools/api-config", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(config),
+        body: JSON.stringify({
+          apiKey: config.apiKey,
+          baseUrl: config.baseUrl
+        }),
       })
       const result = await response.json()
       if (result.success) {
@@ -83,7 +85,7 @@ export function ApiConfig() {
         title={
           <div className={styles.cardTitle}>
             <IconSettings className={styles.titleIcon} />
-            <span>大模型 API 配置</span>
+            <span>API配置</span>
           </div>
         }
         className={styles.configCard}
@@ -115,26 +117,6 @@ export function ApiConfig() {
             />
             <div className={styles.hint}>
               默认使用硅基流动 API 地址，如需使用其他服务请修改
-            </div>
-          </div>
-
-          <div className={styles.formItem}>
-            <label className={styles.label}>默认大模型</label>
-            <Select
-              value={config.defaultModel}
-              onChange={(value) => setConfig({ ...config, defaultModel: value })}
-              placeholder="请选择默认模型"
-              className={styles.select}
-              style={{ width: "100%" }}
-            >
-              {LLM_OPTIONS.map((option) => (
-                <Select.Option key={option.value} value={option.value}>
-                  {option.label}
-                </Select.Option>
-              ))}
-            </Select>
-            <div className={styles.hint}>
-              生成文章时将默认使用此模型，您也可以在生成时选择其他模型
             </div>
           </div>
 

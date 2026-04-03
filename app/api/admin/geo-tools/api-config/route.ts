@@ -15,7 +15,6 @@ export async function GET(request: NextRequest) {
     const config = repository.getValue(CONFIG_KEY, {
       apiKey: "",
       baseUrl: "https://api.siliconflow.cn/v1",
-      defaultModel: "deepseek",
     })
 
     return successResponse(config)
@@ -33,7 +32,7 @@ export async function POST(request: NextRequest) {
     }
 
     const body = await request.json()
-    const { apiKey, baseUrl, defaultModel } = body
+    const { apiKey, baseUrl } = body
 
     if (!apiKey || !apiKey.trim()) {
       return errorResponse("API密钥不能为空")
@@ -42,7 +41,6 @@ export async function POST(request: NextRequest) {
     const config = {
       apiKey: apiKey.trim(),
       baseUrl: baseUrl?.trim() || "https://api.siliconflow.cn/v1",
-      defaultModel: defaultModel || "deepseek",
     }
 
     repository.setValue(CONFIG_KEY, config)
