@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useEffect, useRef } from 'react'
-import { Modal, Button, Card, Statistic, Grid, Spin, Empty, Popconfirm, Message, Checkbox } from '@arco-design/web-react'
+import { Modal, Button, Card, Statistic, Grid, Spin, Empty, Popconfirm, Checkbox } from '@arco-design/web-react'
 import { 
   Image as ImageIcon, 
   Trash2, 
@@ -17,7 +17,9 @@ import {
   Square,
   Trash
 } from 'lucide-react'
+import { toast } from 'sonner'
 import { ManagementHeader } from './ManagementHeader'
+import { copyToClipboard } from '@/lib/clipboard-utils'
 import styles from './ImageManagement.module.css'
 
 const { Row, Col } = Grid
@@ -67,11 +69,11 @@ export function ImageManagement() {
       if (result.success) {
         setImages(result.images)
       } else {
-        Message.error(result.message || '加载图片失败')
+        toast.error(result.message || '加载图片失败')
       }
     } catch (error) {
       console.error('Load images error:', error)
-      Message.error('加载图片失败')
+      toast.error('加载图片失败')
     } finally {
       setLoading(false)
     }
@@ -107,15 +109,15 @@ export function ImageManagement() {
       const result = await response.json()
 
       if (result.success) {
-        Message.success(`图片上传成功，节省 ${result.savedPercentage}% 空间`)
+        toast.success(`图片上传成功，节省 ${result.savedPercentage}% 空间`)
         loadImages()
         loadStats()
       } else {
-        Message.error(result.message || '上传失败')
+        toast.error(result.message || '上传失败')
       }
     } catch (error) {
       console.error('Upload error:', error)
-      Message.error('上传失败')
+      toast.error('上传失败')
     } finally {
       setUploading(false)
       if (fileInputRef.current) {
@@ -155,21 +157,21 @@ export function ImageManagement() {
       const result = await response.json()
 
       if (result.success) {
-        Message.success('图片删除成功')
+        toast.success('图片删除成功')
         loadImages()
         loadStats()
       } else {
-        Message.error(result.message || '删除失败')
+        toast.error(result.message || '删除失败')
       }
     } catch (error) {
       console.error('Delete error:', error)
-      Message.error('删除失败')
+      toast.error('删除失败')
     }
   }
 
   const handleBatchDelete = async () => {
     if (selectedImages.size === 0) {
-      Message.warning('请先选择要删除的图片')
+      toast.warning('请先选择要删除的图片')
       return
     }
 
@@ -185,16 +187,16 @@ export function ImageManagement() {
       const result = await response.json()
 
       if (result.success) {
-        Message.success(result.message || '批量删除成功')
+        toast.success(result.message || '批量删除成功')
       } else {
-        Message.warning(result.message || '部分删除失败')
+        toast.warning(result.message || '部分删除失败')
       }
       setSelectedImages(new Set())
       loadImages()
       loadStats()
     } catch (error) {
       console.error('Batch delete error:', error)
-      Message.error('批量删除失败')
+      toast.error('批量删除失败')
     }
   }
 
@@ -211,13 +213,12 @@ export function ImageManagement() {
   }
 
   const handleCopyLink = async (url: string, label: string) => {
-    try {
-      const fullUrl = window.location.origin + url
-      await navigator.clipboard.writeText(fullUrl)
-      Message.success(`${label}链接已复制`)
-    } catch (error) {
-      console.error('Copy link error:', error)
-      Message.error('复制链接失败')
+    const fullUrl = window.location.origin + url
+    const success = await copyToClipboard(fullUrl)
+    if (success) {
+      toast.success(`${label}链接已复制`)
+    } else {
+      toast.error('复制链接失败')
     }
   }
 

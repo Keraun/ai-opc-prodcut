@@ -6,6 +6,7 @@ import ReactMarkdown from "react-markdown"
 import remarkGfm from "remark-gfm"
 import { IconCopy, IconFile, IconBulb, IconBook, IconRobot, IconLoading } from "@arco-design/web-react/icon"
 import { toast } from "sonner"
+import { copyToClipboard } from "@/lib/clipboard-utils"
 import { ArticleForm } from "../../components/ArticleForm"
 import { PanelHeader } from "./PanelHeader"
 
@@ -422,36 +423,32 @@ export function ArticleGenerator() {
     toast.info("已取消生成")
   }
 
-  const handleCopyStrategy = () => {
+  const handleCopyStrategy = async () => {
     if (!strategyResult) {
       toast.warning("请先生成提示词")
       return
     }
 
-    navigator.clipboard
-      .writeText(strategyResult)
-      .then(() => {
-        toast.success("提示词已复制到剪贴板")
-      })
-      .catch(() => {
-        toast.error("复制失败，请手动复制")
-      })
+    const success = await copyToClipboard(strategyResult)
+    if (success) {
+      toast.success("提示词已复制到剪贴板")
+    } else {
+      toast.error("复制失败，请手动复制")
+    }
   }
 
-  const handleCopyArticle = () => {
+  const handleCopyArticle = async () => {
     if (!articleResult) {
       toast.warning("请先生成文章")
       return
     }
 
-    navigator.clipboard
-      .writeText(articleResult)
-      .then(() => {
-        toast.success("文章已复制到剪贴板")
-      })
-      .catch(() => {
-        toast.error("复制失败，请手动复制")
-      })
+    const success = await copyToClipboard(articleResult)
+    if (success) {
+      toast.success("文章已复制到剪贴板")
+    } else {
+      toast.error("复制失败，请手动复制")
+    }
   }
 
   const validateInput = () => {
