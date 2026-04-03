@@ -57,7 +57,7 @@ export function SessionManager() {
   const [validationStatuses, setValidationStatuses] = useState<Record<string, ValidationStatus>>({})
   const [expiringSoon, setExpiringSoon] = useState<string[]>([])
   const [confirmModalVisible, setConfirmModalVisible] = useState(false)
-  const [confirmData, setConfirmData] = useState<{siteId: string, site: any, cookie_data: string | null, storage_data: Record<string, string> | null} | null>(null)
+  const [confirmData, setConfirmData] = useState<{ siteId: string, site: any, cookie_data: string | null, storage_data: Record<string, string> | null } | null>(null)
   const pollingRef = useRef<Record<string, NodeJS.Timeout>>({})
   const validationPollingRef = useRef<Record<string, NodeJS.Timeout>>({})
 
@@ -88,18 +88,18 @@ export function SessionManager() {
   const checkExpiring = (data: Record<string, SessionData>) => {
     const expiring: string[] = []
     const now = new Date()
-    
+
     Object.entries(data).forEach(([siteId, session]) => {
       if (session.expiresAt) {
         const expiresDate = new Date(session.expiresAt)
         const daysUntilExpiry = Math.ceil((expiresDate.getTime() - now.getTime()) / (1000 * 60 * 60 * 24))
-        
+
         if (daysUntilExpiry <= 3 && daysUntilExpiry > 0) {
           expiring.push(siteId)
         }
       }
     })
-    
+
     setExpiringSoon(expiring)
   }
 
@@ -169,9 +169,9 @@ export function SessionManager() {
           cookies: tempCookieValue,
           storage: tempStorageValue
         },
-        sessionRules: {
-          use_cookies: true,
-          storage_key: Array.isArray(site.storageKey) ? site.storageKey : (site.storageKey ? [site.storageKey] : [])
+        sessionRules: sessionData?.sessionRules || {
+          use_cookies: false,
+          storage_key: []
         },
         updatedAt: new Date().toLocaleString("zh-CN"),
         expiresAt: expiresAt.toISOString()
@@ -199,6 +199,10 @@ export function SessionManager() {
     if (data?.sessionData?.cookies) {
       navigator.clipboard.writeText(data.sessionData.cookies)
         .then(() => toast.success("会话信息已复制到剪贴板"))
+        .catch(() => toast.error("复制失败"))
+    } else if (data?.sessionData?.storage && Object.keys(data.sessionData.storage).length > 0) {
+      navigator.clipboard.writeText(JSON.stringify(data.sessionData.storage, null, 2))
+        .then(() => toast.success("LocalStorage 数据已复制到剪贴板"))
         .catch(() => toast.error("复制失败"))
     } else {
       toast.warning("没有可复制的会话信息")
@@ -326,7 +330,7 @@ export function SessionManager() {
 
   const validateSession = async (siteId: string, siteUrl: string) => {
     const sessionDataItem = sessionData[siteId]
-    if (!sessionDataItem?.sessionData?.cookies) {
+    if (!sessionDataItem?.sessionData?.cookies && (!sessionDataItem?.sessionData?.storage || Object.keys(sessionDataItem.sessionData.storage).length === 0)) {
       toast.warning("没有可验证的会话信息")
       return
     }
@@ -354,7 +358,8 @@ export function SessionManager() {
           siteId,
           siteUrl,
           cookies: sessionDataItem.sessionData.cookies,
-          storage_data: sessionDataItem.sessionData.storage
+          storage_data: sessionDataItem.sessionData.storage,
+          session_rules: sessionDataItem.sessionRules
         })
       })
 
@@ -415,7 +420,7 @@ export function SessionManager() {
             if (status === "completed") {
               clearInterval(validationPollingRef.current[siteId])
               delete validationPollingRef.current[siteId]
-              
+
               if (isValid) {
                 toast.success("会话信息验证成功，登录状态正常")
               } else {
@@ -501,11 +506,11 @@ export function SessionManager() {
 
   const getExpiryTag = (_siteId: string, expiresAt?: string) => {
     if (!expiresAt) return null
-    
+
     const now = new Date()
     const expiresDate = new Date(expiresAt)
     const daysUntilExpiry = Math.ceil((expiresDate.getTime() - now.getTime()) / (1000 * 60 * 60 * 24))
-    
+
     if (daysUntilExpiry <= 0) {
       return <Tag color="red" size="small">已过期</Tag>
     } else if (daysUntilExpiry <= 3) {
@@ -543,7 +548,7 @@ export function SessionManager() {
     }
 
     saveSessionsToDb(newData)
-    
+
     // 停止抓取过程
     const status = extractionStatuses[siteId]
     if (status?.sessionId) {
@@ -567,7 +572,7 @@ export function SessionManager() {
         console.error("Stop extraction error:", error)
       }
     }
-    
+
     setConfirmModalVisible(false)
     setConfirmData(null)
     toast.success("会话信息已保存")
@@ -600,7 +605,7 @@ export function SessionManager() {
         }
       }
     }
-    
+
     setConfirmModalVisible(false)
     setConfirmData(null)
   }
@@ -643,7 +648,7 @@ export function SessionManager() {
       <div className={styles.sitesGrid}>
         {LLM_SITES.map((site) => {
           const savedData = sessionData[site.id]
-          const hasCookie = !!savedData?.sessionData?.cookies
+          const hasCookie = !!savedData?.sessionData?.cookies || (savedData?.sessionData?.storage && Object.keys(savedData.sessionData.storage).length > 0)
           const storageType = site.storageType || 'cookie'
           const storageLabel = storageType === 'localStorage' ? 'LocalStorage' : 'Cookie'
 
@@ -682,7 +687,7 @@ export function SessionManager() {
                 >
                   打开官网
                 </Button>
-                
+
                 {extractionStatuses[site.id]?.sessionId ? (
                   <Button
                     type="outline"
@@ -704,7 +709,7 @@ export function SessionManager() {
                     自动抓取
                   </Button>
                 )}
-                
+
                 <Button
                   type="primary"
                   size="small"
@@ -798,7 +803,7 @@ export function SessionManager() {
             placeholder="请粘贴浏览器 Cookie 内容..."
             autoSize={{ minRows: 6, maxRows: 12 }}
           />
-          
+
           <div className={styles.dataSection} style={{ marginTop: 20 }}>
             <div className={styles.dataTitle}>LocalStorage 数据：</div>
             <Input.TextArea
@@ -831,7 +836,7 @@ export function SessionManager() {
             <div className={styles.modalTip}>
               已成功抓取到 <strong>{confirmData.site.name}</strong> 的会话信息，请确认是否保存：
             </div>
-            
+
             {confirmData.cookie_data && (
               <div className={styles.dataSection}>
                 <div className={styles.dataTitle}>Cookie 数据：</div>
@@ -843,7 +848,7 @@ export function SessionManager() {
                 />
               </div>
             )}
-            
+
             {confirmData.storage_data && Object.keys(confirmData.storage_data).length > 0 && (
               <div className={styles.dataSection}>
                 <div className={styles.dataTitle}>LocalStorage 数据：</div>

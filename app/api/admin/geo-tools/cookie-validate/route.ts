@@ -55,10 +55,11 @@ export async function POST(request: NextRequest) {
     }
 
     const body = await request.json()
-    const { siteId, siteUrl, cookie_data, storage_data, cookies } = body
+    const { siteId, siteUrl, cookie_data, storage_data, cookies, session_rules } = body
     
     // 兼容前端传递的cookies参数
     const cookieData = cookie_data || cookies
+    const sessionRules = session_rules || {}
 
     if (!siteId || !siteUrl || (!cookieData && !storage_data)) {
       return errorResponse("缺少必要参数")
@@ -77,7 +78,7 @@ export async function POST(request: NextRequest) {
       createdAt: new Date()
     })
 
-    validateWithBrowser(sessionId, siteUrl, cookieData, storage_data).catch(console.error)
+    validateWithBrowser(sessionId, siteUrl, cookieData, storage_data, sessionRules).catch(console.error)
 
     return successResponse({
       sessionId,
@@ -151,7 +152,7 @@ export async function DELETE(request: NextRequest) {
   }
 }
 
-async function validateWithBrowser(sessionId: string, siteUrl: string, cookie_data: string | null, storage_data: Record<string, string> | null) {
+async function validateWithBrowser(sessionId: string, siteUrl: string, cookie_data: string | null, storage_data: Record<string, string> | null, sessionRules: { use_cookies?: boolean, storage_key?: string[] } = {}) {
   const session = validationSessions.get(sessionId)
   if (!session) return
 
@@ -189,7 +190,8 @@ async function validateWithBrowser(sessionId: string, siteUrl: string, cookie_da
     let page = null
     
     // 处理cookie数据
-    if (cookie_data) {
+    const useCookies = sessionRules.use_cookies !== false // 默认使用cookies
+    if (useCookies && cookie_data) {
       const cookies = cookie_data.split(";").map(cookie => {
         const [name, ...valueParts] = cookie.trim().split("=")
         const value = valueParts.join("=").trim()
@@ -212,7 +214,7 @@ async function validateWithBrowser(sessionId: string, siteUrl: string, cookie_da
         
         return {
           name: cookieName,
-          value: decodeURIComponent(value),
+          value: value,
           domain: domain,
           path: "/",
           secure: secure,
@@ -233,6 +235,8 @@ async function validateWithBrowser(sessionId: string, siteUrl: string, cookie_da
 
       // 注入两种domain的cookie
       await context.addCookies([...cookies, ...rootDomainCookies])
+    } else if (!useCookies) {
+      console.log(`[Cookie Validate] Skipping cookies injection (use_cookies: false)`)
     }
     
     // 创建页面
@@ -245,13 +249,33 @@ async function validateWithBrowser(sessionId: string, siteUrl: string, cookie_da
     // 处理localStorage数据
     if (storage_data && Object.keys(storage_data).length > 0) {
       try {
-        await page.evaluate((data) => {
-          Object.entries(data).forEach(([key, value]) => {
-            localStorage.setItem(key, value)
-          })
-        }, storage_data)
+        // 获取session_rules中的storage_key
+        const storageKeys = sessionRules.storage_key || site?.storageKey || []
+        const filteredStorageData: Record<string, string> = {}
         
-        console.log(`[Cookie Validate] Set localStorage data for ${site?.name || session.siteId}:`, Object.keys(storage_data))
+        // 只设置storage_key中指定的字段
+        if (storageKeys.length > 0) {
+          storageKeys.forEach(key => {
+            if (storage_data[key]) {
+              filteredStorageData[key] = storage_data[key]
+            }
+          })
+        } else {
+          // 如果没有指定storageKey，则使用所有字段
+          Object.assign(filteredStorageData, storage_data)
+        }
+        
+        if (Object.keys(filteredStorageData).length > 0) {
+          await page.evaluate((data) => {
+            Object.entries(data).forEach(([key, value]) => {
+              localStorage.setItem(key, value)
+            })
+          }, filteredStorageData)
+          
+          console.log(`[Cookie Validate] Set localStorage data for ${site?.name || session.siteId}:`, Object.keys(filteredStorageData))
+        } else {
+          console.log(`[Cookie Validate] No matching localStorage keys found for ${site?.name || session.siteId}`)
+        }
       } catch (error) {
         console.warn(`[Cookie Validate] Failed to set localStorage:`, error)
         // 继续执行，不中断流程

@@ -358,14 +358,13 @@ export function writeConfig(configType: string, data: any): void {
       jsonDb.clearTable('llm_cookies')
       
       for (const [siteId, cookieData] of Object.entries(data)) {
-        const { name, url, cookies, expiresAt, storageType, storageKey } = cookieData as any
+        const { name, url, sessionData, sessionRules, expiresAt } = cookieData as any
         jsonDb.insert('llm_cookies', {
           site_id: siteId,
           name,
           url,
-          cookies,
-          storage_type: storageType || 'cookie',
-          storage_key: storageKey || null,
+          session_data: sessionData || { cookies: null, storage: null },
+          session_rules: sessionRules || { use_cookies: false, storage_key: [] },
           updated_at: new Date().toLocaleString("zh-CN"),
           expires_at: expiresAt || new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString(),
           created_at: new Date().toISOString()

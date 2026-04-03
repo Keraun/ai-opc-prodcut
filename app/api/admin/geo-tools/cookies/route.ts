@@ -7,7 +7,14 @@ interface CookieData {
   siteId: string
   name: string
   url: string
-  cookies: string
+  sessionData: {
+    cookies: string | null
+    storage: any | null
+  }
+  sessionRules: {
+    useCookies: boolean
+    storageKey: string[]
+  }
   updatedAt: string
   expiresAt?: string
 }
@@ -42,9 +49,9 @@ export async function POST(request: NextRequest) {
       return successResponse({ message: "Cookie保存成功" })
     }
 
-    const { siteId, name, url, cookies, expiresAt } = body
+    const { siteId, name, url, sessionData, sessionRules, expiresAt } = body
 
-    if (!siteId || !name || !url || !cookies) {
+    if (!siteId || !name || !url) {
       return errorResponse("缺少必要参数")
     }
 
@@ -54,7 +61,8 @@ export async function POST(request: NextRequest) {
       siteId,
       name,
       url,
-      cookies,
+      sessionData: sessionData || { cookies: null, storage: null },
+      sessionRules: sessionRules || { useCookies: false, storageKey: [] },
       updatedAt: new Date().toLocaleString("zh-CN"),
       expiresAt: expiresAt || new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString()
     }

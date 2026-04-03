@@ -284,7 +284,7 @@ async function generateWithLLM(
         
         return {
           name: cookieName,
-          value: decodeURIComponent(value),
+          value: value,
           domain: domain,
           path: "/",
           secure: secure,
