@@ -189,6 +189,37 @@ export const CheckCircleIcon = () => (
 )
 
 
+export const SearchIcon = () => (
+  <svg className={styles.svgIcon} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
+    <circle cx="11" cy="11" r="6" />
+    <path strokeLinecap="round" strokeLinejoin="round" d="M21 21l-4.35-4.35" />
+  </svg>
+)
+
+export const MessageIcon = () => (
+  <svg className={styles.svgIcon} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
+    <path strokeLinecap="round" strokeLinejoin="round" d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z" />
+  </svg>
+)
+
+export const TeamIcon = () => (
+  <svg className={styles.svgIcon} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
+    <circle cx="9" cy="7" r="3" />
+    <circle cx="17" cy="7" r="3" />
+    <path strokeLinecap="round" strokeLinejoin="round" d="M3 19v-1a5 5 0 015-5h2a5 5 0 015 5v1" />
+    <path strokeLinecap="round" strokeLinejoin="round" d="M17 11a4 4 0 014 4v2" />
+  </svg>
+)
+
+export const AppIcon = () => (
+  <svg className={styles.svgIcon} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
+    <rect x="3" y="3" width="7" height="7" rx="1.5" />
+    <rect x="14" y="3" width="7" height="7" rx="1.5" />
+    <rect x="14" y="14" width="7" height="7" rx="1.5" />
+    <rect x="3" y="14" width="7" height="7" rx="1.5" />
+  </svg>
+)
+
 export const NotFoundIcon = () => (
   <svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
     <path

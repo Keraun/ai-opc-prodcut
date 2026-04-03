@@ -16,7 +16,7 @@
     "category": "GEO服务",
     "categoryName": "GEO服务",
     "link": "/product/1",
-    "buyLink": "#",
+    "buyLink": "",
     "features": [
       "全球地理位置分析",
       "多语言SEO优化",
@@ -27,7 +27,7 @@
     "rating": 4.9,
     "status": "active",
     "created_at": "2026-04-03T00:00:00.000Z",
-    "updated_at": "2026-04-03T00:00:00.000Z"
+    "updated_at": "2026-04-03T22:49:46.339Z"
   },
   {
     "id": 2,
@@ -46,7 +46,7 @@
     "category": "建站服务",
     "categoryName": "建站服务",
     "link": "/product/2",
-    "buyLink": "#",
+    "buyLink": "",
     "features": [
       "模块化设计",
       "丰富模板选择",
@@ -57,7 +57,7 @@
     "rating": 4.8,
     "status": "active",
     "created_at": "2026-04-03T00:00:00.000Z",
-    "updated_at": "2026-04-03T00:00:00.000Z"
+    "updated_at": "2026-04-03T22:49:55.719Z"
   },
   {
     "id": 3,
@@ -76,7 +76,7 @@
     "category": "咨询服务",
     "categoryName": "咨询服务",
     "link": "/product/3",
-    "buyLink": "#",
+    "buyLink": "",
     "features": [
       "技术架构设计",
       "系统优化方案",
@@ -84,9 +84,9 @@
       "技术选型建议"
     ],
     "salesCount": 100,
-    "rating": 5.0,
+    "rating": 5,
     "status": "active",
     "created_at": "2026-04-03T00:00:00.000Z",
-    "updated_at": "2026-04-03T00:00:00.000Z"
+    "updated_at": "2026-04-03T22:50:00.841Z"
   }
 ]
