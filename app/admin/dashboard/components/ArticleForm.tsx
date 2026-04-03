@@ -1,9 +1,11 @@
 "use client"
 
 import { useState, useRef, useEffect } from "react"
-import { Button, Input, Form, Modal, Message, Tag as ArcoTag, Select } from "@arco-design/web-react"
+import { Button, Input, Form, Modal, Message, Tag as ArcoTag, Select, Tabs } from "@arco-design/web-react"
 import { RichTextEditor } from "@/components/RichTextEditor"
 import { MarkdownEditor } from "@/components/MarkdownEditor"
+import ReactMarkdown from "react-markdown"
+import remarkGfm from "remark-gfm"
 import { toast } from "sonner"
 import { Newspaper, Tag, FileText, Image as ImageIcon, X, Plus } from "lucide-react"
 import styles from "./ArticleForm.module.css"
@@ -33,6 +35,8 @@ export function ArticleForm({
   const [seoKeywordInput, setSeoKeywordInput] = useState("")
   const [mainImage, setMainImage] = useState("")
   const [articleType, setArticleType] = useState<'html' | 'markdown'>(contentType)
+  const [markdownTab, setMarkdownTab] = useState<'edit' | 'preview'>('edit')
+  const [markdownContent, setMarkdownContent] = useState(initialContent)
   const fileInputRef = useRef<HTMLInputElement>(null)
 
   useEffect(() => {
@@ -50,6 +54,8 @@ export function ArticleForm({
       setSeoKeywords([])
       setMainImage("")
       setArticleType(contentType)
+      setMarkdownContent(initialContent)
+      setMarkdownTab('edit')
     }
   }, [visible, initialContent, contentType, form])
 
@@ -61,6 +67,7 @@ export function ArticleForm({
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           ...values,
+          content: articleType === 'markdown' ? markdownContent : values.content,
           tags,
           mainImage,
           seo: {
@@ -400,7 +407,19 @@ export function ArticleForm({
           rules={[{ required: true, message: "请输入文章内容" }]}
         >
           {articleType === 'markdown' ? (
-            <MarkdownEditor />
+            <Tabs activeTab={markdownTab} onChange={setMarkdownTab}>
+              <Tabs.TabPane key="edit" title="编辑">
+                <MarkdownEditor 
+                  value={markdownContent} 
+                  onChange={setMarkdownContent} 
+                />
+              </Tabs.TabPane>
+              <Tabs.TabPane key="preview" title="预览">
+                <div className={styles.markdownPreview}>
+                  <ReactMarkdown remarkPlugins={[remarkGfm]}>{markdownContent}</ReactMarkdown>
+                </div>
+              </Tabs.TabPane>
+            </Tabs>
           ) : (
             <RichTextEditor />
           )}

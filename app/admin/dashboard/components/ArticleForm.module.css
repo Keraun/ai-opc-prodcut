@@ -152,3 +152,120 @@
   border-color: #165dff;
   color: #165dff;
 }
+
+.markdownPreview {
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  padding: 20px;
+  background-color: #ffffff;
+  min-height: 300px;
+  overflow-y: auto;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+}
+
+.markdownPreview h1,
+.markdownPreview h2,
+.markdownPreview h3,
+.markdownPreview h4,
+.markdownPreview h5,
+.markdownPreview h6 {
+  margin-top: 24px;
+  margin-bottom: 16px;
+  font-weight: 600;
+  line-height: 1.25;
+  color: #111827;
+}
+
+.markdownPreview h1 {
+  font-size: 2em;
+  border-bottom: 1px solid #e5e7eb;
+  padding-bottom: 0.3em;
+}
+
+.markdownPreview h2 {
+  font-size: 1.5em;
+  border-bottom: 1px solid #e5e7eb;
+  padding-bottom: 0.3em;
+}
+
+.markdownPreview h3 {
+  font-size: 1.25em;
+}
+
+.markdownPreview p {
+  margin-top: 0;
+  margin-bottom: 16px;
+  line-height: 1.5;
+  color: #374151;
+}
+
+.markdownPreview ul,
+.markdownPreview ol {
+  margin-top: 0;
+  margin-bottom: 16px;
+  padding-left: 2em;
+  color: #374151;
+}
+
+.markdownPreview li {
+  margin-top: 0.25em;
+}
+
+.markdownPreview code {
+  font-family: SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+  font-size: 0.875em;
+  padding: 0.2em 0.4em;
+  margin: 0;
+  background-color: rgba(27, 31, 35, 0.05);
+  border-radius: 3px;
+  color: #111827;
+}
+
+.markdownPreview pre {
+  margin-top: 0;
+  margin-bottom: 16px;
+  padding: 16px;
+  overflow: auto;
+  font-size: 85%;
+  line-height: 1.45;
+  background-color: #f9fafb;
+  border-radius: 8px;
+  border: 1px solid #e5e7eb;
+}
+
+.markdownPreview pre code {
+  display: inline;
+  max-width: auto;
+  padding: 0;
+  margin: 0;
+  overflow: visible;
+  line-height: inherit;
+  word-wrap: normal;
+  background-color: transparent;
+  border: 0;
+}
+
+.markdownPreview blockquote {
+  margin-top: 0;
+  margin-bottom: 16px;
+  padding: 0 1em;
+  color: #6b7280;
+  border-left: 0.25em solid #e5e7eb;
+}
+
+.markdownPreview a {
+  color: #165dff;
+  text-decoration: none;
+}
+
+.markdownPreview a:hover {
+  text-decoration: underline;
+}
+
+.markdownPreview img {
+  max-width: 100%;
+  box-sizing: content-box;
+  background-color: #fff;
+  border-radius: 8px;
+  border: 1px solid #e5e7eb;
+}

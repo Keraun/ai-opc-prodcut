@@ -630,6 +630,7 @@ export function ArticleGenerator() {
         onClose={() => setArticleFormVisible(false)}
         initialContent={articleResult || ""}
         onSuccess={handleArticleFormSuccess}
+        contentType="markdown"
       />
 
       {fullscreenVisible && (
