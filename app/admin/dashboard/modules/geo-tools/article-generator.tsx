@@ -6,6 +6,7 @@ import ReactMarkdown from "react-markdown"
 import remarkGfm from "remark-gfm"
 import { IconCopy, IconFile, IconBulb, IconBook, IconRobot, IconLoading } from "@arco-design/web-react/icon"
 import { toast } from "sonner"
+import { ArticleForm } from "../../components/ArticleForm"
 
 import styles from "./article-generator.module.css"
 
@@ -23,6 +24,8 @@ interface GenerationProgress {
   completionTokens: number
   totalTokens: number
 }
+
+type Step = "company" | "strategy" | "article"
 
 export function ArticleGenerator() {
   const [companyName, setCompanyName] = useState("")
@@ -46,6 +49,8 @@ export function ArticleGenerator() {
     completionTokens: 0,
     totalTokens: 0,
   })
+  const [currentStep, setCurrentStep] = useState<Step>("company")
+  const [articleFormVisible, setArticleFormVisible] = useState(false)
   const abortControllerRef = useRef<AbortController | null>(null)
 
   useEffect(() => {
@@ -94,6 +99,7 @@ export function ArticleGenerator() {
       })
       setStrategyResult(prompt)
       setLoadingStrategy(false)
+      setCurrentStep("strategy")
       toast.success("提示词生成成功！现在可以生成文章了")
     }, 500)
   }
@@ -221,6 +227,7 @@ export function ArticleGenerator() {
         completionTokens,
         totalTokens,
       })
+      setCurrentStep("article")
       toast.success("文章生成成功！")
     } catch (error) {
       if ((error as Error).name === "AbortError") {
@@ -346,14 +353,39 @@ export function ArticleGenerator() {
 
   const statusDisplay = getStatusDisplay()
 
+  const handleSaveArticle = () => {
+    setArticleFormVisible(true)
+  }
+
+  const handleArticleFormSuccess = () => {
+    setArticleFormVisible(false)
+    toast.success("资讯保存成功")
+  }
+
   return (
     <div className={styles.container}>
-      <Collapse defaultActiveKey={["company"]} bordered={false}>
+      <Collapse activeKey={[currentStep]} bordered={false} onChange={(keys) => {
+        if (keys.length > 0) {
+          setCurrentStep(keys[0] as Step)
+        }
+      }}>
         <CollapseItem
           header={
             <div className={styles.collapseHeader}>
               <IconBulb className={styles.collapseIcon} />
               <span>目标企业信息</span>
+              <Button
+                type="primary"
+                size="small"
+                loading={loadingStrategy}
+                onClick={(e) => {
+                  e.stopPropagation()
+                  handleGenerateStrategy()
+                }}
+                className={styles.collapseButton}
+              >
+                生成提示词
+              </Button>
             </div>
           }
           name="company"
@@ -397,126 +429,61 @@ export function ArticleGenerator() {
             </div>
           </div>
         </CollapseItem>
-      </Collapse>
 
-      <div className={styles.actionsSection}>
-        <Card className={styles.actionCard}>
-          <div className={styles.actionContent}>
-            <div className={styles.actionInfo}>
-              <IconBulb className={styles.actionIcon} />
-              <div>
-                <div className={styles.actionTitle}>生成提示词</div>
-                <div className={styles.actionDesc}>根据企业信息生成完整的提示词</div>
-              </div>
-            </div>
-            <Button type="primary" loading={loadingStrategy} onClick={handleGenerateStrategy}>
-              生成提示词
-            </Button>
-          </div>
-        </Card>
-
-        <Card className={styles.actionCard}>
-          <div className={styles.actionContent}>
-            <div className={styles.actionInfo}>
-              <IconRobot className={styles.actionIcon} />
-              <div>
-                <div className={styles.actionTitle}>文章生成</div>
-                <div className={styles.actionDesc}>
-                  {!strategyResult ? "请先生成提示词" : "使用大模型生成高捕获率文章"}
-                </div>
-              </div>
-            </div>
-            <Button
-              type="primary"
-              loading={generation.status === "connecting" || generation.status === "generating"}
-              disabled={!strategyResult || generation.status === "connecting" || generation.status === "generating"}
-              onClick={handleGenerateArticle}
-            >
-              {generation.status === "connecting" || generation.status === "generating"
-                ? "生成中..."
-                : "生成文章"}
-            </Button>
-          </div>
-
-          {(generation.status === "connecting" ||
-            generation.status === "generating" ||
-            generation.status === "completed" ||
-            generation.status === "error") && (
-            <div className={styles.progressSection}>
-              <div className={styles.progressHeader}>
-                <Space>
-                  <Tag color={statusDisplay.color}>{statusDisplay.text}</Tag>
-                  <span className={styles.progressMessage}>{generation.message || generation.error}</span>
-                </Space>
-                {(generation.status === "connecting" || generation.status === "generating") && (
-                  <Button type="text" size="small" onClick={handleCancelGeneration}>
-                    取消
-                  </Button>
-                )}
-              </div>
-              <Progress
-                percent={generation.progress}
-                status={generation.status === "error" ? "error" : generation.status === "completed" ? "success" : "normal"}
-                animation
-              />
-              <div className={styles.tokenInfo}>
-                <div className={styles.tokenItem}>
-                  <span className={styles.tokenLabel}>输入Token:</span>
-                  <span className={styles.tokenValue}>{generation.promptTokens}</span>
-                </div>
-                <div className={styles.tokenItem}>
-                  <span className={styles.tokenLabel}>输出Token:</span>
-                  <span className={styles.tokenValue}>{generation.completionTokens}</span>
-                </div>
-                <div className={styles.tokenItem}>
-                  <span className={styles.tokenLabel}>总计:</span>
-                  <span className={styles.tokenValue + " " + styles.tokenTotal}>{generation.totalTokens}</span>
-                </div>
-              </div>
-              {generation.status === "generating" && articleResult && (
-                <div className={styles.generatingHint}>
-                  <IconLoading className={styles.spinIcon} />
-                  <span>正在接收内容，已生成 {articleResult.length} 字符...</span>
-                </div>
-              )}
-            </div>
-          )}
-        </Card>
-      </div>
-
-      {strategyResult && (
-        <Collapse defaultActiveKey={["strategy"]} bordered={false} className={styles.resultCollapse}>
-          <CollapseItem
+        <CollapseItem
             header={
               <div className={styles.collapseHeader}>
                 <IconFile className={styles.collapseIcon} />
                 <span>提示词预览</span>
-                <Button
-                  type="outline"
-                  size="small"
-                  icon={<IconCopy />}
-                  onClick={(e) => {
-                    e.stopPropagation()
-                    handleCopyStrategy()
-                  }}
-                  className={styles.collapseButton}
-                >
-                  复制
-                </Button>
+                <div style={{ display: 'flex', gap: '8px' }}>
+                  <Button
+                    type="outline"
+                    size="small"
+                    icon={<IconCopy />}
+                    onClick={(e) => {
+                      e.stopPropagation()
+                      handleCopyStrategy()
+                    }}
+                    className={styles.collapseButton}
+                    disabled={!strategyResult}
+                  >
+                    复制
+                  </Button>
+                  <Button
+                    type="primary"
+                    size="small"
+                    loading={generation.status === "connecting" || generation.status === "generating"}
+                    disabled={!strategyResult || generation.status === "connecting" || generation.status === "generating"}
+                    onClick={(e) => {
+                      e.stopPropagation()
+                      handleGenerateArticle()
+                    }}
+                    className={styles.collapseButton}
+                  >
+                    生成文章
+                  </Button>
+                </div>
               </div>
             }
             name="strategy"
           >
             <div className={styles.markdownContent}>
-              <ReactMarkdown remarkPlugins={[remarkGfm]}>{strategyResult}</ReactMarkdown>
+              {strategyResult ? (
+                <Input.TextArea
+                  value={strategyResult}
+                  readOnly
+                  autoSize={{ minRows: 10, maxRows: 20 }}
+                  style={{ width: '100%' }}
+                />
+              ) : (
+                <div className={styles.emptyState}>
+                  请先生成提示词
+                </div>
+              )}
             </div>
           </CollapseItem>
-        </Collapse>
-      )}
 
-      {articleResult && (
-        <Collapse defaultActiveKey={["article"]} bordered={false} className={styles.resultCollapse}>
-          <CollapseItem
+        <CollapseItem
             header={
               <div className={styles.collapseHeader}>
                 <IconBook className={styles.collapseIcon} />
@@ -531,22 +498,21 @@ export function ArticleGenerator() {
                       handleCopyArticle()
                     }}
                     className={styles.collapseButton}
+                    disabled={!articleResult}
                   >
                     复制
                   </Button>
                   <Button
                     type="primary"
                     size="small"
+                    disabled={!articleResult}
                     onClick={(e) => {
                       e.stopPropagation()
-                      if (articleResult) {
-                        const encodedContent = encodeURIComponent(articleResult)
-                        window.location.href = `/admin/dashboard?page=articles&content=${encodedContent}`
-                      }
+                      handleSaveArticle()
                     }}
                     className={styles.collapseButton}
                   >
-                    新建资讯
+                    保存资讯
                   </Button>
                 </div>
               </div>
@@ -554,10 +520,61 @@ export function ArticleGenerator() {
             name="article"
           >
             <div className={styles.markdownContent}>
-              <ReactMarkdown remarkPlugins={[remarkGfm]}>{articleResult}</ReactMarkdown>
+              {articleResult ? (
+                <ReactMarkdown remarkPlugins={[remarkGfm]}>{articleResult}</ReactMarkdown>
+              ) : (
+                <div className={styles.emptyState}>
+                  请先生成文章
+                </div>
+              )}
             </div>
           </CollapseItem>
-        </Collapse>
+      </Collapse>
+
+      {(generation.status === "connecting" ||
+        generation.status === "generating" ||
+        generation.status === "completed" ||
+        generation.status === "error") && (
+        <Card className={styles.progressCard}>
+          <div className={styles.progressSection}>
+            <div className={styles.progressHeader}>
+              <Space>
+                <Tag color={statusDisplay.color}>{statusDisplay.text}</Tag>
+                <span className={styles.progressMessage}>{generation.message || generation.error}</span>
+              </Space>
+              {(generation.status === "connecting" || generation.status === "generating") && (
+                <Button type="text" size="small" onClick={handleCancelGeneration}>
+                  取消
+                </Button>
+              )}
+            </div>
+            <Progress
+              percent={generation.progress}
+              status={generation.status === "error" ? "error" : generation.status === "completed" ? "success" : "normal"}
+              animation
+            />
+            <div className={styles.tokenInfo}>
+              <div className={styles.tokenItem}>
+                <span className={styles.tokenLabel}>输入Token:</span>
+                <span className={styles.tokenValue}>{generation.promptTokens}</span>
+              </div>
+              <div className={styles.tokenItem}>
+                <span className={styles.tokenLabel}>输出Token:</span>
+                <span className={styles.tokenValue}>{generation.completionTokens}</span>
+              </div>
+              <div className={styles.tokenItem}>
+                <span className={styles.tokenLabel}>总计:</span>
+                <span className={styles.tokenValue + " " + styles.tokenTotal}>{generation.totalTokens}</span>
+              </div>
+            </div>
+            {generation.status === "generating" && articleResult && (
+              <div className={styles.generatingHint}>
+                <IconLoading className={styles.spinIcon} />
+                <span>正在接收内容，已生成 {articleResult.length} 字符...</span>
+              </div>
+            )}
+          </div>
+        </Card>
       )}
 
       {llmSelectVisible && (
@@ -599,6 +616,13 @@ export function ArticleGenerator() {
           </div>
         </div>
       )}
+
+      <ArticleForm
+        visible={articleFormVisible}
+        onClose={() => setArticleFormVisible(false)}
+        initialContent={articleResult || ""}
+        onSuccess={handleArticleFormSuccess}
+      />
     </div>
   )
 }

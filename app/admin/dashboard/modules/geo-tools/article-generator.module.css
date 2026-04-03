@@ -136,6 +136,16 @@
   line-height: 1.8;
 }
 
+.emptyState {
+  padding: 40px 20px;
+  text-align: center;
+  color: #86909c;
+  font-size: 14px;
+  background: #f7f8fa;
+  border-radius: 6px;
+  margin: 10px 0;
+}
+
 .markdownContent :global(h1) {
   font-size: 1.5rem;
   font-weight: 600;
@@ -231,6 +241,14 @@
   background: #f7f8fa;
   border-radius: 8px;
   border: 1px solid #e5e6eb;
+}
+
+.progressCard {
+  border-radius: 8px;
+}
+
+.progressCard :global(.arco-card-body) {
+  padding: 16px;
 }
 
 .progressHeader {

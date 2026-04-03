@@ -193,12 +193,9 @@ export function LLMModels() {
           </Button>
           <Popconfirm
             title="确定删除这个模型吗？"
-            onConfirm={(e) => {
-              e?.stopPropagation()
-              handleDeleteModel(record.id)
-            }}
+            onConfirm={() => handleDeleteModel(record.id)}
           >
-            <Button size="small" icon={<IconDelete />} status="danger">
+            <Button size="small" icon={<IconDelete />} status="danger" onClick={(e) => e.stopPropagation()}>
               删除
             </Button>
           </Popconfirm>
