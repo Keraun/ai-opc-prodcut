@@ -5,4 +5,5 @@ export { ThemeConfigRepository, type ThemeConfig } from './ThemeConfigRepository
 export { PageRepository, type Page } from './PageRepository'
 export { ModuleRegistryRepository, type ModuleRegistry } from './ModuleRegistryRepository'
 export { PageModuleRepository, type PageModule } from './PageModuleRepository'
-export { SystemLogRepository, type SystemLog } from './SystemLogRepository'
+export { CompanyProfileRepository, type CompanyProfile } from './CompanyProfileRepository'
+export { PromptRepository, type Prompt } from './PromptRepository'

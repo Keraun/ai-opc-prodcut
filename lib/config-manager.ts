@@ -43,6 +43,7 @@ function getPathMapping(configType: string): PathMapping {
     'token': { dir: 'system', prefix: 'system-token' },
 
     'verification-codes': { dir: 'system', prefix: 'system-verification-codes' },
+    'llm-cookies': { dir: 'system', prefix: 'system-llm-cookies' },
     'page-list': { dir: '', prefix: 'page-list' },
   }
   
@@ -99,6 +100,7 @@ export function readConfig(configType: string): any {
       return result
     }
     
+
 
     
     if (configType === 'site' || configType === 'site-seo') {
@@ -329,6 +331,7 @@ export function writeConfig(configType: string, data: any): void {
       return
     }
     
+
 
     
     if (configType === 'site' || configType === 'site-seo') {

@@ -1,0 +1,23 @@
+[
+  {
+    "id": 1,
+    "name": "DeepSeek-V3.2",
+    "value": "deepseek-ai/DeepSeek-V3.2",
+    "is_default": true,
+    "updated_at": "2026-04-03T06:15:50.342Z"
+  },
+  {
+    "id": 2,
+    "name": "DeepSeek-R1",
+    "value": "deepseek-ai/DeepSeek-R1",
+    "is_default": false,
+    "updated_at": "2026-04-03T06:15:50.341Z"
+  },
+  {
+    "id": 3,
+    "name": "Kimi-K2-Thinking",
+    "value": "moonshotai/Kimi-K2-Thinking",
+    "is_default": false,
+    "updated_at": "2026-04-03T06:15:50.341Z"
+  }
+]

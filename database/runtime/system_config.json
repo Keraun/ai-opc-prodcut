@@ -29,9 +29,14 @@
   },
   {
     "config_key": "notification",
-    "config_value": "{\"pushplus\":{\"enabled\":true,\"token\":\"20169976d69346eb8c82162c74e0df10\",\"wechatEnabled\":true,\"webHookEnabled\":false,\"voiceEnabled\":false},\"email\":{\"enabled\":true},\"sms\":{\"enabled\":true},\"wxClawBot\":{},\"notificationTemplate\":\"【新留言通知】\\n\\n用户信息：\\n姓名：{name}\\n电话：{phone}\\n微信：{wechat}\\n邮箱：{email}\\n偏好联系方式：{preference}\\n\\n留言内容：\\n{message}\\n\\n大模型信息：\\n使用模型：{llmModel}\\n\\n设备信息：\\nIP地址：{ip}\\n地区：{region}\\n操作系统：{os} {osVersion}\\n浏览器：{browser} {browserVersion}\\n设备机型：{deviceModel}\\n\\n提交时间：{created_at}\\n\\n查看详情：{detail_link}\\n\\n请及时处理！\"}",
+    "config_value": "{\"pushplus\":{\"enabled\":false,\"token\":\"\",\"wechatEnabled\":true,\"webHookEnabled\":false,\"voiceEnabled\":false},\"email\":{\"enabled\":true},\"sms\":{\"enabled\":true},\"wxClawBot\":{},\"notificationTemplate\":\"【新留言通知】\\n\\n用户信息：\\n姓名：{name}\\n电话：{phone}\\n微信：{wechat}\\n邮箱：{email}\\n偏好联系方式：{preference}\\n\\n留言内容：\\n{message}\\n\\n大模型信息：\\n使用模型：{llmModel}\\n\\n设备信息：\\nIP地址：{ip}\\n地区：{region}\\n操作系统：{os} {osVersion}\\n浏览器：{browser} {browserVersion}\\n设备机型：{deviceModel}\\n\\n提交时间：{created_at}\\n\\n查看详情：{detail_link}\\n\\n请及时处理！\"}",
     "created_at": "2026-03-31T03:50:40.707Z",
-    "updated_at": "2026-03-31T12:08:05.794Z",
+    "updated_at": "2026-04-03T13:04:16.462Z",
     "id": 8
+  },
+  {
+    "config_key": "geo_config",
+    "config_value": "{\"apiKey\":\"\",\"baseUrl\":\"https://api.siliconflow.cn/v1\"}",
+    "id": 9
   }
 ]

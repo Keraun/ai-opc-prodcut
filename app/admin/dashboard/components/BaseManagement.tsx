@@ -636,6 +636,14 @@ function ItemForm({
       if (mode === 'new' && field.name === 'author' && !value && siteConfig?.creator?.name) {
         value = siteConfig.creator.name
       }
+      // 如果是新建模式且字段是content，从URL参数中获取预填数据
+      if (mode === 'new' && field.name === 'content' && !value) {
+        const urlParams = new URLSearchParams(window.location.search)
+        const contentParam = urlParams.get('content')
+        if (contentParam) {
+          value = contentParam
+        }
+      }
       setNestedValue(initial, field.name, value ?? (field.type === 'tags' ? [] : ''))
     })
     return { ...initial, ...initialData }
@@ -899,6 +907,42 @@ export function BaseManagement({ config }: BaseManagementProps) {
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false)
   const [itemToDelete, setItemToDelete] = useState<number | null>(null)
   const { configs } = useConfig()
+  
+  // 从URL参数中获取预填数据
+  useEffect(() => {
+    const urlParams = new URLSearchParams(window.location.search)
+    const content = urlParams.get('content')
+    if (content) {
+      // 如果URL中有content参数，自动进入新建模式并预填数据
+      setViewMode('new')
+    }
+  }, [])
+
+  // 从URL路径中获取编辑ID
+  useEffect(() => {
+    // 检查当前URL路径是否包含编辑路由
+    const path = window.location.pathname
+    const editMatch = path.match(/\/admin\/articles\/edit\/(\d+)/)
+    if (editMatch && editMatch[1]) {
+      const articleId = parseInt(editMatch[1], 10)
+      // 查找对应的文章数据
+      const article = items.find((item: any) => item.id === articleId)
+      if (article) {
+        setCurrentItem(article)
+        setViewMode('edit')
+      } else {
+        // 如果找不到文章，尝试从API获取
+        fetch(`${config.apiEndpoint}?id=${articleId}`)
+          .then(response => response.json())
+          .then(result => {
+            if (result.success && result.data) {
+              setCurrentItem(result.data)
+              setViewMode('edit')
+            }
+          })
+      }
+    }
+  }, [items, config.apiEndpoint])
 
   useEffect(() => {
     fetchItems()

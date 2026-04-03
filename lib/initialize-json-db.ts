@@ -5,13 +5,10 @@ import path from 'path'
 export function initializeJsonDb() {
   console.log('Initializing JSON database...')
   
-  // 初始化主题数据
   initializeThemeData()
   
-  // 初始化系统配置
   initializeSystemConfig()
   
-  // 初始化模块注册表
   initializeModuleRegistry()
   
   console.log('JSON database initialized successfully!')
@@ -77,7 +74,6 @@ function initializeModuleRegistry() {
   if (modules.length === 0) {
     console.log('Initializing module registry...')
     
-    // 创建默认模块
     const defaultModules = [
       {
         module_id: 'section-hero',

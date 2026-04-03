@@ -18,6 +18,7 @@ interface Article {
   status: string
   created_at: string
   updated_at: string
+  contentType: 'html' | 'markdown'
   seo?: {
     title?: string
     description?: string
@@ -57,9 +58,11 @@ export async function GET(request: NextRequest) {
     articles = articles.filter((article: Article) => article.status === 'published')
   }
   
-  articles = articles.sort((a: Article, b: Article) => 
-    new Date(b.date).getTime() - new Date(a.date).getTime()
-  )
+  articles = articles.sort((a: Article, b: Article) => {
+    const aTime = a.updated_at ? new Date(a.updated_at).getTime() : 0
+    const bTime = b.updated_at ? new Date(b.updated_at).getTime() : 0
+    return bTime - aTime
+  })
   
   return successResponse(articles)
 }
@@ -87,6 +90,7 @@ export async function POST(request: NextRequest) {
       mainImage: data.mainImage || data.image || '',
       viewCount: 0,
       status: data.status || 'published',
+      contentType: data.contentType || 'html',
       seo: data.seo || {},
       created_at: new Date().toISOString(),
       updated_at: new Date().toISOString()
@@ -128,6 +132,7 @@ export async function PUT(request: NextRequest) {
       image: data.image || existing.image,
       mainImage: data.mainImage || data.image || existing.mainImage || existing.image,
       status: data.status || existing.status,
+      contentType: data.contentType || existing.contentType || 'html',
       seo: data.seo !== undefined ? data.seo : existing.seo,
       updated_at: new Date().toISOString()
     }

@@ -18,7 +18,8 @@ import {
   ArticleManager,
   ProductManager,
   SiteConfigManager,
-  MessageManager
+  MessageManager,
+  GeoTools
 } from "./modules"
 import { ImageManagement } from "./components"
 import styles from "./dashboard.module.css"
@@ -111,7 +112,8 @@ export default function AdminDashboardPage() {
         return <MessageManager />
       case 'images':
         return <ImageManagement />
-
+      case 'geo-tools':
+        return <GeoTools />
       case 'theme':
         return <ThemeManager />
       case 'accounts':

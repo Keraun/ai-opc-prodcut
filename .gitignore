@@ -14,3 +14,9 @@ next.user-config.*
 node_modules
 .next/
 .vercel
+
+# Playwright
+ms-playwright/
+test-results/
+playwright-report/
+playwright/.cache/
