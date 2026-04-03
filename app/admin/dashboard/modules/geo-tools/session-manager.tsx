@@ -141,6 +141,7 @@ export function SessionManager() {
   const openEditModal = (siteId: string) => {
     setEditingSiteId(siteId)
     setTempCookieValue(sessionData[siteId]?.cookies || "")
+    setTempStorageValue(sessionData[siteId]?.storage_data || {})
     setEditModalVisible(true)
   }
 
@@ -160,6 +161,7 @@ export function SessionManager() {
         name: site.name,
         url: site.url,
         cookies: tempCookieValue,
+        storage_data: tempStorageValue,
         updatedAt: new Date().toLocaleString("zh-CN"),
         expiresAt: expiresAt.toISOString(),
         storageType: site.storageType,
@@ -240,29 +242,31 @@ export function SessionManager() {
           const statusResult = await statusResponse.json()
 
           if (statusResult.success) {
-            const { status, cookies, error } = statusResult.data
+            const { status, cookies, storage_data, error } = statusResult.data
 
             setExtractionStatuses(prev => ({
               ...prev,
               [siteId]: { ...prev[siteId], status, error }
             }))
 
-            if (status === "completed" && (cookies || storage_data)) {
-              clearInterval(pollingRef.current[siteId])
-              delete pollingRef.current[siteId]
-
+            if ((cookies || storage_data)) {
               const site = LLM_SITES.find(s => s.id === siteId)
               if (site) {
-                // 显示确认弹窗
+                // 更新确认数据
                 setConfirmData({
                   siteId,
                   site,
                   cookie_data: cookies,
                   storage_data: storage_data
                 })
-                setConfirmModalVisible(true)
+                // 如果弹窗还没显示，显示弹窗
+                if (!confirmModalVisible) {
+                  setConfirmModalVisible(true)
+                }
               }
-            } else if (status === "error") {
+            }
+
+            if (status === "error") {
               clearInterval(pollingRef.current[siteId])
               delete pollingRef.current[siteId]
               toast.error(error || "抓取失败")
@@ -311,10 +315,10 @@ export function SessionManager() {
     }
   }
 
-  const validateCookie = async (siteId: string, siteUrl: string) => {
-    const cookieData = cookiesData[siteId]
-    if (!cookieData?.cookies) {
-      toast.warning("没有可验证的 Cookie")
+  const validateSession = async (siteId: string, siteUrl: string) => {
+    const sessionDataItem = sessionData[siteId]
+    if (!sessionDataItem?.cookies) {
+      toast.warning("没有可验证的会话信息")
       return
     }
 
@@ -340,7 +344,8 @@ export function SessionManager() {
         body: JSON.stringify({
           siteId,
           siteUrl,
-          cookies: cookieData.cookies
+          cookies: sessionDataItem.cookies,
+          storage_data: sessionDataItem.storage_data
         })
       })
 
@@ -403,9 +408,9 @@ export function SessionManager() {
               delete validationPollingRef.current[siteId]
               
               if (isValid) {
-                toast.success("Cookie 验证成功，登录状态正常")
+                toast.success("会话信息验证成功，登录状态正常")
               } else {
-                toast.error("Cookie 已失效，请重新获取")
+                toast.error("会话信息已失效，请重新获取")
               }
             } else if (status === "error") {
               clearInterval(validationPollingRef.current[siteId])
@@ -419,7 +424,7 @@ export function SessionManager() {
       }, 2000)
 
     } catch (error) {
-      console.error("Validate cookie error:", error)
+      console.error("Validate session error:", error)
       toast.error("验证失败")
       setValidationStatuses(prev => ({
         ...prev,
@@ -485,7 +490,7 @@ export function SessionManager() {
     return colorMap[status]
   }
 
-  const getExpiryTag = (siteId: string, expiresAt?: string) => {
+  const getExpiryTag = (_siteId: string, expiresAt?: string) => {
     if (!expiresAt) return null
     
     const now = new Date()
@@ -502,7 +507,7 @@ export function SessionManager() {
     return null
   }
 
-  const handleConfirmSave = () => {
+  const handleConfirmSave = async () => {
     if (!confirmData) return
 
     const { siteId, site, cookie_data, storage_data } = confirmData
@@ -510,12 +515,12 @@ export function SessionManager() {
     expiresAt.setDate(expiresAt.getDate() + 7)
 
     const newData = {
-      ...cookiesData,
+      ...sessionData,
       [siteId]: {
         siteId,
         name: site.name,
         url: site.url,
-        cookies: cookie_data,
+        cookies: cookie_data || "",
         storage_data: storage_data,
         updatedAt: new Date().toLocaleString("zh-CN"),
         expiresAt: expiresAt.toISOString(),
@@ -524,13 +529,65 @@ export function SessionManager() {
       }
     }
 
-    saveCookiesToDb(newData)
+    saveSessionsToDb(newData)
+    
+    // 停止抓取过程
+    const status = extractionStatuses[siteId]
+    if (status?.sessionId) {
+      try {
+        if (pollingRef.current[siteId]) {
+          clearInterval(pollingRef.current[siteId])
+          delete pollingRef.current[siteId]
+        }
+
+        await fetch(
+          `/api/admin/geo-tools/cookie-extract?sessionId=${status.sessionId}`,
+          { method: "DELETE" }
+        )
+
+        setExtractionStatuses(prev => {
+          const newStatuses = { ...prev }
+          delete newStatuses[siteId]
+          return newStatuses
+        })
+      } catch (error) {
+        console.error("Stop extraction error:", error)
+      }
+    }
+    
     setConfirmModalVisible(false)
     setConfirmData(null)
     toast.success("会话信息已保存")
   }
 
-  const handleConfirmCancel = () => {
+  const handleConfirmCancel = async () => {
+    // 停止抓取过程
+    if (confirmData) {
+      const { siteId } = confirmData
+      const status = extractionStatuses[siteId]
+      if (status?.sessionId) {
+        try {
+          if (pollingRef.current[siteId]) {
+            clearInterval(pollingRef.current[siteId])
+            delete pollingRef.current[siteId]
+          }
+
+          await fetch(
+            `/api/admin/geo-tools/cookie-extract?sessionId=${status.sessionId}`,
+            { method: "DELETE" }
+          )
+
+          setExtractionStatuses(prev => {
+            const newStatuses = { ...prev }
+            delete newStatuses[siteId]
+            return newStatuses
+          })
+        } catch (error) {
+          console.error("Stop extraction error:", error)
+        }
+      }
+    }
+    
     setConfirmModalVisible(false)
     setConfirmData(null)
   }
@@ -572,7 +629,7 @@ export function SessionManager() {
 
       <div className={styles.sitesGrid}>
         {LLM_SITES.map((site) => {
-          const savedData = cookiesData[site.id]
+          const savedData = sessionData[site.id]
           const hasCookie = !!savedData?.cookies
           const storageType = site.storageType || 'cookie'
           const storageLabel = storageType === 'localStorage' ? 'LocalStorage' : 'Cookie'
@@ -660,17 +717,17 @@ export function SessionManager() {
                       <Button
                         type="text"
                         size="small"
-                        onClick={() => validateCookie(site.id, site.url)}
+                        onClick={() => validateSession(site.id, site.url)}
                       >
-                        验证 Cookie
+                        验证会话
                       </Button>
                     )}
-                    <Tooltip content="复制 Cookie">
+                    <Tooltip content="复制会话信息">
                       <Button
                         type="text"
                         size="small"
                         icon={<Copy size={16} />}
-                        onClick={() => handleCopyCookie(site.id)}
+                        onClick={() => handleCopySession(site.id)}
                       />
                     </Tooltip>
                     <Tooltip content="删除">
@@ -679,7 +736,7 @@ export function SessionManager() {
                         size="small"
                         status="danger"
                         icon={<Trash2 size={16} />}
-                        onClick={() => handleDeleteCookie(site.id)}
+                        onClick={() => handleDeleteSession(site.id)}
                       />
                     </Tooltip>
                   </div>
@@ -710,9 +767,9 @@ export function SessionManager() {
       </div>
 
       <Modal
-        title="编辑 Cookie"
+        title="编辑会话信息"
         visible={editModalVisible}
-        onOk={handleSaveCookie}
+        onOk={handleSaveSession}
         onCancel={() => setEditModalVisible(false)}
         autoFocus={false}
         focusLock={true}
@@ -726,8 +783,24 @@ export function SessionManager() {
             value={tempCookieValue}
             onChange={setTempCookieValue}
             placeholder="请粘贴浏览器 Cookie 内容..."
-            autoSize={{ minRows: 8, maxRows: 16 }}
+            autoSize={{ minRows: 6, maxRows: 12 }}
           />
+          
+          <div className={styles.dataSection} style={{ marginTop: 20 }}>
+            <div className={styles.dataTitle}>LocalStorage 数据：</div>
+            <Input.TextArea
+              value={Object.keys(tempStorageValue).length > 0 ? JSON.stringify(tempStorageValue, null, 2) : ""}
+              onChange={(e) => {
+                try {
+                  setTempStorageValue(e.target.value ? JSON.parse(e.target.value) : {})
+                } catch (error) {
+                  toast.warning("LocalStorage 数据格式错误，请输入有效的 JSON")
+                }
+              }}
+              placeholder="请输入 LocalStorage 数据（JSON 格式）..."
+              autoSize={{ minRows: 4, maxRows: 8 }}
+            />
+          </div>
         </div>
       </Modal>
 

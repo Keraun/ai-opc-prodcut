@@ -55,9 +55,12 @@ export async function POST(request: NextRequest) {
     }
 
     const body = await request.json()
-    const { siteId, siteUrl, cookie_data, storage_data } = body
+    const { siteId, siteUrl, cookie_data, storage_data, cookies } = body
+    
+    // 兼容前端传递的cookies参数
+    const cookieData = cookie_data || cookies
 
-    if (!siteId || !siteUrl || (!cookie_data && !storage_data)) {
+    if (!siteId || !siteUrl || (!cookieData && !storage_data)) {
       return errorResponse("缺少必要参数")
     }
 
@@ -74,7 +77,7 @@ export async function POST(request: NextRequest) {
       createdAt: new Date()
     })
 
-    validateWithBrowser(sessionId, siteUrl, cookie_data, storage_data).catch(console.error)
+    validateWithBrowser(sessionId, siteUrl, cookieData, storage_data).catch(console.error)
 
     return successResponse({
       sessionId,

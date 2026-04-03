@@ -3,30 +3,35 @@
     "site_id": "deepseek",
     "name": "DeepSeek",
     "url": "https://chat.deepseek.com/",
-    "cookie_data": "HWWAFSESID=a036b13f653bedc1fd91; HWWAFSESTIME=1775182447936; smidV2=202604031014123c46ace09069b655e360b4c96f468adf00b89883efcb15f20; .thumbcache_6b2e5483f9d858d7c661c5e276b6a6ae=j4EzEXxcGk1jnVJt6SVPDwfA1PmWeDT76n9CLAGSqeuPQqcmP0NWcYO3J+uDHCqeenAwc63YhXbtByOLjKCI4g%3D%3D; ds_session_id=81861cbcae024d7ea1b0e5c41f4c7c20",
-    "storage_data": {
-      "userToken": "{\"value\":\"vJwQkD1IaslHR7JUzs6dje6w1kJhYDaAC6FBHIbbPjgHy1N/yytZQeRYIb6oDEuJ\",\"__version\":\"0\"}"
-    },
-    "storage_type": "both",
-    "storage_key": [
-      "userToken"
-    ],
-    "updated_at": "2026-04-03T02:14:19.945Z",
-    "expires_at": "2026-04-10T01:34:54.021Z",
-    "created_at": "2026-04-03T01:34:54.033Z",
+    "cookies": "HWWAFSESID=f1540d5d1755b863160; HWWAFSESTIME=1775184645126; smidV2=20260403105048dfba8c5c3f5883cd9beededa6b714059007da87db49743e60; .thumbcache_6b2e5483f9d858d7c661c5e276b6a6ae=IEwEgooW9o9RrbbUdwHu+K3uRRh7txVQMSs0X9FSNuNyCi/p2WXJT/KyP4hjh7vg2Nw0JQ13SrpACjdLHNao8A%3D%3D; ds_session_id=0d5dc5d293ba4f02aa03f3c9156f494f",
+    "storage_type": "localStorage",
+    "storage_key": "userToken",
+    "updated_at": "2026/4/3 10:53:38",
+    "expires_at": "2026-04-10T02:51:13.248Z",
+    "created_at": "2026-04-03T02:53:38.090Z",
     "id": 1
   },
   {
     "site_id": "doubao",
     "name": "豆包",
     "url": "https://www.doubao.com/",
-    "cookie_data": "hook_slardar_session_id=20260403085935EE6BFF78EF6CA9119252; ttwid=1%7CFknkEmJQoqGnEFHt8nFAZhuuw8XdNV0VrYyXj7jc-fI%7C1775177976%7C228934e7903aef1e37eb0341f1529fa49c4b4d23609adea444d687b303c053c2; i18next=zh; flow_ssr_sidebar_expand=1; flow_cur_user_sec_id=; biz_trace_id=372dc150; passport_csrf_token=9849d655aead9524778508a4b139828a; passport_csrf_token_default=9849d655aead9524778508a4b139828a; odin_tt=4c27cbeb0a0b0248a34d775621a624e48de8de3d4cd365b0baf1d7aad0ca2ac2e44c4aeab24dbc7f71b7d9a3a2640c08bf8b120c8233ac2fccb5575cc0dfba3c5e5a54393b2b37348da0d178484e9376; s_v_web_id=verify_mni74ugj_q2BhtSXI_3eNq_4CAB_BEtH_ZSrXLehFKLXx",
-    "storage_data": {},
     "storage_type": "cookie",
     "storage_key": [],
-    "updated_at": "2026/4/3 09:34:54",
+    "updated_at": "2026/4/3 10:53:38",
     "expires_at": "2026-04-10T00:59:42.899Z",
-    "created_at": "2026-04-03T01:34:54.034Z",
+    "created_at": "2026-04-03T02:53:38.090Z",
     "id": 2
+  },
+  {
+    "site_id": "kimi",
+    "name": "Kimi",
+    "url": "https://kimi.moonshot.cn/",
+    "cookies": "tester_20001731=p%2Bvw3FSGJ0omu8BQ0n5sbVHLbx98w56moboXHG8LmJs%3D%28c8322c2e65e0422d7a561d178ab3ba6bef499349%29; HMACCOUNT_BFESS=3AB76BF3E534A36A; Hm_lvt_358cae4815e85d48f7e8ab7f3680a74b=1775184793; Hm_lpvt_358cae4815e85d48f7e8ab7f3680a74b=1775184793; HMACCOUNT=3AB76BF3E534A36A; _ga=GA1.1.179032145.1775184793; _gcl_au=1.1.1746882348.1775184793; _ga_YXD8W70SZP=GS2.1.s1775184793$o1$g0$t1775184793$j60$l0$h0; theme=light; test_cookie=CheckForPermission; __snaker__id=1V9TXe6COY356jF3; gdxidpyhxdE=HeM%2BtAGVbDvJCkz%5CQ9JI575xKnC44ItEU%2BOaDm7SZVeCLZQe7YHZooXNXHSnMwj1z%5CnMNMUbDqp31MUA6AGogXLfsNCO0yr3bS22KHneLHvACs8UPtGSeZtf5evkgKUHSyK2YxWG8epOrVB%2Fy7mi2YndJAgoo6p%2BXicDcoMDdQ6qKflz%3A1775185698213; kimi-auth=eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJ1c2VyLWNlbnRlciIsImV4cCI6MTc3Nzc3NjgwOCwiaWF0IjoxNzc1MTg0ODA4LCJqdGkiOiJkNzdpbmEwdjAyNTVlcnFmc2pzZyIsInR5cCI6ImFjY2VzcyIsImFwcF9pZCI6ImtpbWkiLCJzdWIiOiJjbzBxMXNlY3A3ZmN0Z3AxODJwMCIsInNwYWNlX2lkIjoiY28wcTFzZWNwN2ZjdGdwMTgybzAiLCJhYnN0cmFjdF91c2VyX2lkIjoiY28wcTFzZWNwN2ZjdGdwMTgybmciLCJkZXZpY2VfaWQiOiI3NjI0MzYwNjMwMjkxNTc5NDAyIiwicmVnaW9uIjoiY24iLCJtZW1iZXJzaGlwIjp7ImxldmVsIjoxMH19.i1tITsKU9W0pjtOc_B-ZXyGBbwQUwdlEtqw5w7yAsxjj_JunSx43Sdsb4jYT9rZ9xIj1nXVT9lR4Nu4CAj3wzQ",
+    "storage_type": "cookie",
+    "storage_key": null,
+    "updated_at": "2026/4/3 10:53:38",
+    "expires_at": "2026-04-10T02:53:38.068Z",
+    "created_at": "2026-04-03T02:53:38.090Z",
+    "id": 3
   }
 ]

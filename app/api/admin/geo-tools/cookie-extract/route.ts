@@ -112,7 +112,7 @@ export async function GET(request: NextRequest) {
 
     return successResponse({
       status: session.status,
-      cookie_data: session.cookie_data,
+      cookies: session.cookie_data,
       storage_data: session.storage_data,
       error: session.error
     })
@@ -181,43 +181,7 @@ async function extractCookies(sessionId: string, siteUrl: string) {
 
     session.status = "waiting"
 
-    // 监听页面导航事件，当用户登录成功并跳转后，再抓取数据
-    let navigationCompleted = false
-    
-    page.on('framenavigated', async (frame) => {
-      if (frame === page.mainFrame()) {
-        const currentUrl = page.url()
-        console.log(`[Cookie Extract] Page navigated to: ${currentUrl}`)
-        
-        // 对于DeepSeek，当页面导航到根域名时，检查登录状态
-        if (currentUrl === 'https://chat.deepseek.com/') {
-          console.log(`[Cookie Extract] DeepSeek redirected to root domain, checking login status...`)
-          // 等待页面完全加载
-          await page.waitForLoadState('networkidle', { timeout: 10000 }).catch(() => {
-            console.log(`[Cookie Extract] Network idle timeout, proceeding with login check`)
-          })
-          // 检查登录状态
-          const isLoggedIn = await checkLoginStatus()
-          if (isLoggedIn) {
-            navigationCompleted = true
-            console.log(`[Cookie Extract] Login status checked after redirect to root domain`)
-          }
-        } else {
-          // 其他情况也检查登录状态
-          const isLoggedIn = await checkLoginStatus()
-          if (isLoggedIn) {
-            navigationCompleted = true
-          }
-        }
-      }
-    })
-
-    // 导航到目标网站
-    await page.goto(siteUrl, { waitUntil: "domcontentloaded", timeout: 60000 })
-
-    // 初始检查
-    await page.waitForTimeout(5000)
-    
+    // 定义检查登录状态的函数
     const checkLoginStatus = async () => {
       try {
         const site = LLM_SITES.find(s => s.id === session.siteId)
@@ -294,40 +258,6 @@ async function extractCookies(sessionId: string, siteUrl: string) {
             session.status = "completed"
             console.log(`[Cookie Extract] Extraction completed for ${site.name}`)
             
-            // 保存数据到数据库
-            try {
-              const db = getJsonDb()
-              const existingCookies = db.find('llm_cookies', { site_id: site.id })
-              
-              if (existingCookies.length > 0) {
-                // 更新现有数据
-                const existingCookie = existingCookies[0]
-                db.update('llm_cookies', existingCookie.id, {
-                  cookie_data: session.cookie_data,
-                  storage_data: session.storage_data,
-                  updated_at: new Date().toISOString()
-                })
-                console.log(`[Cookie Extract] Updated existing cookie data for ${site.name} in database`)
-              } else {
-                // 插入新数据
-                db.insert('llm_cookies', {
-                  site_id: site.id,
-                  name: site.name,
-                  url: site.url,
-                  cookie_data: session.cookie_data,
-                  storage_data: session.storage_data,
-                  storage_type: site.storageType,
-                  storage_key: site.storageKey,
-                  created_at: new Date().toISOString(),
-                  updated_at: new Date().toISOString(),
-                  expires_at: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString()
-                })
-                console.log(`[Cookie Extract] Inserted new cookie data for ${site.name} into database`)
-              }
-            } catch (error) {
-              console.error(`[Cookie Extract] Error saving data to database:`, error)
-            }
-            
             return true
           } else {
             console.log(`[Cookie Extract] No valid data found for ${site.name}`)
@@ -341,6 +271,45 @@ async function extractCookies(sessionId: string, siteUrl: string) {
         return false
       }
     }
+
+    // 监听页面导航事件，当用户登录成功并跳转后，实时抓取数据
+    let navigationCompleted = false
+    
+    page.on('framenavigated', async (frame) => {
+      if (frame === page.mainFrame()) {
+        const currentUrl = page.url()
+        console.log(`[Cookie Extract] Page navigated to: ${currentUrl}`)
+        
+        // 对于DeepSeek，当页面导航到根域名时，实时检查登录状态
+        if (currentUrl === 'https://chat.deepseek.com/') {
+          console.log(`[Cookie Extract] DeepSeek redirected to root domain, checking login status...`)
+          // 等待页面基本加载完成
+          await page.waitForLoadState('domcontentloaded', { timeout: 5000 }).catch(() => {
+            console.log(`[Cookie Extract] DOM content loaded timeout, proceeding with login check`)
+          })
+          // 实时检查登录状态
+          await checkLoginStatus()
+        }
+      }
+    })
+    
+    // 监听页面加载事件，实时更新数据
+    page.on('load', async () => {
+      console.log(`[Cookie Extract] Page loaded, checking login status...`)
+      await checkLoginStatus()
+    })
+    
+    // 监听页面状态变化，实时更新数据
+    page.on('domcontentloaded', async () => {
+      console.log(`[Cookie Extract] DOM content loaded, checking login status...`)
+      await checkLoginStatus()
+    })
+
+    // 导航到目标网站
+    await page.goto(siteUrl, { waitUntil: "domcontentloaded", timeout: 60000 })
+
+    // 初始检查
+    await page.waitForTimeout(5000)
 
     // 初始检查登录状态
     await checkLoginStatus()
@@ -358,15 +327,15 @@ async function extractCookies(sessionId: string, siteUrl: string) {
         return
       }
 
-      if (!navigationCompleted) {
-        const isLoggedIn = await checkLoginStatus()
-        if (!isLoggedIn) {
-          elapsedTime += checkInterval
-          setTimeout(checkLoop, checkInterval)
-        }
-      }
+      // 实时检查登录状态
+      await checkLoginStatus()
+      
+      // 继续检查，直到超时
+      elapsedTime += checkInterval
+      setTimeout(checkLoop, checkInterval)
     }
 
+    // 启动检查循环
     await checkLoop()
 
   } catch (error) {
