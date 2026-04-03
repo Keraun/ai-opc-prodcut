@@ -232,13 +232,15 @@
             "baiduAnalytics": {
               "type": "string",
               "title": "百度统计ID",
-              "description": "百度统计的站点ID，格式为：hm.xxxxxx",
+              "description": "百度统计的站点ID。获取方式：1. 访问 https://tongji.baidu.com 并登录；2. 点击「管理」→「新增网站」；3. 添加网站后在「获取代码」中找到 hm.js? 后面的字符串，格式为：hm.xxxxxx",
+              "descriptionRow": true,
               "default": ""
             },
             "googleAnalytics": {
               "type": "string",
               "title": "谷歌统计ID",
-              "description": "谷歌统计的跟踪ID，格式为：UA-xxxxxx-x 或 G-xxxxxxxxxx",
+              "description": "谷歌统计的跟踪ID。获取方式：1. 访问 https://analytics.google.com 并登录；2. 点击「管理」→「创建媒体资源」；3. 在媒体资源设置中找到跟踪ID，格式为：UA-xxxxxx-x 或 G-xxxxxxxxxx",
+              "descriptionRow": true,
               "default": ""
             }
           }

@@ -36,7 +36,7 @@
   },
   {
     "config_key": "geo_config",
-    "config_value": "{\"apiKey\":\"\",\"baseUrl\":\"https://api.siliconflow.cn/v1\"}",
+    "config_value": "{\"apiKey\":\"sk-aqgbavpcequqvzmsglnuthjfueoejhbjgwvgizpmqrvdzdlz\",\"baseUrl\":\"https://api.siliconflow.cn/v1\"}",
     "id": 9
   }
 ]

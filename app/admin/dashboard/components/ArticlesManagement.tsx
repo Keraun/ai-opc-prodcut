@@ -18,18 +18,7 @@ export function ArticlesManagement() {
         placeholder: "请输入文章标题",
         icon: <Newspaper size={16} />
       },
-      {
-        name: "contentType",
-        label: "文章类型",
-        type: "select",
-        options: [
-          { value: "html", label: "HTML" },
-          { value: "markdown", label: "Markdown" }
-        ],
-        placeholder: "请选择文章类型",
-        icon: <FileText size={16} />,
-        inlineGroup: "分类与标签"
-      },
+      
       {
         name: "category",
         label: "文章分类",
@@ -70,6 +59,18 @@ export function ArticlesManagement() {
         type: "text",
         placeholder: "请输入作者名称",
         icon: <Calendar size={16} />
+      },
+      {
+        name: "contentType",
+        label: "文章类型",
+        type: "select",
+        options: [
+          { value: "html", label: "HTML" },
+          { value: "markdown", label: "Markdown" }
+        ],
+        placeholder: "请选择文章类型",
+        icon: <FileText size={16} />,
+        inlineGroup: "分类与标签"
       },
       {
         name: "tags",
