@@ -58,9 +58,11 @@ export async function GET(request: NextRequest) {
     articles = articles.filter((article: Article) => article.status === 'published')
   }
   
-  articles = articles.sort((a: Article, b: Article) => 
-    new Date(b.date).getTime() - new Date(a.date).getTime()
-  )
+  articles = articles.sort((a: Article, b: Article) => {
+    const aTime = a.updated_at ? new Date(a.updated_at).getTime() : 0
+    const bTime = b.updated_at ? new Date(b.updated_at).getTime() : 0
+    return bTime - aTime
+  })
   
   return successResponse(articles)
 }
