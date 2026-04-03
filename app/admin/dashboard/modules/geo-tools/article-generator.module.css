@@ -599,19 +599,25 @@
   align-items: center;
   gap: 1.25rem;
   margin-bottom: 1.25rem;
-  font-size: 0.875rem;
+  font-size: 0.8125rem;
   color: #6b7280;
 }
 
 .articleMetaItem {
   display: flex;
   align-items: center;
-  gap: 0.375rem;
+  gap: 0.5rem;
+  padding: 0.25rem 0.75rem;
+  background: #f3f4f6;
+  border-radius: 4px;
+  color: #374151;
+  font-weight: 500;
+  min-width: 55px;
 }
 
 .articleMetaLabel {
   font-weight: 500;
-  color: #374151;
+  color: #6b7280;
 }
 
 .articleTags {
@@ -622,13 +628,14 @@
 }
 
 .articleTag {
-  padding: 0.375rem 0.75rem;
-  background: #f3f4f6;
-  border: 1px solid #e5e7eb;
-  border-radius: 9999px;
+  padding: 0.25rem 0.75rem;
+  background: #e5e7eb;
+  border: none;
+  border-radius: 4px;
   font-size: 0.75rem;
   font-weight: 500;
   color: #374151;
+  min-width: 55px;
 }
 
 .articleContent {

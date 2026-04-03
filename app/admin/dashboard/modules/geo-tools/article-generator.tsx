@@ -41,6 +41,7 @@ export function ArticleGenerator() {
     content: string
     category: string
     tags: string[]
+    contentType?: 'markdown' | 'html'
   } | null>(null)
   const [loadingStrategy, setLoadingStrategy] = useState(false)
   const [selectedLLM, setSelectedLLM] = useState<string>("")
@@ -262,15 +263,17 @@ export function ArticleGenerator() {
         const jsonToParse = extractedJSON || fullContent
 
         const parsedData = JSON.parse(jsonToParse)
+        const detectedContentType = detectContentType(parsedData.content || "")
         setArticleData({
           title: parsedData.title || "",
           summary: parsedData.summary || "",
           content: parsedData.content || "",
           category: parsedData.category || "",
-          tags: parsedData.tags || []
+          tags: parsedData.tags || [],
+          contentType: detectedContentType
         })
         setArticleResult(parsedData.content || "")
-        setArticleContentType(detectContentType(parsedData.content || ""))
+        setArticleContentType(detectedContentType)
       } catch (error) {
         console.error("解析文章数据失败:", error)
         setArticleData(null)
@@ -729,7 +732,8 @@ export function ArticleGenerator() {
         initialContent={articleResult || ""}
         onSuccess={handleArticleFormSuccess}
         contentType={articleContentType}
-        articleData={articleData}
+        title="保存生成的资讯"
+        articleData={articleData || undefined}
       />
       {fullscreenVisible && (
         <div className={styles.fullscreenOverlay} onClick={() => setFullscreenVisible(false)}>

@@ -23,6 +23,14 @@ interface ArticleFormProps {
     content: string
     category: string
     tags: string[]
+    author?: string
+    mainImage?: string
+    contentType?: 'html' | 'markdown'
+    seo?: {
+      title?: string
+      description?: string
+      keywords?: string[]
+    }
   }
 }
 
@@ -54,15 +62,15 @@ export function ArticleForm({
           title: articleData.title,
           category: articleData.category,
           summary: articleData.summary,
-          author: "",
+          author: articleData.author || "",
           content: articleData.content,
-          seoTitle: "",
-          seoDescription: "",
+          seoTitle: articleData.seo?.title || "",
+          seoDescription: articleData.seo?.description || "",
         })
-        setTags(articleData.tags)
-        setSeoKeywords([])
-        setMainImage("")
-        setArticleType(contentType)
+        setTags(articleData.tags || [])
+        setSeoKeywords(articleData.seo?.keywords || [])
+        setMainImage(articleData.mainImage || "")
+        setArticleType(articleData.contentType || contentType)
         setMarkdownContent(articleData.content)
         setMarkdownTab('edit')
       } else {
@@ -433,7 +441,7 @@ export function ArticleForm({
           rules={[{ required: true, message: "请输入文章内容" }]}
         >
           {articleType === 'markdown' ? (
-            <Tabs activeTab={markdownTab} onChange={setMarkdownTab}>
+            <Tabs activeTab={markdownTab} onChange={(key) => setMarkdownTab(key as 'edit' | 'preview')}>
               <Tabs.TabPane key="edit" title="编辑">
                 <MarkdownEditor 
                   value={markdownContent} 

@@ -266,40 +266,7 @@ export function NewsDetailModule({ data }: ModuleProps) {
     <div className={`${styles.newsDetail} ${isFullscreen ? styles.fullscreen : ''}`} ref={fullscreenRef}>
       <div className={styles.container}>
         <div className={styles.articleActions}>
-          <button 
-            className={styles.actionButton} 
-            onClick={handleFullscreenToggle}
-            title={isFullscreen ? '退出全屏' : '全屏查看'}
-          >
-            <svg 
-              className={styles.actionIcon} 
-              fill="none" 
-              stroke="currentColor" 
-              viewBox="0 0 24 24"
-            >
-              {isFullscreen ? (
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 3H5a2 2 0 00-2 2v3m18 0V5a2 2 0 00-2-2h-3m0 18h3a2 2 0 002-2v-3M3 16v3a2 2 0 002 2h3" />
-              ) : (
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 3v3a2 2 0 01-2 2H3m18 0h-3a2 2 0 01-2-2V3m0 18v-3a2 2 0 012-2h3M3 16h3a2 2 0 012 2v3" />
-              )}
-            </svg>
-            {isFullscreen ? '退出全屏' : '全屏查看'}
-          </button>
-          <button 
-            className={styles.actionButton} 
-            onClick={handleSaveArticle}
-            title="保存资讯"
-          >
-            <svg 
-              className={styles.actionIcon} 
-              fill="none" 
-              stroke="currentColor" 
-              viewBox="0 0 24 24"
-            >
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4" />
-            </svg>
-            保存资讯
-          </button>
+        
         </div>
         <article className={styles.article}>
           <header className={styles.articleHeader}>
