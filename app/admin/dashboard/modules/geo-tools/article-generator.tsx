@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useRef, useEffect, useCallback } from "react"
+import { useState, useRef, useEffect } from "react"
 import { Button, Input, Card, Collapse, Select, Progress, Space, Tag } from "@arco-design/web-react"
 import ReactMarkdown from "react-markdown"
 import remarkGfm from "remark-gfm"
@@ -31,6 +31,9 @@ interface GenerationProgress {
   message: string
   content: string
   error: string | null
+  promptTokens: number
+  completionTokens: number
+  totalTokens: number
 }
 
 export function ArticleGenerator() {
@@ -50,10 +53,12 @@ export function ArticleGenerator() {
     message: "",
     content: "",
     error: null,
+    promptTokens: 0,
+    completionTokens: 0,
+    totalTokens: 0,
   })
   const abortControllerRef = useRef<AbortController | null>(null)
 
-  // 获取默认配置
   useEffect(() => {
     fetchDefaultConfig()
   }, [])
@@ -121,7 +126,6 @@ export function ArticleGenerator() {
     const modelToUse = selectedLLM || defaultLLM
 
     try {
-      // 取消之前的请求
       if (abortControllerRef.current) {
         abortControllerRef.current.abort()
       }
@@ -134,6 +138,9 @@ export function ArticleGenerator() {
         message: "正在连接大模型服务...",
         content: "",
         error: null,
+        promptTokens: 0,
+        completionTokens: 0,
+        totalTokens: 0,
       })
       setArticleResult("")
 
@@ -166,6 +173,9 @@ export function ArticleGenerator() {
 
       const decoder = new TextDecoder()
       let fullContent = ""
+      let promptTokens = 0
+      let completionTokens = 0
+      let totalTokens = 0
 
       while (true) {
         const { done, value } = await reader.read()
@@ -189,6 +199,17 @@ export function ArticleGenerator() {
                   progress: Math.min(30 + Math.floor((fullContent.length / 2000) * 60), 90),
                 }))
               }
+              if (parsed.usage) {
+                promptTokens = parsed.usage.prompt_tokens || promptTokens
+                completionTokens = parsed.usage.completion_tokens || completionTokens
+                totalTokens = parsed.usage.total_tokens || totalTokens
+                setGeneration((prev) => ({
+                  ...prev,
+                  promptTokens,
+                  completionTokens,
+                  totalTokens,
+                }))
+              }
               if (parsed.error) {
                 throw new Error(parsed.error)
               }
@@ -205,6 +226,9 @@ export function ArticleGenerator() {
         message: "文章生成完成！",
         content: fullContent,
         error: null,
+        promptTokens,
+        completionTokens,
+        totalTokens,
       })
       toast.success("文章生成成功！")
     } catch (error) {
@@ -219,6 +243,9 @@ export function ArticleGenerator() {
         message: "",
         content: "",
         error: errorMessage,
+        promptTokens: 0,
+        completionTokens: 0,
+        totalTokens: 0,
       })
       toast.error(errorMessage)
     }
@@ -235,6 +262,9 @@ export function ArticleGenerator() {
       message: "",
       content: "",
       error: null,
+      promptTokens: 0,
+      completionTokens: 0,
+      totalTokens: 0,
     })
     toast.info("已取消生成")
   }
@@ -417,7 +447,6 @@ export function ArticleGenerator() {
             </Button>
           </div>
 
-          {/* 进度展示 */}
           {(generation.status === "connecting" ||
             generation.status === "generating" ||
             generation.status === "completed" ||
@@ -439,6 +468,20 @@ export function ArticleGenerator() {
                 status={generation.status === "error" ? "error" : generation.status === "completed" ? "success" : "normal"}
                 animation
               />
+              <div className={styles.tokenInfo}>
+                <div className={styles.tokenItem}>
+                  <span className={styles.tokenLabel}>输入Token:</span>
+                  <span className={styles.tokenValue}>{generation.promptTokens}</span>
+                </div>
+                <div className={styles.tokenItem}>
+                  <span className={styles.tokenLabel}>输出Token:</span>
+                  <span className={styles.tokenValue}>{generation.completionTokens}</span>
+                </div>
+                <div className={styles.tokenItem}>
+                  <span className={styles.tokenLabel}>总计:</span>
+                  <span className={styles.tokenValue + " " + styles.tokenTotal}>{generation.totalTokens}</span>
+                </div>
+              </div>
               {generation.status === "generating" && articleResult && (
                 <div className={styles.generatingHint}>
                   <IconLoading className={styles.spinIcon} />
@@ -451,34 +494,65 @@ export function ArticleGenerator() {
       </div>
 
       {strategyResult && (
-        <Card className={styles.resultCard}>
-          <div className={styles.resultHeader}>
-            <div className={styles.resultTitle}>提示词预览</div>
-            <Button type="outline" size="small" icon={<IconCopy />} onClick={handleCopyStrategy}>
-              复制提示词
-            </Button>
-          </div>
-          <div className={styles.markdownContent}>
-            <ReactMarkdown remarkPlugins={[remarkGfm]}>{strategyResult}</ReactMarkdown>
-          </div>
-        </Card>
+        <Collapse defaultActiveKey={["strategy"]} bordered={false} className={styles.resultCollapse}>
+          <CollapseItem
+            header={
+              <div className={styles.collapseHeader}>
+                <IconFile className={styles.collapseIcon} />
+                <span>提示词预览</span>
+                <Button
+                  type="outline"
+                  size="small"
+                  icon={<IconCopy />}
+                  onClick={(e) => {
+                    e.stopPropagation()
+                    handleCopyStrategy()
+                  }}
+                  className={styles.collapseButton}
+                >
+                  复制
+                </Button>
+              </div>
+            }
+            name="strategy"
+          >
+            <div className={styles.markdownContent}>
+              <ReactMarkdown remarkPlugins={[remarkGfm]}>{strategyResult}</ReactMarkdown>
+            </div>
+          </CollapseItem>
+        </Collapse>
       )}
 
       {articleResult && (
-        <Card className={styles.resultCard}>
-          <div className={styles.resultHeader}>
-            <div className={styles.resultTitle}>文章生成</div>
-            <Button type="outline" size="small" icon={<IconCopy />} onClick={handleCopyArticle}>
-              复制文章
-            </Button>
-          </div>
-          <div className={styles.markdownContent}>
-            <ReactMarkdown remarkPlugins={[remarkGfm]}>{articleResult}</ReactMarkdown>
-          </div>
-        </Card>
+        <Collapse defaultActiveKey={["article"]} bordered={false} className={styles.resultCollapse}>
+          <CollapseItem
+            header={
+              <div className={styles.collapseHeader}>
+                <IconBook className={styles.collapseIcon} />
+                <span>文章生成结果</span>
+                <Button
+                  type="outline"
+                  size="small"
+                  icon={<IconCopy />}
+                  onClick={(e) => {
+                    e.stopPropagation()
+                    handleCopyArticle()
+                  }}
+                  className={styles.collapseButton}
+                >
+                  复制
+                </Button>
+              </div>
+            }
+            name="article"
+          >
+            <div className={styles.markdownContent}>
+              <ReactMarkdown remarkPlugins={[remarkGfm]}>{articleResult}</ReactMarkdown>
+            </div>
+          </CollapseItem>
+        </Collapse>
       )}
 
-      {/* 模型选择弹窗 */}
       {llmSelectVisible && (
         <div className={styles.modalOverlay} onClick={() => setLlmSelectVisible(false)}>
           <div className={styles.modal} onClick={(e) => e.stopPropagation()}>

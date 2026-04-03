@@ -4,7 +4,6 @@ import { SystemConfigRepository } from "@/lib/repositories/SystemConfigRepositor
 
 const repository = new SystemConfigRepository()
 
-// 模型映射配置
 const MODEL_CONFIG: Record<string, { baseUrl?: string; modelId: string }> = {
   "deepseek-ai/DeepSeek-V2.5": { modelId: "deepseek-ai/DeepSeek-V2.5" },
   "Qwen/Qwen2.5-72B-Instruct": { modelId: "Qwen/Qwen2.5-72B-Instruct" },
@@ -31,7 +30,6 @@ export async function POST(request: NextRequest) {
       return errorResponse("缺少提示词参数")
     }
 
-    // 获取API配置
     const config = repository.getValue("geo_config", {
       apiKey: "",
       baseUrl: "https://api.siliconflow.cn/v1",
@@ -46,7 +44,6 @@ export async function POST(request: NextRequest) {
     const modelConfig = MODEL_CONFIG[modelToUse] || { modelId: modelToUse }
     const baseUrl = config.baseUrl || "https://api.siliconflow.cn/v1"
 
-    // 创建流式响应
     const encoder = new TextEncoder()
     const stream = new ReadableStream({
       async start(controller) {
@@ -71,6 +68,7 @@ export async function POST(request: NextRequest) {
                 },
               ],
               stream: true,
+              stream_options: { include_usage: true },
               temperature: 0.7,
               max_tokens: 4096,
             }),
@@ -118,6 +116,19 @@ export async function POST(request: NextRequest) {
                   if (content) {
                     controller.enqueue(
                       encoder.encode(`data: ${JSON.stringify({ content })}\n\n`)
+                    )
+                  }
+                  if (parsed.usage) {
+                    controller.enqueue(
+                      encoder.encode(
+                        `data: ${JSON.stringify({
+                          usage: {
+                            prompt_tokens: parsed.usage.prompt_tokens || 0,
+                            completion_tokens: parsed.usage.completion_tokens || 0,
+                            total_tokens: parsed.usage.total_tokens || 0,
+                          },
+                        })}\n\n`
+                      )
                     )
                   }
                 } catch (e) {
