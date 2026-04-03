@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import Link from 'next/link'
 import ReactMarkdown from 'react-markdown'
 import remarkGfm from 'remark-gfm'
@@ -62,6 +62,10 @@ export function NewsDetailModule({ data }: ModuleProps) {
   const [nextArticle, setNextArticle] = useState<Article | null>(null)
   const [loading, setLoading] = useState(!ssrArticle)
   const [isPreview, setIsPreview] = useState(false)
+  const [isFullscreen, setIsFullscreen] = useState(false)
+  const [showSaveModal, setShowSaveModal] = useState(false)
+  const [savedArticleId, setSavedArticleId] = useState<number | null>(null)
+  const fullscreenRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
     const fetchArticle = async () => {
@@ -183,6 +187,66 @@ export function NewsDetailModule({ data }: ModuleProps) {
     )
   }
 
+  const handleFullscreenToggle = () => {
+    if (!isFullscreen) {
+      if (fullscreenRef.current) {
+        if (fullscreenRef.current.requestFullscreen) {
+          fullscreenRef.current.requestFullscreen()
+        } else if ((fullscreenRef.current as any).webkitRequestFullscreen) {
+          (fullscreenRef.current as any).webkitRequestFullscreen()
+        } else if ((fullscreenRef.current as any).mozRequestFullScreen) {
+          (fullscreenRef.current as any).mozRequestFullScreen()
+        } else if ((fullscreenRef.current as any).msRequestFullscreen) {
+          (fullscreenRef.current as any).msRequestFullscreen()
+        }
+        setIsFullscreen(true)
+      }
+    } else {
+      if (document.exitFullscreen) {
+        document.exitFullscreen()
+      } else if ((document as any).webkitExitFullscreen) {
+        (document as any).webkitExitFullscreen()
+      } else if ((document as any).mozCancelFullScreen) {
+        (document as any).mozCancelFullScreen()
+      } else if ((document as any).msExitFullscreen) {
+        (document as any).msExitFullscreen()
+      }
+      setIsFullscreen(false)
+    }
+  }
+
+  const handleSaveArticle = async () => {
+    try {
+      const response = await fetch('/api/articles', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(article)
+      })
+      const result = await response.json()
+      if (result.success) {
+        setSavedArticleId(result.data.id)
+        setShowSaveModal(true)
+      } else {
+        alert('资讯保存失败：' + result.message)
+      }
+    } catch (error) {
+      console.error('Failed to save article:', error)
+      alert('资讯保存失败，请重试')
+    }
+  }
+
+  const handleViewDetail = () => {
+    setShowSaveModal(false)
+    window.open(`/news/${savedArticleId}`, '_blank')
+  }
+
+  const handleEditArticle = () => {
+    setShowSaveModal(false)
+    window.location.href = `/admin/articles/edit/${savedArticleId}`
+  }
+
   if (!article) {
     return (
       <div className={styles.error}>
@@ -199,8 +263,44 @@ export function NewsDetailModule({ data }: ModuleProps) {
   }
 
   return (
-    <div className={styles.newsDetail}>
+    <div className={`${styles.newsDetail} ${isFullscreen ? styles.fullscreen : ''}`} ref={fullscreenRef}>
       <div className={styles.container}>
+        <div className={styles.articleActions}>
+          <button 
+            className={styles.actionButton} 
+            onClick={handleFullscreenToggle}
+            title={isFullscreen ? '退出全屏' : '全屏查看'}
+          >
+            <svg 
+              className={styles.actionIcon} 
+              fill="none" 
+              stroke="currentColor" 
+              viewBox="0 0 24 24"
+            >
+              {isFullscreen ? (
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 3H5a2 2 0 00-2 2v3m18 0V5a2 2 0 00-2-2h-3m0 18h3a2 2 0 002-2v-3M3 16v3a2 2 0 002 2h3" />
+              ) : (
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 3v3a2 2 0 01-2 2H3m18 0h-3a2 2 0 01-2-2V3m0 18v-3a2 2 0 012-2h3M3 16h3a2 2 0 012 2v3" />
+              )}
+            </svg>
+            {isFullscreen ? '退出全屏' : '全屏查看'}
+          </button>
+          <button 
+            className={styles.actionButton} 
+            onClick={handleSaveArticle}
+            title="保存资讯"
+          >
+            <svg 
+              className={styles.actionIcon} 
+              fill="none" 
+              stroke="currentColor" 
+              viewBox="0 0 24 24"
+            >
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4" />
+            </svg>
+            保存资讯
+          </button>
+        </div>
         <article className={styles.article}>
           <header className={styles.articleHeader}>
             <h1 className={styles.articleTitle}>{article.title}</h1>
@@ -221,7 +321,22 @@ export function NewsDetailModule({ data }: ModuleProps) {
                   <span>{article.date}</span>
                 </div>
               )}
+              {article.category && (
+                <div className={styles.articleMetaItem}>
+                  <svg className={styles.articleMetaIcon} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                  </svg>
+                  <span>{article.category}</span>
+                </div>
+              )}
             </div>
+            {article.tags && article.tags.length > 0 && (
+              <div className={styles.articleTags}>
+                {article.tags.map((tag, index) => (
+                  <span key={index} className={styles.articleTag}>{tag}</span>
+                ))}
+              </div>
+            )}
             {article.image && (
               <img 
                 src={article.image} 
@@ -232,6 +347,10 @@ export function NewsDetailModule({ data }: ModuleProps) {
           </header>
           
           <div className={styles.articleContent}>
+            <div className={styles.articleSummary}>
+              <h3>摘要</h3>
+              <p>{article.summary}</p>
+            </div>
             {article.contentType === 'markdown' ? (
               <ReactMarkdown remarkPlugins={[remarkGfm]}>{article.content}</ReactMarkdown>
             ) : (
@@ -297,6 +416,36 @@ export function NewsDetailModule({ data }: ModuleProps) {
           </div>
         )}
       </div>
+
+      {showSaveModal && (
+        <div className={styles.modalOverlay}>
+          <div className={styles.modal}>
+            <div className={styles.modalContent}>
+              <div className={styles.modalIcon}>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+              </div>
+              <h2 className={styles.modalTitle}>资讯保存成功</h2>
+              <p className={styles.modalText}>您的资讯已成功保存到系统中</p>
+              <div className={styles.modalActions}>
+                <button 
+                  className={`${styles.modalButton} ${styles.modalButtonSecondary}`}
+                  onClick={handleViewDetail}
+                >
+                  查看详情
+                </button>
+                <button 
+                  className={`${styles.modalButton} ${styles.modalButtonPrimary}`}
+                  onClick={handleEditArticle}
+                >
+                  去编辑
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   )
 }

@@ -121,6 +121,7 @@ export function ArticleGenerator() {
       toast.warning("请先生成提示词")
       return
     }
+    setExpandedPanels([])
     setLlmSelectVisible(true)
   }
 
@@ -288,7 +289,7 @@ export function ArticleGenerator() {
         totalTokens,
       })
       setCurrentStep("article")
-      setExpandedPanels(prev => [...prev, "article"].filter((v, i, a) => a.indexOf(v) === i))
+      setExpandedPanels(["article"])
       toast.success("文章生成成功！")
     } catch (error) {
       if ((error as Error).name === "AbortError") {
@@ -390,11 +391,10 @@ export function ArticleGenerator() {
 1. 目的性极强：文章本身为机器阅读和引用优化，同时兼顾人类读者的可读性
 2. 内容布局：严格遵循抓取逻辑，强化企业实体识别，突出权威数据，构建清晰的问答结构
 3. 确保大模型能轻松提取并作为"标准答案"引用
-4. 文章要包含：标题、引言(文章摘要)、文章分类、文章标签、企业概况、核心优势分析、数据支撑、行业地位、未来展望、结论、参考资料
-5. 使用Markdown格式
-6. 文章要详细、专业、有深度，字数在2000字以上
-`
-  }
+4. 文章主体要包含：企业概况、核心优势分析、数据支撑、行业地位、未来展望、结论、参考资料
+5. 文章的其他信息拆解到不同字段: 标题、引言(文章摘要)、文章分类、文章标签
+6. 使用Markdown格式
+7. 文章要详细、专业、有深度，字数在2000字以上`}
 
   const getStatusDisplay = () => {
     switch (generation.status) {
@@ -459,7 +459,6 @@ export function ArticleGenerator() {
         multiple
         onChange={(keys, data) => {
           setExpandedPanels(data as Step[])
-
         }}
       >
         {/* 目标企业信息面板 */}
@@ -604,14 +603,14 @@ export function ArticleGenerator() {
                     type="outline"
                     size="small"
                     onClick={() => setFullscreenVisible(true)}
-                    disabled={!articleResult}
+                    disabled={generation.progress !== 100}
                   >
                     全屏查看文章
                   </Button>
                   <Button
                     type="primary"
                     size="small"
-                    disabled={!articleResult}
+                    disabled={generation.progress !== 100}
                     onClick={handleSaveArticle}
                   >
                     保存资讯
@@ -742,12 +741,41 @@ export function ArticleGenerator() {
               </button>
             </div>
             <div className={styles.fullscreenContent}>
-              {articleResult && (
-                articleContentType === 'markdown' ? (
-                  <ReactMarkdown remarkPlugins={[remarkGfm]}>{articleResult}</ReactMarkdown>
-                ) : (
-                  <div dangerouslySetInnerHTML={{ __html: articleResult }} />
-                )
+              {articleData && (
+                <article className={styles.article}>
+                  <header className={styles.articleHeader}>
+                    <h1 className={styles.articleTitle}>{articleData.title}</h1>
+                    <div className={styles.articleMeta}>
+                      {articleData.category && (
+                        <div className={styles.articleMetaItem}>
+                          <span className={styles.articleMetaLabel}>分类:</span>
+                          <span>{articleData.category}</span>
+                        </div>
+                      )}
+                      {articleData.tags && articleData.tags.length > 0 && (
+                        <div className={styles.articleTags}>
+                          {articleData.tags.map((tag, index) => (
+                            <span key={index} className={styles.articleTag}>{tag}</span>
+                          ))}
+                        </div>
+                      )}
+                    </div>
+                  </header>
+                  
+                  <div className={styles.articleContent}>
+                    <div className={styles.articleSummary}>
+                      <h3>摘要</h3>
+                      <p>{articleData.summary}</p>
+                    </div>
+                    <div className={styles.articleBody}>
+                      {articleContentType === 'markdown' ? (
+                        <ReactMarkdown remarkPlugins={[remarkGfm]}>{articleData.content}</ReactMarkdown>
+                      ) : (
+                        <div dangerouslySetInnerHTML={{ __html: articleData.content }} />
+                      )}
+                    </div>
+                  </div>
+                </article>
               )}
             </div>
           </div>

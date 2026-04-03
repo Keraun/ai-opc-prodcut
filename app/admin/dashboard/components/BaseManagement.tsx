@@ -918,6 +918,32 @@ export function BaseManagement({ config }: BaseManagementProps) {
     }
   }, [])
 
+  // 从URL路径中获取编辑ID
+  useEffect(() => {
+    // 检查当前URL路径是否包含编辑路由
+    const path = window.location.pathname
+    const editMatch = path.match(/\/admin\/articles\/edit\/(\d+)/)
+    if (editMatch && editMatch[1]) {
+      const articleId = parseInt(editMatch[1], 10)
+      // 查找对应的文章数据
+      const article = items.find((item: any) => item.id === articleId)
+      if (article) {
+        setCurrentItem(article)
+        setViewMode('edit')
+      } else {
+        // 如果找不到文章，尝试从API获取
+        fetch(`${config.apiEndpoint}?id=${articleId}`)
+          .then(response => response.json())
+          .then(result => {
+            if (result.success && result.data) {
+              setCurrentItem(result.data)
+              setViewMode('edit')
+            }
+          })
+      }
+    }
+  }, [items, config.apiEndpoint])
+
   useEffect(() => {
     fetchItems()
   }, [])
