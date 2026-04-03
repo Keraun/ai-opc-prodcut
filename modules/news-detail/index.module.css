@@ -172,6 +172,116 @@
   margin-bottom: 0.5rem;
 }
 
+.articleContent table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 1.5rem 0;
+  background: white;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  border: 1px solid #e5e7eb;
+}
+
+.articleContent thead {
+  background: linear-gradient(135deg, var(--theme-primary, #3b82f6) 0%, #2563eb 100%);
+}
+
+.articleContent thead th {
+  padding: 1rem 1.25rem;
+  text-align: left;
+  font-weight: 600;
+  font-size: 0.875rem;
+  color: white;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  border-bottom: 2px solid rgba(255, 255, 255, 0.2);
+}
+
+.articleContent tbody tr {
+  border-bottom: 1px solid #e5e7eb;
+  transition: background-color 0.2s ease;
+}
+
+.articleContent tbody tr:last-child {
+  border-bottom: none;
+}
+
+.articleContent tbody tr:nth-child(even) {
+  background: #f9fafb;
+}
+
+.articleContent tbody tr:hover {
+  background: #f0f9ff;
+}
+
+.articleContent td {
+  padding: 1rem 1.25rem;
+  font-size: 0.9375rem;
+  color: #374151;
+  vertical-align: middle;
+}
+
+.articleContent td:first-child {
+  font-weight: 500;
+  color: #111827;
+}
+
+.articleContent table a {
+  color: var(--theme-primary, #3b82f6);
+  text-decoration: none;
+  font-weight: 500;
+  transition: color 0.2s ease;
+}
+
+.articleContent table a:hover {
+  color: #2563eb;
+  text-decoration: underline;
+}
+
+.articleContent table code {
+  background: #f3f4f6;
+  padding: 0.25rem 0.5rem;
+  border-radius: 4px;
+  font-size: 0.875rem;
+  font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+  color: #ef4444;
+}
+
+.articleContent table pre {
+  background: #1f2937;
+  color: #f9fafb;
+  padding: 1rem;
+  border-radius: 6px;
+  overflow-x: auto;
+  font-size: 0.875rem;
+  line-height: 1.5;
+}
+
+.articleContent table blockquote {
+  margin: 0.5rem 0;
+  padding: 0.75rem 1rem;
+  background: #fef3c7;
+  border-left: 3px solid #f59e0b;
+  color: #92400e;
+  font-size: 0.875rem;
+}
+
+@media (max-width: 768px) {
+  .articleContent table {
+    font-size: 0.875rem;
+  }
+
+  .articleContent thead th,
+  .articleContent td {
+    padding: 0.75rem 1rem;
+  }
+
+  .articleContent thead th {
+    font-size: 0.8125rem;
+  }
+}
+
 .shareSection {
   margin: 2rem 0;
   padding: 1.25rem;
