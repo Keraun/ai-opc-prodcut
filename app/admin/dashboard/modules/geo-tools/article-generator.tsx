@@ -371,6 +371,7 @@ export function ArticleGenerator() {
       <Collapse 
         activeKey={expandedPanels} 
         bordered={false} 
+        multiple 
         onChange={(keys) => {
           setExpandedPanels(keys as Step[])
           if (keys.length > 0) {
@@ -474,9 +475,9 @@ export function ArticleGenerator() {
             {strategyResult ? (
               <Input.TextArea
                 value={strategyResult}
-                readOnly
                 autoSize={{ minRows: 10, maxRows: 20 }}
                 style={{ width: '100%' }}
+                onChange={(e) => setStrategyResult(e.target.value)}
               />
             ) : (
               <div className={styles.emptyState}>
