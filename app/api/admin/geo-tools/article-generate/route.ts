@@ -29,51 +29,69 @@ async function checkPlaywright() {
   }
 }
 
-const LLM_SITES: Record<string, { url: string; inputSelector: string; submitSelector: string }> = {
+const LLM_SITES: Record<string, { url: string; inputSelector: string; submitSelector: string; storageType: string; storageKey: string[] }> = {
   deepseek: {
     url: "https://chat.deepseek.com/",
     inputSelector: "textarea[placeholder*='问'], textarea[placeholder*='输入'], textarea",
-    submitSelector: "button[type='submit'], button:has-text('发送'), button:has-text('Send')"
+    submitSelector: "button[type='submit'], button:has-text('发送'), button:has-text('Send')",
+    storageType: "both",
+    storageKey: ["userToken"]
   },
   openai: {
     url: "https://chat.openai.com/",
     inputSelector: "textarea[placeholder*='Message'], textarea",
-    submitSelector: "button[data-testid='send-button'], button[type='submit']"
+    submitSelector: "button[data-testid='send-button'], button[type='submit']",
+    storageType: "cookie",
+    storageKey: []
   },
   doubao: {
     url: "https://www.doubao.com/",
     inputSelector: "textarea[placeholder*='输入'], textarea",
-    submitSelector: "button[type='submit'], button:has-text('发送')"
+    submitSelector: "button[type='submit'], button:has-text('发送')",
+    storageType: "cookie",
+    storageKey: []
   },
   kimi: {
     url: "https://kimi.moonshot.cn/",
     inputSelector: "textarea[placeholder*='输入'], textarea",
-    submitSelector: "button[type='submit'], button:has-text('发送')"
+    submitSelector: "button[type='submit'], button:has-text('发送')",
+    storageType: "cookie",
+    storageKey: []
   },
   qwen: {
     url: "https://tongyi.aliyun.com/",
     inputSelector: "textarea[placeholder*='输入'], textarea",
-    submitSelector: "button[type='submit'], button:has-text('发送')"
+    submitSelector: "button[type='submit'], button:has-text('发送')",
+    storageType: "cookie",
+    storageKey: []
   },
   zhipu: {
     url: "https://chatglm.cn/",
     inputSelector: "textarea[placeholder*='输入'], textarea",
-    submitSelector: "button[type='submit'], button:has-text('发送')"
+    submitSelector: "button[type='submit'], button:has-text('发送')",
+    storageType: "cookie",
+    storageKey: []
   },
   minimax: {
     url: "https://www.minimaxi.com/",
     inputSelector: "textarea[placeholder*='输入'], textarea",
-    submitSelector: "button[type='submit'], button:has-text('发送')"
+    submitSelector: "button[type='submit'], button:has-text('发送')",
+    storageType: "cookie",
+    storageKey: []
   },
   claude: {
     url: "https://claude.ai/",
     inputSelector: "textarea[placeholder*='Message'], textarea",
-    submitSelector: "button[type='submit'], button:has-text('Send')"
+    submitSelector: "button[type='submit'], button:has-text('Send')",
+    storageType: "cookie",
+    storageKey: []
   },
   wenxin: {
     url: "https://yiyan.baidu.com/",
     inputSelector: "textarea[placeholder*='输入'], textarea",
-    submitSelector: "button[type='submit'], button:has-text('发送')"
+    submitSelector: "button[type='submit'], button:has-text('发送')",
+    storageType: "cookie",
+    storageKey: []
   }
 }
 
@@ -103,15 +121,19 @@ export async function POST(request: NextRequest) {
       return errorResponse("不支持的大模型")
     }
 
-    const cookiesData = readConfig("llm-cookies") as Record<string, any> || {}
+    const cookiesData = readConfig("llm-cookies") || {}
     
-    // 检查 cookiesData 是否为对象类型
+    let cookieData = null
+    
+    // 处理数组格式的cookies数据
     if (Array.isArray(cookiesData)) {
-      console.error("[Article Generate] cookiesData is an array, expected object. Data:", cookiesData)
-      return errorResponse("Cookie 数据格式错误，请重新配置 Cookie")
+      cookieData = cookiesData.find(item => item.site_id === llmId)
+    } else {
+      // 处理对象格式的cookies数据
+      cookieData = cookiesData[llmId]
     }
     
-    const cookieData = cookiesData[llmId]
+    console.log("[Article Generate] Cookie data for", llmId, "is:", cookieData)
     
     if (!cookieData?.cookies) {
       return errorResponse(`请先在 Cookie 管理中配置 ${llmId} 的 Cookie`)
@@ -130,7 +152,7 @@ export async function POST(request: NextRequest) {
       createdAt: new Date()
     })
 
-    generateWithLLM(sessionId, siteConfig, cookieData.cookies, prompt).catch(console.error)
+    generateWithLLM(sessionId, siteConfig, cookieData.cookie_data, cookieData.storage_data, prompt).catch(console.error)
 
     return successResponse({
       sessionId,
@@ -206,8 +228,9 @@ export async function DELETE(request: NextRequest) {
 
 async function generateWithLLM(
   sessionId: string,
-  siteConfig: { url: string; inputSelector: string; submitSelector: string },
-  cookiesString: string,
+  siteConfig: { url: string; inputSelector: string; submitSelector: string; storageType: string; storageKey: string[] },
+  cookie_data: string | null,
+  storage_data: Record<string, string> | null,
   prompt: string
 ) {
   const session = generationSessions.get(sessionId)
@@ -242,68 +265,75 @@ async function generateWithLLM(
     // 同时准备根域名（带点前缀），用于跨子域的cookie
     const rootDomain = domain.includes('.') ? '.' + domain.split('.').slice(-2).join('.') : domain
 
-    const cookies = cookiesString.split(";").map(cookie => {
-      const [name, ...valueParts] = cookie.trim().split("=")
-      const value = valueParts.join("=").trim()
-      const cookieName = name.trim()
-      
-      // 根据deepseek的cookie规则设置属性
-      let httpOnly = false
-      let secure = urlObj.protocol === 'https:'
-      let sameSite: 'Lax' | 'Strict' | 'None' = 'Lax'
-      
-      // 对于deepseek特定的cookie
-      if (domain.includes('deepseek.com')) {
-        // ds_session_id 和 hw_session_id 设置为 httpOnly 和 secure
-        if (cookieName === 'ds_session_id' || cookieName === 'hw_session_id') {
-          httpOnly = true
-          secure = true
-          sameSite = 'Strict'
+    // 处理cookie数据
+    if (cookie_data) {
+      const cookies = cookie_data.split(";").map(cookie => {
+        const [name, ...valueParts] = cookie.trim().split("=")
+        const value = valueParts.join("=").trim()
+        const cookieName = name.trim()
+        
+        // 根据deepseek的cookie规则设置属性
+        let httpOnly = false
+        let secure = urlObj.protocol === 'https:'
+        let sameSite: 'Lax' | 'Strict' | 'None' = 'Lax'
+        
+        // 对于deepseek特定的cookie
+        if (domain.includes('deepseek.com')) {
+          // ds_session_id 和 hw_session_id 设置为 httpOnly 和 secure
+          if (cookieName === 'ds_session_id' || cookieName === 'hw_session_id') {
+            httpOnly = true
+            secure = true
+            sameSite = 'Strict'
+          }
         }
-      }
-      
-      return {
-        name: cookieName,
-        value: decodeURIComponent(value),
-        domain: domain,
-        path: "/",
-        secure: secure,
-        httpOnly: httpOnly,
-        sameSite: sameSite
-      }
-    })
+        
+        return {
+          name: cookieName,
+          value: decodeURIComponent(value),
+          domain: domain,
+          path: "/",
+          secure: secure,
+          httpOnly: httpOnly,
+          sameSite: sameSite
+        }
+      })
 
-    // 同时注入根域名的cookie，确保跨子域生效
-    const rootDomainCookies = cookies.map(c => ({
-      ...c,
-      domain: rootDomain
-    }))
+      // 同时注入根域名的cookie，确保跨子域生效
+      const rootDomainCookies = cookies.map(c => ({
+        ...c,
+        domain: rootDomain
+      }))
 
-    console.log(`[Article Generate] Injecting ${cookies.length} cookies for domain: ${domain}`)
-    console.log(`[Article Generate] Injecting ${rootDomainCookies.length} cookies for root domain: ${rootDomain}`)
-    console.log(`[Article Generate] Cookie names:`, cookies.map(c => c.name).join(', '))
+      console.log(`[Article Generate] Injecting ${cookies.length} cookies for domain: ${domain}`)
+      console.log(`[Article Generate] Injecting ${rootDomainCookies.length} cookies for root domain: ${rootDomain}`)
+      console.log(`[Article Generate] Cookie names:`, cookies.map(c => c.name).join(', '))
 
-    // 注入两种domain的cookie
-    await context.addCookies([...cookies, ...rootDomainCookies])
+      // 注入两种domain的cookie
+      await context.addCookies([...cookies, ...rootDomainCookies])
+    }
 
     const page = await context.newPage()
     session.page = page
 
-    // 对于deepseek，从cookie字符串中提取userToken并设置到localStorage
-    if (domain.includes('deepseek.com')) {
-      const userTokenMatch = cookiesString.match(/userToken=([^;]+)/)
-      if (userTokenMatch && userTokenMatch[1]) {
-        const userToken = decodeURIComponent(userTokenMatch[1])
-        await page.evaluate((token) => {
-          localStorage.setItem('userToken', token)
-        }, userToken)
-        console.log('[Article Generate] Set userToken to localStorage')
-      }
-    }
-
     session.status = "generating"
 
+    // 先导航到网站，再设置localStorage
     await page.goto(siteConfig.url, { waitUntil: "domcontentloaded", timeout: 60000 })
+
+    // 处理localStorage数据
+    if (storage_data && (siteConfig.storageType === "both" || siteConfig.storageType === "localStorage") && siteConfig.storageKey && siteConfig.storageKey.length > 0) {
+      try {
+        await page.evaluate((data) => {
+          Object.entries(data).forEach(([key, value]) => {
+            localStorage.setItem(key, value)
+          })
+        }, storage_data)
+        console.log(`[Article Generate] Set localStorage data:`, Object.keys(storage_data))
+      } catch (error) {
+        console.warn('[Article Generate] Failed to set localStorage:', error)
+        // 继续执行，不中断流程
+      }
+    }
 
     await page.waitForTimeout(3000)
 

@@ -3,24 +3,30 @@
     "site_id": "deepseek",
     "name": "DeepSeek",
     "url": "https://chat.deepseek.com/",
-    "cookies": "userToken={\"value\":null,\"__version\":\"0\"}",
-    "storage_type": "localStorage",
-    "storage_key": "userToken",
-    "updated_at": "2026/4/3 09:29:14",
-    "expires_at": "2026-04-10T01:29:14.977Z",
-    "created_at": "2026-04-03T01:29:14.994Z",
+    "cookie_data": "HWWAFSESID=a036b13f653bedc1fd91; HWWAFSESTIME=1775182447936; smidV2=202604031014123c46ace09069b655e360b4c96f468adf00b89883efcb15f20; .thumbcache_6b2e5483f9d858d7c661c5e276b6a6ae=j4EzEXxcGk1jnVJt6SVPDwfA1PmWeDT76n9CLAGSqeuPQqcmP0NWcYO3J+uDHCqeenAwc63YhXbtByOLjKCI4g%3D%3D; ds_session_id=81861cbcae024d7ea1b0e5c41f4c7c20",
+    "storage_data": {
+      "userToken": "{\"value\":\"vJwQkD1IaslHR7JUzs6dje6w1kJhYDaAC6FBHIbbPjgHy1N/yytZQeRYIb6oDEuJ\",\"__version\":\"0\"}"
+    },
+    "storage_type": "both",
+    "storage_key": [
+      "userToken"
+    ],
+    "updated_at": "2026-04-03T02:14:19.945Z",
+    "expires_at": "2026-04-10T01:34:54.021Z",
+    "created_at": "2026-04-03T01:34:54.033Z",
     "id": 1
   },
   {
     "site_id": "doubao",
     "name": "豆包",
     "url": "https://www.doubao.com/",
-    "cookies": "hook_slardar_session_id=20260403085935EE6BFF78EF6CA9119252; ttwid=1%7CFknkEmJQoqGnEFHt8nFAZhuuw8XdNV0VrYyXj7jc-fI%7C1775177976%7C228934e7903aef1e37eb0341f1529fa49c4b4d23609adea444d687b303c053c2; i18next=zh; flow_ssr_sidebar_expand=1; flow_cur_user_sec_id=; biz_trace_id=372dc150; passport_csrf_token=9849d655aead9524778508a4b139828a; passport_csrf_token_default=9849d655aead9524778508a4b139828a; odin_tt=4c27cbeb0a0b0248a34d775621a624e48de8de3d4cd365b0baf1d7aad0ca2ac2e44c4aeab24dbc7f71b7d9a3a2640c08bf8b120c8233ac2fccb5575cc0dfba3c5e5a54393b2b37348da0d178484e9376; s_v_web_id=verify_mni74ugj_q2BhtSXI_3eNq_4CAB_BEtH_ZSrXLehFKLXx",
+    "cookie_data": "hook_slardar_session_id=20260403085935EE6BFF78EF6CA9119252; ttwid=1%7CFknkEmJQoqGnEFHt8nFAZhuuw8XdNV0VrYyXj7jc-fI%7C1775177976%7C228934e7903aef1e37eb0341f1529fa49c4b4d23609adea444d687b303c053c2; i18next=zh; flow_ssr_sidebar_expand=1; flow_cur_user_sec_id=; biz_trace_id=372dc150; passport_csrf_token=9849d655aead9524778508a4b139828a; passport_csrf_token_default=9849d655aead9524778508a4b139828a; odin_tt=4c27cbeb0a0b0248a34d775621a624e48de8de3d4cd365b0baf1d7aad0ca2ac2e44c4aeab24dbc7f71b7d9a3a2640c08bf8b120c8233ac2fccb5575cc0dfba3c5e5a54393b2b37348da0d178484e9376; s_v_web_id=verify_mni74ugj_q2BhtSXI_3eNq_4CAB_BEtH_ZSrXLehFKLXx",
+    "storage_data": {},
     "storage_type": "cookie",
-    "storage_key": null,
-    "updated_at": "2026/4/3 09:29:14",
+    "storage_key": [],
+    "updated_at": "2026/4/3 09:34:54",
     "expires_at": "2026-04-10T00:59:42.899Z",
-    "created_at": "2026-04-03T01:29:14.994Z",
+    "created_at": "2026-04-03T01:34:54.034Z",
     "id": 2
   }
 ]

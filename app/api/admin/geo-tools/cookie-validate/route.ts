@@ -14,15 +14,15 @@ interface ValidationSession {
 }
 
 const LLM_SITES = [
-  { id: "deepseek", name: "DeepSeek", url: "https://chat.deepseek.com/", description: "DeepSeek AI 深度求索", storageType: "localStorage", storageKey: "userToken" },
-  { id: "openai", name: "OpenAI (ChatGPT)", url: "https://chat.openai.com/", description: "OpenAI 对话模型", storageType: "cookie" },
-  { id: "doubao", name: "豆包", url: "https://www.doubao.com/", description: "字节跳动大模型", storageType: "cookie" },
-  { id: "kimi", name: "Kimi", url: "https://kimi.moonshot.cn/", description: "月之暗面大模型", storageType: "cookie" },
-  { id: "qwen", name: "通义千问", url: "https://tongyi.aliyun.com/", description: "阿里云大语言模型", storageType: "cookie" },
-  { id: "zhipu", name: "智谱AI (GLM)", url: "https://chatglm.cn/", description: "智谱清言对话模型", storageType: "cookie" },
-  { id: "minimax", name: "MiniMax", url: "https://www.minimaxi.com/", description: "MiniMax 大模型", storageType: "cookie" },
-  { id: "claude", name: "Claude (Anthropic)", url: "https://claude.ai/", description: "Anthropic 对话模型", storageType: "cookie" },
-  { id: "wenxin", name: "文心一言", url: "https://yiyan.baidu.com/", description: "百度文心大模型", storageType: "cookie" },
+  { id: "deepseek", name: "DeepSeek", url: "https://chat.deepseek.com/", description: "DeepSeek AI 深度求索", storageType: "both", storageKey: ["userToken"] },
+  { id: "openai", name: "OpenAI (ChatGPT)", url: "https://chat.openai.com/", description: "OpenAI 对话模型", storageType: "cookie", storageKey: [] },
+  { id: "doubao", name: "豆包", url: "https://www.doubao.com/", description: "字节跳动大模型", storageType: "cookie", storageKey: [] },
+  { id: "kimi", name: "Kimi", url: "https://kimi.moonshot.cn/", description: "月之暗面大模型", storageType: "cookie", storageKey: [] },
+  { id: "qwen", name: "通义千问", url: "https://tongyi.aliyun.com/", description: "阿里云大语言模型", storageType: "cookie", storageKey: [] },
+  { id: "zhipu", name: "智谱AI (GLM)", url: "https://chatglm.cn/", description: "智谱清言对话模型", storageType: "cookie", storageKey: [] },
+  { id: "minimax", name: "MiniMax", url: "https://www.minimaxi.com/", description: "MiniMax 大模型", storageType: "cookie", storageKey: [] },
+  { id: "claude", name: "Claude (Anthropic)", url: "https://claude.ai/", description: "Anthropic 对话模型", storageType: "cookie", storageKey: [] },
+  { id: "wenxin", name: "文心一言", url: "https://yiyan.baidu.com/", description: "百度文心大模型", storageType: "cookie", storageKey: [] },
 ]
 
 const validationSessions = new Map<string, ValidationSession>()
@@ -55,9 +55,9 @@ export async function POST(request: NextRequest) {
     }
 
     const body = await request.json()
-    const { siteId, siteUrl, cookies } = body
+    const { siteId, siteUrl, cookie_data, storage_data } = body
 
-    if (!siteId || !siteUrl || !cookies) {
+    if (!siteId || !siteUrl || (!cookie_data && !storage_data)) {
       return errorResponse("缺少必要参数")
     }
 
@@ -74,7 +74,7 @@ export async function POST(request: NextRequest) {
       createdAt: new Date()
     })
 
-    validateWithBrowser(sessionId, siteUrl, cookies).catch(console.error)
+    validateWithBrowser(sessionId, siteUrl, cookie_data, storage_data).catch(console.error)
 
     return successResponse({
       sessionId,
@@ -148,7 +148,7 @@ export async function DELETE(request: NextRequest) {
   }
 }
 
-async function validateWithBrowser(sessionId: string, siteUrl: string, cookiesString: string) {
+async function validateWithBrowser(sessionId: string, siteUrl: string, cookie_data: string | null, storage_data: Record<string, string> | null) {
   const session = validationSessions.get(sessionId)
   if (!session) return
 
@@ -183,85 +183,38 @@ async function validateWithBrowser(sessionId: string, siteUrl: string, cookiesSt
 
     const site = LLM_SITES.find(s => s.id === session.siteId)
     
-    if (site) {
-      if (site.storageType === "localStorage" && site.storageKey) {
-        // 对于localStorage类型的站点，从cookies字符串中提取对应的值并设置到localStorage
-        const storageKeyMatch = cookiesString.match(new RegExp(`${site.storageKey}=([^;]+)`))
-        if (storageKeyMatch && storageKeyMatch[1]) {
-          const storageValue = decodeURIComponent(storageKeyMatch[1])
-          const page = await context.newPage()
-          session.page = page
-          
-          await page.evaluate(({ key, value }) => {
-            localStorage.setItem(key, value)
-          }, { key: site.storageKey, value: storageValue })
-          
-          console.log(`[Cookie Validate] Set ${site.storageKey} to localStorage for ${site.name}`)
-        }
-      } else {
-        // 对于cookie类型的站点，保持现有的注入逻辑
-        const cookies = cookiesString.split(";").map(cookie => {
-          const [name, ...valueParts] = cookie.trim().split("=")
-          const value = valueParts.join("=").trim()
-          const cookieName = name.trim()
-          
-          // 根据站点的cookie规则设置属性
-          let httpOnly = false
-          let secure = urlObj.protocol === 'https:'
-          let sameSite: 'Lax' | 'Strict' | 'None' = 'Lax'
-          
-          // 对于deepseek特定的cookie
-          if (domain.includes('deepseek.com')) {
-            // ds_session_id 和 hw_session_id 设置为 httpOnly 和 secure
-            if (cookieName === 'ds_session_id' || cookieName === 'hw_session_id') {
-              httpOnly = true
-              secure = true
-              sameSite = 'Strict'
-            }
-          }
-          
-          return {
-            name: cookieName,
-            value: decodeURIComponent(value),
-            domain: domain,
-            path: "/",
-            secure: secure,
-            httpOnly: httpOnly,
-            sameSite: sameSite
-          }
-        })
-
-        // 同时注入根域名的cookie，确保跨子域生效
-        const rootDomainCookies = cookies.map(c => ({
-          ...c,
-          domain: rootDomain
-        }))
-
-        console.log(`[Cookie Validate] Injecting ${cookies.length} cookies for domain: ${domain}`)
-        console.log(`[Cookie Validate] Injecting ${rootDomainCookies.length} cookies for root domain: ${rootDomain}`)
-        console.log(`[Cookie Validate] Cookie names:`, cookies.map(c => c.name).join(', '))
-
-        // 注入两种domain的cookie
-        await context.addCookies([...cookies, ...rootDomainCookies])
-
-        const page = await context.newPage()
-        session.page = page
-      }
-    } else {
-      // 对于未知站点，默认使用cookie注入
-      const cookies = cookiesString.split(";").map(cookie => {
+    let page = null
+    
+    // 处理cookie数据
+    if (cookie_data) {
+      const cookies = cookie_data.split(";").map(cookie => {
         const [name, ...valueParts] = cookie.trim().split("=")
         const value = valueParts.join("=").trim()
         const cookieName = name.trim()
+        
+        // 根据站点的cookie规则设置属性
+        let httpOnly = false
+        let secure = urlObj.protocol === 'https:'
+        let sameSite: 'Lax' | 'Strict' | 'None' = 'Lax'
+        
+        // 对于deepseek特定的cookie
+        if (domain.includes('deepseek.com')) {
+          // ds_session_id 和 hw_session_id 设置为 httpOnly 和 secure
+          if (cookieName === 'ds_session_id' || cookieName === 'hw_session_id') {
+            httpOnly = true
+            secure = true
+            sameSite = 'Strict'
+          }
+        }
         
         return {
           name: cookieName,
           value: decodeURIComponent(value),
           domain: domain,
           path: "/",
-          secure: urlObj.protocol === 'https:',
-          httpOnly: false,
-          sameSite: 'Lax' as const
+          secure: secure,
+          httpOnly: httpOnly,
+          sameSite: sameSite
         }
       })
 
@@ -277,14 +230,35 @@ async function validateWithBrowser(sessionId: string, siteUrl: string, cookiesSt
 
       // 注入两种domain的cookie
       await context.addCookies([...cookies, ...rootDomainCookies])
-
-      const page = await context.newPage()
-      session.page = page
+    }
+    
+    // 创建页面
+    page = await context.newPage()
+    session.page = page
+    
+    // 先导航到网站，再设置localStorage
+    await page.goto(siteUrl, { waitUntil: "domcontentloaded", timeout: 60000 })
+    
+    // 处理localStorage数据
+    if (storage_data && site && (site.storageType === "both" || site.storageType === "localStorage") && site.storageKey && site.storageKey.length > 0) {
+      try {
+        await page.evaluate((data) => {
+          Object.entries(data).forEach(([key, value]) => {
+            localStorage.setItem(key, value)
+          })
+        }, storage_data)
+        
+        console.log(`[Cookie Validate] Set localStorage data for ${site.name}:`, Object.keys(storage_data))
+      } catch (error) {
+        console.warn(`[Cookie Validate] Failed to set localStorage for ${site.name}:`, error)
+        // 继续执行，不中断流程
+      }
     }
 
     session.status = "validating"
 
-    await page.goto(siteUrl, { waitUntil: "domcontentloaded", timeout: 60000 })
+    // 页面已经在设置localStorage之前导航过了，不需要再次导航
+    await page.waitForTimeout(3000)
 
     await page.waitForTimeout(3000)
 

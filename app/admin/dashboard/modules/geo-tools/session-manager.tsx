@@ -4,13 +4,14 @@ import { useState, useEffect, useRef } from "react"
 import { Button, Card, Modal, Input, Tag, Tooltip } from "@arco-design/web-react"
 import { toast } from "sonner"
 import { ExternalLink, Edit, Trash2, Copy, Info, RefreshCw, X } from "lucide-react"
-import styles from "./cookie-manager.module.css"
+import styles from "./session-manager.module.css"
 
-interface CookieData {
+interface SessionData {
   siteId: string
   name: string
   url: string
   cookies: string
+  storage_data?: any
   updatedAt: string
   expiresAt?: string
   storageType?: string
@@ -42,19 +43,21 @@ const LLM_SITES = [
   { id: "wenxin", name: "文心一言", url: "https://yiyan.baidu.com/", description: "百度文心大模型", storageType: "cookie" },
 ]
 
-export function CookieManager() {
-  const [cookiesData, setCookiesData] = useState<Record<string, CookieData>>({})
+export function SessionManager() {
+  const [sessionData, setSessionData] = useState<Record<string, SessionData>>({})
   const [editModalVisible, setEditModalVisible] = useState(false)
   const [editingSiteId, setEditingSiteId] = useState<string | null>(null)
   const [tempCookieValue, setTempCookieValue] = useState("")
   const [extractionStatuses, setExtractionStatuses] = useState<Record<string, ExtractionStatus>>({})
   const [validationStatuses, setValidationStatuses] = useState<Record<string, ValidationStatus>>({})
   const [expiringSoon, setExpiringSoon] = useState<string[]>([])
+  const [confirmModalVisible, setConfirmModalVisible] = useState(false)
+  const [confirmData, setConfirmData] = useState<{siteId: string, site: any, cookie_data: string | null, storage_data: any | null} | null>(null)
   const pollingRef = useRef<Record<string, NodeJS.Timeout>>({})
   const validationPollingRef = useRef<Record<string, NodeJS.Timeout>>({})
 
   useEffect(() => {
-    fetchCookies()
+    fetchSessions()
   }, [])
 
   useEffect(() => {
@@ -64,26 +67,26 @@ export function CookieManager() {
     }
   }, [])
 
-  const fetchCookies = async () => {
+  const fetchSessions = async () => {
     try {
       const response = await fetch("/api/admin/geo-tools/cookies")
       const result = await response.json()
       if (result.success) {
-        setCookiesData(result.data || {})
+        setSessionData(result.data || {})
         checkExpiring(result.data || {})
       }
     } catch (error) {
-      console.error("Fetch cookies error:", error)
+      console.error("Fetch sessions error:", error)
     }
   }
 
-  const checkExpiring = (data: Record<string, CookieData>) => {
+  const checkExpiring = (data: Record<string, SessionData>) => {
     const expiring: string[] = []
     const now = new Date()
     
-    Object.entries(data).forEach(([siteId, cookie]) => {
-      if (cookie.expiresAt) {
-        const expiresDate = new Date(cookie.expiresAt)
+    Object.entries(data).forEach(([siteId, session]) => {
+      if (session.expiresAt) {
+        const expiresDate = new Date(session.expiresAt)
         const daysUntilExpiry = Math.ceil((expiresDate.getTime() - now.getTime()) / (1000 * 60 * 60 * 24))
         
         if (daysUntilExpiry <= 3 && daysUntilExpiry > 0) {
@@ -95,7 +98,7 @@ export function CookieManager() {
     setExpiringSoon(expiring)
   }
 
-  const saveCookiesToDb = async (newData: Record<string, CookieData>) => {
+  const saveSessionsToDb = async (newData: Record<string, SessionData>) => {
     try {
       const response = await fetch("/api/admin/geo-tools/cookies", {
         method: "POST",
@@ -104,29 +107,29 @@ export function CookieManager() {
       })
       const result = await response.json()
       if (result.success) {
-        setCookiesData(newData)
+        setSessionData(newData)
         checkExpiring(newData)
       }
     } catch (error) {
-      console.error("Save cookies error:", error)
+      console.error("Save sessions error:", error)
       toast.error("保存失败")
     }
   }
 
-  const deleteCookieFromDb = async (siteId: string) => {
+  const deleteSessionFromDb = async (siteId: string) => {
     try {
       const response = await fetch(`/api/admin/geo-tools/cookies?siteId=${siteId}`, {
         method: "DELETE"
       })
       const result = await response.json()
       if (result.success) {
-        const newData = { ...cookiesData }
+        const newData = { ...sessionData }
         delete newData[siteId]
-        setCookiesData(newData)
+        setSessionData(newData)
         checkExpiring(newData)
       }
     } catch (error) {
-      console.error("Delete cookie error:", error)
+      console.error("Delete session error:", error)
       toast.error("删除失败")
     }
   }
@@ -137,11 +140,11 @@ export function CookieManager() {
 
   const openEditModal = (siteId: string) => {
     setEditingSiteId(siteId)
-    setTempCookieValue(cookiesData[siteId]?.cookies || "")
+    setTempCookieValue(sessionData[siteId]?.cookies || "")
     setEditModalVisible(true)
   }
 
-  const handleSaveCookie = () => {
+  const handleSaveSession = () => {
     if (!editingSiteId) return
 
     const site = LLM_SITES.find(s => s.id === editingSiteId)
@@ -151,7 +154,7 @@ export function CookieManager() {
     expiresAt.setDate(expiresAt.getDate() + 7)
 
     const newData = {
-      ...cookiesData,
+      ...sessionData,
       [editingSiteId]: {
         siteId: editingSiteId,
         name: site.name,
@@ -164,30 +167,30 @@ export function CookieManager() {
       }
     }
 
-    saveCookiesToDb(newData)
+    saveSessionsToDb(newData)
     setEditModalVisible(false)
-    toast.success("Cookie 已保存")
+    toast.success("会话信息已保存")
   }
 
-  const handleDeleteCookie = (siteId: string) => {
+  const handleDeleteSession = (siteId: string) => {
     Modal.confirm({
       title: "确认删除",
-      content: "确定要删除这个 Cookie 吗？",
+      content: "确定要删除这个会话信息吗？",
       onOk: () => {
-        deleteCookieFromDb(siteId)
-        toast.success("Cookie 已删除")
+        deleteSessionFromDb(siteId)
+        toast.success("会话信息已删除")
       }
     })
   }
 
-  const handleCopyCookie = (siteId: string) => {
-    const data = cookiesData[siteId]
+  const handleCopySession = (siteId: string) => {
+    const data = sessionData[siteId]
     if (data?.cookies) {
       navigator.clipboard.writeText(data.cookies)
-        .then(() => toast.success("Cookie 已复制到剪贴板"))
+        .then(() => toast.success("会话信息已复制到剪贴板"))
         .catch(() => toast.error("复制失败"))
     } else {
-      toast.warning("没有可复制的 Cookie")
+      toast.warning("没有可复制的会话信息")
     }
   }
 
@@ -244,30 +247,20 @@ export function CookieManager() {
               [siteId]: { ...prev[siteId], status, error }
             }))
 
-            if (status === "completed" && cookies) {
+            if (status === "completed" && (cookies || storage_data)) {
               clearInterval(pollingRef.current[siteId])
               delete pollingRef.current[siteId]
 
               const site = LLM_SITES.find(s => s.id === siteId)
               if (site) {
-                const expiresAt = new Date()
-                expiresAt.setDate(expiresAt.getDate() + 7)
-
-                const newData = {
-                  ...cookiesData,
-                  [siteId]: {
-                    siteId,
-                    name: site.name,
-                    url: site.url,
-                    cookies,
-                    updatedAt: new Date().toLocaleString("zh-CN"),
-                    expiresAt: expiresAt.toISOString(),
-                    storageType: site.storageType,
-                    storageKey: site.storageKey
-                  }
-                }
-                saveCookiesToDb(newData)
-                toast.success("Cookie 已自动抓取并保存")
+                // 显示确认弹窗
+                setConfirmData({
+                  siteId,
+                  site,
+                  cookie_data: cookies,
+                  storage_data: storage_data
+                })
+                setConfirmModalVisible(true)
               }
             } else if (status === "error") {
               clearInterval(pollingRef.current[siteId])
@@ -509,6 +502,39 @@ export function CookieManager() {
     return null
   }
 
+  const handleConfirmSave = () => {
+    if (!confirmData) return
+
+    const { siteId, site, cookie_data, storage_data } = confirmData
+    const expiresAt = new Date()
+    expiresAt.setDate(expiresAt.getDate() + 7)
+
+    const newData = {
+      ...cookiesData,
+      [siteId]: {
+        siteId,
+        name: site.name,
+        url: site.url,
+        cookies: cookie_data,
+        storage_data: storage_data,
+        updatedAt: new Date().toLocaleString("zh-CN"),
+        expiresAt: expiresAt.toISOString(),
+        storageType: site.storageType,
+        storageKey: site.storageKey
+      }
+    }
+
+    saveCookiesToDb(newData)
+    setConfirmModalVisible(false)
+    setConfirmData(null)
+    toast.success("会话信息已保存")
+  }
+
+  const handleConfirmCancel = () => {
+    setConfirmModalVisible(false)
+    setConfirmData(null)
+  }
+
   return (
     <div className={styles.container}>
       {expiringSoon.length > 0 && (
@@ -703,6 +729,48 @@ export function CookieManager() {
             autoSize={{ minRows: 8, maxRows: 16 }}
           />
         </div>
+      </Modal>
+
+      <Modal
+        title="确认保存会话信息"
+        visible={confirmModalVisible}
+        onOk={handleConfirmSave}
+        onCancel={handleConfirmCancel}
+        autoFocus={false}
+        focusLock={true}
+        style={{ width: 600 }}
+      >
+        {confirmData && (
+          <div className={styles.modalContent}>
+            <div className={styles.modalTip}>
+              已成功抓取到 <strong>{confirmData.site.name}</strong> 的会话信息，请确认是否保存：
+            </div>
+            
+            {confirmData.cookie_data && (
+              <div className={styles.dataSection}>
+                <div className={styles.dataTitle}>Cookie 数据：</div>
+                <Input.TextArea
+                  value={confirmData.cookie_data}
+                  readOnly
+                  autoSize={{ minRows: 4, maxRows: 8 }}
+                  className={styles.dataTextarea}
+                />
+              </div>
+            )}
+            
+            {confirmData.storage_data && Object.keys(confirmData.storage_data).length > 0 && (
+              <div className={styles.dataSection}>
+                <div className={styles.dataTitle}>LocalStorage 数据：</div>
+                <Input.TextArea
+                  value={JSON.stringify(confirmData.storage_data, null, 2)}
+                  readOnly
+                  autoSize={{ minRows: 4, maxRows: 8 }}
+                  className={styles.dataTextarea}
+                />
+              </div>
+            )}
+          </div>
+        )}
       </Modal>
     </div>
   )
