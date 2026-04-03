@@ -7,6 +7,7 @@ import remarkGfm from "remark-gfm"
 import { IconCopy, IconFile, IconBulb, IconBook, IconRobot, IconLoading } from "@arco-design/web-react/icon"
 import { toast } from "sonner"
 import { ArticleForm } from "../../components/ArticleForm"
+import { PanelHeader } from "./PanelHeader"
 
 import styles from "./article-generator.module.css"
 
@@ -49,6 +50,7 @@ export function ArticleGenerator() {
     completionTokens: 0,
     totalTokens: 0,
   })
+  const [expandedPanels, setExpandedPanels] = useState<Step[]>(["company"])
   const [currentStep, setCurrentStep] = useState<Step>("company")
   const [articleFormVisible, setArticleFormVisible] = useState(false)
   const abortControllerRef = useRef<AbortController | null>(null)
@@ -100,6 +102,7 @@ export function ArticleGenerator() {
       setStrategyResult(prompt)
       setLoadingStrategy(false)
       setCurrentStep("strategy")
+      setExpandedPanels(prev => [...prev, "strategy"].filter((v, i, a) => a.indexOf(v) === i))
       toast.success("提示词生成成功！现在可以生成文章了")
     }, 500)
   }
@@ -228,6 +231,7 @@ export function ArticleGenerator() {
         totalTokens,
       })
       setCurrentStep("article")
+      setExpandedPanels(prev => [...prev, "article"].filter((v, i, a) => a.indexOf(v) === i))
       toast.success("文章生成成功！")
     } catch (error) {
       if ((error as Error).name === "AbortError") {
@@ -364,29 +368,33 @@ export function ArticleGenerator() {
 
   return (
     <div className={styles.container}>
-      <Collapse activeKey={[currentStep]} bordered={false} onChange={(keys) => {
-        if (keys.length > 0) {
-          setCurrentStep(keys[0] as Step)
-        }
-      }}>
+      <Collapse 
+        activeKey={expandedPanels} 
+        bordered={false} 
+        onChange={(keys) => {
+          setExpandedPanels(keys as Step[])
+          if (keys.length > 0) {
+            setCurrentStep(keys[keys.length - 1] as Step)
+          }
+        }}
+      >
+        {/* 目标企业信息面板 */}
         <CollapseItem
           header={
-            <div className={styles.collapseHeader}>
-              <IconBulb className={styles.collapseIcon} />
-              <span>目标企业信息</span>
-              <Button
-                type="primary"
-                size="small"
-                loading={loadingStrategy}
-                onClick={(e) => {
-                  e.stopPropagation()
-                  handleGenerateStrategy()
-                }}
-                className={styles.collapseButton}
-              >
-                生成提示词
-              </Button>
-            </div>
+            <PanelHeader
+              icon={IconBulb}
+              title="目标企业信息"
+              action={
+                <Button
+                  type="primary"
+                  size="small"
+                  loading={loadingStrategy}
+                  onClick={handleGenerateStrategy}
+                >
+                  生成提示词
+                </Button>
+              }
+            />
           }
           name="company"
         >
@@ -430,21 +438,19 @@ export function ArticleGenerator() {
           </div>
         </CollapseItem>
 
+        {/* 提示词预览面板 */}
         <CollapseItem
-            header={
-              <div className={styles.collapseHeader}>
-                <IconFile className={styles.collapseIcon} />
-                <span>提示词预览</span>
-                <div style={{ display: 'flex', gap: '8px' }}>
+          header={
+            <PanelHeader
+              icon={IconFile}
+              title="提示词预览"
+              action={
+                <>
                   <Button
                     type="outline"
                     size="small"
                     icon={<IconCopy />}
-                    onClick={(e) => {
-                      e.stopPropagation()
-                      handleCopyStrategy()
-                    }}
-                    className={styles.collapseButton}
+                    onClick={handleCopyStrategy}
                     disabled={!strategyResult}
                   >
                     复制
@@ -454,50 +460,45 @@ export function ArticleGenerator() {
                     size="small"
                     loading={generation.status === "connecting" || generation.status === "generating"}
                     disabled={!strategyResult || generation.status === "connecting" || generation.status === "generating"}
-                    onClick={(e) => {
-                      e.stopPropagation()
-                      handleGenerateArticle()
-                    }}
-                    className={styles.collapseButton}
+                    onClick={handleGenerateArticle}
                   >
                     生成文章
                   </Button>
-                </div>
+                </>
+              }
+            />
+          }
+          name="strategy"
+        >
+          <div className={styles.markdownContent}>
+            {strategyResult ? (
+              <Input.TextArea
+                value={strategyResult}
+                readOnly
+                autoSize={{ minRows: 10, maxRows: 20 }}
+                style={{ width: '100%' }}
+              />
+            ) : (
+              <div className={styles.emptyState}>
+                请先生成提示词
               </div>
-            }
-            name="strategy"
-          >
-            <div className={styles.markdownContent}>
-              {strategyResult ? (
-                <Input.TextArea
-                  value={strategyResult}
-                  readOnly
-                  autoSize={{ minRows: 10, maxRows: 20 }}
-                  style={{ width: '100%' }}
-                />
-              ) : (
-                <div className={styles.emptyState}>
-                  请先生成提示词
-                </div>
-              )}
-            </div>
-          </CollapseItem>
+            )}
+          </div>
+        </CollapseItem>
 
+        {/* 文章生成结果面板 */}
         <CollapseItem
-            header={
-              <div className={styles.collapseHeader}>
-                <IconBook className={styles.collapseIcon} />
-                <span>文章生成结果</span>
-                <div style={{ display: 'flex', gap: '8px' }}>
+          header={
+            <PanelHeader
+              icon={IconBook}
+              title="文章生成结果"
+              action={
+                <>
                   <Button
                     type="outline"
                     size="small"
                     icon={<IconCopy />}
-                    onClick={(e) => {
-                      e.stopPropagation()
-                      handleCopyArticle()
-                    }}
-                    className={styles.collapseButton}
+                    onClick={handleCopyArticle}
                     disabled={!articleResult}
                   >
                     复制
@@ -506,29 +507,26 @@ export function ArticleGenerator() {
                     type="primary"
                     size="small"
                     disabled={!articleResult}
-                    onClick={(e) => {
-                      e.stopPropagation()
-                      handleSaveArticle()
-                    }}
-                    className={styles.collapseButton}
+                    onClick={handleSaveArticle}
                   >
                     保存资讯
                   </Button>
-                </div>
+                </>
+              }
+            />
+          }
+          name="article"
+        >
+          <div className={styles.markdownContent}>
+            {articleResult ? (
+              <ReactMarkdown remarkPlugins={[remarkGfm]}>{articleResult}</ReactMarkdown>
+            ) : (
+              <div className={styles.emptyState}>
+                请先生成文章
               </div>
-            }
-            name="article"
-          >
-            <div className={styles.markdownContent}>
-              {articleResult ? (
-                <ReactMarkdown remarkPlugins={[remarkGfm]}>{articleResult}</ReactMarkdown>
-              ) : (
-                <div className={styles.emptyState}>
-                  请先生成文章
-                </div>
-              )}
-            </div>
-          </CollapseItem>
+            )}
+          </div>
+        </CollapseItem>
       </Collapse>
 
       {(generation.status === "connecting" ||

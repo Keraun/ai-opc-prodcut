@@ -26,12 +26,21 @@ export class LLMModelRepository extends BaseRepository<LLMModel> {
   }
 
   protected mapEntityToRow(entity: Partial<LLMModel>): Record<string, any> {
-    return {
-      name: entity.name,
-      value: entity.value,
-      is_default: entity.is_default,
+    const row: Record<string, any> = {
       updated_at: new Date().toISOString()
     }
+    
+    if (entity.name !== undefined) {
+      row.name = entity.name
+    }
+    if (entity.value !== undefined) {
+      row.value = entity.value
+    }
+    if (entity.is_default !== undefined) {
+      row.is_default = entity.is_default
+    }
+    
+    return row
   }
 
   findDefaultModel(): LLMModel | null {
