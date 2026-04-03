@@ -1,0 +1,154 @@
+.fieldLabel {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 14px;
+  font-weight: 500;
+  color: #4b5563;
+}
+
+.fieldLabel svg {
+  color: #9ca3af;
+}
+
+.inlineGroup {
+  margin-bottom: 20px;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  padding: 16px;
+  background: #fafafa;
+}
+
+.inlineGroupTitle {
+  font-size: 12px;
+  font-weight: 600;
+  color: #6b7280;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 16px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.inlineFields {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+@media (max-width: 768px) {
+  .inlineFields {
+    grid-template-columns: 1fr;
+  }
+}
+
+.formGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.inlineField {
+  width: 100%;
+}
+
+.tagsContainer {
+  width: 100%;
+}
+
+.tagInput {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 12px;
+}
+
+.imageUploadContainer {
+  width: 100%;
+}
+
+.imagePreviewWrapper {
+  position: relative;
+  display: inline-block;
+}
+
+.imagePreview {
+  width: 200px;
+  height: 150px;
+  object-fit: cover;
+  border-radius: 8px;
+  border: 1px solid #e5e7eb;
+}
+
+.removeImageButton {
+  position: absolute;
+  top: -8px;
+  right: -8px;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: #f53f3f;
+  color: white;
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.removeImageButton:hover {
+  background: #d91e1e;
+}
+
+.imageUploadPlaceholder {
+  width: 200px;
+  height: 150px;
+  border: 2px dashed #d1d5db;
+  border-radius: 8px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  cursor: pointer;
+  transition: all 0.2s;
+  color: #6b7280;
+  background: #f9fafb;
+}
+
+.imageUploadPlaceholder:hover {
+  border-color: #165dff;
+  color: #165dff;
+  background: #e8f3ff;
+}
+
+.imageHint {
+  font-size: 11px;
+  color: #9ca3af;
+  margin-top: 4px;
+}
+
+.generateImageButton {
+  margin-top: 12px;
+  padding: 6px 12px;
+  background: #f7f8fa;
+  border: 1px solid #e5e7eb;
+  border-radius: 4px;
+  font-size: 12px;
+  color: #4b5563;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.generateImageButton:hover {
+  background: #e5e7eb;
+  border-color: #165dff;
+  color: #165dff;
+}

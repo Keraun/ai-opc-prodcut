@@ -368,15 +368,13 @@ export function ArticleGenerator() {
 
   return (
     <div className={styles.container}>
-      <Collapse 
-        activeKey={expandedPanels} 
-        bordered={false} 
-        multiple 
-        onChange={(keys) => {
-          setExpandedPanels(keys as Step[])
-          if (keys.length > 0) {
-            setCurrentStep(keys[keys.length - 1] as Step)
-          }
+      <Collapse
+        activeKey={expandedPanels}
+        bordered={false}
+        multiple
+        onChange={(keys, data) => {
+          setExpandedPanels(data as Step[])
+
         }}
       >
         {/* 目标企业信息面板 */}
@@ -534,47 +532,47 @@ export function ArticleGenerator() {
         generation.status === "generating" ||
         generation.status === "completed" ||
         generation.status === "error") && (
-        <Card className={styles.progressCard}>
-          <div className={styles.progressSection}>
-            <div className={styles.progressHeader}>
-              <Space>
-                <Tag color={statusDisplay.color}>{statusDisplay.text}</Tag>
-                <span className={styles.progressMessage}>{generation.message || generation.error}</span>
-              </Space>
-              {(generation.status === "connecting" || generation.status === "generating") && (
-                <Button type="text" size="small" onClick={handleCancelGeneration}>
-                  取消
-                </Button>
+          <Card className={styles.progressCard}>
+            <div className={styles.progressSection}>
+              <div className={styles.progressHeader}>
+                <Space>
+                  <Tag color={statusDisplay.color}>{statusDisplay.text}</Tag>
+                  <span className={styles.progressMessage}>{generation.message || generation.error}</span>
+                </Space>
+                {(generation.status === "connecting" || generation.status === "generating") && (
+                  <Button type="text" size="small" onClick={handleCancelGeneration}>
+                    取消
+                  </Button>
+                )}
+              </div>
+              <Progress
+                percent={generation.progress}
+                status={generation.status === "error" ? "error" : generation.status === "completed" ? "success" : "normal"}
+                animation
+              />
+              <div className={styles.tokenInfo}>
+                <div className={styles.tokenItem}>
+                  <span className={styles.tokenLabel}>输入Token:</span>
+                  <span className={styles.tokenValue}>{generation.promptTokens}</span>
+                </div>
+                <div className={styles.tokenItem}>
+                  <span className={styles.tokenLabel}>输出Token:</span>
+                  <span className={styles.tokenValue}>{generation.completionTokens}</span>
+                </div>
+                <div className={styles.tokenItem}>
+                  <span className={styles.tokenLabel}>总计:</span>
+                  <span className={styles.tokenValue + " " + styles.tokenTotal}>{generation.totalTokens}</span>
+                </div>
+              </div>
+              {generation.status === "generating" && articleResult && (
+                <div className={styles.generatingHint}>
+                  <IconLoading className={styles.spinIcon} />
+                  <span>正在接收内容，已生成 {articleResult.length} 字符...</span>
+                </div>
               )}
             </div>
-            <Progress
-              percent={generation.progress}
-              status={generation.status === "error" ? "error" : generation.status === "completed" ? "success" : "normal"}
-              animation
-            />
-            <div className={styles.tokenInfo}>
-              <div className={styles.tokenItem}>
-                <span className={styles.tokenLabel}>输入Token:</span>
-                <span className={styles.tokenValue}>{generation.promptTokens}</span>
-              </div>
-              <div className={styles.tokenItem}>
-                <span className={styles.tokenLabel}>输出Token:</span>
-                <span className={styles.tokenValue}>{generation.completionTokens}</span>
-              </div>
-              <div className={styles.tokenItem}>
-                <span className={styles.tokenLabel}>总计:</span>
-                <span className={styles.tokenValue + " " + styles.tokenTotal}>{generation.totalTokens}</span>
-              </div>
-            </div>
-            {generation.status === "generating" && articleResult && (
-              <div className={styles.generatingHint}>
-                <IconLoading className={styles.spinIcon} />
-                <span>正在接收内容，已生成 {articleResult.length} 字符...</span>
-              </div>
-            )}
-          </div>
-        </Card>
-      )}
+          </Card>
+        )}
 
       {llmSelectVisible && (
         <div className={styles.modalOverlay} onClick={() => setLlmSelectVisible(false)}>
