@@ -28,7 +28,7 @@
     "module_id": "product-list",
     "module_name": "产品列表",
     "module_order": 2,
-    "data": "{\"title\":\"AI产品中心\",\"subtitle\":\"精选优质 AI 工具、课程和服务，助力个人创业者实现10倍效率提升\",\"showPrice\":true,\"showTags\":true,\"categories\":[{\"key\":\"tools\",\"title\":\"AI工具\"},{\"key\":\"courses\",\"title\":\"AI课程\"},{\"key\":\"services\",\"title\":\"AI服务\"}]}",
+    "data": "{\"title\":\"OPC服务\",\"subtitle\":\"为OPC创业者和小型团队提供GEO、快速建站、技术咨询等专业服务\",\"showPrice\":true,\"showTags\":true,\"categories\":[{\"key\":\"geo-services\",\"title\":\"GEO服务\"},{\"key\":\"website-system\",\"title\":\"建站系统\"},{\"key\":\"tech-consulting\",\"title\":\"技术咨询\"},{\"key\":\"other-services\",\"title\":\"其他服务\"}]}",
     "created_at": "2026-03-27T20:18:12.903Z",
     "updated_at": "2026-03-29T15:00:00.000Z"
   },
@@ -115,7 +115,7 @@
     "module_instance_id": "news-list-1774642143719-1774642694903",
     "module_name": "资讯列表",
     "module_order": 2,
-    "data": "{\"title\":\"资讯中心\",\"subtitle\":\"最新行业动态、深度分析与实战案例\",\"showDate\":true,\"showSummary\":true,\"itemsPerPage\":10}",
+    "data": "{\"title\":\"创业资讯\",\"subtitle\":\"GEO技巧、建站指南、技术分享与创业经验\",\"showDate\":true,\"showSummary\":true,\"itemsPerPage\":10}",
     "created_at": "2026/03/31 09:41:46",
     "updated_at": "2026/03/31 09:41:46",
     "id": 72
@@ -226,8 +226,8 @@
     "module_name": "站点容器",
     "module_order": 0,
     "data": null,
-    "created_at": "2026/04/03 20:40:39",
-    "updated_at": "2026/04/03 20:40:39",
+    "created_at": "2026/04/03 22:26:59",
+    "updated_at": "2026/04/03 22:26:59",
     "id": 102
   },
   {
@@ -237,8 +237,8 @@
     "module_name": "站点导航",
     "module_order": 1,
     "data": "{\"navItems\":[{\"label\":\"首页\",\"href\":\"/\"},{\"label\":\"产品\",\"href\":\"/product\"},{\"label\":\"资讯\",\"href\":\"/news\"}],\"showContactButton\":true,\"showCtaButton\":true,\"ctaButtonText\":\"开始使用\",\"ctaButtonLink\":\"/product\"}",
-    "created_at": "2026/04/03 20:40:39",
-    "updated_at": "2026/04/03 20:40:39",
+    "created_at": "2026/04/03 22:26:59",
+    "updated_at": "2026/04/03 22:26:59",
     "id": 103
   },
   {
@@ -247,9 +247,9 @@
     "module_instance_id": "section-hero-1774642129718-1774642694903",
     "module_name": "Hero 区块",
     "module_order": 2,
-    "data": "{\"layout\":\"layout1\",\"badge\":\"徽章文本徽章文本徽章文本\",\"title\":{\"main\":\"主标题文案\",\"sub\":\"副标题文案\"},\"subtitle\":\"副标题描述副标题描述副标题描述副标题描述副标题描述\",\"buttons\":{\"primary\":{\"text\":\"开始探索\",\"href\":\"/product\"},\"secondary\":{\"text\":\"了解更多\",\"href\":\"/product\"}},\"featurePills\":[\"标签1\",\"标签2\",\"标签3\",\"标签4\"],\"mainImage\":\"\"}",
-    "created_at": "2026/04/03 20:40:39",
-    "updated_at": "2026/04/03 20:40:39",
+    "data": "{\"layout\":\"layout1\",\"badge\":\"OPC创业者首选\",\"title\":{\"main\":\"让技术成为你的\",\"sub\":\"超级杠杆\"},\"subtitle\":\"OPC一人公司为创业者和小型团队提供GEO、快速建站、技术咨询等专业服务，助你一人成军，事半功倍\",\"buttons\":{\"primary\":{\"text\":\"开始合作\",\"href\":\"/product\"},\"secondary\":{\"text\":\"了解服务\",\"href\":\"/product\"}},\"featurePills\":[\"GEO服务\",\"快速建站\",\"技术咨询\",\"创业支持\"],\"mainImage\":\"\"}",
+    "created_at": "2026/04/03 22:26:59",
+    "updated_at": "2026/04/03 22:26:59",
     "id": 104
   },
   {
@@ -258,9 +258,9 @@
     "module_instance_id": "section-partner-1774642130719-1774642695903",
     "module_name": "合作伙伴区块",
     "module_order": 3,
-    "data": "{\"sectionTag\":\"合作伙伴\",\"title\":\"来自优秀伙伴的信任2313\",\"description\":\"与行业领先的企业和机构合作，为用户提供更好的服务\",\"items\":[{\"src\":\"/partner/partner_01.png\",\"alt\":\"合作伙伴1\"},{\"src\":\"/partner/partner_01.png\",\"alt\":\"合作伙伴1\"},{\"src\":\"/partner/partner_01.png\",\"alt\":\"合作伙伴1\"},{\"src\":\"/partner/partner_01.png\",\"alt\":\"合作伙伴1\"}]}",
-    "created_at": "2026/04/03 20:40:39",
-    "updated_at": "2026/04/03 20:40:39",
+    "data": "{\"sectionTag\":\"合作伙伴\",\"title\":\"来自优秀创业者的信任\",\"description\":\"与众多OPC创业者和小型团队建立长期合作关系\",\"items\":[{\"src\":\"/partner/partner_01.png\",\"alt\":\"合作伙伴1\"},{\"src\":\"/partner/partner_02.png\",\"alt\":\"合作伙伴2\"},{\"src\":\"/partner/partner_03.png\",\"alt\":\"合作伙伴3\"},{\"src\":\"/partner/partner_04.png\",\"alt\":\"合作伙伴4\"}]}",
+    "created_at": "2026/04/03 22:26:59",
+    "updated_at": "2026/04/03 22:26:59",
     "id": 105
   },
   {
@@ -269,9 +269,9 @@
     "module_instance_id": "section-products-1774642131720-1774642696903",
     "module_name": "产品区块",
     "module_order": 4,
-    "data": "{\"title\":\"区块标题\",\"description\":\"区块描述区块描述区块描述区块描述\",\"sectionTag\":\"区块标签\",\"items\":[{\"id\":\"workflow\",\"name\":\"产品1\",\"description\":\"产品1描述\",\"icon\":\"IconThunderbolt\",\"tag\":\"热门\",\"tagColor\":\"blue\",\"features\":[\"标签1\",\"标签2\",\"标签3\"],\"link\":\"/product\"},{\"id\":\"tools\",\"name\":\"产品2\",\"description\":\"产品2描述\",\"icon\":\"IconApps\",\"tag\":\"免费\",\"tagColor\":\"green\",\"features\":[\"标签1\",\"标签2\",\"标签3\"],\"link\":\"/product\"},{\"id\":\"courses\",\"name\":\"产品3\",\"description\":\"产品3描述\",\"icon\":\"IconBook\",\"tag\":\"新课\",\"tagColor\":\"orange\",\"features\":[\"标签1\",\"标签2\",\"标签3\"],\"link\":\"/product\"},{\"id\":\"services\",\"name\":\"产品4\",\"description\":\"产品4描述\",\"icon\":\"IconCustomerService\",\"tag\":\"定制\",\"tagColor\":\"purple\",\"features\":[\"标签1\",\"标签2\",\"标签3\"],\"link\":\"/product\"}]}",
-    "created_at": "2026/04/03 20:40:39",
-    "updated_at": "2026/04/03 20:40:39",
+    "data": "{\"title\":\"核心服务\",\"description\":\"为OPC创业者量身定制的专业服务方案\",\"sectionTag\":\"我们的服务\",\"items\":[{\"id\":\"geo\",\"name\":\"GEO服务\",\"description\":\"AI驱动的搜索引擎优化，提升你的内容可见度\",\"icon\":\"IconSearch\",\"tag\":\"热门\",\"tagColor\":\"blue\",\"features\":[\"AI内容优化\",\"关键词分析\",\"排名提升\",\"效果追踪\"],\"link\":\"/geo\"},{\"id\":\"website\",\"name\":\"快速建站\",\"description\":\"一键生成专业网站，无需技术背景\",\"icon\":\"IconApp\",\"tag\":\"高效\",\"tagColor\":\"green\",\"features\":[\"模板丰富\",\"响应式设计\",\"SEO友好\",\"快速上线\"],\"link\":\"/website\"},{\"id\":\"consulting\",\"name\":\"技术咨询\",\"description\":\"一对一技术咨询，解决你的技术难题\",\"icon\":\"IconMessage\",\"tag\":\"专业\",\"tagColor\":\"orange\",\"features\":[\"架构设计\",\"技术选型\",\"问题诊断\",\"持续支持\"],\"link\":\"/consulting\"},{\"id\":\"support\",\"name\":\"创业支持\",\"description\":\"全方位创业支持服务，助你快速成长\",\"icon\":\"IconTeam\",\"tag\":\"贴心\",\"tagColor\":\"purple\",\"features\":[\"资源对接\",\"运营指导\",\"社群支持\",\"成长陪伴\"],\"link\":\"/product\"}]}",
+    "created_at": "2026/04/03 22:26:59",
+    "updated_at": "2026/04/03 22:26:59",
     "id": 106
   },
   {
@@ -280,9 +280,9 @@
     "module_instance_id": "section-services-1774642132721-1774642697903",
     "module_name": "服务区块",
     "module_order": 5,
-    "data": "{\"title\":\"我们的服务\",\"description\":\"为个人创业者提供专业的AI服务\",\"sectionTag\":\"服务内容\",\"items\":[{\"title\":\"服务标题1\",\"description\":\"服务1描述\",\"highlights\":[\"1000+ 精选工具\",\"每周更新\",\"智能分类\",\"免费使用\",\"测试\"]},{\"title\":\"服务标题2\",\"description\":\"服务2描述\",\"highlights\":[\"零基础入门\",\"实战案例\",\"社群答疑\",\"终身学习\"]},{\"title\":\"服务标题3\",\"description\":\"服务3描述\",\"highlights\":[\"自动化流程\",\"降低成本\",\"提升效率\",\"持续优化\"]},{\"title\":\"服务标题4\",\"description\":\"服务4描述\",\"highlights\":[\"专家咨询\",\"定制方案\",\"技术支持\",\"效果保障\"]}]}",
-    "created_at": "2026/04/03 20:40:39",
-    "updated_at": "2026/04/03 20:40:39",
+    "data": "{\"title\":\"服务优势\",\"description\":\"为OPC创业者提供全方位的专业支持\",\"sectionTag\":\"为什么选择我们\",\"items\":[{\"title\":\"专业GEO服务\",\"description\":\"AI驱动的搜索引擎优化，让你的内容更容易被发现\",\"highlights\":[\"AI内容优化\",\"关键词策略\",\"排名提升\",\"效果追踪\",\"持续优化\"]},{\"title\":\"快速建站系统\",\"description\":\"无需技术背景，一键生成专业网站\",\"highlights\":[\"模板丰富\",\"响应式设计\",\"SEO友好\",\"快速上线\",\"易于维护\"]},{\"title\":\"技术咨询服务\",\"description\":\"一对一技术咨询，解决你的技术难题\",\"highlights\":[\"架构设计\",\"技术选型\",\"问题诊断\",\"持续支持\",\"效果保障\"]},{\"title\":\"创业支持计划\",\"description\":\"全方位创业支持，助你快速成长\",\"highlights\":[\"资源对接\",\"运营指导\",\"社群支持\",\"成长陪伴\",\"长期合作\"]}]}",
+    "created_at": "2026/04/03 22:26:59",
+    "updated_at": "2026/04/03 22:26:59",
     "id": 107
   },
   {
@@ -291,9 +291,9 @@
     "module_instance_id": "section-pricing-1774642133722-1774642698903",
     "module_name": "价格区块",
     "module_order": 6,
-    "data": "{\"sectionTag\":\"价格方案\",\"title\":\"选择适合你的计划\",\"description\":\"无论你是个人创业者还是企业用户，我们都有适合你的AI解决方案\",\"plans\":[{\"title\":\"免费版\",\"price\":\"¥0\",\"description\":\"适合个人用户和小型项目\",\"features\":[\"1000+ AI工具访问\",\"基础工作流模板\",\"社区支持\",\"每月100次API调用\"],\"buttonText\":\"开始免费使用\",\"buttonLink\":\"/product\"},{\"title\":\"专业版\",\"price\":\"¥999\",\"description\":\"适合专业用户和小型企业\",\"features\":[\"全部AI工具访问\",\"高级工作流定制\",\"优先技术支持\",\"每月1000次API调用\",\"AI GEO课程访问\"],\"buttonText\":\"升级专业版\",\"buttonLink\":\"/product\",\"isPopular\":true},{\"title\":\"企业版\",\"price\":\"¥2999\",\"description\":\"适合企业级用户和团队\",\"features\":[\"全部AI工具访问\",\"企业级工作流定制\",\"专属技术支持\",\"无限制API调用\",\"AI GEO课程访问\",\"企业级安全保障\"],\"buttonText\":\"联系销售\",\"buttonLink\":\"/contact\"}]}",
-    "created_at": "2026/04/03 20:40:39",
-    "updated_at": "2026/04/03 20:40:39",
+    "data": "{\"sectionTag\":\"价格方案\",\"title\":\"选择适合你的服务方案\",\"description\":\"无论你是刚起步的OPC创业者，还是已有规模的小型团队，我们都有适合你的解决方案\",\"plans\":[{\"title\":\"基础版\",\"price\":\"¥0\",\"description\":\"适合刚起步的OPC创业者\",\"features\":[\"基础GEO分析\",\"建站模板访问\",\"社区支持\",\"基础技术文档\"],\"buttonText\":\"免费开始\",\"buttonLink\":\"/contact\"},{\"title\":\"成长版\",\"price\":\"¥1999\",\"description\":\"适合快速发展的创业者\",\"features\":[\"高级GEO服务\",\"定制化建站\",\"一对一咨询\",\"优先技术支持\",\"创业资源对接\"],\"buttonText\":\"选择成长版\",\"buttonLink\":\"/contact\",\"isPopular\":true},{\"title\":\"专业版\",\"price\":\"¥5999\",\"description\":\"适合小型团队和成熟创业者\",\"features\":[\"全套GEO服务\",\"企业级建站\",\"专属顾问\",\"7x24技术支持\",\"全方位资源对接\",\"定制化解决方案\"],\"buttonText\":\"联系咨询\",\"buttonLink\":\"/contact\"}]}",
+    "created_at": "2026/04/03 22:26:59",
+    "updated_at": "2026/04/03 22:26:59",
     "id": 108
   },
   {
@@ -302,9 +302,9 @@
     "module_instance_id": "section-about-1774642134723-1774642699903",
     "module_name": "关于我们区块",
     "module_order": 7,
-    "data": "{\"sectionTag\":\"关于我们\",\"title\":{\"main\":\"关于\",\"highlight\":\"\"},\"description\":[\"专注于为个人创业者提供AI赋能服务\",\"我们深知一人公司的挑战与机遇，致力于通过AI工具、课程和工作流，帮助创业者提升效率、降低成本、实现增长\"],\"mission\":{\"title\":\"使命\",\"description\":\"使命描述使命描述使命描述使命描述使命描述\"},\"vision\":{\"title\":\"愿景\",\"description\":\"愿景描述愿景描述愿景描述愿景描述愿景描述\"},\"values\":{\"title\":\"价值观\",\"description\":\"价值观描述价值观描述价值观描述价值观描述\"},\"stats\":[{\"value\":\"1000\",\"label\":\"AI工具\"},{\"value\":\"10万\",\"label\":\"服务用户\"},{\"value\":\"99\",\"label\":\"满意度\"}]}",
-    "created_at": "2026/04/03 20:40:39",
-    "updated_at": "2026/04/03 20:40:39",
+    "data": "{\"sectionTag\":\"关于我们\",\"title\":{\"main\":\"关于\",\"highlight\":\"OPC一人公司\"},\"description\":[\"专注于为OPC创业者和小型团队提供专业服务\",\"我们深知一人公司的挑战与机遇，致力于通过GEO、快速建站和技术咨询，帮助创业者提升效率、降低成本、实现增长\"],\"mission\":{\"title\":\"使命\",\"description\":\"让技术成为每个创业者的超级杠杆，助力一人成军，事半功倍\"},\"vision\":{\"title\":\"愿景\",\"description\":\"成为中国最受信赖的OPC创业服务平台，陪伴每一位创业者成长\"},\"values\":{\"title\":\"价值观\",\"description\":\"专业、高效、贴心、长期主义，与创业者共同成长\"},\"stats\":[{\"value\":\"500+\",\"label\":\"服务客户\"},{\"value\":\"95%\",\"label\":\"满意度\"},{\"value\":\"3年\",\"label\":\"行业经验\"}]}",
+    "created_at": "2026/04/03 22:26:59",
+    "updated_at": "2026/04/03 22:26:59",
     "id": 109
   },
   {
@@ -313,9 +313,9 @@
     "module_instance_id": "section-contact-1774642135724-1774642700903",
     "module_name": "联系我们区块",
     "module_order": 8,
-    "data": "{\"sectionTag\":\"联系我们\",\"title\":\"准备好开启XXXXXX之旅了吗？\",\"description\":\"留下您的联系方式，我们会尽快与您取得联系\",\"contactPreferences\":[{\"label\":\"电话\",\"value\":\"phone\"},{\"label\":\"微信\",\"value\":\"wechat\"},{\"label\":\"邮箱\",\"value\":\"email\"}]}",
-    "created_at": "2026/04/03 20:40:39",
-    "updated_at": "2026/04/03 20:40:39",
+    "data": "{\"sectionTag\":\"联系我们\",\"title\":\"准备好开启你的OPC创业之旅了吗？\",\"description\":\"留下您的联系方式，我们会尽快与您取得联系，为你提供专业的服务支持\",\"contactPreferences\":[{\"label\":\"电话\",\"value\":\"phone\"},{\"label\":\"微信\",\"value\":\"wechat\"},{\"label\":\"邮箱\",\"value\":\"email\"}]}",
+    "created_at": "2026/04/03 22:26:59",
+    "updated_at": "2026/04/03 22:26:59",
     "id": 110
   },
   {
@@ -325,8 +325,8 @@
     "module_name": "站点页脚",
     "module_order": 9,
     "data": null,
-    "created_at": "2026/04/03 20:40:39",
-    "updated_at": "2026/04/03 20:40:39",
+    "created_at": "2026/04/03 22:26:59",
+    "updated_at": "2026/04/03 22:26:59",
     "id": 111
   }
 ]
