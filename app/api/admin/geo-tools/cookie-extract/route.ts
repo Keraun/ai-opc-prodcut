@@ -1,8 +1,6 @@
 import { NextRequest } from "next/server"
 import { successResponse, errorResponse } from "@/lib/api-utils"
 import { checkAdminAuth } from "@/lib/api-utils"
-import { updateConfig } from "@/lib/config-manager"
-import { getJsonDb } from "@/lib/json-database"
 
 interface ExtractionSession {
   browser: any
@@ -19,7 +17,7 @@ const LLM_SITES = [
   { id: "deepseek", name: "DeepSeek", url: "https://chat.deepseek.com/", description: "DeepSeek AI 深度求索", storageType: "both", storageKey: ["userToken"] },
   { id: "openai", name: "OpenAI (ChatGPT)", url: "https://chat.openai.com/", description: "OpenAI 对话模型", storageType: "cookie", storageKey: [] },
   { id: "doubao", name: "豆包", url: "https://www.doubao.com/", description: "字节跳动大模型", storageType: "cookie", storageKey: [] },
-  { id: "kimi", name: "Kimi", url: "https://kimi.moonshot.cn/", description: "月之暗面大模型", storageType: "cookie", storageKey: [] },
+  { id: "kimi", name: "Kimi", url: "https://kimi.moonshot.cn/", description: "月之暗面大模型", storageType: "cookie", storageKey: ["access_token", "refresh_token"] },
   { id: "qwen", name: "通义千问", url: "https://tongyi.aliyun.com/", description: "阿里云大语言模型", storageType: "cookie", storageKey: [] },
   { id: "zhipu", name: "智谱AI (GLM)", url: "https://chatglm.cn/", description: "智谱清言对话模型", storageType: "cookie", storageKey: [] },
   { id: "minimax", name: "MiniMax", url: "https://www.minimaxi.com/", description: "MiniMax 大模型", storageType: "cookie", storageKey: [] },
@@ -139,6 +137,10 @@ export async function DELETE(request: NextRequest) {
     const session = sessions.get(sessionId)
     if (session) {
       if (session.browser) {
+        // 在关闭浏览器前再抓取一次数据
+        if (session.page) {
+          await checkLoginStatus(session)
+        }
         await session.browser.close()
       }
       sessions.delete(sessionId)
@@ -148,6 +150,96 @@ export async function DELETE(request: NextRequest) {
   } catch (error) {
     console.error("Delete session error:", error)
     return errorResponse("关闭会话失败")
+  }
+}
+
+async function checkLoginStatus(session: ExtractionSession) {
+  try {
+    const { page, browser } = session
+    if (!page || !browser) return false
+
+    const site = LLM_SITES.find(s => s.id === session.siteId)
+    
+    if (site) {
+      console.log(`[Cookie Extract] Checking login status for ${site.name} (${site.id})`)
+      console.log(`[Cookie Extract] Current URL: ${page.url()}`)
+      
+      let hasValidData = false
+      
+      // 抓取localStorage数据
+      if (site.storageKey && site.storageKey.length > 0) {
+        try {
+          console.log(`[Cookie Extract] Attempting to get localStorage data for keys: ${site.storageKey}`)
+          const storageData = await page.evaluate((keys: string[]) => {
+            const data: Record<string, string> = {}
+            // 只抓取storage_key中指定的字段
+            keys.forEach((key: string) => {
+              try {
+                const value = localStorage.getItem(key)
+                if (value) {
+                  data[key] = value
+                } else {
+                  console.log(`[Cookie Extract] localStorage key ${key} not found`)
+                }
+              } catch (e) {
+                console.log(`[Cookie Extract] Error getting localStorage key ${key}:`, e)
+              }
+            })
+            return data
+          }, site.storageKey)
+          
+          console.log(`[Cookie Extract] localStorage data:`, storageData)
+          
+          // 只使用storage_key中指定的字段
+          if (Object.keys(storageData).length > 0) {
+            console.log(`[Cookie Extract] Found localStorage data for ${site.name}:`, Object.keys(storageData))
+            session.storage_data = storageData
+            hasValidData = true
+          } else {
+            console.log(`[Cookie Extract] No localStorage data found for ${site.name}`)
+          }
+        } catch (e) {
+          console.error("Check localStorage error:", e)
+        }
+      }
+      
+      // 抓取cookie数据
+      const context = await browser.newContext()
+      const cookies = await context.cookies()
+      console.log(`[Cookie Extract] Found ${cookies.length} cookies`)
+      console.log(`[Cookie Extract] Cookie names:`, cookies.map((c: { name: string }) => c.name))
+      
+      if (cookies.length > 0) {
+        session.status = "extracting"
+        
+        const cookieString = cookies
+          .map((cookie: { name: string; value: string }) => `${cookie.name}=${cookie.value}`)
+          .join("; ")
+
+        session.cookie_data = cookieString
+        hasValidData = true
+        console.log(`[Cookie Extract] Using cookie data for ${site.name}`)
+      } else {
+        console.log(`[Cookie Extract] No cookies found for ${site.name}`)
+      }
+      
+      console.log(`[Cookie Extract] hasValidData: ${hasValidData}`)
+      
+      if (hasValidData) {
+        session.status = "completed"
+        console.log(`[Cookie Extract] Extraction completed for ${site.name}`)
+        
+        return true
+      } else {
+        console.log(`[Cookie Extract] No valid data found for ${site.name}`)
+      }
+    } else {
+      console.log(`[Cookie Extract] Site not found for id: ${session.siteId}`)
+    }
+    return false
+  } catch (error) {
+    console.error("Check login status error:", error)
+    return false
   }
 }
 
@@ -181,128 +273,30 @@ async function extractCookies(sessionId: string, siteUrl: string) {
 
     session.status = "waiting"
 
-    // 定义检查登录状态的函数
-    const checkLoginStatus = async () => {
-      try {
-        const site = LLM_SITES.find(s => s.id === session.siteId)
-        
-        if (site) {
-          console.log(`[Cookie Extract] Checking login status for ${site.name} (${site.id})`)
-          console.log(`[Cookie Extract] Current URL: ${page.url()}`)
-          console.log(`[Cookie Extract] Storage type: ${site.storageType}, Storage keys: ${site.storageKey}`)
-          
-          let hasValidData = false
-          
-          // 抓取localStorage数据
-          if ((site.storageType === "both" || site.storageType === "localStorage") && site.storageKey && site.storageKey.length > 0) {
-            try {
-              console.log(`[Cookie Extract] Attempting to get localStorage data for keys: ${site.storageKey}`)
-              const storageData = await page.evaluate((keys) => {
-                const data: Record<string, string> = {}
-                // 只抓取storage_key中指定的字段
-                keys.forEach(key => {
-                  try {
-                    const value = localStorage.getItem(key)
-                    if (value) {
-                      data[key] = value
-                    } else {
-                      console.log(`[Cookie Extract] localStorage key ${key} not found`)
-                    }
-                  } catch (e) {
-                    console.log(`[Cookie Extract] Error getting localStorage key ${key}:`, e)
-                  }
-                })
-                return data
-              }, site.storageKey)
-              
-              console.log(`[Cookie Extract] localStorage data:`, storageData)
-              
-              // 只使用storage_key中指定的字段
-              if (Object.keys(storageData).length > 0) {
-                console.log(`[Cookie Extract] Found localStorage data for ${site.name}:`, Object.keys(storageData))
-                session.storage_data = storageData
-                hasValidData = true
-              } else {
-                console.log(`[Cookie Extract] No localStorage data found for ${site.name}`)
-              }
-            } catch (e) {
-              console.error("Check localStorage error:", e)
-            }
-          }
-          
-          // 抓取cookie数据
-          if (site.storageType === "both" || site.storageType === "cookie") {
-            const cookies = await context.cookies()
-            console.log(`[Cookie Extract] Found ${cookies.length} cookies`)
-            console.log(`[Cookie Extract] Cookie names:`, cookies.map(c => c.name))
-            
-            // 对于DeepSeek，只要有cookie就认为是登录状态
-            if (cookies.length > 0) {
-              session.status = "extracting"
-              
-              const cookieString = cookies
-                .map(cookie => `${cookie.name}=${cookie.value}`)
-                .join("; ")
-
-              session.cookie_data = cookieString
-              hasValidData = true
-              console.log(`[Cookie Extract] Using cookie data for ${site.name}`)
-            } else {
-              console.log(`[Cookie Extract] No cookies found for ${site.name}`)
-            }
-          }
-          
-          console.log(`[Cookie Extract] hasValidData: ${hasValidData}`)
-          
-          if (hasValidData) {
-            session.status = "completed"
-            console.log(`[Cookie Extract] Extraction completed for ${site.name}`)
-            
-            return true
-          } else {
-            console.log(`[Cookie Extract] No valid data found for ${site.name}`)
-          }
-        } else {
-          console.log(`[Cookie Extract] Site not found for id: ${session.siteId}`)
-        }
-        return false
-      } catch (error) {
-        console.error("Check login status error:", error)
-        return false
-      }
-    }
-
     // 监听页面导航事件，当用户登录成功并跳转后，实时抓取数据
-    let navigationCompleted = false
-    
     page.on('framenavigated', async (frame) => {
       if (frame === page.mainFrame()) {
         const currentUrl = page.url()
         console.log(`[Cookie Extract] Page navigated to: ${currentUrl}`)
-        
-        // 对于DeepSeek，当页面导航到根域名时，实时检查登录状态
-        if (currentUrl === 'https://chat.deepseek.com/') {
-          console.log(`[Cookie Extract] DeepSeek redirected to root domain, checking login status...`)
-          // 等待页面基本加载完成
-          await page.waitForLoadState('domcontentloaded', { timeout: 5000 }).catch(() => {
-            console.log(`[Cookie Extract] DOM content loaded timeout, proceeding with login check`)
-          })
-          // 实时检查登录状态
-          await checkLoginStatus()
-        }
+        // 等待页面基本加载完成
+        await page.waitForLoadState('domcontentloaded', { timeout: 5000 }).catch(() => {
+          console.log(`[Cookie Extract] DOM content loaded timeout, proceeding with login check`)
+        })
+        // 实时检查登录状态
+        await checkLoginStatus(session)
       }
     })
     
     // 监听页面加载事件，实时更新数据
     page.on('load', async () => {
       console.log(`[Cookie Extract] Page loaded, checking login status...`)
-      await checkLoginStatus()
+      await checkLoginStatus(session)
     })
     
     // 监听页面状态变化，实时更新数据
     page.on('domcontentloaded', async () => {
       console.log(`[Cookie Extract] DOM content loaded, checking login status...`)
-      await checkLoginStatus()
+      await checkLoginStatus(session)
     })
 
     // 导航到目标网站
@@ -312,7 +306,7 @@ async function extractCookies(sessionId: string, siteUrl: string) {
     await page.waitForTimeout(5000)
 
     // 初始检查登录状态
-    await checkLoginStatus()
+    await checkLoginStatus(session)
 
     const maxWaitTime = 300000
     const checkInterval = 3000
@@ -322,13 +316,15 @@ async function extractCookies(sessionId: string, siteUrl: string) {
       if (elapsedTime >= maxWaitTime) {
         session.status = "error"
         session.error = "等待超时，请重试"
+        // 在关闭浏览器前再抓取一次
+        await checkLoginStatus(session)
         await browser.close()
         sessions.delete(sessionId)
         return
       }
 
       // 实时检查登录状态
-      await checkLoginStatus()
+      await checkLoginStatus(session)
       
       // 继续检查，直到超时
       elapsedTime += checkInterval
@@ -345,6 +341,10 @@ async function extractCookies(sessionId: string, siteUrl: string) {
     
     if (session.browser) {
       try {
+        // 在关闭浏览器前再抓取一次
+        if (session.page) {
+          await checkLoginStatus(session)
+        }
         await session.browser.close()
       } catch (e) {
         console.error("Failed to close browser:", e)

@@ -56,7 +56,7 @@ const LLM_SITES: Record<string, { url: string; inputSelector: string; submitSele
     inputSelector: "textarea[placeholder*='输入'], textarea",
     submitSelector: "button[type='submit'], button:has-text('发送')",
     storageType: "cookie",
-    storageKey: []
+    storageKey: ["access_token", "refresh_token"]
   },
   qwen: {
     url: "https://tongyi.aliyun.com/",
@@ -125,17 +125,12 @@ export async function POST(request: NextRequest) {
     
     let cookieData = null
     
-    // 处理数组格式的cookies数据
-    if (Array.isArray(cookiesData)) {
-      cookieData = cookiesData.find(item => item.site_id === llmId)
-    } else {
-      // 处理对象格式的cookies数据
-      cookieData = cookiesData[llmId]
-    }
+    // 处理对象格式的cookies数据
+    cookieData = cookiesData[llmId]
     
     console.log("[Article Generate] Cookie data for", llmId, "is:", cookieData)
     
-    if (!cookieData?.cookies) {
+    if (!cookieData?.sessionData?.cookies) {
       return errorResponse(`请先在 Cookie 管理中配置 ${llmId} 的 Cookie`)
     }
 
@@ -152,7 +147,7 @@ export async function POST(request: NextRequest) {
       createdAt: new Date()
     })
 
-    generateWithLLM(sessionId, siteConfig, cookieData.cookie_data, cookieData.storage_data, prompt).catch(console.error)
+    generateWithLLM(sessionId, siteConfig, cookieData.sessionData.cookies, cookieData.sessionData.storage, prompt).catch(console.error)
 
     return successResponse({
       sessionId,
@@ -321,7 +316,7 @@ async function generateWithLLM(
     await page.goto(siteConfig.url, { waitUntil: "domcontentloaded", timeout: 60000 })
 
     // 处理localStorage数据
-    if (storage_data && (siteConfig.storageType === "both" || siteConfig.storageType === "localStorage") && siteConfig.storageKey && siteConfig.storageKey.length > 0) {
+    if (storage_data && Object.keys(storage_data).length > 0) {
       try {
         await page.evaluate((data) => {
           Object.entries(data).forEach(([key, value]) => {

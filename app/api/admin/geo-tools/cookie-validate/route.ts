@@ -17,7 +17,7 @@ const LLM_SITES = [
   { id: "deepseek", name: "DeepSeek", url: "https://chat.deepseek.com/", description: "DeepSeek AI 深度求索", storageType: "both", storageKey: ["userToken"] },
   { id: "openai", name: "OpenAI (ChatGPT)", url: "https://chat.openai.com/", description: "OpenAI 对话模型", storageType: "cookie", storageKey: [] },
   { id: "doubao", name: "豆包", url: "https://www.doubao.com/", description: "字节跳动大模型", storageType: "cookie", storageKey: [] },
-  { id: "kimi", name: "Kimi", url: "https://kimi.moonshot.cn/", description: "月之暗面大模型", storageType: "cookie", storageKey: [] },
+  { id: "kimi", name: "Kimi", url: "https://kimi.moonshot.cn/", description: "月之暗面大模型", storageType: "cookie", storageKey: ["access_token", "refresh_token"] },
   { id: "qwen", name: "通义千问", url: "https://tongyi.aliyun.com/", description: "阿里云大语言模型", storageType: "cookie", storageKey: [] },
   { id: "zhipu", name: "智谱AI (GLM)", url: "https://chatglm.cn/", description: "智谱清言对话模型", storageType: "cookie", storageKey: [] },
   { id: "minimax", name: "MiniMax", url: "https://www.minimaxi.com/", description: "MiniMax 大模型", storageType: "cookie", storageKey: [] },
@@ -243,7 +243,7 @@ async function validateWithBrowser(sessionId: string, siteUrl: string, cookie_da
     await page.goto(siteUrl, { waitUntil: "domcontentloaded", timeout: 60000 })
     
     // 处理localStorage数据
-    if (storage_data && site && (site.storageType === "both" || site.storageType === "localStorage") && site.storageKey && site.storageKey.length > 0) {
+    if (storage_data && Object.keys(storage_data).length > 0) {
       try {
         await page.evaluate((data) => {
           Object.entries(data).forEach(([key, value]) => {
@@ -251,9 +251,9 @@ async function validateWithBrowser(sessionId: string, siteUrl: string, cookie_da
           })
         }, storage_data)
         
-        console.log(`[Cookie Validate] Set localStorage data for ${site.name}:`, Object.keys(storage_data))
+        console.log(`[Cookie Validate] Set localStorage data for ${site?.name || session.siteId}:`, Object.keys(storage_data))
       } catch (error) {
-        console.warn(`[Cookie Validate] Failed to set localStorage for ${site.name}:`, error)
+        console.warn(`[Cookie Validate] Failed to set localStorage:`, error)
         // 继续执行，不中断流程
       }
     }

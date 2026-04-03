@@ -10,12 +10,16 @@ interface SessionData {
   siteId: string
   name: string
   url: string
-  cookies: string
-  storage_data?: any
+  sessionData: {
+    cookies: string
+    storage: Record<string, string>
+  }
+  sessionRules: {
+    use_cookies: boolean
+    storage_key: string[]
+  }
   updatedAt: string
   expiresAt?: string
-  storageType?: string
-  storageKey?: string
 }
 
 interface ExtractionStatus {
@@ -32,15 +36,15 @@ interface ValidationStatus {
 }
 
 const LLM_SITES = [
-  { id: "deepseek", name: "DeepSeek", url: "https://chat.deepseek.com/", description: "DeepSeek AI 深度求索", storageType: "localStorage", storageKey: "userToken" },
-  { id: "openai", name: "OpenAI (ChatGPT)", url: "https://chat.openai.com/", description: "OpenAI 对话模型", storageType: "cookie" },
-  { id: "doubao", name: "豆包", url: "https://www.doubao.com/", description: "字节跳动大模型", storageType: "cookie" },
-  { id: "kimi", name: "Kimi", url: "https://kimi.moonshot.cn/", description: "月之暗面大模型", storageType: "cookie" },
-  { id: "qwen", name: "通义千问", url: "https://tongyi.aliyun.com/", description: "阿里云大语言模型", storageType: "cookie" },
-  { id: "zhipu", name: "智谱AI (GLM)", url: "https://chatglm.cn/", description: "智谱清言对话模型", storageType: "cookie" },
-  { id: "minimax", name: "MiniMax", url: "https://www.minimaxi.com/", description: "MiniMax 大模型", storageType: "cookie" },
-  { id: "claude", name: "Claude (Anthropic)", url: "https://claude.ai/", description: "Anthropic 对话模型", storageType: "cookie" },
-  { id: "wenxin", name: "文心一言", url: "https://yiyan.baidu.com/", description: "百度文心大模型", storageType: "cookie" },
+  { id: "deepseek", name: "DeepSeek", url: "https://chat.deepseek.com/", description: "DeepSeek AI 深度求索", storageType: "localStorage", storageKey: ["userToken"] },
+  { id: "openai", name: "OpenAI (ChatGPT)", url: "https://chat.openai.com/", description: "OpenAI 对话模型", storageType: "cookie", storageKey: [] },
+  { id: "doubao", name: "豆包", url: "https://www.doubao.com/", description: "字节跳动大模型", storageType: "cookie", storageKey: [] },
+  { id: "kimi", name: "Kimi", url: "https://kimi.moonshot.cn/", description: "月之暗面大模型", storageType: "cookie", storageKey: ["access_token", "refresh_token"] },
+  { id: "qwen", name: "通义千问", url: "https://tongyi.aliyun.com/", description: "阿里云大语言模型", storageType: "cookie", storageKey: [] },
+  { id: "zhipu", name: "智谱AI (GLM)", url: "https://chatglm.cn/", description: "智谱清言对话模型", storageType: "cookie", storageKey: [] },
+  { id: "minimax", name: "MiniMax", url: "https://www.minimaxi.com/", description: "MiniMax 大模型", storageType: "cookie", storageKey: [] },
+  { id: "claude", name: "Claude (Anthropic)", url: "https://claude.ai/", description: "Anthropic 对话模型", storageType: "cookie", storageKey: [] },
+  { id: "wenxin", name: "文心一言", url: "https://yiyan.baidu.com/", description: "百度文心大模型", storageType: "cookie", storageKey: [] },
 ]
 
 export function SessionManager() {
@@ -48,11 +52,12 @@ export function SessionManager() {
   const [editModalVisible, setEditModalVisible] = useState(false)
   const [editingSiteId, setEditingSiteId] = useState<string | null>(null)
   const [tempCookieValue, setTempCookieValue] = useState("")
+  const [tempStorageValue, setTempStorageValue] = useState<any>({})
   const [extractionStatuses, setExtractionStatuses] = useState<Record<string, ExtractionStatus>>({})
   const [validationStatuses, setValidationStatuses] = useState<Record<string, ValidationStatus>>({})
   const [expiringSoon, setExpiringSoon] = useState<string[]>([])
   const [confirmModalVisible, setConfirmModalVisible] = useState(false)
-  const [confirmData, setConfirmData] = useState<{siteId: string, site: any, cookie_data: string | null, storage_data: any | null} | null>(null)
+  const [confirmData, setConfirmData] = useState<{siteId: string, site: any, cookie_data: string | null, storage_data: Record<string, string> | null} | null>(null)
   const pollingRef = useRef<Record<string, NodeJS.Timeout>>({})
   const validationPollingRef = useRef<Record<string, NodeJS.Timeout>>({})
 
@@ -140,8 +145,8 @@ export function SessionManager() {
 
   const openEditModal = (siteId: string) => {
     setEditingSiteId(siteId)
-    setTempCookieValue(sessionData[siteId]?.cookies || "")
-    setTempStorageValue(sessionData[siteId]?.storage_data || {})
+    setTempCookieValue(sessionData[siteId]?.sessionData?.cookies || "")
+    setTempStorageValue(sessionData[siteId]?.sessionData?.storage || {})
     setEditModalVisible(true)
   }
 
@@ -160,12 +165,16 @@ export function SessionManager() {
         siteId: editingSiteId,
         name: site.name,
         url: site.url,
-        cookies: tempCookieValue,
-        storage_data: tempStorageValue,
+        sessionData: {
+          cookies: tempCookieValue,
+          storage: tempStorageValue
+        },
+        sessionRules: {
+          use_cookies: true,
+          storage_key: Array.isArray(site.storageKey) ? site.storageKey : (site.storageKey ? [site.storageKey] : [])
+        },
         updatedAt: new Date().toLocaleString("zh-CN"),
-        expiresAt: expiresAt.toISOString(),
-        storageType: site.storageType,
-        storageKey: site.storageKey
+        expiresAt: expiresAt.toISOString()
       }
     }
 
@@ -187,8 +196,8 @@ export function SessionManager() {
 
   const handleCopySession = (siteId: string) => {
     const data = sessionData[siteId]
-    if (data?.cookies) {
-      navigator.clipboard.writeText(data.cookies)
+    if (data?.sessionData?.cookies) {
+      navigator.clipboard.writeText(data.sessionData.cookies)
         .then(() => toast.success("会话信息已复制到剪贴板"))
         .catch(() => toast.error("复制失败"))
     } else {
@@ -317,7 +326,7 @@ export function SessionManager() {
 
   const validateSession = async (siteId: string, siteUrl: string) => {
     const sessionDataItem = sessionData[siteId]
-    if (!sessionDataItem?.cookies) {
+    if (!sessionDataItem?.sessionData?.cookies) {
       toast.warning("没有可验证的会话信息")
       return
     }
@@ -344,8 +353,8 @@ export function SessionManager() {
         body: JSON.stringify({
           siteId,
           siteUrl,
-          cookies: sessionDataItem.cookies,
-          storage_data: sessionDataItem.storage_data
+          cookies: sessionDataItem.sessionData.cookies,
+          storage_data: sessionDataItem.sessionData.storage
         })
       })
 
@@ -520,12 +529,16 @@ export function SessionManager() {
         siteId,
         name: site.name,
         url: site.url,
-        cookies: cookie_data || "",
-        storage_data: storage_data,
+        sessionData: {
+          cookies: cookie_data || "",
+          storage: storage_data || {}
+        },
+        sessionRules: {
+          use_cookies: true,
+          storage_key: Array.isArray(site.storageKey) ? site.storageKey : (site.storageKey ? [site.storageKey] : [])
+        },
         updatedAt: new Date().toLocaleString("zh-CN"),
-        expiresAt: expiresAt.toISOString(),
-        storageType: site.storageType,
-        storageKey: site.storageKey
+        expiresAt: expiresAt.toISOString()
       }
     }
 
@@ -630,7 +643,7 @@ export function SessionManager() {
       <div className={styles.sitesGrid}>
         {LLM_SITES.map((site) => {
           const savedData = sessionData[site.id]
-          const hasCookie = !!savedData?.cookies
+          const hasCookie = !!savedData?.sessionData?.cookies
           const storageType = site.storageType || 'cookie'
           const storageLabel = storageType === 'localStorage' ? 'LocalStorage' : 'Cookie'
 
@@ -652,7 +665,7 @@ export function SessionManager() {
                   ) : hasCookie ? (
                     <>
                       <Tag color="green" size="small">已配置</Tag>
-                      {getExpiryTag(site.id, savedData.expiresAt)}
+                      {getExpiryTag(site.id, savedData?.expiresAt)}
                     </>
                   ) : (
                     <Tag color="gray" size="small">未配置</Tag>
@@ -790,9 +803,9 @@ export function SessionManager() {
             <div className={styles.dataTitle}>LocalStorage 数据：</div>
             <Input.TextArea
               value={Object.keys(tempStorageValue).length > 0 ? JSON.stringify(tempStorageValue, null, 2) : ""}
-              onChange={(e) => {
+              onChange={(value: string) => {
                 try {
-                  setTempStorageValue(e.target.value ? JSON.parse(e.target.value) : {})
+                  setTempStorageValue(value ? JSON.parse(value) : {})
                 } catch (error) {
                   toast.warning("LocalStorage 数据格式错误，请输入有效的 JSON")
                 }

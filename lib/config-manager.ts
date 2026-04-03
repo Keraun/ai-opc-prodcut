@@ -114,11 +114,10 @@ export function readConfig(configType: string): any {
             siteId: item.site_id,
             name: item.name,
             url: item.url,
-            cookies: item.cookies,
+            sessionData: item.session_data || { cookies: '', storage: {} },
+            sessionRules: item.session_rules || { use_cookies: true, storage_key: [] },
             updatedAt: item.updated_at,
-            expiresAt: item.expires_at,
-            storageType: item.storage_type || 'cookie',
-            storageKey: item.storage_key || null
+            expiresAt: item.expires_at
           }
         }
       }
