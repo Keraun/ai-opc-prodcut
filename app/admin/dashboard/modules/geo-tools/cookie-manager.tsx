@@ -21,6 +21,13 @@ interface ExtractionStatus {
   error: string | null
 }
 
+interface ValidationStatus {
+  status: "idle" | "initializing" | "validating" | "completed" | "error"
+  sessionId: string | null
+  isValid: boolean | null
+  error: string | null
+}
+
 const LLM_SITES = [
   { id: "deepseek", name: "DeepSeek", url: "https://chat.deepseek.com/", description: "DeepSeek AI 深度求索" },
   { id: "openai", name: "OpenAI (ChatGPT)", url: "https://chat.openai.com/", description: "OpenAI 对话模型" },
@@ -39,8 +46,10 @@ export function CookieManager() {
   const [editingSiteId, setEditingSiteId] = useState<string | null>(null)
   const [tempCookieValue, setTempCookieValue] = useState("")
   const [extractionStatuses, setExtractionStatuses] = useState<Record<string, ExtractionStatus>>({})
+  const [validationStatuses, setValidationStatuses] = useState<Record<string, ValidationStatus>>({})
   const [expiringSoon, setExpiringSoon] = useState<string[]>([])
   const pollingRef = useRef<Record<string, NodeJS.Timeout>>({})
+  const validationPollingRef = useRef<Record<string, NodeJS.Timeout>>({})
 
   useEffect(() => {
     fetchCookies()
@@ -49,6 +58,7 @@ export function CookieManager() {
   useEffect(() => {
     return () => {
       Object.values(pollingRef.current).forEach(clearInterval)
+      Object.values(validationPollingRef.current).forEach(clearInterval)
     }
   }, [])
 
@@ -310,7 +320,20 @@ export function CookieManager() {
     }
 
     try {
-      toast.loading("正在验证 Cookie...")
+      if (validationPollingRef.current[siteId]) {
+        clearInterval(validationPollingRef.current[siteId])
+        delete validationPollingRef.current[siteId]
+      }
+
+      setValidationStatuses(prev => ({
+        ...prev,
+        [siteId]: {
+          status: "initializing",
+          sessionId: null,
+          isValid: null,
+          error: null
+        }
+      }))
 
       const response = await fetch("/api/admin/geo-tools/cookie-validate", {
         method: "POST",
@@ -324,14 +347,118 @@ export function CookieManager() {
 
       const result = await response.json()
 
-      if (result.success && result.data.valid) {
-        toast.success("Cookie 验证成功，状态正常")
-      } else {
-        toast.error(result.data?.message || "Cookie 已失效，请重新获取")
+      if (!result.success) {
+        if (response.status === 501) {
+          toast.error("服务器环境不支持浏览器自动化")
+        } else {
+          toast.error(result.message || "启动验证失败")
+        }
+        setValidationStatuses(prev => ({
+          ...prev,
+          [siteId]: {
+            status: "error",
+            sessionId: null,
+            isValid: null,
+            error: result.message || "启动验证失败"
+          }
+        }))
+        return
       }
+
+      const sessionId = result.data.sessionId
+
+      setValidationStatuses(prev => ({
+        ...prev,
+        [siteId]: {
+          status: "initializing",
+          sessionId,
+          isValid: null,
+          error: null
+        }
+      }))
+
+      toast.success("浏览器已启动，请在浏览器窗口中查看登录状态")
+
+      validationPollingRef.current[siteId] = setInterval(async () => {
+        try {
+          const statusResponse = await fetch(
+            `/api/admin/geo-tools/cookie-validate?sessionId=${sessionId}`
+          )
+          const statusResult = await statusResponse.json()
+
+          if (statusResult.success) {
+            const { status, isValid, error } = statusResult.data
+
+            setValidationStatuses(prev => ({
+              ...prev,
+              [siteId]: {
+                status,
+                sessionId,
+                isValid,
+                error
+              }
+            }))
+
+            if (status === "completed") {
+              clearInterval(validationPollingRef.current[siteId])
+              delete validationPollingRef.current[siteId]
+              
+              if (isValid) {
+                toast.success("Cookie 验证成功，登录状态正常")
+              } else {
+                toast.error("Cookie 已失效，请重新获取")
+              }
+            } else if (status === "error") {
+              clearInterval(validationPollingRef.current[siteId])
+              delete validationPollingRef.current[siteId]
+              toast.error(error || "验证失败")
+            }
+          }
+        } catch (error) {
+          console.error("Poll validation status error:", error)
+        }
+      }, 2000)
+
     } catch (error) {
       console.error("Validate cookie error:", error)
       toast.error("验证失败")
+      setValidationStatuses(prev => ({
+        ...prev,
+        [siteId]: {
+          status: "error",
+          sessionId: null,
+          isValid: null,
+          error: "验证失败"
+        }
+      }))
+    }
+  }
+
+  const stopValidation = async (siteId: string) => {
+    const validationStatus = validationStatuses[siteId]
+    if (!validationStatus?.sessionId) return
+
+    try {
+      if (validationPollingRef.current[siteId]) {
+        clearInterval(validationPollingRef.current[siteId])
+        delete validationPollingRef.current[siteId]
+      }
+
+      await fetch(
+        `/api/admin/geo-tools/cookie-validate?sessionId=${validationStatus.sessionId}`,
+        { method: "DELETE" }
+      )
+
+      setValidationStatuses(prev => {
+        const newStatuses = { ...prev }
+        delete newStatuses[siteId]
+        return newStatuses
+      })
+
+      toast.success("验证已停止")
+    } catch (error) {
+      console.error("Stop validation error:", error)
+      toast.error("停止失败")
     }
   }
 
@@ -475,13 +602,25 @@ export function CookieManager() {
 
                 {hasCookie && (
                   <div className={styles.actionGroup}>
-                    <Button
-                      type="text"
-                      size="small"
-                      onClick={() => validateCookie(site.id, site.url)}
-                    >
-                      验证 Cookie
-                    </Button>
+                    {validationStatuses[site.id]?.sessionId ? (
+                      <Button
+                        type="text"
+                        size="small"
+                        status="warning"
+                        icon={<X size={16} />}
+                        onClick={() => stopValidation(site.id)}
+                      >
+                        停止验证
+                      </Button>
+                    ) : (
+                      <Button
+                        type="text"
+                        size="small"
+                        onClick={() => validateCookie(site.id, site.url)}
+                      >
+                        验证 Cookie
+                      </Button>
+                    )}
                     <Tooltip content="复制 Cookie">
                       <Button
                         type="text"
@@ -506,6 +645,19 @@ export function CookieManager() {
               {extractionStatuses[site.id]?.sessionId && (
                 <div className={styles.extractionTip}>
                   请在弹出的浏览器窗口中完成登录
+                </div>
+              )}
+
+              {validationStatuses[site.id]?.sessionId && (
+                <div className={styles.extractionTip}>
+                  {validationStatuses[site.id].status === "initializing" && "正在启动浏览器..."}
+                  {validationStatuses[site.id].status === "validating" && "正在验证Cookie，请在浏览器窗口中查看登录状态"}
+                  {validationStatuses[site.id].status === "completed" && (
+                    <span style={{ color: validationStatuses[site.id].isValid ? "#52c41a" : "#f5222d" }}>
+                      {validationStatuses[site.id].isValid ? "✓ Cookie验证成功" : "✗ Cookie已失效"}
+                    </span>
+                  )}
+                  {validationStatuses[site.id].status === "error" && `验证失败: ${validationStatuses[site.id].error}`}
                 </div>
               )}
             </Card>
