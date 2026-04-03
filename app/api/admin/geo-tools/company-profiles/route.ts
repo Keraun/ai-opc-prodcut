@@ -146,10 +146,18 @@ export async function PATCH(request: NextRequest) {
     }
 
     const body = await request.json()
-    const { id } = body
+    const { id, cancelDefault } = body
 
     if (!id) {
       return errorResponse("缺少ID参数")
+    }
+
+    if (cancelDefault) {
+      const success = repository.cancelDefaultProfile(id)
+      if (!success) {
+        return errorResponse("取消默认企业画像失败")
+      }
+      return successResponse({ message: "取消默认成功" })
     }
 
     const success = repository.setDefaultProfile(id)

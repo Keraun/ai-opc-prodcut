@@ -73,6 +73,14 @@ export class CompanyProfileRepository extends BaseRepository<CompanyProfile> {
     return this.update(id, { is_default: true })
   }
 
+  cancelDefaultProfile(id: number): boolean {
+    const profile = this.findById(id)
+    if (!profile || !profile.is_default) {
+      return false
+    }
+    return this.update(id, { is_default: false })
+  }
+
   findByName(name: string): CompanyProfile | null {
     return this.findByField('name', name)
   }
