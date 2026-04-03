@@ -12,6 +12,18 @@ interface ExtractionSession {
   createdAt: Date
 }
 
+const LLM_SITES = [
+  { id: "deepseek", name: "DeepSeek", url: "https://chat.deepseek.com/", description: "DeepSeek AI 深度求索", storageType: "localStorage", storageKey: "userToken" },
+  { id: "openai", name: "OpenAI (ChatGPT)", url: "https://chat.openai.com/", description: "OpenAI 对话模型", storageType: "cookie" },
+  { id: "doubao", name: "豆包", url: "https://www.doubao.com/", description: "字节跳动大模型", storageType: "cookie" },
+  { id: "kimi", name: "Kimi", url: "https://kimi.moonshot.cn/", description: "月之暗面大模型", storageType: "cookie" },
+  { id: "qwen", name: "通义千问", url: "https://tongyi.aliyun.com/", description: "阿里云大语言模型", storageType: "cookie" },
+  { id: "zhipu", name: "智谱AI (GLM)", url: "https://chatglm.cn/", description: "智谱清言对话模型", storageType: "cookie" },
+  { id: "minimax", name: "MiniMax", url: "https://www.minimaxi.com/", description: "MiniMax 大模型", storageType: "cookie" },
+  { id: "claude", name: "Claude (Anthropic)", url: "https://claude.ai/", description: "Anthropic 对话模型", storageType: "cookie" },
+  { id: "wenxin", name: "文心一言", url: "https://yiyan.baidu.com/", description: "百度文心大模型", storageType: "cookie" },
+]
+
 const sessions = new Map<string, ExtractionSession>()
 
 let isPlaywrightAvailable = true
@@ -170,30 +182,54 @@ async function extractCookies(sessionId: string, siteUrl: string) {
 
     const checkLoginStatus = async () => {
       try {
-        const cookies = await context.cookies()
+        const site = LLM_SITES.find(s => s.id === session.siteId)
         
-        const hasSessionCookie = cookies.some(cookie => {
-          const importantCookies = [
-            "session", "token", "auth", "login", "user",
-            "sessionid", "csrf", "jwt", "access_token",
-            "refresh_token", "sid", "JSESSIONID"
-          ]
-          return importantCookies.some(name => 
-            cookie.name.toLowerCase().includes(name.toLowerCase())
-          )
-        })
+        if (site) {
+          if (site.storageType === "localStorage" && site.storageKey) {
+            // 从 localStorage 中提取数据
+            try {
+              const localStorageData = await page.evaluate((key) => {
+                return localStorage.getItem(key)
+              }, site.storageKey)
+              
+              if (localStorageData) {
+                console.log(`[Cookie Extract] Found ${site.storageKey} in localStorage for ${site.name}`)
+                // 将 localStorage 数据存储到 cookies 字段中
+                session.cookies = `${site.storageKey}=${localStorageData}`
+                session.status = "completed"
+                return true
+              }
+            } catch (e) {
+              console.error("Check localStorage error:", e)
+            }
+          } else {
+            // 从 cookies 中提取数据
+            const cookies = await context.cookies()
+            
+            let hasSessionCookie = cookies.some(cookie => {
+              const importantCookies = [
+                "session", "token", "auth", "login", "user",
+                "sessionid", "csrf", "jwt", "access_token",
+                "refresh_token", "sid", "JSESSIONID"
+              ]
+              return importantCookies.some(name => 
+                cookie.name.toLowerCase().includes(name.toLowerCase())
+              )
+            })
 
-        if (hasSessionCookie) {
-          session.status = "extracting"
-          
-          const cookieString = cookies
-            .map(cookie => `${cookie.name}=${cookie.value}`)
-            .join("; ")
+            if (hasSessionCookie) {
+              session.status = "extracting"
+              
+              const cookieString = cookies
+                .map(cookie => `${cookie.name}=${cookie.value}`)
+                .join("; ")
 
-          session.cookies = cookieString
-          session.status = "completed"
+              session.cookies = cookieString
+              session.status = "completed"
 
-          return true
+              return true
+            }
+          }
         }
         return false
       } catch (error) {

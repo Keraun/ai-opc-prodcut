@@ -103,8 +103,15 @@ export async function POST(request: NextRequest) {
       return errorResponse("不支持的大模型")
     }
 
-    const cookiesData = readConfig("llm-cookies") as any[] || []
-    const cookieData = cookiesData.find((item: any) => item.site_id === llmId)
+    const cookiesData = readConfig("llm-cookies") as Record<string, any> || {}
+    
+    // 检查 cookiesData 是否为对象类型
+    if (Array.isArray(cookiesData)) {
+      console.error("[Article Generate] cookiesData is an array, expected object. Data:", cookiesData)
+      return errorResponse("Cookie 数据格式错误，请重新配置 Cookie")
+    }
+    
+    const cookieData = cookiesData[llmId]
     
     if (!cookieData?.cookies) {
       return errorResponse(`请先在 Cookie 管理中配置 ${llmId} 的 Cookie`)
@@ -232,29 +239,67 @@ async function generateWithLLM(
     const urlObj = new URL(siteConfig.url)
     const hostname = urlObj.hostname
     const domain = hostname.startsWith('www.') ? hostname.substring(4) : hostname
+    // 同时准备根域名（带点前缀），用于跨子域的cookie
+    const rootDomain = domain.includes('.') ? '.' + domain.split('.').slice(-2).join('.') : domain
 
     const cookies = cookiesString.split(";").map(cookie => {
       const [name, ...valueParts] = cookie.trim().split("=")
       const value = valueParts.join("=").trim()
+      const cookieName = name.trim()
+      
+      // 根据deepseek的cookie规则设置属性
+      let httpOnly = false
+      let secure = urlObj.protocol === 'https:'
+      let sameSite: 'Lax' | 'Strict' | 'None' = 'Lax'
+      
+      // 对于deepseek特定的cookie
+      if (domain.includes('deepseek.com')) {
+        // ds_session_id 和 hw_session_id 设置为 httpOnly 和 secure
+        if (cookieName === 'ds_session_id' || cookieName === 'hw_session_id') {
+          httpOnly = true
+          secure = true
+          sameSite = 'Strict'
+        }
+      }
       
       return {
-        name: name.trim(),
+        name: cookieName,
         value: decodeURIComponent(value),
         domain: domain,
         path: "/",
-        secure: urlObj.protocol === 'https:',
-        httpOnly: false,
-        sameSite: 'Lax' as const
+        secure: secure,
+        httpOnly: httpOnly,
+        sameSite: sameSite
       }
     })
 
+    // 同时注入根域名的cookie，确保跨子域生效
+    const rootDomainCookies = cookies.map(c => ({
+      ...c,
+      domain: rootDomain
+    }))
+
     console.log(`[Article Generate] Injecting ${cookies.length} cookies for domain: ${domain}`)
+    console.log(`[Article Generate] Injecting ${rootDomainCookies.length} cookies for root domain: ${rootDomain}`)
     console.log(`[Article Generate] Cookie names:`, cookies.map(c => c.name).join(', '))
 
-    await context.addCookies(cookies)
+    // 注入两种domain的cookie
+    await context.addCookies([...cookies, ...rootDomainCookies])
 
     const page = await context.newPage()
     session.page = page
+
+    // 对于deepseek，从cookie字符串中提取userToken并设置到localStorage
+    if (domain.includes('deepseek.com')) {
+      const userTokenMatch = cookiesString.match(/userToken=([^;]+)/)
+      if (userTokenMatch && userTokenMatch[1]) {
+        const userToken = decodeURIComponent(userTokenMatch[1])
+        await page.evaluate((token) => {
+          localStorage.setItem('userToken', token)
+        }, userToken)
+        console.log('[Article Generate] Set userToken to localStorage')
+      }
+    }
 
     session.status = "generating"
 

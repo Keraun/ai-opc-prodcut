@@ -13,6 +13,18 @@ interface ValidationSession {
   createdAt: Date
 }
 
+const LLM_SITES = [
+  { id: "deepseek", name: "DeepSeek", url: "https://chat.deepseek.com/", description: "DeepSeek AI 深度求索", storageType: "localStorage", storageKey: "userToken" },
+  { id: "openai", name: "OpenAI (ChatGPT)", url: "https://chat.openai.com/", description: "OpenAI 对话模型", storageType: "cookie" },
+  { id: "doubao", name: "豆包", url: "https://www.doubao.com/", description: "字节跳动大模型", storageType: "cookie" },
+  { id: "kimi", name: "Kimi", url: "https://kimi.moonshot.cn/", description: "月之暗面大模型", storageType: "cookie" },
+  { id: "qwen", name: "通义千问", url: "https://tongyi.aliyun.com/", description: "阿里云大语言模型", storageType: "cookie" },
+  { id: "zhipu", name: "智谱AI (GLM)", url: "https://chatglm.cn/", description: "智谱清言对话模型", storageType: "cookie" },
+  { id: "minimax", name: "MiniMax", url: "https://www.minimaxi.com/", description: "MiniMax 大模型", storageType: "cookie" },
+  { id: "claude", name: "Claude (Anthropic)", url: "https://claude.ai/", description: "Anthropic 对话模型", storageType: "cookie" },
+  { id: "wenxin", name: "文心一言", url: "https://yiyan.baidu.com/", description: "百度文心大模型", storageType: "cookie" },
+]
+
 const validationSessions = new Map<string, ValidationSession>()
 
 let isPlaywrightAvailable = true
@@ -166,29 +178,109 @@ async function validateWithBrowser(sessionId: string, siteUrl: string, cookiesSt
     const urlObj = new URL(siteUrl)
     const hostname = urlObj.hostname
     const domain = hostname.startsWith('www.') ? hostname.substring(4) : hostname
+    // 同时准备根域名（带点前缀），用于跨子域的cookie
+    const rootDomain = domain.includes('.') ? '.' + domain.split('.').slice(-2).join('.') : domain
 
-    const cookies = cookiesString.split(";").map(cookie => {
-      const [name, ...valueParts] = cookie.trim().split("=")
-      const value = valueParts.join("=").trim()
-      
-      return {
-        name: name.trim(),
-        value: decodeURIComponent(value),
-        domain: domain,
-        path: "/",
-        secure: urlObj.protocol === 'https:',
-        httpOnly: false,
-        sameSite: 'Lax' as const
+    const site = LLM_SITES.find(s => s.id === session.siteId)
+    
+    if (site) {
+      if (site.storageType === "localStorage" && site.storageKey) {
+        // 对于localStorage类型的站点，从cookies字符串中提取对应的值并设置到localStorage
+        const storageKeyMatch = cookiesString.match(new RegExp(`${site.storageKey}=([^;]+)`))
+        if (storageKeyMatch && storageKeyMatch[1]) {
+          const storageValue = decodeURIComponent(storageKeyMatch[1])
+          const page = await context.newPage()
+          session.page = page
+          
+          await page.evaluate(({ key, value }) => {
+            localStorage.setItem(key, value)
+          }, { key: site.storageKey, value: storageValue })
+          
+          console.log(`[Cookie Validate] Set ${site.storageKey} to localStorage for ${site.name}`)
+        }
+      } else {
+        // 对于cookie类型的站点，保持现有的注入逻辑
+        const cookies = cookiesString.split(";").map(cookie => {
+          const [name, ...valueParts] = cookie.trim().split("=")
+          const value = valueParts.join("=").trim()
+          const cookieName = name.trim()
+          
+          // 根据站点的cookie规则设置属性
+          let httpOnly = false
+          let secure = urlObj.protocol === 'https:'
+          let sameSite: 'Lax' | 'Strict' | 'None' = 'Lax'
+          
+          // 对于deepseek特定的cookie
+          if (domain.includes('deepseek.com')) {
+            // ds_session_id 和 hw_session_id 设置为 httpOnly 和 secure
+            if (cookieName === 'ds_session_id' || cookieName === 'hw_session_id') {
+              httpOnly = true
+              secure = true
+              sameSite = 'Strict'
+            }
+          }
+          
+          return {
+            name: cookieName,
+            value: decodeURIComponent(value),
+            domain: domain,
+            path: "/",
+            secure: secure,
+            httpOnly: httpOnly,
+            sameSite: sameSite
+          }
+        })
+
+        // 同时注入根域名的cookie，确保跨子域生效
+        const rootDomainCookies = cookies.map(c => ({
+          ...c,
+          domain: rootDomain
+        }))
+
+        console.log(`[Cookie Validate] Injecting ${cookies.length} cookies for domain: ${domain}`)
+        console.log(`[Cookie Validate] Injecting ${rootDomainCookies.length} cookies for root domain: ${rootDomain}`)
+        console.log(`[Cookie Validate] Cookie names:`, cookies.map(c => c.name).join(', '))
+
+        // 注入两种domain的cookie
+        await context.addCookies([...cookies, ...rootDomainCookies])
+
+        const page = await context.newPage()
+        session.page = page
       }
-    })
+    } else {
+      // 对于未知站点，默认使用cookie注入
+      const cookies = cookiesString.split(";").map(cookie => {
+        const [name, ...valueParts] = cookie.trim().split("=")
+        const value = valueParts.join("=").trim()
+        const cookieName = name.trim()
+        
+        return {
+          name: cookieName,
+          value: decodeURIComponent(value),
+          domain: domain,
+          path: "/",
+          secure: urlObj.protocol === 'https:',
+          httpOnly: false,
+          sameSite: 'Lax' as const
+        }
+      })
 
-    console.log(`[Cookie Validate] Injecting ${cookies.length} cookies for domain: ${domain}`)
-    console.log(`[Cookie Validate] Cookie names:`, cookies.map(c => c.name).join(', '))
+      // 同时注入根域名的cookie，确保跨子域生效
+      const rootDomainCookies = cookies.map(c => ({
+        ...c,
+        domain: rootDomain
+      }))
 
-    await context.addCookies(cookies)
+      console.log(`[Cookie Validate] Injecting ${cookies.length} cookies for domain: ${domain}`)
+      console.log(`[Cookie Validate] Injecting ${rootDomainCookies.length} cookies for root domain: ${rootDomain}`)
+      console.log(`[Cookie Validate] Cookie names:`, cookies.map(c => c.name).join(', '))
 
-    const page = await context.newPage()
-    session.page = page
+      // 注入两种domain的cookie
+      await context.addCookies([...cookies, ...rootDomainCookies])
+
+      const page = await context.newPage()
+      session.page = page
+    }
 
     session.status = "validating"
 
@@ -199,17 +291,93 @@ async function validateWithBrowser(sessionId: string, siteUrl: string, cookiesSt
     const currentUrl = page.url()
     const pageTitle = await page.title()
 
-    const isLoginPage = 
+    // 等待页面完全加载
+    await page.waitForTimeout(3000)
+
+    // 检查登录状态的多种方式
+    let isLoginPage = false
+    let hasLoginElement = false
+    let hasUserElement = false
+
+    // 1. 检查URL和标题
+    isLoginPage = 
       currentUrl.includes("/login") || 
       currentUrl.includes("/signin") ||
       currentUrl.includes("/auth") ||
       pageTitle.toLowerCase().includes("登录") ||
       pageTitle.toLowerCase().includes("login")
 
-    session.isValid = !isLoginPage
+    // 2. 检查页面是否有登录表单元素
+    try {
+      const loginSelectors = [
+        'input[type="password"]',
+        'input[name="password"]',
+        'input[placeholder*="密码"]',
+        'input[placeholder*="password"]',
+        'button:has-text("登录")',
+        'button:has-text("Login")',
+        'a:has-text("登录")',
+        'a:has-text("Login")',
+        '[class*="login"]',
+        '[class*="signin"]'
+      ]
+      
+      for (const selector of loginSelectors) {
+        const element = await page.$(selector)
+        if (element) {
+          const isVisible = await element.isVisible().catch(() => false)
+          if (isVisible) {
+            hasLoginElement = true
+            console.log(`[Cookie Validate] Found login element: ${selector}`)
+            break
+          }
+        }
+      }
+    } catch (e) {
+      console.error("[Cookie Validate] Error checking login elements:", e)
+    }
+
+    // 3. 检查是否有用户相关的元素（表示已登录）
+    try {
+      const userSelectors = [
+        '[class*="user"]',
+        '[class*="avatar"]',
+        '[class*="profile"]',
+        'img[alt*="avatar"]',
+        'button:has-text("退出")',
+        'button:has-text("Logout")',
+        'a:has-text("退出")',
+        'a:has-text("Logout")'
+      ]
+      
+      for (const selector of userSelectors) {
+        const element = await page.$(selector)
+        if (element) {
+          const isVisible = await element.isVisible().catch(() => false)
+          if (isVisible) {
+            hasUserElement = true
+            console.log(`[Cookie Validate] Found user element: ${selector}`)
+            break
+          }
+        }
+      }
+    } catch (e) {
+      console.error("[Cookie Validate] Error checking user elements:", e)
+    }
+
+    // 综合判断：如果有用户元素，则认为已登录；如果有登录元素或登录页面特征，则认为未登录
+    const isValid = hasUserElement || (!isLoginPage && !hasLoginElement)
+
+    session.isValid = isValid
     session.status = "completed"
 
-    console.log(`[Cookie Validate] Validation completed for ${session.siteId}. Valid: ${session.isValid}`)
+    console.log(`[Cookie Validate] Validation completed for ${session.siteId}:`)
+    console.log(`  - URL: ${currentUrl}`)
+    console.log(`  - Title: ${pageTitle}`)
+    console.log(`  - Is login page: ${isLoginPage}`)
+    console.log(`  - Has login element: ${hasLoginElement}`)
+    console.log(`  - Has user element: ${hasUserElement}`)
+    console.log(`  - Valid: ${isValid}`)
 
   } catch (error) {
     console.error("Validate with browser error:", error)

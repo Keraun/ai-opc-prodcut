@@ -102,15 +102,24 @@ export function readConfig(configType: string): any {
     
     if (configType === 'llm-cookies') {
       const cookies = jsonDb.getAll('llm_cookies')
+      // 确保返回的是对象而不是数组
+      if (!Array.isArray(cookies)) {
+        console.error('[Config Manager] llm_cookies is not an array:', cookies)
+        return {}
+      }
       const result: Record<string, any> = {}
       for (const item of cookies) {
-        result[item.site_id] = {
-          siteId: item.site_id,
-          name: item.name,
-          url: item.url,
-          cookies: item.cookies,
-          updatedAt: item.updated_at,
-          expiresAt: item.expires_at
+        if (item && item.site_id) {
+          result[item.site_id] = {
+            siteId: item.site_id,
+            name: item.name,
+            url: item.url,
+            cookies: item.cookies,
+            updatedAt: item.updated_at,
+            expiresAt: item.expires_at,
+            storageType: item.storage_type || 'cookie',
+            storageKey: item.storage_key || null
+          }
         }
       }
       return result
@@ -350,12 +359,14 @@ export function writeConfig(configType: string, data: any): void {
       jsonDb.clearTable('llm_cookies')
       
       for (const [siteId, cookieData] of Object.entries(data)) {
-        const { name, url, cookies, expiresAt } = cookieData as any
+        const { name, url, cookies, expiresAt, storageType, storageKey } = cookieData as any
         jsonDb.insert('llm_cookies', {
           site_id: siteId,
           name,
           url,
           cookies,
+          storage_type: storageType || 'cookie',
+          storage_key: storageKey || null,
           updated_at: new Date().toLocaleString("zh-CN"),
           expires_at: expiresAt || new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString(),
           created_at: new Date().toISOString()

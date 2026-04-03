@@ -3,10 +3,24 @@
     "site_id": "deepseek",
     "name": "DeepSeek",
     "url": "https://chat.deepseek.com/",
-    "cookies": "HWWAFSESID=d065d88f6218254c42a; HWWAFSESTIME=1775175339561; ds_session_id=21838e9b912f460294a4e9e399d930f4; smidV2=202604030815421a67b69cf253075d718b5bf53ed480db00459b103ec94ec70; .thumbcache_6b2e5483f9d858d7c661c5e276b6a6ae=FO5JLfVrKoSSHF2tDKnsBulQ1tCHJgEdimbXLQqtPP+cujZ3shEHx3QGP+uaoIbk/kK0W6uP2/1eox15o1jDWA%3D%3D",
-    "updated_at": "2026/4/3 08:15:49",
-    "expires_at": "2026-04-10T00:15:49.118Z",
-    "created_at": "2026-04-03T00:15:49.150Z",
+    "cookies": "userToken={\"value\":null,\"__version\":\"0\"}",
+    "storage_type": "localStorage",
+    "storage_key": "userToken",
+    "updated_at": "2026/4/3 09:29:14",
+    "expires_at": "2026-04-10T01:29:14.977Z",
+    "created_at": "2026-04-03T01:29:14.994Z",
     "id": 1
+  },
+  {
+    "site_id": "doubao",
+    "name": "豆包",
+    "url": "https://www.doubao.com/",
+    "cookies": "hook_slardar_session_id=20260403085935EE6BFF78EF6CA9119252; ttwid=1%7CFknkEmJQoqGnEFHt8nFAZhuuw8XdNV0VrYyXj7jc-fI%7C1775177976%7C228934e7903aef1e37eb0341f1529fa49c4b4d23609adea444d687b303c053c2; i18next=zh; flow_ssr_sidebar_expand=1; flow_cur_user_sec_id=; biz_trace_id=372dc150; passport_csrf_token=9849d655aead9524778508a4b139828a; passport_csrf_token_default=9849d655aead9524778508a4b139828a; odin_tt=4c27cbeb0a0b0248a34d775621a624e48de8de3d4cd365b0baf1d7aad0ca2ac2e44c4aeab24dbc7f71b7d9a3a2640c08bf8b120c8233ac2fccb5575cc0dfba3c5e5a54393b2b37348da0d178484e9376; s_v_web_id=verify_mni74ugj_q2BhtSXI_3eNq_4CAB_BEtH_ZSrXLehFKLXx",
+    "storage_type": "cookie",
+    "storage_key": null,
+    "updated_at": "2026/4/3 09:29:14",
+    "expires_at": "2026-04-10T00:59:42.899Z",
+    "created_at": "2026-04-03T01:29:14.994Z",
+    "id": 2
   }
 ]

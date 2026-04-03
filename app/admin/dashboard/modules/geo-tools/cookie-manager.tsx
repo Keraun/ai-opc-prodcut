@@ -13,6 +13,8 @@ interface CookieData {
   cookies: string
   updatedAt: string
   expiresAt?: string
+  storageType?: string
+  storageKey?: string
 }
 
 interface ExtractionStatus {
@@ -29,15 +31,15 @@ interface ValidationStatus {
 }
 
 const LLM_SITES = [
-  { id: "deepseek", name: "DeepSeek", url: "https://chat.deepseek.com/", description: "DeepSeek AI 深度求索" },
-  { id: "openai", name: "OpenAI (ChatGPT)", url: "https://chat.openai.com/", description: "OpenAI 对话模型" },
-  { id: "doubao", name: "豆包", url: "https://www.doubao.com/", description: "字节跳动大模型" },
-  { id: "kimi", name: "Kimi", url: "https://kimi.moonshot.cn/", description: "月之暗面大模型" },
-  { id: "qwen", name: "通义千问", url: "https://tongyi.aliyun.com/", description: "阿里云大语言模型" },
-  { id: "zhipu", name: "智谱AI (GLM)", url: "https://chatglm.cn/", description: "智谱清言对话模型" },
-  { id: "minimax", name: "MiniMax", url: "https://www.minimaxi.com/", description: "MiniMax 大模型" },
-  { id: "claude", name: "Claude (Anthropic)", url: "https://claude.ai/", description: "Anthropic 对话模型" },
-  { id: "wenxin", name: "文心一言", url: "https://yiyan.baidu.com/", description: "百度文心大模型" },
+  { id: "deepseek", name: "DeepSeek", url: "https://chat.deepseek.com/", description: "DeepSeek AI 深度求索", storageType: "localStorage", storageKey: "userToken" },
+  { id: "openai", name: "OpenAI (ChatGPT)", url: "https://chat.openai.com/", description: "OpenAI 对话模型", storageType: "cookie" },
+  { id: "doubao", name: "豆包", url: "https://www.doubao.com/", description: "字节跳动大模型", storageType: "cookie" },
+  { id: "kimi", name: "Kimi", url: "https://kimi.moonshot.cn/", description: "月之暗面大模型", storageType: "cookie" },
+  { id: "qwen", name: "通义千问", url: "https://tongyi.aliyun.com/", description: "阿里云大语言模型", storageType: "cookie" },
+  { id: "zhipu", name: "智谱AI (GLM)", url: "https://chatglm.cn/", description: "智谱清言对话模型", storageType: "cookie" },
+  { id: "minimax", name: "MiniMax", url: "https://www.minimaxi.com/", description: "MiniMax 大模型", storageType: "cookie" },
+  { id: "claude", name: "Claude (Anthropic)", url: "https://claude.ai/", description: "Anthropic 对话模型", storageType: "cookie" },
+  { id: "wenxin", name: "文心一言", url: "https://yiyan.baidu.com/", description: "百度文心大模型", storageType: "cookie" },
 ]
 
 export function CookieManager() {
@@ -156,7 +158,9 @@ export function CookieManager() {
         url: site.url,
         cookies: tempCookieValue,
         updatedAt: new Date().toLocaleString("zh-CN"),
-        expiresAt: expiresAt.toISOString()
+        expiresAt: expiresAt.toISOString(),
+        storageType: site.storageType,
+        storageKey: site.storageKey
       }
     }
 
@@ -257,7 +261,9 @@ export function CookieManager() {
                     url: site.url,
                     cookies,
                     updatedAt: new Date().toLocaleString("zh-CN"),
-                    expiresAt: expiresAt.toISOString()
+                    expiresAt: expiresAt.toISOString(),
+                    storageType: site.storageType,
+                    storageKey: site.storageKey
                   }
                 }
                 saveCookiesToDb(newData)
@@ -527,7 +533,14 @@ export function CookieManager() {
           <span className={styles.introTitle}>使用说明</span>
         </div>
         <p className={styles.introText}>
-          点击下方大模型官网链接进行登录，登录后将浏览器中的 Cookie 复制并保存到这里，方便后续使用 Playwright 调用官网生成内容。
+          点击下方大模型官网链接进行登录，登录后根据不同大模型的存储方式获取会话信息：
+        </p>
+        <ul className={styles.introList}>
+          <li><strong>DeepSeek</strong>：登录后在浏览器控制台执行 <code>localStorage.getItem('userToken')</code> 获取</li>
+          <li><strong>其他大模型</strong>：登录后在浏览器开发者工具的 Network 或 Application 面板复制 Cookie</li>
+        </ul>
+        <p className={styles.introText}>
+          获取到的会话信息保存到这里，方便后续使用 Playwright 调用官网生成内容。
         </p>
       </div>
 
@@ -535,6 +548,8 @@ export function CookieManager() {
         {LLM_SITES.map((site) => {
           const savedData = cookiesData[site.id]
           const hasCookie = !!savedData?.cookies
+          const storageType = site.storageType || 'cookie'
+          const storageLabel = storageType === 'localStorage' ? 'LocalStorage' : 'Cookie'
 
           return (
             <Card key={site.id} className={styles.siteCard}>
@@ -542,6 +557,9 @@ export function CookieManager() {
                 <div className={styles.siteInfo}>
                   <div className={styles.siteName}>{site.name}</div>
                   <div className={styles.siteDesc}>{site.description}</div>
+                  <Tag size="small" className={styles.storageTag}>
+                    {storageLabel}
+                  </Tag>
                 </div>
                 <div className={styles.siteStatus}>
                   {extractionStatuses[site.id]?.sessionId ? (
