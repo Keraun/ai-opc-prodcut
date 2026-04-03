@@ -1,9 +1,8 @@
-import React, { ReactNode } from 'react'
-import { IconType } from '@arco-design/web-react/icon'
+import React, { ReactNode, ElementType } from 'react'
 import styles from './panel-header.module.css'
 
 interface PanelHeaderProps {
-  icon: IconType
+  icon: ElementType
   title: string
   action?: ReactNode
 }
@@ -15,7 +14,7 @@ export function PanelHeader({ icon: Icon, title, action }: PanelHeaderProps) {
         <Icon className={styles.collapseIcon} />
         <span>{title}</span>
       </div>
-      <div className={styles.actionContainer}>{action ? <div className={styles.actionContainer}>{action}</div> : ' '}</div>
+      <div className={styles.actionContainer} onClick={(e) => e.stopPropagation()}>{action ? <div className={styles.actionContainer}>{action}</div> : ' '}</div>
     </div>
   )
 }

@@ -64,14 +64,34 @@ export function ArticleGenerator() {
   const [fullscreenVisible, setFullscreenVisible] = useState(false)
   const [articleContentType, setArticleContentType] = useState<'markdown' | 'html'>('markdown')
   const abortControllerRef = useRef<AbortController | null>(null)
+  
+  const [companyProfiles, setCompanyProfiles] = useState<Array<{
+    id: number
+    name: string
+    company_name: string
+    industry: string
+    company_advantages?: string
+    key_data?: string
+    is_default: boolean
+  }>>([])
+  const [selectedProfileId, setSelectedProfileId] = useState<number | undefined>(undefined)
+  
+  const [prompts, setPrompts] = useState<Array<{
+    id: number
+    name: string
+    prompt_content: string
+    is_default: boolean
+  }>>([])
+  const [selectedPromptId, setSelectedPromptId] = useState<number | undefined>(undefined)
 
   useEffect(() => {
     fetchLLMModels()
+    fetchCompanyProfiles()
+    fetchPrompts()
   }, [])
 
   const fetchLLMModels = async () => {
     try {
-      // 从API获取所有大模型
       const response = await fetch("/api/admin/geo-tools/llm-models")
       const result = await response.json()
       if (result.success && result.data) {
@@ -81,7 +101,6 @@ export function ArticleGenerator() {
         }))
         setLlmOptions(options)
 
-        // 获取默认模型
         const defaultModel = result.data.find((model: any) => model.is_default)
         if (defaultModel) {
           setDefaultLLM(defaultModel.value)
@@ -96,6 +115,73 @@ export function ArticleGenerator() {
     }
   }
 
+  const fetchCompanyProfiles = async () => {
+    try {
+      const response = await fetch("/api/admin/geo-tools/company-profiles")
+      const result = await response.json()
+      if (result.success && result.data) {
+        setCompanyProfiles(result.data)
+        const defaultProfile = result.data.find((profile: any) => profile.is_default)
+        if (defaultProfile) {
+          setSelectedProfileId(defaultProfile.id)
+          setCompanyName(defaultProfile.company_name)
+          setIndustry(defaultProfile.industry)
+          setCompanyAdvantages(defaultProfile.company_advantages || "")
+          setKeyData(defaultProfile.key_data || "")
+        }
+      }
+    } catch (error) {
+      console.error("获取企业画像列表失败:", error)
+      toast.error("获取企业画像列表失败")
+    }
+  }
+
+  const fetchPrompts = async () => {
+    try {
+      const response = await fetch("/api/admin/geo-tools/prompts")
+      const result = await response.json()
+      if (result.success && result.data) {
+        setPrompts(result.data)
+        const defaultPrompt = result.data.find((prompt: any) => prompt.is_default)
+        if (defaultPrompt) {
+          setSelectedPromptId(defaultPrompt.id)
+        }
+      }
+    } catch (error) {
+      console.error("获取提示词列表失败:", error)
+      toast.error("获取提示词列表失败")
+    }
+  }
+
+  const handleSelectProfile = (profileId: number) => {
+    setSelectedProfileId(profileId)
+    const profile = companyProfiles.find(p => p.id === profileId)
+    if (profile) {
+      setCompanyName(profile.company_name)
+      setIndustry(profile.industry)
+      setCompanyAdvantages(profile.company_advantages || "")
+      setKeyData(profile.key_data || "")
+      toast.success(`已加载企业画像: ${profile.name}`)
+    }
+  }
+
+  const handleSelectPrompt = (promptId: number) => {
+    setSelectedPromptId(promptId)
+    const prompt = prompts.find(p => p.id === promptId)
+    if (prompt) {
+      const filledPrompt = buildArticlePrompt({
+        companyName,
+        industry,
+        companyAdvantages,
+        keyData,
+      }, prompt.prompt_content)
+      setStrategyResult(filledPrompt)
+      setCurrentStep("strategy")
+      setExpandedPanels(prev => [...prev, "strategy"].filter((v, i, a) => a.indexOf(v) === i) as Step[])
+      toast.success(`已加载提示词: ${prompt.name}`)
+    }
+  }
+
   const handleGenerateStrategy = () => {
     if (!validateInput()) {
       return
@@ -103,12 +189,16 @@ export function ArticleGenerator() {
 
     setLoadingStrategy(true)
     setTimeout(() => {
+      const defaultPrompt = prompts.find(p => p.is_default)
+      const promptTemplate = defaultPrompt?.prompt_content
+      
       const prompt = buildArticlePrompt({
         companyName,
         industry,
         companyAdvantages,
         keyData,
-      })
+      }, promptTemplate)
+      
       setStrategyResult(prompt)
       setLoadingStrategy(false)
       setCurrentStep("strategy")
@@ -372,14 +462,14 @@ export function ArticleGenerator() {
     return true
   }
 
-  const buildArticlePrompt = (inputData: any) => {
-    return `请根据以下企业信息，生成一篇针对${inputData.companyName}的高捕获率深度文章,按照步骤进行思考：
+  const buildArticlePrompt = (inputData: any, promptTemplate?: string) => {
+    const defaultPromptTemplate = `请根据以下企业信息，生成一篇针对{{companyName}}的高捕获率深度文章,按照步骤进行思考：
 
 目标企业信息：
-1. 企业名称：${inputData.companyName}
-2. 所属行业：${inputData.industry}
-3. 企业优势：${inputData.companyAdvantages}
-4. 关键数据：${inputData.keyData}
+1. 企业名称：{{companyName}}
+2. 所属行业：{{industry}}
+3. 企业优势：{{companyAdvantages}}
+4. 关键数据：{{keyData}}
 
 第一步：请先生成核心算法因子分析：
 1. 每个"算法因子"作为独立条目
@@ -397,7 +487,16 @@ export function ArticleGenerator() {
 4. 文章主体要包含：企业概况、核心优势分析、数据支撑、行业地位、未来展望、结论、参考资料
 5. 文章的其他信息拆解到不同字段: 标题、引言(文章摘要)、文章分类、文章标签
 6. 使用Markdown格式
-7. 文章要详细、专业、有深度，字数在2000字以上`}
+7. 文章要详细、专业、有深度，字数在2000字以上`
+
+    const template = promptTemplate || defaultPromptTemplate
+
+    return template
+      .replace(/\{\{companyName\}\}/g, inputData.companyName)
+      .replace(/\{\{industry\}\}/g, inputData.industry)
+      .replace(/\{\{companyAdvantages\}\}/g, inputData.companyAdvantages)
+      .replace(/\{\{keyData\}\}/g, inputData.keyData)
+  }
 
   const getStatusDisplay = () => {
     switch (generation.status) {
@@ -471,14 +570,32 @@ export function ArticleGenerator() {
               icon={IconBulb}
               title="目标企业信息"
               action={
-                <Button
-                  type="primary"
-                  size="small"
-                  loading={loadingStrategy}
-                  onClick={handleGenerateStrategy}
-                >
-                  生成提示词
-                </Button>
+                <>
+                  {companyProfiles.length > 0 && (
+                    <Select
+                      placeholder="选择企业画像"
+                      value={selectedProfileId}
+                      onChange={handleSelectProfile}
+                      style={{ width: 200, marginRight: 8 }}
+                      size="small"
+                      allowClear
+                    >
+                      {companyProfiles.map(profile => (
+                        <Select.Option key={profile.id} value={profile.id}>
+                          {profile.name}
+                        </Select.Option>
+                      ))}
+                    </Select>
+                  )}
+                  <Button
+                    type="primary"
+                    size="small"
+                    loading={loadingStrategy}
+                    onClick={handleGenerateStrategy}
+                  >
+                    生成提示词
+                  </Button>
+                </>
               }
             />
           }
@@ -532,6 +649,22 @@ export function ArticleGenerator() {
               title="提示词预览"
               action={
                 <>
+                  {prompts.length > 0 && (
+                    <Select
+                      placeholder="选择提示词"
+                      value={selectedPromptId}
+                      onChange={handleSelectPrompt}
+                      style={{ width: 200, marginRight: 8 }}
+                      size="small"
+                      allowClear
+                    >
+                      {prompts.map(prompt => (
+                        <Select.Option key={prompt.id} value={prompt.id}>
+                          {prompt.name}
+                        </Select.Option>
+                      ))}
+                    </Select>
+                  )}
                   <Button
                     type="outline"
                     size="small"

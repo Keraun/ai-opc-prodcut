@@ -5,6 +5,8 @@ import { Tabs } from "@arco-design/web-react"
 import { ArticleGenerator } from "./article-generator"
 import { ApiConfig } from "./api-config"
 import { LLMModels } from "./llm-models"
+import { CompanyProfiles } from "./company-profiles"
+import { Prompts } from "./prompts"
 import styles from "./geo-tools.module.css"
 
 const TabPane = Tabs.TabPane
@@ -32,6 +34,16 @@ export function GeoTools() {
           <TabPane key="article-generator" title="文章生成器">
             <div className={styles.tabContent}>
               <ArticleGenerator />
+            </div>
+          </TabPane>
+          <TabPane key="company-profiles" title="企业画像">
+            <div className={styles.tabContent}>
+              <CompanyProfiles />
+            </div>
+          </TabPane>
+          <TabPane key="prompts" title="提示词管理">
+            <div className={styles.tabContent}>
+              <Prompts />
             </div>
           </TabPane>
           <TabPane key="api-config" title="API配置">

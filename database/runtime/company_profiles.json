@@ -1,0 +1,24 @@
+[
+  {
+    "updated_at": "2026-04-03T12:22:08.977Z",
+    "name": "测试2",
+    "company_name": "测试2",
+    "industry": "测试",
+    "company_advantages": "测试",
+    "key_data": "测试",
+    "is_default": true,
+    "created_at": "2026-04-03T12:22:08.977Z",
+    "id": 1
+  },
+  {
+    "updated_at": "2026-04-03T12:22:17.789Z",
+    "name": "测试3",
+    "company_name": "测试4",
+    "industry": "测试5",
+    "company_advantages": "",
+    "key_data": "",
+    "is_default": false,
+    "created_at": "2026-04-03T12:22:17.789Z",
+    "id": 2
+  }
+]
