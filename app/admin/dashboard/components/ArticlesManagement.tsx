@@ -19,6 +19,18 @@ export function ArticlesManagement() {
         icon: <Newspaper size={16} />
       },
       {
+        name: "contentType",
+        label: "文章类型",
+        type: "select",
+        options: [
+          { value: "html", label: "HTML" },
+          { value: "markdown", label: "Markdown" }
+        ],
+        placeholder: "请选择文章类型",
+        icon: <FileText size={16} />,
+        inlineGroup: "分类与标签"
+      },
+      {
         name: "category",
         label: "文章分类",
         type: "select-with-input",
@@ -117,6 +129,19 @@ export function ArticlesManagement() {
         ) : (
           <span className={styles.emptyValue}>-</span>
         )
+      },
+      {
+        key: "contentType",
+        label: "文章类型",
+        width: "100",
+        render: (item) => {
+          const typeConfig: Record<string, { text: string; color: 'blue' | 'green' }> = {
+            html: { text: 'HTML', color: 'blue' },
+            markdown: { text: 'Markdown', color: 'green' },
+          }
+          const config = typeConfig[item.contentType] || typeConfig.html
+          return <ArcoTag color={config.color}>{config.text}</ArcoTag>
+        }
       },
       {
         key: "title",
