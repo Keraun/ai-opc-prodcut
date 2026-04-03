@@ -5,6 +5,7 @@ import { ManagementHeader, CommonTable } from "../index"
 import { Code, Save } from "lucide-react"
 import { Form, Switch, Input, Button, Card, Modal } from '@arco-design/web-react'
 import { toast } from "sonner"
+import { copyToClipboard } from "@/lib/clipboard-utils"
 import { useConfig } from '../../common/hooks/useConfig'
 
 const FormItem = Form.Item
@@ -370,9 +371,9 @@ export function NotificationSettings() {
           <Button
             key="copy"
             type="primary"
-            onClick={() => {
+            onClick={async () => {
               const values = notificationForm.getFieldsValue()
-              navigator.clipboard.writeText(JSON.stringify({
+              const success = await copyToClipboard(JSON.stringify({
                 pushplus: {
                   enabled: values.enabled,
                   token: values.token,
@@ -391,7 +392,11 @@ export function NotificationSettings() {
                 },
                 notificationTemplate: values.notificationTemplate
               }, null, 2))
-              toast.success('已复制到剪贴板')
+              if (success) {
+                toast.success('已复制到剪贴板')
+              } else {
+                toast.error('复制失败')
+              }
             }}
           >
             复制

@@ -33,6 +33,7 @@ import { Tooltip, Modal, Input, Button } from '@arco-design/web-react'
 import { ManagementHeader } from './ManagementHeader'
 import { CommonTable, ActionButton } from './CommonTable'
 import { useConfig } from '../common/hooks/useConfig'
+import { MarkdownEditor } from '../../../../components/MarkdownEditor'
 import styles from "./BaseManagement.module.css"
 
 export interface FieldConfig {
@@ -323,14 +324,21 @@ function RichTextEditor({
 function FormField({ 
   field, 
   value, 
-  onChange 
+  onChange,
+  formData
 }: { 
   field: FieldConfig
   value: any
-  onChange: (value: any) => void 
+  onChange: (value: any) => void
+  formData?: any
 }) {
   const [tagInput, setTagInput] = useState('')
   const fileInputRef = useRef<HTMLInputElement>(null)
+  
+  // 当formData改变时重新渲染组件
+  useEffect(() => {
+    // 当formData改变时，组件会重新渲染
+  }, [formData])
 
   const handleAddTag = () => {
     if (tagInput.trim() && !value?.includes(tagInput.trim())) {
@@ -513,11 +521,19 @@ function FormField({
       
       {field.type === 'richtext' && (
         <div className={styles.richtextContainer}>
-          <RichTextEditor
-            value={value || ''}
-            onChange={onChange}
-            placeholder={field.placeholder}
-          />
+          {formData?.contentType === 'markdown' ? (
+            <MarkdownEditor
+              value={value || ''}
+              onChange={onChange}
+              placeholder={field.placeholder}
+            />
+          ) : (
+            <RichTextEditor
+              value={value || ''}
+              onChange={onChange}
+              placeholder={field.placeholder}
+            />
+          )}
         </div>
       )}
       
@@ -635,6 +651,10 @@ function ItemForm({
       // 如果是新建模式且字段是作者，使用站点配置的作者字段作为默认值
       if (mode === 'new' && field.name === 'author' && !value && siteConfig?.creator?.name) {
         value = siteConfig.creator.name
+      }
+      // 如果是新建模式且字段是contentType，默认值为html
+      if (mode === 'new' && field.name === 'contentType' && !value) {
+        value = 'html'
       }
       // 如果是新建模式且字段是content，从URL参数中获取预填数据
       if (mode === 'new' && field.name === 'content' && !value) {
@@ -761,6 +781,7 @@ function ItemForm({
                       field={field}
                       value={getNestedValue(formData, field.name)}
                       onChange={(value) => updateField(field.name, value)}
+                      formData={formData}
                     />
                   ))}
                 </div>
@@ -785,6 +806,7 @@ function ItemForm({
                       field={field}
                       value={getNestedValue(formData, field.name)}
                       onChange={(value) => updateField(field.name, value)}
+                      formData={formData}
                     />
                   </div>
                 ))}
@@ -800,6 +822,7 @@ function ItemForm({
             field={field}
             value={getNestedValue(formData, field.name)}
             onChange={(value) => updateField(field.name, value)}
+            formData={formData}
           />
         ))}
 
@@ -809,6 +832,7 @@ function ItemForm({
             field={field}
             value={getNestedValue(formData, field.name)}
             onChange={(value) => updateField(field.name, value)}
+            formData={formData}
           />
         ))}
 
@@ -818,6 +842,7 @@ function ItemForm({
             field={field}
             value={getNestedValue(formData, field.name)}
             onChange={(value) => updateField(field.name, value)}
+            formData={formData}
           />
         ))}
       </div>

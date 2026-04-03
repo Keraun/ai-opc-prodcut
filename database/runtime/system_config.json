@@ -2,29 +2,29 @@
   {
     "id": 3,
     "config_key": "site_config",
-    "config_value": "{\"name\":\"你的站点名称1\",\"description\":\"\",\"url\":\"\",\"ogImage\":\"\",\"links\":{\"email\":\"\",\"wechat\":\"\",\"github\":\"\",\"twitter\":\"\"},\"creator\":{\"name\":\"\",\"url\":\"\"},\"contact\":{\"address\":\"\",\"phone\":\"\",\"email\":\"\"},\"support\":{\"customerServiceQRCode\":\"\",\"helpDocUrl\":\"\"},\"icp\":\"\",\"features\":{\"enableSearch\":false},\"seo\":{\"keywords\":[],\"robots\":{\"index\":true,\"follow\":true,\"googleBot\":{\"index\":true,\"follow\":true,\"maxVideoPreview\":-1,\"maxImagePreview\":\"large\",\"maxSnippet\":-1}}},\"currentTheme\":\"nature\",\"logo\":\"\"}",
+    "config_value": "{\"name\":\"OPC一人公司\",\"description\":\"面向OPC创业者和小型团队提供GEO、快速建站系统、技术咨询等服务\",\"url\":\"https://opc-one.com\",\"ogImage\":\"\",\"links\":{\"email\":\"contact@opc-one.com\",\"wechat\":\"opc_one_company\",\"github\":\"\",\"twitter\":\"\"},\"creator\":{\"name\":\"OPC一人公司\",\"url\":\"https://opc-one.com\"},\"contact\":{\"address\":\"中国\",\"phone\":\"13800138000\",\"email\":\"contact@opc-one.com\"},\"support\":{\"customerServiceQRCode\":\"http://localhost:3000/uploads/editor/1775256835856_tnj8oo.webp\",\"helpDocUrl\":\"https://opc-one.com/help\"},\"icp\":\"\",\"features\":{\"enableSearch\":true},\"seo\":{\"keywords\":[\"OPC\",\"创业\",\"建站\",\"技术咨询\",\"GEO\"],\"robots\":{\"index\":true,\"follow\":true,\"googleBot\":{\"index\":true,\"follow\":true,\"maxVideoPreview\":-1,\"maxImagePreview\":\"large\",\"maxSnippet\":-1}}},\"currentTheme\":\"nature\",\"logo\":\"\"}",
     "created_at": "2026-03-27 21:36:34",
-    "updated_at": "2026-04-02T00:19:24.158Z"
+    "updated_at": "2026-04-03T22:53:58.102Z"
   },
   {
     "id": 5,
     "config_key": "site_footer_config",
-    "config_value": "{\"description\":\"页脚描述文案页脚描述文案页脚描述文案\",\"address\":\"xxx省xxx市xxx区xxxxxxx\",\"phone\":\"xxxx-xxxx-xxxx\",\"email\":\"xxxx@xxx.xx\",\"wechatQrCode\":\"\",\"officialAccountQrCode\":\"\",\"showAdminLink\":true}",
+    "config_value": "{\"description\":\"OPC一人公司 - 为OPC创业者和小型团队提供专业服务\",\"address\":\"中国\",\"phone\":\"13800138000\",\"email\":\"contact@opc-one.com\",\"wechatQrCode\":\"\",\"officialAccountQrCode\":\"\",\"showAdminLink\":true}",
     "created_at": "2026-03-29T17:50:07.138Z",
-    "updated_at": "2026-03-31T23:55:48.175Z"
+    "updated_at": "2026-04-03T13:04:16.462Z"
   },
   {
     "config_key": "product_categories",
-    "config_value": "[{\"value\":\"ai-tools\",\"label\":\"AI工具\"},{\"value\":\"courses\",\"label\":\"课程\"},{\"value\":\"services\",\"label\":\"服务\"},{\"value\":\"other\",\"label\":\"其他\"},{\"value\":\"test\",\"label\":\"测试\"}]",
+    "config_value": "[{\"value\":\"geo-services\",\"label\":\"GEO服务\"},{\"value\":\"website-system\",\"label\":\"建站系统\"},{\"value\":\"tech-consulting\",\"label\":\"技术咨询\"},{\"value\":\"other-services\",\"label\":\"其他服务\"}]",
     "created_at": "2026-03-30T22:07:16.617Z",
-    "updated_at": "2026-03-30T22:07:16.617Z",
+    "updated_at": "2026-04-03T13:04:16.462Z",
     "id": 6
   },
   {
     "config_key": "site_header_config",
     "config_value": "{\"navItems\":[{\"label\":\"首页\",\"href\":\"/\"},{\"label\":\"产品\",\"href\":\"/product\"},{\"label\":\"资讯\",\"href\":\"/news\"}],\"showContactButton\":true,\"showCtaButton\":true,\"ctaButtonText\":\"开始使用\",\"ctaButtonLink\":\"/product\"}",
     "created_at": "2026-03-30T22:26:00.456Z",
-    "updated_at": "2026-03-31T21:13:58.174Z",
+    "updated_at": "2026-04-03T13:04:16.462Z",
     "id": 7
   },
   {
@@ -36,7 +36,7 @@
   },
   {
     "config_key": "geo_config",
-    "config_value": "{\"apiKey\":\"\",\"baseUrl\":\"https://api.siliconflow.cn/v1\"}",
+    "config_value": "{\"apiKey\":\"sk-aqgbavpcequqvzmsglnuthjfueoejhbjgwvgizpmqrvdzdlz\",\"baseUrl\":\"https://api.siliconflow.cn/v1\"}",
     "id": 9
   }
 ]

@@ -681,7 +681,7 @@ export function ModuleFieldEditor({ moduleId, data, onChange }: ModuleFieldEdito
 
   const renderSimpleField = (item: FieldLayoutItem): React.ReactNode => {
     const { property, path, colSpan } = item
-    const { type, title, description, enum: enumValues, "x-component": component, ui } = property
+    const { type, title, description, enum: enumValues, "x-component": component, ui, descriptionRow } = property
     const value = getNestedValue(data, path)
 
     const fieldStyle = {
@@ -791,7 +791,7 @@ export function ModuleFieldEditor({ moduleId, data, onChange }: ModuleFieldEdito
             <div className={styles.formFieldRow}>
               <div className={styles.formFieldLabel}>
                 <label className={styles.formLabel}>{title}</label>
-                {description && <span className={styles.formHint}>{description}</span>}
+                {description && !descriptionRow ? <div className={styles.formHint}>{description}</div> : null}
               </div>
               <div className={styles.formFieldControl}>
                 <Input
@@ -801,6 +801,7 @@ export function ModuleFieldEditor({ moduleId, data, onChange }: ModuleFieldEdito
                 />
               </div>
             </div>
+            {description && descriptionRow ? <div className={styles.formHint}>{description}</div> : null}
           </div>
         )
 
@@ -885,7 +886,7 @@ export function ModuleFieldEditor({ moduleId, data, onChange }: ModuleFieldEdito
             </div>
           ))}
         </div>
-        {nestedObjectFields.map(({ key: nestedKey, property: nestedProp }) => 
+        {nestedObjectFields.map(({ key: nestedKey, property: nestedProp }) =>
           renderObjectField(nestedKey, nestedProp, fieldPath)
         )}
       </div>
@@ -931,7 +932,7 @@ export function ModuleFieldEditor({ moduleId, data, onChange }: ModuleFieldEdito
   return (
     <div className={styles.formEditor}>
       {sortedTopLevelObjectFields.filter(([key]) => key.toLowerCase().includes('title') || key === 'title').map(([key, property]) => renderObjectField(key, property))}
-      
+
       {sortedTopLevelSimpleFields.length > 0 && (
         <div className={styles.formSection}>
           <div className={styles.formSectionHeader}>
@@ -946,7 +947,7 @@ export function ModuleFieldEditor({ moduleId, data, onChange }: ModuleFieldEdito
           </div>
         </div>
       )}
-      
+
       {sortedTopLevelObjectFields.filter(([key]) => !(key.toLowerCase().includes('title') || key === 'title')).map(([key, property]) => renderObjectField(key, property))}
     </div>
   )

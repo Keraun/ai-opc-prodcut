@@ -1,7 +1,17 @@
 import Link from "next/link"
 import { Card, Section } from "@/components/ui"
 import { useTheme } from "@/components/theme-provider"
-import { AppsIcon, BookIcon, ThunderboltIcon, CustomerServiceIcon, ArrowRightIcon } from "@/modules/icons"
+import { 
+  AppsIcon, 
+  BookIcon, 
+  ThunderboltIcon, 
+  CustomerServiceIcon, 
+  ArrowRightIcon,
+  SearchIcon,
+  AppIcon,
+  MessageIcon,
+  TeamIcon
+} from "@/modules/icons"
 import type { ModuleProps } from "@/modules/types"
 import type { ProductsData } from "./types"
 import styles from "./index.module.css"
@@ -11,6 +21,10 @@ const iconMap: Record<string, any> = {
   IconBook: <BookIcon />,
   IconThunderbolt: <ThunderboltIcon />,
   IconCustomerService: <CustomerServiceIcon />,
+  IconSearch: <SearchIcon />,
+  IconApp: <AppIcon />,
+  IconMessage: <MessageIcon />,
+  IconTeam: <TeamIcon />,
 }
 
 export function ProductsModule({ data }: ModuleProps) {
@@ -25,7 +39,7 @@ export function ProductsModule({ data }: ModuleProps) {
 
   const accentColor = themeConfig?.colors.accent || "#06b6d4" // 默认强调色
   const primaryColor = themeConfig?.colors.primary || "#1e40af" // 默认主色
-  const learnMoreText = config.learnMoreText
+  const learnMoreText = config.learnMoreText || "了解更多"
 
   return (
     <Section
@@ -48,7 +62,6 @@ export function ProductsModule({ data }: ModuleProps) {
         <div className={styles.grid}>
           {products.map((product, index: number) => {
             const Icon = product?.icon
-            if (!Icon) return null
 
             const cardFooter = product?.link ? (
               <Link

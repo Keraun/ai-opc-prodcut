@@ -208,7 +208,7 @@
 .buyButton {
   flex: 1;
   padding: 0.875rem 1.5rem;
-  background: var(--theme-primary, #3b82f6);
+  background: var(--theme-primary);
   color: white;
   border: none;
   border-radius: 6px;
@@ -219,23 +219,25 @@
 }
 
 .buyButton:hover {
-  background: var(--theme-primary-hover, #2563eb);
+  background: var(--theme-secondary);
 }
 
 .contactButton {
   padding: 0.875rem 1.5rem;
-  background: transparent;
-  color: var(--theme-primary, #3b82f6);
-  border: 1px solid var(--theme-primary, #3b82f6);
+  background: white;
+  color: var(--theme-text-secondary);
+  border: 1px solid var(--theme-border);
   border-radius: 6px;
   font-size: 1rem;
   font-weight: 600;
   cursor: pointer;
-  transition: background-color 0.2s ease;
+  transition: all 0.2s ease;
 }
 
 .contactButton:hover {
-  background: var(--theme-background-secondary, #eff6ff);
+  border-color: var(--theme-primary);
+  color: var(--theme-primary);
+  background: white;
 }
 
 .relatedSection {

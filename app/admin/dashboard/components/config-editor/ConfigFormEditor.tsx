@@ -4,6 +4,7 @@ import { useState, useEffect } from "react"
 import { Button, Card, Modal, Message, Spin, Alert } from "@arco-design/web-react"
 import { IconSave, IconEye, IconCode, IconRefresh, IconPlus } from "@arco-design/web-react/icon"
 import { toast } from "sonner"
+import { copyToClipboard } from "@/lib/clipboard-utils"
 import { DynamicForm } from "@/components/dynamic-form"
 import { getSchema } from "@/lib/api-client"
 import { ManagementHeader } from "../ManagementHeader"
@@ -180,9 +181,13 @@ export function ConfigFormEditor({
           <Button
             key="copy"
             type="primary"
-            onClick={() => {
-              navigator.clipboard.writeText(JSON.stringify(previewData, null, 2))
-              toast.success('已复制到剪贴板')
+            onClick={async () => {
+              const success = await copyToClipboard(JSON.stringify(previewData, null, 2))
+              if (success) {
+                toast.success('已复制到剪贴板')
+              } else {
+                toast.error('复制失败')
+              }
             }}
           >
             复制

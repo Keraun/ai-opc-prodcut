@@ -539,6 +539,21 @@
   color: #4080ff;
 }
 
+.markdownEditor {
+  font-family: Monaco, Menlo, "Courier New", monospace;
+  font-size: 14px;
+  line-height: 1.6;
+  min-height: 400px;
+  resize: vertical;
+  width: 100%;
+  border: none;
+  outline: none;
+}
+
+.markdownEditor:focus {
+  outline: none;
+}
+
 .formFooter {
   display: flex;
   justify-content: flex-end;
