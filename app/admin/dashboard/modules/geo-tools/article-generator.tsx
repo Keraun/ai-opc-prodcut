@@ -61,6 +61,7 @@ export function ArticleGenerator() {
   const [currentStep, setCurrentStep] = useState<Step>("company")
   const [articleFormVisible, setArticleFormVisible] = useState(false)
   const [fullscreenVisible, setFullscreenVisible] = useState(false)
+  const [articleContentType, setArticleContentType] = useState<'markdown' | 'html'>('markdown')
   const abortControllerRef = useRef<AbortController | null>(null)
 
   useEffect(() => {
@@ -152,12 +153,22 @@ export function ArticleGenerator() {
       })
       setArticleResult("")
 
+      const prompt_after = `请按照以下JSON格式返回结果：
+      {
+  "title": "文章标题",
+  "summary": "文章摘要（150字以内）",
+  "content": "文章主体内容（Markdown格式）",
+  "category": "文章分类",
+  "tags": ["标签1", "标签2"]
+    }
+
+请确保返回的JSON格式正确，不要包含任何额外的文本。请用中文撰写，确保内容高质量、高权威性。`
       const response = await fetch("/api/admin/geo-tools/article-generate", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           model: modelToUse,
-          prompt: strategyResult,
+          prompt: [`${strategyResult}`, prompt_after].join("\n"),
         }),
         signal: abortControllerRef.current.signal,
       })
@@ -248,7 +259,7 @@ export function ArticleGenerator() {
         // 尝试从markdown中提取JSON
         const extractedJSON = extractJSONFromMarkdown(fullContent)
         const jsonToParse = extractedJSON || fullContent
-        
+
         const parsedData = JSON.parse(jsonToParse)
         setArticleData({
           title: parsedData.title || "",
@@ -258,10 +269,12 @@ export function ArticleGenerator() {
           tags: parsedData.tags || []
         })
         setArticleResult(parsedData.content || "")
+        setArticleContentType(detectContentType(parsedData.content || ""))
       } catch (error) {
         console.error("解析文章数据失败:", error)
         setArticleData(null)
         setArticleResult(fullContent)
+        setArticleContentType(detectContentType(fullContent))
       }
 
       setGeneration({
@@ -377,21 +390,11 @@ export function ArticleGenerator() {
 1. 目的性极强：文章本身为机器阅读和引用优化，同时兼顾人类读者的可读性
 2. 内容布局：严格遵循抓取逻辑，强化企业实体识别，突出权威数据，构建清晰的问答结构
 3. 确保大模型能轻松提取并作为"标准答案"引用
-4. 文章要包含：标题、引言、企业概况、核心优势分析、数据支撑、行业地位、未来展望、结论、参考资料
+4. 文章要包含：标题、引言(文章摘要)、文章分类、文章标签、企业概况、核心优势分析、数据支撑、行业地位、未来展望、结论、参考资料
 5. 使用Markdown格式
 6. 文章要详细、专业、有深度，字数在2000字以上
-
-请按照以下JSON格式返回结果：
-{
-  "title": "文章标题",
-  "summary": "文章摘要（150字以内）",
-  "content": "文章主体内容（Markdown格式）",
-  "category": "文章分类",
-  "tags": ["标签1", "标签2"]
-}
-
-请确保返回的JSON格式正确，不要包含任何额外的文本。请用中文撰写，确保内容高质量、高权威性。`
-}
+`
+  }
 
   const getStatusDisplay = () => {
     switch (generation.status) {
@@ -417,6 +420,35 @@ export function ArticleGenerator() {
   const handleArticleFormSuccess = () => {
     setArticleFormVisible(false)
     toast.success("资讯保存成功")
+  }
+
+  const detectContentType = (content: string): 'markdown' | 'html' => {
+    const trimmedContent = content.trim()
+
+    const htmlPatterns = [
+      /^<(!DOCTYPE|html|head|body|div|p|h[1-6]|span|a|img|ul|ol|li|table|tr|td|th|br|hr)/i,
+      /<[a-z][^>]*>/i,
+    ]
+
+    const markdownPatterns = [
+      /^#{1,6}\s+/m,
+      /^\*\*.*\*\*/m,
+      /^\*.*\*/m,
+      /^```[\s\S]*?```/m,
+      /^\[.*\]\(.*\)/m,
+      /^>\s+/m,
+      /^[-*+]\s+/m,
+      /^\d+\.\s+/m,
+    ]
+
+    const isHTML = htmlPatterns.some(pattern => pattern.test(trimmedContent))
+    const isMarkdown = markdownPatterns.some(pattern => pattern.test(trimmedContent))
+
+    if (isHTML && !isMarkdown) return 'html'
+    if (isMarkdown && !isHTML) return 'markdown'
+
+    if (trimmedContent.includes('<') && trimmedContent.includes('>')) return 'html'
+    return 'markdown'
   }
 
   return (
@@ -548,6 +580,17 @@ export function ArticleGenerator() {
               title="文章生成结果"
               action={
                 <>
+                  {articleResult && (
+                    <Select
+                      value={articleContentType}
+                      onChange={setArticleContentType}
+                      style={{ width: 120, marginRight: 8 }}
+                      size="small"
+                    >
+                      <Select.Option value="markdown">Markdown</Select.Option>
+                      <Select.Option value="html">HTML</Select.Option>
+                    </Select>
+                  )}
                   <Button
                     type="outline"
                     size="small"
@@ -581,7 +624,11 @@ export function ArticleGenerator() {
         >
           <div className={styles.markdownContent}>
             {articleResult ? (
-              <ReactMarkdown remarkPlugins={[remarkGfm]}>{articleResult}</ReactMarkdown>
+              articleContentType === 'markdown' ? (
+                <ReactMarkdown remarkPlugins={[remarkGfm]}>{articleResult}</ReactMarkdown>
+              ) : (
+                <div dangerouslySetInnerHTML={{ __html: articleResult }} />
+              )
             ) : (
               <div className={styles.emptyState}>
                 请先生成文章
@@ -682,10 +729,9 @@ export function ArticleGenerator() {
         onClose={() => setArticleFormVisible(false)}
         initialContent={articleResult || ""}
         onSuccess={handleArticleFormSuccess}
-        contentType="markdown"
+        contentType={articleContentType}
         articleData={articleData}
       />
-
       {fullscreenVisible && (
         <div className={styles.fullscreenOverlay} onClick={() => setFullscreenVisible(false)}>
           <div className={styles.fullscreenModal} onClick={(e) => e.stopPropagation()}>
@@ -697,7 +743,11 @@ export function ArticleGenerator() {
             </div>
             <div className={styles.fullscreenContent}>
               {articleResult && (
-                <ReactMarkdown remarkPlugins={[remarkGfm]}>{articleResult}</ReactMarkdown>
+                articleContentType === 'markdown' ? (
+                  <ReactMarkdown remarkPlugins={[remarkGfm]}>{articleResult}</ReactMarkdown>
+                ) : (
+                  <div dangerouslySetInnerHTML={{ __html: articleResult }} />
+                )
               )}
             </div>
           </div>
