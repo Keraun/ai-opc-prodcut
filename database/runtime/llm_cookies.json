@@ -1,0 +1,12 @@
+[
+  {
+    "site_id": "deepseek",
+    "name": "DeepSeek",
+    "url": "https://chat.deepseek.com/",
+    "cookies": "HWWAFSESID=d065d88f6218254c42a; HWWAFSESTIME=1775175339561; ds_session_id=21838e9b912f460294a4e9e399d930f4; smidV2=202604030815421a67b69cf253075d718b5bf53ed480db00459b103ec94ec70; .thumbcache_6b2e5483f9d858d7c661c5e276b6a6ae=FO5JLfVrKoSSHF2tDKnsBulQ1tCHJgEdimbXLQqtPP+cujZ3shEHx3QGP+uaoIbk/kK0W6uP2/1eox15o1jDWA%3D%3D",
+    "updated_at": "2026/4/3 08:15:49",
+    "expires_at": "2026-04-10T00:15:49.118Z",
+    "created_at": "2026-04-03T00:15:49.150Z",
+    "id": 1
+  }
+]

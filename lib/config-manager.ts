@@ -43,6 +43,7 @@ function getPathMapping(configType: string): PathMapping {
     'token': { dir: 'system', prefix: 'system-token' },
 
     'verification-codes': { dir: 'system', prefix: 'system-verification-codes' },
+    'llm-cookies': { dir: 'system', prefix: 'system-llm-cookies' },
     'page-list': { dir: '', prefix: 'page-list' },
   }
   
@@ -93,6 +94,22 @@ export function readConfig(configType: string): any {
       for (const item of codes) {
         result[item.email] = {
           code: item.code,
+          expiresAt: item.expires_at
+        }
+      }
+      return result
+    }
+    
+    if (configType === 'llm-cookies') {
+      const cookies = jsonDb.getAll('llm_cookies')
+      const result: Record<string, any> = {}
+      for (const item of cookies) {
+        result[item.site_id] = {
+          siteId: item.site_id,
+          name: item.name,
+          url: item.url,
+          cookies: item.cookies,
+          updatedAt: item.updated_at,
           expiresAt: item.expires_at
         }
       }
@@ -324,6 +341,24 @@ export function writeConfig(configType: string, data: any): void {
           expires_at: expiresAt,
           created_at: new Date().toISOString(),
           updated_at: new Date().toISOString()
+        })
+      }
+      return
+    }
+    
+    if (configType === 'llm-cookies') {
+      jsonDb.clearTable('llm_cookies')
+      
+      for (const [siteId, cookieData] of Object.entries(data)) {
+        const { name, url, cookies, expiresAt } = cookieData as any
+        jsonDb.insert('llm_cookies', {
+          site_id: siteId,
+          name,
+          url,
+          cookies,
+          updated_at: new Date().toLocaleString("zh-CN"),
+          expires_at: expiresAt || new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString(),
+          created_at: new Date().toISOString()
         })
       }
       return

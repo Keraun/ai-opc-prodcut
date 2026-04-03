@@ -20,7 +20,8 @@ class JsonDatabase {
     products: 'products.json',
     messages: 'messages.json',
     push_records: 'push_records.json',
-    verification_codes: 'verification_codes.json'
+    verification_codes: 'verification_codes.json',
+    llm_cookies: 'llm_cookies.json'
   }
   private options: JsonDatabaseOptions
 

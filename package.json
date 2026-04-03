@@ -6,7 +6,8 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint ."
+    "lint": "eslint .",
+    "postinstall": "npx playwright install chromium --with-deps"
   },
   "dependencies": {
     "@arco-design/web-react": "^2.66.12",
@@ -24,6 +25,7 @@
     "lucide-react": "^0.564.0",
     "next": "16.2.0",
     "nodemailer": "^8.0.3",
+    "playwright": "^1.59.1",
     "react": "19.2.4",
     "react-dom": "19.2.4",
     "react-markdown": "^10.1.0",
