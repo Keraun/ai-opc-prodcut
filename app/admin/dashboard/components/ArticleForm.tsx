@@ -17,6 +17,13 @@ interface ArticleFormProps {
   onSuccess?: () => void
   contentType?: 'html' | 'markdown'
   title?: string
+  articleData?: {
+    title: string
+    summary: string
+    content: string
+    category: string
+    tags: string[]
+  }
 }
 
 export function ArticleForm({ 
@@ -25,7 +32,8 @@ export function ArticleForm({
   initialContent = "", 
   onSuccess, 
   contentType = 'html',
-  title = "新建资讯"
+  title = "新建资讯",
+  articleData
 }: ArticleFormProps) {
   const [form] = Form.useForm()
   const [submitting, setSubmitting] = useState(false)
@@ -41,23 +49,41 @@ export function ArticleForm({
 
   useEffect(() => {
     if (visible) {
-      form.setFieldsValue({
-        title: "",
-        category: "",
-        summary: "",
-        author: "",
-        content: initialContent,
-        seoTitle: "",
-        seoDescription: "",
-      })
-      setTags([])
-      setSeoKeywords([])
-      setMainImage("")
-      setArticleType(contentType)
-      setMarkdownContent(initialContent)
-      setMarkdownTab('edit')
+      if (articleData) {
+        form.setFieldsValue({
+          title: articleData.title,
+          category: articleData.category,
+          summary: articleData.summary,
+          author: "",
+          content: articleData.content,
+          seoTitle: "",
+          seoDescription: "",
+        })
+        setTags(articleData.tags)
+        setSeoKeywords([])
+        setMainImage("")
+        setArticleType(contentType)
+        setMarkdownContent(articleData.content)
+        setMarkdownTab('edit')
+      } else {
+        form.setFieldsValue({
+          title: "",
+          category: "",
+          summary: "",
+          author: "",
+          content: initialContent,
+          seoTitle: "",
+          seoDescription: "",
+        })
+        setTags([])
+        setSeoKeywords([])
+        setMainImage("")
+        setArticleType(contentType)
+        setMarkdownContent(initialContent)
+        setMarkdownTab('edit')
+      }
     }
-  }, [visible, initialContent, contentType, form])
+  }, [visible, initialContent, contentType, form, articleData])
 
   const handleSubmit = async (values: any) => {
     setSubmitting(true)

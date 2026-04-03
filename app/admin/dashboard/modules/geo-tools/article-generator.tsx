@@ -35,6 +35,13 @@ export function ArticleGenerator() {
   const [keyData, setKeyData] = useState("")
   const [strategyResult, setStrategyResult] = useState<string | null>(null)
   const [articleResult, setArticleResult] = useState<string | null>(null)
+  const [articleData, setArticleData] = useState<{
+    title: string
+    summary: string
+    content: string
+    category: string
+    tags: string[]
+  } | null>(null)
   const [loadingStrategy, setLoadingStrategy] = useState(false)
   const [selectedLLM, setSelectedLLM] = useState<string>("")
   const [defaultLLM, setDefaultLLM] = useState<string>("")
@@ -221,6 +228,42 @@ export function ArticleGenerator() {
         }
       }
 
+      // 从markdown中提取JSON数据的函数
+      const extractJSONFromMarkdown = (content: string): string | null => {
+        // 匹配 ```json ... ``` 格式
+        const jsonMatch = content.match(/```json[\s\S]*?\n([\s\S]*?)\n```/)
+        if (jsonMatch && jsonMatch[1]) {
+          return jsonMatch[1].trim()
+        }
+        // 匹配 ``` ... ``` 格式
+        const codeMatch = content.match(/```[\s\S]*?\n([\s\S]*?)\n```/)
+        if (codeMatch && codeMatch[1]) {
+          return codeMatch[1].trim()
+        }
+        return null
+      }
+
+      // 解析大模型返回的JSON数据
+      try {
+        // 尝试从markdown中提取JSON
+        const extractedJSON = extractJSONFromMarkdown(fullContent)
+        const jsonToParse = extractedJSON || fullContent
+        
+        const parsedData = JSON.parse(jsonToParse)
+        setArticleData({
+          title: parsedData.title || "",
+          summary: parsedData.summary || "",
+          content: parsedData.content || "",
+          category: parsedData.category || "",
+          tags: parsedData.tags || []
+        })
+        setArticleResult(parsedData.content || "")
+      } catch (error) {
+        console.error("解析文章数据失败:", error)
+        setArticleData(null)
+        setArticleResult(fullContent)
+      }
+
       setGeneration({
         status: "completed",
         progress: 100,
@@ -338,7 +381,16 @@ export function ArticleGenerator() {
 5. 使用Markdown格式
 6. 文章要详细、专业、有深度，字数在2000字以上
 
-我只需要你返回第三步的文章的核心内容,请用中文撰写，确保内容高质量、高权威性。`
+请按照以下JSON格式返回结果：
+{
+  "title": "文章标题",
+  "summary": "文章摘要（150字以内）",
+  "content": "文章主体内容（Markdown格式）",
+  "category": "文章分类",
+  "tags": ["标签1", "标签2"]
+}
+
+请确保返回的JSON格式正确，不要包含任何额外的文本。请用中文撰写，确保内容高质量、高权威性。`
 }
 
   const getStatusDisplay = () => {
@@ -631,6 +683,7 @@ export function ArticleGenerator() {
         initialContent={articleResult || ""}
         onSuccess={handleArticleFormSuccess}
         contentType="markdown"
+        articleData={articleData}
       />
 
       {fullscreenVisible && (
