@@ -18,6 +18,7 @@ interface Article {
   status: string
   created_at: string
   updated_at: string
+  contentType: 'html' | 'markdown'
   seo?: {
     title?: string
     description?: string

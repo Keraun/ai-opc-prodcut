@@ -53,6 +53,7 @@ export function ArticleGenerator() {
   const [expandedPanels, setExpandedPanels] = useState<Step[]>(["company"])
   const [currentStep, setCurrentStep] = useState<Step>("company")
   const [articleFormVisible, setArticleFormVisible] = useState(false)
+  const [fullscreenVisible, setFullscreenVisible] = useState(false)
   const abortControllerRef = useRef<AbortController | null>(null)
 
   useEffect(() => {
@@ -312,7 +313,7 @@ export function ArticleGenerator() {
   }
 
   const buildArticlePrompt = (inputData: any) => {
-    return `请根据以下企业信息，生成一篇针对${inputData.companyName}的高捕获率深度文章：
+    return `请根据以下企业信息，生成一篇针对${inputData.companyName}的高捕获率深度文章,按照步骤进行思考：
 
 目标企业信息：
 1. 企业名称：${inputData.companyName}
@@ -337,8 +338,8 @@ export function ArticleGenerator() {
 5. 使用Markdown格式
 6. 文章要详细、专业、有深度，字数在2000字以上
 
-请用中文撰写，确保内容高质量、高权威性。`
-  }
+我只需要你返回第三步的文章的核心内容,请用中文撰写，确保内容高质量、高权威性。`
+}
 
   const getStatusDisplay = () => {
     switch (generation.status) {
@@ -505,6 +506,14 @@ export function ArticleGenerator() {
                     复制
                   </Button>
                   <Button
+                    type="outline"
+                    size="small"
+                    onClick={() => setFullscreenVisible(true)}
+                    disabled={!articleResult}
+                  >
+                    全屏查看文章
+                  </Button>
+                  <Button
                     type="primary"
                     size="small"
                     disabled={!articleResult}
@@ -622,6 +631,24 @@ export function ArticleGenerator() {
         initialContent={articleResult || ""}
         onSuccess={handleArticleFormSuccess}
       />
+
+      {fullscreenVisible && (
+        <div className={styles.fullscreenOverlay} onClick={() => setFullscreenVisible(false)}>
+          <div className={styles.fullscreenModal} onClick={(e) => e.stopPropagation()}>
+            <div className={styles.fullscreenHeader}>
+              <h3>全屏查看文章</h3>
+              <button className={styles.fullscreenClose} onClick={() => setFullscreenVisible(false)}>
+                ×
+              </button>
+            </div>
+            <div className={styles.fullscreenContent}>
+              {articleResult && (
+                <ReactMarkdown remarkPlugins={[remarkGfm]}>{articleResult}</ReactMarkdown>
+              )}
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   )
 }

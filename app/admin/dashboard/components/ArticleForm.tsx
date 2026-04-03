@@ -1,91 +1,30 @@
 "use client"
 
 import { useState, useRef, useEffect } from "react"
-import { Button, Input, Form, Modal, Message, Tag as ArcoTag } from "@arco-design/web-react"
+import { Button, Input, Form, Modal, Message, Tag as ArcoTag, Select } from "@arco-design/web-react"
 import { RichTextEditor } from "@/components/RichTextEditor"
+import { MarkdownEditor } from "@/components/MarkdownEditor"
 import { toast } from "sonner"
 import { Newspaper, Tag, FileText, Image as ImageIcon, X, Plus } from "lucide-react"
 import styles from "./ArticleForm.module.css"
-
-// Markdown 转 HTML 的简单实现
-function markdownToHtml(markdown: string): string {
-  if (!markdown) return ""
-
-  let html = markdown
-
-  // 转义 HTML 特殊字符
-  html = html.replace(/&/g, "&amp;")
-    .replace(/</g, "&lt;")
-    .replace(/>/g, "&gt;")
-
-  // 代码块 (```code```)
-  html = html.replace(/```([\s\S]*?)```/g, "<pre><code>$1</code></pre>")
-
-  // 行内代码 (`code`)
-  html = html.replace(/`([^`]+)`/g, "<code>$1</code>")
-
-  // 标题 (# ## ### #### ##### ######)
-  html = html.replace(/^###### (.*$)/gim, "<h6>$1</h6>")
-  html = html.replace(/^##### (.*$)/gim, "<h5>$1</h5>")
-  html = html.replace(/^#### (.*$)/gim, "<h4>$1</h4>")
-  html = html.replace(/^### (.*$)/gim, "<h3>$1</h3>")
-  html = html.replace(/^## (.*$)/gim, "<h2>$1</h2>")
-  html = html.replace(/^# (.*$)/gim, "<h1>$1</h1>")
-
-  // 粗体 (**text** 或 __text__)
-  html = html.replace(/\*\*(.*?)\*\*/g, "<strong>$1</strong>")
-  html = html.replace(/__(.*?)__/g, "<strong>$1</strong>")
-
-  // 斜体 (*text* 或 _text_)
-  html = html.replace(/\*(.*?)\*/g, "<em>$1</em>")
-  html = html.replace(/_(.*?)_/g, "<em>$1</em>")
-
-  // 删除线 (~~text~~)
-  html = html.replace(/~~(.*?)~~/g, "<del>$1</del>")
-
-  // 链接 ([text](url))
-  html = html.replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2" target="_blank" rel="noopener noreferrer">$1</a>')
-
-  // 图片 (![alt](url))
-  html = html.replace(/!\[([^\]]*)\]\(([^)]+)\)/g, '<img src="$2" alt="$1" />')
-
-  // 无序列表 (- item 或 * item)
-  html = html.replace(/^\s*[-*] (.*$)/gim, "<li>$1</li>")
-  html = html.replace(/(<li>.*<\/li>\n?)+/g, "<ul>$&</ul>")
-  html = html.replace(/<\/ul>\s*<ul>/g, "")
-
-  // 有序列表 (1. item)
-  html = html.replace(/^\s*\d+\. (.*$)/gim, "<li>$1</li>")
-  html = html.replace(/(<li>.*<\/li>\n?)+/g, (match) => {
-    if (match.includes("<ul>")) return match
-    return `<ol>${match}</ol>`
-  })
-
-  // 引用 (> text)
-  html = html.replace(/^> (.*$)/gim, "<blockquote>$1</blockquote>")
-
-  // 水平线 (--- 或 *** 或 ___)
-  html = html.replace(/^(---|___|\*\*\*)$/gim, "<hr />")
-
-  // 换行符转 <br>
-  html = html.replace(/\n/g, "<br />")
-
-  // 段落 (如果没有被其他标签包裹)
-  html = html.replace(/([^>])<br \/><br \/>/g, "$1</p><p>")
-  html = html.replace(/^([^<].*)/gim, "<p>$1</p>")
-  html = html.replace(/<p><\/p>/g, "")
-
-  return html
-}
 
 interface ArticleFormProps {
   visible: boolean
   onClose: () => void
   initialContent?: string
   onSuccess?: () => void
+  contentType?: 'html' | 'markdown'
+  title?: string
 }
 
-export function ArticleForm({ visible, onClose, initialContent = "", onSuccess }: ArticleFormProps) {
+export function ArticleForm({ 
+  visible, 
+  onClose, 
+  initialContent = "", 
+  onSuccess, 
+  contentType = 'html',
+  title = "新建资讯"
+}: ArticleFormProps) {
   const [form] = Form.useForm()
   const [submitting, setSubmitting] = useState(false)
   const [tags, setTags] = useState<string[]>([])
@@ -93,10 +32,8 @@ export function ArticleForm({ visible, onClose, initialContent = "", onSuccess }
   const [seoKeywords, setSeoKeywords] = useState<string[]>([])
   const [seoKeywordInput, setSeoKeywordInput] = useState("")
   const [mainImage, setMainImage] = useState("")
+  const [articleType, setArticleType] = useState<'html' | 'markdown'>(contentType)
   const fileInputRef = useRef<HTMLInputElement>(null)
-
-  // 将 markdown 转换为 HTML
-  const convertedContent = markdownToHtml(initialContent)
 
   useEffect(() => {
     if (visible) {
@@ -105,15 +42,16 @@ export function ArticleForm({ visible, onClose, initialContent = "", onSuccess }
         category: "",
         summary: "",
         author: "",
-        content: convertedContent,
+        content: initialContent,
         seoTitle: "",
         seoDescription: "",
       })
       setTags([])
       setSeoKeywords([])
       setMainImage("")
+      setArticleType(contentType)
     }
-  }, [visible, convertedContent, form])
+  }, [visible, initialContent, contentType, form])
 
   const handleSubmit = async (values: any) => {
     setSubmitting(true)
@@ -131,6 +69,7 @@ export function ArticleForm({ visible, onClose, initialContent = "", onSuccess }
             keywords: seoKeywords,
           },
           status: "draft",
+          contentType: articleType,
         }),
       })
 
@@ -229,7 +168,7 @@ export function ArticleForm({ visible, onClose, initialContent = "", onSuccess }
 
   return (
     <Modal
-      title="新建资讯"
+      title={title}
       visible={visible}
       onCancel={onClose}
       footer={null}
@@ -245,7 +184,7 @@ export function ArticleForm({ visible, onClose, initialContent = "", onSuccess }
           category: "",
           summary: "",
           author: "",
-          content: convertedContent,
+          content: initialContent,
           seoTitle: "",
           seoDescription: "",
         }}
@@ -257,6 +196,21 @@ export function ArticleForm({ visible, onClose, initialContent = "", onSuccess }
           rules={[{ required: true, message: "请输入文章标题" }]}
         >
           <Input placeholder="请输入文章标题" />
+        </Form.Item>
+
+        {/* 文章类型 */}
+        <Form.Item
+          field="contentType"
+          label={<span className={styles.fieldLabel}><FileText size={16} /> 文章类型</span>}
+        >
+          <Select
+            value={articleType}
+            onChange={setArticleType}
+            style={{ width: "100%" }}
+          >
+            <Select.Option value="html">HTML 富文本</Select.Option>
+            <Select.Option value="markdown">Markdown</Select.Option>
+          </Select>
         </Form.Item>
 
         {/* 分类与标签 - 内联组 */}
@@ -445,7 +399,11 @@ export function ArticleForm({ visible, onClose, initialContent = "", onSuccess }
           label={<span className={styles.fieldLabel}><FileText size={16} /> 文章内容</span>}
           rules={[{ required: true, message: "请输入文章内容" }]}
         >
-          <RichTextEditor />
+          {articleType === 'markdown' ? (
+            <MarkdownEditor />
+          ) : (
+            <RichTextEditor />
+          )}
         </Form.Item>
 
         <div style={{ display: "flex", justifyContent: "flex-end", gap: 12, marginTop: 24 }}>

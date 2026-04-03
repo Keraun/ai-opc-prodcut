@@ -2,6 +2,8 @@
 
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
+import ReactMarkdown from 'react-markdown'
+import remarkGfm from 'remark-gfm'
 import type { ModuleProps } from '@/modules/types'
 import type { NewsDetailData } from './types'
 import styles from './index.module.css'
@@ -21,6 +23,7 @@ interface Article {
   status: string
   created_at: string
   updated_at: string
+  contentType: 'html' | 'markdown'
 }
 
 // 预览模式下的模拟文章数据
@@ -38,7 +41,8 @@ const previewArticle: Article = {
   viewCount: 100,
   status: 'published',
   created_at: new Date().toISOString(),
-  updated_at: new Date().toISOString()
+  updated_at: new Date().toISOString(),
+  contentType: 'html'
 }
 
 export function NewsDetailModule({ data }: ModuleProps) {
@@ -227,7 +231,13 @@ export function NewsDetailModule({ data }: ModuleProps) {
             )}
           </header>
           
-          <div className={styles.articleContent} dangerouslySetInnerHTML={{ __html: article.content }} />
+          <div className={styles.articleContent}>
+            {article.contentType === 'markdown' ? (
+              <ReactMarkdown remarkPlugins={[remarkGfm]}>{article.content}</ReactMarkdown>
+            ) : (
+              <div dangerouslySetInnerHTML={{ __html: article.content }} />
+            )}
+          </div>
         </article>
 
         {(prevArticle || nextArticle) && (
