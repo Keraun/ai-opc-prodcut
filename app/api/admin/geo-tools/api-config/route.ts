@@ -34,12 +34,8 @@ export async function POST(request: NextRequest) {
     const body = await request.json()
     const { apiKey, baseUrl } = body
 
-    if (!apiKey || !apiKey.trim()) {
-      return errorResponse("API密钥不能为空")
-    }
-
     const config = {
-      apiKey: apiKey.trim(),
+      apiKey: apiKey?.trim() || "",
       baseUrl: baseUrl?.trim() || "https://api.siliconflow.cn/v1",
     }
 

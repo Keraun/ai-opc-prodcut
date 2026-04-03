@@ -50,11 +50,6 @@ export function ApiConfig() {
   }
 
   const handleSave = async () => {
-    if (!config.apiKey.trim()) {
-      toast.warning("请输入API密钥")
-      return
-    }
-
     setSaving(true)
     try {
       const response = await fetch("/api/admin/geo-tools/api-config", {
@@ -94,12 +89,12 @@ export function ApiConfig() {
         <div className={styles.form}>
           <div className={styles.formItem}>
             <label className={styles.label}>
-              API 密钥 <span className={styles.required}>*</span>
+              API 密钥
             </label>
             <Input.Password
               value={config.apiKey}
               onChange={(value) => setConfig({ ...config, apiKey: value })}
-              placeholder="请输入您的 API 密钥"
+              placeholder="请输入您的 API 密钥（可选）"
               className={styles.input}
             />
             <div className={styles.hint}>
