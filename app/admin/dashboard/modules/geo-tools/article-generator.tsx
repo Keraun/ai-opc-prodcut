@@ -475,7 +475,9 @@ export function ArticleGenerator() {
                 value={strategyResult}
                 autoSize={{ minRows: 10, maxRows: 20 }}
                 style={{ width: '100%' }}
-                onChange={(e) => setStrategyResult(e.target.value)}
+                onChange={(value) => {
+                  setStrategyResult(value)
+                }}
               />
             ) : (
               <div className={styles.emptyState}>
