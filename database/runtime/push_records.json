@@ -34,5 +34,29 @@
     "created_at": "2026-04-02T00:59:45.533Z",
     "updated_at": "2026-04-02T00:59:45.533Z",
     "id": 3
+  },
+  {
+    "messageId": 1,
+    "channel": "mail",
+    "status": "failed",
+    "content": "<div style=\"font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif; line-height: 1.6; color: #333; background-color: #f8f9fa; border-radius: 8px; padding: 20px; border: 1px solid #e9ecef;\">\n<p>【新留言通知】</p><p>用户信息：<br/>姓名：777777<br/>电话：15869165232<br/>微信：1313<br/>邮箱：915064510@qq.com<br/>偏好联系方式：email</p><p>留言内容：<br/>cease</p><p>大模型信息：<br/>使用模型：-</p><p>设备信息：<br/>IP地址：::ffff:192.168.10.50<br/>地区：-<br/>操作系统：macOS 10.15.7<br/>浏览器：Chrome 146.0.0.0<br/>设备机型：Mac</p><p>提交时间：2026/04/04 21:41:43</p><p><a href=\"http://localhost:3000/admin/dashboard/messages/1\" style=\"color: #165DFF; text-decoration: underline;\">查看详情</a></p><p>请及时处理！</p>\n</div>",
+    "templateType": "html",
+    "response": "",
+    "error": "缺少PushPlus token",
+    "created_at": "2026-04-04T13:41:43.424Z",
+    "updated_at": "2026-04-04T13:41:43.424Z",
+    "id": 4
+  },
+  {
+    "messageId": 1,
+    "channel": "sms",
+    "status": "failed",
+    "content": "<div style=\"font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif; line-height: 1.6; color: #333; background-color: #f8f9fa; border-radius: 8px; padding: 20px; border: 1px solid #e9ecef;\">\n<p>【新留言通知】</p><p>用户信息：<br/>姓名：777777<br/>电话：15869165232<br/>微信：1313<br/>邮箱：915064510@qq.com<br/>偏好联系方式：email</p><p>留言内容：<br/>cease</p><p>大模型信息：<br/>使用模型：-</p><p>设备信息：<br/>IP地址：::ffff:192.168.10.50<br/>地区：-<br/>操作系统：macOS 10.15.7<br/>浏览器：Chrome 146.0.0.0<br/>设备机型：Mac</p><p>提交时间：2026/04/04 21:41:43</p><p><a href=\"http://localhost:3000/admin/dashboard/messages/1\" style=\"color: #165DFF; text-decoration: underline;\">查看详情</a></p><p>请及时处理！</p>\n</div>",
+    "templateType": "html",
+    "response": "",
+    "error": "缺少PushPlus token",
+    "created_at": "2026-04-04T13:41:43.425Z",
+    "updated_at": "2026-04-04T13:41:43.425Z",
+    "id": 5
   }
 ]

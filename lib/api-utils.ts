@@ -10,7 +10,7 @@ export interface ApiResponse<T = any> {
 }
 
 export interface AuthResult {
-  isAuthenticated: boolean
+  authenticated: boolean
   username?: string
   userData?: any
 }
@@ -35,18 +35,18 @@ export async function checkAdminAuth(): Promise<AuthResult> {
     const userCookie = cookieStore.get('adminUser')?.value
     
     if (!userCookie) {
-      return { isAuthenticated: false }
+      return { authenticated: false }
     }
     
     const userData = JSON.parse(userCookie)
     return {
-      isAuthenticated: true,
+      authenticated: true,
       username: userData.username,
       userData
     }
   } catch (error) {
     console.error('Auth check failed:', error)
-    return { isAuthenticated: false }
+    return { authenticated: false }
   }
 }
 

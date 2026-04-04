@@ -2,7 +2,11 @@ import type { ApiResponse, PageConfig, Product, Article, SiteConfig } from './ty
 
 async function request<T>(url: string, options?: RequestInit): Promise<ApiResponse<T>> {
   try {
-    const response = await fetch(url, {
+    // 确保使用完整的 API 路径
+    const baseUrl = typeof window !== 'undefined' ? window.location.origin : ''
+    const fullUrl = `${baseUrl}${url}`
+    
+    const response = await fetch(fullUrl, {
       headers: {
         'Content-Type': 'application/json',
         ...options?.headers,

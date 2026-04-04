@@ -50,7 +50,7 @@ export function ContactFormClient({ contactPreferences }: ContactFormProps) {
   }
 
   return (
-    <form className={styles.form} onSubmit={handleSubmit}>
+    <form className={styles.form} onSubmit={handleSubmit} method="post" action="#">
       {message?.type === 'error' && (
         <div className={styles.errorMessage}>{message.text}</div>
       )}
