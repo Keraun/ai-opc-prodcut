@@ -37,7 +37,7 @@ export async function POST(request: NextRequest) {
 
     if (!name || !phone || !message) {
       const acceptHeader = request.headers.get('accept') || ''
-      const isFormSubmit = !acceptHeader.includes('application/json')
+      const isFormSubmit = !acceptHeader.includes('application/json') && request.headers.get('content-type')?.includes('application/x-www-form-urlencoded')
       
       if (isFormSubmit) {
         return NextResponse.redirect(new URL('/?contact=error', request.url))
@@ -106,7 +106,7 @@ export async function POST(request: NextRequest) {
     }
 
     const acceptHeader = request.headers.get('accept') || ''
-    const isFormSubmit = !acceptHeader.includes('application/json')
+    const isFormSubmit = !acceptHeader.includes('application/json') && request.headers.get('content-type')?.includes('application/x-www-form-urlencoded')
     
     if (isFormSubmit) {
       return NextResponse.redirect(new URL('/?contact=success', request.url))
@@ -117,7 +117,7 @@ export async function POST(request: NextRequest) {
     console.error("提交留言失败:", error)
     
     const acceptHeader = request.headers.get('accept') || ''
-    const isFormSubmit = !acceptHeader.includes('application/json')
+    const isFormSubmit = !acceptHeader.includes('application/json') && request.headers.get('content-type')?.includes('application/x-www-form-urlencoded')
     
     if (isFormSubmit) {
       return NextResponse.redirect(new URL('/?contact=error', request.url))

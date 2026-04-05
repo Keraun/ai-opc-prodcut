@@ -3,22 +3,16 @@ import fs from 'fs'
 import path from 'path'
 
 export function initializeJsonDb() {
-  console.log('Initializing JSON database...')
-  
   initializeThemeData()
   
   initializeSystemConfig()
   
   initializeModuleRegistry()
-  
-  console.log('JSON database initialized successfully!')
 }
 
 function initializeThemeData() {
   const themes = jsonDb.getAll('theme_config')
   if (themes.length === 0) {
-    console.log('Initializing theme data...')
-    
     const themeConfigPath = path.join(process.cwd(), 'database', 'tpl', 'theme_config.json')
     
     if (fs.existsSync(themeConfigPath)) {
@@ -36,7 +30,6 @@ function initializeThemeData() {
               updated_at: theme.updated_at
             })
           }
-          console.log(`Initialized ${themeList.length} themes from template`)
         }
       } catch (error) {
         console.error('Error initializing theme data:', error)
@@ -50,8 +43,6 @@ function initializeThemeData() {
 function initializeSystemConfig() {
   const systemConfigs = jsonDb.getAll('system_config')
   if (systemConfigs.length === 0) {
-    console.log('Initializing system config...')
-    
     // 创建默认站点配置
     jsonDb.insert('system_config', {
       config_key: 'site_config',
@@ -64,16 +55,12 @@ function initializeSystemConfig() {
       created_at: new Date().toISOString(),
       updated_at: new Date().toISOString()
     })
-    
-    console.log('Initialized system config')
   }
 }
 
 function initializeModuleRegistry() {
   const modules = jsonDb.getAll('module_registry')
   if (modules.length === 0) {
-    console.log('Initializing module registry...')
-    
     const defaultModules = [
       {
         module_id: 'section-hero',
@@ -106,8 +93,6 @@ function initializeModuleRegistry() {
         updated_at: new Date().toISOString()
       })
     }
-    
-    console.log('Initialized module registry')
   }
 }
 

@@ -79,6 +79,8 @@ export function ProductListModule({ data }: ModuleProps) {
         
         if (productsRes.success && productsRes.data) {
           setProducts(productsRes.data)
+        } else {
+          console.error('Failed to fetch products:', productsRes.message)
         }
         
         if (categoriesRes.success && categoriesRes.data) {
@@ -90,6 +92,8 @@ export function ProductListModule({ data }: ModuleProps) {
             }))
           ]
           setCategories(formattedCategories)
+        } else {
+          console.error('Failed to fetch categories:', categoriesRes.message)
         }
       } catch (error) {
         console.error('Failed to fetch data:', error)

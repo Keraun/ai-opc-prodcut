@@ -13,20 +13,29 @@ export async function request<T>(
     headers['Content-Type'] = 'application/json'
   }
   
-  const response = await fetch(url, {
-    headers,
-    ...options,
-  })
-  
-  const contentType = response.headers.get('content-type')
-  if (contentType && contentType.includes('application/json')) {
-    const result = await response.json()
-    return result as ApiResponse<T>
+  try {
+    const response = await fetch(url, {
+      headers,
+      ...options,
+    })
+    
+    const contentType = response.headers.get('content-type')
+    if (contentType && contentType.includes('application/json')) {
+      const result = await response.json()
+      return result as ApiResponse<T>
+    }
+    
+    const result = {
+      code: response.status,
+      success: response.ok,
+      message: response.ok ? '操作成功' : '操作失败',
+    } as ApiResponse<T>
+    return result
+  } catch (error) {
+    return {
+      code: 500,
+      success: false,
+      message: '网络请求失败，请稍后重试'
+    } as ApiResponse<T>
   }
-  
-  return {
-    code: response.status,
-    success: response.ok,
-    message: response.ok ? '操作成功' : '操作失败',
-  } as ApiResponse<T>
 }

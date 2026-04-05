@@ -1,11 +1,11 @@
 import type { ApiResponse, PageConfig, Product, Article, SiteConfig } from './types'
 
 async function request<T>(url: string, options?: RequestInit): Promise<ApiResponse<T>> {
+  // 确保使用完整的 API 路径
+  const baseUrl = typeof window !== 'undefined' ? window.location.origin : ''
+  const fullUrl = `${baseUrl}${url}`
+  
   try {
-    // 确保使用完整的 API 路径
-    const baseUrl = typeof window !== 'undefined' ? window.location.origin : ''
-    const fullUrl = `${baseUrl}${url}`
-    
     const response = await fetch(fullUrl, {
       headers: {
         'Content-Type': 'application/json',
@@ -13,11 +13,15 @@ async function request<T>(url: string, options?: RequestInit): Promise<ApiRespon
       },
       ...options,
     })
+    
+    if (!response.ok) {
+      return { success: false, message: `请求失败 (${response.status})` }
+    }
+    
     const data = await response.json()
     return data
   } catch (error) {
-    console.error('API request failed:', error)
-    return { success: false, message: '请求失败' }
+    return { success: false, message: '请求失败，请检查网络连接' }
   }
 }
 

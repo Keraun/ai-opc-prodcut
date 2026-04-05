@@ -57,10 +57,12 @@ export function CrawlerArticle({ article }: CrawlerArticleProps) {
 
   return (
     <article style={{ maxWidth: '800px', margin: '0 auto', padding: '2rem 1rem' }}>
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
-      />
+      <template>
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+        />
+      </template>
       
       <header>
         <h1 style={{ fontSize: '2rem', fontWeight: 'bold', marginBottom: '1rem', lineHeight: '1.3' }}>

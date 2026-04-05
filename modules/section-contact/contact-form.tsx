@@ -31,26 +31,32 @@ export function ContactFormClient({ contactPreferences }: ContactFormProps) {
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
+    e.stopPropagation()
     setMessage(null)
     setIsSubmitting(true)
 
     const form = e.currentTarget
     const formData = new FormData(form)
 
-    const result = await submitContactForm(formData)
-    
-    if (result.success) {
-      setMessage({ type: 'success', text: result.message })
-      form.reset()
-    } else {
-      setMessage({ type: 'error', text: result.message })
+    try {
+      const result = await submitContactForm(formData)
+      
+      if (result.success) {
+        setMessage({ type: 'success', text: result.message })
+        form.reset()
+      } else {
+        setMessage({ type: 'error', text: result.message })
+      }
+    } catch (error) {
+      console.error('Error submitting form:', error)
+      setMessage({ type: 'error', text: '提交失败，请稍后重试' })
+    } finally {
+      setIsSubmitting(false)
     }
-    
-    setIsSubmitting(false)
   }
 
   return (
-    <form className={styles.form} onSubmit={handleSubmit} method="post" action="#">
+    <form className={styles.form} onSubmit={handleSubmit} method="post">
       {message?.type === 'error' && (
         <div className={styles.errorMessage}>{message.text}</div>
       )}

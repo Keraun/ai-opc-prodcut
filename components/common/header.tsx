@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useEffect } from "react"
+import { useState, useEffect, useRef } from "react"
 import { Button, Drawer, Dropdown, Menu } from "@arco-design/web-react"
 import { IconMenu, IconCustomerService } from "@arco-design/web-react/icon"
 import Link from "next/link"
@@ -50,7 +50,9 @@ export function Header({
   const config = propConfig || headerConfig || {}
   const [isScrolled, setIsScrolled] = useState(false)
   const [drawerVisible, setDrawerVisible] = useState(false)
-  const [isMobile, setIsMobile] = useState(false)
+  // 初始值为 false，服务端渲染时使用
+  // 使用 useRef 存储 isMobile 状态，避免水合问题
+  const isMobileRef = useRef(false)
 
   const navItems = propNavItems || (config?.navItems?.map((item: any) => ({
     id: item.href,
@@ -71,20 +73,23 @@ export function Header({
   const showCta = showCtaButton !== undefined ? showCtaButton : true
 
   useEffect(() => {
-    const handleScroll = () => {
-      setIsScrolled(window.scrollY > 50)
-    }
+    // 仅在客户端执行，避免服务端渲染时访问 window 对象
+    if (typeof window !== 'undefined') {
+      const handleScroll = () => {
+        setIsScrolled(window.scrollY > 50)
+      }
 
-    const handleResize = () => {
-      setIsMobile(window.innerWidth < 768)
-    }
+      const handleResize = () => {
+        isMobileRef.current = window.innerWidth < 768
+      }
 
-    handleResize()
-    window.addEventListener("scroll", handleScroll)
-    window.addEventListener("resize", handleResize)
-    return () => {
-      window.removeEventListener("scroll", handleScroll)
-      window.removeEventListener("resize", handleResize)
+      handleResize()
+      window.addEventListener("scroll", handleScroll)
+      window.addEventListener("resize", handleResize)
+      return () => {
+        window.removeEventListener("scroll", handleScroll)
+        window.removeEventListener("resize", handleResize)
+      }
     }
   }, [])
 
@@ -210,7 +215,12 @@ export function Header({
 
           <button
             className={styles.mobileMenuButton}
-            onClick={() => setDrawerVisible(true)}
+            onClick={(e) => {
+              e.preventDefault()
+              e.stopPropagation()
+              setDrawerVisible(true)
+            }}
+            style={{ zIndex: 1000 }}
           >
             <IconMenu style={{ fontSize: '1.25rem', color: '#374151' }} />
           </button>

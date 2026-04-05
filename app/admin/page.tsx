@@ -50,30 +50,29 @@ export default function AdminLoginPage() {
     }
 
     setLoading(true)
-    console.log('[Login Page] Attempting login...')
     
-    const data = await loginWithResponse(username, password)
-    console.log('[Login Page] Login response:', data)
+    try {
+      const data = await loginWithResponse(username, password)
 
-    if (data.success) {
-      if (data.user) {
-        sessionStorage.setItem('currentUser', JSON.stringify(data.user))
-        console.log('[Login Page] User saved to sessionStorage')
-      }
-      
-      if (data.requireEmailSetup) {
-        console.log('[Login Page] Showing email setup')
-        setShowEmailSetup(true)
+      if (data.success) {
+        if (data.user) {
+          sessionStorage.setItem('currentUser', JSON.stringify(data.user))
+        }
+        
+        if (data.requireEmailSetup) {
+          setShowEmailSetup(true)
+        } else {
+          toast.success("登录成功")
+          router.push("/admin/dashboard?menu=pages")
+        }
       } else {
-        console.log('[Login Page] Login successful, redirecting to dashboard')
-        toast.success("登录成功")
-        router.push("/admin/dashboard?menu=pages")
+        toast.error(data.message || "登录失败")
       }
-    } else {
-      toast.error(data.message || "登录失败")
+    } catch (error) {
+      toast.error("登录失败，请稍后重试")
+    } finally {
+      setLoading(false)
     }
-    
-    setLoading(false)
   }
 
   const handleEmailSetup = async (): Promise<void> => {

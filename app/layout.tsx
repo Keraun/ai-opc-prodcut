@@ -165,8 +165,58 @@ export default function RootLayout({
       <head>
         <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
         <meta name="theme-color" content={seoConfig?.themeColor} />
+        <meta httpEquiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+        <meta httpEquiv="Pragma" content="no-cache" />
+        <meta httpEquiv="Expires" content="0" />
         <link rel="manifest" href="/manifest.json" />
         <style dangerouslySetInnerHTML={{ __html: `:root { ${styleString} }` }} />
+        {/* 全局错误捕获 - 移动端调试 */}
+        <Script
+          strategy="beforeInteractive"
+          dangerouslySetInnerHTML={{
+            __html: `
+              (function() {
+                // 捕获 JavaScript 错误
+                window.addEventListener('error', function(e) {
+                  var errorMsg = 'JS Error: ' + e.message + '\\n';
+                  errorMsg += 'File: ' + e.filename + '\\n';
+                  errorMsg += 'Line: ' + e.lineno + ', Column: ' + e.colno;
+                  if (e.error && e.error.stack) {
+                    errorMsg += '\\nStack: ' + e.error.stack;
+                  }
+                  alert(errorMsg);
+                  console.error('[Global Error]', errorMsg);
+                });
+                
+                // 捕获 Promise 未处理的拒绝
+                window.addEventListener('unhandledrejection', function(e) {
+                  var errorMsg = 'Promise Error: ';
+                  if (e.reason && e.reason.message) {
+                    errorMsg += e.reason.message;
+                    if (e.reason.stack) {
+                      errorMsg += '\\nStack: ' + e.reason.stack;
+                    }
+                  } else {
+                    errorMsg += JSON.stringify(e.reason);
+                  }
+                  alert(errorMsg);
+                  console.error('[Promise Error]', errorMsg);
+                });
+                
+                // 捕获资源加载错误
+                window.addEventListener('error', function(e) {
+                  if (e.target && (e.target.tagName === 'SCRIPT' || e.target.tagName === 'LINK' || e.target.tagName === 'IMG')) {
+                    var errorMsg = 'Resource Load Error: ' + e.target.tagName + ' - ' + (e.target.src || e.target.href);
+                    alert(errorMsg);
+                    console.error('[Resource Error]', errorMsg);
+                  }
+                }, true);
+                
+
+              })();
+            `
+          }}
+        />
         {/* 注入首屏初始数据到 window 对象 */}
         <Script
           strategy="beforeInteractive"
@@ -213,6 +263,15 @@ export default function RootLayout({
         )}
       </head>
       <body style={{ fontFamily: 'var(--font-sans)', WebkitFontSmoothing: 'antialiased', MozOsxFontSmoothing: 'grayscale' }}>
+        <noscript dangerouslySetInnerHTML={{
+          __html: `
+            <div style="position: fixed; top: 0; left: 0; right: 0; bottom: 0; background-color: #fff; z-index: 99999; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 20px; text-align: center;">
+              <h1 style="font-size: 24px; margin-bottom: 20px;">请启用 JavaScript</h1>
+              <p style="font-size: 16px; color: #666;">本网站需要启用 JavaScript 才能正常运行。</p>
+              <p style="font-size: 14px; color: #999; margin-top: 20px;">请在浏览器设置中启用 JavaScript，然后刷新页面。</p>
+            </div>
+          `
+        }} />
         <ToasterProvider />
         <ClientLayout>
           {children}

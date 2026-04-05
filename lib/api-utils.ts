@@ -99,7 +99,7 @@ export function withAuth<T = any>(
   handler: (authResult: AuthResult) => Promise<NextResponse<ApiResponse<T>>>
 ): Promise<NextResponse<ApiResponse<T>>> {
   return checkAdminAuth().then(authResult => {
-    if (!authResult.isAuthenticated) {
+    if (!authResult.authenticated) {
       return unauthorizedResponse()
     }
     return handler(authResult)

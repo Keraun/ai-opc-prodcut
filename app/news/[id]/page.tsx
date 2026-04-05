@@ -6,8 +6,8 @@ import { GenericPage } from '@/components/common/GenericPage'
 import { CrawlerArticle } from '@/components/crawler/CrawlerArticle'
 import { isCrawler } from '@/lib/device-utils'
 
-// 明确设置为动态渲染，确保每次请求都获取最新数据
-export const dynamic = 'force-dynamic'
+// 设置页面缓存为2小时
+export const revalidate = 7200
 
 interface PageInfo {
   pageId: string

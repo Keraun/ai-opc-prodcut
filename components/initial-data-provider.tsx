@@ -23,11 +23,7 @@ function getWindowInitialData(): InitialData {
   }
   const data = (window as any).__INITIAL_DATA__
   if (data) {
-    console.log('[InitialDataProvider] Got initial data from window:', {
-      hasSite: !!data.site,
-      hasHeader: !!data['site-header'],
-      hasFooter: !!data['site-footer']
-    })
+    // Initial data loaded successfully
   }
   return data || defaultInitialData
 }
@@ -44,14 +40,11 @@ const InitialDataContext = createContext<{
 // Provider 组件
 export function InitialDataProvider({ children }: { children: ReactNode }) {
   const [isClient, setIsClient] = useState(false)
-
-  const data = useMemo(() => {
-    return getWindowInitialData()
-  }, [])
+  const [data, setData] = useState<InitialData>(defaultInitialData)
 
   useEffect(() => {
     setIsClient(true)
-    console.log('[InitialDataProvider] Client-side initialized')
+    setData(getWindowInitialData())
   }, [])
 
   return (

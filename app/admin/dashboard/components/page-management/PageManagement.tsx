@@ -66,7 +66,7 @@ export function PageManagement({ onEditPage }: PageManagementProps) {
   const loadPages = async () => {
     setLoading(true)
     const pages = await getPageList()
-    if (pages.length > 0 || pages !== null) {
+    if (pages !== null) {
       setPages(pages || [])
     } else {
       toast.error("获取页面列表失败")

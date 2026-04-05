@@ -2,12 +2,13 @@
 
 /* 禁用移动端双击缩放 */
 html {
-  touch-action: manipulation;
   -webkit-tap-highlight-color: transparent;
 }
 
+/* 移除可能影响触摸事件的样式 */
 * {
-  -webkit-touch-callout: none;
+  touch-action: auto;
+  -webkit-touch-callout: auto;
 }
 
 :root {

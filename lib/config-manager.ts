@@ -682,7 +682,7 @@ export function listSystemConfigs(): string[] {
 }
 
 export function readAllConfigs(): Record<string, any> {
-  console.warn('Warning: readAllConfigs() is deprecated. Use readAllPageData() for page data and readSystemConfig() for system configs.')
+
   
   const configs: Record<string, any> = {}
   
@@ -698,7 +698,7 @@ export function readAllConfigs(): Record<string, any> {
 
 
 export function initializeDatabaseFromTemplates(): void {
-  console.log('Database initialized from templates')
+
 }
 
 export function getPageResponse(pageId: string): any {

@@ -1,6 +1,9 @@
 import { NextRequest } from 'next/server'
+import { initializeAndSyncModules } from '@/lib/initialize-modules'
 import { getModuleComponent, getModuleDefaultData } from '@/modules/registry'
 import { successResponse, errorResponse, notFoundResponse } from '@/lib/api-utils'
+
+initializeAndSyncModules()
 
 export async function GET(
   request: NextRequest,
