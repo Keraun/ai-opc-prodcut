@@ -7,7 +7,7 @@ const repository = new PromptRepository()
 export async function GET(request: NextRequest) {
   try {
     const authResult = await checkAdminAuth()
-    if (!authResult.isAuthenticated) {
+    if (!authResult.authenticated) {
       return errorResponse("未授权", 401)
     }
 
@@ -22,7 +22,7 @@ export async function GET(request: NextRequest) {
 export async function POST(request: NextRequest) {
   try {
     const authResult = await checkAdminAuth()
-    if (!authResult.isAuthenticated) {
+    if (!authResult.authenticated) {
       return errorResponse("未授权", 401)
     }
 
@@ -57,7 +57,7 @@ export async function POST(request: NextRequest) {
 export async function PUT(request: NextRequest) {
   try {
     const authResult = await checkAdminAuth()
-    if (!authResult.isAuthenticated) {
+    if (!authResult.authenticated) {
       return errorResponse("未授权", 401)
     }
 
@@ -99,7 +99,7 @@ export async function PUT(request: NextRequest) {
 export async function DELETE(request: NextRequest) {
   try {
     const authResult = await checkAdminAuth()
-    if (!authResult.isAuthenticated) {
+    if (!authResult.authenticated) {
       return errorResponse("未授权", 401)
     }
 
@@ -125,7 +125,7 @@ export async function DELETE(request: NextRequest) {
 export async function PATCH(request: NextRequest) {
   try {
     const authResult = await checkAdminAuth()
-    if (!authResult.isAuthenticated) {
+    if (!authResult.authenticated) {
       return errorResponse("未授权", 401)
     }
 
